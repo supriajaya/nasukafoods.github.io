@@ -75,8 +75,8 @@
     }
 
     .form-group input[type="text"],
+    .form-group input[type="tel"], /* Added for phone number */
     .form-group input[type="email"],
-    .form-group input[type="number"],
     .form-group select,
     .form-group textarea { /* Tambahkan textarea untuk alamat */
       width: calc(100% - 20px);
@@ -87,9 +87,9 @@
       box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
     }
 
-    .form-group input[type="number"] {
-        text-align: center;
+    .form-group select.quantity-select { /* Specific style for quantity select */
         width: 80px; /* Lebar lebih kecil untuk kuantitas */
+        text-align: center;
         display: inline-block;
         vertical-align: middle;
         margin-right: 10px;
@@ -246,7 +246,7 @@
 
       <div class="form-group">
         <label for="phone">Nomor Handphone:</label>
-        <input type="text" id="phone" name="handphone" required placeholder="Cth: 081234567890">
+        <input type="tel" id="phone" name="handphone" required placeholder="Cth: 081234567890"> <!-- Changed type to tel -->
       </div>
 
       <div class="form-group" id="physicalAddressGroup">
@@ -285,7 +285,14 @@
 
       <div class="form-group">
         <label for="quantity">Kuantitas:</label>
-        <input type="number" id="quantity" name="kuantitas" min="1" value="1" required>
+        <select id="quantity" name="kuantitas" class="quantity-select" required> <!-- Changed to select -->
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <!-- Anda bisa menambahkan opsi kuantitas lain di sini jika diperlukan -->
+        </select>
       </div>
 
       <div class="total-price">
@@ -323,7 +330,7 @@
 
   <script>
     const productSelect = document.getElementById('product');
-    const quantityInput = document.getElementById('quantity');
+    const quantityInput = document.getElementById('quantity'); // This is now a select element
     const productPriceSpan = document.getElementById('productPrice');
     const totalAmountDisplaySpan = document.getElementById('totalAmountDisplay');
     const totalAmountHiddenInput = document.getElementById('totalAmountHidden');
@@ -358,7 +365,7 @@
 
     function calculateTotal() {
         const selectedProductId = productSelect.value;
-        const quantity = parseInt(quantityInput.value);
+        const quantity = parseInt(quantityInput.value); // Read value from select
         let currentPrice = 0;
         let currentImage = "https://nasukafoods.site/paketcilok.jpg"; // Default image
 
@@ -401,7 +408,7 @@
     }
 
     productSelect.addEventListener('change', calculateTotal);
-    quantityInput.addEventListener('input', calculateTotal);
+    quantityInput.addEventListener('change', calculateTotal); // Changed to 'change' for select element
 
     // Initial calculation when page loads
     calculateTotal();
