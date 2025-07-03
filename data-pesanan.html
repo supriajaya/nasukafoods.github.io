@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Pesanan - Nasuka Foods</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-block;
+        }
+        nav a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow-x: auto; /* Untuk tabel responsif */
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        #loadingMessage {
+            text-align: center;
+            font-size: 1.1em;
+            color: #555;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+        footer p {
+            margin: 5px 0;
+        }
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                position: absolute;
+                top: 6px;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+            }
+            td:nth-of-type(1):before { content: "Kode Pesanan:"; }
+            td:nth-of-type(2):before { content: "Waktu:"; }
+            td:nth-of-type(3):before { content: "Nama:"; }
+            td:nth-of-type(4):before { content: "Kuantitas:"; }
+            td:nth-of-type(5):before { content: "Produk:"; }
+            td:nth-of-type(6):before { content: "Total Harga:"; }
+        }
+    </style>
+</head>
+<body>
+
+  <header>
+    <h1>Daftar Pesanan Nasuka Foods</h1>
+    <nav>
+      <a href="form-pembelian.html">Kembali ke Form Pembelian</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Data Pesanan</h2>
+    <p id="loadingMessage">Memuat data pesanan...</p>
+    <table id="orderTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Kode Pesanan</th>
+          <th>Waktu</th>
+          <th>Nama</th>
+          <th>Kuantitas</th>
+          <th>Produk</th>
+          <th>Total Harga</th>
+        </tr>
+      </thead>
+      <tbody>
+        </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Nasuka Foods. Hak Cipta Dilindungi Undang-Undang.</p>
+  </footer>
+
+  <script>
+    // URL Web App Google Apps Script Anda (URL yang sama dengan form pembelian)
+    const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHkLbvwWElYFUkv79Mc3EnazriDROW9yfQk_fVPlAQ0VIep1OxHIPyg_tRDMzl41Jsqq/exec';
+
+    const orderTableBody = document.querySelector('#orderTable tbody');
+    const loadingMessage = document.getElementById('loadingMessage');
+    const orderTable = document.getElementById('orderTable');
+
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(amount);
+    }
+
+    async function fetchOrders() {
+        loadingMessage.style.display = 'block';
+        orderTable.style.display = 'none';
+
+        try {
+            // Kita akan menggunakan doGet untuk mengambil data dari sheet
+            // Ini memerlukan penyesuaian di kode Google Apps Script Anda (doGet)
+            const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL + '?action=getOrders');
+            const data = await response.json();
+
+            if (data.status === 'success' && data.orders && data.orders.length > 0) {
+                orderTableBody.innerHTML = ''; // Kosongkan tabel sebelumnya
+                data.orders.forEach(order => {
+                    const row = orderTableBody.insertRow();
+                    row.insertCell().textContent = order['Kode Pesanan'];
+                    row.insertCell().textContent = order['Waktu'];
+                    row.insertCell().textContent = order['Nama'];
+                    row.insertCell().textContent = order['Kuantitas'];
+                    row.insertCell().textContent = order['Produk']; // 'Produk' sesuai header di Apps Script
+                    row.insertCell().textContent = formatRupiah(order['Total Harga']);
+                });
+                loadingMessage.style.display = 'none';
+                orderTable.style.display = 'table';
+            } else {
+                loadingMessage.textContent = 'Tidak ada data pesanan ditemukan.';
+            }
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            loadingMessage.textContent = 'Gagal memuat data pesanan. Coba lagi nanti.';
+        }
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    fetchOrders();
+  </script>
+
+</body>
+</html>
