@@ -241,42 +241,59 @@
     <form id="orderForm">
       <div class="form-group">
         <label for="fullName">Nama Lengkap:</label>
-        <input type="text" id="fullName" name="nama" required placeholder="Cth: Budi Santoso">
+        <input type="text" id="fullName" name="nama" required placeholder="Cth: Arya Wilalodra">
       </div>
 
       <div class="form-group">
         <label for="phone">Nomor Handphone:</label>
-        <input type="tel" id="phone" name="handphone" required placeholder="Cth: 081234567890"> <!-- Changed type to tel -->
+        <input type="tel" id="phone" name="handphone" required placeholder="Cth: 0859109819017"> <!-- Changed type to tel -->
       </div>
 
       <div class="form-group" id="physicalAddressGroup">
-        <label for="addressPhysical">Alamat Fisik (lengkap dengan RT/RW, Kelurahan, Kecamatan, Kota, Kode Pos):</label>
+        <label for="addressPhysical">Alamat Fisik (lengkap dengan RT/RW):</label>
         <textarea id="addressPhysical" name="alamat_fisik" rows="3" placeholder="Isi hanya jika memesan produk fisik"></textarea>
       </div>
 
       <div class="form-group" id="tiktokAddressGroup">
-        <label for="addressTiktok">Alamat TikTok (Username / Link Akun):</label>
-        <input type="text" id="addressTiktok" name="alamat_tiktok" placeholder="Isi hanya jika memesan layanan TikTok">
+        <label for="addressTiktok"> (Username / Link Video):</label>
+        <input type="text" id="addressTiktok" name="alamat_tiktok" placeholder="Cth: @arya / https://vt.Isi ikTok">
       </div>
 
       <div class="form-group">
         <label for="product">Pilih Produk:</label>
         <div class="item-selection">
+            
             <img id="productImage" src="https://nasukafoods.site/paketcilok.jpg" alt="Foto Produk"> <!-- Default image -->
+            
             <div class="product-info">
                 <select id="product" name="satuan" required>
                     <option value="">Pilih Produk Anda</option>
-                    <option value="Paket Cilok" data-price="50000" data-img="https://nasukafoods.site/paketcilok.jpg">Paket Cilok - Rp 50.000</option>
-                    <option value="Kacang Toping" data-price="50000" data-img="https://nasukafoods.site/bumbukacang.jpeg">Kacang Toping - Rp 50.000</option>
-                    <option value="Booster Followers" data-price="40000" data-img="https://nasukafoods.site/tiktok-followers.jpg">Booster Followers - Rp 40.000</option>
-                    <option value="Booster Viewers" data-price="10000" data-img="https://nasukafoods.site/tiktok-viewers.jpg">Booster Viewers - Rp 10.000</option>
-                    <option value="Booster Likes" data-price="25000" data-img="https://nasukafoods.site/tiktok-likes.jpg">Booster Likes - Rp 25.000</option>
-                    <option value="Cilok Polosan" data-price="50000" data-img="https://nasukafoods.site/images/cilok-polosan.jpg">Cilok Polosan - Rp 50.000</option>
-                    <option value="Cilok Full Toping" data-price="50000" data-img="https://nasukafoods.site/images/cilok-full-topping.jpg">Cilok Full Toping - Rp 50.000</option>
-                    <option value="Roda Cilok" data-price="1500000" data-img="https://nasukafoods.site/images/roda-cilok.jpg">Roda Cilok - Rp 1.500.000</option>
-                    <option value="Kawal Darurat" data-price="50000" data-img="https://nasukafoods.site/images/kawal-darurat.jpg">Kawal Darurat - Rp 50.000</option>
-                    <option value="Aplikator Acp" data-price="700000" data-img="https://nasukafoods.site/images/aplikator-acp.jpg">Aplikator Acp - Rp 700.000</option>
-                    <option value="Hack lokasi" data-price="10000" data-img="https://nasukafoods.site/images/hack-lokasi.jpg">Hack lokasi - Rp 10.000</option>
+                    <option value="Paket Cilok" data-price="50000" data-img="https://nasukafoods.site/paketcilok.jpg">Paket Cilok</option>
+                    <option value="Kacang Toping" data-price="50000" data-img="https://nasukafoods.site/bumbukacang.jpeg">Kacang Toping</option>
+                    
+                    
+                    <option value="Hack lokasi" data-price="10000" data-img="https://nasukafoods.site/hack-lokasi.jpg">Hack lokasi</option>
+                    
+                    <option value="Booster Viewers" data-price="10000" data-img="https://nasukafoods.site/tiktok-viewers.png">Booster Viewers</option>
+                    
+                    
+                    
+                    <option value="Booster Likes" data-price="25000" data-img="https://nasukafoods.site/tiktok-likes.jpg">Booster Likes</option>
+                    
+                    <option value="Booster Followers" data-price="40000" data-img="https://nasukafoods.site/tiktok-viewers.png">Booster Followers</option>
+                    
+                    
+                  
+                    
+                
+                    
+                 
+                   
+                    <option value="Aplikator Acp" data-price="700000" data-img="https://nasukafoods.site/images/aplikator-acp.jpg">Aplikator Acp</option>
+       
+                  <option value="Kawasaki Ax" data-price="6500000" data-img="https://nasukafoods.site/images/roda-cilok.jpg">Kawasaki Ax- Rp 6.500.000</option>
+                              
+                    
                 </select>
                 <p>Harga Satuan: <span id="productPrice">Rp 0</span></p>
             </div>
@@ -313,7 +330,7 @@
             <li>Konfirmasi pembayaran Anda di aplikasi.</li>
             <li>Simpan bukti pembayaran Anda.</li>
           </ol>
-          <p>Setelah pembayaran berhasil, pesanan Anda akan diproses. Anda akan menerima konfirmasi melalui email (jika ada sistem backend email). Untuk informasi lebih lanjut, silakan hubungi kami.</p>
+          <p>Setelah pembayaran berhasil, pesanan Anda akan diproses. Anda akan menerima konfirmasi melalui whatsapp. Untuk informasi lebih lanjut, silakan hubungi kami.</p>
         </div>
         <button type="submit" class="submit-button">Konfirmasi Pesanan & Bayar</button>
         <div id="responseMessage" style="margin-top: 20px; font-weight: bold;"></div>
@@ -345,14 +362,14 @@
         "Paket Cilok": { price: 50000, img: "https://nasukafoods.site/paketcilok.jpg" },
         "Kacang Toping": { price: 50000, img: "https://nasukafoods.site/bumbukacang.jpeg" },
         "Booster Followers": { price: 40000, img: "https://nasukafoods.site/tiktok-followers.jpg" },
-        "Booster Viewers": { price: 10000, img: "https://nasukafoods.site/tiktok-viewers.jpg" },
+        "Booster Viewers": { price: 10000, img: "https://nasukafoods.site/tiktok-viewers.png" },
         "Booster Likes": { price: 25000, img: "https://nasukafoods.site/tiktok-likes.jpg" },
         "Cilok Polosan": { price: 50000, img: "https://nasukafoods.site/images/cilok-polosan.jpg" },
         "Cilok Full Toping": { price: 50000, img: "https://nasukafoods.site/images/cilok-full-topping.jpg" },
-        "Roda Cilok": { price: 1500000, img: "https://nasukafoods.site/images/roda-cilok.jpg" },
+        "Kawasaki Ax": { price: 6500000, img: "https://nasukafoods.site/kawasakiax.png" },
         "Kawal Darurat": { price: 50000, img: "https://nasukafoods.site/images/kawal-darurat.jpg" },
-        "Aplikator Acp": { price: 700000, img: "https://nasukafoods.site/images/aplikator-acp.jpg" },
-        "Hack lokasi": { price: 10000, img: "https://nasukafoods.site/images/hack-lokasi.jpg" }
+        "Aplikator Acp": { price: 700000, img: "https://nasukafoods.site/foto-leles.jpg" },
+        "Hack lokasi": { price: 10000, img: "https://nasukafoods.site/hack-lokasi.jpg" }
     };
 
     function formatRupiah(amount) {
@@ -444,7 +461,7 @@
             body: new URLSearchParams(data).toString() // Ubah objek data menjadi URL-encoded string
         })
         .then(() => {
-            responseMessage.textContent = 'Pesanan berhasil dikirim ke Google Sheet! Silakan selesaikan pembayaran QRIS.';
+            responseMessage.textContent = 'Pesanan berhasil dikirim Silakan selesaikan pembayaran QRIS.';
             responseMessage.style.color = '#28a745';
             form.reset(); // Reset form setelah sukses
             calculateTotal(); // Recalculate total for reset form
@@ -460,4 +477,3 @@
 
 </body>
 </html>
-
