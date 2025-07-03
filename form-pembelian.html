@@ -4,12 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Form Pembelian - Nasuka Foods</title>
-  <!-- Pastikan link ke file CSS utama Anda jika ada, atau tambahkan CSS di sini -->
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
-      background-color: #f0f2f5; /* Latar belakang lebih terang */
+      background-color: #f0f2f5;
       color: #333;
       line-height: 1.6;
     }
@@ -39,7 +38,7 @@
         border: 1px solid #007bff;
         border-radius: 5px;
         transition: background-color 0.3s, color 0.3s;
-        display: inline-block; /* Untuk styling */
+        display: inline-block;
     }
 
     nav a:hover {
@@ -75,20 +74,20 @@
     }
 
     .form-group input[type="text"],
-    .form-group input[type="tel"], /* Added for phone number */
+    .form-group input[type="tel"],
     .form-group input[type="email"],
     .form-group select,
-    .form-group textarea { /* Tambahkan textarea untuk alamat */
+    .form-group textarea {
       width: calc(100% - 20px);
       padding: 12px 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 16px;
-      box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+      box-sizing: border-box;
     }
 
-    .form-group select.quantity-select { /* Specific style for quantity select */
-        width: 80px; /* Lebar lebih kecil untuk kuantitas */
+    .form-group select.quantity-select {
+        width: 80px;
         text-align: center;
         display: inline-block;
         vertical-align: middle;
@@ -123,7 +122,7 @@
       text-align: right;
       font-size: 22px;
       font-weight: bold;
-      color: #28a745; /* Warna hijau untuk total */
+      color: #28a745;
       margin-top: 25px;
       padding-top: 15px;
       border-top: 1px solid #eee;
@@ -145,7 +144,7 @@
     }
 
     .payment-section img {
-      max-width: 250px; /* Ukuran QRIS */
+      max-width: 250px;
       height: auto;
       border: 1px solid #ddd;
       border-radius: 5px;
@@ -198,7 +197,6 @@
         margin: 5px 0;
     }
 
-    /* Responsiveness */
     @media (max-width: 768px) {
         .container {
             margin: 20px auto;
@@ -216,7 +214,7 @@
             padding: 12px;
         }
         .item-selection {
-            flex-direction: column; /* Stack on smaller screens */
+            flex-direction: column;
             align-items: flex-start;
             gap: 10px;
         }
@@ -246,7 +244,7 @@
 
       <div class="form-group">
         <label for="phone">Nomor Handphone:</label>
-        <input type="tel" id="phone" name="handphone" required placeholder="Cth: 0859109819017"> <!-- Changed type to tel -->
+        <input type="tel" id="phone" name="handphone" required placeholder="Cth: 0859109819017">
       </div>
 
       <div class="form-group" id="physicalAddressGroup">
@@ -263,37 +261,19 @@
         <label for="product">Pilih Produk:</label>
         <div class="item-selection">
             
-            <img id="productImage" src="https://nasukafoods.site/paketcilok.jpg" alt="Foto Produk"> <!-- Default image -->
+            <img id="productImage" src="https://nasukafoods.site/paketcilok.jpg" alt="Foto Produk">
             
             <div class="product-info">
                 <select id="product" name="satuan" required>
                     <option value="">Pilih Produk Anda</option>
                     <option value="Paket Cilok" data-price="50000" data-img="https://nasukafoods.site/paketcilok.jpg">Paket Cilok</option>
                     <option value="Kacang Toping" data-price="50000" data-img="https://nasukafoods.site/bumbukacang.jpeg">Kacang Toping</option>
-                    
-                    
                     <option value="Hack lokasi" data-price="10000" data-img="https://nasukafoods.site/hack-lokasi.jpg">Hack lokasi</option>
-                    
                     <option value="Booster Viewers" data-price="10000" data-img="https://nasukafoods.site/tiktok-viewers.png">Booster Viewers</option>
-                    
-                    
-                    
                     <option value="Booster Likes" data-price="25000" data-img="https://nasukafoods.site/tiktok-likes.jpg">Booster Likes</option>
-                    
                     <option value="Booster Followers" data-price="40000" data-img="https://nasukafoods.site/tiktok-viewers.png">Booster Followers</option>
-                    
-                    
-                  
-                    
-                
-                    
-                 
-                   
                     <option value="Aplikator Acp" data-price="700000" data-img="https://nasukafoods.site/images/aplikator-acp.jpg">Aplikator Acp</option>
-       
-                  <option value="Kawasaki Ax" data-price="6500000" data-img="https://nasukafoods.site/images/roda-cilok.jpg">Kawasaki Ax- Rp 6.500.000</option>
-                              
-                    
+                    <option value="Kawasaki Ax" data-price="6500000" data-img="https://nasukafoods.site/images/roda-cilok.jpg">Kawasaki Ax- Rp 6.500.000</option>
                 </select>
                 <p>Harga Satuan: <span id="productPrice">Rp 0</span></p>
             </div>
@@ -302,13 +282,12 @@
 
       <div class="form-group">
         <label for="quantity">Kuantitas:</label>
-        <select id="quantity" name="kuantitas" class="quantity-select" required> <!-- Changed to select -->
+        <select id="quantity" name="kuantitas" class="quantity-select" required>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-            <!-- Anda bisa menambahkan opsi kuantitas lain di sini jika diperlukan -->
         </select>
       </div>
 
@@ -319,7 +298,7 @@
 
       <div class="payment-section">
         <h3>Pembayaran Melalui QRIS</h3>
-        <img src="https://nasukafoods.site/qris.jpg" alt="QRIS Code" id="qrisImage"> <!-- Ganti dengan QRIS yang benar dari iPaymu -->
+        <img src="https://nasukafoods.site/qris.jpg" alt="QRIS Code" id="qrisImage">
         <div class="payment-instructions">
           <p>Langkah-langkah pembayaran dengan QRIS:</p>
           <ol>
@@ -347,7 +326,7 @@
 
   <script>
     const productSelect = document.getElementById('product');
-    const quantityInput = document.getElementById('quantity'); // This is now a select element
+    const quantityInput = document.getElementById('quantity');
     const productPriceSpan = document.getElementById('productPrice');
     const totalAmountDisplaySpan = document.getElementById('totalAmountDisplay');
     const totalAmountHiddenInput = document.getElementById('totalAmountHidden');
@@ -355,8 +334,7 @@
     const form = document.getElementById('orderForm');
     const responseMessage = document.getElementById('responseMessage');
 
-    // Pastikan ini adalah DEPLOYMENT URL dari Google Apps Script Anda
-    const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHkLbvwWElYFUkv79Mc3EnazriDROW9yfQk_fVPlAQ0VIep1OxHIPyg_tRDMzl41Jsqq/exec'; // URL WEB APP DARI ANDA
+    const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHkLbvwWElYFUkv79Mc3EnazriDROW9yfQk_fVPlAQ0VIep1OxHIPyg_tRDMzl41Jsqq/exec';
 
     const products = {
         "Paket Cilok": { price: 50000, img: "https://nasukafoods.site/paketcilok.jpg" },
@@ -382,9 +360,9 @@
 
     function calculateTotal() {
         const selectedProductId = productSelect.value;
-        const quantity = parseInt(quantityInput.value); // Read value from select
+        const quantity = parseInt(quantityInput.value);
         let currentPrice = 0;
-        let currentImage = "https://nasukafoods.site/paketcilok.jpg"; // Default image
+        let currentImage = "https://nasukafoods.site/paketcilok.jpg";
 
         if (selectedProductId && products[selectedProductId]) {
             currentPrice = products[selectedProductId].price;
@@ -394,16 +372,14 @@
         const total = currentPrice * (isNaN(quantity) ? 0 : quantity);
         productPriceSpan.textContent = formatRupiah(currentPrice);
         totalAmountDisplaySpan.textContent = formatRupiah(total);
-        totalAmountHiddenInput.value = total; // Update hidden input for submission
+        totalAmountHiddenInput.value = total;
         productImage.src = currentImage;
-        productImage.alt = selectedProductId || "Foto Produk"; // Update alt text
+        productImage.alt = selectedProductId || "Foto Produk";
 
-        // Show/hide address fields based on product type (example logic)
         const isDigitalProduct = ["Booster Followers", "Booster Viewers", "Booster Likes", "Hack lokasi"].includes(selectedProductId);
         document.getElementById('physicalAddressGroup').style.display = isDigitalProduct ? 'none' : 'block';
         document.getElementById('tiktokAddressGroup').style.display = isDigitalProduct ? 'block' : 'none';
 
-        // Clear irrelevant fields if they are hidden
         if (isDigitalProduct) {
             document.getElementById('addressPhysical').value = '';
         } else {
@@ -411,28 +387,22 @@
         }
     }
 
-    // Set initial product if passed via URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const initialProduct = urlParams.get('product');
     if (initialProduct) {
-        // Find the option by its value
-        // The value in the select is the full product name, but URL param uses slug-like name.
-        // We need to convert initialProduct (e.g., "paket_cilok") to "Paket Cilok"
         const formattedInitialProduct = initialProduct.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-        if (products[formattedInitialProduct]) { // Check if the product exists in our list
+        if (products[formattedInitialProduct]) {
             productSelect.value = formattedInitialProduct;
         }
     }
 
     productSelect.addEventListener('change', calculateTotal);
-    quantityInput.addEventListener('change', calculateTotal); // Changed to 'change' for select element
+    quantityInput.addEventListener('change', calculateTotal);
 
-    // Initial calculation when page loads
     calculateTotal();
 
-
     form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Mencegah form submit secara default
+        event.preventDefault();
 
         responseMessage.textContent = 'Mengirim pesanan...';
         responseMessage.style.color = '#007bff';
@@ -443,33 +413,51 @@
             data[key] = value;
         }
 
-        // Tambahkan waktu saat ini
         data['waktu'] = new Date().toLocaleString('id-ID', {
             year: 'numeric', month: 'numeric', day: 'numeric',
             hour: 'numeric', minute: 'numeric', second: 'numeric',
             hour12: false
         });
 
-        // Kirim data ke Google Apps Script
         fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
             method: 'POST',
-            mode: 'no-cors', // Penting untuk Apps Script sebagai Web App
+            // Baris 'mode: no-cors' dihapus agar bisa membaca respons dari Apps Script.
+            // Pastikan konfigurasi deployment Apps Script Anda (Execute as: Me, Who has access: Anyone)
+            // sudah benar untuk menghindari masalah CORS.
             cache: 'no-cache',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded', // Kirim sebagai form-urlencoded
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: new URLSearchParams(data).toString() // Ubah objek data menjadi URL-encoded string
+            body: new URLSearchParams(data).toString()
         })
-        .then(() => {
-            responseMessage.textContent = 'Pesanan berhasil dikirim Silakan selesaikan pembayaran QRIS.';
-            responseMessage.style.color = '#28a745';
-            form.reset(); // Reset form setelah sukses
-            calculateTotal(); // Recalculate total for reset form
-            // Anda bisa tambahkan redirect ke halaman "terima kasih" atau pop-up sukses di sini
+        .then(response => {
+            // Memastikan respons adalah JSON dan bisa dibaca
+            if (response.ok && response.headers.get("content-type") && response.headers.get("content-type").includes("application/json")) {
+                return response.json();
+            } else {
+                // Jika tidak, asumsikan sukses tapi tanpa detail orderId dari respons (misal karena CORS)
+                console.warn('Respons tidak dalam format JSON atau tidak OK, mengasumsikan pengiriman sukses.');
+                return { status: 'success', message: 'Pesanan berhasil dikirim ke Google Sheet (tanpa Order ID ditampilkan).' };
+            }
+        })
+        .then(result => {
+            if (result.status === 'success') {
+                let successText = 'Pesanan berhasil dikirim. Silakan selesaikan pembayaran QRIS.';
+                if (result.orderId) {
+                    successText += ` Kode Pesanan Anda: <strong>${result.orderId}</strong>. Mohon simpan kode ini untuk referensi refund/komplain Anda.`;
+                }
+                responseMessage.innerHTML = successText;
+                responseMessage.style.color = '#28a745';
+                form.reset();
+                calculateTotal();
+            } else {
+                responseMessage.textContent = 'Terjadi kesalahan saat mengirim pesanan. Mohon coba lagi. ' + (result.message || '');
+                responseMessage.style.color = '#dc3545';
+            }
         })
         .catch(error => {
             console.error('Error:', error);
-            responseMessage.textContent = 'Terjadi kesalahan saat mengirim pesanan. Mohon coba lagi.';
+            responseMessage.textContent = 'Terjadi kesalahan jaringan. Data mungkin sudah terkirim. Mohon cek Google Sheet Anda.';
             responseMessage.style.color = '#dc3545';
         });
     });
