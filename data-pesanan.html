@@ -133,9 +133,10 @@
             td:nth-of-type(1):before { content: "Kode Pesanan:"; }
             td:nth-of-type(2):before { content: "Waktu:"; }
             td:nth-of-type(3):before { content: "Nama:"; }
-            td:nth-of-type(4):before { content: "Kuantitas:"; }
-            td:nth-of-type(5):before { content: "Produk:"; }
-            td:nth-of-type(6):before { content: "Total Harga:"; }
+            td:nth-of-type(4):before { content: "Handphone:"; }
+            td:nth-of-type(5):before { content: "Kuantitas:"; }
+            td:nth-of-type(6):before { content: "Produk:"; }
+            td:nth-of-type(7):before { content: "Total Harga:"; }
         }
     </style>
 </head>
@@ -157,13 +158,15 @@
           <th>Kode Pesanan</th>
           <th>Waktu</th>
           <th>Nama</th>
+          <th>Handphone</th>
           <th>Kuantitas</th>
           <th>Produk</th>
           <th>Total Harga</th>
         </tr>
       </thead>
       <tbody>
-        </tbody>
+        
+</tbody>
     </table>
   </div>
 
@@ -172,7 +175,6 @@
   </footer>
 
   <script>
-    // URL Web App Google Apps Script Anda (URL yang sama dengan form pembelian)
     const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHkLbvwWElYFUkv79Mc3EnazriDROW9yfQk_fVPlAQ0VIep1OxHIPyg_tRDMzl41Jsqg/exec';
 
     const orderTableBody = document.querySelector('#orderTable tbody');
@@ -190,28 +192,40 @@
     async function fetchOrders() {
         loadingMessage.style.display = 'block';
         orderTable.style.display = 'none';
-        orderTableBody.innerHTML = ''; // Kosongkan tabel setiap kali memuat
+        orderTableBody.innerHTML = '';
 
         try {
-            // Menggunakan GET request dengan parameter 'action=getOrders'
             const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL + '?action=getOrders');
             const data = await response.json();
 
             if (data.status === 'success' && data.orders && data.orders.length > 0) {
+                // <<< BARIS INI DITAMBAHKAN UNTUK MEMBALIK URUTAN
+                data.orders.reverse(); 
+
                 data.orders.forEach(order => {
                     const row = orderTableBody.insertRow();
                     row.insertCell().textContent = order['Kode Pesanan'];
                     row.insertCell().textContent = order['Waktu'];
                     row.insertCell().textContent = order['Nama'];
+
+                    const phone = String(order['Handphone'] || '');
+                    let censoredPhone = '';
+                    if (phone.length > 3) {
+                        censoredPhone = phone.slice(0, -3) + '***';
+                    } else {
+                        censoredPhone = phone;
+                    }
+                    row.insertCell().textContent = censoredPhone;
+
                     row.insertCell().textContent = order['Kuantitas'];
-                    row.insertCell().textContent = order['Produk']; // Pastikan ini sesuai dengan header di Google Sheet
+                    row.insertCell().textContent = order['Produk'];
                     row.insertCell().textContent = formatRupiah(order['Total Harga']);
                 });
                 loadingMessage.style.display = 'none';
                 orderTable.style.display = 'table';
             } else {
                 loadingMessage.textContent = 'Tidak ada data pesanan ditemukan.';
-                orderTable.style.display = 'none'; // Sembunyikan tabel jika tidak ada data
+                orderTable.style.display = 'none';
             }
         } catch (error) {
             console.error('Error fetching orders:', error);
@@ -220,7 +234,6 @@
         }
     }
 
-    // Panggil fungsi saat halaman dimuat
     fetchOrders();
   </script>
 
