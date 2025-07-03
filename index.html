@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Website Saya</title>
-  <style>
+  <title>Nasuka Foods - Produk & Layanan</title> <style>
     body {
       margin: 0;
       font-family: sans-serif;
@@ -13,133 +12,254 @@
       line-height: 1.6;
     }
 
+    header {
+      background-color: #f8f8f8; /* Warna latar belakang header */
+      padding: 10px 20px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px; /* Ukuran font nama perusahaan */
+      color: #333;
+    }
+
     header img {
       width: 100%;
-      max-height: 30px;
+      max-height: 150px; /* Tinggi header yang lebih masuk akal */
       object-fit: cover;
       display: block;
+      margin-bottom: 10px; /* Jarak antara gambar dan teks jika ada */
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Lebih responsif */
+      gap: 15px; /* Jarak antar item */
       padding: 20px;
+      max-width: 1200px; /* Batasi lebar konten */
+      margin: 0 auto; /* Tengah secara horizontal */
     }
 
     .item {
       text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .item img {
       width: 100%;
-      height: auto;
+      height: 150px; /* Tinggi gambar yang konsisten */
+      object-fit: cover; /* Pastikan gambar mengisi area tanpa terdistorsi */
       border-radius: 8px;
       display: block;
-    }
-
-    .item p {
-      margin: 8px 0 0;
-      font-size: 14px;
-    }
-
-    article {
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    article h2 {
-      font-size: 24px;
       margin-bottom: 10px;
     }
 
-    article p {
+    .item p {
+      margin: 5px 0; /* Kurangi margin */
+      font-size: 15px;
+      font-weight: bold; /* Judul produk lebih tebal */
+    }
+
+    .item p:last-child {
+      font-size: 16px;
+      color: #007bff; /* Warna harga */
+      margin-top: 10px;
+    }
+
+    section.content-section { /* Menggunakan section untuk area artikel */
+        padding: 20px;
+        max-width: 800px;
+        margin: 20px auto; /* Tambah margin atas/bawah */
+        background-color: #fdfdfd;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    section.content-section h2 {
+      font-size: 26px; /* Ukuran font yang sedikit lebih besar */
+      margin-bottom: 15px;
+      color: #333;
+      text-align: center;
+    }
+
+    section.content-section p {
       font-size: 16px;
       text-align: justify;
+      margin-bottom: 10px;
+    }
+
+    footer {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        margin-top: 30px; /* Beri jarak dari konten di atas */
+        font-size: 14px;
+    }
+
+    footer .footer-content {
+        margin-bottom: 15px;
+    }
+
+    footer .footer-content p {
+        margin: 5px 0;
+    }
+
+    footer .footer-links a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+        transition: color 0.3s ease;
+    }
+
+    footer .footer-links a:hover {
+        color: #007bff;
+    }
+
+    @media (max-width: 768px) {
+        .grid {
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .item img {
+            height: 120px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        section.content-section h2 {
+            font-size: 22px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .grid {
+            grid-template-columns: 1fr 1fr; /* 2 kolom di layar sangat kecil */
+            padding: 10px;
+        }
+
+        .item img {
+            height: 100px;
+        }
+
+        .item p {
+            font-size: 13px;
+        }
+
+        .item p:last-child {
+            font-size: 14px;
+        }
+
+        header img {
+            max-height: 100px;
+        }
+
+        header h1 {
+            font-size: 20px;
+        }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="https://nasukafoods.site/paketcilok.jpg" alt="Header Foto">
-  </header>
+    <img src="https://nasukafoods.site/paketcilok.jpg" alt="Header Nasuka Foods">
+    <h1>Nasuka Foods</h1> </header>
+
+  <section class="content-section">
+      <h2>Produk Kami</h2>
+  </section>
 
   <div class="grid">
     <div class="item">
       <a href="https://nasukafoods.site/detail1">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 1">
-      </a>
+        <img src="https://nasukafoods.site/images/cilok-polosan.jpg" alt="Cilok Polosan"> </a>
       <p>Cilok Polosan</p>
       <p>Rp 50.000</p>
     </div>
     <div class="item">
       <a href="https://nasukafoods.site/detail2">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 2">
-      </a>
-      <p>Cilok Full Toping</p>
+        <img src="https://nasukafoods.site/images/cilok-full-topping.jpg" alt="Cilok Full Topping"> </a>
+      <p>Cilok Full Topping</p>
       <p>Rp 50.000</p>
     </div>
     <div class="item">
       <a href="https://nasukafoods.site/detail3">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 3">
-      </a>
+        <img src="https://nasukafoods.site/images/roda-cilok.jpg" alt="Roda Cilok"> </a>
       <p>Roda Cilok</p>
       <p>Rp 1.500.000</p>
     </div>
     <div class="item">
       <a href="https://nasukafoods.site/detail4">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 4">
-      </a>
+        <img src="https://nasukafoods.site/images/kawal-darurat.jpg" alt="Kawal Darurat"> </a>
       <p>Kawal Darurat</p>
       <p>Rp 50.000</p>
     </div>
     <div class="item">
       <a href="https://nasukafoods.site/detail5">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 5">
-      </a>
+        <img src="https://nasukafoods.site/images/aplikator-acp.jpg" alt="Aplikator Acp"> </a>
       <p>Aplikator Acp</p>
       <p>Rp 700.000</p>
     </div>
     <div class="item">
       <a href="https://nasukafoods.site/detail6">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 6">
-      </a>
+        <img src="https://nasukafoods.site/images/hack-lokasi.jpg" alt="Hack lokasi"> </a>
       <p>Hack lokasi</p>
       <p>Rp 10.000</p>
     </div>
      <div class="item">
-      <a href="https://nasukafoods.site/detail5">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 5">
-      </a>
+      <a href="https://nasukafoods.site/detail7">
+        <img src="https://nasukafoods.site/images/booster-followers.jpg" alt="Booster Followers"> </a>
       <p>Booster Followers</p>
       <p>Rp 40.000</p>
     </div>
     
-<div class="item">
-<a href="https://nasukafoods.site/detail6">
-<img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 6"></a>
-<p>Booster Viewers</p>
-<p>Rp 10.000</p>
-</div>
+    <div class="item">
+        <a href="https://nasukafoods.site/detail8">
+            <img src="https://nasukafoods.site/images/booster-viewers.jpg" alt="Booster Viewers"> </a>
+        <p>Booster Viewers</p>
+        <p>Rp 10.000</p>
+    </div>
 
-
-<div class="item">
-<a href="https://nasukafoods.site/detail6">
-<img src="https://nasukafoods.site/paketcilok.jpg" alt="Foto 6"></a>
-<p>Booster likes</p>
-<p>Rp 25.000</p>
-</div>
-    
-    
+    <div class="item">
+        <a href="https://nasukafoods.site/detail9">
+            <img src="https://nasukafoods.site/images/booster-likes.jpg" alt="Booster Likes"> </a>
+        <p>Booster likes</p>
+        <p>Rp 25.000</p>
+    </div>
   </div>
 
-  <article>
+  <section class="content-section">
     <h2>Layanan Nasuka</h2>
-    <p>...
+    <p>Nasuka Foods adalah penyedia berbagai produk dan layanan inovatif yang dirancang untuk memenuhi kebutuhan Anda. Kami berkomitmen untuk memberikan kualitas terbaik dengan fokus pada kepuasan pelanggan. Jelajahi pilihan produk kami yang beragam, mulai dari makanan siap saji hingga solusi digital, dan temukan yang paling sesuai untuk Anda. Kami selalu berusaha untuk mengembangkan penawaran baru yang relevan dengan tren dan permintaan pasar terkini.
     </p>
-  </article>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+        <h3>Nasuka Foods</h3>
+        <p>Alamat: Jl. Contoh Raya No. 123, Kota Bandung, Jawa Barat, Indonesia 40123</p>
+        <p>Telepon: +62 812-3456-7890</p>
+        <p>Email: info@nasukafoods.site</p>
+        <p>Jam Operasional: Senin - Jumat, 09:00 - 17:00 WIB</p>
+    </div>
+    <div class="footer-links">
+        <a href="faq.html">FAQ</a> |
+        <a href="refund-policy.html">Kebijakan Pengembalian</a> |
+        <a href="terms-conditions.html">Syarat & Ketentuan</a>
+    </div>
+    <p>&copy; 2025 Nasuka Foods. Hak Cipta Dilindungi Undang-Undang.</p>
+  </footer>
 
 </body>
 </html>
