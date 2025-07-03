@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nasuka Foods - Produk & Layanan</title> <style>
+  <title>Nasuka Foods - Produk & Layanan</title>
+  <style>
     body {
       margin: 0;
       font-family: sans-serif;
@@ -28,9 +29,9 @@
     header img {
       width: 100%;
       max-height: 150px; /* Tinggi header yang lebih masuk akal */
-      object-fit: cover;
+      object-fit: contain; /* Menggunakan 'contain' agar logo tidak terpotong */
       display: block;
-      margin-bottom: 10px; /* Jarak antara gambar dan teks jika ada */
+      margin: 0 auto 10px auto; /* Tengah secara horizontal, margin bawah */
     }
 
     .grid {
@@ -49,6 +50,14 @@
       padding: 15px;
       background-color: #fff;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex; /* Untuk layout flexbox di dalam item */
+      flex-direction: column;
+      justify-content: space-between; /* Untuk mendorong tombol ke bawah */
+    }
+
+    .item a {
+        text-decoration: none; /* Hilangkan garis bawah pada link */
+        color: inherit; /* Warisi warna teks dari parent */
     }
 
     .item img {
@@ -64,13 +73,33 @@
       margin: 5px 0; /* Kurangi margin */
       font-size: 15px;
       font-weight: bold; /* Judul produk lebih tebal */
+      color: #333; /* Warna teks produk */
     }
 
-    .item p:last-child {
+    .item .price { /* Kelas baru untuk harga */
       font-size: 16px;
       color: #007bff; /* Warna harga */
       margin-top: 10px;
+      font-weight: bold;
     }
+
+    .buy-button {
+      display: inline-block;
+      background-color: #28a745; /* Warna hijau untuk tombol beli */
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-top: 15px; /* Jarak dari teks harga */
+      transition: background-color 0.3s ease;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .buy-button:hover {
+      background-color: #218838;
+    }
+
 
     section.content-section { /* Menggunakan section untuk area artikel */
         padding: 20px;
@@ -156,8 +185,13 @@
             font-size: 13px;
         }
 
-        .item p:last-child {
+        .item .price {
             font-size: 14px;
+        }
+
+        .buy-button {
+            padding: 8px 10px;
+            font-size: 12px;
         }
 
         header img {
@@ -173,8 +207,8 @@
 <body>
 
   <header>
-    <img src="https://nasukafoods.site/logo-header.jpg" alt="Header Nasuka Foods">
-    <h1>Nasuka Foods</h1> </header>
+    <img src="https://nasukafoods.site/logo-header.jpg" alt="Logo Nasuka Foods"> <h1>Nasuka Foods</h1>
+  </header>
 
   <section class="content-section">
       <h2>Produk Kami</h2>
@@ -182,37 +216,92 @@
 
   <div class="grid">
     <div class="item">
-      <a href="https://nasukafoods.site/paketcilk.jpg">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Cilok Polosan"> </a>
+      <a href="form-pembelian.html?product=paket_cilok"> <img src="https://nasukafoods.site/paketcilok.jpg" alt="Paket Cilok">
+      </a>
       <p>Paket Cilok</p>
-      <p>Rp 50.000</p>
+      <p class="price">Rp 50.000</p>
+      <a href="form-pembelian.html?product=paket_cilok" class="buy-button">Beli Sekarang</a>
     </div>
     <div class="item">
-      <a href="https://nasukafoods.site/detail2">
-        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Bumbu Kacang"> </a>
+      <a href="form-pembelian.html?product=kacang_toping"> <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Kacang Toping">
+      </a>
       <p>Kacang toping</p>
-      <p>Rp 50.000</p>
+      <p class="price">Rp 50.000</p>
+      <a href="form-pembelian.html?product=kacang_toping" class="buy-button">Beli Sekarang</a>
     </div>
-
+    <div class="item">
+        <a href="form-pembelian.html?product=cilok_polosan">
+            <img src="https://nasukafoods.site/images/cilok-polosan.jpg" alt="Cilok Polosan">
+        </a>
+        <p>Cilok Polosan</p>
+        <p class="price">Rp 50.000</p>
+        <a href="form-pembelian.html?product=cilok_polosan" class="buy-button">Beli Sekarang</a>
+    </div>
+    <div class="item">
+        <a href="form-pembelian.html?product=cilok_full_topping">
+            <img src="https://nasukafoods.site/images/cilok-full-topping.jpg" alt="Cilok Full Toping">
+        </a>
+        <p>Cilok Full Toping</p>
+        <p class="price">Rp 50.000</p>
+        <a href="form-pembelian.html?product=cilok_full_topping" class="buy-button">Beli Sekarang</a>
+    </div>
+    <div class="item">
+        <a href="form-pembelian.html?product=roda_cilok">
+            <img src="https://nasukafoods.site/images/roda-cilok.jpg" alt="Roda Cilok">
+        </a>
+        <p>Roda Cilok</p>
+        <p class="price">Rp 1.500.000</p>
+        <a href="form-pembelian.html?product=roda_cilok" class="buy-button">Beli Sekarang</a>
+    </div>
+    <div class="item">
+        <a href="form-pembelian.html?product=kawal_darurat">
+            <img src="https://nasukafoods.site/images/kawal-darurat.jpg" alt="Kawal Darurat">
+        </a>
+        <p>Kawal Darurat</p>
+        <p class="price">Rp 50.000</p>
+        <a href="form-pembelian.html?product=kawal_darurat" class="buy-button">Beli Sekarang</a>
+    </div>
+    <div class="item">
+        <a href="form-pembelian.html?product=aplikator_acp">
+            <img src="https://nasukafoods.site/images/aplikator-acp.jpg" alt="Aplikator Acp">
+        </a>
+        <p>Aplikator Acp</p>
+        <p class="price">Rp 700.000</p>
+        <a href="form-pembelian.html?product=aplikator_acp" class="buy-button">Beli Sekarang</a>
+    </div>
+    <div class="item">
+        <a href="form-pembelian.html?product=hack_lokasi">
+            <img src="https://nasukafoods.site/images/hack-lokasi.jpg" alt="Hack lokasi">
+        </a>
+        <p>Hack lokasi</p>
+        <p class="price">Rp 10.000</p>
+        <a href="form-pembelian.html?product=hack_lokasi" class="buy-button">Beli Sekarang</a>
+    </div>
      <div class="item">
-      <a href="https://nasukafoods.site/detail7">
-        <img src="https://nasukafoods.site/tiktok-followers.jpg" alt="Booster Followers"> </a>
+      <a href="form-pembelian.html?product=booster_followers">
+        <img src="https://nasukafoods.site/tiktok-followers.jpg" alt="Booster Followers">
+      </a>
       <p>Booster Followers</p>
-      <p>Rp 40.000</p>
-    </div>
-    
-    <div class="item">
-        <a href="https://nasukafoods.site/tiktok.viewers.jpg">
-            <img src="https://nasukafoods.site/tiktok-viewers.jpg" alt="Booster Viewers"> </a>
-        <p>Booster Viewers</p>
-        <p>Rp 10.000</p>
+      <p class="price">Rp 40.000</p>
+      <a href="form-pembelian.html?product=booster_followers" class="buy-button">Beli Sekarang</a>
     </div>
 
     <div class="item">
-        <a href="https://nasukafoods.site/tiktok-likes.jpg">
-            <img src="https://nasukafoods.site/tiktok-likes.jpg" alt="Booster Likes"> </a>
+        <a href="form-pembelian.html?product=booster_viewers">
+            <img src="https://nasukafoods.site/tiktok-viewers.jpg" alt="Booster Viewers">
+        </a>
+        <p>Booster Viewers</p>
+        <p class="price">Rp 10.000</p>
+        <a href="form-pembelian.html?product=booster_viewers" class="buy-button">Beli Sekarang</a>
+    </div>
+
+    <div class="item">
+        <a href="form-pembelian.html?product=booster_likes">
+            <img src="https://nasukafoods.site/tiktok-likes.jpg" alt="Booster Likes">
+        </a>
         <p>Booster likes</p>
-        <p>Rp 25.000</p>
+        <p class="price">Rp 25.000</p>
+        <a href="form-pembelian.html?product=booster_likes" class="buy-button">Beli Sekarang</a>
     </div>
   </div>
 
