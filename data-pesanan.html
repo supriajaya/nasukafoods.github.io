@@ -47,7 +47,7 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            overflow-x: auto; /* Untuk tabel responsif */
+            overflow-x: auto;
         }
         h2 {
             text-align: center;
@@ -93,7 +93,6 @@
         footer p {
             margin: 5px 0;
         }
-        /* Responsiveness */
         @media (max-width: 768px) {
             .container {
                 margin: 20px auto;
@@ -174,7 +173,7 @@
 
   <script>
     // URL Web App Google Apps Script Anda (URL yang sama dengan form pembelian)
-    const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHkLbvwWElYFUkv79Mc3EnazriDROW9yfQk_fVPlAQ0VIep1OxHIPyg_tRDMzl41Jsqq/exec';
+    const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHkLbvwWElYFUkv79Mc3EnazriDROW9yfQk_fVPlAQ0VIep1OxHIPyg_tRDMzl41Jsqg/exec';
 
     const orderTableBody = document.querySelector('#orderTable tbody');
     const loadingMessage = document.getElementById('loadingMessage');
@@ -191,32 +190,33 @@
     async function fetchOrders() {
         loadingMessage.style.display = 'block';
         orderTable.style.display = 'none';
+        orderTableBody.innerHTML = ''; // Kosongkan tabel setiap kali memuat
 
         try {
-            // Kita akan menggunakan doGet untuk mengambil data dari sheet
-            // Ini memerlukan penyesuaian di kode Google Apps Script Anda (doGet)
+            // Menggunakan GET request dengan parameter 'action=getOrders'
             const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL + '?action=getOrders');
             const data = await response.json();
 
             if (data.status === 'success' && data.orders && data.orders.length > 0) {
-                orderTableBody.innerHTML = ''; // Kosongkan tabel sebelumnya
                 data.orders.forEach(order => {
                     const row = orderTableBody.insertRow();
                     row.insertCell().textContent = order['Kode Pesanan'];
                     row.insertCell().textContent = order['Waktu'];
                     row.insertCell().textContent = order['Nama'];
                     row.insertCell().textContent = order['Kuantitas'];
-                    row.insertCell().textContent = order['Produk']; // 'Produk' sesuai header di Apps Script
+                    row.insertCell().textContent = order['Produk']; // Pastikan ini sesuai dengan header di Google Sheet
                     row.insertCell().textContent = formatRupiah(order['Total Harga']);
                 });
                 loadingMessage.style.display = 'none';
                 orderTable.style.display = 'table';
             } else {
                 loadingMessage.textContent = 'Tidak ada data pesanan ditemukan.';
+                orderTable.style.display = 'none'; // Sembunyikan tabel jika tidak ada data
             }
         } catch (error) {
             console.error('Error fetching orders:', error);
-            loadingMessage.textContent = 'Gagal memuat data pesanan. Coba lagi nanti.';
+            loadingMessage.textContent = 'Gagal memuat data pesanan. Periksa koneksi atau konfigurasi Apps Script Anda.';
+            orderTable.style.display = 'none';
         }
     }
 
