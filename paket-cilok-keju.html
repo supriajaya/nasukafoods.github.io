@@ -3,184 +3,358 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paket Cilok Keju - Nasuka Foods</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <title>Detail Produk - Paket Cilok Keju | Nasuka Foods</title>
   <style>
+    /* Definisi variabel CSS untuk konsistensi */
     :root {
-        --color-primary: hsl(18, 95%, 52%); /* Oranye-Merah Cerah */
-        --color-secondary: hsl(210, 29%, 24%); /* Biru Kebiruan Gelap (untuk Header/Footer) */
-        --color-text-dark: hsl(210, 10%, 20%); /* Abu-abu Gelap Lembut */
-        --color-text-light: #ffffff;
-        --color-background-light: hsl(210, 15%, 95%); /* Abu-abu Kebiruan Sangat Terang */
-        --color-accent-green: hsl(120, 39%, 45%); /* Hijau Lebih Kaya */
-        --color-border: #e0e0e0;
-        --shadow-light: 0 4px 12px rgba(0,0,0,0.08); /* Bayangan Lebih Halus */
-        --shadow-button: 0 4px 8px rgba(0, 123, 255, 0.2);
+      --primary-color: #007bff;
+      --success-color: #28a745;
+      --dark-text: #333;
+      --light-bg: #f8f8f8;
+      --white-bg: #fff;
+      --shadow-light: 0 2px 5px rgba(0,0,0,0.1);
+      --shadow-subtle: 0 2px 5px rgba(0,0,0,0.05);
+      --border-light: 1px solid #eee;
     }
 
     body {
       margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      background-color: var(--color-background-light);
-      color: var(--color-text-dark);
-      line-height: 1.7;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      font-family: 'Open Sans', sans-serif; /* Font yang lebih umum di web */
+      background-color: var(--white-bg);
+      color: #000000;
+      line-height: 1.6;
+      font-size: 16px; /* Base font size untuk desktop */
     }
 
     header {
-      background-color: var(--color-secondary);
-      color: var(--color-text-light);
-      padding: 20px 30px;
+      background-color: var(--light-bg);
+      padding: 1rem 1.25rem;
       text-align: center;
-      box-shadow: var(--shadow-light);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: var(--border-light);
     }
 
     header h1 {
       margin: 0;
-      font-size: 32px;
-      font-family: 'Poppins', sans-serif;
-      letter-spacing: 0.05em;
+      font-size: 1.75rem;
+      color: var(--dark-text);
+      line-height: 1.2;
     }
 
-    nav {
-        margin-top: 15px;
+    header img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 0.625rem auto;
     }
 
-    nav a {
-        text-decoration: none;
-        color: var(--color-text-light);
-        font-weight: 600;
-        padding: 8px 18px;
-        border: 1px solid var(--color-text-light);
-        border-radius: 25px;
-        transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-        display: inline-block;
-        font-size: 0.95em;
+    .product-detail-container {
+      max-width: 900px;
+      margin: 1.875rem auto; /* 30px */
+      padding: 1.5625rem; /* 25px */
+      background-color: #fdfdfd;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-wrap: wrap; /* Agar bisa wrap di layar kecil */
+      gap: 1.875rem; /* 30px */
     }
 
-    nav a:hover {
-        background-color: var(--color-primary);
-        border-color: var(--color-primary);
-        color: var(--color-text-light);
-        transform: translateY(-2px);
+    /* CSS untuk Slider */
+    .product-image-area {
+      flex: 1; /* Akan mengambil sisa ruang */
+      min-width: 300px; /* Lebar minimum sebelum wrap */
+      max-width: 100%; /* Pastikan tidak melebihi container */
     }
 
-    .container {
-      max-width: 850px;
-      margin: 40px auto;
-      background-color: #fff;
-      padding: 40px;
-      border-radius: 12px;
+    .slider-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
       box-shadow: var(--shadow-light);
-      text-align: center;
-      flex-grow: 1;
     }
 
-    h2 {
-      color: var(--color-secondary);
-      margin-bottom: 25px;
-      font-size: 30px;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.03em;
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out; /* Animasi geser */
     }
 
-    .product-detail-image {
-        max-width: 90%;
-        height: auto;
-        border-radius: 10px;
-        margin-bottom: 30px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-        transition: transform 0.3s ease;
+    .slides img {
+      width: 100%;
+      flex-shrink: 0; /* Penting agar gambar tidak menyusut */
+      height: auto; /* Pastikan proporsi gambar terjaga */
+      display: block;
     }
 
-    .product-detail-image:hover {
-        transform: scale(1.02);
+    .slider-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.6); /* Warna lebih gelap */
+      color: white;
+      border: none;
+      padding: 0.625rem 0.9375rem; /* 10px 15px */
+      cursor: pointer;
+      font-size: 1.5rem; /* 24px */
+      border-radius: 5px;
+      z-index: 10;
+      opacity: 0.8; /* Sedikit transparan */
+      transition: background-color 0.3s ease, opacity 0.3s ease;
     }
 
-    .product-price {
-        font-size: 2.5em;
-        font-weight: bold;
-        color: var(--color-accent-green);
-        margin-bottom: 25px;
-        letter-spacing: 0.04em;
+    .slider-button:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+      opacity: 1;
     }
 
-    .product-description {
-        text-align: center;
-        font-size: 1.15em;
-        line-height: 1.8;
-        margin: 0 auto 35px auto;
-        max-width: 700px;
-        color: var(--color-text-dark);
+    .prev {
+      left: 0.625rem; /* 10px */
+    }
+
+    .next {
+      right: 0.625rem; /* 10px */
+    }
+    /* Akhir CSS untuk Slider */
+
+
+    .product-info-area {
+      flex: 2; /* Akan mengambil dua kali lipat ruang dari product-image-area */
+      min-width: 300px; /* Lebar minimum sebelum wrap */
+      max-width: 100%; /* Pastikan tidak melebihi container */
+    }
+
+    .product-info-area h2 {
+      font-size: 2rem; /* 32px */
+      color: var(--dark-text);
+      margin-top: 0;
+      margin-bottom: 0.9375rem; /* 15px */
+    }
+
+    .product-info-area .price {
+      font-size: 1.75rem; /* 28px */
+      color: var(--primary-color);
+      font-weight: bold;
+      margin-bottom: 1.25rem; /* 20px */
+    }
+
+    .product-info-area h3 {
+      font-size: 1.25rem; /* 20px */
+      color: var(--dark-text);
+      margin-top: 1.5625rem; /* 25px */
+      margin-bottom: 0.625rem; /* 10px */
+    }
+
+    .product-info-area ul {
+      list-style-type: disc;
+      margin-left: 1.25rem; /* 20px */
+      margin-bottom: 1.25rem; /* 20px */
+      padding: 0; /* Pastikan padding tidak berlebihan dari default browser */
+    }
+
+    .product-info-area ul li {
+      margin-bottom: 0.5rem; /* 8px */
+      font-size: 1rem; /* 16px */
+    }
+
+    .product-info-area p {
+      font-size: 1rem; /* 16px */
+      line-height: 1.7;
+      margin-bottom: 0.9375rem; /* 15px */
+      text-align: justify;
     }
 
     .buy-button {
       display: inline-block;
-      padding: 18px 40px;
-      background-color: var(--color-primary);
-      color: var(--color-text-light);
+      background-color: var(--success-color);
+      color: var(--white-bg);
+      padding: 0.75rem 1.5625rem; /* 12px 25px */
+      border-radius: 5px;
       text-decoration: none;
-      border: none;
-      border-radius: 30px;
-      font-size: 1.3em;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      margin-top: 1.25rem; /* 20px */
+      font-size: 1.125rem; /* 18px */
       font-weight: bold;
-      letter-spacing: 0.05em;
-      box-shadow: var(--shadow-button);
+      transition: background-color 0.3s ease;
+      width: auto; /* Agar tidak selalu 100% lebar */
     }
 
     .buy-button:hover {
-        background-color: hsl(18, 95%, 42%);
-        transform: translateY(-3px);
-        box-shadow: 0 6px 15px rgba(255, 100, 0, 0.3);
+      background-color: #218838;
+    }
+
+    .back-button {
+      display: block;
+      text-align: center;
+      margin-top: 1.875rem; /* 30px */
+      font-size: 1rem;
+    }
+
+    .back-button a {
+        color: var(--primary-color);
+        text-decoration: none;
+        padding: 0.5rem 0.9375rem; /* 8px 15px */
+        border: 1px solid var(--primary-color);
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .back-button a:hover {
+        background-color: var(--primary-color);
+        color: var(--white-bg);
     }
 
     footer {
-        background-color: var(--color-secondary);
-        color: var(--color-text-light);
+        background-color: var(--dark-text);
+        color: var(--white-bg);
         text-align: center;
-        padding: 25px;
-        margin-top: auto;
-        font-size: 14px;
-        box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        padding: 1.25rem; /* 20px */
+        margin-top: 3.125rem; /* 50px */
+        font-size: 0.875rem; /* 14px */
     }
 
-    footer p {
-        margin: 5px 0;
+    footer .footer-content {
+        margin-bottom: 0.9375rem; /* 15px */
     }
 
+    footer .footer-content p {
+        margin: 0.3125rem 0; /* 5px */
+    }
+
+    footer .footer-links a {
+        color: var(--white-bg);
+        text-decoration: none;
+        margin: 0 0.625rem; /* 10px */
+        transition: color 0.3s ease;
+    }
+
+    footer .footer-links a:hover {
+        color: var(--primary-color);
+    }
+
+    /* --- Media Queries untuk Responsivitas --- */
+
+    /* Untuk tablet dan layar yang lebih kecil */
     @media (max-width: 768px) {
+      body {
+          font-size: 15px; /* Sedikit lebih kecil untuk tablet */
+      }
+
+      .product-detail-container {
+        flex-direction: column; /* Tumpuk konten di layar kecil */
+        padding: 1.25rem; /* 20px */
+        margin: 1.25rem auto; /* 20px */
+        gap: 1.25rem; /* 20px */
+      }
+      .product-image-area, .product-info-area {
+        min-width: unset; /* Hapus min-width */
+        width: 100%; /* Lebarkan ke 100% */
+      }
+      .product-info-area h2 {
+        font-size: 1.75rem; /* 28px */
+      }
+      .product-info-area .price {
+        font-size: 1.5rem; /* 24px */
+      }
+      .buy-button {
+        width: 100%; /* Tombol beli penuh lebar */
+        text-align: center;
+        box-sizing: border-box; /* Pastikan padding dihitung dalam lebar */
+      }
+      .slider-button {
+        padding: 0.5rem 0.8rem; /* Lebih kecil di tablet */
+        font-size: 1.3rem; /* Lebih kecil di tablet */
+      }
+      header h1 {
+          font-size: 1.5rem;
+      }
+      section.content-section h2 {
+          font-size: 1.375rem;
+      }
+      section.content-section, footer {
+          padding: 1rem;
+      }
+    }
+
+    /* Untuk ponsel (smartphone) */
+    @media (max-width: 480px) {
+        body {
+            font-size: 14px; /* Ukuran font dasar untuk ponsel */
+        }
+
+        header {
+            padding: 0.8rem 1rem;
+        }
+
+        header img {
+            max-width: 150px; /* Logo lebih kecil di ponsel */
+        }
+
         header h1 {
-            font-size: 24px;
+            font-size: 1.3rem;
         }
-        nav a {
-            padding: 6px 12px;
-            font-size: 0.9em;
+
+        .product-detail-container {
+            padding: 1rem;
+            margin: 1rem auto;
+            gap: 1rem;
         }
-        .container {
-            margin: 20px auto;
-            padding: 25px;
+
+        .product-info-area h2 {
+            font-size: 1.5rem; /* 24px */
         }
-        h2 {
-            font-size: 22px;
+        .product-info-area .price {
+            font-size: 1.25rem; /* 20px */
         }
-        .product-price {
-            font-size: 2em;
+        .product-info-area h3 {
+            font-size: 1.125rem; /* 18px */
         }
-        .product-description {
-            font-size: 1em;
-            margin-bottom: 25px;
+        .product-info-area p, .product-info-area ul li {
+            font-size: 0.9375rem; /* 15px */
         }
         .buy-button {
-            padding: 14px 28px;
-            font-size: 1.1em;
+            padding: 0.6rem 0.8rem;
+            font-size: 1rem;
+        }
+        .slider-button {
+            padding: 0.4rem 0.6rem; /* Lebih kecil di ponsel */
+            font-size: 1.1rem; /* Lebih kecil di ponsel */
+        }
+
+        section.content-section {
+            padding: 0.8rem;
+            margin: 1rem auto;
+        }
+        section.content-section h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.8rem;
+        }
+        section.content-section p {
+            font-size: 0.9rem;
+        }
+        footer {
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+        }
+        footer .footer-links a {
+            margin: 0 0.4rem;
+        }
+    }
+
+    /* Untuk layar sangat kecil (misal iPhone SE lama) */
+    @media (max-width: 375px) {
+        .product-detail-container {
+            padding: 0.8rem;
+        }
+        .product-info-area h2 {
+            font-size: 1.4rem;
+        }
+        .product-info-area .price {
+            font-size: 1.1rem;
+        }
+        .product-info-area p, .product-info-area ul li {
+            font-size: 0.875rem; /* 14px */
         }
     }
   </style>
@@ -188,23 +362,79 @@
 <body>
 
   <header>
-    <h1>Detail Produk</h1>
-    <nav>
-      <a href="index.html">Kembali ke Beranda</a>
-    </nav>
+    <img src="https://nasukafoods.site/logo-nasuka.jpg" alt="Logo Nasuka Foods">
   </header>
 
-  <div class="container">
-    <h2>Paket Cilok Keju</h2>
-    <img src="https://nasukafoods.site/paketcilokkeju.jpg" alt="Paket Cilok Keju" class="product-detail-image">
-    <p class="product-price">Rp 60.000</p>
-    <p class="product-description">Sensasi gurih creamy yang meleleh di mulut! Paket Cilok Keju Nasuka Foods hadir dengan isian keju melimpah di setiap butirnya. Paduan tekstur cilok yang kenyal dengan lelehan keju premium akan memanjakan lidah Anda. Cocok untuk pecinta keju yang mencari pengalaman rasa baru!</p>
-    <a href="form-pembelian.html?product=paket_cilok_keju" class="buy-button">Beli Sekarang</a>
+  <div class="product-detail-container">
+    <div class="product-image-area">
+      <div class="slider-container">
+        <div class="slides">
+          <img src="https://nasukafoods.site/paket-cilok-keju.jpg" alt="Paket Cilok Keju - Gambar Utama">
+          <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Paket Cilok Keju - Bumbu Kacang">
+          <img src="https://nasukafoods.site/contoh-cilok-isi.jpg" alt="Paket Cilok Keju - Contoh Isi">
+          </div>
+        <button class="slider-button prev" onclick="changeSlide(-1)">&#10094;</button>
+        <button class="slider-button next" onclick="changeSlide(1)">&#10095;</button>
+      </div>
+    </div>
+    <div class="product-info-area">
+      <h2>Paket Cilok Keju Khas Indramayu</h2>
+      <p class="price">Rp 55.000</p>
+      
+      <h3>Spesifikasi Produk:</h3>
+      <ul>
+        <li>Isi: 60 pcs (Standar @ Rp 1.000/pcs)</li>
+        <li>Isian: Keju lumer premium</li>
+        <li>Berat Bersih: ± 500 gram (untuk 5 - 6 porsi)</li>
+        <li>Penyimpanan: Tahan 3 hari di suhu ruang, 7 hari di kulkas, 1 bulan di freezer.</li>
+        <li>Cara Penyajian: Kukus atau rebus cilok, siram dengan bumbu kacang yang sudah dihangatkan.</li>
+      </ul>
+
+      <p>Manjakan diri Anda dengan "Paket Cilok Keju" dari Nasuka Foods! Perpaduan sempurna antara kenyalnya cilok dan **isian keju lumer** yang gurih creamy. Cocok untuk camilan santai atau hidangan istimewa keluarga.</p>
+
+      <h3>Mengapa Memilih Paket Cilok Keju Kami?</h3>
+      <p>Kami menggunakan keju berkualitas tinggi untuk isian yang melimpah dan lezat. Setiap cilok dibuat dengan hati-hati untuk memastikan rasa dan tekstur yang sempurna, menjadikannya favorit semua kalangan, terutama anak-anak dan pecinta keju.</p>
+
+      <a href="form-pembelian.html?product=paket_cilok_keju" class="buy-button">Beli Sekarang</a>
+    </div>
+  </div>
+
+  <div class="back-button">
+    <a href="index.html">Kembali ke Produk Lainnya</a>
   </div>
 
   <footer>
+    <div class="footer-content">
+    <div class="footer-links">
+        <a href="faq.html">FAQ</a> |
+        <a href="refund-policy.html">Refund Policy</a> |
+        <a href="terms-conditions.html">Terms & Condition</a>
+    </div>
     <p>&copy; 2025 Nasuka Foods. Hak Cipta Dilindungi Undang-Undang.</p>
   </footer>
+
+  <script>
+    let slideIndex = 0;
+    const slides = document.querySelector('.slides');
+    const totalSlides = slides.children.length;
+
+    function showSlides() {
+      if (slideIndex >= totalSlides) {
+        slideIndex = 0;
+      }
+      if (slideIndex < 0) {
+        slideIndex = totalSlides - 1;
+      }
+      slides.style.transform = `translateX(${-slideIndex * 100}%)`;
+    }
+
+    function changeSlide(n) {
+      slideIndex += n;
+      showSlides();
+    }
+
+    document.addEventListener('DOMContentLoaded', showSlides);
+  </script>
 
 </body>
 </html>
