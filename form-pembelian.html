@@ -10,35 +10,37 @@
       font-family: sans-serif;
       background-color: #f0f2f5;
       color: #333;
-      line-height: 1.6;
+      line-height: 1.5; /* Disesuaikan agar tidak terlalu renggang */
+      font-size: 14px; /* Ukuran teks dasar dikurangi */
     }
 
     header {
       background-color: #333;
       color: #fff;
-      padding: 15px 20px;
+      padding: 12px 16px; /* Padding dikurangi */
       text-align: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     header h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 22px; /* Ukuran judul dikurangi */
     }
 
     nav {
-        margin-top: 10px;
+        margin-top: 8px; /* Margin dikurangi */
     }
 
     nav a {
         text-decoration: none;
         color: #007bff;
         font-weight: bold;
-        padding: 5px 10px;
+        padding: 4px 8px; /* Padding dikurangi */
         border: 1px solid #007bff;
-        border-radius: 5px;
+        border-radius: 4px; /* Radius dikurangi */
         transition: background-color 0.3s, color 0.3s;
         display: inline-block;
+        font-size: 13px; /* Ukuran teks dikurangi */
     }
 
     nav a:hover {
@@ -47,30 +49,31 @@
     }
 
     .container {
-      max-width: 600px;
-      margin: 30px auto;
+      max-width: 550px; /* Lebar maksimum dikurangi */
+      margin: 25px auto; /* Margin dikurangi */
       background-color: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 25px; /* Padding dikurangi */
+      border-radius: 7px; /* Radius dikurangi */
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1); /* Shadow dikurangi */
     }
 
     h2 {
       text-align: center;
       color: #333;
-      margin-bottom: 25px;
-      font-size: 24px;
+      margin-bottom: 20px; /* Margin dikurangi */
+      font-size: 20px; /* Ukuran judul dikurangi */
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 16px; /* Margin dikurangi */
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px; /* Margin dikurangi */
       font-weight: bold;
       color: #555;
+      font-size: 13px; /* Ukuran teks dikurangi */
     }
 
     .form-group input[type="text"],
@@ -78,32 +81,32 @@
     .form-group input[type="email"],
     .form-group select,
     .form-group textarea {
-      width: calc(100% - 20px);
-      padding: 12px 10px;
+      width: calc(100% - 16px); /* Padding dikurangi */
+      padding: 10px 8px; /* Padding dikurangi */
       border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 5px; /* Radius dikurangi */
+      font-size: 14px; /* Ukuran teks dikurangi */
       box-sizing: border-box;
     }
 
     .form-group select.quantity-select {
-        width: 80px;
+        width: 70px; /* Lebar dikurangi */
         text-align: center;
         display: inline-block;
         vertical-align: middle;
-        margin-right: 10px;
+        margin-right: 8px; /* Margin dikurangi */
     }
 
     .item-selection {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 12px; /* Jarak antar item dikurangi */
     }
     .item-selection img {
-        width: 60px;
-        height: 60px;
+        width: 50px; /* Ukuran gambar dikurangi */
+        height: 50px; /* Ukuran gambar dikurangi */
         object-fit: cover;
-        border-radius: 4px;
+        border-radius: 3px; /* Radius dikurangi */
     }
 
     .product-info {
@@ -111,71 +114,71 @@
     }
     .product-info p {
         margin: 0;
-        font-size: 15px;
+        font-size: 13px; /* Ukuran teks dikurangi */
     }
     .product-info .price {
         font-weight: bold;
         color: #007bff;
+        font-size: 14px; /* Ukuran teks dikurangi */
     }
 
     .total-price {
-      /* text-align: right; <-- Baris ini Dihapus atau Dikomen */
-      font-size: 22px;
+      font-size: 18px; /* Ukuran teks dikurangi */
       font-weight: bold;
       color: #28a745;
-      margin-top: 25px;
-      padding-top: 15px;
+      margin-top: 20px; /* Margin dikurangi */
+      padding-top: 12px; /* Padding dikurangi */
       border-top: 1px solid #eee;
     }
 
     .payment-section {
-      margin-top: 30px;
-      padding: 25px;
+      margin-top: 25px; /* Margin dikurangi */
+      padding: 20px; /* Padding dikurangi */
       border: 1px solid #e0e0e0;
-      border-radius: 8px;
+      border-radius: 7px; /* Radius dikurangi */
       background-color: #f9f9f9;
       text-align: center;
     }
 
     .payment-section h3 {
       color: #333;
-      font-size: 20px;
-      margin-bottom: 15px;
+      font-size: 18px; /* Ukuran judul dikurangi */
+      margin-bottom: 12px; /* Margin dikurangi */
     }
 
     .payment-section img {
-      max-width: 250px;
+      max-width: 200px; /* Ukuran gambar dikurangi */
       height: auto;
       border: 1px solid #ddd;
-      border-radius: 5px;
-      margin-bottom: 20px;
+      border-radius: 4px; /* Radius dikurangi */
+      margin-bottom: 16px; /* Margin dikurangi */
     }
 
     .payment-instructions {
       text-align: left;
-      font-size: 15px;
+      font-size: 13px; /* Ukuran teks dikurangi */
       color: #555;
-      line-height: 1.8;
-      margin-bottom: 20px;
+      line-height: 1.6; /* Line height dikurangi */
+      margin-bottom: 16px; /* Margin dikurangi */
     }
 
     .payment-instructions ol {
-        padding-left: 20px;
-        margin-top: 10px;
+        padding-left: 18px; /* Padding dikurangi */
+        margin-top: 8px; /* Margin dikurangi */
     }
     .payment-instructions li {
-        margin-bottom: 8px;
+        margin-bottom: 6px; /* Margin dikurangi */
     }
 
     .submit-button {
       display: block;
       width: 100%;
-      padding: 15px;
+      padding: 12px; /* Padding dikurangi */
       background-color: #007bff;
       color: #fff;
       border: none;
-      border-radius: 6px;
-      font-size: 18px;
+      border-radius: 5px; /* Radius dikurangi */
+      font-size: 16px; /* Ukuran teks dikurangi */
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -188,39 +191,57 @@
         background-color: #333;
         color: #fff;
         text-align: center;
-        padding: 20px;
-        margin-top: 30px;
-        font-size: 14px;
+        padding: 16px; /* Padding dikurangi */
+        margin-top: 25px; /* Margin dikurangi */
+        font-size: 12px; /* Ukuran teks dikurangi */
     }
 
     footer p {
-        margin: 5px 0;
+        margin: 4px 0; /* Margin dikurangi */
     }
 
     @media (max-width: 768px) {
+        body {
+            font-size: 13px; /* Ukuran teks responsif lebih kecil */
+        }
         .container {
-            margin: 20px auto;
-            padding: 20px;
+            margin: 15px auto;
+            padding: 15px;
         }
         h2 {
-            font-size: 20px;
+            font-size: 18px;
         }
         .form-group input, .form-group select, .form-group textarea {
-            font-size: 14px;
-            padding: 10px;
+            font-size: 13px;
+            padding: 8px;
         }
         .submit-button {
-            font-size: 16px;
-            padding: 12px;
+            font-size: 15px;
+            padding: 10px;
         }
         .item-selection {
             flex-direction: column;
             align-items: flex-start;
-            gap: 10px;
+            gap: 8px;
         }
         .item-selection img {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
+        }
+        .product-info p, .product-info .price {
+            font-size: 12px;
+        }
+        .total-price {
+            font-size: 16px;
+        }
+        .payment-section h3 {
+            font-size: 16px;
+        }
+        .payment-instructions {
+            font-size: 12px;
+        }
+        footer {
+            font-size: 11px;
         }
     }
   </style>
@@ -261,9 +282,9 @@
                 <select id="product" name="satuan" required>
                     <option value="">Pilihan:</option>
                     <option value="Paket Cilok Original" data-price="50000" data-img="https://nasukafoods.site/paketcilok.jpg">Paket Cilok Original</option>
-                    <option value="Paket Cilok Pedas" data-price="55000" data-img="https://nasukafoods.site/paketcilokpedas.jpg">Paket Cilok Pedas</option>
-                    <option value="Paket Cilok Keju" data-price="60000" data-img="https://nasukafoods.site/paketcilokkeju.jpg">Paket Cilok Keju</option>
-                    <option value="Paket Cilok Mix" data-price="65000" data-img="https://nasukafoods.site/paketcilokmix.jpg">Paket Cilok Mix</option>
+                    <option value="Paket Cilok Pedas" data-price="55000" data-img="https://nasukafoods.site/paket-cilok-pedas.jpg">Paket Cilok Pedas</option>
+                    <option value="Paket Cilok Keju" data-price="60000" data-img="https://nasukafoods.site/paket-cilok-keju.jpg">Paket Cilok Keju</option>
+                    <option value="Paket Cilok Mix" data-price="65000" data-img="https://nasukafoods.site/paket-cilok-mix.jpg">Paket Cilok Mix</option>
                     <option value="Kacang Toping" data-price="25000" data-img="https://nasukafoods.site/bumbukacang.jpeg">Kacang Toping</option>
                 </select>
                 <p>Harga Satuan: <span id="productPrice">Rp 0</span></p>
@@ -303,8 +324,8 @@
           <p>Setelah pembayaran berhasil, pesanan Anda akan diproses. Anda akan menerima konfirmasi melalui whatsapp. Untuk informasi lebih lanjut, silakan hubungi kami.</p>
         </div>
         <button type="submit" class="submit-button">Konfirmasi Pesanan & Bayar</button>
-        <div id="responseMessage" style="margin-top: 20px; font-weight: bold;"></div>
-        <small style="display: block; margin-top: 15px; color: #888;">
+        <div id="responseMessage" style="margin-top: 15px; font-weight: bold; font-size: 13px;"></div>
+        <small style="display: block; margin-top: 12px; color: #888; font-size: 11px;">
             *Catatan: Pembayaran QRIS ini adalah instruksi. Data pesanan akan dicatat setelah Anda mengklik "Konfirmasi Pesanan & Bayar".
         </small>
       </div>
@@ -330,9 +351,9 @@
 
     const products = {
         "Paket Cilok Original": { price: 50000, img: "https://nasukafoods.site/paketcilok.jpg" },
-        "Paket Cilok Pedas": { price: 55000, img: "https://nasukafoods.site/paketcilokpedas.jpg" },
-        "Paket Cilok Keju": { price: 60000, img: "https://nasukafoods.site/paketcilokkeju.jpg" },
-        "Paket Cilok Mix": { price: 65000, img: "https://nasukafoods.site/paketcilokmix.jpg" },
+        "Paket Cilok Pedas": { price: 55000, img: "https://nasukafoods.site/paket-cilok-pedas.jpg" },
+        "Paket Cilok Keju": { price: 60000, img: "https://nasukafoods.site/paket-cilok-keju.jpg" },
+        "Paket Cilok Mix": { price: 65000, img: "https://nasukafoods.site/paket-cilok-mix.jpg" },
         "Kacang Toping": { price: 25000, img: "https://nasukafoods.site/bumbukacang.jpeg" }
     };
 
@@ -362,16 +383,13 @@
         productImage.src = currentImage;
         productImage.alt = selectedProductId || "Foto Produk";
 
-        // Karena hanya produk fisik, alamat fisik selalu ditampilkan
         document.getElementById('physicalAddressGroup').style.display = 'block';
-        // Field alamat tiktok/digital sudah dihapus dari HTML
     }
 
     // Mengambil parameter produk dari URL dan mengatur pilihan awal
     const urlParams = new URLSearchParams(window.location.search);
     const initialProduct = urlParams.get('product');
     if (initialProduct) {
-        // Mengubah format seperti "paket_cilok_original" menjadi "Paket Cilok Original"
         const formattedInitialProduct = initialProduct.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         if (products[formattedInitialProduct]) {
             productSelect.value = formattedInitialProduct;
@@ -381,7 +399,6 @@
     productSelect.addEventListener('change', calculateTotal);
     quantityInput.addEventListener('change', calculateTotal);
 
-    // Hitung total saat halaman pertama kali dimuat
     calculateTotal();
 
     form.addEventListener('submit', function(event) {
@@ -404,9 +421,6 @@
 
         fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
             method: 'POST',
-            // Baris 'mode: no-cors' dihapus agar bisa membaca respons dari Apps Script.
-            // Pastikan konfigurasi deployment Apps Script Anda (Execute as: Me, Who has access: Anyone)
-            // sudah benar untuk menghindari masalah CORS.
             cache: 'no-cache',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -414,11 +428,9 @@
             body: new URLSearchParams(data).toString()
         })
         .then(response => {
-            // Memastikan respons adalah JSON dan bisa dibaca
             if (response.ok && response.headers.get("content-type") && response.headers.get("content-type").includes("application/json")) {
                 return response.json();
             } else {
-                // Jika tidak, asumsikan sukses tapi tanpa detail orderId dari respons (misal karena CORS)
                 console.warn('Respons tidak dalam format JSON atau tidak OK, mengasumsikan pengiriman sukses.');
                 return { status: 'success', message: 'Pesanan berhasil dikirim ke Google Sheet (tanpa Order ID ditampilkan).' };
             }
@@ -432,7 +444,7 @@
                 responseMessage.innerHTML = successText;
                 responseMessage.style.color = '#28a745';
                 form.reset();
-                calculateTotal(); // Hitung ulang total untuk mereset tampilan harga setelah form di-reset
+                calculateTotal();
             } else {
                 responseMessage.textContent = 'Terjadi kesalahan saat mengirim pesanan. Mohon coba lagi. ' + (result.message || '');
                 responseMessage.style.color = '#dc3545';
