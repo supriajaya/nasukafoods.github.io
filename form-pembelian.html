@@ -248,31 +248,23 @@
       </div>
 
       <div class="form-group" id="physicalAddressGroup">
-        <label for="addressPhysical">Alamat (lengkap dengan RT/RW):</label>
-        <textarea id="addressPhysical" name="alamat_fisik" rows="3" placeholder="Isi disini"></textarea>
-      </div>
-
-      <div class="form-group" id="tiktokAddressGroup">
-        <label for="addressTiktok"> (Username / Link Video):</label>
-        <input type="text" id="addressTiktok" name="alamat_tiktok" placeholder="Cth: @arya / https://vt.Isi ikTok">
+        <label for="addressPhysical">Alamat Lengkap (dengan RT/RW, Kecamatan, Kota/Kabupaten, Kode Pos):</label>
+        <textarea id="addressPhysical" name="alamat_fisik" rows="3" placeholder="Cth: Jl. Contoh Raya No. 123, RT 001/RW 002, Kel. Sukamaju, Kec. Jatiwangi, Kab. Indramayu, 45254" required></textarea>
       </div>
 
       <div class="form-group">
         <label for="product">Pilih Produk:</label>
         <div class="item-selection">
-            
             <img id="productImage" src="https://nasukafoods.site/paketcilok.jpg" alt="Foto Produk">
             
             <div class="product-info">
                 <select id="product" name="satuan" required>
                     <option value="">Pilihan:</option>
-                    <option value="Paket Cilok" data-price="50000" data-img="https://nasukafoods.site/paketcilok.jpg">Paket Cilok</option>
-                    <option value="Kacang Toping" data-price="50000" data-img="https://nasukafoods.site/bumbukacang.jpeg">Kacang Toping</option>
-                    
-                    
-                    
-                    
-                    
+                    <option value="Paket Cilok Original" data-price="50000" data-img="https://nasukafoods.site/paketcilok.jpg">Paket Cilok Original</option>
+                    <option value="Paket Cilok Pedas" data-price="55000" data-img="https://nasukafoods.site/paketcilokpedas.jpg">Paket Cilok Pedas</option>
+                    <option value="Paket Cilok Keju" data-price="60000" data-img="https://nasukafoods.site/paketcilokkeju.jpg">Paket Cilok Keju</option>
+                    <option value="Paket Cilok Mix" data-price="65000" data-img="https://nasukafoods.site/paketcilokmix.jpg">Paket Cilok Mix</option>
+                    <option value="Kacang Toping" data-price="25000" data-img="https://nasukafoods.site/bumbukacang.jpeg">Kacang Toping</option>
                 </select>
                 <p>Harga Satuan: <span id="productPrice">Rp 0</span></p>
             </div>
@@ -333,20 +325,15 @@
     const form = document.getElementById('orderForm');
     const responseMessage = document.getElementById('responseMessage');
 
+    // Pastikan URL Google Apps Script Web App Anda benar dan memiliki akses 'Anyone'
     const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwHkLbvwWElYFUkv79Mc3EnazriDROW9yfQk_fVPlAQ0VIep1OxHIPyg_tRDMzl41Jsqq/exec';
 
     const products = {
-        "Paket Cilok": { price: 50000, img: "https://nasukafoods.site/paketcilok.jpg" },
-        "Kacang Toping": { price: 50000, img: "https://nasukafoods.site/bumbukacang.jpeg" },
-        "Booster Followers": { price: 40000, img: "https://nasukafoods.site/tiktok-followers.jpg" },
-        "Booster Viewers": { price: 10000, img: "https://nasukafoods.site/tiktok-viewers.png" },
-        "Booster Likes": { price: 25000, img: "https://nasukafoods.site/tiktok-likes.jpg" },
-        "Cilok Polosan": { price: 50000, img: "https://nasukafoods.site/images/cilok-polosan.jpg" },
-        "Cilok Full Toping": { price: 50000, img: "https://nasukafoods.site/images/cilok-full-topping.jpg" },
-        "Kawasaki Ax": { price: 6500000, img: "https://nasukafoods.site/kawasakiax.png" },
-        "Kawal Darurat": { price: 50000, img: "https://nasukafoods.site/images/kawal-darurat.jpg" },
-        "Aplikator Acp": { price: 700000, img: "https://nasukafoods.site/foto-leles.jpg" },
-        "Hack lokasi": { price: 10000, img: "https://nasukafoods.site/hack-lokasi.jpg" }
+        "Paket Cilok Original": { price: 50000, img: "https://nasukafoods.site/paketcilok.jpg" },
+        "Paket Cilok Pedas": { price: 55000, img: "https://nasukafoods.site/paketcilokpedas.jpg" },
+        "Paket Cilok Keju": { price: 60000, img: "https://nasukafoods.site/paketcilokkeju.jpg" },
+        "Paket Cilok Mix": { price: 65000, img: "https://nasukafoods.site/paketcilokmix.jpg" },
+        "Kacang Toping": { price: 25000, img: "https://nasukafoods.site/bumbukacang.jpeg" }
     };
 
     function formatRupiah(amount) {
@@ -361,7 +348,7 @@
         const selectedProductId = productSelect.value;
         const quantity = parseInt(quantityInput.value);
         let currentPrice = 0;
-        let currentImage = "https://nasukafoods.site/paketcilok.jpg";
+        let currentImage = "https://nasukafoods.site/paketcilok.jpg"; // Default image
 
         if (selectedProductId && products[selectedProductId]) {
             currentPrice = products[selectedProductId].price;
@@ -375,20 +362,16 @@
         productImage.src = currentImage;
         productImage.alt = selectedProductId || "Foto Produk";
 
-        const isDigitalProduct = ["Booster Followers", "Booster Viewers", "Booster Likes", "Hack lokasi"].includes(selectedProductId);
-        document.getElementById('physicalAddressGroup').style.display = isDigitalProduct ? 'none' : 'block';
-        document.getElementById('tiktokAddressGroup').style.display = isDigitalProduct ? 'block' : 'none';
-
-        if (isDigitalProduct) {
-            document.getElementById('addressPhysical').value = '';
-        } else {
-            document.getElementById('addressTiktok').value = '';
-        }
+        // Karena hanya produk fisik, alamat fisik selalu ditampilkan
+        document.getElementById('physicalAddressGroup').style.display = 'block';
+        // Field alamat tiktok/digital sudah dihapus dari HTML
     }
 
+    // Mengambil parameter produk dari URL dan mengatur pilihan awal
     const urlParams = new URLSearchParams(window.location.search);
     const initialProduct = urlParams.get('product');
     if (initialProduct) {
+        // Mengubah format seperti "paket_cilok_original" menjadi "Paket Cilok Original"
         const formattedInitialProduct = initialProduct.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         if (products[formattedInitialProduct]) {
             productSelect.value = formattedInitialProduct;
@@ -398,6 +381,7 @@
     productSelect.addEventListener('change', calculateTotal);
     quantityInput.addEventListener('change', calculateTotal);
 
+    // Hitung total saat halaman pertama kali dimuat
     calculateTotal();
 
     form.addEventListener('submit', function(event) {
@@ -448,7 +432,7 @@
                 responseMessage.innerHTML = successText;
                 responseMessage.style.color = '#28a745';
                 form.reset();
-                calculateTotal();
+                calculateTotal(); // Hitung ulang total untuk mereset tampilan harga setelah form di-reset
             } else {
                 responseMessage.textContent = 'Terjadi kesalahan saat mengirim pesanan. Mohon coba lagi. ' + (result.message || '');
                 responseMessage.style.color = '#dc3545';
@@ -463,5 +447,4 @@
   </script>
 
 </body>
-</html>
 </html>
