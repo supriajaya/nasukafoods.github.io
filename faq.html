@@ -4,67 +4,99 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FAQ - Nasuka Foods</title>
-  <link rel="stylesheet" href="style.css"> <style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Variabel CSS untuk konsistensi desain */
+    :root {
+        --color-primary: hsl(190, 60%, 40%); /* Teal yang lebih lembut dan profesional */
+        --color-primary-darker: hsl(190, 60%, 30%); /* Versi lebih gelap untuk hover */
+        --color-primary-rgb: 41, 144, 163; /* Nilai RGB dari --color-primary untuk bayangan */
+
+        --color-secondary: hsl(210, 29%, 24%); /* Biru Kebiruan Gelap (untuk Header/Footer) */
+        --color-text-dark: hsl(210, 10%, 20%); /* Abu-abu Gelap Lembut */
+        --color-text-light: #ffffff;
+        --color-background-light: hsl(210, 15%, 95%); /* Abu-abu Kebiruan Sangat Terang */
+        --color-accent-green: hsl(120, 39%, 45%); /* Hijau Lebih Kaya untuk harga, jika ada */
+        --color-border: #e0e0e0;
+        --shadow-light: 0 4px 12px rgba(0,0,0,0.08); /* Bayangan Lebih Halus */
+    }
+
     body {
       margin: 0;
-      font-family: sans-serif;
-      background-color: #ffffff;
-      color: #000000;
-      line-height: 1.6;
+      font-family: 'Open Sans', sans-serif; /* Menggunakan Open Sans untuk teks umum */
+      background-color: var(--color-background-light);
+      color: var(--color-text-dark);
+      line-height: 1.7; /* Meningkatkan line-height untuk keterbacaan */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
-      background-color: #f8f8f8;
-      padding: 10px 20px;
+      background-color: var(--color-secondary);
+      color: var(--color-text-light);
+      padding: 20px 30px; /* Padding lebih besar */
       text-align: center;
-      border-bottom: 1px solid #eee;
+      box-shadow: var(--shadow-light); /* Bayangan lebih lembut */
+      border-bottom: 1px solid rgba(255,255,255,0.1); /* Garis tipis di bawah header */
     }
 
     header h1 {
       margin: 0;
-      font-size: 28px;
-      color: #333;
+      font-size: 32px; /* Ukuran font lebih besar */
+      font-family: 'Poppins', sans-serif; /* Poppins untuk judul utama */
+      letter-spacing: 0.05em; /* Spasi antar huruf */
     }
 
     nav {
-        margin-top: 10px;
+        margin-top: 15px;
     }
 
     nav a {
         text-decoration: none;
-        color: #007bff;
-        font-weight: bold;
-        padding: 5px 10px;
-        border: 1px solid #007bff;
-        border-radius: 5px;
-        transition: background-color 0.3s, color 0.3s;
+        color: var(--color-text-light); /* Teks putih untuk navigasi */
+        font-weight: 600;
+        padding: 8px 18px; /* Padding lebih besar */
+        border: 1px solid var(--color-text-light);
+        border-radius: 25px; /* Sudut lebih membulat */
+        transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        display: inline-block;
+        font-size: 0.95em;
     }
 
     nav a:hover {
-        background-color: #007bff;
-        color: #fff;
+        background-color: var(--color-primary); /* Warna primer saat hover */
+        border-color: var(--color-primary);
+        color: var(--color-text-light);
+        transform: translateY(-2px); /* Efek angkat */
     }
 
     .content-section {
-        padding: 20px;
-        max-width: 800px;
-        margin: 20px auto;
-        background-color: #fdfdfd;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        padding: 40px; /* Padding lebih besar */
+        max-width: 900px; /* Lebar maksimum lebih besar */
+        margin: 40px auto; /* Margin lebih besar */
+        background-color: #fff;
+        border-radius: 12px; /* Sudut lebih membulat */
+        box-shadow: var(--shadow-light);
+        flex-grow: 1; /* Agar konten mengisi ruang tersedia */
     }
 
     .content-section h2 {
-      font-size: 26px;
-      margin-bottom: 15px;
-      color: #333;
+      font-size: 2.8em; /* Ukuran font lebih besar */
+      margin-bottom: 40px; /* Jarak bawah lebih besar */
+      color: var(--color-secondary); /* Warna sesuai tema */
       text-align: center;
+      font-family: 'Poppins', sans-serif; /* Poppins untuk sub-judul */
+      font-weight: 700;
+      letter-spacing: 0.03em;
     }
 
     .faq-item {
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px dashed #eee;
+        margin-bottom: 30px; /* Jarak antar item FAQ lebih besar */
+        padding-bottom: 25px; /* Padding bawah lebih besar */
+        border-bottom: 1px solid var(--color-border); /* Garis pemisah yang lebih halus */
     }
 
     .faq-item:last-child {
@@ -74,29 +106,73 @@
     }
 
     .faq-item h3 {
-        font-size: 18px;
-        color: #555;
+        font-size: 1.5em; /* Ukuran font lebih besar */
+        color: var(--color-primary); /* Warna judul FAQ */
         margin-top: 0;
-        margin-bottom: 10px;
+        margin-bottom: 15px; /* Jarak bawah lebih besar */
+        font-family: 'Poppins', sans-serif; /* Poppins untuk pertanyaan */
+        font-weight: 600;
+        line-height: 1.4;
     }
 
     .faq-item p {
-        font-size: 15px;
+        font-size: 1.05em; /* Ukuran font sedikit lebih besar */
         text-align: justify;
-        line-height: 1.7;
+        line-height: 1.8; /* Line-height lebih besar untuk keterbacaan */
+        color: var(--color-text-dark);
     }
 
     footer {
-        background-color: #333;
-        color: #fff;
+        background-color: var(--color-secondary);
+        color: var(--color-text-light);
         text-align: center;
-        padding: 20px;
-        margin-top: 30px;
+        padding: 25px;
+        margin-top: auto; /* Memastikan footer selalu di bawah */
         font-size: 14px;
+        box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
     }
 
     footer p {
         margin: 5px 0;
+    }
+
+    footer a {
+        color: var(--color-primary); /* Tautan di footer juga pakai warna primary */
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+        color: var(--color-text-light);
+    }
+
+    @media (max-width: 768px) {
+        header h1 {
+            font-size: 28px;
+        }
+        nav a {
+            padding: 6px 12px;
+            font-size: 0.9em;
+        }
+        .content-section {
+            margin: 20px auto;
+            padding: 25px;
+        }
+        .content-section h2 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+        }
+        .faq-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+        }
+        .faq-item h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        .faq-item p {
+            font-size: 0.95em;
+        }
     }
   </style>
 </head>
@@ -114,38 +190,34 @@
 
     <div class="faq-item">
       <h3>1. Apa itu Nasuka Foods?</h3>
-      <p>Nasuka Foods adalah usaha yang bergerak di bidang penjualan makanan olahan, khususnya berbagai varian cilok, serta menyediakan beberapa layanan digital. Kami berkomitmen untuk memberikan produk dan layanan berkualitas tinggi kepada pelanggan kami.</p>
+      <p>Nasuka Foods adalah usaha yang bergerak di bidang penjualan makanan olahan, khususnya berbagai varian cilok premium. Kami berkomitmen untuk memberikan produk makanan berkualitas tinggi dengan cita rasa otentik kepada pelanggan kami.</p>
     </div>
 
     <div class="faq-item">
       <h3>2. Bagaimana cara memesan produk di Nasuka Foods?</h3>
-      <p>Anda dapat memesan produk kami dengan memilih item yang Anda inginkan dari halaman produk, lalu melanjutkan ke proses checkout. Ikuti petunjuk yang ada untuk menyelesaikan pembelian Anda.</p>
+      <p>Anda dapat memesan produk kami dengan memilih item yang Anda inginkan dari halaman produk di website kami, lalu melanjutkan ke proses checkout. Ikuti petunjuk yang ada untuk menyelesaikan pembelian Anda dengan mudah.</p>
     </div>
 
     <div class="faq-item">
       <h3>3. Metode pembayaran apa saja yang diterima?</h3>
-      <p>Kami menerima berbagai metode pembayaran melalui layanan iPaymu, termasuk transfer bank, e-wallet, dan metode pembayaran lainnya yang didukung oleh iPaymu. Detail lebih lanjut akan tersedia saat proses checkout.</p>
+      <p>Kami menerima berbagai metode pembayaran melalui layanan iPaymu, termasuk transfer bank, e-wallet, dan metode pembayaran lainnya yang didukung oleh iPaymu. Detail metode pembayaran yang tersedia akan ditampilkan secara jelas saat proses checkout.</p>
     </div>
 
     <div class="faq-item">
       <h3>4. Berapa lama waktu pengiriman untuk produk makanan?</h3>
-      <p>Waktu pengiriman bervariasi tergantung lokasi Anda dan jenis produk. Untuk produk makanan, kami berusaha memproses pesanan secepat mungkin. Informasi estimasi pengiriman akan diberikan saat konfirmasi pesanan.</p>
+      <p>Waktu pengiriman bervariasi tergantung lokasi Anda dan jenis produk. Kami berusaha memproses setiap pesanan secepat mungkin untuk memastikan kesegaran produk. Informasi estimasi pengiriman akan diberikan saat konfirmasi pesanan Anda.</p>
     </div>
 
     <div class="faq-item">
-      <h3>5. Apakah ada garansi untuk layanan digital?</h3>
-      <p>Untuk layanan digital, kami memberikan jaminan kepuasan pelanggan sesuai dengan deskripsi layanan. Jika ada kendala, silakan hubungi tim dukungan kami untuk bantuan.</p>
-    </div>
-
-    <div class="faq-item">
-      <h3>6. Bagaimana cara menghubungi layanan pelanggan?</h3>
-      <p>Anda dapat menghubungi kami melalui email di info@nasukafoods.site atau melalui telepon di +62 812-3456-7890 selama jam operasional kami (Senin - Jumat, 09:00 - 17:00 WIB).</p>
+      <h3>5. Bagaimana cara menghubungi layanan pelanggan?</h3>
+      <p>Anda dapat menghubungi kami melalui email di <a href="mailto:info@nasukafoods.site" style="color: var(--color-primary); text-decoration: none;">info@nasukafoods.site</a> atau melalui telepon di <a href="tel:+62859109819017" style="color: var(--color-primary); text-decoration: none;">+62 859-1098-19017</a>. Tim kami siap membantu Anda selama jam operasional kami (Senin - Jumat, 09:00 - 17:00 WIB).</p>
     </div>
 
     </section>
 
   <footer>
     <p>&copy; 2025 Nasuka Foods. Hak Cipta Dilindungi Undang-Undang.</p>
+    <p><a href="terms-conditions.html">Syarat & Ketentuan</a> | <a href="privacy-policy.html">Kebijakan Privasi</a></p>
   </footer>
 
 </body>
