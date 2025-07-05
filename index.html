@@ -1,286 +1,1197 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nasuka Foods - Produk & Layanan</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: #ffffff;
-      color: #000000;
-      line-height: 1.6;
-    }
-
-    header {
-      background-color: #f8f8f8; /* Warna latar belakang header */
-      padding: 10px 20px;
-      text-align: center;
-      border-bottom: 1px solid #eee;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px; /* Ukuran font nama perusahaan */
-      color: #333;
-    }
-
-    header img {
-      width: 100%;
-      max-height: 150px; /* Tinggi header yang lebih masuk akal */
-      object-fit: contain; /* Menggunakan 'contain' agar logo tidak terpotong */
-      display: block;
-      margin: 0 auto 10px auto; /* Tengah secara horizontal, margin bawah */
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Lebih responsif */
-      gap: 15px; /* Jarak antar item */
-      padding: 20px;
-      max-width: 1200px; /* Batasi lebar konten */
-      margin: 0 auto; /* Tengah secara horizontal */
-    }
-
-    .item {
-      text-align: center;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      background-color: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      display: flex; /* Untuk layout flexbox di dalam item */
-      flex-direction: column;
-      justify-content: space-between; /* Untuk mendorong tombol ke bawah */
-    }
-
-    .item a {
-        text-decoration: none; /* Hilangkan garis bawah pada link */
-        color: inherit; /* Warisi warna teks dari parent */
-    }
-
-    .item img {
-      width: 100%;
-      height: 150px; /* Tinggi gambar yang konsisten */
-      object-fit: cover; /* Pastikan gambar mengisi area tanpa terdistorsi */
-      border-radius: 8px;
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .item p {
-      margin: 5px 0; /* Kurangi margin */
-      font-size: 15px;
-      font-weight: bold; /* Judul produk lebih tebal */
-      color: #333; /* Warna teks produk */
-    }
-
-    .item .price { /* Kelas baru untuk harga */
-      font-size: 16px;
-      color: #007bff; /* Warna harga */
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .buy-button {
-      display: inline-block;
-      background-color: #28a745; /* Warna hijau untuk tombol beli */
-      color: #fff;
-      padding: 10px 15px;
-      border-radius: 5px;
-      text-decoration: none;
-      margin-top: 15px; /* Jarak dari teks harga */
-      transition: background-color 0.3s ease;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .buy-button:hover {
-      background-color: #218838;
-    }
-
-
-    section.content-section { /* Menggunakan section untuk area artikel */
-        padding: 20px;
-        max-width: 800px;
-        margin: 20px auto; /* Tambah margin atas/bawah */
-        background-color: #fdfdfd;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-
-    section.content-section h2 {
-      font-size: 26px; /* Ukuran font yang sedikit lebih besar */
-      margin-bottom: 15px;
-      color: #333;
-      text-align: center;
-    }
-
-    section.content-section p {
-      font-size: 14px;
-      text-align: justify;
-      margin-bottom: 10px;
-    }
-
-    footer {
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        padding: 14px; /* Padding dikurangi 30% dari 20px (20 * 0.7 = 14) */
-        margin-top: 30px;
-        font-size: 9.8px; /* Ukuran font dikurangi 30% dari 14px (14 * 0.7 = 9.8) */
-    }
-
-    footer .footer-content {
-        margin-bottom: 10.5px; /* Dikurangi 30% dari 15px (15 * 0.7 = 10.5) */
-    }
-
-    footer .footer-content p {
-        margin: 3.5px 0; /* Dikurangi 30% dari 5px (5 * 0.7 = 3.5) */
-        font-size: 9.8px; /* Ukuran font dikurangi 30% dari 14px (14 * 0.7 = 9.8) */
-    }
-
-    footer .footer-links a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 7px; /* Dikurangi 30% dari 10px (10 * 0.7 = 7) */
-        transition: color 0.3s ease;
-        font-size: 9.8px; /* Ukuran font dikurangi 30% dari 14px (14 * 0.7 = 9.8) */
-    }
-
-    footer .footer-links a:hover {
-        color: #007bff;
-    }
-
-    @media (max-width: 768px) {
-        .grid {
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            padding: 15px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Foods</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #528B8B; /* Dark Teal */
+            --color-primary-darker: #3E6A6A;
+            --color-secondary: #2C3E50; /* Dark Blue Gray */
+            --color-text-dark: #333333;
+            --color-text-light: #ffffff;
+            --color-background-light: #F8F8F8;
+            --color-accent-green: #2ECC71; /* Emerald Green */
+            --color-border: #e0e0e0;
+            --shadow-light: 0 4px 15px rgba(0,0,0,0.07);
+            --spacing-unit: 1rem; /* 16px */
         }
 
-        .item img {
-            height: 120px;
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background-light);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+            font-size: 8px; /* Mengurangi ukuran font menjadi 50% dari 16px */
+            padding-top: calc(var(--spacing-unit) * 4.5); /* Padding for fixed header */
+        }
+
+        header {
+            background-color: var(--color-secondary);
+            color: var(--color-text-light);
+            padding: calc(var(--spacing-unit) * 1.25) var(--spacing-unit) calc(var(--spacing-unit) * 0.75);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-light);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
         }
 
         header h1 {
-            font-size: 24px;
+            margin: 0;
+            font-size: 0.9em; /* Mengurangi ukuran font menjadi 50% dari 1.8em */
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.02em;
+            font-weight: 700;
         }
 
-        section.content-section h2 {
-            font-size: 22px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .grid {
-            grid-template-columns: 1fr 1fr; /* 2 kolom di layar sangat kecil */
-            padding: 10px;
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem; /* Mengurangi jarak antara ikon menjadi 50% dari 1rem */
         }
 
-        .item img {
-            height: 100px;
+        .icon-button {
+            cursor: pointer;
+            color: var(--color-text-light);
+            font-size: 0.9em; /* Mengurangi ukuran font menjadi 50% dari 1.8em */
+            padding: 0.1rem; /* Mengurangi padding menjadi 50% dari 0.2rem */
+            transition: transform 0.2s ease;
+            text-decoration: none; /* Untuk tautan */
         }
 
-        .item p {
-            font-size: 13px;
+        .icon-button:hover {
+            transform: scale(1.05);
         }
 
-        .item .price {
-            font-size: 14px;
+        .cart-icon {
+            position: relative;
         }
 
-        .buy-button {
-            padding: 8px 10px;
-            font-size: 12px;
+        .cart-count {
+            position: absolute;
+            top: -0.25rem; /* Mengurangi top menjadi 50% dari -0.5rem */
+            right: -0.25rem; /* Mengurangi right menjadi 50% dari -0.5rem */
+            background-color: var(--color-accent-green);
+            color: white;
+            border-radius: 50%;
+            padding: 0.1rem 0.25rem; /* Mengurangi padding menjadi 50% dari 0.2rem 0.5rem */
+            font-size: 0.35em; /* Mengurangi ukuran font menjadi 50% dari 0.7em */
+            font-weight: 600;
+            min-width: 0.625rem; /* Mengurangi min-width menjadi 50% dari 1.25rem */
+            text-align: center;
+            line-height: 1;
+            box-shadow: 0 1px 2.5px rgba(0,0,0,0.2); /* Mengurangi bayangan menjadi 50% */
         }
 
-        header img {
-            max-height: 100px;
+        main {
+            padding: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding menjadi 50% */
+            max-width: 600px; /* Mengurangi max-width menjadi 50% dari 1200px */
+            margin: var(--spacing-unit) auto; /* Mengurangi margin menjadi 50% */
         }
 
-        header h1 {
-            font-size: 20px;
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--color-secondary);
+            text-align: center;
+            margin-bottom: var(--spacing-unit); /* Mengurangi margin-bottom menjadi 50% */
+            font-size: 1.1em; /* Mengurangi ukuran font menjadi 50% dari 2.2em */
+            font-weight: 700;
         }
-    }
-  </style>
+
+        /* Perubahan untuk mode baris horizontal */
+        .product-grid {
+            display: flex; /* Mengubah ke flexbox */
+            flex-wrap: nowrap; /* Mencegah wrap ke baris baru */
+            overflow-x: auto; /* Mengaktifkan scroll horizontal jika konten melebihi lebar */
+            -webkit-overflow-scrolling: touch; /* Mengaktifkan smooth scrolling di iOS */
+            gap: calc(var(--spacing-unit) * 0.375); /* Mengurangi jarak antar kartu menjadi 50% */
+            padding-bottom: calc(var(--spacing-unit) * 0.5); /* Memberi ruang untuk scrollbar menjadi 50% */
+            justify-content: flex-start; /* Memulai kartu dari kiri */
+        }
+
+        .product-card {
+            background-color: #fff;
+            border-radius: 0.3rem; /* Mengurangi border-radius menjadi 50% */
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 0.5px solid var(--color-border); /* Mengurangi border menjadi 50% */
+            flex: 0 0 80px; /* Mengurangi lebar tetap menjadi 50% dari 160px */
+            min-width: 75px; /* Mengurangi min-width menjadi 50% dari 150px */
+            max-width: 90px; /* Mengurangi max-width menjadi 50% dari 180px */
+            position: relative; /* Tambahkan ini untuk posisi absolut pada harga */
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px); /* Mengurangi efek hover menjadi 50% */
+            box-shadow: 0 3px 7.5px rgba(0,0,0,0.1); /* Mengurangi bayangan menjadi 50% */
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 80px; /* Mengurangi tinggi gambar x */
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid var(--color-border); /* Mengurangi border menjadi 50% */
+        }
+
+        .product-info {
+            padding: calc(var(--spacing-unit) * 0.25); /* Mengurangi padding menjadi 50% */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-info h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--color-secondary);
+            margin-top: 0;
+            margin-bottom: 0.125rem; /* Mengurangi margin bawah menjadi 50% */
+            font-size: 0.55em; /* Mengurangi ukuran font menjadi 50% dari 1.1em */
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .product-card .price { /* Modifikasi selector untuk harga di dalam kartu produk */
+            position: absolute; /* Posisikan absolut */
+            top: 0.25rem; /* Sesuaikan posisi vertikal */
+            left: 0.25rem; /* Sesuaikan posisi horizontal */
+            background-color: rgba(0, 0, 0, 0.6); /* Latar belakang semi-transparan */
+            color: white;
+            padding: 0.1rem 0.25rem; /* Padding yang lebih kecil */
+            border-radius: 0.15rem; /* Border radius yang lebih kecil */
+            font-size: 0.45em; /* Mengurangi ukuran font menjadi 50% dari 1em */
+            font-weight: 700;
+            z-index: 10; /* Pastikan di atas gambar */
+        }
+
+        .add-to-cart-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.4rem; /* Mengurangi padding menjadi 50% */
+            border-radius: 0.2rem; /* Mengurangi border-radius menjadi 50% */
+            cursor: pointer;
+            font-size: 0.425em; /* Mengurangi ukuran font menjadi 50% dari 0.85em */
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            margin-top: auto;
+            text-transform: uppercase;
+            letter-spacing: 0.01em; /* Mengurangi letter-spacing menjadi 50% */
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--color-primary-darker);
+            transform: translateY(-1px); /* Mengurangi transform menjadi 50% */
+            box-shadow: 0 1.5px 4px rgba(0,0,0,0.1); /* Mengurangi bayangan menjadi 50% */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            padding: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding menjadi 50% */
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: calc(var(--spacing-unit) * 0.75); /* Mengurangi padding menjadi 50% */
+            border-radius: 0.375rem; /* Mengurangi border-radius menjadi 50% */
+            width: 95%;
+            max-width: 275px; /* Mengurangi max-width menjadi 50% dari 550px */
+            box-shadow: 0 4px 12.5px rgba(0,0,0,0.25); /* Mengurangi bayangan menjadi 50% */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-15px); opacity: 0; } /* Mengurangi transform menjadi 50% */
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-bottom menjadi 50% */
+            border-bottom: 0.5px solid var(--color-border); /* Mengurangi border menjadi 50% */
+            padding-bottom: 0.375rem; /* Mengurangi padding-bottom menjadi 50% */
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            color: var(--color-secondary);
+            font-size: 0.9em; /* Mengurangi ukuran font menjadi 50% dari 1.8em */
+            font-weight: 700;
+        }
+
+        .close-button {
+            color: #888;
+            font-size: 1.25em; /* Mengurangi ukuran font menjadi 50% dari 2.5em */
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+            line-height: 1;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            transform: rotate(90deg);
+        }
+
+        .cart-items-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 0.375rem; /* Mengurangi padding-right menjadi 50% */
+            margin-bottom: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-bottom menjadi 50% */
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-bottom menjadi 50% */
+            padding-bottom: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding-bottom menjadi 50% */
+            border-bottom: 0.5px dashed var(--color-border); /* Mengurangi border menjadi 50% */
+        }
+        .cart-item:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .cart-item img {
+            width: 20px; /* Mengurangi lebar gambar item keranjang menjadi 50% dari 40px */
+            height: 20px; /* Mengurangi tinggi gambar item keranjang menjadi 50% dari 40px */
+            object-fit: cover;
+            border-radius: 0.25rem; /* Mengurangi border-radius menjadi 50% */
+            margin-right: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-right menjadi 50% */
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1); /* Mengurangi bayangan menjadi 50% */
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-info h4 {
+            margin: 0;
+            font-size: 0.6em; /* Mengurangi ukuran font menjadi 50% dari 1.2em */
+            color: var(--color-primary-darker);
+            font-weight: 600;
+        }
+
+        .cart-item-info .price {
+            font-size: 0.5em; /* Mengurangi ukuran font menjadi 50% dari 1em */
+            color: #666;
+            margin-top: 0.125rem; /* Mengurangi margin-top menjadi 50% */
+            font-weight: 500;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem; /* Mengurangi gap menjadi 50% */
+            flex-shrink: 0;
+        }
+
+        .cart-item-controls button {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 16px; /* Mengurangi lebar menjadi 50% */
+            height: 16px; /* Mengurangi tinggi menjadi 50% */
+            font-size: 0.7em; /* Mengurangi ukuran font menjadi 50% dari 1.4em */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 1px 2.5px rgba(0,0,0,0.1); /* Mengurangi bayangan menjadi 50% */
+        }
+        .cart-item-controls button:hover {
+            background-color: var(--color-primary-darker);
+            transform: translateY(-0.5px); /* Mengurangi transform menjadi 50% */
+        }
+        .cart-item-controls button:active {
+            transform: translateY(0);
+        }
+
+        .cart-item-controls span {
+            font-weight: 700;
+            min-width: 1rem; /* Mengurangi min-width menjadi 50% */
+            text-align: center;
+            font-size: 0.55em; /* Mengurangi ukuran font menjadi 50% dari 1.1em */
+            color: var(--color-secondary);
+        }
+
+        .cart-total-modal {
+            text-align: right;
+            margin-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-top menjadi 50% */
+            padding-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding-top menjadi 50% */
+            border-top: 0.5px solid var(--color-border); /* Mengurangi border menjadi 50% */
+            font-size: 0.75em; /* Mengurangi ukuran font menjadi 50% dari 1.5em */
+            font-weight: 700;
+            color: var(--color-accent-green);
+        }
+
+        .checkout-btn {
+            background-color: var(--color-accent-green);
+            color: white;
+            border: none;
+            padding: 0.45rem 0.9rem; /* Mengurangi padding menjadi 50% */
+            border-radius: 0.25rem; /* Mengurangi border-radius menjadi 50% */
+            cursor: pointer;
+            font-size: 0.6em; /* Mengurangi ukuran font menjadi 50% dari 1.2em */
+            font-weight: 600;
+            margin-top: calc(var(--spacing-unit) * 0.75); /* Mengurangi margin-top menjadi 50% */
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.025em; /* Mengurangi letter-spacing menjadi 50% */
+        }
+
+        .checkout-btn:hover {
+            background-color: hsl(120, 39%, 35%);
+            transform: translateY(-1.5px); /* Mengurangi transform menjadi 50% */
+            box-shadow: 0 2.5px 6px rgba(0,0,0,0.15); /* Mengurangi bayangan menjadi 50% */
+        }
+
+        .checkout-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .empty-cart-modal {
+            text-align: center;
+            padding: var(--spacing-unit) 0; /* Mengurangi padding menjadi 50% */
+            color: #777;
+            font-style: italic;
+            font-size: 0.55em; /* Mengurangi ukuran font menjadi 50% dari 1.1em */
+        }
+
+        .free-shipping-badge {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.2em 0.35em; /* Mengurangi padding menjadi 50% */
+            border-radius: 0.25rem; /* Mengurangi border-radius menjadi 50% */
+            font-size: 0.4em; /* Mengurangi ukuran font menjadi 50% dari 0.8em */
+            font-weight: 600;
+            margin-left: 0.5rem; /* Mengurangi margin-left menjadi 50% */
+            letter-spacing: 0.015em; /* Mengurangi letter-spacing menjadi 50% */
+            text-transform: uppercase;
+            box-shadow: 0 1px 2.5px rgba(0,0,0,0.2); /* Mengurangi bayangan menjadi 50% */
+            align-items: center;
+            gap: 0.2em; /* Mengurangi gap menjadi 50% */
+        }
+        .free-shipping-badge.active {
+            display: inline-flex;
+        }
+
+        /* Address Modal Specific Styles */
+        #addressModal .modal-content {
+            max-width: 225px; /* Mengurangi max-width menjadi 50% dari 450px */
+            padding: calc(var(--spacing-unit) * 0.625); /* Mengurangi padding menjadi 50% */
+        }
+        #addressModal form {
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--spacing-unit) * 0.5); /* Mengurangi gap menjadi 50% */
+        }
+        #addressModal label {
+            font-weight: 600;
+            margin-bottom: 0.125rem; /* Mengurangi margin-bottom menjadi 50% */
+            display: block;
+            color: var(--color-secondary);
+            font-size: 0.475em; /* Mengurangi ukuran font menjadi 50% dari 0.95em */
+        }
+        #addressModal input[type="text"],
+        #addressModal input[type="tel"],
+        #addressModal textarea {
+            width: 100%;
+            padding: 0.375rem; /* Mengurangi padding menjadi 50% */
+            border: 0.5px solid var(--color-border); /* Mengurangi border menjadi 50% */
+            border-radius: 0.2rem; /* Mengurangi border-radius menjadi 50% */
+            font-family: 'Inter', sans-serif;
+            font-size: 0.475em; /* Mengurangi ukuran font menjadi 50% dari 0.95em */
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        #addressModal input[type="text"]:focus,
+        #addressModal input[type="tel"]:focus,
+        #addressModal textarea:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 1.5px rgba(82, 139, 139, 0.2); /* Mengurangi bayangan menjadi 50% */
+            outline: none;
+        }
+        #addressModal textarea {
+            resize: vertical;
+            min-height: 40px; /* Mengurangi min-height menjadi 50% */
+            max-height: 75px; /* Mengurangi max-height menjadi 50% */
+        }
+        #addressModal button[type="submit"] {
+            background-color: var(--color-accent-green);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.75rem; /* Mengurangi padding menjadi 50% */
+            border-radius: 0.25rem; /* Mengurangi border-radius menjadi 50% */
+            cursor: pointer;
+            font-size: 0.5em; /* Mengurangi ukuran font menjadi 50% dari 1em */
+            font-weight: 600;
+            margin-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-top menjadi 50% */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        #addressModal button[type="submit"]:hover {
+            background-color: hsl(120, 39%, 35%);
+            transform: translateY(-1px); /* Mengurangi transform menjadi 50% */
+        }
+        #addressModal button[type="submit"]:active {
+            transform: translateY(0);
+        }
+        .address-info-display {
+            padding: 0.375rem 0.5rem; /* Mengurangi padding menjadi 50% */
+            border: 0.5px solid #dcdcdc; /* Mengurangi border menjadi 50% */
+            border-radius: 0.25rem; /* Mengurangi border-radius menjadi 50% */
+            background-color: #f0f0f0;
+            margin-top: 0.5rem; /* Mengurangi margin-top menjadi 50% */
+            line-height: 1.5;
+            font-size: 0.45em; /* Mengurangi ukuran font menjadi 50% dari 0.9em */
+            color: #555;
+        }
+        .address-info-display strong {
+            color: var(--color-secondary);
+        }
+
+        /* Profile picture styling */
+        .profile-pic-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.375rem; /* Mengurangi gap menjadi 50% */
+            margin-bottom: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-bottom menjadi 50% */
+            padding-bottom: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding-bottom menjadi 50% */
+            border-bottom: 0.5px dashed var(--color-border); /* Mengurangi border menjadi 50% */
+        }
+
+        .profile-pic-container {
+            width: 25px; /* Mengurangi lebar kontainer gambar profil menjadi 50% dari 50px */
+            height: 25px; /* Mengurangi tinggi kontainer gambar profil menjadi 50% dari 50px */
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--color-primary); /* Mengurangi border menjadi 50% */
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1); /* Mengurangi bayangan menjadi 50% */
+        }
+
+        #profilePicturePreview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic-upload-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 0.3rem 0.6rem; /* Mengurangi padding menjadi 50% */
+            border-radius: 0.2rem; /* Mengurangi border-radius menjadi 50% */
+            cursor: pointer;
+            font-size: 0.45em; /* Mengurangi ukuran font menjadi 50% dari 0.9em */
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-pic-upload-btn:hover {
+            background-color: #5a6268;
+        }
+
+        /* Checkout Page Styles */
+        .checkout-page-container {
+            display: none; /* Hidden by default */
+            max-width: 400px; /* Mengurangi max-width menjadi 50% dari 800px */
+            margin: var(--spacing-unit) auto; /* Mengurangi margin menjadi 50% */
+            background-color: #fff;
+            padding: var(--spacing-unit); /* Mengurangi padding menjadi 50% */
+            border-radius: 0.375rem; /* Mengurangi border-radius menjadi 50% */
+            box-shadow: var(--shadow-light);
+        }
+
+        .checkout-page-container h2 {
+            text-align: left;
+            margin-bottom: calc(var(--spacing-unit) * 0.75); /* Mengurangi margin-bottom menjadi 50% */
+            font-size: 1em; /* Mengurangi ukuran font menjadi 50% dari 2em */
+        }
+
+        .checkout-section {
+            margin-bottom: var(--spacing-unit); /* Mengurangi margin-bottom menjadi 50% */
+            padding: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding menjadi 50% */
+            border: 0.5px solid var(--color-border); /* Mengurangi border menjadi 50% */
+            border-radius: 0.3rem; /* Mengurangi border-radius menjadi 50% */
+        }
+
+        .checkout-section h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--color-primary-darker);
+            margin-top: 0;
+            margin-bottom: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-bottom menjadi 50% */
+            font-size: 0.75em; /* Mengurangi ukuran font menjadi 50% dari 1.5em */
+            border-bottom: 0.5px solid var(--color-border); /* Mengurangi border menjadi 50% */
+            padding-bottom: 0.25rem; /* Mengurangi padding-bottom menjadi 50% */
+        }
+
+        .checkout-section p {
+            margin-bottom: 0.25rem; /* Mengurangi margin-bottom menjadi 50% */
+            font-size: 0.475em; /* Mengurangi ukuran font menjadi 50% dari 0.95em */
+        }
+
+        .checkout-section strong {
+            color: var(--color-secondary);
+        }
+
+        .checkout-items {
+            border-top: 0.5px dashed var(--color-border); /* Mengurangi border menjadi 50% */
+            padding-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding-top menjadi 50% */
+            margin-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-top menjadi 50% */
+        }
+
+        .checkout-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.375rem; /* Mengurangi margin-bottom menjadi 50% */
+            gap: calc(var(--spacing-unit) * 0.5); /* Mengurangi gap menjadi 50% */
+        }
+
+        .checkout-item img {
+            width: 15px; /* Mengurangi lebar gambar checkout item menjadi 50% dari 30px */
+            height: 15px; /* Mengurangi tinggi gambar checkout item menjadi 50% dari 30px */
+            object-fit: cover;
+            border-radius: 0.2rem; /* Mengurangi border-radius menjadi 50% */
+            box-shadow: 0 1px 2.5px rgba(0,0,0,0.1); /* Mengurangi bayangan menjadi 50% */
+        }
+
+        .checkout-item-details {
+            flex-grow: 1;
+        }
+
+        .checkout-item-details h4 {
+            margin: 0;
+            font-size: 0.55em; /* Mengurangi ukuran font menjadi 50% dari 1.1em */
+            color: var(--color-secondary);
+        }
+
+        .checkout-item-details p {
+            margin: 0.1rem 0 0; /* Mengurangi margin menjadi 50% */
+            font-size: 0.425em; /* Mengurangi ukuran font menjadi 50% dari 0.85em */
+            color: #666;
+        }
+
+        .checkout-summary {
+            text-align: right;
+            border-top: 1px solid var(--color-primary); /* Mengurangi border menjadi 50% */
+            padding-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi padding-top menjadi 50% */
+            margin-top: calc(var(--spacing-unit) * 0.75); /* Mengurangi margin-top menjadi 50% */
+        }
+
+        .checkout-summary p {
+            font-size: 0.55em; /* Mengurangi ukuran font menjadi 50% dari 1.1em */
+            font-weight: 500;
+            margin-bottom: 0.25rem; /* Mengurangi margin-bottom menjadi 50% */
+        }
+
+        .checkout-summary .total-price {
+            font-size: 0.9em; /* Mengurangi ukuran font menjadi 50% dari 1.8em */
+            font-weight: 700;
+            color: var(--color-accent-green);
+            margin-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-top menjadi 50% */
+        }
+
+        .place-order-btn {
+            background-color: var(--color-accent-green);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem; /* Mengurangi padding menjadi 50% */
+            border-radius: 0.25rem; /* Mengurangi border-radius menjadi 50% */
+            cursor: pointer;
+            font-size: 0.65em; /* Mengurangi ukuran font menjadi 50% dari 1.3em */
+            font-weight: 600;
+            width: 100%;
+            margin-top: var(--spacing-unit); /* Mengurangi margin-top menjadi 50% */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.025em; /* Mengurangi letter-spacing menjadi 50% */
+        }
+
+        .place-order-btn:hover {
+            background-color: hsl(120, 39%, 35%);
+            transform: translateY(-1.5px); /* Mengurangi transform menjadi 50% */
+            box-shadow: 0 2.5px 6px rgba(0,0,0,0.15); /* Mengurangi bayangan menjadi 50% */
+        }
+
+        .back-to-cart-btn {
+            background-color: #f0f0f0;
+            color: var(--color-secondary);
+            border: 0.5px solid var(--color-border); /* Mengurangi border menjadi 50% */
+            padding: 0.4rem 0.75rem; /* Mengurangi padding menjadi 50% */
+            border-radius: 0.25rem; /* Mengurangi border-radius menjadi 50% */
+            cursor: pointer;
+            font-size: 0.5em; /* Mengurangi ukuran font menjadi 50% dari 1em */
+            font-weight: 500;
+            width: 100%;
+            margin-top: calc(var(--spacing-unit) * 0.5); /* Mengurangi margin-top menjadi 50% */
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+
+        .back-to-cart-btn:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <div class="header-icons">
+            <a href="#" class="icon-button" id="homeIcon">🏠</a>
+            <div class="cart-icon" id="cartIcon">
+                🛒 <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
 
-  <header>
-    <img src="https://nasukafoods.site/logo-nasuka.jpg" alt="Logo Nasuka Foods">
-    <h1>Nasuka Foods</h1>
-  </header>
-  <li>PRODUK KAMI</li>
+    <main id="mainContent">
+        <div id="productPage" class="active-page">
+           
+            <div class="product-grid" id="productGrid">
+            </div>
+        </div>
 
-  <div class="grid">
-    <div class="item">
-      <a href="https://nasukafoods.site/paket-cilok.html">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Paket Cilok">
-      </a>
-      <p>Paket Cilok Original</p>
-      <p class="price">Rp 50.000</p>
-      <a href="form-pembelian.html?product=paket_cilok_original" class="buy-button">Beli Sekarang</a>
+        <div id="checkoutPage" class="checkout-page-container">
+            <h2>Detail Pesanan Anda</h2>
+
+            <div class="checkout-section">
+                <h3>Informasi Pelanggan</h3>
+                <p><strong>Nama:</strong> <span id="checkoutCustomerName"></span></p>
+                <p><strong>Telepon:</strong> <span id="checkoutCustomerPhone"></span></p>
+                <p><strong>Alamat:</strong> <span id="checkoutCustomerAddress"></span></p>
+            </div>
+
+            <div class="checkout-section">
+                <h3>Ringkasan Pesanan</h3>
+                <div id="checkoutItems" class="checkout-items">
+                    </div>
+                <div class="checkout-summary">
+                    <p>Subtotal: <span id="checkoutSubtotal">Rp 0</span></p>
+                    <p>Ongkos Kirim: <span id="checkoutShippingCost">Rp 0</span></p>
+                    <p class="total-price">Total: <span id="checkoutTotalPrice">Rp 0</span></p>
+                </div>
+            </div>
+
+            <button class="place-order-btn" id="placeOrderBtn">Pesan Sekarang (WhatsApp)</button>
+            <button class="back-to-cart-btn" id="backToCartBtn">Kembali ke Keranjang</button>
+        </div>
+    </main>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Keranjang Anda</h3>
+                <span class="close-button" id="closeCartModal">&times;</span>
+            </div>
+            <div id="cartItemsContainer" class="cart-items-container">
+                <p class="empty-cart-modal" id="emptyCartModalMessage">Keranjang Anda kosong.</p>
+            </div>
+            <div class="cart-total-modal">
+                Total: <span id="modalCartTotal">Rp 0</span>
+                <span class="free-shipping-badge" id="freeShippingBadge">
+                    🚚 Gratis Ongkir!
+                </span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Lanjutkan ke Checkout</button>
+        </div>
     </div>
 
-    <div class="item">
-      <a href="https://nasukafoods.site/paket-cilok-pedas.html">
-        <img src="https://nasukafoods.site/paket-cilok-pedas.jpg" alt="Paket Cilok Pedas">
-      </a>
-      <p>Paket Cilok Pedas</p>
-      <p class="price">Rp 55.000</p>
-      <a href="form-pembelian.html?product=paket_cilok_pedas" class="buy-button">Beli Sekarang</a>
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Informasi Pengiriman</h3>
+                <span class="close-button" id="closeAddressModal">&times;</span>
+            </div>
+            <form id="addressForm">
+                <div class="profile-pic-section">
+                    <div class="profile-pic-container">
+                        <img id="profilePicturePreview" src="https://via.placeholder.com/100?text=Foto" alt="Profil">
+                    </div>
+                    <label for="profilePictureUpload" class="profile-pic-upload-btn">Unggah Foto Profil</label>
+                    <input type="file" id="profilePictureUpload" accept="image/*" style="display: none;">
+                </div>
+
+                <label for="customerName">Nama Lengkap:</label>
+                <input type="text" id="customerName" required>
+
+                <label for="customerPhone">Nomor Telepon:</label>
+                <input type="tel" id="customerPhone" required>
+
+                <label for="customerAddress">Alamat Lengkap:</label>
+                <textarea id="customerAddress" rows="4" required></textarea>
+
+                <button type="submit">Simpan Alamat</button>
+            </form>
+            <div id="savedAddressDisplay" class="address-info-display" style="display: none;">
+                <p>Alamat tersimpan:</p>
+                <p><strong>Nama:</strong> <span id="displayCustomerName"></span></p>
+                <p><strong>Telepon:</strong> <span id="displayCustomerPhone"></span></p>
+                <p><strong>Alamat:</strong> <span id="displayCustomerAddress"></span></p>
+            </div>
+        </div>
     </div>
 
-    <div class="item">
-      <a href="https://nasukafoods.site/paket-cilok-keju.html">
-        <img src="https://nasukafoods.site/paket-cilok-keju.jpg" alt="Paket Cilok Keju">
-      </a>
-      <p>Paket Cilok Keju</p>
-      <p class="price">Rp 60.000</p>
-      <a href="form-pembelian.html?product=paket_cilok_keju" class="buy-button">Beli Sekarang</a>
-    </div>
+    <script>
+        const products = [
+        
+        
+            { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+            { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+            { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+            { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+             { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+            { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+            { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+            { id: 'p001', name: 'CILOK KUAH', price: 900, description: 'Cilok kenyal dengan kuah pedas gurih, cocok untuk camilan.', image: 'https://nasukafoods.site/paketcilok.jpg' },
+            
+          
+          
+          
+        ];
 
-    <div class="item">
-      <a href="https://nasukafoods.site/paket-cilok-mix.html">
-        <img src="https://nasukafoods.site/paket-cilok-mix.jpg" alt="Paket Cilok Mix">
-      </a>
-      <p>Paket Cilok Mix</p>
-      <p class="price">Rp 65.000</p>
-      <a href="form-pembelian.html?product=paket_cilok_mix" class="buy-button">Beli Sekarang</a>
-    </div>
+        const productGrid = document.getElementById('productGrid');
+        const cartIcon = document.getElementById('cartIcon');
+        const cartCountSpan = document.getElementById('cartCount');
+        const cartModal = document.getElementById('cartModal');
+        const closeCartModalBtn = document.getElementById('closeCartModal');
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const modalCartTotalSpan = document.getElementById('modalCartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const emptyCartModalMessage = document.getElementById('emptyCartModalMessage');
+        const freeShippingBadge = document.getElementById('freeShippingBadge');
+        const FREE_SHIPPING_THRESHOLD = 50000;
+        const homeIcon = document.getElementById('homeIcon');
 
-    <div class="item">
-      <a href="https://nasukafoods.site/kacang-toping.html">
-        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Kacang Toping">
-      </a>
-      <p>Kacang Toping</p>
-      <p class="price">Rp 25.000</p>
-      <a href="form-pembelian.html?product=kacang_toping" class="buy-button">Beli Sekarang</a>
-    </div>
-  </div>        
+        const addressModal = document.getElementById('addressModal');
+        const closeAddressModalBtn = document.getElementById('closeAddressModal');
+        const addressForm = document.getElementById('addressForm');
+        const customerNameInput = document.getElementById('customerName');
+        const customerPhoneInput = document.getElementById('customerPhone');
+        const customerAddressInput = document.getElementById('customerAddress');
+        const savedAddressDisplay = document.getElementById('savedAddressDisplay');
+        const displayCustomerName = document.getElementById('displayCustomerName');
+        const displayCustomerPhone = document.getElementById('displayCustomerPhone');
+        const displayCustomerAddress = document.getElementById('displayCustomerAddress');
+        const profilePictureUpload = document.getElementById('profilePictureUpload');
+        const profilePicturePreview = document.getElementById('profilePicturePreview');
 
-  <section class="content-section">
-    <p>Nasuka Foods adalah penyedia berbagai produk dan layanan inovatif yang dirancang untuk memenuhi kebutuhan Anda. Kami berkomitmen untuk memberikan kualitas terbaik dengan fokus pada kepuasan pelanggan. Kami selalu berusaha untuk mengembangkan penawaran baru yang relevan dengan tren dan permintaan pasar terkini.
-    </p>
-  </section>
+        const productPage = document.getElementById('productPage');
+        const checkoutPage = document.getElementById('checkoutPage');
+        const checkoutCustomerName = document.getElementById('checkoutCustomerName');
+        const checkoutCustomerPhone = document.getElementById('checkoutCustomerPhone');
+        const checkoutCustomerAddress = document.getElementById('checkoutCustomerAddress');
+        const checkoutItems = document.getElementById('checkoutItems');
+        const checkoutSubtotal = document.getElementById('checkoutSubtotal');
+        const checkoutShippingCost = document.getElementById('checkoutShippingCost');
+        const checkoutTotalPrice = document.getElementById('checkoutTotalPrice');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const backToCartBtn = document.getElementById('backToCartBtn');
 
-  <footer>
-    <div class="footer-content">
-        <h3>Nasuka Foods</h3>
-        <p>Alamat: Jl eretan wetan No.45, Kabupaten Indramayu, Jawa Barat, Indonesia 45254</p>
-        <p>Telepon: +62 859109819017</p>
-        <p>Email: info@nasukafoods.site</p>
-        <p>Jam Operasional: Senin - Jumat, 09:00 - 17:00 WIB</p>
-    </div>
-    <div class="footer-links">
-        <a href="faq.html">FAQ</a> |
-        <a href="refund-policy.html">Kebijakan Pengembalian</a> |
-        <a href="terms-conditions.html">Syarat & Ketentuan</a>
-    </div>
-    <p>&copy; 2025 Nasuka Foods. Hak Cipta Dilindungi Undang-Undang.</p>
-  </footer>
+        const SHIPPING_COST = 10000;
 
+        function getCartFromLocalStorage() {
+            const cart = localStorage.getItem('nasukaCart');
+            try {
+                return cart ? JSON.parse(cart) : [];
+            } catch (e) {
+                console.error("Error parsing cart from localStorage:", e);
+                return [];
+            }
+        }
+
+        function saveCartToLocalStorage(cart) {
+            localStorage.setItem('nasukaCart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function getCustomerInfoFromLocalStorage() {
+            const customerInfo = localStorage.getItem('nasukaCustomerInfo');
+            try {
+                return customerInfo ? JSON.parse(customerInfo) : null;
+            } catch (e) {
+                console.error("Error parsing customer info from localStorage:", e);
+                return null;
+            }
+        }
+
+        function saveCustomerInfoToLocalStorage(info) {
+            localStorage.setItem('nasukaCustomerInfo', JSON.stringify(info));
+            displayCustomerInfo();
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(number);
+        }
+
+        function renderProducts() {
+            productGrid.innerHTML = '';
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="price">${formatRupiah(product.price)}</div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <button class="add-to-cart-btn" data-product-id="${product.id}">+ Keranjang</button>
+                    </div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const productId = event.target.dataset.productId;
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        addToCart(product);
+                    }
+                });
+            });
+        }
+
+        function addToCart(product) {
+            let cart = getCartFromLocalStorage();
+            const existingItemIndex = cart.findIndex(item => item.id === product.id);
+
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            saveCartToLocalStorage(cart);
+            renderCartItems();
+        }
+
+        function removeFromCart(productId) {
+            let cart = getCartFromLocalStorage();
+            cart = cart.filter(item => item.id !== productId);
+            saveCartToLocalStorage(cart);
+            renderCartItems();
+        }
+
+        function updateQuantity(productId, change) {
+            let cart = getCartFromLocalStorage();
+            const itemIndex = cart.findIndex(item => item.id === productId);
+
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity += change;
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+            }
+            saveCartToLocalStorage(cart);
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const cart = getCartFromLocalStorage();
+            cartItemsContainer.innerHTML = '';
+            let totalModalPrice = 0;
+
+            if (cart.length === 0) {
+                emptyCartModalMessage.style.display = 'block';
+                checkoutBtn.disabled = true;
+            } else {
+                emptyCartModalMessage.style.display = 'none';
+                checkoutBtn.disabled = false;
+                cart.forEach(item => {
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.classList.add('cart-item');
+                    cartItemElement.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <p class="price">${formatRupiah(item.price)}</p>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button data-product-id="${item.id}" data-change="-1">-</button>
+                            <span>${item.quantity}</span>
+                            <button data-product-id="${item.id}" data-change="1">+</button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(cartItemElement);
+                    totalModalPrice += item.price * item.quantity;
+                });
+            }
+            modalCartTotalSpan.textContent = formatRupiah(totalModalPrice);
+
+            if (totalModalPrice >= FREE_SHIPPING_THRESHOLD) {
+                freeShippingBadge.classList.add('active');
+            } else {
+                freeShippingBadge.classList.remove('active');
+            }
+
+            document.querySelectorAll('.cart-item-controls button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const productId = event.target.dataset.productId;
+                    const change = parseInt(event.target.dataset.change);
+                    updateQuantity(productId, change);
+                });
+            });
+        }
+
+        function updateCartCount() {
+            const cart = getCartFromLocalStorage();
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCountSpan.textContent = totalItems;
+        }
+
+        function displayCustomerInfo() {
+            const customerInfo = getCustomerInfoFromLocalStorage();
+            if (customerInfo) {
+                customerNameInput.value = customerInfo.name;
+                customerPhoneInput.value = customerInfo.phone;
+                customerAddressInput.value = customerInfo.address;
+                profilePicturePreview.src = customerInfo.profilePic || 'https://via.placeholder.com/100?text=Foto';
+
+                displayCustomerName.textContent = customerInfo.name;
+                displayCustomerPhone.textContent = customerInfo.phone;
+                displayCustomerAddress.textContent = customerInfo.address;
+                savedAddressDisplay.style.display = 'block';
+            } else {
+                customerNameInput.value = '';
+                customerPhoneInput.value = '';
+                customerAddressInput.value = '';
+                profilePicturePreview.src = 'https://via.placeholder.com/100?text=Foto';
+                savedAddressDisplay.style.display = 'none';
+            }
+        }
+
+        function showCheckoutPage() {
+            const cart = getCartFromLocalStorage();
+            const customerInfo = getCustomerInfoFromLocalStorage();
+
+            if (cart.length === 0) {
+                alert('Keranjang Anda kosong. Tambahkan produk terlebih dahulu.');
+                return;
+            }
+
+            if (!customerInfo || !customerInfo.name || !customerInfo.phone || !customerInfo.address) {
+                alert('Mohon lengkapi informasi pengiriman Anda terlebih dahulu (klik ikon Rumah).');
+                homeIcon.click();
+                return;
+            }
+
+            checkoutCustomerName.textContent = customerInfo.name;
+            checkoutCustomerPhone.textContent = customerInfo.phone;
+            checkoutCustomerAddress.textContent = customerInfo.address;
+
+            checkoutItems.innerHTML = '';
+            let subtotalPrice = 0;
+            cart.forEach(item => {
+                const checkoutItemElement = document.createElement('div');
+                checkoutItemElement.classList.add('checkout-item');
+                checkoutItemElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="checkout-item-details">
+                        <h4>${item.name}</h4>
+                        <p>${item.quantity} x ${formatRupiah(item.price)} = ${formatRupiah(item.quantity * item.price)}</p>
+                    </div>
+                `;
+                checkoutItems.appendChild(checkoutItemElement);
+                subtotalPrice += item.quantity * item.price;
+            });
+
+            checkoutSubtotal.textContent = formatRupiah(subtotalPrice);
+            let shippingCost = SHIPPING_COST;
+            if (subtotalPrice >= FREE_SHIPPING_THRESHOLD) {
+                shippingCost = 0;
+            }
+            checkoutShippingCost.textContent = formatRupiah(shippingCost);
+            checkoutTotalPrice.textContent = formatRupiah(subtotalPrice + shippingCost);
+
+            productPage.style.display = 'none';
+            checkoutPage.style.display = 'block';
+            cartModal.style.display = 'none';
+        }
+
+        function showProductPage() {
+            productPage.style.display = 'block';
+            checkoutPage.style.display = 'none';
+        }
+
+        homeIcon.addEventListener('click', (event) => {
+            event.preventDefault();
+            const customerInfo = getCustomerInfoFromLocalStorage();
+            if (customerInfo) {
+                customerNameInput.value = customerInfo.name;
+                customerPhoneInput.value = customerInfo.phone;
+                customerAddressInput.value = customerInfo.address;
+                profilePicturePreview.src = customerInfo.profilePic || 'https://via.placeholder.com/100?text=Foto';
+                displayCustomerInfo();
+                addressForm.style.display = 'flex';
+            } else {
+                customerNameInput.value = '';
+                customerPhoneInput.value = '';
+                customerAddressInput.value = '';
+                profilePicturePreview.src = 'https://via.placeholder.com/100?text=Foto';
+                savedAddressDisplay.style.display = 'none';
+                addressForm.style.display = 'flex';
+            }
+            addressModal.style.display = 'flex';
+        });
+
+        closeAddressModalBtn.addEventListener('click', () => {
+            addressModal.style.display = 'none';
+        });
+
+        profilePictureUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePicturePreview.src = e.target.result;
+                    const customerInfo = getCustomerInfoFromLocalStorage() || {};
+                    customerInfo.profilePic = e.target.result;
+                    saveCustomerInfoToLocalStorage(customerInfo);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        addressForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const customerInfo = {
+                name: customerNameInput.value,
+                phone: customerPhoneInput.value,
+                address: customerAddressInput.value,
+                profilePic: profilePicturePreview.src
+            };
+            saveCustomerInfoToLocalStorage(customerInfo);
+            addressModal.style.display = 'none';
+            alert('Informasi alamat telah disimpan!');
+        });
+
+        cartIcon.addEventListener('click', () => {
+            renderCartItems();
+            cartModal.style.display = 'flex';
+        });
+
+        closeCartModalBtn.addEventListener('click', () => {
+            cartModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target == cartModal) {
+                cartModal.style.display = 'none';
+            }
+            if (event.target == addressModal) {
+                addressModal.style.display = 'none';
+            }
+        });
+
+        checkoutBtn.addEventListener('click', showCheckoutPage);
+
+        backToCartBtn.addEventListener('click', () => {
+            showProductPage();
+            cartIcon.click();
+        });
+
+        placeOrderBtn.addEventListener('click', () => {
+            const cart = getCartFromLocalStorage();
+            const customerInfo = getCustomerInfoFromLocalStorage();
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+            const total = subtotal + shipping;
+
+            let whatsappMessage = `Halo Nasuka Foods, saya ingin memesan:\n\n`;
+            cart.forEach((item, index) => {
+                whatsappMessage += `${index + 1}. ${item.name} (${item.quantity} x ${formatRupiah(item.price)}) = ${formatRupiah(item.quantity * item.price)}\n`;
+            });
+
+            whatsappMessage += `\nSubtotal: ${formatRupiah(subtotal)}\n`;
+            whatsappMessage += `Ongkos Kirim: ${formatRupiah(shipping)}\n`;
+            whatsappMessage += `Total Pembayaran: ${formatRupiah(total)}\n\n`;
+
+            whatsappMessage += `Informasi Pengiriman:\n`;
+            whatsappMessage += `Nama: ${customerInfo.name}\n`;
+            whatsappMessage += `Telepon: ${customerInfo.phone}\n`;
+            whatsappMessage += `Alamat: ${customerInfo.address}\n\n`;
+            if (customerInfo.profilePic && customerInfo.profilePic !== 'https://via.placeholder.com/100?text=Foto') {
+                 whatsappMessage += `Foto Profil (untuk referensi): ${customerInfo.profilePic}\n\n`;
+            }
+            whatsappMessage += `Terima kasih!`;
+
+            const whatsappUrl = `https://wa.me/62859109819017?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCartCount();
+            displayCustomerInfo();
+            showProductPage();
+        });
+    </script>
 </body>
 </html>
