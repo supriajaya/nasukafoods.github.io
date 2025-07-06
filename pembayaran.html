@@ -132,9 +132,12 @@
             const sendOrderBtn = document.getElementById('sendOrderBtn');
 
             const cart = JSON.parse(localStorage.getItem('nasukaCart')) || [];
+            // Penting: Pastikan ini selalu dimuat
             const customerData = JSON.parse(localStorage.getItem('nasukaCustomerData')) || {};
 
-            if (cart.length === 0 || !customerData.nama) {
+            // Periksa jika keranjang kosong ATAU data nama pelanggan tidak ada
+            // Karena data profil bisa saja belum diisi jika pelanggan langsung ke checkout
+            if (cart.length === 0) {
                 emptyCartMessage.style.display = 'block';
                 actionButtonsDiv.style.display = 'none';
                 return;
@@ -147,10 +150,18 @@
             let overallTotal = 0;
 
             htmlContent += '<h2 class="section-title">Informasi Pelanggan</h2>';
-            htmlContent += `<div class="detail-item"><strong>Nama:</strong> ${customerData.nama || '-'}</div>`;
-            htmlContent += `<div class="detail-item"><strong>Handphone:</strong> ${customerData.handphone || '-'}</div>`;
-            htmlContent += `<div class="detail-item"><strong>Alamat:</strong> ${customerData.alamat || '-'}</div>`;
-            htmlContent += `<div class="detail-item"><strong>Username:</strong> ${customerData.username || '-'}</div>`;
+            // Pastikan Anda menampilkan pesan jika data pelanggan belum lengkap
+            if (customerData.nama && customerData.handphone && customerData.alamat && customerData.username) {
+                htmlContent += `<div class="detail-item"><strong>Nama:</strong> ${customerData.nama}</div>`;
+                htmlContent += `<div class="detail-item"><strong>Handphone:</strong> ${customerData.handphone}</div>`;
+                htmlContent += `<div class="detail-item"><strong>Alamat:</strong> ${customerData.alamat}</div>`;
+                htmlContent += `<div class="detail-item"><strong>Username:</strong> ${customerData.username}</div>`;
+            } else {
+                htmlContent += `<p style="color: red; font-weight: bold;">Informasi profil pelanggan belum lengkap. Mohon lengkapi profil Anda di halaman utama terlebih dahulu.</p>`;
+                // Anda mungkin ingin menonaktifkan tombol kirim pesanan jika data profil tidak lengkap
+                sendOrderBtn.disabled = true;
+                sendOrderBtn.textContent = 'Lengkapi Profil Dahulu';
+            }
 
             htmlContent += '<h2 class="section-title">Rincian Produk</h2>';
             htmlContent += '<ul class="product-list">';
@@ -170,6 +181,12 @@
             orderDetailsDiv.innerHTML = htmlContent;
 
             sendOrderBtn.addEventListener('click', async () => {
+                // Periksa lagi kelengkapan data profil sebelum mengirim
+                if (!customerData.nama || !customerData.handphone || !customerData.alamat || !customerData.username) {
+                    alert('Mohon lengkapi informasi profil Anda sebelum mengirim pesanan.');
+                    return;
+                }
+
                 const orderCode = `NASUKA-${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${new Date().getDate().toString().padStart(2, '0')}-${Date.now().toString().slice(-6)}`;
 
                 const orderPayload = {
@@ -203,9 +220,10 @@
 
                     alert('Pesanan Anda berhasil dikirim! Terima Kasih.');
                     
+                    // HANYA HAPUS DATA KERANJANG, JANGAN HAPUS DATA PROFIL
                     localStorage.removeItem('nasukaCart');
-                    localStorage.removeItem('nasukaCustomerData');
-                    
+                    // localStorage.removeItem('nasukaCustomerData'); // <--- BARIS INI DIKOMENTARI ATAU DIHAPUS
+
                     window.location.href = 'terima-kasih.html';
 
                 } catch (error) {
