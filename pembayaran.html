@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Pesanan & Pembayaran - Nasuka Karya</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .detail-item {
+            margin-bottom: 10px;
+            padding-left: 15px;
+        }
+        .detail-item strong {
+            display: inline-block;
+            width: 120px;
+        }
+        .product-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .product-list li {
+            background-color: #f0f8ff;
+            border: 1px solid #e0f0ff;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .product-list li span {
+            font-weight: bold;
+        }
+        .total-summary {
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+        }
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .action-buttons button, .action-buttons a {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .action-buttons button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+        .action-buttons button:hover {
+            background-color: #218838;
+        }
+        .action-buttons a {
+            background-color: #6c757d;
+            color: white;
+            border: 1px solid #6c757d;
+        }
+        .action-buttons a:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+        .empty-cart-message {
+            text-align: center;
+            font-size: 1.1em;
+            color: #888;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detail Pesanan Anda</h1>
+
+        <div id="order-details">
+            <div class="empty-cart-message" id="empty-cart-message">
+                Keranjang belanja Anda kosong atau data tidak ditemukan.
+                <br><a href="index.html">Kembali ke halaman produk</a> untuk mulai belanja.
+            </div>
+        </div>
+
+        <div class="action-buttons" id="action-buttons" style="display:none;">
+            <button id="sendOrderBtn">Kirim Pesanan Sekarang</button>
+            <a href="index.html">Kembali Belanja</a>
+        </div>
+    </div>
+
+    <script>
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderDetailsDiv = document.getElementById('order-details');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const actionButtonsDiv = document.getElementById('action-buttons');
+            const sendOrderBtn = document.getElementById('sendOrderBtn');
+
+            const cart = JSON.parse(localStorage.getItem('nasukaCart')) || [];
+            const customerData = JSON.parse(localStorage.getItem('nasukaCustomerData')) || {};
+
+            if (cart.length === 0 || !customerData.nama) {
+                emptyCartMessage.style.display = 'block';
+                actionButtonsDiv.style.display = 'none';
+                return;
+            } else {
+                emptyCartMessage.style.display = 'none';
+                actionButtonsDiv.style.display = 'block';
+            }
+
+            let htmlContent = '';
+            let overallTotal = 0;
+
+            htmlContent += '<h2 class="section-title">Informasi Pelanggan</h2>';
+            htmlContent += `<div class="detail-item"><strong>Nama:</strong> ${customerData.nama || '-'}</div>`;
+            htmlContent += `<div class="detail-item"><strong>Handphone:</strong> ${customerData.handphone || '-'}</div>`;
+            htmlContent += `<div class="detail-item"><strong>Alamat:</strong> ${customerData.alamat || '-'}</div>`;
+            htmlContent += `<div class="detail-item"><strong>Username:</strong> ${customerData.username || '-'}</div>`;
+
+            htmlContent += '<h2 class="section-title">Rincian Produk</h2>';
+            htmlContent += '<ul class="product-list">';
+            cart.forEach(item => {
+                htmlContent += `
+                    <li>
+                        <span>${item.productName}</span>
+                        <span>${item.quantity} x Rp ${item.pricePerUnit.toLocaleString('id-ID')} = Rp ${item.totalPrice.toLocaleString('id-ID')}</span>
+                    </li>
+                `;
+                overallTotal += item.totalPrice;
+            });
+            htmlContent += '</ul>';
+
+            htmlContent += `<div class="total-summary">Total Keseluruhan: Rp ${overallTotal.toLocaleString('id-ID')}</div>`;
+
+            orderDetailsDiv.innerHTML = htmlContent;
+
+            sendOrderBtn.addEventListener('click', async () => {
+                const orderCode = `NASUKA-${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${new Date().getDate().toString().padStart(2, '0')}-${Date.now().toString().slice(-6)}`;
+
+                const orderPayload = {
+                    kodePesanan: orderCode,
+                    waktu: new Date().toISOString(),
+                    nama: customerData.nama,
+                    handphone: customerData.handphone,
+                    alamat: customerData.alamat,
+                    username: customerData.username,
+                    produkDetail: cart.map(item => ({
+                        namaProduk: item.productName,
+                        kuantitas: item.quantity,
+                        hargaPerUnit: item.pricePerUnit,
+                        totalHargaProduk: item.totalPrice
+                    })),
+                    totalHargaPesanan: overallTotal
+                };
+
+                try {
+                    sendOrderBtn.disabled = true;
+                    sendOrderBtn.textContent = 'Mengirim Pesanan...';
+
+                    const response = await fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(orderPayload),
+                    });
+
+                    alert('Pesanan Anda berhasil dikirim! Terima Kasih.');
+                    
+                    localStorage.removeItem('nasukaCart');
+                    localStorage.removeItem('nasukaCustomerData');
+                    
+                    window.location.href = 'terima-kasih.html';
+
+                } catch (error) {
+                    console.error('Error saat mengirim pesanan:', error);
+                    alert('Terjadi kesalahan saat mengirim pesanan. Silakan coba lagi. Pastikan Anda terhubung ke internet.');
+                } finally {
+                    sendOrderBtn.disabled = false;
+                    sendOrderBtn.textContent = 'Kirim Pesanan Sekarang';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
