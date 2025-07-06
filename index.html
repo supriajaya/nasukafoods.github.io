@@ -19,6 +19,7 @@
       padding: 10px 20px;
       text-align: center;
       border-bottom: 1px solid #eee;
+      position: relative; /* Added for cart icon positioning */
     }
 
     header h1 {
@@ -33,6 +34,123 @@
       object-fit: contain;
       display: block;
       margin: 0 auto 10px auto;
+    }
+
+    .cart-icon {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #007bff;
+    }
+
+    .cart-icon:hover {
+      color: #0056b3;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 10px;
+      line-height: 1;
+      text-align: center;
+      display: none; /* Hidden by default */
+    }
+
+    .cart-popup {
+      display: none; /* Hidden by default */
+      position: absolute;
+      top: 60px; /* Adjust as needed */
+      right: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+      text-align: left;
+    }
+
+    .cart-popup h3 {
+      margin-top: 0;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    .cart-item {
+      display: flex;
+      flex-direction: column; /* Changed to column for better layout of controls */
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .cart-item-name {
+      font-weight: bold;
+      flex-grow: 1;
+    }
+
+    .cart-item-price {
+      white-space: nowrap; /* Prevent price from wrapping */
+    }
+
+    .cart-item-controls {
+      display: flex;
+      justify-content: flex-end; /* Align controls to the right */
+      align-items: center;
+      margin-top: 5px;
+    }
+
+    .cart-item-controls button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin: 0 3px;
+    }
+
+    .cart-item-controls button:hover {
+      background-color: #0056b3;
+    }
+
+    .cart-item-controls input {
+      width: 30px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 3px;
+      font-size: 12px;
+    }
+
+    .cart-total {
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: right;
     }
 
     .grid {
@@ -84,7 +202,7 @@
       font-weight: bold;
     }
 
-    .buy-button {
+    .add-to-cart-button {
       display: inline-block;
       background-color: #28a745;
       color: #fff;
@@ -95,11 +213,34 @@
       transition: background-color 0.3s ease;
       font-size: 11.2px; /* 14px - 20% */
       font-weight: bold;
+      border: none;
+      cursor: pointer;
     }
 
-    .buy-button:hover {
+    .add-to-cart-button:hover {
       background-color: #218838;
     }
+
+    .checkout-button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none; /* Make it look like a button, but act as a link */
+      display: block; /* Ensure it takes full width */
+      text-align: center;
+    }
+
+    .checkout-button:hover {
+      background-color: #0056b3;
+    }
+
 
     section.content-section {
         padding: 20px;
@@ -122,6 +263,51 @@
       text-align: justify;
       margin-bottom: 10px;
     }
+
+    .profile-form {
+        margin-top: 30px;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+    }
+
+    .profile-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .profile-form input[type="text"],
+    .profile-form input[type="tel"],
+    .profile-form textarea {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 1em;
+    }
+
+    .profile-form textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    .profile-form button {
+        background-color: #6c757d;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+    .profile-form button:hover {
+        background-color: #5a6268;
+    }
+
 
     footer {
         background-color: #333;
@@ -189,7 +375,7 @@
             font-size: 11.2px; /* 14px - 20% */
         }
 
-        .buy-button {
+        .add-to-cart-button {
             padding: 6.4px 8px; /* 8px 10px - 20% */
             font-size: 9.6px; /* 12px - 20% */
         }
@@ -208,61 +394,26 @@
 
   <header>
     <img src="https://nasukafoods.site/images/nasuka-karya.jpg" alt="Logo Nasuka Karya">
+    <div class="cart-icon" id="cart-icon">&#128722;<span class="cart-count" id="cart-count">0</span></div>
+    <div class="cart-popup" id="cart-popup">
+      <h3>Keranjang Belanja</h3>
+      <div id="cart-items">
+        <p>Keranjang kosong.</p>
+      </div>
+      <div class="cart-total" id="cart-total">Total: Rp 0</div>
+      <a href="pembayaran.html" class="checkout-button" id="checkout-button">Checkout</a>
+    </div>
   </header>
 
   <div class="grid">
-    <div class="item">
-      <a href="https://nasukafoods.site/paket-cilok.html">
-        <img src="https://nasukafoods.site/paketcilok.jpg" alt="Paket Cilok">
-      </a>
-      <p>Paket Cilok 60 pcs</p>
-      <p class="price">Rp 50.000</p>
-      <a href="form-pembelian.html?product=paket_cilok" class="buy-button">Beli Sekarang</a>
-    </div>
-
-    <div class="item">
-      <a href="form-pembelian.html?product=roda_cilok">
-        <img src="https://nasukafoods.site/kawasakiax.png" alt="Kawas">
-      </a>
-      <p>Kawasaki Ax</p>
-      <p class="price">Rp 6.500.000</p>
-      <a href="fork" class="buy-button">Layanan Khusus</a>
-    </div>
-
-    <div class="item">
-      <a href="form-pembelian.html?product=aplikator_acp">
-        <img src="https://nasukafoods.site/foto-leles.jpg" alt="Aplikator Acp">
-      </a>
-      <p>Aplikator Acp</p>
-      <p class="price">Rp 700.000</p>
-      <a href="form-pembelian.html?product=aplikator_acp" class="buy-button">Layanan Khusus</a>
-    </div>
-
-    <div class="item">
-      <a href="form-pembelian.html?product=hack_lokasi">
-        <img src="https://nasukafoods.site/hack-lokasi.jpg" alt="Hack lokasi">
-      </a>
-      <p>Hack lokasi</p>
-      <p class="price">Rp 10.000</p>
-      <a href="form-pembelian.html?product=hack_lokasi" class="buy-button">Beli Sekarang</a>
-    </div>
-
-    <div class="item">
-      <a href="form-pembelian.html?product=booster_followers">
-        <img src="https://nasukafoods.site/tiktok-followers.jpg" alt="Booster Followers">
-      </a>
-      <p>Booster Followers</p>
-      <p class="price">Rp 40.000</p>
-      <a href="form-pembelian.html?product=booster_followers" class="buy-button">Beli Sekarang</a>
-    </div>
-
     <div class="item">
       <a href="form-pembelian.html?product=booster_viewers">
         <img src="https://nasukafoods.site/tiktok-viewers.png" alt="Booster Viewers">
       </a>
       <p>Booster Viewers</p>
-      <p class="price">Rp 10.000</p>
-      <a href="form-pembelian.html?product=booster_viewers" class="buy-button">Beli Sekarang</a>
+      <p class="price">Rp 1.000</p>
+      <input type="hidden" value="1" class="quantity-input" data-price="1000" data-product="booster_viewers">
+      <button class="add-to-cart-button">tambah ke keranjang</button>
     </div>
 
     <div class="item">
@@ -270,12 +421,30 @@
         <img src="https://nasukafoods.site/tiktok-likes.jpg" alt="Booster Likes">
       </a>
       <p>Booster likes</p>
-      <p class="price">Rp 25.000</p>
-      <a href="form-pembelian.html?product=booster_likes" class="buy-button">Beli Sekarang</a>
+      <p class="price">Rp 2.000</p>
+      <input type="hidden" value="1" class="quantity-input" data-price="2000" data-product="booster_likes">
+      <button class="add-to-cart-button">tambah ke keranjang</button>
     </div>
   </div>
 
   <section class="content-section">
+    <h2>Data Diri Anda (Disimpan Otomatis)</h2>
+    <p>Isi data diri Anda di sini sekali, dan kami akan mengingatnya untuk pesanan berikutnya di perangkat ini.</p>
+    <div class="profile-form">
+        <label for="profile_nama">Nama Lengkap:</label>
+        <input type="text" id="profile_nama" name="profile_nama" required>
+
+        <label for="profile_handphone">Nomor Handphone (WhatsApp):</label>
+        <input type="tel" id="profile_handphone" name="profile_handphone" pattern="[0-9]{10,15}" title="Masukkan nomor telepon yang valid (10-15 digit)" required>
+
+        <label for="profile_alamat">Alamat Lengkap:</label>
+        <textarea id="profile_alamat" name="profile_alamat" rows="4" required></textarea>
+
+        <label for="profile_username">Username (Contoh: TikTok, Instagram, dll.):</label>
+        <input type="text" id="profile_username" name="profile_username" placeholder="@usernameAnda" required>
+
+        <button id="saveProfileBtn">Simpan Data Diri</button>
+    </div>
   </section>
 
   <footer>
@@ -289,5 +458,168 @@
     <p>&copy; 2025 Nasuka Karya. Hak Cipta Dilindungi Undang-Undang.</p>
   </footer>
 
+  <script>
+    let cart = [];
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw5p_xUXY6i2F1yPGPhmIP599MaTP1lLLvbBDH9wp36jEMYIxIlEOq3JudNPNoPLD8fqA/exec";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const cartIcon = document.getElementById('cart-icon');
+      const cartPopup = document.getElementById('cart-popup');
+      const cartItemsContainer = document.getElementById('cart-items');
+      const cartTotalElement = document.getElementById('cart-total');
+      const cartCountElement = document.getElementById('cart-count');
+      const checkoutButton = document.getElementById('checkout-button');
+
+      const profileNama = document.getElementById('profile_nama');
+      const profileHandphone = document.getElementById('profile_handphone');
+      const profileAlamat = document.getElementById('profile_alamat');
+      const profileUsername = document.getElementById('profile_username');
+      const saveProfileBtn = document.getElementById('saveProfileBtn');
+
+      if (localStorage.getItem('nasukaCart')) {
+        cart = JSON.parse(localStorage.getItem('nasukaCart'));
+        updateCartDisplay();
+      }
+
+      loadCustomerProfile();
+
+      saveProfileBtn.addEventListener('click', () => {
+          saveCustomerProfile();
+          alert('Data diri Anda telah disimpan!');
+      });
+
+      const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
+      addToCartButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          const item = event.target.closest('.item');
+          const productName = item.querySelector('p').innerText;
+          const quantityInput = item.querySelector('.quantity-input');
+          const quantity = parseInt(quantityInput.value);
+          const pricePerUnit = parseInt(quantityInput.dataset.price);
+          const productCode = quantityInput.dataset.product;
+
+          const existingItemIndex = cart.findIndex(cartItem => cartItem.productCode === productCode);
+
+          if (existingItemIndex > -1) {
+            cart[existingItemIndex].quantity += quantity;
+            cart[existingItemIndex].totalPrice = cart[existingItemIndex].quantity * cart[existingItemIndex].pricePerUnit;
+          } else {
+            cart.push({
+              productName,
+              quantity,
+              pricePerUnit,
+              totalPrice: quantity * pricePerUnit,
+              productCode
+            });
+          }
+
+          localStorage.setItem('nasukaCart', JSON.stringify(cart));
+          updateCartDisplay();
+        });
+      });
+
+      cartIcon.addEventListener('click', () => {
+        cartPopup.style.display = cartPopup.style.display === 'block' ? 'none' : 'block';
+        updateCartDisplay();
+      });
+
+      window.addEventListener('click', (event) => {
+        if (!cartPopup.contains(event.target) && !cartIcon.contains(event.target)) {
+          cartPopup.style.display = 'none';
+        }
+      });
+
+      checkoutButton.addEventListener('click', (event) => {
+        if (cart.length === 0) {
+          alert('Keranjang belanja Anda kosong. Silakan tambahkan produk terlebih dahulu.');
+          event.preventDefault();
+          return;
+        }
+      });
+
+      function updateCartDisplay() {
+        cartItemsContainer.innerHTML = '';
+        let overallTotal = 0;
+        let totalItemsInCart = 0;
+
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML = '<p>Keranjang kosong.</p>';
+          cartCountElement.style.display = 'none';
+          checkoutButton.style.display = 'none';
+        } else {
+          cart.forEach((item, index) => {
+            const cartItemDiv = document.createElement('div');
+            cartItemDiv.classList.add('cart-item');
+            cartItemDiv.innerHTML = `
+              <div class="cart-item-header">
+                <div class="cart-item-name">${item.productName}</div>
+                <div class="cart-item-price">Rp ${item.totalPrice.toLocaleString('id-ID')}</div>
+              </div>
+              <div class="cart-item-controls">
+                <button class="minus-cart-item" data-index="${index}">-</button>
+                <input type="text" value="${item.quantity}" class="cart-quantity-input" data-index="${index}" readonly>
+                <button class="plus-cart-item" data-index="${index}">+</button>
+              </div>
+            `;
+            cartItemsContainer.appendChild(cartItemDiv);
+            overallTotal += item.totalPrice;
+            totalItemsInCart += item.quantity;
+          });
+
+          document.querySelectorAll('.minus-cart-item').forEach(button => {
+            button.addEventListener('click', (event) => {
+              event.stopPropagation();
+              const index = parseInt(event.target.dataset.index);
+              if (cart[index].quantity > 1) {
+                cart[index].quantity--;
+                cart[index].totalPrice = cart[index].quantity * cart[index].pricePerUnit;
+              } else {
+                cart.splice(index, 1);
+              }
+              localStorage.setItem('nasukaCart', JSON.stringify(cart));
+              updateCartDisplay();
+            });
+          });
+
+          document.querySelectorAll('.plus-cart-item').forEach(button => {
+            button.addEventListener('click', (event) => {
+              event.stopPropagation();
+              const index = parseInt(event.target.dataset.index);
+              cart[index].quantity++;
+              cart[index].totalPrice = cart[index].quantity * cart[index].pricePerUnit;
+              localStorage.setItem('nasukaCart', JSON.stringify(cart));
+              updateCartDisplay();
+            });
+          });
+
+          cartCountElement.innerText = totalItemsInCart;
+          cartCountElement.style.display = 'block';
+          checkoutButton.style.display = 'block';
+        }
+        cartTotalElement.innerText = `Total: Rp ${overallTotal.toLocaleString('id-ID')}`;
+      }
+
+      function loadCustomerProfile() {
+          const storedCustomerData = localStorage.getItem('nasukaCustomerData');
+          if (storedCustomerData) {
+              const customerData = JSON.parse(storedCustomerData);
+              profileNama.value = customerData.nama || '';
+              profileHandphone.value = customerData.handphone || '';
+              profileAlamat.value = customerData.alamat || '';
+              profileUsername.value = customerData.username || '';
+          }
+      }
+
+      function saveCustomerProfile() {
+          const customerData = {
+              nama: profileNama.value,
+              handphone: profileHandphone.value,
+              alamat: profileAlamat.value,
+              username: profileUsername.value
+          };
+          localStorage.setItem('nasukaCustomerData', JSON.stringify(customerData));
+      }
+    });
+  </script>
 </body>
 </html>
