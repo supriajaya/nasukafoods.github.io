@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nasuka Wireless</title>
   <style>
-    /* Global Styles */
     body {
       margin: 0;
       font-family: sans-serif;
       background-color: #ffffff;
       color: #000000;
       line-height: 1.6;
-      font-size: 12.8px; /* Default 16px - 20% */
+      font-size: 12.8px;
     }
 
     header {
@@ -25,7 +24,7 @@
 
     header h1 {
       margin: 0;
-      font-size: 22.4px; /* 28px - 20% */
+      font-size: 22.4px;
       color: #333;
     }
 
@@ -37,41 +36,38 @@
       margin: 0 auto 10px auto;
     }
 
-    /* Icons and Buttons in Header (NOW Fixed Cart Icon) */
-    .profile-button { /* Profile button remains absolute */
+    .profile-button {
       position: absolute;
       top: 15px;
       font-size: 24px;
       cursor: pointer;
       color: #007bff;
       text-decoration: none;
-      left: 20px; /* Kept left for profile button */
+      left: 20px;
     }
 
-    .cart-icon { /* CART ICON IS NOW FIXED */
-      position: fixed; /* Changed to fixed */
-      top: 15px; /* Adjust as needed */
-      right: 20px; /* Adjust as needed */
+    .cart-icon {
+      position: fixed;
+      top: 15px;
+      right: 20px;
       font-size: 24px;
       cursor: pointer;
       color: #007bff;
-      z-index: 1000; /* Ensure it stays on top */
-      background-color: #f8f8f8; /* Added background to make it stand out */
-      padding: 5px 10px; /* Added padding */
-      border-radius: 5px; /* Rounded corners */
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
+      z-index: 1000;
+      background-color: #f8f8f8;
+      padding: 5px 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-
 
     .cart-icon:hover, .profile-button:hover {
       color: #0056b3;
     }
 
-
     .cart-count {
       position: absolute;
-      top: 0px; /* Adjusted to be inside fixed container */
-      right: 0px; /* Adjusted to be inside fixed container */
+      top: 0px;
+      right: 0px;
       background-color: red;
       color: white;
       border-radius: 50%;
@@ -79,20 +75,19 @@
       font-size: 10px;
       line-height: 1;
       text-align: center;
-      display: none; /* Hidden by default */
+      display: none;
     }
 
-    /* Cart Popup Styles */
     .cart-popup {
-      display: none; /* Hidden by default */
-      position: fixed; /* Changed to fixed as well, to stay relative to viewport */
-      top: 60px; /* Adjust positioning relative to the fixed cart icon */
+      display: none;
+      position: fixed;
+      top: 60px;
       right: 20px;
       background-color: white;
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      z-index: 1001; /* Higher z-index than cart icon */
+      z-index: 1001;
       width: 300px;
       max-height: 400px;
       overflow-y: auto;
@@ -193,7 +188,6 @@
       background-color: #0056b3;
     }
 
-    /* Product Grid Styles */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -262,17 +256,16 @@
       background-color: #218838;
     }
 
-    /* Profile Page/Section Styles */
     .profile-page {
-      display: none; /* Hidden by default, will be shown as full page */
-      position: fixed; /* Fixed to cover the whole viewport */
+      display: none;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #ffffff; /* Same as body background */
-      z-index: 1001; /* Above cart popup */
-      overflow-y: auto; /* Enable scrolling for long content */
+      background-color: #ffffff;
+      z-index: 1001;
+      overflow-y: auto;
     }
 
     .profile-page .profile-header {
@@ -301,9 +294,9 @@
       position: absolute;
       top: 15px;
       left: 20px;
-      font-size: 20px; /* Slightly smaller than main icons */
+      font-size: 20px;
       cursor: pointer;
-      color: #dc3545; /* Red color for close */
+      color: #dc3545;
       text-decoration: none;
       padding: 5px 10px;
       border: 1px solid #dc3545;
@@ -378,7 +371,6 @@
         background-color: #5a6268;
     }
 
-    /* Footer Styles */
     footer {
         background-color: #333;
         color: #fff;
@@ -407,7 +399,6 @@
         color: #007bff;
     }
 
-    /* --- New Sliding Product Section Styles --- */
     .sliding-products-container {
       max-width: 1200px;
       margin: 20px auto 0;
@@ -423,24 +414,21 @@
         text-align: center;
     }
 
-    /* Flex container for the pinned item and the scrollable wrapper */
     .sliding-content-wrapper {
         display: flex;
-        overflow-x: hidden; /* Prevent this wrapper from scrolling */
-        padding-bottom: 10px; /* Space for scrollbar if needed by inner wrapper */
+        overflow-x: hidden;
+        padding-bottom: 10px;
     }
 
-    /* Pinned item style */
     .pinned-sliding-item {
-        flex: 0 0 auto; /* Prevent shrinking/growing */
-        width: 100px; /* Same width as other sliding items */
-        margin-right: 15px; /* Gap to the scrollable section */
+        flex: 0 0 auto;
+        width: 100px;
+        margin-right: 15px;
         text-align: center;
-        border: 1px solid #ddd;
+        border: none;
         border-radius: 8px;
         padding: 10px;
         background-color: #fff;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -477,18 +465,15 @@
       font-weight: bold;
     }
 
-
     .sliding-products-wrapper {
       display: flex;
-      overflow-x: auto; /* Enable horizontal scrolling */
-      /* REMOVED: scroll-snap-type: x mandatory; */
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      flex-grow: 1; /* Allows it to take remaining space */
-      scrollbar-width: thin; /* Firefox */
-      scrollbar-color: #888 #f1f1f1; /* Firefox */
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-grow: 1;
+      scrollbar-width: thin;
+      scrollbar-color: #888 #f1f1f1;
     }
 
-    /* For Webkit browsers (Chrome, Safari) */
     .sliding-products-wrapper::-webkit-scrollbar {
       height: 8px;
     }
@@ -508,35 +493,33 @@
     }
 
     .sliding-item {
-      flex: 0 0 auto; /* Prevent items from shrinking */
-      width: 100px; /* Base width for 50% of main item (150px / 2 = 75px, plus padding/border) */
-      margin-right: 15px; /* Gap between items */
+      flex: 0 0 auto;
+      width: 100px;
+      margin-right: 15px;
       text-align: center;
-      border: 1px solid #ddd;
+      border: none;
       border-radius: 8px;
-      padding: 10px; /* Reduced padding */
+      padding: 10px;
       background-color: #fff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Lighter shadow */
-      /* REMOVED: scroll-snap-align: start; */
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.3s ease; /* Smooth hover effect */
+      transition: transform 0.3s ease;
     }
 
     .sliding-item:last-child {
-        margin-right: 0; /* No margin on the last item */
+        margin-right: 0;
     }
 
     .sliding-item:hover {
-        transform: translateY(-3px); /* Slight lift on hover */
+        transform: translateY(-3px);
     }
 
     .sliding-item img {
       width: 100%;
-      height: 75px; /* 50% of main item's 150px height */
+      height: 75px;
       object-fit: cover;
-      border-radius: 6px; /* Slightly smaller border-radius */
+      border-radius: 6px;
       display: block;
       margin-bottom: 8px;
     }
@@ -558,25 +541,26 @@
       font-weight: bold;
     }
 
-    /* GIF Container Styles */
     .gif-container {
         text-align: center;
-        margin-top: 30px; /* Add some space above the GIF */
-        padding: 0 20px; /* Match padding of other sections */
-        max-width: 1200px;
+        margin-top: 30px;
+        padding: 0 20px;
+        width: 100%; /* Lebar container 100% */
         margin-left: auto;
         margin-right: auto;
     }
 
     .gif-container img {
-        max-width: 100%; /* Ensure GIF is responsive */
+        width: 25%; /* Lebar gambar 25% dari container (50% dari 50%) */
         height: auto;
-        border-radius: 8px; /* Optional: subtle rounded corners */
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional: subtle shadow */
+        object-fit: cover;
+        aspect-ratio: 3 / 1;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: block;
+        margin: 0 auto;
     }
 
-
-    /* Media Queries */
     @media (max-width: 768px) {
         .grid {
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -592,7 +576,7 @@
             font-size: 19.2px;
         }
 
-        .cart-icon { /* Adjust fixed cart icon for smaller screens */
+        .cart-icon {
             top: 10px;
             right: 10px;
             font-size: 20px;
@@ -622,7 +606,7 @@
 
         .pinned-sliding-item,
         .sliding-item {
-            width: 80px; /* Adjust for smaller screens */
+            width: 80px;
             margin-right: 10px;
             padding: 8px;
         }
@@ -642,6 +626,9 @@
         .gif-container {
             margin-top: 20px;
             padding: 0 15px;
+        }
+        .gif-container img {
+            width: 35%; /* Disesuaikan untuk tablet (50% dari 70%) */
         }
     }
 
@@ -680,7 +667,7 @@
             padding: 3px 8px;
         }
 
-        .cart-icon { /* Further adjust fixed cart icon for very small screens */
+        .cart-icon {
             top: 5px;
             right: 5px;
             font-size: 18px;
@@ -692,10 +679,9 @@
             font-size: 7px;
         }
 
-
         .pinned-sliding-item,
         .sliding-item {
-            width: 70px; /* Further adjust for very small screens */
+            width: 70px;
             margin-right: 8px;
             padding: 6px;
         }
@@ -716,6 +702,9 @@
             margin-top: 15px;
             padding: 0 10px;
         }
+        .gif-container img {
+            width: 40%; /* Disesuaikan untuk ponsel (50% dari 80%) */
+        }
     }
   </style>
 </head>
@@ -723,9 +712,9 @@
 
   <div id="main-content-view">
     <header>
-      <img src="https://nasukafoods.site/images/nasuka-karya.jpg" alt="Logo Nasuka Karya">
+      <img src="https://nasukafoods.site/image/nasuka-karya.jpg" alt="Logo Nasuka Karya">
       <a href="#" class="profile-button" id="profile-button">&#128100;</a>
-      </header>
+    </header>
 
     <div class="cart-icon" id="cart-icon">&#128722;<span class="cart-count" id="cart-count">0</span></div>
     <div class="cart-popup" id="cart-popup">
@@ -741,32 +730,33 @@
         <h2 class="sliding-products-header">Produk Unggulan Lainnya</h2>
         <div class="sliding-content-wrapper">
             <div class="pinned-sliding-item">
-                <a href="form-pembelian.html?product=tiktok_followers">
-                    <img src="https://via.placeholder.com/75x75?text=TikTok+Followers" alt="TikTok Followers">
+                <a href="form-pembelian.html?product=booster">
+                    <img src="https://nasukafoods.site/image/sosial-media.png" alt="booster sosmed">
                 </a>
-                <p>TikTok Followers</p>
+                <p>booster sosmed</p>
                 <p class="price">Rp 500</p>
-                <input type="hidden" value="1" class="quantity-input" data-price="500" data-product="tiktok_followers">
+                <input type="hidden" value="1" class="quantity-input" data-price="500" data-product="booster">
+                📍Cibaduyut
                 <button class="add-to-cart-button">tambah ke keranjang</button>
             </div>
 
             <div class="sliding-products-wrapper">
                 <div class="sliding-item">
-                    <a href="form-pembelian.html?product=instagram_likes">
-                        <img src="https://via.placeholder.com/75x75?text=IG+Likes" alt="Instagram Likes">
+                    <a href="form-pembelian.html?product=gesek_tunai">
+                        <img src="https://nasukafoods.site/image/gestun.jpg" alt="Gestun">
                     </a>
-                    <p>Instagram Likes</p>
+                    <p>Gestun</p>
                     <p class="price">Rp 400</p>
-                    <input type="hidden" value="1" class="quantity-input" data-price="400" data-product="instagram_likes">
+                    <input type="hidden" value="1" class="quantity-input" data-price="400" data-product="gesek_tunai">
                     <button class="add-to-cart-button">tambah ke keranjang</button>
                 </div>
                 <div class="sliding-item">
-                    <a href="form-pembelian.html?product=youtube_views">
-                        <img src="https://via.placeholder.com/75x75?text=YT+Views" alt="YouTube Views">
+                    <a href="form-pembelian.html?product=pulsa">
+                        <img src="https://nasukafoods.site/image/jual-pulsa.jpg" alt="PULSA">
                     </a>
-                    <p>YouTube Views</p>
+                    <p>PULSA</p>
                     <p class="price">Rp 700</p>
-                    <input type="hidden" value="1" class="quantity-input" data-price="700" data-product="youtube_views">
+                    <input type="hidden" value="1" class="quantity-input" data-price="700" data-product="pulsa">
                     <button class="add-to-cart-button">tambah ke keranjang</button>
                 </div>
                 <div class="sliding-item">
@@ -805,24 +795,23 @@
         <a href="form-pembelian.html?product=lacak_lokasi">
           <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="Lacak Lokasi">
         </a>
-        <p>Lacak Lokasi</p>
-        <p class="price">Rp 1.000</p> <input type="hidden" value="1" class="quantity-input" data-price="1000" data-product="lacak_lokasi">
-        <button class="add-to-cart-button">tambah ke keranjang</button>
+        <p>GPS NASUKA SERVER</p>
+        <p class="price">Pantau orang tersayang melalui nasuka server, Layanan khusus tracking unlimited</p> <input type="hidden" value="1" class="quantity-input" data-price="1000" data-product="lacak_lokasi">
       </div>
 
       <div class="item">
-        <a href="form-pembelian.html?product=booster_likes">
-          <img src="https://nasukafoods.site/tiktok-likes.jpg" alt="Booster Likes">
+        <a href="form-pembelian.html?product=CILOK GAJIH">
+          <img src="https://nasukafoods.site/paketcilok.jpg" alt="CILOK GAJIH">
         </a>
-        <p>Booster likes</p>
-        <p class="price">Rp 2.000</p>
-        <input type="hidden" value="1" class="quantity-input" data-price="2000" data-product="booster_likes">
+        <p>CILOK GAJIH</p>
+        <p class="price">Rp 900</p>
+        <input type="hidden" value="1" class="quantity-input" data-price="900" data-product="CILOK GAJIH">📍 Cibaduyut
         <button class="add-to-cart-button">tambah ke keranjang</button>
       </div>
     </div>
 
     <div class="gif-container">
-      <img src="https://via.placeholder.com/800x200/007bff/ffffff?text=Promo+Keren+Disini%21" alt="GIF Promosi">
+      <img src="https://nasukafoods.site/image/special-promo.gif" alt="Promosi">
     </div>
 
     <div class="grid">
@@ -905,10 +894,9 @@
 
   <script>
     let cart = [];
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec"; // Your Google Apps Script URL
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec";
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Elements for Main Content and Cart
       const mainContentView = document.getElementById('main-content-view');
       const cartIcon = document.getElementById('cart-icon');
       const cartPopup = document.getElementById('cart-popup');
@@ -917,7 +905,6 @@
       const cartCountElement = document.getElementById('cart-count');
       const checkoutButton = document.getElementById('checkout-button');
 
-      // Elements for Profile Page
       const profileButton = document.getElementById('profile-button');
       const profilePageView = document.getElementById('profile-page-view');
       const closeProfileButton = document.getElementById('close-profile-button');
@@ -927,19 +914,15 @@
       const profileUsername = document.getElementById('profile_username');
       const saveProfileBtn = document.getElementById('saveProfileBtn');
 
-      // Load cart from localStorage
       if (localStorage.getItem('nasukaCart')) {
         cart = JSON.parse(localStorage.getItem('nasukaCart'));
         updateCartDisplay();
       }
 
-      // --- Cart Functionality ---
-      // Add to cart buttons for ALL items
-      // We now select all buttons with class 'add-to-cart-button'
       const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
       addToCartButtons.forEach(button => {
         button.addEventListener('click', (event) => {
-          const item = event.target.closest('.item') || event.target.closest('.sliding-item') || event.target.closest('.pinned-sliding-item'); // Check all parent classes
+          const item = event.target.closest('.item') || event.target.closest('.sliding-item') || event.target.closest('.pinned-sliding-item');
           
           if (!item) {
               console.error("Could not find parent item for add-to-cart button.");
@@ -972,12 +955,6 @@
         });
       });
 
-      // Links inside sliding and pinned items will now primarily use the add-to-cart button
-      // No need for separate event listeners for their <a> tags if you want them to just navigate
-      // or if they now have a dedicated add-to-cart button.
-      // For now, we assume direct navigation on <a> click and add-to-cart on button click.
-
-
       cartIcon.addEventListener('click', (event) => {
         event.stopPropagation();
         cartPopup.style.display = cartPopup.style.display === 'block' ? 'none' : 'block';
@@ -992,10 +969,9 @@
       checkoutButton.addEventListener('click', (event) => {
         if (cart.length === 0) {
           alert('Keranjang belanja Anda kosong. Silakan tambahkan produk terlebih dahulu.');
-          event.preventDefault(); // Stop navigation if cart is empty
+          event.preventDefault();
           return;
         }
-        // If cart is not empty, proceed to pembayaran.html
       });
 
       function updateCartDisplay() {
@@ -1027,7 +1003,6 @@
             totalItemsInCart += item.quantity;
           });
 
-          // Re-attach event listeners for +/- buttons in cart popup
           document.querySelectorAll('.minus-cart-item').forEach(button => {
             button.addEventListener('click', (event) => {
               event.stopPropagation();
@@ -1036,7 +1011,7 @@
                 cart[index].quantity--;
                 cart[index].totalPrice = cart[index].quantity * cart[index].pricePerUnit;
               } else {
-                cart.splice(index, 1); // Remove item if quantity becomes 0
+                cart.splice(index, 1);
               }
               localStorage.setItem('nasukaCart', JSON.stringify(cart));
               updateCartDisplay();
@@ -1061,26 +1036,22 @@
         cartTotalElement.innerText = `Total: Rp ${overallTotal.toLocaleString('id-ID')}`;
       }
 
-      // --- Profile Page Functionality ---
       profileButton.addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default link behavior
-        mainContentView.style.display = 'none'; // Hide main content
-        profilePageView.style.display = 'block'; // Show profile page
-        loadCustomerProfile(); // Load data when showing
-        cartPopup.style.display = 'none'; // Ensure cart popup is closed
+        event.preventDefault();
+        mainContentView.style.display = 'none';
+        profilePageView.style.display = 'block';
+        loadCustomerProfile();
+        cartPopup.style.display = 'none';
       });
 
       closeProfileButton.addEventListener('click', () => {
-        profilePageView.style.display = 'none'; // Hide profile page
-        mainContentView.style.display = 'block'; // Show main content
+        profilePageView.style.display = 'none';
+        mainContentView.style.display = 'block';
       });
 
       saveProfileBtn.addEventListener('click', () => {
           saveCustomerProfile();
           alert('Data diri Anda telah disimpan!');
-          // Optionally, you can also hide the profile page after saving
-          // profilePageView.style.display = 'none';
-          // mainContentView.style.display = 'block';
       });
 
       function loadCustomerProfile() {
