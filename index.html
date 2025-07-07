@@ -37,32 +37,41 @@
       margin: 0 auto 10px auto;
     }
 
-    /* Icons and Buttons in Header */
-    .cart-icon, .profile-button {
+    /* Icons and Buttons in Header (NOW Fixed Cart Icon) */
+    .profile-button { /* Profile button remains absolute */
       position: absolute;
       top: 15px;
       font-size: 24px;
       cursor: pointer;
       color: #007bff;
-      text-decoration: none; /* For profile-button as it's a link */
+      text-decoration: none;
+      left: 20px; /* Kept left for profile button */
     }
+
+    .cart-icon { /* CART ICON IS NOW FIXED */
+      position: fixed; /* Changed to fixed */
+      top: 15px; /* Adjust as needed */
+      right: 20px; /* Adjust as needed */
+      font-size: 24px;
+      cursor: pointer;
+      color: #007bff;
+      z-index: 1000; /* Ensure it stays on top */
+      background-color: #f8f8f8; /* Added background to make it stand out */
+      padding: 5px 10px; /* Added padding */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
+    }
+
 
     .cart-icon:hover, .profile-button:hover {
       color: #0056b3;
     }
 
-    .cart-icon {
-      right: 20px;
-    }
-
-    .profile-button {
-      left: 20px;
-    }
 
     .cart-count {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 0px; /* Adjusted to be inside fixed container */
+      right: 0px; /* Adjusted to be inside fixed container */
       background-color: red;
       color: white;
       border-radius: 50%;
@@ -76,14 +85,14 @@
     /* Cart Popup Styles */
     .cart-popup {
       display: none; /* Hidden by default */
-      position: absolute;
-      top: 60px;
+      position: fixed; /* Changed to fixed as well, to stay relative to viewport */
+      top: 60px; /* Adjust positioning relative to the fixed cart icon */
       right: 20px;
       background-color: white;
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      z-index: 1000;
+      z-index: 1001; /* Higher z-index than cart icon */
       width: 300px;
       max-height: 400px;
       overflow-y: auto;
@@ -398,6 +407,175 @@
         color: #007bff;
     }
 
+    /* --- New Sliding Product Section Styles --- */
+    .sliding-products-container {
+      max-width: 1200px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .sliding-products-header {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+        text-align: center;
+    }
+
+    /* Flex container for the pinned item and the scrollable wrapper */
+    .sliding-content-wrapper {
+        display: flex;
+        overflow-x: hidden; /* Prevent this wrapper from scrolling */
+        padding-bottom: 10px; /* Space for scrollbar if needed by inner wrapper */
+    }
+
+    /* Pinned item style */
+    .pinned-sliding-item {
+        flex: 0 0 auto; /* Prevent shrinking/growing */
+        width: 100px; /* Same width as other sliding items */
+        margin-right: 15px; /* Gap to the scrollable section */
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.3s ease;
+    }
+
+    .pinned-sliding-item:hover {
+        transform: translateY(-3px);
+    }
+
+    .pinned-sliding-item img {
+      width: 100%;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .pinned-sliding-item p {
+      margin: 3px 0;
+      font-size: 10px;
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pinned-sliding-item .price {
+      font-size: 10.4px;
+      color: #007bff;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+
+    .sliding-products-wrapper {
+      display: flex;
+      overflow-x: auto; /* Enable horizontal scrolling */
+      /* REMOVED: scroll-snap-type: x mandatory; */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      flex-grow: 1; /* Allows it to take remaining space */
+      scrollbar-width: thin; /* Firefox */
+      scrollbar-color: #888 #f1f1f1; /* Firefox */
+    }
+
+    /* For Webkit browsers (Chrome, Safari) */
+    .sliding-products-wrapper::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .sliding-products-wrapper::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .sliding-products-wrapper::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    .sliding-products-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    .sliding-item {
+      flex: 0 0 auto; /* Prevent items from shrinking */
+      width: 100px; /* Base width for 50% of main item (150px / 2 = 75px, plus padding/border) */
+      margin-right: 15px; /* Gap between items */
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px; /* Reduced padding */
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Lighter shadow */
+      /* REMOVED: scroll-snap-align: start; */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease; /* Smooth hover effect */
+    }
+
+    .sliding-item:last-child {
+        margin-right: 0; /* No margin on the last item */
+    }
+
+    .sliding-item:hover {
+        transform: translateY(-3px); /* Slight lift on hover */
+    }
+
+    .sliding-item img {
+      width: 100%;
+      height: 75px; /* 50% of main item's 150px height */
+      object-fit: cover;
+      border-radius: 6px; /* Slightly smaller border-radius */
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .sliding-item p {
+      margin: 3px 0;
+      font-size: 10px;
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sliding-item .price {
+      font-size: 10.4px;
+      color: #007bff;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+    /* GIF Container Styles */
+    .gif-container {
+        text-align: center;
+        margin-top: 30px; /* Add some space above the GIF */
+        padding: 0 20px; /* Match padding of other sections */
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .gif-container img {
+        max-width: 100%; /* Ensure GIF is responsive */
+        height: auto;
+        border-radius: 8px; /* Optional: subtle rounded corners */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional: subtle shadow */
+    }
+
+
     /* Media Queries */
     @media (max-width: 768px) {
         .grid {
@@ -414,6 +592,19 @@
             font-size: 19.2px;
         }
 
+        .cart-icon { /* Adjust fixed cart icon for smaller screens */
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            padding: 3px 8px;
+        }
+
+        .cart-count {
+            top: -5px;
+            right: -5px;
+            font-size: 8px;
+        }
+
         .cart-popup {
             width: 90%;
             max-width: 280px;
@@ -427,6 +618,30 @@
         }
         .profile-page .content-section h2 {
             font-size: 17.6px;
+        }
+
+        .pinned-sliding-item,
+        .sliding-item {
+            width: 80px; /* Adjust for smaller screens */
+            margin-right: 10px;
+            padding: 8px;
+        }
+        .pinned-sliding-item img,
+        .sliding-item img {
+            height: 60px;
+        }
+        .pinned-sliding-item p,
+        .sliding-item p {
+            font-size: 9px;
+        }
+        .pinned-sliding-item .price,
+        .sliding-item .price {
+            font-size: 9.6px;
+        }
+
+        .gif-container {
+            margin-top: 20px;
+            padding: 0 15px;
         }
     }
 
@@ -464,6 +679,43 @@
             font-size: 16px;
             padding: 3px 8px;
         }
+
+        .cart-icon { /* Further adjust fixed cart icon for very small screens */
+            top: 5px;
+            right: 5px;
+            font-size: 18px;
+            padding: 2px 6px;
+        }
+        .cart-count {
+            top: -7px;
+            right: -7px;
+            font-size: 7px;
+        }
+
+
+        .pinned-sliding-item,
+        .sliding-item {
+            width: 70px; /* Further adjust for very small screens */
+            margin-right: 8px;
+            padding: 6px;
+        }
+        .pinned-sliding-item img,
+        .sliding-item img {
+            height: 50px;
+        }
+        .pinned-sliding-item p,
+        .sliding-item p {
+            font-size: 8px;
+        }
+        .pinned-sliding-item .price,
+        .sliding-item .price {
+            font-size: 8.8px;
+        }
+
+        .gif-container {
+            margin-top: 15px;
+            padding: 0 10px;
+        }
     }
   </style>
 </head>
@@ -473,25 +725,88 @@
     <header>
       <img src="https://nasukafoods.site/images/nasuka-karya.jpg" alt="Logo Nasuka Karya">
       <a href="#" class="profile-button" id="profile-button">&#128100;</a>
-      <div class="cart-icon" id="cart-icon">&#128722;<span class="cart-count" id="cart-count">0</span></div>
-      <div class="cart-popup" id="cart-popup">
-        <h3>Keranjang Belanja</h3>
-        <div id="cart-items">
-          <p>Keranjang kosong.</p>
-        </div>
-        <div class="cart-total" id="cart-total">Total: Rp 0</div>
-        <a href="pembayaran.html" class="checkout-button" id="checkout-button">Checkout</a>
+      </header>
+
+    <div class="cart-icon" id="cart-icon">&#128722;<span class="cart-count" id="cart-count">0</span></div>
+    <div class="cart-popup" id="cart-popup">
+      <h3>Keranjang Belanja</h3>
+      <div id="cart-items">
+        <p>Keranjang kosong.</p>
       </div>
-    </header>
+      <div class="cart-total" id="cart-total">Total: Rp 0</div>
+      <a href="pembayaran.html" class="checkout-button" id="checkout-button">Checkout</a>
+    </div>
+
+    <div class="sliding-products-container">
+        <h2 class="sliding-products-header">Produk Unggulan Lainnya</h2>
+        <div class="sliding-content-wrapper">
+            <div class="pinned-sliding-item">
+                <a href="form-pembelian.html?product=tiktok_followers">
+                    <img src="https://via.placeholder.com/75x75?text=TikTok+Followers" alt="TikTok Followers">
+                </a>
+                <p>TikTok Followers</p>
+                <p class="price">Rp 500</p>
+                <input type="hidden" value="1" class="quantity-input" data-price="500" data-product="tiktok_followers">
+                <button class="add-to-cart-button">tambah ke keranjang</button>
+            </div>
+
+            <div class="sliding-products-wrapper">
+                <div class="sliding-item">
+                    <a href="form-pembelian.html?product=instagram_likes">
+                        <img src="https://via.placeholder.com/75x75?text=IG+Likes" alt="Instagram Likes">
+                    </a>
+                    <p>Instagram Likes</p>
+                    <p class="price">Rp 400</p>
+                    <input type="hidden" value="1" class="quantity-input" data-price="400" data-product="instagram_likes">
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
+                </div>
+                <div class="sliding-item">
+                    <a href="form-pembelian.html?product=youtube_views">
+                        <img src="https://via.placeholder.com/75x75?text=YT+Views" alt="YouTube Views">
+                    </a>
+                    <p>YouTube Views</p>
+                    <p class="price">Rp 700</p>
+                    <input type="hidden" value="1" class="quantity-input" data-price="700" data-product="youtube_views">
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
+                </div>
+                <div class="sliding-item">
+                    <a href="form-pembelian.html?product=twitter_retweets">
+                        <img src="https://via.placeholder.com/75x75?text=Twitter+RT" alt="Twitter Retweets">
+                    </a>
+                    <p>Twitter Retweets</p>
+                    <p class="price">Rp 300</p>
+                    <input type="hidden" value="1" class="quantity-input" data-price="300" data-product="twitter_retweets">
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
+                </div>
+                <div class="sliding-item">
+                    <a href="form-pembelian.html?product=new_product_5">
+                        <img src="https://via.placeholder.com/75x75?text=Produk+5" alt="Produk Baru 5">
+                    </a>
+                    <p>Produk Baru 5</p>
+                    <p class="price">Rp 800</p>
+                    <input type="hidden" value="1" class="quantity-input" data-price="800" data-product="new_product_5">
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
+                </div>
+                 <div class="sliding-item">
+                    <a href="form-pembelian.html?product=new_product_6">
+                        <img src="https://via.placeholder.com/75x75?text=Produk+6" alt="Produk Baru 6">
+                    </a>
+                    <p>Produk Baru 6</p>
+                    <p class="price">Rp 900</p>
+                    <input type="hidden" value="1" class="quantity-input" data-price="900" data-product="new_product_6">
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="grid">
       <div class="item">
-        <a href="form-pembelian.html?product=booster_viewers">
-          <img src="https://nasukafoods.site/tiktok-viewers.png" alt="Booster Viewers">
+        <a href="form-pembelian.html?product=lacak_lokasi">
+          <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="Lacak Lokasi">
         </a>
-        <p>Booster Viewers</p>
-        <p class="price">Rp 1.000</p>
-        <input type="hidden" value="1" class="quantity-input" data-price="1000" data-product="booster_viewers">
+        <p>Lacak Lokasi</p>
+        <p class="price">Rp 1.000</p> <input type="hidden" value="1" class="quantity-input" data-price="1000" data-product="lacak_lokasi">
         <button class="add-to-cart-button">tambah ke keranjang</button>
       </div>
 
@@ -505,7 +820,52 @@
         <button class="add-to-cart-button">tambah ke keranjang</button>
       </div>
     </div>
-  </div> <div class="profile-page" id="profile-page-view">
+
+    <div class="gif-container">
+      <img src="https://via.placeholder.com/800x200/007bff/ffffff?text=Promo+Keren+Disini%21" alt="GIF Promosi">
+    </div>
+
+    <div class="grid">
+        <div class="item">
+            <a href="form-pembelian.html?product=produk_baru_1">
+                <img src="https://via.placeholder.com/150x150?text=Produk+Baru+1" alt="Produk Baru 1">
+            </a>
+            <p>Produk Baru 1</p>
+            <p class="price">Rp 1.500</p>
+            <input type="hidden" value="1" class="quantity-input" data-price="1500" data-product="produk_baru_1">
+            <button class="add-to-cart-button">tambah ke keranjang</button>
+        </div>
+        <div class="item">
+            <a href="form-pembelian.html?product=produk_baru_2">
+                <img src="https://via.placeholder.com/150x150?text=Produk+Baru+2" alt="Produk Baru 2">
+            </a>
+            <p>Produk Baru 2</p>
+            <p class="price">Rp 2.500</p>
+            <input type="hidden" value="1" class="quantity-input" data-price="2500" data-product="produk_baru_2">
+            <button class="add-to-cart-button">tambah ke keranjang</button>
+        </div>
+        <div class="item">
+            <a href="form-pembelian.html?product=produk_baru_3">
+                <img src="https://via.placeholder.com/150x150?text=Produk+Baru+3" alt="Produk Baru 3">
+            </a>
+            <p>Produk Baru 3</p>
+            <p class="price">Rp 1.200</p>
+            <input type="hidden" value="1" class="quantity-input" data-price="1200" data-product="produk_baru_3">
+            <button class="add-to-cart-button">tambah ke keranjang</button>
+        </div>
+        <div class="item">
+            <a href="form-pembelian.html?product=produk_baru_4">
+                <img src="https://via.placeholder.com/150x150?text=Produk+Baru+4" alt="Produk Baru 4">
+            </a>
+            <p>Produk Baru 4</p>
+            <p class="price">Rp 3.000</p>
+            <input type="hidden" value="1" class="quantity-input" data-price="3000" data-product="produk_baru_4">
+            <button class="add-to-cart-button">tambah ke keranjang</button>
+        </div>
+    </div>
+  </div>
+
+  <div class="profile-page" id="profile-page-view">
     <div class="profile-header">
       <img src="https://nasukafoods.site/images/nasuka-karya.jpg" alt="Logo Nasuka Karya">
       <button class="close-profile-button" id="close-profile-button">&#10006; Tutup</button>
@@ -530,7 +890,9 @@
           <button id="saveProfileBtn">Simpan</button>
       </div>
     </section>
-  </div> <footer>
+  </div>
+
+  <footer>
     <div class="footer-content">
     </div>
     <div class="footer-links">
@@ -543,7 +905,7 @@
 
   <script>
     let cart = [];
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec"; // Your Google Apps Script URL
 
     document.addEventListener('DOMContentLoaded', () => {
       // Elements for Main Content and Cart
@@ -572,10 +934,18 @@
       }
 
       // --- Cart Functionality ---
+      // Add to cart buttons for ALL items
+      // We now select all buttons with class 'add-to-cart-button'
       const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
       addToCartButtons.forEach(button => {
         button.addEventListener('click', (event) => {
-          const item = event.target.closest('.item');
+          const item = event.target.closest('.item') || event.target.closest('.sliding-item') || event.target.closest('.pinned-sliding-item'); // Check all parent classes
+          
+          if (!item) {
+              console.error("Could not find parent item for add-to-cart button.");
+              return;
+          }
+
           const productName = item.querySelector('p').innerText;
           const quantityInput = item.querySelector('.quantity-input');
           const quantity = parseInt(quantityInput.value);
@@ -602,6 +972,12 @@
         });
       });
 
+      // Links inside sliding and pinned items will now primarily use the add-to-cart button
+      // No need for separate event listeners for their <a> tags if you want them to just navigate
+      // or if they now have a dedicated add-to-cart button.
+      // For now, we assume direct navigation on <a> click and add-to-cart on button click.
+
+
       cartIcon.addEventListener('click', (event) => {
         event.stopPropagation();
         cartPopup.style.display = cartPopup.style.display === 'block' ? 'none' : 'block';
@@ -616,9 +992,10 @@
       checkoutButton.addEventListener('click', (event) => {
         if (cart.length === 0) {
           alert('Keranjang belanja Anda kosong. Silakan tambahkan produk terlebih dahulu.');
-          event.preventDefault();
+          event.preventDefault(); // Stop navigation if cart is empty
           return;
         }
+        // If cart is not empty, proceed to pembayaran.html
       });
 
       function updateCartDisplay() {
@@ -650,6 +1027,7 @@
             totalItemsInCart += item.quantity;
           });
 
+          // Re-attach event listeners for +/- buttons in cart popup
           document.querySelectorAll('.minus-cart-item').forEach(button => {
             button.addEventListener('click', (event) => {
               event.stopPropagation();
@@ -658,7 +1036,7 @@
                 cart[index].quantity--;
                 cart[index].totalPrice = cart[index].quantity * cart[index].pricePerUnit;
               } else {
-                cart.splice(index, 1);
+                cart.splice(index, 1); // Remove item if quantity becomes 0
               }
               localStorage.setItem('nasukaCart', JSON.stringify(cart));
               updateCartDisplay();
