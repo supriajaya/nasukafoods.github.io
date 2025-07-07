@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kirim Lokasi Realtime</title>
+  <title>Lokasi Realtime Arya</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
+    #map {
+      height: 400px;
+      width: 100%;
+    }
     body {
       font-family: sans-serif;
       text-align: center;
-      padding: 50px;
+      padding: 20px;
     }
-    .status {
-      font-size: 18px;
+    .info {
       margin-top: 20px;
-      color: green;
+      font-size: 1.1em;
     }
   </style>
 </head>
 <body>
-  <h2>Kirim Lokasi Realtime</h2>
-  <p class="status">Mengambil lokasi...</p>
+  <h2>Lokasi Realtime Arya</h2>
+  <div id="map"></div>
+  <div class="info">
+    <p>Lokasi terakhir diperbarui pada:</p>
+    <p id="lastUpdateTime">Memuat...</p>
+  </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    // Konfigurasi Firebase Anda
     const firebaseConfig = {
       apiKey: "AIzaSyC1pLpsAE5QJv26cEudkY6FoqzEoD9KM",
       authDomain: "posisi-saya.firebaseapp.com",
@@ -35,37 +45,50 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const statusEl = document.querySelector('.status');
 
-    const updateLocation = (lat, lng) => {
-      const lokasiRef = doc(db, "lokasi_saya", "nasukafoods");
-      setDoc(lokasiRef, {
-        lat: lat,
-        lng: lng,
-        waktu: new Date().toISOString()
-      }).then(() => {
-        statusEl.textContent = "Lokasi berhasil dikirim.";
-      }).catch(err => {
-        statusEl.textContent = "Gagal kirim lokasi.";
-        console.error(err);
-      });
-    };
+    const map = L.map('map').setView([0, 0], 2); // Set view awal ke 0,0 dengan zoom rendah
+    let marker;
 
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition((pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        updateLocation(lat, lng);
-      }, (err) => {
-        statusEl.textContent = "Izin lokasi ditolak atau gagal.";
-      }, {
-        enableHighAccuracy: true,
-        maximumAge: 5000,
-        timeout: 10000
-      });
-    } else {
-      statusEl.textContent = "Geolocation tidak didukung.";
-    }
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    const lastUpdateTimeEl = document.getElementById('lastUpdateTime');
+
+    // Mendengarkan perubahan data di Firestore secara realtime
+    onSnapshot(doc(db, "lokasi_saya", "Arya"), (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        const lat = data.lat;
+        const lng = data.lng;
+        const waktuString = data.waktu; // Ini adalah string ISO 8601
+
+        // Perbarui marker peta
+        if (marker) {
+          marker.setLatLng([lat, lng]);
+        } else {
+          marker = L.marker([lat, lng]).addTo(map);
+        }
+        map.setView([lat, lng], 16); // Set view peta ke lokasi baru dengan zoom yang lebih dekat
+
+        // Format dan tampilkan waktu
+        if (waktuString) {
+          const date = new Date(waktuString);
+          const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
+          const formattedDate = date.toLocaleDateString('id-ID', options); // Menggunakan locale Indonesia
+          lastUpdateTimeEl.textContent = formattedDate;
+        } else {
+          lastUpdateTimeEl.textContent = "Data waktu tidak tersedia.";
+        }
+
+      } else {
+        lastUpdateTimeEl.textContent = "Data lokasi tidak ditemukan.";
+        console.log("No such document!");
+      }
+    }, (error) => {
+      lastUpdateTimeEl.textContent = "Gagal mengambil data lokasi.";
+      console.error("Error getting document:", error);
+    });
   </script>
 </body>
 </html>
