@@ -5,33 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nasuka Wireless</title>
   <style>
+    /* Global Styles */
     body {
       margin: 0;
       font-family: sans-serif;
       background-color: #ffffff;
       color: #000000;
       line-height: 1.6;
-      font-size: 14px; /* Meningkatkan ukuran font dasar untuk keterbacaan */
-      -webkit-font-smoothing: antialiased; /* Haluskan font di WebKit */
-      -moz-osx-font-smoothing: grayscale; /* Haluskan font di Firefox */
-      /* HATI-HATI: Ini menghilangkan efek overscroll bounce/glow di SELURUH halaman */
-      /* Jika denyutan ada saat scroll ke atas/bawah mentok, ini solusinya. */
-      overscroll-behavior-y: none;
-      /* Mencegah scroll horizontal body secara tidak sengaja */
-      overflow-x: hidden; 
-      /* Meningkatkan kelancaran scrolling di iOS WebView */
-      -webkit-overflow-scrolling: touch; 
-    }
-
-    /* Memastikan elemen-elemen penting berada di atas */
-    header, .cart-icon, .cart-popup, .profile-page, footer {
-        z-index: 100;
-        /* Tambahan untuk performa rendering di GPU */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-        will-change: transform, opacity; /* Tambahkan opacity ke will-change */
+      font-size: 12.8px; /* Default 16px - 20% */
     }
 
     header {
@@ -44,7 +25,7 @@
 
     header h1 {
       margin: 0;
-      font-size: 24px; /* Sedikit lebih besar */
+      font-size: 22.4px; /* 28px - 20% */
       color: #333;
     }
 
@@ -54,51 +35,43 @@
       object-fit: contain;
       display: block;
       margin: 0 auto 10px auto;
-      /* Pastikan aspect-ratio untuk mencegah layout shift saat gambar dimuat */
-      aspect-ratio: 16 / 5; /* Sesuaikan dengan rasio asli gambar logo Anda */
-      will-change: transform, opacity;
     }
 
-    .profile-button {
+    /* Icons and Buttons in Header (NOW Fixed Cart Icon) */
+    .profile-button { /* Profile button remains absolute */
       position: absolute;
       top: 15px;
       font-size: 24px;
       cursor: pointer;
       color: #007bff;
       text-decoration: none;
-      left: 20px;
+      left: 20px; /* Kept left for profile button */
     }
 
-    .cart-icon {
-      position: fixed;
-      top: 15px;
-      right: 20px;
+    .cart-icon { /* CART ICON IS NOW FIXED */
+      position: fixed; /* Changed to fixed */
+      top: 15px; /* Adjust as needed */
+      right: 20px; /* Adjust as needed */
       font-size: 24px;
       cursor: pointer;
       color: #007bff;
-      z-index: 1000;
-      background-color: #f8f8f8;
-      padding: 5px 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: all 0.2s ease-in-out; /* Transisi untuk hover */
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      will-change: transform;
+      z-index: 1000; /* Ensure it stays on top */
+      background-color: #f8f8f8; /* Added background to make it stand out */
+      padding: 5px 10px; /* Added padding */
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
     }
+
 
     .cart-icon:hover, .profile-button:hover {
       color: #0056b3;
-      transform: scale(1.05) translateZ(0); /* Efek kecil saat hover, tetap di GPU */
     }
+
 
     .cart-count {
       position: absolute;
-      top: 0px;
-      right: 0px;
+      top: 0px; /* Adjusted to be inside fixed container */
+      right: 0px; /* Adjusted to be inside fixed container */
       background-color: red;
       color: white;
       border-radius: 50%;
@@ -106,34 +79,25 @@
       font-size: 10px;
       line-height: 1;
       text-align: center;
-      display: none;
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      display: none; /* Hidden by default */
     }
 
+    /* Cart Popup Styles */
     .cart-popup {
-      display: none;
-      position: fixed;
-      top: 60px;
+      display: none; /* Hidden by default */
+      position: fixed; /* Changed to fixed as well, to stay relative to viewport */
+      top: 60px; /* Adjust positioning relative to the fixed cart icon */
       right: 20px;
       background-color: white;
       border: 1px solid #ddd;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      z-index: 1001;
+      z-index: 1001; /* Higher z-index than cart icon */
       width: 300px;
       max-height: 400px;
       overflow-y: auto;
       padding: 15px;
       text-align: left;
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
     }
 
     .cart-popup h3 {
@@ -166,12 +130,10 @@
     .cart-item-name {
       font-weight: bold;
       flex-grow: 1;
-      font-size: 14px; /* Sesuaikan ukuran font */
     }
 
     .cart-item-price {
       white-space: nowrap;
-      font-size: 14px; /* Sesuaikan ukuran font */
     }
 
     .cart-item-controls {
@@ -185,12 +147,11 @@
       background-color: #007bff;
       color: #fff;
       border: none;
-      padding: 5px 10px; /* Padding lebih besar untuk sentuhan */
+      padding: 3px 8px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 14px; /* Ukuran font lebih besar */
-      margin: 0 5px; /* Margin lebih besar */
-      min-width: 30px; /* Pastikan tombol cukup besar */
+      font-size: 12px;
+      margin: 0 3px;
     }
 
     .cart-item-controls button:hover {
@@ -198,45 +159,44 @@
     }
 
     .cart-item-controls input {
-      width: 40px; /* Lebar lebih besar */
+      width: 30px;
       text-align: center;
       border: 1px solid #ccc;
       border-radius: 4px;
-      padding: 5px; /* Padding lebih besar */
-      font-size: 14px; /* Ukuran font lebih besar */
+      padding: 3px;
+      font-size: 12px;
     }
 
     .cart-total {
       font-weight: bold;
       margin-top: 10px;
       text-align: right;
-      font-size: 16px; /* Ukuran font lebih besar */
     }
 
     .checkout-button {
       background-color: #007bff;
       color: #fff;
-      padding: 12px 15px; /* Padding lebih besar */
+      padding: 10px 15px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       width: 100%;
       margin-top: 15px;
-      font-size: 16px; /* Ukuran font lebih besar */
+      font-size: 14px;
       font-weight: bold;
       text-decoration: none;
       display: block;
       text-align: center;
-      transition: background-color 0.3s ease;
     }
 
     .checkout-button:hover {
       background-color: #0056b3;
     }
 
+    /* Product Grid Styles */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Min lebar item sedikit lebih besar */
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 15px;
       padding: 20px;
       max-width: 1200px;
@@ -253,16 +213,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s ease-in-out; /* Efek hover */
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-
-    .item:hover {
-        transform: translateY(-5px) translateZ(0); /* Efek angkat saat hover, tetap di GPU */
     }
 
     .item a {
@@ -272,30 +222,22 @@
 
     .item img {
       width: 100%;
-      height: 160px; /* Tinggi gambar sedikit lebih besar */
+      height: 150px;
       object-fit: cover;
       border-radius: 8px;
       display: block;
       margin-bottom: 10px;
-      /* Penting untuk mencegah layout shift. Sesuaikan rasio ini. */
-      aspect-ratio: 1 / 1; /* Contoh: untuk gambar persegi. Sesuaikan jika gambar Anda bukan persegi. */
-      will-change: transform, opacity; /* Memberi hint browser untuk optimasi */
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
     }
 
     .item p {
       margin: 5px 0;
-      font-size: 14px; /* Ukuran font lebih besar */
+      font-size: 12px;
       font-weight: bold;
       color: #333;
     }
 
     .item .price {
-      font-size: 16px; /* Ukuran font lebih besar */
+      font-size: 12.8px;
       color: #007bff;
       margin-top: 10px;
       font-weight: bold;
@@ -305,12 +247,12 @@
       display: inline-block;
       background-color: #28a745;
       color: #fff;
-      padding: 10px 15px; /* Padding lebih besar */
+      padding: 8px 12px;
       border-radius: 5px;
       text-decoration: none;
       margin-top: 12px;
       transition: background-color 0.3s ease;
-      font-size: 14px; /* Ukuran font lebih besar */
+      font-size: 11.2px;
       font-weight: bold;
       border: none;
       cursor: pointer;
@@ -320,39 +262,30 @@
       background-color: #218838;
     }
 
+    /* Profile Page/Section Styles */
     .profile-page {
-      display: none;
-      position: fixed;
+      display: none; /* Hidden by default, will be shown as full page */
+      position: fixed; /* Fixed to cover the whole viewport */
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #ffffff;
-      z-index: 1001;
-      overflow-y: auto;
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      background-color: #ffffff; /* Same as body background */
+      z-index: 1001; /* Above cart popup */
+      overflow-y: auto; /* Enable scrolling for long content */
     }
 
     .profile-page .profile-header {
       background-color: #f8f8f8;
-      padding: 15px 20px; /* Padding lebih besar */
+      padding: 10px 20px;
       text-align: center;
       border-bottom: 1px solid #eee;
       position: relative;
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
     }
 
     .profile-page .profile-header h1 {
       margin: 0;
-      font-size: 24px; /* Ukuran font lebih besar */
+      font-size: 22.4px;
       color: #333;
     }
 
@@ -362,29 +295,21 @@
       object-fit: contain;
       display: block;
       margin: 0 auto 10px auto;
-       /* Pastikan aspect-ratio untuk mencegah layout shift saat gambar dimuat */
-      aspect-ratio: 16 / 5; /* Sesuaikan dengan rasio asli gambar logo Anda */
-      will-change: transform, opacity;
     }
 
     .profile-page .close-profile-button {
       position: absolute;
       top: 15px;
       left: 20px;
-      font-size: 20px;
+      font-size: 20px; /* Slightly smaller than main icons */
       cursor: pointer;
-      color: #dc3545;
+      color: #dc3545; /* Red color for close */
       text-decoration: none;
-      padding: 8px 12px; /* Padding lebih besar */
+      padding: 5px 10px;
       border: 1px solid #dc3545;
       border-radius: 5px;
       background-color: #fff;
       transition: background-color 0.3s ease, color 0.3s ease;
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
     }
 
     .profile-page .close-profile-button:hover {
@@ -393,7 +318,7 @@
     }
 
     .profile-page .content-section {
-        padding: 25px; /* Padding lebih besar */
+        padding: 20px;
         max-width: 800px;
         margin: 20px auto;
         background-color: #fdfdfd;
@@ -402,8 +327,8 @@
     }
 
     .profile-page .content-section h2 {
-      font-size: 22px; /* Ukuran font lebih besar */
-      margin-bottom: 20px; /* Margin lebih besar */
+      font-size: 20.8px;
+      margin-bottom: 15px;
       color: #333;
       text-align: center;
     }
@@ -416,36 +341,35 @@
 
     .profile-form label {
         display: block;
-        margin-bottom: 10px; /* Margin lebih besar */
+        margin-bottom: 8px;
         font-weight: bold;
-        font-size: 15px; /* Ukuran font lebih besar */
     }
 
     .profile-form input[type="text"],
     .profile-form input[type="tel"],
     .profile-form textarea {
-        width: calc(100% - 22px); /* Penyesuaian lebar */
-        padding: 12px; /* Padding lebih besar */
-        margin-bottom: 20px; /* Margin lebih besar */
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
-        font-size: 15px; /* Ukuran font lebih besar */
+        font-size: 1em;
     }
 
     .profile-form textarea {
         resize: vertical;
-        min-height: 80px; /* Tinggi minimal lebih besar */
+        min-height: 60px;
     }
 
     .profile-form button {
         background-color: #6c757d;
         color: white;
-        padding: 12px 15px; /* Padding lebih besar */
+        padding: 10px 15px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 16px; /* Ukuran font lebih besar */
+        font-size: 1em;
         transition: background-color 0.3s ease;
         width: 100%;
     }
@@ -454,18 +378,14 @@
         background-color: #5a6268;
     }
 
+    /* Footer Styles */
     footer {
         background-color: #333;
         color: #fff;
         text-align: center;
         padding: 20px;
         margin-top: 30px;
-        font-size: 12px; /* Ukuran font lebih besar */
-        /* Tambahan untuk performa rendering di GPU */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
+        font-size: 11.2px;
     }
 
     footer .footer-content {
@@ -487,78 +407,62 @@
         color: #007bff;
     }
 
+    /* --- New Sliding Product Section Styles --- */
     .sliding-products-container {
       max-width: 1200px;
-      margin: 25px auto 0; /* Margin lebih besar */
+      margin: 20px auto 0;
       padding: 0 20px;
       position: relative;
     }
 
     .sliding-products-header {
-        font-size: 1.3em; /* Ukuran font lebih besar */
+        font-size: 1.2em;
         font-weight: bold;
-        margin-bottom: 20px; /* Margin lebih besar */
+        margin-bottom: 15px;
         color: #333;
         text-align: center;
     }
 
+    /* Flex container for the pinned item and the scrollable wrapper */
     .sliding-content-wrapper {
         display: flex;
-        overflow-x: hidden; /* Tetap hidden jika ada bagian yang ingin dipin */
-        padding-bottom: 10px;
-        align-items: flex-start; /* Sejajarkan item di awal */
-        /* Tambahan untuk performa rendering di GPU */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
+        overflow-x: hidden; /* Prevent this wrapper from scrolling */
+        padding-bottom: 10px; /* Space for scrollbar if needed by inner wrapper */
     }
 
+    /* Pinned item style */
     .pinned-sliding-item {
-        flex: 0 0 auto;
-        width: 110px; /* Lebar sedikit lebih besar */
-        margin-right: 15px;
+        flex: 0 0 auto; /* Prevent shrinking/growing */
+        width: 100px; /* Same width as other sliding items */
+        margin-right: 15px; /* Gap to the scrollable section */
         text-align: center;
-        border: 1px solid #eee; /* Tambahkan border ringan */
+        border: none;
         border-radius: 8px;
-        padding: 12px; /* Padding lebih besar */
+        padding: 10px;
         background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Tambah shadow ringan */
+        /* box-shadow: 0 1px 3px rgba(0,0,0,0.1); */ /* Removed shadow */
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         transition: transform 0.3s ease;
-        /* Tambahan untuk performa rendering di GPU */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
     }
 
     .pinned-sliding-item:hover {
-        transform: translateY(-5px) translateZ(0); /* Efek angkat saat hover, tetap di GPU */
+        transform: translateY(-3px);
     }
 
     .pinned-sliding-item img {
       width: 100%;
-      height: 85px; /* Tinggi sedikit lebih besar */
+      height: 75px;
       object-fit: cover;
       border-radius: 6px;
       display: block;
-      margin-bottom: 10px; /* Margin lebih besar */
-      /* Penting untuk mencegah layout shift. Sesuaikan rasio ini. */
-      aspect-ratio: 1 / 1; /* Contoh: untuk gambar persegi. Sesuaikan jika gambar Anda bukan persegi. */
-      will-change: transform, opacity; /* Memberi hint browser untuk optimasi */
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      margin-bottom: 8px;
     }
 
     .pinned-sliding-item p {
-      margin: 4px 0; /* Margin lebih besar */
-      font-size: 11px; /* Ukuran font sedikit lebih besar */
+      margin: 3px 0;
+      font-size: 10px;
       font-weight: bold;
       color: #333;
       white-space: nowrap;
@@ -567,29 +471,24 @@
     }
 
     .pinned-sliding-item .price {
-      font-size: 12px; /* Ukuran font sedikit lebih besar */
+      font-size: 10.4px;
       color: #007bff;
-      margin-top: 8px; /* Margin lebih besar */
+      margin-top: 5px;
       font-weight: bold;
     }
 
+
     .sliding-products-wrapper {
       display: flex;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      flex-grow: 1;
-      scrollbar-width: thin;
-      scrollbar-color: #888 #f1f1f1;
-      padding-bottom: 5px; /* Tambahkan padding di bawah untuk scrollbar */
-      /* HATI-HATI: Ini menghilangkan efek overscroll bounce/glow HANYA untuk slider horizontal */
-      overscroll-behavior-x: none; /* Ini yang mengatasi denyutan saat swipe kanan/kiri habis */
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      overflow-x: auto; /* Enable horizontal scrolling */
+      /* REMOVED: scroll-snap-type: x mandatory; */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      flex-grow: 1; /* Allows it to take remaining space */
+      scrollbar-width: thin; /* Firefox */
+      scrollbar-color: #888 #f1f1f1; /* Firefox */
     }
 
+    /* For Webkit browsers (Chrome, Safari) */
     .sliding-products-wrapper::-webkit-scrollbar {
       height: 8px;
     }
@@ -609,54 +508,42 @@
     }
 
     .sliding-item {
-      flex: 0 0 auto;
-      width: 110px; /* Lebar sedikit lebih besar */
-      margin-right: 15px;
+      flex: 0 0 auto; /* Prevent items from shrinking */
+      width: 100px; /* Base width for 50% of main item (150px / 2 = 75px, plus padding/border) */
+      margin-right: 15px; /* Gap between items */
       text-align: center;
-      border: 1px solid #eee; /* Tambahkan border ringan */
+      border: none;
       border-radius: 8px;
-      padding: 12px; /* Padding lebih besar */
+      padding: 10px; /* Reduced padding */
       background-color: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Tambah shadow ringan */
+      /* box-shadow: 0 1px 3px rgba(0,0,0,0.1); */ /* Removed shadow */
+      /* REMOVED: scroll-snap-align: start; */
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.3s ease;
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      transition: transform 0.3s ease; /* Smooth hover effect */
     }
 
     .sliding-item:last-child {
-        margin-right: 0;
+        margin-right: 0; /* No margin on the last item */
     }
 
     .sliding-item:hover {
-        transform: translateY(-5px) translateZ(0); /* Efek angkat saat hover, tetap di GPU */
+        transform: translateY(-3px); /* Slight lift on hover */
     }
 
     .sliding-item img {
       width: 100%;
-      height: 85px; /* Tinggi sedikit lebih besar */
+      height: 75px; /* 50% of main item's 150px height */
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 6px; /* Slightly smaller border-radius */
       display: block;
-      margin-bottom: 10px;
-      /* Penting untuk mencegah layout shift. Sesuaikan rasio ini. */
-      aspect-ratio: 1 / 1; /* Contoh: untuk gambar persegi. Sesuaikan jika gambar Anda bukan persegi. */
-      will-change: transform, opacity;
-      /* Tambahan untuk performa rendering di GPU */
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      margin-bottom: 8px;
     }
 
     .sliding-item p {
-      margin: 4px 0; /* Margin lebih besar */
-      font-size: 11px; /* Ukuran font sedikit lebih besar */
+      margin: 3px 0;
+      font-size: 10px;
       font-weight: bold;
       color: #333;
       white-space: nowrap;
@@ -665,56 +552,47 @@
     }
 
     .sliding-item .price {
-      font-size: 12px; /* Ukuran font sedikit lebih besar */
+      font-size: 10.4px;
       color: #007bff;
-      margin-top: 8px; /* Margin lebih besar */
+      margin-top: 5px;
       font-weight: bold;
     }
 
+    /* GIF Container Styles */
     .gif-container {
         text-align: center;
-        margin-top: 30px;
-        padding: 0 20px;
-        width: 100%;
+        margin-top: 30px; /* Add some space above the GIF */
+        padding: 0 20px; /* Match padding of other sections */
+        max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
-        overflow: hidden; /* Memastikan tidak ada overflow saat aspect-ratio */
-        /* Tambahan untuk performa rendering di GPU */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
     }
 
     .gif-container img {
-        width: 25%; /* Tetap 25% dari container */
+        max-width: 100%; /* Ensure GIF is responsive */
         height: auto;
-        object-fit: cover;
-        /* Penting: Memberi tahu browser rasio aspek gambar untuk mencegah layout shift */
-        aspect-ratio: 3 / 1; /* Sesuaikan dengan rasio asli GIF Anda */
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        display: block;
-        margin: 0 auto;
-        will-change: transform, opacity; /* Memberi hint browser untuk optimasi */
-        /* Tambahan untuk performa rendering di GPU */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
+        border-radius: 8px; /* Optional: subtle rounded corners */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional: subtle shadow */
     }
 
-    /* --- Media Queries --- */
 
+    /* Media Queries */
     @media (max-width: 768px) {
-        body {
-            font-size: 13px; /* Sesuaikan ukuran font dasar */
-        }
-        header h1, .profile-page .profile-header h1 {
-            font-size: 20px;
+        .grid {
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            padding: 15px;
         }
 
-        .cart-icon {
+        .item img {
+            height: 120px;
+        }
+
+        header h1, .profile-page .profile-header h1 {
+            font-size: 19.2px;
+        }
+
+        .cart-icon { /* Adjust fixed cart icon for smaller screens */
             top: 10px;
             right: 10px;
             font-size: 20px;
@@ -734,187 +612,23 @@
             right: 5%;
         }
 
-        .cart-item-name, .cart-item-price, .cart-item-controls button, .cart-item-controls input {
-            font-size: 12px;
-        }
-
-        .checkout-button, .cart-total {
-            font-size: 14px;
-        }
-
-        .grid {
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Min lebar item disesuaikan */
-            gap: 12px;
-            padding: 15px;
-        }
-
-        .item img {
-            height: 130px; /* Tinggi gambar disesuaikan */
-        }
-        .item p {
-            font-size: 13px;
-        }
-        .item .price {
-            font-size: 14px;
-        }
-        .add-to-cart-button {
-            padding: 8px 12px;
-            font-size: 12px;
-        }
-
-        .profile-page .content-section {
-            padding: 20px;
-            margin: 15px auto;
-        }
-        .profile-page .content-section h2 {
-            font-size: 18px;
-        }
-        .profile-form label, .profile-form input, .profile-form textarea, .profile-form button {
-            font-size: 14px;
-            padding: 10px;
-        }
-
-        .sliding-products-container {
-            margin-top: 20px;
-            padding: 0 15px;
-        }
-        .sliding-products-header {
-            font-size: 1.2em;
-            margin-bottom: 15px;
-        }
-        .pinned-sliding-item,
-        .sliding-item {
-            width: 90px; /* Lebar disesuaikan */
-            margin-right: 12px;
-            padding: 10px;
-        }
-        .pinned-sliding-item img,
-        .sliding-item img {
-            height: 70px; /* Tinggi disesuaikan */
-        }
-        .pinned-sliding-item p,
-        .sliding-item p {
-            font-size: 10px;
-        }
-        .pinned-sliding-item .price,
-        .sliding-item .price {
-            font-size: 11px;
-        }
-
-        .gif-container {
-            margin-top: 20px;
-            padding: 0 15px;
-        }
-        .gif-container img {
-            width: 35%; /* Disesuaikan untuk tablet (50% dari 70%) */
-        }
-    }
-
-    @media (max-width: 480px) {
-        body {
-            font-size: 12px; /* Lebih kecil lagi untuk ponsel */
-        }
-        header h1, .profile-page .profile-header h1 {
-            font-size: 18px;
-        }
-        .profile-button {
-            top: 10px;
-            left: 10px;
-            font-size: 20px;
-        }
-        .cart-icon {
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            padding: 3px 8px;
-        }
-        .cart-count {
-            top: -5px;
-            right: -5px;
-            font-size: 8px;
-        }
-        .cart-popup {
-            top: 50px;
-            right: 5%;
-            width: 95%;
-            max-width: 250px;
-            padding: 10px;
-        }
-        .cart-item-name, .cart-item-price, .cart-item-controls button, .cart-item-controls input {
-            font-size: 11px;
-            padding: 3px 6px;
-        }
-        .cart-item-controls input {
-            width: 35px;
-        }
-        .checkout-button, .cart-total {
-            font-size: 13px;
-        }
-
-        .grid {
-            grid-template-columns: 1fr 1fr; /* Dua kolom di ponsel */
-            padding: 10px;
-            gap: 10px;
-        }
-
-        .item img {
-            height: 100px;
-        }
-
-        .item p {
-            font-size: 11px;
-        }
-
-        .item .price {
-            font-size: 12px;
-        }
-
-        .add-to-cart-button {
-            padding: 7px 10px;
-            font-size: 11px;
-        }
-
-        header img, .profile-page .profile-header img {
-            max-height: 80px;
-        }
-
-        .profile-page .close-profile-button {
-            font-size: 16px;
-            padding: 5px 8px;
-            top: 10px;
-            left: 10px;
-        }
         .profile-page .content-section {
             padding: 15px;
             margin: 10px auto;
         }
         .profile-page .content-section h2 {
-            font-size: 16px;
+            font-size: 17.6px;
         }
-        .profile-form label, .profile-form input, .profile-form textarea, .profile-form button {
-            font-size: 13px;
-            padding: 8px;
-        }
-        .profile-form textarea {
-            min-height: 60px;
-        }
-        .sliding-products-container {
-            margin-top: 15px;
-            padding: 0 10px;
-        }
-        .sliding-products-header {
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
+
         .pinned-sliding-item,
         .sliding-item {
-            width: 80px; /* Lebar disesuaikan */
+            width: 80px; /* Adjust for smaller screens */
             margin-right: 10px;
             padding: 8px;
         }
         .pinned-sliding-item img,
         .sliding-item img {
-            height: 60px; /* Tinggi disesuaikan */
+            height: 60px;
         }
         .pinned-sliding-item p,
         .sliding-item p {
@@ -922,15 +636,85 @@
         }
         .pinned-sliding-item .price,
         .sliding-item .price {
-            font-size: 10px;
+            font-size: 9.6px;
+        }
+
+        .gif-container {
+            margin-top: 20px;
+            padding: 0 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .grid {
+            grid-template-columns: 1fr 1fr;
+            padding: 10px;
+        }
+
+        .item img {
+            height: 100px;
+        }
+
+        .item p {
+            font-size: 10.4px;
+        }
+
+        .item .price {
+            font-size: 11.2px;
+        }
+
+        .add-to-cart-button {
+            padding: 6.4px 8px;
+            font-size: 9.6px;
+        }
+
+        header img, .profile-page .profile-header img {
+            max-height: 100px;
+        }
+
+        header h1, .profile-page .profile-header h1 {
+            font-size: 16px;
+        }
+        .profile-page .close-profile-button {
+            font-size: 16px;
+            padding: 3px 8px;
+        }
+
+        .cart-icon { /* Further adjust fixed cart icon for very small screens */
+            top: 5px;
+            right: 5px;
+            font-size: 18px;
+            padding: 2px 6px;
+        }
+        .cart-count {
+            top: -7px;
+            right: -7px;
+            font-size: 7px;
+        }
+
+
+        .pinned-sliding-item,
+        .sliding-item {
+            width: 70px; /* Further adjust for very small screens */
+            margin-right: 8px;
+            padding: 6px;
+        }
+        .pinned-sliding-item img,
+        .sliding-item img {
+            height: 50px;
+        }
+        .pinned-sliding-item p,
+        .sliding-item p {
+            font-size: 8px;
+        }
+        .pinned-sliding-item .price,
+        .sliding-item .price {
+            font-size: 8.8px;
         }
 
         .gif-container {
             margin-top: 15px;
             padding: 0 10px;
-        }
-        .gif-container img {
-            width: 60%; /* Disesuaikan untuk ponsel agar tidak terlalu kecil */
         }
     }
   </style>
@@ -939,13 +723,13 @@
 
   <div id="main-content-view">
     <header>
-      <img src="https://nasukafoods.site/image/nasuka-karya.hapussementara" alt="Logo Nasuka Karya">
-      <a href="#" class="profile-button" id="profile-button" aria-label="Profil">&#128100;</a>
-    </header>
+      <img src="https://nasukafoods.site/image/nasuka-karya.jpg" alt="Logo Nasuka Karya">
+      <a href="#" class="profile-button" id="profile-button">&#128100;</a>
+      </header>
 
-    <div class="cart-icon" id="cart-icon" role="button" aria-label="Keranjang Belanja">&#128722;<span class="cart-count" id="cart-count">0</span></div>
-    <div class="cart-popup" id="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cart-popup-title">
-      <h3 id="cart-popup-title">Keranjang Belanja</h3>
+    <div class="cart-icon" id="cart-icon">&#128722;<span class="cart-count" id="cart-count">0</span></div>
+    <div class="cart-popup" id="cart-popup">
+      <h3>Keranjang Belanja</h3>
       <div id="cart-items">
         <p>Keranjang kosong.</p>
       </div>
@@ -953,38 +737,37 @@
       <a href="pembayaran.html" class="checkout-button" id="checkout-button">Checkout</a>
     </div>
 
-    <section class="sliding-products-container">
+    <div class="sliding-products-container">
         <h2 class="sliding-products-header">Produk Unggulan Lainnya</h2>
         <div class="sliding-content-wrapper">
             <div class="pinned-sliding-item">
                 <a href="form-pembelian.html?product=booster">
-                    <img src="https://nasukafoods.site/image/sosial-media.hapussementara" alt="booster sosmed">
+                    <img src="https://nasukafoods.site/image/sosial-media.png" alt="booster sosmed">
                 </a>
                 <p>booster sosmed</p>
                 <p class="price">Rp 500</p>
                 <input type="hidden" value="1" class="quantity-input" data-price="500" data-product="booster">
-                <span class="location-tag">📍Cibaduyut</span>
-                <button class="add-to-cart-button">Tambah ke Keranjang</button>
+                <button class="add-to-cart-button">tambah ke keranjang</button>
             </div>
 
             <div class="sliding-products-wrapper">
                 <div class="sliding-item">
-                    <a href="form-pembelian.html?product=gesek_tunai">
-                        <img src="https://nasukafoods.site/image/gestun.hapussementara" alt="Gestun">
+                    <a href="form-pembelian.html?product=instagram_likes">
+                        <img src="https://via.placeholder.com/75x75?text=IG+Likes" alt="Instagram Likes">
                     </a>
-                    <p>Gestun</p>
+                    <p>Instagram Likes</p>
                     <p class="price">Rp 400</p>
-                    <input type="hidden" value="1" class="quantity-input" data-price="400" data-product="gesek_tunai">
-                    <button class="add-to-cart-button">Tambah ke Keranjang</button>
+                    <input type="hidden" value="1" class="quantity-input" data-price="400" data-product="instagram_likes">
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
                 </div>
                 <div class="sliding-item">
-                    <a href="form-pembelian.html?product=pulsa">
-                        <img src="https://nasukafoods.site/image/jual-pulsa.hapussementara" alt="PULSA">
+                    <a href="form-pembelian.html?product=youtube_views">
+                        <img src="https://via.placeholder.com/75x75?text=YT+Views" alt="YouTube Views">
                     </a>
-                    <p>PULSA</p>
+                    <p>YouTube Views</p>
                     <p class="price">Rp 700</p>
-                    <input type="hidden" value="1" class="quantity-input" data-price="700" data-product="pulsa">
-                    <button class="add-to-cart-button">Tambah ke Keranjang</button>
+                    <input type="hidden" value="1" class="quantity-input" data-price="700" data-product="youtube_views">
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
                 </div>
                 <div class="sliding-item">
                     <a href="form-pembelian.html?product=twitter_retweets">
@@ -993,7 +776,7 @@
                     <p>Twitter Retweets</p>
                     <p class="price">Rp 300</p>
                     <input type="hidden" value="1" class="quantity-input" data-price="300" data-product="twitter_retweets">
-                    <button class="add-to-cart-button">Tambah ke Keranjang</button>
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
                 </div>
                 <div class="sliding-item">
                     <a href="form-pembelian.html?product=new_product_5">
@@ -1002,7 +785,7 @@
                     <p>Produk Baru 5</p>
                     <p class="price">Rp 800</p>
                     <input type="hidden" value="1" class="quantity-input" data-price="800" data-product="new_product_5">
-                    <button class="add-to-cart-button">Tambah ke Keranjang</button>
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
                 </div>
                  <div class="sliding-item">
                     <a href="form-pembelian.html?product=new_product_6">
@@ -1011,38 +794,38 @@
                     <p>Produk Baru 6</p>
                     <p class="price">Rp 900</p>
                     <input type="hidden" value="1" class="quantity-input" data-price="900" data-product="new_product_6">
-                    <button class="add-to-cart-button">Tambah ke Keranjang</button>
+                    <button class="add-to-cart-button">tambah ke keranjang</button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="grid">
+    <div class="grid">
       <div class="item">
         <a href="form-pembelian.html?product=lacak_lokasi">
-          <img src="https://nasukafoods.site/lacak-lokasi.f" alt="Lacak Lokasi">
+          <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="Lacak Lokasi">
         </a>
         <p>GPS NASUKA SERVER</p>
         <p class="price">Pantau orang tersayang melalui nasuka server, Layanan khusus tracking unlimited</p> <input type="hidden" value="1" class="quantity-input" data-price="1000" data-product="lacak_lokasi">
+       
       </div>
 
       <div class="item">
         <a href="form-pembelian.html?product=CILOK GAJIH">
-          <img src="https://nasukafoods.site/paketcilok.hapussementara" alt="CILOK GAJIH">
+          <img src="https://nasukafoods.site/paketcilok.jpg" alt="CILOK GAJIH">
         </a>
         <p>CILOK GAJIH</p>
         <p class="price">Rp 900</p>
         <input type="hidden" value="1" class="quantity-input" data-price="900" data-product="CILOK GAJIH">
-        <span class="location-tag">📍 Cibaduyut</span>
-        <button class="add-to-cart-button">Tambah ke Keranjang</button>
+        <button class="add-to-cart-button">tambah ke keranjang</button>
       </div>
-    </section>
-
-    <div class="gif-container">
-      <img src="https://nasukafoods.site/image/special-pmo.gif" alt="Promosi">
     </div>
 
-    <section class="grid">
+    <div class="gif-container">
+      <img src="https://nasukafoods.site/image/special-promo.gif" alt="Promosi">
+    </div>
+
+    <div class="grid">
         <div class="item">
             <a href="form-pembelian.html?product=produk_baru_1">
                 <img src="https://via.placeholder.com/150x150?text=Produk+Baru+1" alt="Produk Baru 1">
@@ -1050,7 +833,7 @@
             <p>Produk Baru 1</p>
             <p class="price">Rp 1.500</p>
             <input type="hidden" value="1" class="quantity-input" data-price="1500" data-product="produk_baru_1">
-            <button class="add-to-cart-button">Tambah ke Keranjang</button>
+            <button class="add-to-cart-button">tambah ke keranjang</button>
         </div>
         <div class="item">
             <a href="form-pembelian.html?product=produk_baru_2">
@@ -1059,7 +842,7 @@
             <p>Produk Baru 2</p>
             <p class="price">Rp 2.500</p>
             <input type="hidden" value="1" class="quantity-input" data-price="2500" data-product="produk_baru_2">
-            <button class="add-to-cart-button">Tambah ke Keranjang</button>
+            <button class="add-to-cart-button">tambah ke keranjang</button>
         </div>
         <div class="item">
             <a href="form-pembelian.html?product=produk_baru_3">
@@ -1068,7 +851,7 @@
             <p>Produk Baru 3</p>
             <p class="price">Rp 1.200</p>
             <input type="hidden" value="1" class="quantity-input" data-price="1200" data-product="produk_baru_3">
-            <button class="add-to-cart-button">Tambah ke Keranjang</button>
+            <button class="add-to-cart-button">tambah ke keranjang</button>
         </div>
         <div class="item">
             <a href="form-pembelian.html?product=produk_baru_4">
@@ -1077,21 +860,21 @@
             <p>Produk Baru 4</p>
             <p class="price">Rp 3.000</p>
             <input type="hidden" value="1" class="quantity-input" data-price="3000" data-product="produk_baru_4">
-            <button class="add-to-cart-button">Tambah ke Keranjang</button>
+            <button class="add-to-cart-button">tambah ke keranjang</button>
         </div>
-    </section>
+    </div>
   </div>
 
   <div class="profile-page" id="profile-page-view">
     <div class="profile-header">
-      <img src="https://nasukafoods.site/images/nasuka-karya.hapussementara" alt="Logo Nasuka Karya">
-      <button class="close-profile-button" id="close-profile-button" aria-label="Tutup Profil">&#10006; Tutup</button>
+      <img src="https://nasukafoods.site/images/nasuka-karya.jpg" alt="Logo Nasuka Karya">
+      <button class="close-profile-button" id="close-profile-button">&#10006; Tutup</button>
       <h1>Profil Saya</h1>
     </div>
 
     <section class="content-section">
       <h2>Informasi Profil</h2>
-      <form class="profile-form">
+      <div class="profile-form">
           <label for="profile_nama">Nama Lengkap:</label>
           <input type="text" id="profile_nama" name="profile_nama" required>
 
@@ -1104,8 +887,8 @@
           <label for="profile_username">Username (Contoh: TikTok, Instagram, dll.):</label>
           <input type="text" id="profile_username" name="profile_username" placeholder="@usernameAnda" required>
 
-          <button id="saveProfileBtn" type="submit">Simpan</button>
-      </form>
+          <button id="saveProfileBtn">Simpan</button>
+      </div>
     </section>
   </div>
 
@@ -1122,10 +905,11 @@
 
   <script>
     let cart = [];
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec"; // Your Google Apps Script URL
 
     document.addEventListener('DOMContentLoaded', () => {
-      const mainContentView = document.getElementById('main-content-view'); // Kembali ke ID ini
+      // Elements for Main Content and Cart
+      const mainContentView = document.getElementById('main-content-view');
       const cartIcon = document.getElementById('cart-icon');
       const cartPopup = document.getElementById('cart-popup');
       const cartItemsContainer = document.getElementById('cart-items');
@@ -1133,6 +917,7 @@
       const cartCountElement = document.getElementById('cart-count');
       const checkoutButton = document.getElementById('checkout-button');
 
+      // Elements for Profile Page
       const profileButton = document.getElementById('profile-button');
       const profilePageView = document.getElementById('profile-page-view');
       const closeProfileButton = document.getElementById('close-profile-button');
@@ -1141,7 +926,6 @@
       const profileAlamat = document.getElementById('profile_alamat');
       const profileUsername = document.getElementById('profile_username');
       const saveProfileBtn = document.getElementById('saveProfileBtn');
-      const profileForm = document.querySelector('.profile-form'); 
 
       // Load cart from localStorage
       if (localStorage.getItem('nasukaCart')) {
@@ -1149,26 +933,21 @@
         updateCartDisplay();
       }
 
-      // Add to cart functionality
+      // --- Cart Functionality ---
+      // Add to cart buttons for ALL items
+      // We now select all buttons with class 'add-to-cart-button'
       const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
       addToCartButtons.forEach(button => {
         button.addEventListener('click', (event) => {
-          const item = event.target.closest('.item') || event.target.closest('.sliding-item') || event.target.closest('.pinned-sliding-item');
+          const item = event.target.closest('.item') || event.target.closest('.sliding-item') || event.target.closest('.pinned-sliding-item'); // Check all parent classes
           
           if (!item) {
               console.error("Could not find parent item for add-to-cart button.");
               return;
           }
 
-          const productNameElement = item.querySelector('p');
-          let productName = productNameElement ? productNameElement.innerText.split('\n')[0].trim() : 'Unknown Product'; 
-          
+          const productName = item.querySelector('p').innerText;
           const quantityInput = item.querySelector('.quantity-input');
-          if (!quantityInput) {
-            console.error("Quantity input not found for item:", item);
-            return;
-          }
-          
           const quantity = parseInt(quantityInput.value);
           const pricePerUnit = parseInt(quantityInput.dataset.price);
           const productCode = quantityInput.dataset.product;
@@ -1193,29 +972,32 @@
         });
       });
 
-      // Cart icon click to toggle popup
+      // Links inside sliding and pinned items will now primarily use the add-to-cart button
+      // No need for separate event listeners for their <a> tags if you want them to just navigate
+      // or if they now have a dedicated add-to-cart button.
+      // For now, we assume direct navigation on <a> click and add-to-cart on button click.
+
+
       cartIcon.addEventListener('click', (event) => {
         event.stopPropagation();
         cartPopup.style.display = cartPopup.style.display === 'block' ? 'none' : 'block';
       });
 
-      // Close cart popup when clicking outside
       window.addEventListener('click', (event) => {
         if (!cartPopup.contains(event.target) && !cartIcon.contains(event.target)) {
           cartPopup.style.display = 'none';
         }
       });
 
-      // Checkout button validation
       checkoutButton.addEventListener('click', (event) => {
         if (cart.length === 0) {
           alert('Keranjang belanja Anda kosong. Silakan tambahkan produk terlebih dahulu.');
-          event.preventDefault();
+          event.preventDefault(); // Stop navigation if cart is empty
           return;
         }
+        // If cart is not empty, proceed to pembayaran.html
       });
 
-      // Update cart display function
       function updateCartDisplay() {
         cartItemsContainer.innerHTML = '';
         let overallTotal = 0;
@@ -1245,7 +1027,7 @@
             totalItemsInCart += item.quantity;
           });
 
-          // Add event listeners for cart item quantity buttons
+          // Re-attach event listeners for +/- buttons in cart popup
           document.querySelectorAll('.minus-cart-item').forEach(button => {
             button.addEventListener('click', (event) => {
               event.stopPropagation();
@@ -1254,7 +1036,7 @@
                 cart[index].quantity--;
                 cart[index].totalPrice = cart[index].quantity * cart[index].pricePerUnit;
               } else {
-                cart.splice(index, 1);
+                cart.splice(index, 1); // Remove item if quantity becomes 0
               }
               localStorage.setItem('nasukaCart', JSON.stringify(cart));
               updateCartDisplay();
@@ -1279,29 +1061,28 @@
         cartTotalElement.innerText = `Total: Rp ${overallTotal.toLocaleString('id-ID')}`;
       }
 
-      // Profile button click to show profile page
+      // --- Profile Page Functionality ---
       profileButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        mainContentView.style.display = 'none'; // Sembunyikan kontainer utama
-        profilePageView.style.display = 'block';
-        loadCustomerProfile();
-        cartPopup.style.display = 'none'; 
+        event.preventDefault(); // Prevent default link behavior
+        mainContentView.style.display = 'none'; // Hide main content
+        profilePageView.style.display = 'block'; // Show profile page
+        loadCustomerProfile(); // Load data when showing
+        cartPopup.style.display = 'none'; // Ensure cart popup is closed
       });
 
-      // Close profile button click
       closeProfileButton.addEventListener('click', () => {
-        profilePageView.style.display = 'none';
-        mainContentView.style.display = 'block'; // Tampilkan kembali kontainer utama
+        profilePageView.style.display = 'none'; // Hide profile page
+        mainContentView.style.display = 'block'; // Show main content
       });
 
-      // Save profile data
-      profileForm.addEventListener('submit', (event) => { 
-          event.preventDefault(); 
+      saveProfileBtn.addEventListener('click', () => {
           saveCustomerProfile();
           alert('Data diri Anda telah disimpan!');
+          // Optionally, you can also hide the profile page after saving
+          // profilePageView.style.display = 'none';
+          // mainContentView.style.display = 'block';
       });
 
-      // Load customer profile data from localStorage
       function loadCustomerProfile() {
           const storedCustomerData = localStorage.getItem('nasukaCustomerData');
           if (storedCustomerData) {
@@ -1313,7 +1094,6 @@
           }
       }
 
-      // Save customer profile data to localStorage
       function saveCustomerProfile() {
           const customerData = {
               nama: profileNama.value,
