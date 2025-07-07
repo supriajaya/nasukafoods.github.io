@@ -1,29 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kirim Lokasi Realtime</title>
+  <title>Kirim Lokasi Realtime Arya</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       font-family: sans-serif;
       text-align: center;
       padding: 50px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      background-color: #fff;
+      margin: auto;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+    h2 {
+      color: #0056b3;
+      margin-bottom: 20px;
     }
     .status {
-      font-size: 18px;
+      font-size: 1.1em;
       margin-top: 20px;
-      color: green;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #e7f3ff;
+      color: #0056b3;
+    }
+    .status.error {
+      background-color: #ffe7e7;
+      color: #cc0000;
     }
   </style>
 </head>
 <body>
-  <h2>Kirim Lokasi Realtime</h2>
-  <p class="status">Mengambil lokasi...</p>
+  <div class="container">
+    <h2>Kirim Lokasi Realtime Arya</h2>
+    <p class="status" id="statusMessage">Mengambil lokasi...</p>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    // --- Konfigurasi Firebase Anda ---
     const firebaseConfig = {
       apiKey: "AIzaSyC1pLpsAE5QJv26cEudkY6FoqzEoD9KM",
       authDomain: "posisi-saya.firebaseapp.com",
@@ -33,39 +57,83 @@
       appId: "1:1090605644806:web:7a257eee40570904135787"
     };
 
+    // Inisialisasi Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const statusEl = document.querySelector('.status');
 
-    const updateLocation = (lat, lng) => {
-      const lokasiRef = doc(db, "lokasi_saya", "Arya");
-      setDoc(lokasiRef, {
-        lat: lat,
-        lng: lng,
-        waktu: new Date().toISOString()
-      }).then(() => {
-        statusEl.textContent = "Lokasi berhasil dikirim.";
-      }).catch(err => {
-        statusEl.textContent = "Gagal kirim lokasi.";
-        console.error(err);
-      });
+    // Dapatkan elemen status dari HTML
+    const statusMessageEl = document.getElementById('statusMessage');
+
+    // Interval pengiriman lokasi (5 menit = 300000 milidetik)
+    const INTERVAL_KIRIM_LOKASI = 5 * 60 * 1000; 
+    const NAMA_PENGGUNA = "Arya"; // Nama pengguna untuk dokumen Firestore
+
+    /**
+     * Fungsi untuk mengirim data lokasi ke Firestore.
+     * @param {number} lat - Latitude.
+     * @param {number} lng - Longitude.
+     */
+    const sendLocationToFirestore = async (lat, lng) => {
+      try {
+        const lokasiRef = doc(db, "lokasi_saya", NAMA_PENGGUNA);
+        await setDoc(lokasiRef, {
+          lat: lat,
+          lng: lng,
+          waktu: new Date().toISOString() // Simpan waktu dalam format ISO string
+        });
+        const currentTime = new Date().toLocaleTimeString('id-ID');
+        statusMessageEl.textContent = `Lokasi ${NAMA_PENGGUNA} berhasil dikirim pada ${currentTime}. Menunggu pengiriman selanjutnya...`;
+        statusMessageEl.classList.remove('error');
+      } catch (err) {
+        statusMessageEl.textContent = `Gagal kirim lokasi ${NAMA_PENGGUNA}. Silakan coba lagi.`;
+        statusMessageEl.classList.add('error');
+        console.error("Error mengirim lokasi ke Firestore:", err);
+      }
     };
 
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition((pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        updateLocation(lat, lng);
-      }, (err) => {
-        statusEl.textContent = "Izin lokasi ditolak atau gagal.";
-      }, {
-        enableHighAccuracy: true,
-        maximumAge: 5000,
-        timeout: 10000
-      });
-    } else {
-      statusEl.textContent = "Geolocation tidak didukung.";
-    }
+    /**
+     * Fungsi untuk mendapatkan lokasi pengguna dan memicu pengiriman.
+     */
+    const getLocationAndSend = () => {
+      if (navigator.geolocation) {
+        statusMessageEl.textContent = "Mengambil lokasi...";
+        statusMessageEl.classList.remove('error');
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            sendLocationToFirestore(lat, lng);
+          },
+          (err) => {
+            let errorMessage = "Izin lokasi ditolak atau gagal mengambil lokasi.";
+            if (err.code === err.PERMISSION_DENIED) {
+              errorMessage = "Akses lokasi ditolak. Mohon izinkan akses lokasi agar aplikasi dapat berfungsi.";
+            } else if (err.code === err.POSITION_UNAVAILABLE) {
+              errorMessage = "Informasi lokasi tidak tersedia.";
+            } else if (err.code === err.TIMEOUT) {
+              errorMessage = "Waktu habis saat mencoba mendapatkan lokasi.";
+            }
+            statusMessageEl.textContent = errorMessage;
+            statusMessageEl.classList.add('error');
+            console.error("Error geolocation:", err);
+          },
+          {
+            enableHighAccuracy: true, // Meminta akurasi lokasi tinggi
+            maximumAge: 0,          // Selalu mencoba mendapatkan lokasi terbaru (tidak menggunakan cache)
+            timeout: 10000          // Batas waktu 10 detik untuk mendapatkan lokasi
+          }
+        );
+      } else {
+        statusMessageEl.textContent = "Geolocation tidak didukung oleh browser ini.";
+        statusMessageEl.classList.add('error');
+      }
+    };
+
+    // Panggil fungsi pertama kali saat halaman dimuat
+    getLocationAndSend();
+
+    // Set interval untuk memanggil fungsi setiap 5 menit
+    setInterval(getLocationAndSend, INTERVAL_KIRIM_LOKASI);
   </script>
 </body>
 </html>
