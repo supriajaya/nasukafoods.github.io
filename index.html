@@ -14,11 +14,24 @@
       font-size: 14px; /* Meningkatkan ukuran font dasar untuk keterbacaan */
       -webkit-font-smoothing: antialiased; /* Haluskan font di WebKit */
       -moz-osx-font-smoothing: grayscale; /* Haluskan font di Firefox */
+      /* HATI-HATI: Ini menghilangkan efek overscroll bounce/glow di SELURUH halaman */
+      /* Jika denyutan ada saat scroll ke atas/bawah mentok, ini solusinya. */
+      overscroll-behavior-y: none;
+      /* Mencegah scroll horizontal body secara tidak sengaja */
+      overflow-x: hidden; 
+      /* Meningkatkan kelancaran scrolling di iOS WebView */
+      -webkit-overflow-scrolling: touch; 
     }
 
     /* Memastikan elemen-elemen penting berada di atas */
-    header, .cart-icon, .cart-popup, .profile-page {
+    header, .cart-icon, .cart-popup, .profile-page, footer {
         z-index: 100;
+        /* Tambahan untuk performa rendering di GPU */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        will-change: transform, opacity; /* Tambahkan opacity ke will-change */
     }
 
     header {
@@ -41,6 +54,9 @@
       object-fit: contain;
       display: block;
       margin: 0 auto 10px auto;
+      /* Pastikan aspect-ratio untuk mencegah layout shift saat gambar dimuat */
+      aspect-ratio: 16 / 5; /* Sesuaikan dengan rasio asli gambar logo Anda */
+      will-change: transform, opacity;
     }
 
     .profile-button {
@@ -66,11 +82,17 @@
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       transition: all 0.2s ease-in-out; /* Transisi untuk hover */
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      will-change: transform;
     }
 
     .cart-icon:hover, .profile-button:hover {
       color: #0056b3;
-      transform: scale(1.05); /* Efek kecil saat hover */
+      transform: scale(1.05) translateZ(0); /* Efek kecil saat hover, tetap di GPU */
     }
 
     .cart-count {
@@ -85,6 +107,11 @@
       line-height: 1;
       text-align: center;
       display: none;
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .cart-popup {
@@ -102,6 +129,11 @@
       overflow-y: auto;
       padding: 15px;
       text-align: left;
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .cart-popup h3 {
@@ -222,10 +254,15 @@
       flex-direction: column;
       justify-content: space-between;
       transition: transform 0.2s ease-in-out; /* Efek hover */
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .item:hover {
-        transform: translateY(-5px); /* Efek angkat saat hover */
+        transform: translateY(-5px) translateZ(0); /* Efek angkat saat hover, tetap di GPU */
     }
 
     .item a {
@@ -240,7 +277,14 @@
       border-radius: 8px;
       display: block;
       margin-bottom: 10px;
+      /* Penting untuk mencegah layout shift. Sesuaikan rasio ini. */
+      aspect-ratio: 1 / 1; /* Contoh: untuk gambar persegi. Sesuaikan jika gambar Anda bukan persegi. */
       will-change: transform, opacity; /* Memberi hint browser untuk optimasi */
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .item p {
@@ -286,6 +330,11 @@
       background-color: #ffffff;
       z-index: 1001;
       overflow-y: auto;
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .profile-page .profile-header {
@@ -294,6 +343,11 @@
       text-align: center;
       border-bottom: 1px solid #eee;
       position: relative;
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .profile-page .profile-header h1 {
@@ -308,6 +362,9 @@
       object-fit: contain;
       display: block;
       margin: 0 auto 10px auto;
+       /* Pastikan aspect-ratio untuk mencegah layout shift saat gambar dimuat */
+      aspect-ratio: 16 / 5; /* Sesuaikan dengan rasio asli gambar logo Anda */
+      will-change: transform, opacity;
     }
 
     .profile-page .close-profile-button {
@@ -323,6 +380,11 @@
       border-radius: 5px;
       background-color: #fff;
       transition: background-color 0.3s ease, color 0.3s ease;
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .profile-page .close-profile-button:hover {
@@ -399,6 +461,11 @@
         padding: 20px;
         margin-top: 30px;
         font-size: 12px; /* Ukuran font lebih besar */
+        /* Tambahan untuk performa rendering di GPU */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
 
     footer .footer-content {
@@ -440,6 +507,11 @@
         overflow-x: hidden; /* Tetap hidden jika ada bagian yang ingin dipin */
         padding-bottom: 10px;
         align-items: flex-start; /* Sejajarkan item di awal */
+        /* Tambahan untuk performa rendering di GPU */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
 
     .pinned-sliding-item {
@@ -456,10 +528,15 @@
         flex-direction: column;
         justify-content: space-between;
         transition: transform 0.3s ease;
+        /* Tambahan untuk performa rendering di GPU */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
 
     .pinned-sliding-item:hover {
-        transform: translateY(-5px); /* Efek angkat saat hover */
+        transform: translateY(-5px) translateZ(0); /* Efek angkat saat hover, tetap di GPU */
     }
 
     .pinned-sliding-item img {
@@ -469,7 +546,14 @@
       border-radius: 6px;
       display: block;
       margin-bottom: 10px; /* Margin lebih besar */
-      will-change: transform, opacity;
+      /* Penting untuk mencegah layout shift. Sesuaikan rasio ini. */
+      aspect-ratio: 1 / 1; /* Contoh: untuk gambar persegi. Sesuaikan jika gambar Anda bukan persegi. */
+      will-change: transform, opacity; /* Memberi hint browser untuk optimasi */
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .pinned-sliding-item p {
@@ -497,6 +581,13 @@
       scrollbar-width: thin;
       scrollbar-color: #888 #f1f1f1;
       padding-bottom: 5px; /* Tambahkan padding di bawah untuk scrollbar */
+      /* HATI-HATI: Ini menghilangkan efek overscroll bounce/glow HANYA untuk slider horizontal */
+      overscroll-behavior-x: none; /* Ini yang mengatasi denyutan saat swipe kanan/kiri habis */
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .sliding-products-wrapper::-webkit-scrollbar {
@@ -531,6 +622,11 @@
       flex-direction: column;
       justify-content: space-between;
       transition: transform 0.3s ease;
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .sliding-item:last-child {
@@ -538,7 +634,7 @@
     }
 
     .sliding-item:hover {
-        transform: translateY(-5px); /* Efek angkat saat hover */
+        transform: translateY(-5px) translateZ(0); /* Efek angkat saat hover, tetap di GPU */
     }
 
     .sliding-item img {
@@ -547,8 +643,15 @@
       object-fit: cover;
       border-radius: 6px;
       display: block;
-      margin-bottom: 10px; /* Margin lebih besar */
+      margin-bottom: 10px;
+      /* Penting untuk mencegah layout shift. Sesuaikan rasio ini. */
+      aspect-ratio: 1 / 1; /* Contoh: untuk gambar persegi. Sesuaikan jika gambar Anda bukan persegi. */
       will-change: transform, opacity;
+      /* Tambahan untuk performa rendering di GPU */
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
 
     .sliding-item p {
@@ -576,18 +679,29 @@
         margin-left: auto;
         margin-right: auto;
         overflow: hidden; /* Memastikan tidak ada overflow saat aspect-ratio */
+        /* Tambahan untuk performa rendering di GPU */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
 
     .gif-container img {
         width: 25%; /* Tetap 25% dari container */
         height: auto;
         object-fit: cover;
-        aspect-ratio: 3 / 1; /* Penting: Memberi tahu browser rasio aspek gambar */
+        /* Penting: Memberi tahu browser rasio aspek gambar untuk mencegah layout shift */
+        aspect-ratio: 3 / 1; /* Sesuaikan dengan rasio asli GIF Anda */
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         display: block;
         margin: 0 auto;
         will-change: transform, opacity; /* Memberi hint browser untuk optimasi */
+        /* Tambahan untuk performa rendering di GPU */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
     }
 
     /* --- Media Queries --- */
@@ -825,7 +939,7 @@
 
   <div id="main-content-view">
     <header>
-      <img src="https://nasukafoods.site/image/nasuka-karya.jpg" alt="Logo Nasuka Karya">
+      <img src="https://nasukafoods.site/image/nasuka-karya.hapussementara" alt="Logo Nasuka Karya">
       <a href="#" class="profile-button" id="profile-button" aria-label="Profil">&#128100;</a>
     </header>
 
@@ -844,7 +958,7 @@
         <div class="sliding-content-wrapper">
             <div class="pinned-sliding-item">
                 <a href="form-pembelian.html?product=booster">
-                    <img src="https://nasukafoods.site/image/sosial-media.png" alt="booster sosmed">
+                    <img src="https://nasukafoods.site/image/sosial-media.hapussementara" alt="booster sosmed">
                 </a>
                 <p>booster sosmed</p>
                 <p class="price">Rp 500</p>
@@ -856,7 +970,7 @@
             <div class="sliding-products-wrapper">
                 <div class="sliding-item">
                     <a href="form-pembelian.html?product=gesek_tunai">
-                        <img src="https://nasukafoods.site/image/gestun.jpg" alt="Gestun">
+                        <img src="https://nasukafoods.site/image/gestun.hapussementara" alt="Gestun">
                     </a>
                     <p>Gestun</p>
                     <p class="price">Rp 400</p>
@@ -865,7 +979,7 @@
                 </div>
                 <div class="sliding-item">
                     <a href="form-pembelian.html?product=pulsa">
-                        <img src="https://nasukafoods.site/image/jual-pulsa.jpg" alt="PULSA">
+                        <img src="https://nasukafoods.site/image/jual-pulsa.hapussementara" alt="PULSA">
                     </a>
                     <p>PULSA</p>
                     <p class="price">Rp 700</p>
@@ -906,7 +1020,7 @@
     <section class="grid">
       <div class="item">
         <a href="form-pembelian.html?product=lacak_lokasi">
-          <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="Lacak Lokasi">
+          <img src="https://nasukafoods.site/lacak-lokasi.f" alt="Lacak Lokasi">
         </a>
         <p>GPS NASUKA SERVER</p>
         <p class="price">Pantau orang tersayang melalui nasuka server, Layanan khusus tracking unlimited</p> <input type="hidden" value="1" class="quantity-input" data-price="1000" data-product="lacak_lokasi">
@@ -914,7 +1028,7 @@
 
       <div class="item">
         <a href="form-pembelian.html?product=CILOK GAJIH">
-          <img src="https://nasukafoods.site/paketcilok.jpg" alt="CILOK GAJIH">
+          <img src="https://nasukafoods.site/paketcilok.hapussementara" alt="CILOK GAJIH">
         </a>
         <p>CILOK GAJIH</p>
         <p class="price">Rp 900</p>
@@ -925,7 +1039,7 @@
     </section>
 
     <div class="gif-container">
-      <img src="https://nasukafoods.site/image/special-promo.gif" alt="Promosi">
+      <img src="https://nasukafoods.site/image/special-pmo.gif" alt="Promosi">
     </div>
 
     <section class="grid">
@@ -970,7 +1084,7 @@
 
   <div class="profile-page" id="profile-page-view">
     <div class="profile-header">
-      <img src="https://nasukafoods.site/images/nasuka-karya.jpg" alt="Logo Nasuka Karya">
+      <img src="https://nasukafoods.site/images/nasuka-karya.hapussementara" alt="Logo Nasuka Karya">
       <button class="close-profile-button" id="close-profile-button" aria-label="Tutup Profil">&#10006; Tutup</button>
       <h1>Profil Saya</h1>
     </div>
@@ -1008,11 +1122,10 @@
 
   <script>
     let cart = [];
-    // Menggunakan informasi yang disimpan: ini kode.gs nasukafoods, https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec
     const GAS_URL = "https://script.google.com/macros/s/AKfycbxSTsv1cqsJISjB8Pl7rohtzmtoQKuByT73fcFlADQqjTA7dtYVd1_6AWnAhT0x6XqijA/exec";
 
     document.addEventListener('DOMContentLoaded', () => {
-      const mainContentView = document.getElementById('main-content-view');
+      const mainContentView = document.getElementById('main-content-view'); // Kembali ke ID ini
       const cartIcon = document.getElementById('cart-icon');
       const cartPopup = document.getElementById('cart-popup');
       const cartItemsContainer = document.getElementById('cart-items');
@@ -1028,7 +1141,7 @@
       const profileAlamat = document.getElementById('profile_alamat');
       const profileUsername = document.getElementById('profile_username');
       const saveProfileBtn = document.getElementById('saveProfileBtn');
-      const profileForm = document.querySelector('.profile-form'); // Dapatkan formnya
+      const profileForm = document.querySelector('.profile-form'); 
 
       // Load cart from localStorage
       if (localStorage.getItem('nasukaCart')) {
@@ -1047,8 +1160,15 @@
               return;
           }
 
-          const productName = item.querySelector('p').innerText.split('\n')[0].trim(); // Ambil hanya nama produk, buang lokasi jika ada
+          const productNameElement = item.querySelector('p');
+          let productName = productNameElement ? productNameElement.innerText.split('\n')[0].trim() : 'Unknown Product'; 
+          
           const quantityInput = item.querySelector('.quantity-input');
+          if (!quantityInput) {
+            console.error("Quantity input not found for item:", item);
+            return;
+          }
+          
           const quantity = parseInt(quantityInput.value);
           const pricePerUnit = parseInt(quantityInput.dataset.price);
           const productCode = quantityInput.dataset.product;
@@ -1162,21 +1282,21 @@
       // Profile button click to show profile page
       profileButton.addEventListener('click', (event) => {
         event.preventDefault();
-        mainContentView.style.display = 'none';
+        mainContentView.style.display = 'none'; // Sembunyikan kontainer utama
         profilePageView.style.display = 'block';
         loadCustomerProfile();
-        cartPopup.style.display = 'none'; // Pastikan keranjang tertutup saat membuka profil
+        cartPopup.style.display = 'none'; 
       });
 
       // Close profile button click
       closeProfileButton.addEventListener('click', () => {
         profilePageView.style.display = 'none';
-        mainContentView.style.display = 'block';
+        mainContentView.style.display = 'block'; // Tampilkan kembali kontainer utama
       });
 
       // Save profile data
-      profileForm.addEventListener('submit', (event) => { // Menggunakan event submit pada form
-          event.preventDefault(); // Mencegah reload halaman
+      profileForm.addEventListener('submit', (event) => { 
+          event.preventDefault(); 
           saveCustomerProfile();
           alert('Data diri Anda telah disimpan!');
       });
