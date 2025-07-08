@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Toko Online Saya</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; color: #333; line-height: 1.6; }
         .header {
@@ -37,9 +37,13 @@
             text-align: center;
             margin-bottom: 30px;
             display: flex;
-            flex-wrap: wrap;
+            /* Pastikan flex-wrap tidak aktif untuk memaksa satu baris pada awalnya */
+            flex-wrap: nowrap; /* Mencegah pembungkusan secara default */
             justify-content: center;
             gap: 10px;
+            overflow-x: auto; /* Memungkinkan gulir horizontal jika tombol terlalu banyak */
+            -webkit-overflow-scrolling: touch; /* Untuk pengalaman gulir yang lebih baik di iOS */
+            padding-bottom: 5px; /* Sedikit padding untuk scrollbar jika muncul */
         }
         nav button {
             background-color: #007bff;
@@ -49,8 +53,13 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 15px;
-            flex-grow: 1;
-            max-width: 150px;
+            
+            /* Properti Flexbox untuk tombol navigasi */
+            flex-shrink: 0; /* Penting: mencegah tombol menyusut agar tetap terlihat */
+            flex-grow: 0; /* Jangan biarkan tombol tumbuh mengisi ruang kosong */
+            flex-basis: auto; /* Lebar berdasarkan konten, tapi dengan min-width */
+            min-width: 100px; /* Minimal lebar per tombol */
+            
             transition: background-color 0.3s ease;
         }
         nav button:hover { background-color: #0056b3; }
@@ -160,10 +169,15 @@
                 margin: 10px;
                 padding: 15px;
             }
+            /* Nav buttons will now likely wrap on smaller screens if there are many */
+            nav {
+                flex-wrap: wrap; /* Izinkan pembungkusan di layar kecil */
+                justify-content: center;
+            }
             nav button {
-                padding: 8px 12px;
-                font-size: 14px;
-                max-width: 120px;
+                flex-basis: calc(33.33% - 10px); /* 3 tombol per baris */
+                max-width: none; /* Hilangkan max-width untuk flex-basis bekerja */
+                min-width: unset; /* Izinkan menyusut lebih dari 100px jika perlu */
             }
             h2 { font-size: 1.6em; margin-bottom: 20px; }
             .button {
@@ -187,8 +201,7 @@
             .header h1 { margin-bottom: 5px; }
             .welcome-message { margin-top: 5px; }
             nav button {
-                flex-basis: 45%;
-                max-width: none;
+                flex-basis: calc(50% - 10px); /* 2 tombol per baris di layar sangat kecil */
             }
             .container { padding: 10px; }
             h1 { font-size: 1.5em; }
