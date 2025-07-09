@@ -1437,3 +1437,203 @@ async function loadOrderHistory(nomorHP) {
 <p><strong>Bukti Pembayaran:</strong> ${order['Bukti Pembayaran'] ? `<a href="${order['Bukti Pembayaran']}" target="_blank">Lihat Bukti</a>` : '-'}</p>
 <p><strong>Status Pesanan:</strong> ${order['Status Pesanan'] || '-'}</p>
 <p><strong>Bonus:</strong> ${order['Bonus'] || '-'}</p>
+`;
+                orderHistoryListDiv.appendChild(orderItemDiv);
+            });
+        } else if (result.status === 'success' && result.data.length === 0) {
+            noOrderHistoryMessage.style.display = 'block';
+        } else {
+            orderHistoryMessageDiv.classList.add('error');
+            orderHistoryMessageDiv.innerText = result.message || 'Gagal memuat riwayat pesanan.';
+            orderHistoryMessageDiv.style.display = 'block';
+        }
+    } catch (error) {
+        orderHistoryMessageDiv.classList.add('error');
+        orderHistoryMessageDiv.innerText = 'Terjadi kesalahan saat memuat riwayat pesanan: ' + error.message;
+        orderHistoryMessageDiv.style.display = 'block';
+    }
+}
+
+function displayProfile() {
+    if (loggedInUser) {
+        document.getElementById('profileCustID').innerText = loggedInUser['Customers ID'] || '-';
+        document.getElementById('profileNamaLengkap').innerText = loggedInUser['Nama Lengkap'] || '-';
+        document.getElementById('profileAlamatLengkap').innerText = loggedInUser['Alamat Lengkap'] || '-';
+        document.getElementById('profileNomorHP').innerText = loggedInUser['Nomor HP'] || '-';
+        document.getElementById('profileUsername').innerText = loggedInUser['Username'] || '-';
+        document.getElementById('profileTentangSaya').innerText = loggedInUser['Tentang Saya'] || '-';
+        document.getElementById('profileSaldo').innerText = loggedInUser['Saldo'] !== undefined ? `Rp ${parseFloat(loggedInUser['Saldo']).toLocaleString('id-ID')}` : '-';
+        document.getElementById('profileTanggalDaftar').innerText = loggedInUser['Tanggal Daftar'] || '-';
+        document.getElementById('profileData').style.display = 'block';
+        document.getElementById('profileMessage').style.display = 'none';
+        document.getElementById('editProfileButton').style.display = 'block';
+        document.getElementById('kebijakanButton').style.display = 'block';
+    } else {
+        document.getElementById('profileMessage').classList.add('error');
+        document.getElementById('profileMessage').innerText = 'Anda belum login.';
+        document.getElementById('profileMessage').style.display = 'block';
+        document.getElementById('profileData').style.display = 'none';
+        document.getElementById('editProfileButton').style.display = 'none';
+        document.getElementById('kebijakanButton').style.display = 'none';
+    }
+}
+
+function populateEditProfileForm() {
+    if (loggedInUser) {
+        document.getElementById('editProfileCustomerID').value = loggedInUser['Customers ID'];
+        document.getElementById('editNamaLengkap').value = loggedInUser['Nama Lengkap'] || '';
+        document.getElementById('editAlamatLengkap').value = loggedInUser['Alamat Lengkap'] || '';
+        document.getElementById('editNomorHP').value = loggedInUser['Nomor HP'] || '';
+        document.getElementById('editTentangSaya').value = loggedInUser['Tentang Saya'] || '';
+        document.getElementById('editPassword').value = '';
+    }
+}
+
+function updateNavigationButtons() {
+    const isLoggedIn = loggedInUser !== null;
+    document.getElementById('navLogin').style.display = isLoggedIn ? 'none' : 'inline-block';
+    document.getElementById('navSignup').style.display = isLoggedIn ? 'none' : 'inline-block';
+    document.getElementById('navHome').style.display = 'inline-block';
+    
+    // Tombol Order hanya muncul jika bukan member
+    document.getElementById('navOrder').style.display = isLoggedIn ? 'none' : 'inline-block';
+
+    document.getElementById('navProfile').style.display = isLoggedIn ? 'inline-block' : 'none';
+    document.getElementById('navKebijakan').style.display = isLoggedIn ? 'inline-block' : 'none';
+    document.getElementById('navOrderHistory').style.display = isLoggedIn ? 'inline-block' : 'none';
+    document.getElementById('navDeposit').style.display = isLoggedIn ? 'inline-block' : 'none';
+    document.getElementById('navLogout').style.display = isLoggedIn ? 'inline-block' : 'none';
+}
+
+function logout() {
+    removeUserFromLocalStorage();
+    alert('Anda telah logout.');
+    showSection('home');
+}
+
+function ensureCountryCode(inputElement) {
+    const prefix = "62";
+    let value = inputElement.value;
+    if (!value.startsWith(prefix)) {
+        value = prefix + value.replace(/^0+/, '').replace(/[^0-9]/g, '');
+        if (value.length > prefix.length && value.startsWith('620')) {
+            value = prefix + value.substring(3);
+        } else if (value.length < prefix.length) {
+            value = prefix;
+        }
+    }
+    inputElement.value = value;
+    if (document.activeElement === inputElement) {
+        const len = inputElement.value.length;
+        inputElement.setSelectionRange(len, len);
+    }
+}
+
+document.getElementById('signupForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    await submitForm('signupForm', 'signup', 'signupMessage');
+});
+
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    await submitForm('loginForm', 'login', 'loginMessage');
+});
+
+document.getElementById('depositForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    submitForm('depositForm', 'deposit', 'depositMessage');
+});
+
+document.getElementById('orderForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    submitForm('orderForm', 'order', 'orderMessage');
+});
+
+document.getElementById('editProfileForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    submitForm('editProfileForm', 'updateProfile', 'editProfileMessage');
+});
+
+document.getElementById('editProfileButton').addEventListener('click', function() {
+    showSection('editProfile');
+});
+
+document.getElementById('kebijakanButton').addEventListener('click', function() {
+    showSection('kebijakan');
+});
+
+
+document.querySelectorAll('.buy-button, .buy-now-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const productName = this.dataset.productName;
+        const productPrice = this.dataset.productPrice;
+
+        document.getElementById('produk').value = productName;
+        document.getElementById('kuantitas').value = 1;
+        document.getElementById('totalHarga').value = productPrice;
+        document.getElementById('catatan').value = `Pembelian: ${productName}`;
+        document.getElementById('statusPesanan').value = 'proses';
+        document.getElementById('bonus').value = '';
+        document.getElementById('metodePembayaranOrd').value = '';
+        document.getElementById('buktiPembayaranFile').value = '';
+
+        document.getElementById('summaryProduk').innerText = productName;
+        document.getElementById('summaryKuantitas').innerText = 1;
+        document.getElementById('summaryTotalHarga').innerText = `Rp ${parseFloat(productPrice).toLocaleString('id-ID')}`;
+        document.getElementById('summaryCatatan').innerText = `Pembelian: ${productName}`;
+        document.getElementById('summaryMetodePembayaran').innerText = 'Pilih Metode';
+        document.getElementById('summaryStatusPesanan').innerText = 'proses';
+        document.getElementById('summaryBonus').innerText = '-';
+
+        if (loggedInUser) {
+            document.getElementById('ordNomorHP').value = loggedInUser['Nomor HP'];
+            document.getElementById('ordAlamat').value = loggedInUser['Alamat Lengkap'] || '';
+            document.getElementById('ordUsername').value = loggedInUser['Username'] || '';
+            document.getElementById('summaryTipePelanggan').innerText = 'Member';
+            document.getElementById('summaryNamaLengkap').innerText = loggedInUser['Nama Lengkap'] || '-';
+            document.getElementById('summaryNomorHP').innerText = loggedInUser['Nomor HP'] || '-';
+            document.getElementById('summaryAlamat').innerText = loggedInUser['Alamat Lengkap'] || '-';
+            document.getElementById('summaryUsername').innerText = loggedInUser['Username'] || '-';
+            document.getElementById('summarySisaSaldo').innerText = loggedInUser['Saldo'] !== undefined ? `Rp ${parseFloat(loggedInUser['Saldo']).toLocaleString('id-ID')}` : '-';
+        } else {
+            document.getElementById('ordNomorHP').value = '';
+            document.getElementById('ordAlamat').value = '';
+            document.getElementById('ordUsername').value = '';
+            document.getElementById('summaryTipePelanggan').innerText = 'Tamu';
+            document.getElementById('summaryNamaLengkap').innerText = 'N/A';
+            document.getElementById('summaryNomorHP').innerText = 'N/A';
+            document.getElementById('summaryAlamat').innerText = 'N/A';
+            document.getElementById('summaryUsername').innerText = 'N/A';
+            document.getElementById('summarySisaSaldo').innerText = 'N/A';
+            alert('Silakan login atau masukkan Nomor HP dan Alamat Anda untuk melanjutkan pesanan.');
+        }
+        showSection('order');
+        updateOrderFormVisibility(); // Update visibility after setting product and user status
+    });
+});
+
+document.getElementById('metodePembayaranOrd').addEventListener('change', updateOrderFormVisibility);
+
+document.getElementById('catatan').addEventListener('input', () => document.getElementById('summaryCatatan').innerText = document.getElementById('catatan').value);
+document.getElementById('metodePembayaranOrd').addEventListener('change', () => document.getElementById('summaryMetodePembayaran').innerText = document.getElementById('metodePembayaranOrd').value);
+document.getElementById('ordNomorHP').addEventListener('input', () => {
+    if (!loggedInUser) document.getElementById('summaryNomorHP').innerText = document.getElementById('ordNomorHP').value
+});
+document.getElementById('ordAlamat').addEventListener('input', () => {
+    if (!loggedInUser) document.getElementById('summaryAlamat').innerText = document.getElementById('ordAlamat').value
+});
+document.getElementById('ordUsername').addEventListener('input', () => {
+    if (!loggedInUser) document.getElementById('summaryUsername').innerText = document.getElementById('ordUsername').value
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (loadUserFromLocalStorage()) {
+        updateNavigationButtons();
+    } else {
+        updateNavigationButtons();
+    }
+    showSection('home');
+});
+</script>
+</body>
+</html>
