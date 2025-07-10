@@ -1,39 +1,215 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<title>Galeri Foto</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 10px;
-    background-color: #f0f0f0;
-    text-align: center;
-  }
-  img {
-    width: 100px;
-    height: 100px;
-    margin: 5px;
-    object-fit: cover;
-    border: 1px solid #ccc;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nasuka Foods</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    .hero-section {
+      position: relative;
+      height: 50vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-section video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .promo-text,
+    .info,
+    .sidebar {
+      position: relative;
+      z-index: 1;
+    }
+
+    .promo-text {
+      text-align: center;
+      margin-top: 5vh;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 6px black;
+      padding: 0 20px;
+    }
+
+    .info, .sidebar {
+      position: absolute;
+      bottom: 20px;
+    }
+
+    .info {
+      left: 10px;
+    }
+
+    .info .location {
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    .info .username {
+      font-weight: bold;
+    }
+
+    .info .desc {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .info .music {
+      font-size: 12px;
+      color: #ffbb00;
+    }
+
+    .sidebar {
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar div {
+      margin: 8px 0;
+      font-size: 12px;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+      z-index: 999;
+    }
+
+    .bottom-bar a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .gallery {
+      background: #111;
+      padding: 20px 10px 80px;
+    }
+
+    .gallery img {
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      margin: 30px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
 </head>
 <body>
 
-<h1>10 Foto Minimalis</h1>
+  <section class="hero-section">
+    <video src="https://nasukafoods.site/kawasakih2.mp4" autoplay muted loop playsinline></video>
 
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 1">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 2">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 3">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 4">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 5">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 6">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 7">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 8">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 9">
-<img src="http://nasukafoods.site/image/sosial-media.png" alt="Foto 10">
+    <div class="promo-text">
+      Nasuka Labs <br />
+      <strong>KAWASAKI</strong>
+    </div>
+
+    <div class="info">
+      <div class="location">📍Indramayu | Jawa Barat</div>
+      <div class="username">Arya Kawasaki Labs</div>
+      <div class="desc">Modifikasi body custom kawasaki</div>
+      <div class="music">🎵 Created - Nasuka garage</div>
+    </div>
+
+    <div class="sidebar">
+      <div>❤️ 200.k</div>
+      <div>💬 4.M</div>
+      <div>🔗 Share</div>
+    </div>
+  </section>
+
+  <p>Video diatas konon sirkel yang paling sulit ditembus, dengan mesin super charger 1.000cc </p>
+  <p> Tapi sensasi berkendara ala motor sport, pengendali kuda besi bukan sekedar menaiki mesin, bisa kamu dapatkan cukup dengan harga Rp 7.000.000</p>
+
+  <section class="gallery">
+    <img src="https://nasukafoods.site/kawasakiax.png" alt="Kawasaki Ax Custom" />
+    <p>Bahan yang kita pakai adalah kawasaki Ax 125</p>
+    <img src="https://nasukafoods.site/kawasakiaxori.jpeg" alt="Kawasaki Ax Ori" />
+   
+    <p><strong>Story</strong></p>
+    <p>Lahir 2008 dengan mesin 125cc, Stang laki dan mono shock centre yang membuatnya stabil untuk bermanuver layaknya rider sirkuit, namun dengan harga sekitar 30jt (mengikuti dollar saat itu), Dikenal dengan sparepart setara harga motor sport tapi power setara supra yang sulit diterima pasar, Hingga pada akhirnya disuntik mati oleh Kawasaki</p>
+    <p><strong>Kenapa dihidupkan lagi</strong></p>
+    <p>Baik, kita urai pelan pelan</p>
+    <p>✅ Mode single rider</p>
+    <p>✅ Sparepart serba murah di toko online</p>
+    <p>✅ Mekanisme mesin sangat sederhana</p>
+    <p>✅ Hemat BBM</p>
+    <p>✅ Tidak tergantung sama Aki</p>
+    <p>✅ Minim perawatan</p>
+    <p>✅ Maskulin</p>
+    <p>✅ Dan tentang hobi dan kepuasan berkendara</p>
+    <p>Terkadang kita mendengar lelucon, "Laki koq pake matic, gak sekalian pake lipstic?" joke yang sering kita dengar secara langsung maupun desas desus angin lewat dari penganut paham The Man Of Masculinity 🤭</p>
+    <p>Wtf, ini bukan soal itu, Arya kawasaki labs memang menyukai modifikasi mesin maupun body, siapa tau kamu berminat, Kami siap buatkan motor semi sport menjadi motor tampilan pejantan tangguh</p>
+    <p><strong>Pencarian bahan + Surat surat</strong></p>
+    <img src="https://nasukafoods.site/stnkbpkb.jpg" alt="Cilok Sajian 3" />
+    <p>Kawasaki ax sudah tidak diproduksi lagi, Untuk itu kita akan menjelajahi tiap sudut kota hingga pelosok desa, dan kita rombak total, atau kamu punya bahannya sendiri dan ingin motor kesayangan mu Nasuka Labs modifikasi? tinggal kontak aja, Harga bisa bisik bisik di whatsapp</p>
+    <p><strong>Rasakan sensasi Kawasaki H2 pada Kawasaki Ax Nasuka Labs 😊</strong></p>
+
+    <!-- VIDEO MANIS -->
+    <div class="video-container">
+      <video src="https://nasukafoods.site/kawasakifast.mp4" controls playsinline></video>
+    </div>
+  <p><strong>Video hanya pemanis</strong></p>
+    <a href="https://wa.me/62859109819017?text=Halo%20Arya%20saya%20mau%20memesan%20kawasaki%20ax" 
+       target="_blank" 
+       style="display: inline-block; background-color: #25D366; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+      📲 Kontak WhatsApp
+    </a>
+  </section>
+
+  <div class="bottom-bar">
+    <a href="https://nasukafoods.site">🏠<br>Home</a>
+    <a href="https://nasukafoods.site/discover.html">🔍<br>Layanan</a>
+    <a href="https://nasukafoods.site/pesanan.html">➕<br>Pesanan</a>
+    <a href="https://nasukafoods.site/otomotif.html">📨<br>Otomotif</a>
+    <a href="https://nasukafoods.site/profil.html">👤<br>Profile</a>
+  </div>
 
 </body>
 </html>
