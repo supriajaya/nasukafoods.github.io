@@ -668,7 +668,7 @@ form {
                 <h4>Promo Diskon 20%</h4>
                 <p class="description">Dapatkan diskon 20% untuk produk pilihan ini. 300 pcs</p>
                 <p class="product-price">Rp 240.000</p>
-                <button class="add-to-cart-button" data-product-name="Promo A" data-product-price="200000">Beli Sekarang</button>
+                <button class="add-to-cart-button" data-product-name="Promo A" data-product-price="240000">Beli Sekarang</button>
             </div>
             <div class="divided-product-item">
                 <div class="img-wrapper">
@@ -677,7 +677,7 @@ form {
                 <h4>Promo Nontunai</h4>
                 <p class="description">Gratis ongkir untuk pembelian produk ini.</p>
                 <p class="product-price">Rp 900</p>
-                <button class="add-to-cart-button" data-product-name="Promo B" data-product-price="180000">Beli Sekarang</button>
+                <button class="add-to-cart-button" data-product-name="Promo B" data-product-price="900">Beli Sekarang</button>
             </div>
             <div class="divided-product-item">
                 <div class="img-wrapper">
@@ -695,7 +695,7 @@ form {
                 <h4>Ax Mode Tempur</h4>
                 <p class="description">Hemat 78.33% untuk produk, Stock Limited</p>
                 <p class="product-price">Rp 5.500.000</p>
-                <button class="add-to-cart-button" data-product-name="Promo D" data-product-price="75000">Beli Sekarang</button>
+                <button class="add-to-cart-button" data-product-name="Promo D" data-product-price="5500000">Beli Sekarang</button>
             </div>
         </div>
     </div>
@@ -832,8 +832,8 @@ form {
         <button type="submit" class="button">Ajukan Deposit</button>
     </form>
     <div class="payment-images">
-        <img src="http://nasukafoods.site/image/qris.jpg">
-        <img src="http://nasukafoods.site/image/bri.jpg"
+        <img src="http://nasukafoods.site/image/qris.jpg" alt="QRIS Payment">
+        <img src="http://nasukafoods.site/image/bri.jpg" alt="Bank BRI Payment">
     </div>
     <div id="depositMessage" class="message"></div>
 </div>
@@ -871,17 +871,18 @@ form {
             <label for="ordUsername">Username (Opsional):</label>
             <input type="text" id="ordUsername" name="username">
         </div>
-        <div class="form-group member-readonly" id="formGroupProduk">
+        <div class="form-group" id="formGroupProduk">
             <label for="produk">Produk:</label>
-            <input type="text" id="produk" name="produk" required>
+            <input type="text" id="produk" name="produk" required readonly tabindex="-1">
         </div>
-        <div class="form-group member-readonly" id="formGroupKuantitas">
+        <div class="form-group" id="formGroupKuantitas">
             <label for="kuantitas">Kuantitas:</label>
             <input type="number" id="kuantitas" name="kuantitas" min="1" value="1" required>
         </div>
-        <div class="form-group member-readonly" id="formGroupTotalHarga">
+        <div class="form-group" id="formGroupTotalHarga">
             <label for="totalHarga">Total Harga:</label>
-            <input type="number" id="totalHarga" name="totalHarga" min="1" required>
+            <input type="text" id="totalHarga" name="totalHarga" required readonly tabindex="-1">
+            <input type="hidden" id="totalHargaHidden" value="0">
         </div>
         <div class="form-group">
             <label for="catatan">Catatan (Opsional):</label>
@@ -1250,7 +1251,7 @@ async function loadOrderHistory(nomorHP) {
                     <p><strong>Catatan:</strong> ${order['Catatan'] || '-'}</p>
                     <p><strong>Metode Pembayaran:</strong> ${order['Metode Pembayaran'] || '-'}</p>
                     <p><strong>Bukti Pembayaran:</strong> ${order['Bukti Pembayaran'] ? `<a href="${order['Bukti Pembayaran']}" target="_blank">Lihat Bukti</a>` : '-'}</p>
-                    <p><strong>Bukti:</strong> ${order['Status Pesanan'] || '-'}</p>
+                    <p><strong>Status Pesanan:</strong> ${order['Status Pesanan'] || '-'}</p>
                     <p><strong>Bonus:</strong> ${order['Bonus'] || '-'}</p>
                 `;
                 orderHistoryListDiv.appendChild(orderItemDiv);
@@ -1367,14 +1368,25 @@ document.getElementById('editProfileButton').addEventListener('click', function(
     showSection('editProfile');
 });
 
+// Calculate total price based on quantity
+document.getElementById('kuantitas').addEventListener('input', function() {
+    const quantity = parseInt(this.value);
+    const originalPrice = parseFloat(document.getElementById('totalHargaHidden').value);
+    const totalPrice = originalPrice * quantity;
+    document.getElementById('totalHarga').value = totalPrice;
+    document.getElementById('summaryTotalHarga').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+    document.getElementById('summaryKuantitas').innerText = quantity;
+});
+
 document.querySelectorAll('.add-to-cart-button').forEach(button => {
     button.addEventListener('click', function() {
         const productName = this.dataset.productName;
-        const productPrice = this.dataset.productPrice;
+        const productPrice = parseFloat(this.dataset.productPrice); // Pastikan ini adalah angka
 
         document.getElementById('produk').value = productName;
         document.getElementById('kuantitas').value = 1;
-        document.getElementById('totalHarga').value = productPrice;
+        document.getElementById('totalHargaHidden').value = productPrice; // Simpan harga asli di hidden input
+        document.getElementById('totalHarga').value = productPrice; // Set harga awal
         document.getElementById('catatan').value = `Pembelian: ${productName}`;
         document.getElementById('statusPesanan').value = 'Pending';
         document.getElementById('bonus').value = '';
@@ -1383,7 +1395,7 @@ document.querySelectorAll('.add-to-cart-button').forEach(button => {
 
         document.getElementById('summaryProduk').innerText = productName;
         document.getElementById('summaryKuantitas').innerText = 1;
-        document.getElementById('summaryTotalHarga').innerText = `Rp ${parseFloat(productPrice).toLocaleString('id-ID')}`;
+        document.getElementById('summaryTotalHarga').innerText = `Rp ${productPrice.toLocaleString('id-ID')}`;
         document.getElementById('summaryCatatan').innerText = `Pembelian: ${productName}`;
         document.getElementById('summaryMetodePembayaran').innerText = 'Pilih Metode';
         document.getElementById('summaryStatusPesanan').innerText = 'Pending';
