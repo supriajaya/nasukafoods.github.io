@@ -4,426 +4,170 @@
 <title>Toko Online Saya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
-body{font-family:Arial,sans-serif;margin:0;background-color:#f4f4f4;color:#333;line-height:1.6;overscroll-behavior-x: none;}.header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background-color:#fff;border-bottom:1px solid #eee}.header h1{margin:0;color:#4CAF50;font-size:1.8em}.welcome-message{font-size:1em;font-weight:bold;color:#555}.container{width:100%;max-width:960px;margin:auto;padding:20px;background-color:#fff;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);box-sizing:border-box}nav{text-align:center;margin-bottom:30px;display:flex;flex-wrap:nowrap;justify-content:space-around;gap:8px;overflow-x:hidden;padding-bottom:5px;width:100%;box-sizing:border-box}nav button{background-color:#007bff;color:white;padding:6px 9px;border:none;border-radius:4px;cursor:pointer;font-size:11px;flex-shrink:0;flex-grow:1;min-width:auto;white-space:nowrap;transition:background-color .3s ease}nav button:hover{background-color:#0056b3}.section{display:none;padding-top:20px}.section.active{display:block}h2{text-align:center;color:#555;margin-bottom:25px;font-size:1.8em}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:5px;font-weight:bold;color:#555;font-size:.95em}.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;font-size:16px;box-sizing:border-box;max-width:100%}.form-group.hidden-for-member{display:none}.form-group.member-readonly{display:none}.button{background-color:#4CAF50;color:white;padding:12px 20px;border:none;border-radius:5px;cursor:pointer;font-size:16px;display:block;width:100%;max-width:250px;margin:20px auto 0;transition:background-color .3s ease;box-sizing:border-box}.button:hover{background-color:#45a049}.message{margin-top:20px;padding:15px;border-radius:5px;text-align:center;font-weight:bold;font-size:.95em}.message.success{background-color:#d4edda;color:#155724;border:1px solid #c3e6cb}.message.error{background-color:#f8d7da;color:#721c24;border:1px solid #721c24;border:1px solid #f5c6cb}.product-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:30px}.product-item{background-color:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:15px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,.05);transition:transform .2s ease}.product-item:hover{transform:translateY(-5px)}.product-item h3{color:#333;margin-bottom:8px;font-size:1.15em}.product-item p{color:#666;font-size:.9em;margin-bottom:12px}.product-item .product-price{font-size:1.1em;font-weight:bold;color:#007bff}.buy-now-button{background-color:#28a745;color:white;padding:8px 15px;border:none;border-radius:5px;cursor:pointer;font-size:14px;margin-top:10px;width:auto;display:inline-block}.buy-now-button:hover{background-color:#218838}.profile-data p,.order-item p{margin-bottom:8px;line-height:1.5;font-size:.95em}.profile-data strong,.order-item strong{display:inline-block;width:120px;color:#555}.order-item{border:1px solid #e9ecef;background-color:#fefefe;padding:12px;margin-bottom:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05)}.order-detail-summary{background-color:#e9f7ef;border:1px solid #cce8d6;border-radius:8px;padding:15px;margin-top:20px;margin-bottom:20px}.order-detail-summary p{margin-bottom:8px}.order-detail-summary strong{width:150px;color:#333}.form-group.hidden-field{display:none}footer{background-color:#333;color:white;text-align:center;padding:20px;margin-top:30px;font-size:.56em}.footer-links a{color:#fff;text-decoration:none;margin:0 10px}.footer-links a:hover{text-decoration:underline}@media (max-width:768px){.header{padding:10px 15px}.header h1{font-size:1.5em}.welcome-message{font-size:.9em}.container{margin:10px;padding:15px}h2{font-size:1.6em;margin-bottom:20px}.button{padding:10px 15px;font-size:15px}.product-list{grid-template-columns:1fr}.product-item{padding:15px}.product-item h3{font-size:1.1em}.product-item p{font-size:.85em}.product-item .product-price{font-size:1.05em}.buy-now-button{padding:8px 15px;font-size:14px}.profile-data strong,.order-item strong{width:100px}.order-detail-summary strong{width:120px}}@media (max-width:480px){.header{flex-direction:column;align-items:flex-start;padding:10px}.header h1{margin-bottom:5px}.welcome-message{margin-top:5px}.container{padding:10px}h1{font-size:1.5em}h2{font-size:1.4em}.form-group label{font-size:.9em}.form-group input,.form-group textarea,.form-group select{font-size:14px;padding:8px}.message{font-size:.85em;padding:10px}.buy-now-button{font-size:13px;padding:7px 12px}}
-
-/* New styles for the larger new product section (existing) */
-.new-product-section {
-    margin-top: 20px;
-    margin-bottom: 30px;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
 }
-
-.new-product-section h2 {
-    text-align: center;
-    color: #555;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-}
-
-.new-product-carousel {
+.header {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
-    padding-bottom: 10px; /* Space for scrollbar */
-    gap: 15px; /* Gap between product items */
-}
-
-.new-product-carousel::-webkit-scrollbar {
-    height: 8px;
-}
-
-.new-product-carousel::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-}
-
-.new-product-carousel::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-}
-
-.new-product-item {
-    flex: 0 0 auto; /* Prevent items from shrinking/growing */
-    width: 150px; /* Fixed width for larger new products */
-    height: 220px; /* Fixed height to accommodate content */
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
     background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
+    border-bottom: 1px solid #eee;
     box-shadow: 0 2px 5px rgba(0,0,0,.05);
-    transition: transform .2s ease;
-    scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Distribute space vertically */
-    position: relative; /* Added for price positioning */
-    overflow: hidden; /* Added for price positioning */
 }
-
-.new-product-item img {
-    width: 100%;
-    height: 150px; /* Mengubah tinggi agar menjadi persegi dengan width 150px */
-    object-fit: cover; /* Cover the area, crop if necessary */
-    border-radius: 4px;
-    margin-bottom: 8px;
-    background-color: #eee; /* Placeholder background */
-    cursor: pointer; /* Add cursor pointer to indicate clickable */
+.header h1 {
+    margin: 0;
+    color: #4CAF50;
+    font-size: 1.8em;
 }
-
-.new-product-item h4 {
-    margin: 0 0 5px 0;
-    color: #333;
+.welcome-message {
     font-size: 1em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.new-product-item p.description {
-    font-size: 0.75em;
-    color: #666;
-    margin-bottom: 8px;
-    height: 3em; /* Limit height to 3 lines */
-    overflow: hidden;
-    line-height: 1.2;
-}
-
-.new-product-item .product-info {
-    position: absolute;
-    bottom: 0; /* Position price at the bottom of the image */
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for price */
-    color: white;
-    padding: 5px 10px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 1; /* Always visible */
-    transition: opacity 0.3s ease;
-}
-
-.new-product-item p.price {
-    font-size: 0.9em;
     font-weight: bold;
-    color: white;
-    margin: 0;
-}
-
-.new-product-item .buy-button {
-    background-color: #28a745;
-    color: white;
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85em;
-    transition: background-color .3s ease;
-}
-
-.new-product-item .buy-button:hover {
-    background-color: #218838;
-}
-
-/* Styles for the smaller new product section */
-.smaller-product-section {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-
-.smaller-product-section h2 {
-    text-align: center;
     color: #555;
-    margin-bottom: 25px;
-    font-size: 1.8em;
 }
-
-.smaller-product-carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 10px;
-    gap: 10px; /* Smaller gap */
-}
-
-.smaller-product-carousel::-webkit-scrollbar {
-    height: 8px;
-}
-
-.smaller-product-carousel::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-}
-
-.smaller-product-carousel::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-}
-
-.smaller-product-item {
-    flex: 0 0 auto;
-    width: 100px; /* 50% smaller than 150px = 75px, adjusted to 100px for readability */
-    height: 150px; /* Adjusted height */
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px; /* Smaller border-radius */
-    padding: 8px; /* Smaller padding */
+nav {
     text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,.05); /* Lighter shadow */
-    scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative; /* Added for price positioning */
-    overflow: hidden; /* Added for price positioning */
-}
-
-.smaller-product-item img {
-    width: 100%;
-    height: 100px; /* Mengubah tinggi agar menjadi persegi dengan width 100px */
-    object-fit: cover;
-    border-radius: 3px;
-    margin-bottom: 6px; /* Smaller margin */
-    background-color: #eee;
-    cursor: pointer; /* Add cursor pointer to indicate clickable */
-}
-
-.smaller-product-item h4 {
-    margin: 0 0 3px 0; /* Smaller margin */
-    color: #333;
-    font-size: 0.8em; /* Smaller font size */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.smaller-product-item p.description {
-    font-size: 0.6em; /* Smaller font size */
-    color: #666;
-    margin-bottom: 6px; /* Smaller margin */
-    height: 2.4em; /* Limit height to 3 lines (0.8em * 3) */
-    overflow: hidden;
-    line-height: 1.2;
-}
-
-.smaller-product-item .product-info {
-    position: absolute;
-    bottom: 0; /* Position price at the bottom of the image */
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for price */
-    color: white;
-    padding: 5px 8px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 1; /* Always visible */
-    transition: opacity 0.3s ease;
-}
-
-.smaller-product-item p.price {
-    font-size: 0.75em; /* Smaller font size */
-    font-weight: bold;
-    color: white;
-    margin: 0;
-}
-
-.smaller-product-item .buy-button {
-    background-color: #28a745;
-    color: white;
-    padding: 4px 8px; /* Smaller padding */
-    border: none;
-    border-radius: 3px; /* Smaller border-radius */
-    cursor: pointer;
-    font-size: 0.7em; /* Smaller font size */
-    transition: background-color .3s ease;
-}
-
-.smaller-product-item .buy-button:hover {
-    background-color: #218838;
-}
-
-/* Styles for the even smaller new product section */
-.even-smaller-product-section {
-    margin-top: 20px;
     margin-bottom: 30px;
-}
-
-.even-smaller-product-section h2 {
-    text-align: center;
-    color: #555;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-}
-
-.even-smaller-product-carousel {
     display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    gap: 8px;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 10px;
-    gap: 8px; /* Even smaller gap */
-}
-
-.even-smaller-product-carousel::-webkit-scrollbar {
-    height: 8px;
-}
-
-.even-smaller-product-carousel::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-}
-
-.even-smaller-product-carousel::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-}
-
-.even-smaller-product-item {
-    flex: 0 0 auto;
-    width: 60px; /* 50% smaller than 100px = 75px, adjusted to 60px for readability */
-    height: 90px; /* Adjusted height */
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px; /* Even smaller border-radius */
-    padding: 5px; /* Even smaller padding */
-    text-align: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,.03); /* Lighter shadow */
-    scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative; /* Added for price positioning */
-    overflow: hidden; /* Added for price positioning */
-}
-
-.even-smaller-product-item img {
+    padding-bottom: 5px;
     width: 100%;
-    height: 60px; /* Mengubah tinggi agar menjadi persegi dengan width 60px */
-    object-fit: cover;
-    border-radius: 2px;
-    margin-bottom: 4px; /* Even smaller margin */
-    background-color: #eee;
-    cursor: pointer; /* Add cursor pointer to indicate clickable */
-}
-
-.even-smaller-product-item h4 {
-    margin: 0 0 2px 0; /* Even smaller margin */
-    color: #333;
-    font-size: 0.6em; /* Even smaller font size */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.even-smaller-product-item p.description {
-    font-size: 0.45em; /* Even smaller font size */
-    color: #666;
-    margin-bottom: 4px; /* Even smaller margin */
-    height: 1.8em; /* Limit height to 3 lines (0.6em * 3) */
-    overflow: hidden;
-    line-height: 1.2;
-}
-
-.even-smaller-product-item .product-info {
-    position: absolute;
-    bottom: 0; /* Position price at the bottom of the image */
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for price */
-    color: white;
-    padding: 5px;
     box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 1; /* Always visible */
-    transition: opacity 0.3s ease;
-}
-
-.even-smaller-product-item p.price {
-    font-size: 0.55em; /* Even smaller font size */
-    font-weight: bold;
-    color: white;
-    margin: 0;
-}
-
-.even-smaller-product-item .buy-button {
-    background-color: #28a745;
-    color: white;
-    padding: 3px 6px; /* Even smaller padding */
-    border: none;
-    border-radius: 2px; /* Even smaller border-radius */
-    cursor: pointer;
-    font-size: 0.6em; /* Even smaller font size */
-    transition: background-color .3s ease;
-}
-
-.even-smaller-product-item .buy-button:hover {
-    background-color: #218838;
-}
-
-/* Custom styles for fixed navigation */
-.fixed-nav {
     position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #fff; /* Background to cover content when scrolling */
-    border-bottom: 1px solid #eee;
-    z-index: 1000; /* Ensure it stays on top */
-    padding: 8px 0; /* Add some vertical padding */
-    box-shadow: 0 2px 5px rgba(0,0,0,.05); /* Optional shadow for depth */
+    background-color: #fff;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,.05);
+    padding-top: 10px;
 }
-
-.fixed-nav nav {
-    margin-bottom: 0; /* Remove bottom margin as it's part of the fixed bar */
-    padding: 0 10px; /* Add horizontal padding to the nav buttons */
-}
-
-/* Styles for product-item to position price over image */
-.product-item {
-    position: relative; /* For absolute positioning of the price */
-    overflow: hidden; /* Clip the price if needed */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center content horizontally */
-}
-
-.product-item img {
-    width: 100%; /* Example width */
-    height: 250px; /* Mengubah tinggi agar menjadi persegi dengan width 250px */
-    object-fit: cover; /* Maintain aspect ratio */
-    display: block; /* Remove extra space below image */
-    margin-bottom: 0; /* Remove margin-bottom */
-    cursor: pointer; /* Add cursor pointer to indicate clickable */
-}
-
-.product-item .product-info {
-    position: absolute;
-    bottom: 0; /* Position price at the bottom of the image */
-    left: 0;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for price */
+nav button {
+    background-color: #007bff;
     color: white;
-    padding: 5px 15px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 1; /* Always visible */
-    transition: opacity 0.3s ease;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    flex-shrink: 0;
+    flex-grow: 1;
+    min-width: auto;
+    white-space: nowrap;
+    transition: background-color .3s ease;
+}
+nav button:hover {
+    background-color: #0056b3;
+}
+.section {
+    display: none;
+    padding-top: 20px;
+}
+.section.active {
+    display: block;
+}
+h2 {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+/* Menambahkan background putih ke semua form */
+form {
+    background-color: white; /* Atur background menjadi putih */
+    padding: 20px; /* Tambahkan padding agar lebih rapi */
+    border-radius: 8px; /* Sudut sedikit membulat */
+    box-shadow: 0 2px 10px rgba(0,0,0,.1); /* Tambahkan sedikit bayangan */
+    margin: 0 auto; /* Tengah secara horizontal */
+    max-width: 500px; /* Batasi lebar form */
+    margin-bottom: 20px; /* Jarak antara form dan elemen selanjutnya */
 }
 
-.product-item .product-price {
-    color: white;
-    font-size: 0.9em;
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
     font-weight: bold;
-    margin: 0;
+    color: #555;
+    font-size: .95em;
 }
-
-.product-item .buy-now-button {
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+.form-group.hidden-for-member,
+.form-group.member-readonly,
+.form-group.hidden-field {
+    display: none;
+}
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    margin: 20px auto 0;
+    transition: background-color .3s ease;
+    box-sizing: border-box;
+}
+.button:hover {
+    background-color: #45a049;
+}
+.message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: .95em;
+    display: none;
+}
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.product-item h3 {
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 1.15em;
+}
+.product-item p {
+    color: #666;
+    font-size: .9em;
+    margin-bottom: 12px;
+}
+.product-item .product-price {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #007bff;
+}
+.add-to-cart-button {
     background-color: #28a745;
     color: white;
     padding: 8px 15px;
@@ -433,543 +177,757 @@ body{font-family:Arial,sans-serif;margin:0;background-color:#f4f4f4;color:#333;l
     font-size: 14px;
     width: auto;
     display: inline-block;
+    transition: background-color .3s ease;
+    flex-shrink: 0; /* Prevent shrinking */
+    margin-top: auto; /* Push to bottom */
+}
+.add-to-cart-button:hover {
+    background-color: #218838;
+}
+.profile-data p,
+.order-item p {
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-size: .95em;
+}
+.profile-data strong,
+.order-item strong {
+    display: inline-block;
+    width: 120px;
+    color: #555;
+}
+.order-item {
+    border: 1px solid #e9ecef;
+    background-color: #fefefe;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.order-detail-summary {
+    background-color: #e9f7ef;
+    border: 1px solid #cce8d6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.order-detail-summary p {
+    margin-bottom: 8px;
+}
+.order-detail-summary strong {
+    width: 150px;
+    color: #333;
+}
+.new-product-section, .smaller-product-section, .even-smaller-product-section, .tiny-product-section, .divided-product-section, .half-tiny-product-section, .quarter-larger-product-section, .mini-product-section {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.new-product-section h2, .smaller-product-section h2, .even-smaller-product-section h2, .tiny-product-section h2, .divided-product-section h2, .half-tiny-product-section h2, .quarter-larger-product-section h2, .mini-product-section h2 {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+.product-carousel-container {
+    display: flex;
+    overflow-x: scroll; /* Menggunakan scroll */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 10px 10px;
+    gap: 7.5px;
+    scrollbar-width: none;
+    scroll-behavior: smooth; /* Tambahkan ini untuk scroll yang lebih halus */
+    /* *** Tambahan untuk mengatasi efek "mental" *** */
+    overscroll-behavior-x: contain; /* Mencegah overscroll pada sumbu X */
+    /* ****************************************** */
+}
+.product-carousel-container::-webkit-scrollbar {
+    display: none;
+}
+.product-item-wrapper {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    margin-right: 0; /* Adjust or remove as needed */
+    background-color: transparent; /* Produk mengikuti background body */
+}
+.product-item-wrapper.sticky-product {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1;
+    background-color: transparent; /* Produk mengikuti background body */
+}
+.product-item-wrapper.sticky-product:first-child {
+    left: 0;
+}
+.product-item-wrapper.sticky-product:nth-child(2) {
+    left: calc(60px + 7.5px); /* Lebar mini-product-item + gap */
 }
 
-.product-item .buy-now-button:hover {
-    background-color: #218838;
+
+.new-product-item, .smaller-product-item, .even-smaller-product-item, .tiny-product-item, .half-tiny-product-item, .quarter-larger-product-item, .mini-product-item {
+    flex: 0 0 auto;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    text-align: center;
+    box-shadow: none;
+    transition: transform .2s ease;
+    scroll_snap-align: start;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: transparent;
+    margin-bottom: 0;
+}
+.new-product-item:hover, .smaller-product-item:hover, .even-smaller-product-item:hover, .tiny-product-item:hover, .divided-product-item:hover, .half-tiny-product-item:hover, .quarter-larger-product-item:hover, .mini-product-item:hover {
+    transform: translateY(-5px);
+}
+.new-product-item .img-wrapper, .smaller-product-item .img-wrapper, .even-smaller-product-item .img-wrapper, .tiny-product-item .img-wrapper, .divided-product-item .img-wrapper, .half-tiny-product-item .img-wrapper, .quarter-larger-product-item .img-wrapper, .mini-product-item .img-wrapper {
+    width: 100%;
+    padding-bottom: 100%;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+.new-product-item .img-wrapper img, .smaller-product-item .img-wrapper img, .even-smaller-product-item .img-wrapper img, .tiny-product-item .img-wrapper img, .divided-product-item .img-wrapper img, .half-tiny-product-item .img-wrapper img, .quarter-larger-product-item .img-wrapper img, .mini-product-item .img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    background-color: transparent;
+}
+.new-product-item h4, .smaller-product-item h4, .even-smaller-product-item h4, .tiny-product-item h4, .divided-product-item h4, .half-tiny-product-item h4, .quarter-larger-product-item h4, .mini-product-item h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.new-product-item p.description, .smaller-product-item p.description, .even-smaller-product-item p.description, .tiny-product-item p.description, .divided-product-item p.description, .half-tiny-product-item p.description, .quarter-larger-product-item p.description, .mini-product-item p.description {
+    color: #666;
+    margin-bottom: 8px;
+    height: 3em;
+    overflow: hidden;
+    line-height: 1.2;
+}
+.new-product-item .add-to-cart-button, .smaller-product-item .add-to-cart-button, .even-smaller-product-item .add-to-cart-button, .tiny-product-item .add-to-cart-button, .divided-product-item .add-to-cart-button, .half-tiny-product-item .add-to-cart-button, .quarter-larger-product-item .add-to-cart-button, .mini-product-item .add-to-cart-button {
+    margin-top: auto;
+}
+.new-product-item { width: 150px; height: 220px; }
+.new-product-item h4 { font-size: 1em; }
+.new-product-item p.description { font-size: 0.75em; }
+.new-product-item .product-price { font-size: 0.9em; margin-bottom: 5px;}
+.new-product-item .add-to-cart-button { padding: 6px 10px; font-size: 0.85em; }
+.smaller-product-item { width: 100px; height: 150px; padding: 8px;}
+.smaller-product-item h4 { font-size: 0.8em; }
+.smaller-product-item p.description { font-size: 0.6em; height: 2.4em; }
+.smaller-product-item .product-price { font-size: 0.7em; margin-bottom: 4px;}
+.smaller-product-item .add-to-cart-button { padding: 4px 8px; font-size: 0.7em; }
+.even-smaller-product-item { width: 75px; height: 110px; padding: 5px;}
+.even-smaller-product-item h4 { font-size: 0.65em; }
+.even-smaller-product-item p.description { font-size: 0.5em; height: 2em; }
+.even-smaller-product-item .product-price { font-size: 0.6em; margin-bottom: 3px;}
+.even-smaller-product-item .add-to-cart-button { padding: 3px 6px; font-size: 0.65em; }
+.tiny-product-item { width: 50px; height: 75px; padding: 3px;}
+.tiny-product-item .img-wrapper { margin-bottom: 4px; }
+.tiny-product-item h4 { font-size: 0.55em; margin-bottom: 2px; }
+.tiny-product-item p.description { font-size: 0.4em; height: 1.6em; margin-bottom: 4px; }
+.tiny-product-item .product-price { font-size: 0.35em; margin-bottom: 2px;}
+.tiny-product-item .add-to-cart-button { padding: 2px 4px; font-size: 0.5em; }
+.half-tiny-product-item { width: 25px; height: 37.5px; padding: 1.5px;}
+.half-tiny-product-item .img-wrapper { margin-bottom: 2px; }
+.half-tiny-product-item h4 { font-size: 0.275em; margin-bottom: 1px; }
+.half-tiny-product-item p.description { font-size: 0.2em; height: 0.8em; margin-bottom: 2px; }
+.half-tiny-product-item .product-price { font-size: 0.175em; margin-bottom: 1px;}
+.half-tiny-product-item .add-to-cart-button { padding: 1px 2px; font-size: 0.25em; }
+.quarter-larger-product-item { width: 62.5px; height: 93.75px; padding: 4px; }
+.quarter-larger-product-item h4 { font-size: 0.6em; }
+.quarter-larger-product-item p.description { font-size: 0.45em; height: 1.8em; }
+.quarter-larger-product-item .product-price { font-size: 0.5em; margin-bottom: 3px;}
+.quarter-larger-product-item .add-to-cart-button { padding: 2.5px 5px; font-size: 0.6em; }
+.mini-product-item {
+    width: 60px; /* Lebar produk */
+    height: 90px; /* Tinggi produk */
+    padding: 0; /* Padding nol agar konten menempel tepi */
+    border-radius: 0; /* Tanpa border radius */
+    margin-bottom: 0; /* Tidak ada margin bawah */
+    box-shadow: none; /* Tidak ada shadow */
+    background-color: transparent; /* Default background */
+}
+.mini-product-item.white-bg {
+    background-color: white;
+}
+.mini-product-item .img-wrapper {
+    margin-bottom: 0; /* Hilangkan margin bawah dari img-wrapper */
+    padding-bottom: 100%; /* Tetap aspek rasio 1:1 untuk gambar */
+}
+.mini-product-item .img-wrapper img {
+    border-radius: 0; /* Hilangkan border radius pada gambar */
+}
+.mini-product-item h4 {
+    font-size: 0.6em; /* Ukuran font judul */
+    margin-top: 2px; /* Margin atas untuk judul */
+    margin-bottom: 2px; /* Margin bawah untuk judul */
+}
+.mini-product-item p.description {
+    font-size: 0.45em; /* Ukuran font deskripsi */
+    height: 1.8em; /* Tinggi deskripsi */
+    margin-bottom: 2px; /* Margin bawah deskripsi */
+}
+.mini-product-item .product-price {
+    font-size: 0.5em; /* Ukuran font harga */
+    margin-bottom: 2px; /* Margin bawah harga */
+}
+.mini-product-item .add-to-cart-button {
+    padding: 2px 4px; /* Padding tombol */
+    font-size: 0.6em; /* Ukuran font tombol */
+    border-radius: 0; /* Tanpa border radius pada tombol */
+    position: absolute; /* Posisi absolut agar mentok ke bawah */
+    bottom: 0; /* Mentok ke bawah frame */
+    left: 0; /* Mentok ke kiri */
+    width: 100%; /* Lebar 100% dari item */
+    box-sizing: border-box; /* Pastikan padding masuk ke lebar */
+}
+.divided-product-section {
+    padding: 0 10px;
+}
+.divided-product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7.5px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.divided-product-item {
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    text-align: center;
+    box-shadow: none;
+    transition: transform .2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: auto;
+    background-color: transparent;
+}
+.divided-product-item h4 { font-size: 0.9em; }
+.divided-product-item p.description { font-size: 0.7em; }
+.divided-product-item .product-price { font-size: 0.8em; margin-bottom: 5px;}
+.divided-product-item .add-to-cart-button { padding: 8px 12px; font-size: 0.85em; }
+.payment-images {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.payment-images img {
+    max-width: 45%; /* Adjusted for better responsiveness */
+    height: auto;
+    border: none; /* No border */
+    border-radius: 0; /* No border-radius */
+    box-shadow: none; /* No shadow */
+    background-color: transparent; /* No background */
+}
+@media (max-width:768px) {
+    .header { padding: 10px 15px; }
+    .header h1 { font-size: 1.5em; }
+    .welcome-message { font-size: .9em; }
+    .container { margin: 10px; padding: 15px; }
+    h2 { font-size: 1.6em; margin-bottom: 20px; }
+    .button { padding: 10px 15px; font-size: 15px; }
+    .profile-data strong, .order-item strong { width: 100px; }
+    .order-detail-summary strong { width: 120px; }
+    .new-product-item { width: 130px; height: 190px; }
+    .new-product-item h4 { font-size: 0.9em; }
+    .new-product-item p.description { font-size: 0.7em; }
+    .new-product-item .product-price { font-size: 0.8em; }
+    .new-product-item .add-to-cart-button { padding: 5px 8px; font-size: 0.8em; }
+    .smaller-product-item { width: 80px; height: 120px; padding: 6px;}
+    .smaller-product-item h4 { font-size: 0.7em; }
+    .smaller-product-item p.description { font-size: 0.55em; height: 2.2em; }
+    .smaller-product-item .product-price { font-size: 0.6em; }
+    .smaller-product-item .add-to-cart-button { padding: 3px 6px; font-size: 0.6em; }
+    .even-smaller-product-item { width: 60px; height: 90px; padding: 4px;}
+    .even-smaller-product-item h4 { font-size: 0.6em; }
+    .even-smaller-product-item p.description { font-size: 0.45em; height: 1.8em; }
+    .even-smaller-product-item .product-price { font-size: 0.5em; }
+    .even-smaller-product-item .add-to-cart-button { padding: 2px 5px; font-size: 0.55em; }
+    .tiny-product-item { width: 40px; height: 60px; padding: 2px;}
+    .tiny-product-item h4 { font-size: 0.5em; }
+    .tiny-product-item p.description { font-size: 0.35em; height: 1.4em; }
+    .tiny-product-item .product-price { font-size: 0.3em; }
+    .tiny-product-item .add-to-cart-button { padding: 1px 3px; font-size: 0.45em; }
+    .half-tiny-product-item { width: 20px; height: 30px; padding: 1px;}
+    .half-tiny-product-item h4 { font-size: 0.25em; }
+    .half-tiny-product-item p.description { font-size: 0.175em; height: 0.7em; }
+    .half-tiny-product-item .product-price { font-size: 0.15em; }
+    .half-tiny-product-item .add-to-cart-button { padding: 0.5px 1.5px; font-size: 0.2em; }
+    .quarter-larger-product-item { width: 50px; height: 75px; padding: 3px; }
+    .quarter-larger-product-item h4 { font-size: 0.55em; }
+    .quarter-larger-product-item p.description { font-size: 0.4em; height: 1.6em; }
+    .quarter-larger-product-item .product-price { font-size: 0.35em; }
+    .quarter-larger-product-item .add-to-cart-button { padding: 2px 4px; font-size: 0.5em; }
+    .mini-product-item {
+        width: 48px; /* Lebih kecil di mobile */
+        height: 72px; /* Proporsional */
+    }
+    .mini-product-item h4 { font-size: 0.55em; }
+    .mini-product-item p.description { font-size: 0.4em; height: 1.6em; }
+    .mini-product-item .product-price { font-size: 0.35em; }
+    .mini-product-item .add-to-cart-button { padding: 1.5px 3px; font-size: 0.55em; }
+    .product-item-wrapper.sticky-product:nth-child(2) {
+        left: calc(48px + 7.5px); /* Lebar mini-product-item mobile + gap */
+    }
+    .payment-images img {
+        max-width: 48%; /* Adjust for smaller screens */
+    }
+}
+@media (max-width:480px) {
+    .header { flex-direction: column; align-items: flex-start; padding: 10px; }
+    .header h1 { margin-bottom: 5px; }
+    .welcome-message { margin-top: 5px; }
+    .container { padding: 10px; }
+    h1 { font-size: 1.5em; }
+    h2 { font-size: 1.4em; }
+    .form-group label { font-size: .9em; }
+    .form-group input, .form-group textarea, .form-group select { font-size: 14px; padding: 8px; }
+    .message { font-size: .85em; padding: 10px; }
+    .divided-product-grid { gap: 5px; }
+    .divided-product-item { padding: 8px; }
+    .divided-product-item h4 { font-size: 0.85em; }
+    .divided-product-item p.description { font-size: 0.65em; height: 2.6em; }
+    .divided-product-item .product-price { font-size: 0.7em; }
+    .divided-product-item .add-to-cart-button { padding: 6px 10px; font-size: 0.8em; }
 }
 </style>
 </head>
-
 <body>
 <div class="header">
-<h1 style="margin-bottom:0;">Toko Online</h1>
 <div id="welcomeMessage" class="welcome-message">Hai, Tamu</div>
 </div>
-
-<div class="fixed-nav">
 <nav>
-<button id="navHome" onclick="showSection('home')">Home</button>
+<button id="navHome" onclick="showSection('home')">Beranda</button>
 <button id="navLogin" onclick="showSection('login')">Login</button>
 <button id="navSignup" onclick="showSection('signup')">Daftar</button>
 <button id="navOrder" onclick="showSection('order')">Order</button>
 <button id="navProfile" onclick="showSection('profile')" style="display:none;">Profil</button>
-<button id="navKebijakan" onclick="showSection('kebijakan')" style="display:none;">Policy</button>
-<button id="navOrderHistory" onclick="showSection('orderHistory')" style="display:none;">History</button>
-<button id="navDeposit" onclick="showSection('deposit')" style="display:none;">Top Up</button>
+<button id="navOrderHistory" onclick="showSection('orderHistory')" style="display:none;">Riwayat Pesanan</button>
+<button id="navDeposit" onclick="showSection('deposit')" style="display:none;">Deposit</button>
 <button id="navLogout" onclick="logout()" style="display:none;">Logout</button>
 </nav>
-</div>
 
-<div class="container">
 <div id="homeSection" class="section active">
-<h2>Produk Kami</h2>
+    <div class="mini-product-section">
+      
+        <div class="product-carousel-container" id="socialMediaCarousel">
+            <div class="product-item-wrapper sticky-product">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item white-bg">
+                        <div class="img-wrapper">
+                            <img src="https://nasukafoods.site/tiktok-followers.jpg" alt="Produk sosial media 1">
+                        </div>
+                        <h4>Produk sosial media 1</h4>
+                        
+                        <p class="product-price">Rp 20.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk sosial media 1" data-product-price="20000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper sticky-product">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item white-bg">
+                        <div class="img-wrapper">
+                            <img src="https://nasukafoods.site/tiktok-likes.jpg" alt="Produk sosial media 2">
+                        </div>
+                        <h4>Produk sosial media 2</h4>
+                              <p class="product-price">Rp 25.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk sosial media 2" data-product-price="25000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="https://nasukafoods.site/kosong.jpg" alt="Produk Booster Sosial Media 3">
+                        </div>
+                        <h4>Booster Sosial Media 3</h4>
+                        <p class="description"></p>
+                        <p class="product-price">
+                        
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="http://nasukafoods.site/image/sosial-media.png" alt="Produk Booster Sosial Media 4">
+                        </div>
+                        <h4>Booster Sosial Media 4</h4>
+                        <p class="description">Deskripsi produk booster sosial media 4.</p>
+                        <p class="product-price">Rp 30.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk Booster Sosial Media 4" data-product-price="30000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="http://nasukafoods.site/image/sosial-media.png" alt="Produk Booster Sosial Media 5">
+                        </div>
+                        <h4>Booster Sosial Media 5</h4>
+                        <p class="description">Deskripsi produk booster sosial media 5.</p>
+                        <p class="product-price">Rp 22.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk Booster Sosial Media 5" data-product-price="22000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="http://nasukafoods.site/image/sosial-media.png" alt="Produk Booster Sosial Media 1">
+                        </div>
+                        <h4>Booster Sosial Media 1</h4>
+                        <p class="description">Deskripsi produk booster sosial media 1.</p>
+                        <p class="product-price">Rp 20.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk Booster Sosial Media 1" data-product-price="20000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="http://nasukafoods.site/image/sosial-media.png" alt="Produk Booster Sosial Media 2">
+                        </div>
+                        <h4>Booster Sosial Media 2</h4>
+                        <p class="description">Deskripsi produk booster sosial media 2.</p>
+                        <p class="product-price">Rp 25.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk Booster Sosial Media 2" data-product-price="25000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="http://nasukafoods.site/image/sosial-media.png" alt="Produk Booster Sosial Media 3">
+                        </div>
+                        <h4>Booster Sosial Media 3</h4>
+                        <p class="description">Deskripsi produk booster sosial media 3.</p>
+                        <p class="product-price">Rp 18.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk Booster Sosial Media 3" data-product-price="18000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="http://nasukafoods.site/image/sosial-media.png" alt="Produk Booster Sosial Media 4">
+                        </div>
+                        <h4>Booster Sosial Media 4</h4>
+                        <p class="description">Deskripsi produk booster sosial media 4.</p>
+                        <p class="product-price">Rp 30.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk Booster Sosial Media 4" data-product-price="30000">Beli</button>
+                    </div>
+                </a>
+            </div>
+            <div class="product-item-wrapper">
+                <a href="https://aryawilalodra.site">
+                    <div class="mini-product-item">
+                        <div class="img-wrapper">
+                            <img src="http://nasukafoods.site/image/sosial-media.png" alt="Produk Booster Sosial Media 5">
+                        </div>
+                        <h4>Booster Sosial Media 5</h4>
+                        <p class="description">Deskripsi produk booster sosial media 5.</p>
+                        <p class="product-price">Rp 22.000</p>
+                        <button class="add-to-cart-button" data-product-name="Produk Booster Sosial Media 5" data-product-price="22000">Beli</button>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
-<div class="even-smaller-product-section">
-    <h2>Diskon Kilat</h2>
-    <div class="even-smaller-product-carousel">
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/FF69B4/FFFFFF?text=XSm%201" alt="XSmall Produk 1" onclick="window.open('https://example.com/product/xsm1', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 5.000</p>
-                <button class="buy-button" data-product-name="XSm Produk 1" data-product-price="5000">Beli</button>
+    <div class="divided-product-section">
+        <h2>Penawaran Spesial</h2>
+        <div class="divided-product-grid">
+            <div class="divided-product-item">
+                <div class="img-wrapper">
+                    <img src="https://nasukafoods.site/paketcilok.jpg" alt="Promo A">
+                </div>
+                <h4>Promo Diskon 20%</h4>
+                <p class="description">Dapatkan diskon 20% untuk produk pilihan ini. 300 pcs</p>
+                <p class="product-price">Rp 240.000</p>
+                <button class="add-to-cart-button" data-product-name="Promo A" data-product-price="200000">Beli Sekarang</button>
             </div>
-            <h4>XSm Prod 1</h4>
-            <p class="description">Desc. Prod XSm 1.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/BA55D3/FFFFFF?text=XSm%202" alt="XSmall Produk 2" onclick="window.open('https://example.com/product/xsm2', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 6.000</p>
-                <button class="buy-button" data-product-name="XSm Produk 2" data-product-price="6000">Beli</button>
+            <div class="divided-product-item">
+                <div class="img-wrapper">
+                    <img src="http://nasukafoods.site/isiangajih.png" alt="Promo B">
+                </div>
+                <h4>Promo Nontunai</h4>
+                <p class="description">Gratis ongkir untuk pembelian produk ini.</p>
+                <p class="product-price">Rp 900</p>
+                <button class="add-to-cart-button" data-product-name="Promo B" data-product-price="180000">Beli Sekarang</button>
             </div>
-            <h4>XSm Prod 2</h4>
-            <p class="description">Desc. Prod XSm 2.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/20B2AA/FFFFFF?text=XSm%203" alt="XSmall Produk 3" onclick="window.open('https://example.com/product/xsm3', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 4.500</p>
-                <button class="buy-button" data-product-name="XSm Produk 3" data-product-price="4500">Beli</button>
+            <div class="divided-product-item">
+                <div class="img-wrapper">
+                    <img src="http://nasukafoods.site/bumbukacang.jpeg" alt="Promo C">
+                </div>
+                <h4>Promo C Beli 1 Gratis 1</h4>
+                <p class="description">Setiap pembelian produk C, dapatkan gratis 1 produk yang sama.</p>
+                <p class="product-price">Rp 100.000</p>
+                <button class="add-to-cart-button" data-product-name="Promo C" data-product-price="100000">Beli Sekarang</button>
             </div>
-            <h4>XSm Prod 3</h4>
-            <p class="description">Desc. Prod XSm 3.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/FF8C00/FFFFFF?text=XSm%204" alt="XSmall Produk 4" onclick="window.open('https://example.com/product/xsm4', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 7.000</p>
-                <button class="buy-button" data-product-name="XSm Produk 4" data-product-price="7000">Beli</button>
+            <div class="divided-product-item">
+                <div class="img-wrapper">
+                    <img src="http://nasukafoods.site/kawasakiax.png" alt="Promo D">
+                </div>
+                <h4>Ax Mode Tempur</h4>
+                <p class="description">Hemat 78.33% untuk produk, Stock Limited</p>
+                <p class="product-price">Rp 5.500.000</p>
+                <button class="add-to-cart-button" data-product-name="Promo D" data-product-price="75000">Beli Sekarang</button>
             </div>
-            <h4>XSm Prod 4</h4>
-            <p class="description">Desc. Prod XSm 4.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/6A5ACD/FFFFFF?text=XSm%205" alt="XSmall Produk 5" onclick="window.open('https://example.com/product/xsm5', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 5.500</p>
-                <button class="buy-button" data-product-name="XSm Produk 5" data-product-price="5500">Beli</button>
-            </div>
-            <h4>XSm Prod 5</h4>
-            <p class="description">Desc. Prod XSm 5.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/7FFF00/FFFFFF?text=XSm%206" alt="XSmall Produk 6" onclick="window.open('https://example.com/product/xsm6', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 8.000</p>
-                <button class="buy-button" data-product-name="XSm Produk 6" data-product-price="8000">Beli</button>
-            </div>
-            <h4>XSm Prod 6</h4>
-            <p class="description">Desc. Prod XSm 6.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/DC143C/FFFFFF?text=XSm%207" alt="XSmall Produk 7" onclick="window.open('https://example.com/product/xsm7', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 6.500</p>
-                <button class="buy-button" data-product-name="XSm Produk 7" data-product-price="6500">Beli</button>
-            </div>
-            <h4>XSm Prod 7</h4>
-            <p class="description">Desc. Prod XSm 7.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/00CED1/FFFFFF?text=XSm%208" alt="XSmall Produk 8" onclick="window.open('https://example.com/product/xsm8', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 9.000</p>
-                <button class="buy-button" data-product-name="XSm Produk 8" data-product-price="9000">Beli</button>
-            </div>
-            <h4>XSm Prod 8</h4>
-            <p class="description">Desc. Prod XSm 8.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/DAA520/FFFFFF?text=XSm%209" alt="XSmall Produk 9" onclick="window.open('https://example.com/product/xsm9', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 7.500</p>
-                <button class="buy-button" data-product-name="XSm Produk 9" data-product-price="7500">Beli</button>
-            </div>
-            <h4>XSm Prod 9</h4>
-            <p class="description">Desc. Prod XSm 9.</p>
-        </div>
-        <div class="even-smaller-product-item">
-            <img src="https://via.placeholder.com/60x30/48D1CC/FFFFFF?text=XSm%2010" alt="XSmall Produk 10" onclick="window.open('https://example.com/product/xsm10', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 10.000</p>
-                <button class="buy-button" data-product-name="XSm Produk 10" data-product-price="10000">Beli</button>
-            </div>
-            <h4>XSm Prod 10</h4>
-            <p class="description">Desc. Prod XSm 10.</p>
         </div>
     </div>
 </div>
 
-<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
-
-<div class="smaller-product-section">
-    <h2>Promo Spesial</h2>
-    <div class="smaller-product-carousel">
-        <div class="smaller-product-item">
-            <img src="https://nasukafoods.site/paketcilok.jpg" alt="Mini Produk 1" onclick="window.open('https://example.com/product/mini1', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 20.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 1" data-product-price="20000">Beli</button>
-            </div>
-            <h4>Mini Produk 1</h4>
-            <p class="description">Deskripsi singkat mini produk 1.</p>
-        </div>
-        <div class="smaller-product-item">
-            <img src="https://via.placeholder.com/100x50/87CEEB/FFFFFF?text=Mini%202" alt="Mini Produk 2" onclick="window.open('https://example.com/product/mini2', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 25.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 2" data-product-price="25000">Beli</button>
-            </div>
-            <h4>Mini Produk 2</h4>
-            <p class="description">Deskripsi singkat mini produk 2.</p>
-        </div>
-        <div class="smaller-product-item">
-            <img src="https://via.placeholder.com/100x50/ADFF2F/FFFFFF?text=Mini%203" alt="Mini Produk 3" onclick="window.open('https://example.com/product/mini3', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 15.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 3" data-product-price="15000">Beli</button>
-            </div>
-            <h4>Mini Produk 3</h4>
-            <p class="description">Deskripsi singkat mini produk 3.</p>
-        </div>
-        <div class="smaller-product-item">
-            <img src="https://via.placeholder.com/100x50/FFD700/FFFFFF?text=Mini%204" alt="Mini Produk 4" onclick="window.open('https://example.com/product/mini4', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 30.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 4" data-product-price="30000">Beli</button>
-            </div>
-            <h4>Mini Produk 4</h4>
-            <p class="description">Deskripsi singkat mini produk 4.</p>
-        </div>
-        <div class="smaller-product-item">
-            <img src="https://via.placeholder.com/100x50/FFA07A/FFFFFF?text=Mini%205" alt="Mini Produk 5" onclick="window.open('https://example.com/product/mini5', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 22.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 5" data-product-price="22000">Beli</button>
-            </div>
-            <h4>Mini Produk 5</h4>
-            <p class="description">Deskripsi singkat mini produk 5.</p>
-        </div>
-        <div class="smaller-product-item">
-            <img src="https://via.placeholder.com/100x50/E0BBE4/FFFFFF?text=Mini%206" alt="Mini Produk 6" onclick="window.open('https://example.com/product/mini6', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 18.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 6" data-product-price="18000">Beli</button>
-            </div>
-            <h4>Mini Produk 6</h4>
-            <p class="description">Deskripsi singkat mini produk 6.</p>
-        </div>
-        <div class="smaller-product-item">
-            <img src="https://via.placeholder.com/100x50/94B3FD/FFFFFF?text=Mini%207" alt="Mini Produk 7" onclick="window.open('https://example.com/product/mini7', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 28.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 7" data-product-price="28000">Beli</button>
-            </div>
-            <h4>Mini Produk 7</h4>
-            <p class="description">Deskripsi singkat mini produk 7.</p>
-        </div>
-        <div class="smaller-product-item">
-            <img src="https://via.placeholder.com/100x50/C6E377/FFFFFF?text=Mini%208" alt="Mini Produk 8" onclick="window.open('https://example.com/product/mini8', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 35.000</p>
-                <button class="buy-button" data-product-name="Mini Produk 8" data-product-price="35000">Beli</button>
-            </div>
-            <h4>Mini Produk 8</h4>
-            <p class="description">Deskripsi singkat mini produk 8.</p>
-        </div>
-    </div>
-</div>
-
-<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
-
-<div class="new-product-section">
-    <h2>Produk Terbaru</h2>
-    <div class="new-product-carousel">
-        <div class="new-product-item">
-            <img src="https://via.placeholder.com/150x80/87CEEB/FFFFFF?text=Produk%20A" alt="Produk A" onclick="window.open('https://example.com/product/a', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 50.000</p>
-                <button class="buy-button" data-product-name="Produk A" data-product-price="50000">Beli</button>
-            </div>
-            <h4>Produk A</h4>
-            <p class="description">Deskripsi singkat produk A yang menarik.</p>
-        </div>
-        <div class="new-product-item">
-            <img src="https://via.placeholder.com/150x80/FFD700/FFFFFF?text=Produk%20B" alt="Produk B" onclick="window.open('https://example.com/product/b', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 75.000</p>
-                <button class="buy-button" data-product-name="Produk B" data-product-price="75000">Beli</button>
-            </div>
-            <h4>Produk B</h4>
-            <p class="description">Ini adalah deskripsi singkat untuk produk B.</p>
-        </div>
-        <div class="new-product-item">
-            <img src="https://via.placeholder.com/150x80/90EE90/FFFFFF?text=Produk%20C" alt="Produk C" onclick="window.open('https://example.com/product/c', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 120.000</p>
-                <button class="buy-button" data-product-name="Produk C" data-product-price="120000">Beli</button>
-            </div>
-            <h4>Produk C</h4>
-            <p class="description">Deskripsi produk C dengan fitur-fitur unggulan.</p>
-        </div>
-        <div class="new-product-item">
-            <img src="https://via.placeholder.com/150x80/FF6347/FFFFFF?text=Produk%20D" alt="Produk D" onclick="window.open('https://example.com/product/d', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 90.000</p>
-                <button class="buy-button" data-product-name="Produk D" data-product-price="90000">Beli</button>
-            </div>
-            <h4>Produk D</h4>
-            <p class="description">Produk D kualitas terbaik untuk Anda.</p>
-        </div>
-        <div class="new-product-item">
-            <img src="https://via.placeholder.com/150x80/ADD8E6/FFFFFF?text=Produk%20E" alt="Produk E" onclick="window.open('https://example.com/product/e', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 65.000</p>
-                <button class="buy-button" data-product-name="Produk E" data-product-price="65000">Beli</button>
-            </div>
-            <h4>Produk E</h4>
-            <p class="description">Nikmati keunggulan produk E kami.</p>
-        </div>
-        <div class="new-product-item">
-            <img src="https://via.placeholder.com/150x80/DA70D6/FFFFFF?text=Produk%20F" alt="Produk F" onclick="window.open('https://example.com/product/f', '_blank')">
-            <div class="product-info">
-                <p class="price">Rp 110.000</p>
-                <button class="buy-button" data-product-name="Produk F" data-product-price="110000">Beli</button>
-            </div>
-            <h4>Produk F</h4>
-            <p class="description">Produk F, pilihan cerdas untuk kebutuhan Anda.</p>
-        </div>
-    </div>
-</div>
-
-<hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
-
-<div class="product-list">
-<div class="product-item">
-    <img src="https://via.placeholder.com/250x150/007bff/FFFFFF?text=Internet%20Cepat" alt="Paket Internet Cepat" onclick="window.open('https://example.com/product/internet', '_blank')">
-    <div class="product-info">
-        <p class="product-price">Rp 100.000</p>
-        <button class="button buy-now-button" data-product-name="Paket Internet Cepat" data-product-price="100000">Beli Sekarang</button>
-    </div>
-    <h3>Paket Internet Cepat</h3>
-    <p>Kuota 100 GB, kecepatan hingga 50 Mbps. Ideal untuk streaming dan gaming.</p>
-</div>
-<div class="product-item">
-    <img src="https://via.placeholder.com/250x150/FFA500/FFFFFF?text=Voucher%20Game" alt="Voucher Game Premium" onclick="window.open('https://example.com/product/game', '_blank')">
-    <div class="product-info">
-        <p class="product-price">Rp 150.000</p>
-        <button class="button buy-now-button" data-product-name="Voucher Game Premium" data-product-price="150000">Beli Sekarang</button>
-    </div>
-    <h3>Voucher Game Premium</h3>
-    <p>Voucher untuk game populer, dapatkan item eksklusif.</p>
-</div>
-<div class="product-item">
-    <img src="https://via.placeholder.com/250x150/8A2BE2/FFFFFF?text=Streaming%20Film" alt="Langganan Streaming Film" onclick="window.open('https://example.com/product/streaming', '_blank')">
-    <div class="product-info">
-        <p class="product-price">Rp 80.000</p>
-        <button class="button buy-now-button" data-product-name="Langganan Streaming Film" data-product-price="80000">Beli Sekarang</button>
-    </div>
-    <h3>Langganan Streaming Film</h3>
-    <p>Akses tak terbatas ke ribuan film dan serial TV.</p>
-</div>
-<div class="product-item">
-    <img src="https://via.placeholder.com/250x150/32CD32/FFFFFF?text=Pulsa" alt="Pulsa Elektrik All Operator" onclick="window.open('https://example.com/product/pulsa', '_blank')">
-    <div class="product-info">
-        <p class="product-price">Rp 50.000</p>
-        <button class="button buy-now-button" data-product-name="Pulsa Elektrik All Operator" data-product-price="50000">Beli Sekarang</button>
-    </div>
-    <h3>Pulsa Elektrik All Operator</h3>
-    <p>Isi ulang pulsa instan untuk semua operator seluler.</p>
-</div>
-</div>
-</div>
 <div id="loginSection" class="section">
-<h2>Login ke Akun Anda</h2>
-<form id="loginForm">
-<div class="form-group">
-<label for="loginUsername">Username:</label>
-<input type="text" id="loginUsername" name="username" required>
-</div>
-<div class="form-group">
-<label for="loginPassword">Password:</label>
-<input type="password" id="loginPassword" name="password" required>
-</div>
-<button type="submit" class="button">Login</button>
-</form>
-<div id="loginMessage" class="message" style="display:none;"></div>
-</div>
-<div id="signupSection" class="section">
-<h2>Daftar Akun Baru</h2>
-<form id="signupForm">
-<div class="form-group">
-<label for="namaLengkap">Nama Lengkap:</label>
-<input type="text" id="namaLengkap" name="namaLengkap" required>
-</div>
-<div class="form-group">
-<label for="alamatLengkap">Alamat Lengkap:</label>
-<textarea id="alamatLengkap" name="alamatLengkap" rows="3" required></textarea>
-</div>
-<div class="form-group">
-<label for="nomorHP">Nomor HP:</label>
-<input type="text" id="nomorHP" name="nomorHP" value="62" required oninput="ensureCountryCode(this)">
-</div>
-<div class="form-group">
-<label for="username">Username:</label>
-<input type="text" id="username" name="username" required>
-</div>
-<div class="form-group">
-<label for="tentangSaya">Tentang Saya (Opsional):</label>
-<textarea id="tentangSaya" name="tentangSaya" rows="3"></textarea>
-</div>
-<div class="form-group">
-<label for="password">Password:</label>
-<input type="password" id="password" name="password" required>
-</div>
-<button type="submit" class="button">Daftar</button>
-</form>
-<div id="signupMessage" class="message" style="display:none;"></div>
-</div>
-<div id="profileSection" class="section">
-<h2>Profil Pengguna</h2>
-<div id="profileData" class="profile-data">
-<p><strong>ID:</strong> <span id="profileCustID"></span></p>
-<p><strong>Nama Lengkap:</strong> <span id="profileNamaLengkap"></span></p>
-<p><strong>Alamat Lengkap:</strong> <span id="profileAlamatLengkap"></span></p>
-<p><strong>Nomor HP:</strong> <span id="profileNomorHP"></span></p>
-<p><strong>Username:</strong> <span id="profileUsername"></span></p>
-<p><strong>Tentang Saya:</strong> <span id="profileTentangSaya"></span></p>
-<p><strong>Saldo:</strong> <span id="profileSaldo"></span></p>
-<p><strong>Tanggal Daftar:</strong> <span id="profileTanggalDaftar"></span></p>
-<button id="editProfileButton" class="button">Edit Profil</button>
-<button id="kebijakanButton" class="button">Kebijakan</button>
-</div>
-<div id="profileMessage" class="message" style="display:none;"></div>
-</div>
-<div id="editProfileSection" class="section">
-<h2>Edit Profil</h2>
-<form id="editProfileForm">
-<input type="hidden" id="editProfileCustomerID" name="customerID">
-<div class="form-group">
-<label for="editNamaLengkap">Nama Lengkap:</label>
-<input type="text" id="editNamaLengkap" name="namaLengkap" required>
-</div>
-<div class="form-group">
-<label for="editAlamatLengkap">Alamat Lengkap:</label>
-<textarea id="editAlamatLengkap" name="alamatLengkap" rows="3" required></textarea>
-</div>
-<div class="form-group">
-<label for="editNomorHP">Nomor HP:</label>
-<input type="text" id="editNomorHP" name="nomorHP" required>
-</div>
-<div class="form-group">
-<label for="editPassword">Password (kosongkan jika tidak ingin diubah):</label>
-<input type="password" id="editPassword" name="password">
-</div>
-<div class="form-group">
-<label for="editTentangSaya">Tentang Saya (Opsional):</label>
-<textarea id="editTentangSaya" name="tentangSaya" rows="3"></textarea>
-</div>
-<button type="submit" class="button">Simpan Perubahan</button>
-</form>
-<div id="editProfileMessage" class="message" style="display:none;"></div>
+    <h2>Login ke Akun Anda</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="password" required>
+        </div>
+        <button type="submit" class="button">Login</button>
+    </form>
+    <div id="loginMessage" class="message"></div>
 </div>
 
-<div id="kebijakanSection" class="section">
-    <h2>Kebijakan</h2>
-    <p>Ini adalah halaman kebijakan kami. Di sini Anda dapat menemukan informasi tentang privasi, pengembalian dana, dan syarat layanan kami.</p>
-    <ul>
-        <li><strong>Kebijakan Privasi:</strong> Kami menghargai privasi Anda. Data pribadi Anda akan dijaga kerahasiaannya dan tidak akan dibagikan kepada pihak ketiga.</li>
-        <li><strong>Kebijakan Pengembalian Dana:</strong> Pengembalian dana dapat diajukan dalam waktu 7 hari setelah pembelian, dengan syarat dan ketentuan berlaku.</li>
-        <li><strong>Syarat Layanan:</strong> Dengan menggunakan layanan kami, Anda setuju untuk mematuhi semua syarat dan ketentuan yang ditetapkan.</li>
-    </ul>
-    <p>Untuk informasi lebih lanjut, silakan hubungi admin kami.</p>
+<div id="signupSection" class="section">
+    <h2>Daftar Akun Baru</h2>
+    <form id="signupForm">
+        <div class="form-group">
+            <label for="namaLengkap">Nama Lengkap:</label>
+            <input type="text" id="namaLengkap" name="namaLengkap" required>
+        </div>
+        <div class="form-group">
+            <label for="alamatLengkap">Alamat Lengkap:</label>
+            <textarea id="alamatLengkap" name="alamatLengkap" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="nomorHP">Nomor HP:</label>
+            <input type="text" id="nomorHP" name="nomorHP" value="62" required oninput="ensureCountryCode(this)">
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="tentangSaya">Tentang Saya (Opsional):</label>
+            <textarea id="tentangSaya" name="tentangSaya" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="button">Daftar</button>
+    </form>
+    <div id="signupMessage" class="message"></div>
+</div>
+
+<div id="profileSection" class="section">
+    <h2>Profil Pengguna</h2>
+    <div id="profileData" class="profile-data">
+        <p><strong>Customers ID:</strong> <span id="profileCustID"></span></p>
+        <p><strong>Nama Lengkap:</strong> <span id="profileNamaLengkap"></span></p>
+        <p><strong>Alamat Lengkap:</strong> <span id="profileAlamatLengkap"></span></p>
+        <p><strong>Nomor HP:</strong> <span id="profileNomorHP"></span></p>
+        <p><strong>Username:</strong> <span id="profileUsername"></span></p>
+        <p><strong>Tentang Saya:</strong> <span id="profileTentangSaya"></span></p>
+        <p><strong>Saldo:</strong> <span id="profileSaldo"></span></p>
+        <p><strong>Tanggal Daftar:</strong> <span id="profileTanggalDaftar"></span></p>
+        <button id="editProfileButton" class="button" style="display:none;">Edit Profil</button>
+    </div>
+    <div id="profileMessage" class="message"></div>
+</div>
+
+<div id="editProfileSection" class="section">
+    <h2>Edit Profil</h2>
+    <form id="editProfileForm">
+        <input type="hidden" id="editProfileCustomerID" name="customerID">
+        <div class="form-group">
+            <label for="editNamaLengkap">Nama Lengkap:</label>
+            <input type="text" id="editNamaLengkap" name="namaLengkap" required>
+        </div>
+        <div class="form-group">
+            <label for="editAlamatLengkap">Alamat Lengkap:</label>
+            <textarea id="editAlamatLengkap" name="alamatLengkap" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="editNomorHP">Nomor HP:</label>
+            <input type="text" id="editNomorHP" name="nomorHP" required>
+        </div>
+        <div class="form-group">
+            <label for="editPassword">Password (kosongkan jika tidak ingin diubah):</label>
+            <input type="password" id="editPassword" name="password">
+        </div>
+        <div class="form-group">
+            <label for="editTentangSaya">Tentang Saya (Opsional):</label>
+            <textarea id="editTentangSaya" name="tentangSaya" rows="3"></textarea>
+        </div>
+        <button type="submit" class="button">Simpan Perubahan</button>
+    </form>
+    <div id="editProfileMessage" class="message"></div>
 </div>
 
 <div id="orderHistorySection" class="section">
-<h2>Riwayat Pesanan</h2>
-<div id="orderHistoryList">
-<p id="noOrderHistoryMessage" style="display:none;">Tidak ada riwayat pesanan.</p>
+    <h2>Riwayat Pesanan</h2>
+    <div id="orderHistoryList">
+        <p id="noOrderHistoryMessage" style="display:none;">Tidak ada riwayat pesanan.</p>
+    </div>
+    <div id="orderHistoryMessage" class="message"></div>
 </div>
-<div id="orderHistoryMessage" class="message" style="display:none;"></div>
-</div>
+
 <div id="depositSection" class="section">
-<h2>Top Up Saldo</h2>
-<form id="depositForm">
-<div class="form-group">
-<label for="depNamaPelanggan">Nama Pelanggan:</label>
-<input type="text" id="depNamaPelanggan" name="namaPelanggan" required>
+    <h2>Deposit Saldo</h2>
+    <form id="depositForm">
+        <div class="form-group">
+            <label for="depNamaPelanggan">Nama Pelanggan:</label>
+            <input type="text" id="depNamaPelanggan" name="namaPelanggan" required>
+        </div>
+        <div class="form-group">
+            <label for="depNomorHP">Nomor HP:</label>
+            <input type="text" id="depNomorHP" name="nomorHP" required>
+        </div>
+        <div class="form-group">
+            <label for="jumlahDeposit">Jumlah Deposit:</label>
+            <input type="number" id="jumlahDeposit" name="jumlahDeposit" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="metodePembayaranDep">Metode Pembayaran:</label>
+            <select id="metodePembayaranDep" name="metodePembayaran" required>
+                <option value="">Pilih Metode</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="E-Wallet">E-Wallet</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="buktiTransferFile">Kirim Foto Bukti Transfer:</label>
+            <input type="file" id="buktiTransferFile" name="buktiTransferFile" accept="image/*" required>
+        </div>
+        <button type="submit" class="button">Ajukan Deposit</button>
+    </form>
+    <div class="payment-images">
+        <img src="http://nasukafoods.site/image/qris.jpg">
+        <img src="http://nasukafoods.site/image/bri.jpg"
+    </div>
+    <div id="depositMessage" class="message"></div>
 </div>
-<div class="form-group">
-<label for="depNomorHP">Nomor HP:</label>
-<input type="text" id="depNomorHP" name="nomorHP" required>
-</div>
-<div class="form-group">
-<label for="jumlahDeposit">Jumlah Deposit:</label>
-<input type="number" id="jumlahDeposit" name="jumlahDeposit" min="1" required>
-</div>
-<div class="form-group">
-<label for="metodePembayaranDep">Metode Pembayaran:</label>
-<select id="metodePembayaranDep" name="metodePembayaran" required>
-<option value="">Pilih Metode</option>
-<option value="Bank Transfer">Bank Transfer</option>
-<option value="E-Wallet">QRIS</option>
 
-</select>
-</div>
-<div class="form-group">
-<label for="buktiTransferFile">Kirim Foto Bukti Transfer:</label>
-<input type="file" id="buktiTransferFile" name="buktiTransferFile" accept="image/*" required>
-</div>
-<button type="submit" class="button">Ajukan Deposit</button>
-</form>
-<div id="depositMessage" class="message" style="display:none;"></div>
-</div>
 <div id="orderSection" class="section">
-<h2>Detail Pesanan</h2>
-<div id="orderDetailSummary" class="order-detail-summary" style="display:none;">
-<p><strong>Tipe Pelanggan:</strong> <span id="summaryTipePelanggan"></span></p>
-<p><strong>Nama Lengkap:</strong> <span id="summaryNamaLengkap"></span></p>
-<p><strong>Nomor HP:</strong> <span id="summaryNomorHP"></span></p>
-<p><strong>Alamat Pengiriman:</strong> <span id="summaryAlamat"></span></p>
-<p><strong>Username:</strong> <span id="summaryUsername"></span></p>
-<p><strong>Produk:</strong> <span id="summaryProduk"></span></p>
-<p><strong>Kuantitas:</strong> <span id="summaryKuantitas"></span></p>
-<p><strong>Total Harga:</strong> <span id="summaryTotalHarga"></span></p>
-<p><strong>Sisa Saldo:</strong> <span id="summarySisaSaldo"></span></p>
-<p><strong>Catatan:</strong> <span id="summaryCatatan"></span></p>
-<p><strong>Metode Pembayaran:</strong> <span id="summaryMetodePembayaran"></span></p>
-<p><strong>Status Pesanan:</strong> <span id="summaryStatusPesanan"></span></p>
-<p><strong>Bonus:</strong> <span id="summaryBonus"></span></p>
+    <h2>Detail Pesanan</h2>
+    <div id="orderDetailSummary" class="order-detail-summary" style="display:none;">
+        <p><strong>Tipe Pelanggan:</strong> <span id="summaryTipePelanggan"></span></p>
+        <p><strong>Nama Lengkap:</strong> <span id="summaryNamaLengkap"></span></p>
+        <p><strong>Nomor HP:</strong> <span id="summaryNomorHP"></span></p>
+        <p><strong>Alamat Pengiriman:</strong> <span id="summaryAlamat"></span></p>
+        <p><strong>Username:</strong> <span id="summaryUsername"></span></p>
+        <p><strong>Produk:</strong> <span id="summaryProduk"></span></p>
+        <p><strong>Kuantitas:</strong> <span id="summaryKuantitas"></span></p>
+        <p><strong>Total Harga:</strong> <span id="summaryTotalHarga"></span></p>
+        <p><strong>Sisa Saldo:</strong> <span id="summarySisaSaldo"></span></p>
+        
+      
+        <p><strong>Catatan:</strong> <span id="summaryCatatan"></span></p>
+        
+        <p><strong>Metode Pembayaran:</strong> <span id="summaryMetodePembayaran"></span></p>
+        <p><strong>Status Pesanan:</strong> <span id="summaryStatusPesanan"></span></p>
+        <p><strong>Bonus:</strong> <span id="summaryBonus"></span></p>
+    </div>
+    <form id="orderForm">
+        <div class="form-group hidden-for-member" id="formGroupNomorHP">
+            <label for="ordNomorHP">Nomor HP Pelanggan:</label>
+            <input type="text" id="ordNomorHP" name="nomorHP">
+        </div>
+        <div class="form-group hidden-for-member" id="formGroupAlamat">
+            <label for="ordAlamat">Alamat Pengiriman:</label>
+            <textarea id="ordAlamat" name="alamat" rows="3"></textarea>
+        </div>
+        <div class="form-group hidden-for-member" id="formGroupUsername">
+            <label for="ordUsername">Username (Opsional):</label>
+            <input type="text" id="ordUsername" name="username">
+        </div>
+        <div class="form-group member-readonly" id="formGroupProduk">
+            <label for="produk">Produk:</label>
+            <input type="text" id="produk" name="produk" required>
+        </div>
+        <div class="form-group member-readonly" id="formGroupKuantitas">
+            <label for="kuantitas">Kuantitas:</label>
+            <input type="number" id="kuantitas" name="kuantitas" min="1" value="1" required>
+        </div>
+        <div class="form-group member-readonly" id="formGroupTotalHarga">
+            <label for="totalHarga">Total Harga:</label>
+            <input type="number" id="totalHarga" name="totalHarga" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="catatan">Catatan (Opsional):</label>
+            <textarea id="catatan" name="catatan" rows="3"></textarea>
+        </div>
+        <div class="payment-images">
+            <img src="http://nasukafoods.site/image/qris.jpg" alt="QRIS Payment">
+            <img src="http://nasukafoods.site/image/bri.jpg" alt="Bank BRI Payment">
+        </div>
+        <div class="form-group" id="formGroupMetodePembayaranOrd">
+            <label for="metodePembayaranOrd">Metode Pembayaran:</label>
+            <select id="metodePembayaranOrd" name="metodePembayaran" required>
+                <option value="">Pilih Metode</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="E-Wallet">E-Wallet</option>
+                <option value="Saldo Akun">Saldo Akun</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
+            </select>
+        </div>
+        <div class="form-group" id="formGroupBuktiPembayaran" style="display:none;">
+            <label for="buktiPembayaranFile">Kirim Foto Bukti Pembayaran:</label>
+            <input type="file" id="buktiPembayaranFile" name="buktiPembayaranFile" accept="image/*">
+        </div>
+        <div class="form-group hidden-field" id="formGroupStatusPesanan">
+            <label for="statusPesanan">Status Pesanan:</label>
+            <select id="statusPesanan" name="statusPesanan">
+                <option value="Pending">Pending</option>
+                <option value="Diproses">Diproses</option>
+                <option value="Dikirim">Dikirim</option>
+                <option value="Selesai">Selesai</option>
+                <option value="Dibatalkan">Dibatalkan</option>
+            </select>
+        </div>
+        <div class="form-group hidden-field" id="formGroupBonus">
+            <label for="bonus">Bonus (Opsional):</label>
+            <input type="text" id="bonus" name="bonus">
+        </div>
+        <button type="submit" class="button">Bayar Sekarang</button>
+    </form>
+    <div id="orderMessage" class="message"></div>
 </div>
-<form id="orderForm">
-<div class="form-group hidden-for-member" id="formGroupNomorHP">
-<label for="ordNomorHP">Nomor HP Pelanggan:</label>
-<input type="text" id="ordNomorHP" name="nomorHP">
-</div>
-<div class="form-group hidden-for-member" id="formGroupAlamat">
-<label for="ordAlamat">Alamat Pengiriman:</label>
-<textarea id="ordAlamat" name="alamat" rows="3"></textarea>
-</div>
-<div class="form-group hidden-for-member" id="formGroupUsername">
-<label for="ordUsername">Username (Opsional):</label>
-<input type="text" id="ordUsername" name="username">
-</div>
-<div class="form-group member-readonly" id="formGroupProduk">
-<label for="produk">Produk:</label>
-<input type="text" id="produk" name="produk" required>
-</div>
-<div class="form-group member-readonly" id="formGroupKuantitas">
-<label for="kuantitas">Kuantitas:</label>
-<input type="number" id="kuantitas" name="kuantitas" min="1" value="1" required>
-</div>
-<div class="form-group member-readonly" id="formGroupTotalHarga">
-<label for="totalHarga">Total Harga:</label>
-<input type="number" id="totalHarga" name="totalHarga" min="1" required>
-</div>
-<div class="form-group">
-<label for="catatan">Catatan (Opsional):</label>
-<textarea id="catatan" name="catatan" rows="3"></textarea>
-</div>
-<div class="form-group" id="formGroupMetodePembayaranOrd">
-<label for="metodePembayaranOrd">Metode Pembayaran:</label>
-<select id="metodePembayaranOrd" name="metodePembayaran" required>
-<option value="">Pilih Metode</option>
-<option value="Transfer Bank">Transfer Bank</option>
-<option value="E-Wallet">QRIS</option>
-<option value="Saldo">Saldo</option>
-<option value="Cash on Delivery">Bayar Ditempat</option>
-</select>
-</div>
-<div class="form-group" id="formGroupBuktiPembayaran" style="display:none;">
-<label for="buktiPembayaranFile">Kirim Foto Bukti Pembayaran:</label>
-<input type="file" id="buktiPembayaranFile" name="buktiPembayaranFile" accept="image/*">
-</div>
-<div class="form-group hidden-field" id="formGroupStatusPesanan">
-<label for="statusPesanan">Status Pesanan:</label>
-<select id="statusPesanan" name="statusPesanan">
-<option value="proses">Peroses</option>
-<option value="Diproses">Diproses</option>
-<option value="Dikirim">Dikirim</option>
-<option value="Selesai">Selesai</option>
-<option value="Dibatalkan">Dibatalkan</option>
-</select>
-</div>
-<div class="form-group hidden-field" id="formGroupBonus">
-<label for="bonus">Bonus (Opsional):</label>
-<input type="text" id="bonus" name="bonus">
-</div>
-<button type="submit" class="button" id="submitOrderButton">Bayar Sekarang</button>
-</form>
-<div id="orderMessage" class="message" style="display:none;"></div>
-</div>
-</div>
-
-<img src="URL_FOTO_GIF_ANDA" alt="Deskripsi GIF" style="width:100%; height:10%;">
 
 <script>
 const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
 const DRIVE_FOLDER_ID = '12x-IPybdd1h3JLjN-qEVDy9QHB1Or35A';
+
 let loggedInUser = null;
 
 function saveUserToLocalStorage(userData) {
@@ -977,7 +935,6 @@ function saveUserToLocalStorage(userData) {
     loggedInUser = userData;
     updateWelcomeMessage();
     updateNavigationButtons();
-    updateOrderFormVisibility();
 }
 
 function loadUserFromLocalStorage() {
@@ -995,7 +952,6 @@ function removeUserFromLocalStorage() {
     loggedInUser = null;
     updateWelcomeMessage();
     updateNavigationButtons();
-    updateOrderFormVisibility();
 }
 
 function updateWelcomeMessage() {
@@ -1013,17 +969,23 @@ function showSection(sectionId) {
         section.classList.remove('active');
     });
     document.getElementById(sectionId + 'Section').classList.add('active');
-
-    document.querySelectorAll('.message').forEach(msg => msg.style.display = 'none');
+    document.querySelectorAll('.message').forEach(msg => {
+        msg.style.display = 'none';
+        msg.classList.remove('success', 'error');
+        msg.innerText = '';
+    });
 
     if (sectionId === 'profile') {
         if (loggedInUser) {
             displayProfile();
+            document.getElementById('editProfileButton').style.display = 'block';
         } else {
-            document.getElementById('profileMessage').classList.add('error');
-            document.getElementById('profileMessage').innerText = 'Anda harus login untuk melihat profil.';
-            document.getElementById('profileMessage').style.display = 'block';
+            const profileMessage = document.getElementById('profileMessage');
+            profileMessage.classList.add('error');
+            profileMessage.innerText = 'Anda harus login untuk melihat profil.';
+            profileMessage.style.display = 'block';
             document.getElementById('profileData').style.display = 'none';
+            document.getElementById('editProfileButton').style.display = 'none';
         }
     } else if (sectionId === 'editProfile') {
         if (loggedInUser) {
@@ -1035,9 +997,10 @@ function showSection(sectionId) {
         if (loggedInUser) {
             loadOrderHistory(loggedInUser['Nomor HP']);
         } else {
-            document.getElementById('orderHistoryMessage').classList.add('error');
-            document.getElementById('orderHistoryMessage').innerText = 'Anda harus login untuk melihat riwayat pesanan.';
-            document.getElementById('orderHistoryMessage').style.display = 'block';
+            const orderHistoryMessage = document.getElementById('orderHistoryMessage');
+            orderHistoryMessage.classList.add('error');
+            orderHistoryMessage.innerText = 'Anda harus login untuk melihat riwayat pesanan.';
+            orderHistoryMessage.style.display = 'block';
             document.getElementById('orderHistoryList').innerHTML = '';
             document.getElementById('noOrderHistoryMessage').style.display = 'none';
         }
@@ -1061,36 +1024,12 @@ function updateOrderFormVisibility() {
         document.getElementById('ordAlamat').setAttribute('required', 'required');
         document.getElementById('ordUsername').removeAttribute('required');
     }
+    document.getElementById('formGroupProduk').style.display = 'block';
+    document.getElementById('formGroupKuantitas').style.display = 'block';
+    document.getElementById('formGroupTotalHarga').style.display = 'block';
 
-    const memberHiddenFields = ['formGroupProduk', 'formGroupKuantitas', 'formGroupTotalHarga', 'formGroupStatusPesanan', 'formGroupBonus'];
-    memberHiddenFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        const inputElement = field.querySelector('input, textarea, select');
-        if (isMember) {
-            field.style.display = 'none';
-            if (inputElement) {
-                inputElement.readOnly = true;
-                inputElement.disabled = true;
-            }
-        } else {
-            if (fieldId === 'formGroupProduk' || fieldId === 'formGroupKuantitas' || fieldId === 'formGroupTotalHarga') {
-                field.style.display = 'block';
-            } else {
-                field.style.display = 'none';
-            }
-            if (inputElement) {
-                inputElement.readOnly = false;
-                inputElement.disabled = false;
-            }
-        }
-    });
-
-    const navOrderButton = document.getElementById('navOrder');
-    if (isMember) {
-        navOrderButton.style.display = 'none'; // Sembunyikan tombol Order untuk member
-    } else {
-        navOrderButton.style.display = 'inline-block';
-    }
+    document.getElementById('formGroupStatusPesanan').style.display = 'none';
+    document.getElementById('formGroupBonus').style.display = 'none';
 
     document.getElementById('orderDetailSummary').style.display = isMember ? 'block' : 'none';
     if (isMember) {
@@ -1101,6 +1040,8 @@ function updateOrderFormVisibility() {
         document.getElementById('summaryUsername').innerText = loggedInUser['Username'] || '-';
         document.getElementById('summarySisaSaldo').innerText = loggedInUser['Saldo'] !== undefined ? `Rp ${parseFloat(loggedInUser['Saldo']).toLocaleString('id-ID')}` : '-';
     } else {
+        document.getElementById('summaryTipePelanggan').innerText = 'N/A';
+        document.getElementById('summaryNamaLengkap').innerText = 'N/A';
         document.getElementById('summarySisaSaldo').innerText = 'N/A';
     }
 
@@ -1108,304 +1049,178 @@ function updateOrderFormVisibility() {
     const buktiPembayaranGroup = document.getElementById('formGroupBuktiPembayaran');
     const buktiPembayaranFile = document.getElementById('buktiPembayaranFile');
 
-    if (metodePembayaranOrd === 'Saldo') {
+    if (metodePembayaranOrd === 'Saldo Akun') {
         buktiPembayaranGroup.style.display = 'none';
         buktiPembayaranFile.removeAttribute('required');
-    } else if (metodePembayaranOrd !== '') {
+    } else if (metodePembayaranOrd !== '' && metodePembayaranOrd !== 'Cash on Delivery') {
         buktiPembayaranGroup.style.display = 'block';
         buktiPembayaranFile.setAttribute('required', 'required');
-    } else { 
+    } else {
         buktiPembayaranGroup.style.display = 'none';
         buktiPembayaranFile.removeAttribute('required');
     }
 }
-
 
 async function submitForm(formId, actionType, messageId) {
     const form = document.getElementById(formId);
     const messageDiv = document.getElementById(messageId);
     messageDiv.style.display = 'none';
-    messageDiv.className = 'message';
+    messageDiv.classList.remove('success', 'error');
+    messageDiv.innerText = '';
 
-    let requestBody;
+    let requestBody = new FormData(form);
+    requestBody.append('action', actionType);
 
-    if (actionType === 'login') {
-        const usernameValue = document.getElementById('loginUsername').value;
-        const passwordValue = document.getElementById('loginPassword').value;
+    let fileInput;
+    let fileParamName;
 
-        requestBody = new FormData();
-        requestBody.append('action', 'login');
-        requestBody.append('username', usernameValue);
-        requestBody.append('password', passwordValue);
-
-        try {
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                body: requestBody
-            });
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                messageDiv.classList.add('success');
-                messageDiv.innerText = result.message;
-                saveUserToLocalStorage(result.data);
-                updateNavigationButtons();
-                showSection('home');
-            } else {
-                messageDiv.classList.add('error');
-                messageDiv.innerText = result.message;
-            }
-            messageDiv.style.display = 'block';
-        } catch (error) {
-            messageDiv.classList.add('error');
-            messageDiv.innerText = 'Terjadi kesalahan: ' + error.message;
-            messageDiv.style.display = 'block';
+    if (actionType === 'deposit') {
+        fileInput = document.getElementById('buktiTransferFile');
+        fileParamName = 'buktiTransfer';
+    } else if (actionType === 'order') {
+        const metodePembayaran = document.getElementById('metodePembayaranOrd').value;
+        if (metodePembayaran !== 'Saldo Akun' && metodePembayaran !== 'Cash on Delivery') {
+            fileInput = document.getElementById('buktiPembayaranFile');
+            fileParamName = 'buktiPembayaranFile';
         }
+    }
+
+    const file = fileInput ? fileInput.files[0] : null;
+
+    if (fileInput && fileInput.hasAttribute('required') && !file) {
+        messageDiv.classList.add('error');
+        messageDiv.innerText = 'Mohon unggah file yang diperlukan.';
+        messageDiv.style.display = 'block';
         return;
-    } else if (actionType === 'deposit' || actionType === 'order') {
-        requestBody = new FormData(form);
-        let fileInputId = '';
-        let fileParamName = '';
+    }
 
-        if (actionType === 'deposit') {
-            fileInputId = 'buktiTransferFile';
-            fileParamName = 'buktiTransfer';
-        } else { // actionType === 'order'
-            const metodePembayaran = document.getElementById('metodePembayaranOrd').value;
-            if (metodePembayaran === 'Saldo') {
-                // No file needed for Saldo
-            } else {
-                fileInputId = 'buktiPembayaranFile';
-                fileParamName = 'buktiPembayaranFile'; 
-            }
-        }
-        
-        const fileInput = document.getElementById(fileInputId);
-        const file = fileInput ? fileInput.files[0] : null;
-
-        if (fileInputId && !file && (actionType === 'deposit' || (actionType === 'order' && document.getElementById('metodePembayaranOrd').value !== 'Saldo'))) { // Only require file if fileInputId is set and file is not present, and it's not Saldo for order
+    if (file) {
+        const MAX_FILE_SIZE = 5 * 1024 * 1024;
+        if (file.size > MAX_FILE_SIZE) {
             messageDiv.classList.add('error');
-            messageDiv.innerText = 'Mohon unggah bukti yang diperlukan.';
+            messageDiv.innerText = 'Ukuran file terlalu besar. Maksimal 5MB.';
             messageDiv.style.display = 'block';
             return;
         }
 
-        if (file) {
-            const MAX_FILE_SIZE = 5 * 1024 * 1024; 
-            if (file.size > MAX_FILE_SIZE) {
-                messageDiv.classList.add('error');
-                messageDiv.innerText = 'Ukuran file terlalu besar. Maksimal 5MB.';
-                messageDiv.style.display = 'block';
-                return;
-            }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
 
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = async function() {
+        await new Promise((resolve, reject) => {
+            reader.onloadend = function() {
                 const base64data = reader.result.split(',')[1];
-                requestBody.append('action', actionType);
                 requestBody.append(fileParamName, base64data);
                 requestBody.append('fileName', file.name);
                 requestBody.append('mimeType', file.type);
-
-                if (actionType === 'order') {
-                    if (loggedInUser) {
-                        requestBody.set('tipePelanggan', 'Member');
-                        requestBody.set('nomorHP', loggedInUser['Nomor HP']);
-                        requestBody.set('alamat', loggedInUser['Alamat Lengkap'] || '');
-                        requestBody.set('username', loggedInUser['Username'] || '');
-                    } else {
-                        requestBody.set('tipePelanggan', 'Tamu');
-                    }
-                    requestBody.set('produk', document.getElementById('produk').value);
-                    requestBody.set('kuantitas', document.getElementById('kuantitas').value);
-                    requestBody.set('totalHarga', document.getElementById('totalHarga').value);
-                    requestBody.set('statusPesanan', document.getElementById('statusPesanan').value || 'proses');
-                    requestBody.set('bonus', document.getElementById('bonus').value || '-');
-                }
-
-                try {
-                    const response = await fetch(GAS_URL, {
-                        method: 'POST',
-                        body: requestBody
-                    });
-                    const result = await response.json();
-
-                    if (result.status === 'success') {
-                        messageDiv.classList.add('success');
-                        messageDiv.innerText = result.message;
-                        form.reset();
-                        if (actionType === 'order' && document.getElementById('metodePembayaranOrd').value === 'Saldo' && loggedInUser) {
-                            const refreshFormData = new FormData();
-                            refreshFormData.append('action', 'refreshUserData');
-                            refreshFormData.append('customerID', loggedInUser['Customers ID']);
-                            const refreshResponse = await fetch(GAS_URL, {
-                                method: 'POST',
-                                body: refreshFormData
-                            });
-                            const refreshResult = await refreshResponse.json();
-                            if (refreshResult.status === 'success') {
-                                saveUserToLocalStorage(refreshResult.data);
-                                updateOrderFormVisibility();
-                            } else {
-                                console.error('Gagal memperbarui data user setelah order:', refreshResult.message);
-                            }
-                        }
-                    } else {
-                        messageDiv.classList.add('error');
-                        messageDiv.innerText = result.message;
-                    }
-                    messageDiv.style.display = 'block';
-                } catch (error) {
-                    messageDiv.classList.add('error');
-                    messageDiv.innerText = 'Terjadi kesalahan: ' + error.message;
-                    messageDiv.style.display = 'block';
-                }
+                resolve();
             };
             reader.onerror = function(error) {
                 messageDiv.classList.add('error');
                 messageDiv.innerText = 'Error membaca file: ' + error.message;
                 messageDiv.style.display = 'block';
+                reject(error);
             };
-            return; 
-        } else { 
-            requestBody.append('action', actionType);
-             if (actionType === 'order') {
-                if (loggedInUser) {
-                    requestBody.set('tipePelanggan', 'Member');
-                    requestBody.set('nomorHP', loggedInUser['Nomor HP']);
-                    requestBody.set('alamat', loggedInUser['Alamat Lengkap'] || '');
-                    requestBody.set('username', loggedInUser['Username'] || '');
-                } else {
-                    requestBody.set('tipePelanggan', 'Tamu');
-                }
-                requestBody.set('produk', document.getElementById('produk').value);
-                requestBody.set('kuantitas', document.getElementById('kuantitas').value);
-                requestBody.set('totalHarga', document.getElementById('totalHarga').value);
-                requestBody.set('statusPesanan', document.getElementById('statusPesanan').value || 'proses');
-                requestBody.set('bonus', document.getElementById('bonus').value || '-');
-             }
+        });
+    }
 
-            try {
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: requestBody
-                });
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    messageDiv.classList.add('success');
-                    messageDiv.innerText = result.message;
-                    form.reset();
-                    if (actionType === 'signup') {
-                        form.reset();
-                        showSection('login');
-                    } else if (actionType === 'updateProfile' || (actionType === 'order' && document.getElementById('metodePembayaranOrd').value === 'Saldo')) {
-                        if (loggedInUser) { // Only refresh if user is logged in
-                            const refreshFormData = new FormData();
-                            refreshFormData.append('action', 'refreshUserData');
-                            refreshFormData.append('customerID', loggedInUser['Customers ID']);
-                            const refreshResponse = await fetch(GAS_URL, {
-                                method: 'POST',
-                                body: refreshFormData
-                            });
-                            const refreshResult = await refreshResponse.json();
-                            if (refreshResult.status === 'success') {
-                                saveUserToLocalStorage(refreshResult.data);
-                                if (actionType === 'updateProfile') {
-                                    displayProfile();
-                                    showSection('profile');
-                                } else if (actionType === 'order') {
-                                    updateOrderFormVisibility();
-                                }
-                            } else {
-                                console.error('Gagal memperbarui data user setelah aksi:', refreshResult.message);
-                                alert('Profil berhasil diperbarui, namun ada masalah dalam memuat data terbaru. Silakan refresh halaman.');
-                            }
-                        }
-                    }
-                    if (actionType === 'order') {
-                         document.getElementById('summaryProduk').innerText = '';
-                         document.getElementById('summaryKuantitas').innerText = '';
-                         document.getElementById('summaryTotalHarga').innerText = '';
-                         document.getElementById('summaryCatatan').innerText = '';
-                         document.getElementById('summaryMetodePembayaran').innerText = '';
-                         document.getElementById('summaryStatusPesanan').innerText = '';
-                         document.getElementById('summaryBonus').innerText = '';
-                         document.getElementById('metodePembayaranOrd').value = '';
-                         document.getElementById('buktiPembayaranFile').value = '';
-                         updateOrderFormVisibility();
-                    }
-                } else {
-                    messageDiv.classList.add('error');
-                    messageDiv.innerText = result.message;
-                }
-                messageDiv.style.display = 'block';
-            } catch (error) {
-                    messageDiv.classList.add('error');
-                    messageDiv.innerText = 'Terjadi kesalahan: ' + error.message;
-                    messageDiv.style.display = 'block';
-            }
+    if (actionType === 'order') {
+        if (loggedInUser) {
+            requestBody.set('tipePelanggan', 'Member');
+            requestBody.set('nomorHP', loggedInUser['Nomor HP']);
+            requestBody.set('alamat', loggedInUser['Alamat Lengkap'] || '');
+            requestBody.set('username', loggedInUser['Username'] || '');
+        } else {
+            requestBody.set('tipePelanggan', 'Tamu');
         }
+        requestBody.set('produk', document.getElementById('produk').value);
+        requestBody.set('kuantitas', document.getElementById('kuantitas').value);
+        requestBody.set('totalHarga', document.getElementById('totalHarga').value);
+        requestBody.set('statusPesanan', document.getElementById('statusPesanan').value || 'Pending');
+        requestBody.set('bonus', document.getElementById('bonus').value || '-');
+    }
 
-        return;
-    } else {
-        requestBody = new FormData(form);
-        requestBody.append('action', actionType);
+    console.log('Sending request for action:', actionType);
+    for (let pair of requestBody.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
 
-        try {
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                body: requestBody
-            });
-            const result = await response.json();
+    try {
+        const response = await fetch(GAS_URL, {
+            method: 'POST',
+            body: requestBody
+        });
+        const result = await response.json();
 
-            if (result.status === 'success') {
-                messageDiv.classList.add('success');
-                messageDiv.innerText = result.message;
-                if (actionType === 'signup') {
-                    form.reset();
-                    showSection('login');
-                } else if (actionType === 'updateProfile') {
-                    if (loggedInUser) { // Only refresh if user is logged in
-                        const refreshFormData = new FormData();
-                        refreshFormData.append('action', 'refreshUserData');
-                        refreshFormData.append('customerID', loggedInUser['Customers ID']);
-                        const refreshResponse = await fetch(GAS_URL, {
-                            method: 'POST',
-                            body: refreshFormData
-                        });
-                        const refreshResult = await refreshResponse.json();
-                        if (refreshResult.status === 'success') {
-                            saveUserToLocalStorage(refreshResult.data);
+        if (result.status === 'success') {
+            messageDiv.classList.add('success');
+            messageDiv.innerText = result.message;
+            form.reset();
+
+            if (actionType === 'login') {
+                saveUserToLocalStorage(result.data);
+                updateNavigationButtons();
+                showSection('home');
+            } else if (actionType === 'signup') {
+                showSection('login');
+            } else if (actionType === 'updateProfile' || (actionType === 'order' && document.getElementById('metodePembayaranOrd').value === 'Saldo Akun')) {
+                if (loggedInUser) {
+                    const refreshFormData = new FormData();
+                    refreshFormData.append('action', 'refreshUserData');
+                    refreshFormData.append('customerID', loggedInUser['Customers ID']);
+                    const refreshResponse = await fetch(GAS_URL, {
+                        method: 'POST',
+                        body: refreshFormData
+                    });
+                    const refreshResult = await refreshResponse.json();
+                    if (refreshResult.status === 'success') {
+                        saveUserToLocalStorage(refreshResult.data);
+                        if (actionType === 'updateProfile') {
                             displayProfile();
                             showSection('profile');
-                        } else {
-                            console.error('Gagal memperbarui data user setelah aksi:', refreshResult.message);
-                            alert('Profil berhasil diperbarui, namun ada masalah dalam memuat data terbaru. Silakan refresh halaman.');
+                        } else if (actionType === 'order') {
+                            updateOrderFormVisibility();
                         }
+                    } else {
+                        console.error('Gagal memperbarui data user setelah aksi:', refreshResult.message);
+                        alert('Profil berhasil diperbarui/Saldo terpotong, namun ada masalah dalam memuat data terbaru. Silakan refresh halaman.');
                     }
                 }
-            } else {
-                messageDiv.classList.add('error');
-                messageDiv.innerText = result.message;
             }
-            messageDiv.style.display = 'block';
-        } catch (error) {
+
+            if (actionType === 'order') {
+                document.getElementById('summaryProduk').innerText = '';
+                document.getElementById('summaryKuantitas').innerText = '';
+                document.getElementById('summaryTotalHarga').innerText = '';
+                document.getElementById('summaryCatatan').innerText = '';
+                document.getElementById('summaryMetodePembayaran').innerText = '';
+                document.getElementById('summaryStatusPesanan').innerText = '';
+                document.getElementById('summaryBonus').innerText = '';
+                document.getElementById('metodePembayaranOrd').value = '';
+                document.getElementById('buktiPembayaranFile').value = '';
+                updateOrderFormVisibility();
+            }
+
+        } else {
             messageDiv.classList.add('error');
-            messageDiv.innerText = 'Terjadi kesalahan: ' + error.message;
-            messageDiv.style.display = 'block';
+            messageDiv.innerText = result.message;
         }
+        messageDiv.style.display = 'block';
+    } catch (error) {
+        messageDiv.classList.add('error');
+        messageDiv.innerText = 'Terjadi kesalahan jaringan atau server: ' + error.message;
+        messageDiv.style.display = 'block';
+        console.error('Fetch error:', error);
     }
 }
-
 
 async function loadOrderHistory(nomorHP) {
     const orderHistoryListDiv = document.getElementById('orderHistoryList');
     const orderHistoryMessageDiv = document.getElementById('orderHistoryMessage');
     const noOrderHistoryMessage = document.getElementById('noOrderHistoryMessage');
+
     orderHistoryListDiv.innerHTML = '';
     orderHistoryMessageDiv.style.display = 'none';
+    orderHistoryMessageDiv.classList.remove('success', 'error');
     noOrderHistoryMessage.style.display = 'none';
 
     const formData = new FormData();
@@ -1424,20 +1239,20 @@ async function loadOrderHistory(nomorHP) {
                 const orderItemDiv = document.createElement('div');
                 orderItemDiv.classList.add('order-item');
                 orderItemDiv.innerHTML = `
-<p><strong>Tanggal:</strong> ${order['Tanggal'] || '-'}</p>
-<p><strong>Tipe Pelanggan:</strong> ${order['Tipe Pelanggan'] || '-'}</p>
-<p><strong>Nomor HP:</strong> ${order['Nomor HP'] || '-'}</p>
-<p><strong>Alamat:</strong> ${order['Alamat'] || '-'}</p>
-<p><strong>Username:</strong> ${order['Username'] || '-'}</p>
-<p><strong>Produk:</strong> ${order['Produk'] || '-'}</p>
-<p><strong>Kuantitas:</strong> ${order['Kuantitas'] !== undefined ? order['Kuantitas'] : '-'}</p>
-<p><strong>Total Harga:</strong> Rp ${order['Total Harga'] !== undefined ? parseFloat(order['Total Harga']).toLocaleString('id-ID') : '-'}</p>
-<p><strong>Catatan:</strong> ${order['Catatan'] || '-'}</p>
-<p><strong>Metode Pembayaran:</strong> ${order['Metode Pembayaran'] || '-'}</p>
-<p><strong>Bukti Pembayaran:</strong> ${order['Bukti Pembayaran'] ? `<a href="${order['Bukti Pembayaran']}" target="_blank">Lihat Bukti</a>` : '-'}</p>
-<p><strong>Status Pesanan:</strong> ${order['Status Pesanan'] || '-'}</p>
-<p><strong>Bonus:</strong> ${order['Bonus'] || '-'}</p>
-`;
+                    <p><strong>Tanggal:</strong> ${order['Tanggal'] || '-'}</p>
+                    <p><strong>Tipe Pelanggan:</strong> ${order['Tipe Pelanggan'] || '-'}</p>
+                    <p><strong>Nomor HP:</strong> ${order['Nomor HP'] || '-'}</p>
+                    <p><strong>Alamat:</strong> ${order['Alamat'] || '-'}</p>
+                    <p><strong>Username:</strong> ${order['Username'] || '-'}</p>
+                    <p><strong>Produk:</strong> ${order['Produk'] || '-'}</p>
+                    <p><strong>Kuantitas:</strong> ${order['Kuantitas'] !== undefined ? order['Kuantitas'] : '-'}</p>
+                    <p><strong>Total Harga:</strong> Rp ${order['Total Harga'] !== undefined ? parseFloat(order['Total Harga']).toLocaleString('id-ID') : '-'}</p>
+                    <p><strong>Catatan:</strong> ${order['Catatan'] || '-'}</p>
+                    <p><strong>Metode Pembayaran:</strong> ${order['Metode Pembayaran'] || '-'}</p>
+                    <p><strong>Bukti Pembayaran:</strong> ${order['Bukti Pembayaran'] ? `<a href="${order['Bukti Pembayaran']}" target="_blank">Lihat Bukti</a>` : '-'}</p>
+                    <p><strong>Bukti:</strong> ${order['Status Pesanan'] || '-'}</p>
+                    <p><strong>Bonus:</strong> ${order['Bonus'] || '-'}</p>
+                `;
                 orderHistoryListDiv.appendChild(orderItemDiv);
             });
         } else if (result.status === 'success' && result.data.length === 0) {
@@ -1451,6 +1266,7 @@ async function loadOrderHistory(nomorHP) {
         orderHistoryMessageDiv.classList.add('error');
         orderHistoryMessageDiv.innerText = 'Terjadi kesalahan saat memuat riwayat pesanan: ' + error.message;
         orderHistoryMessageDiv.style.display = 'block';
+        console.error('Fetch error for order history:', error);
     }
 }
 
@@ -1466,21 +1282,18 @@ function displayProfile() {
         document.getElementById('profileTanggalDaftar').innerText = loggedInUser['Tanggal Daftar'] || '-';
         document.getElementById('profileData').style.display = 'block';
         document.getElementById('profileMessage').style.display = 'none';
-        document.getElementById('editProfileButton').style.display = 'block';
-        document.getElementById('kebijakanButton').style.display = 'block';
     } else {
-        document.getElementById('profileMessage').classList.add('error');
-        document.getElementById('profileMessage').innerText = 'Anda belum login.';
-        document.getElementById('profileMessage').style.display = 'block';
+        const profileMessage = document.getElementById('profileMessage');
+        profileMessage.classList.add('error');
+        profileMessage.innerText = 'Anda belum login.';
+        profileMessage.style.display = 'block';
         document.getElementById('profileData').style.display = 'none';
-        document.getElementById('editProfileButton').style.display = 'none';
-        document.getElementById('kebijakanButton').style.display = 'none';
     }
 }
 
 function populateEditProfileForm() {
     if (loggedInUser) {
-        document.getElementById('editProfileCustomerID').value = loggedInUser['Customers ID'];
+        document.getElementById('editProfileCustomerID').value = loggedInUser['Customers ID'] || '';
         document.getElementById('editNamaLengkap').value = loggedInUser['Nama Lengkap'] || '';
         document.getElementById('editAlamatLengkap').value = loggedInUser['Alamat Lengkap'] || '';
         document.getElementById('editNomorHP').value = loggedInUser['Nomor HP'] || '';
@@ -1494,12 +1307,8 @@ function updateNavigationButtons() {
     document.getElementById('navLogin').style.display = isLoggedIn ? 'none' : 'inline-block';
     document.getElementById('navSignup').style.display = isLoggedIn ? 'none' : 'inline-block';
     document.getElementById('navHome').style.display = 'inline-block';
-    
-    // Tombol Order hanya muncul jika bukan member
-    document.getElementById('navOrder').style.display = isLoggedIn ? 'none' : 'inline-block';
-
+    document.getElementById('navOrder').style.display = 'inline-block';
     document.getElementById('navProfile').style.display = isLoggedIn ? 'inline-block' : 'none';
-    document.getElementById('navKebijakan').style.display = isLoggedIn ? 'inline-block' : 'none';
     document.getElementById('navOrderHistory').style.display = isLoggedIn ? 'inline-block' : 'none';
     document.getElementById('navDeposit').style.display = isLoggedIn ? 'inline-block' : 'none';
     document.getElementById('navLogout').style.display = isLoggedIn ? 'inline-block' : 'none';
@@ -1558,12 +1367,7 @@ document.getElementById('editProfileButton').addEventListener('click', function(
     showSection('editProfile');
 });
 
-document.getElementById('kebijakanButton').addEventListener('click', function() {
-    showSection('kebijakan');
-});
-
-
-document.querySelectorAll('.buy-button, .buy-now-button').forEach(button => {
+document.querySelectorAll('.add-to-cart-button').forEach(button => {
     button.addEventListener('click', function() {
         const productName = this.dataset.productName;
         const productPrice = this.dataset.productPrice;
@@ -1572,7 +1376,7 @@ document.querySelectorAll('.buy-button, .buy-now-button').forEach(button => {
         document.getElementById('kuantitas').value = 1;
         document.getElementById('totalHarga').value = productPrice;
         document.getElementById('catatan').value = `Pembelian: ${productName}`;
-        document.getElementById('statusPesanan').value = 'proses';
+        document.getElementById('statusPesanan').value = 'Pending';
         document.getElementById('bonus').value = '';
         document.getElementById('metodePembayaranOrd').value = '';
         document.getElementById('buktiPembayaranFile').value = '';
@@ -1582,7 +1386,7 @@ document.querySelectorAll('.buy-button, .buy-now-button').forEach(button => {
         document.getElementById('summaryTotalHarga').innerText = `Rp ${parseFloat(productPrice).toLocaleString('id-ID')}`;
         document.getElementById('summaryCatatan').innerText = `Pembelian: ${productName}`;
         document.getElementById('summaryMetodePembayaran').innerText = 'Pilih Metode';
-        document.getElementById('summaryStatusPesanan').innerText = 'proses';
+        document.getElementById('summaryStatusPesanan').innerText = 'Pending';
         document.getElementById('summaryBonus').innerText = '-';
 
         if (loggedInUser) {
@@ -1599,7 +1403,7 @@ document.querySelectorAll('.buy-button, .buy-now-button').forEach(button => {
             document.getElementById('ordNomorHP').value = '';
             document.getElementById('ordAlamat').value = '';
             document.getElementById('ordUsername').value = '';
-            document.getElementById('summaryTipePelanggan').innerText = 'Tamu';
+            document.getElementById('summaryTipePelanggan').innerText = 'N/A';
             document.getElementById('summaryNamaLengkap').innerText = 'N/A';
             document.getElementById('summaryNomorHP').innerText = 'N/A';
             document.getElementById('summaryAlamat').innerText = 'N/A';
@@ -1608,7 +1412,7 @@ document.querySelectorAll('.buy-button, .buy-now-button').forEach(button => {
             alert('Silakan login atau masukkan Nomor HP dan Alamat Anda untuk melanjutkan pesanan.');
         }
         showSection('order');
-        updateOrderFormVisibility(); // Update visibility after setting product and user status
+        updateOrderFormVisibility();
     });
 });
 
