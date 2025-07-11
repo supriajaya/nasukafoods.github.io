@@ -144,7 +144,7 @@
       color: #ffbb00;
     }
 
-    /* Login Modal Styles */
+    /* Modal Styles (Login, Topup, & Profile) */
     .modal {
       display: none;
       position: fixed;
@@ -191,7 +191,7 @@
         margin-bottom: 8px;
         font-weight: bold;
     }
-    input[type="text"], input[type="password"] {
+    input[type="text"], input[type="password"], input[type="number"], select {
         width: 100%;
         padding: 12px;
         border: 1px solid #333;
@@ -235,6 +235,16 @@
     .register-link a {
         color: #ffbb00;
         text-decoration: none;
+    }
+
+    /* Profile specific styles */
+    .profile-info p {
+        margin: 10px 0;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #333;
+    }
+    .profile-info strong {
+        color: #ffbb00;
     }
   </style>
 </head>
@@ -312,10 +322,54 @@
     </div>
   </div>
 
+  <div id="topupModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeTopupModal()">&times;</span>
+      <h2 style="color: #ffbb00; text-align: center;">Top Up Saldo</h2>
+      <form id="modalTopupForm">
+        <div class="form-group">
+            <label for="topupAmount">Jumlah Deposit (Rp):</label>
+            <input type="number" id="topupAmount" name="JumlahDeposit" min="10000" required>
+        </div>
+        <div class="form-group">
+            <label for="paymentMethod">Metode Pembayaran:</label>
+            <select id="paymentMethod" name="MetodePembayaran" required>
+                <option value="">Pilih Metode</option>
+                <option value="Transfer Bank">Transfer Bank</option>
+                <option value="Dana">Dana</option>
+                <option value="GoPay">GoPay</option>
+            </select>
+        </div>
+        <button type="submit" id="modalTopupButton">Ajukan Top Up</button>
+      </form>
+      <div id="modalTopupStatus" class="status-message"></div>
+    </div>
+  </div>
+
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeProfileModal()">&times;</span>
+      <h2 style="color: #ffbb00; text-align: center;">Profil Pengguna</h2>
+      <div class="profile-info" id="profileInfoContent">
+        </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="logout()" style="width: auto; padding: 10px 20px; background-color: #dc3545;">Logout</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
 
     function addToCart(element) {
+      const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+      
+      if (!isLoggedIn) {
+        alert('Anda harus login terlebih dahulu untuk menambahkan produk ke keranjang.');
+        openLoginModal();
+        return;
+      }
+      
       const title = element.querySelector('.product-title').innerText;
       const price = element.querySelector('.product-price').innerText;
       const img = element.querySelector('.product-image').src;
@@ -331,6 +385,7 @@
       cart.push(product);
 
       localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${title} berhasil ditambahkan ke keranjang.`);
     }
 
     function updateUIBasedOnLoginStatus() {
@@ -351,13 +406,15 @@
                     userGreeting.textContent = user['Username'];
                 }
 
+                // Links for logged-in users
                 linksHTML = `
                     <a href="index.html">🏠<br>Home</a>
-                    <a href="topup.html">💰<br>Topup</a>
-                    <a href="#" onclick="logout()">🏃<br>Logout</a>
+                    <a href="#" onclick="openTopupModal()">💰<br>Topup</a>
+                    <a href="#" onclick="openProfileModal()">👮<br>Profil</a>
                     <a href="keranjang.html">🛒 <br>Keranjang</a>
                 `;
             } catch (e) {
+                // If userData is corrupt, log out and reset
                 localStorage.removeItem('userLoggedIn');
                 localStorage.removeItem('userData');
                 updateUIBasedOnLoginStatus(); 
@@ -365,7 +422,7 @@
             }
         } else {
             userGreeting.textContent = 'Proyek Apk'; 
-            // Ubah link Login ke fungsi yang membuka modal
+            // Links for non-logged-in users
             linksHTML = `
                 <a href="index.html">🏠<br>Home</a>
                 <a href="#" onclick="openLoginModal()">📥<br>Login</a>
@@ -380,10 +437,11 @@
     function logout() {
         localStorage.removeItem('userLoggedIn');
         localStorage.removeItem('userData');
+        localStorage.removeItem('cart'); // Clear cart on logout
         window.location.href = 'index.html'; 
     }
 
-    // Modal Functions
+    // --- Login Modal Functions ---
     const loginModal = document.getElementById('loginModal');
     const modalLoginForm = document.getElementById('modalLoginForm');
     const modalLoginButton = document.getElementById('modalLoginButton');
@@ -395,7 +453,7 @@
 
     function closeLoginModal() {
         loginModal.style.display = 'none';
-        modalStatusMessage.textContent = ''; // Clear status message on close
+        modalStatusMessage.textContent = ''; 
         modalLoginButton.textContent = 'Masuk';
         modalLoginButton.disabled = false;
         modalLoginForm.reset();
@@ -440,7 +498,8 @@
 
                 // Redirect or refresh UI after successful login
                 setTimeout(() => {
-                    window.location.href = 'index.html'; 
+                    closeLoginModal();
+                    updateUIBasedOnLoginStatus();
                 }, 500);
 
             } else {
@@ -456,6 +515,141 @@
             modalLoginButton.textContent = 'Masuk';
         }
     });
+
+    // --- Topup Modal Functions ---
+    const topupModal = document.getElementById('topupModal');
+    const modalTopupForm = document.getElementById('modalTopupForm');
+    const modalTopupButton = document.getElementById('modalTopupButton');
+    const modalTopupStatus = document.getElementById('modalTopupStatus');
+
+    function openTopupModal() {
+        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        if (!isLoggedIn) {
+            openLoginModal();
+            return;
+        }
+        topupModal.style.display = 'block';
+    }
+
+    function closeTopupModal() {
+        topupModal.style.display = 'none';
+        modalTopupStatus.textContent = '';
+        modalTopupButton.textContent = 'Ajukan Top Up';
+        modalTopupButton.disabled = false;
+        modalTopupForm.reset();
+    }
+
+    // Handle topup form submission
+    modalTopupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) {
+            modalTopupStatus.textContent = 'Sesi login berakhir. Silakan login kembali.';
+            modalTopupStatus.classList.add('error');
+            return;
+        }
+
+        modalTopupButton.disabled = true;
+        modalTopupButton.textContent = 'Mengirim Permintaan...';
+        modalTopupStatus.textContent = '';
+        modalTopupStatus.classList.remove('success', 'error');
+
+        const amount = document.getElementById('topupAmount').value;
+        const method = document.getElementById('paymentMethod').value;
+        const customerName = userData['Nama Lengkap'];
+        const customerPhone = userData['Nomor HP'];
+        
+        // Ensure data is available
+        if (!customerName || !customerPhone) {
+             modalTopupStatus.textContent = 'Data pengguna tidak lengkap. Silakan perbarui profil Anda.';
+             modalTopupStatus.classList.add('error');
+             modalTopupButton.disabled = false;
+             modalTopupButton.textContent = 'Ajukan Top Up';
+             return;
+        }
+
+        const payload = new URLSearchParams({
+            action: 'recordDeposit',
+            Tanggal: new Date().toISOString().slice(0, 10),
+            NamaPelanggan: customerName,
+            NomorHP: customerPhone,
+            JumlahDeposit: amount,
+            MetodePembayaran: method,
+            Status: 'Pending'
+        });
+
+        try {
+            const response = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: payload.toString(),
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                modalTopupStatus.textContent = 'Pengajuan top up berhasil. Silakan lakukan transfer.';
+                modalTopupStatus.classList.add('success');
+                // Optionally redirect or inform user to check status
+            } else {
+                modalTopupStatus.textContent = result.message || 'Gagal mengajukan top up.';
+                modalTopupStatus.classList.add('error');
+            }
+        } catch (error) {
+            modalTopupStatus.textContent = 'Terjadi kesalahan jaringan atau server.';
+            modalTopupStatus.classList.add('error');
+        } finally {
+            modalTopupButton.disabled = false;
+            modalTopupButton.textContent = 'Ajukan Top Up';
+        }
+    });
+
+    // --- Profile Modal Functions ---
+    const profileModal = document.getElementById('profileModal');
+    const profileInfoContent = document.getElementById('profileInfoContent');
+
+    function openProfileModal() {
+        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        if (!isLoggedIn) {
+            openLoginModal();
+            return;
+        }
+
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData) {
+            populateProfileInfo(userData);
+            profileModal.style.display = 'block';
+        } else {
+            // Handle case where user is technically logged in but userData is missing
+            alert('Gagal memuat data profil. Silakan coba login ulang.');
+            logout();
+        }
+    }
+
+    function closeProfileModal() {
+        profileModal.style.display = 'none';
+    }
+
+    function populateProfileInfo(user) {
+        let profileHTML = '';
+
+        // Displaying relevant profile fields based on stored sheet names (Customers)
+        profileHTML += `<p><strong>ID Pelanggan:</strong> ${user['Customers ID'] || '-'}</p>`;
+        profileHTML += `<p><strong>Nama Lengkap:</strong> ${user['Nama Lengkap'] || '-'}</p>`;
+        profileHTML += `<p><strong>Username:</strong> ${user['Username'] || '-'}</p>`;
+        profileHTML += `<p><strong>Nomor HP:</strong> ${user['Nomor HP'] || '-'}</p>`;
+        profileHTML += `<p><strong>Alamat:</strong> ${user['Alamat Lengkap'] || '-'}</p>`;
+        profileHTML += `<p><strong>Saldo:</strong> Rp ${user['Saldo'] || '0'}</p>`;
+        profileHTML += `<p><strong>Tentang Saya:</strong> ${user['Tentang Saya'] || '-'}</p>`;
+        profileHTML += `<p><strong>Tanggal Daftar:</strong> ${user['Tanggal Daftar'] || '-'}</p>`;
+
+        // Note: Password and Foto Profil are not displayed for security/UI reasons here
+
+        profileInfoContent.innerHTML = profileHTML;
+    }
 
     document.addEventListener('DOMContentLoaded', updateUIBasedOnLoginStatus);
   </script>
