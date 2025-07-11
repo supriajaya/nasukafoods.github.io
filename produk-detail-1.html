@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .product-gallery {
+            padding: 20px;
+            box-sizing: border-box;
+            border-right: 1px solid #eee;
+        }
+        .main-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .product-details {
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
+        .product-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        .price-section {
+            background-color: #f8f8f8;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .product-price {
+            font-size: 32px;
+            color: #ff5b00;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 16px;
+        }
+        .discount-badge {
+            background-color: #ff5b00;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+        .rating {
+            color: #ffc107;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .description-section {
+            margin-bottom: 30px;
+        }
+        .description-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .description-content {
+            line-height: 1.6;
+        }
+        .actions {
+            display: flex;
+            flex-direction: column; 
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-align: center; 
+        }
+        .btn-orange {
+            background-color: #ff5b00;
+            color: #fff;
+        }
+        .btn-orange:hover {
+            background-color: #e04a00;
+        }
+        .btn-white {
+            background-color: #fff;
+            color: #ff5b00;
+            border: 1px solid #ff5b00;
+        }
+        .btn-white:hover {
+            background-color: #fff7f2;
+        }
+        .seller-info {
+            background-color: #fafafa;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        .seller-name {
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+
+        /* --- Media Queries for Mobile Responsiveness --- */
+        @media (min-width: 768px) {
+            .container {
+                display: flex;
+                padding: 0 15px;
+            }
+            .product-gallery {
+                flex: 1;
+                border-right: 1px solid #eee;
+            }
+            .product-details {
+                flex: 2;
+                padding: 30px;
+            }
+            .actions {
+                flex-direction: row; 
+            }
+        }
+        @media (max-width: 767px) {
+            .container {
+                margin: 0;
+            }
+            .product-gallery {
+                border-right: none;
+            }
+            .product-details {
+                padding: 20px;
+            }
+            .actions .btn {
+                width: 100%; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="product-gallery">
+        <img src="https://nasukafoods.site/wireless.jpg" alt="Product Image" class="main-image">
+    </div>
+
+    <form class="product-details" action="https://nasukafoods.site/pembayaran.html" method="POST">
+        
+        <input type="hidden" name="product_id" value="12345">
+        <input type="hidden" name="product_name" value="Judul Produk Contoh Nasuka Foods">
+        <input type="hidden" name="price" value="240000">
+
+        <h1 class="product-name">Judul Produk Contoh Nasuka Foods</h1>
+
+        <div class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+            <span>(4.5 / 5) | Bintang gak bisa turun</span>
+        </div>
+
+        <div class="price-section">
+            <div class="product-price">
+                Rp 240.000 <span class="discount-badge">-10%</span>
+            </div>
+            <div class="original-price">Rp 300.000</div>
+        </div>
+
+        <div class="description-section">
+            <h2 class="description-title">Deskripsi Produk</h2>
+            <p class="description-content">
+                Ini adalah deskripsi produk contoh untuk detail-produk.html. Produk ini memiliki kualitas terbaik dan tersedia dalam berbagai varian. Cocok untuk kebutuhan sehari-hari Anda.
+            </p>
+            <ul>
+                <li>Berat: 500 gram</li>
+                <li>Bahan: Alami</li>
+                <li>Garansi: 1 tahun</li>
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn btn-white" onclick="addToCart()">
+                <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button type="submit" class="btn btn-orange">
+                <i class="fas fa-shopping-bag"></i> Beli Sekarang
+            </button>
+        </div>
+
+        <div class="seller-info">
+            <p class="seller-name">Dijual oleh: Toko Official Nasuka Foods</p>
+            <p>Pengiriman: Jakarta Pusat</p>
+        </div>
+    </form>
+</div>
+
+<script>
+    function addToCart() {
+        // Logika untuk menambah produk ke keranjang
+        alert('Produk ditambahkan ke keranjang!');
+    }
+</script>
+
+</body>
+</html>
