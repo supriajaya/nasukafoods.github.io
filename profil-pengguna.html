@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Pengguna - Nasuka Foods</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+      z-index: 999;
+    }
+
+    .top-bar a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 90%;
+      padding: 20px;
+      margin-top: 60px;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      background-color: #333;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #ffbb00;
+    }
+
+    .username {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .profile-info {
+      margin-top: 20px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #333;
+      font-size: 16px;
+    }
+
+    .info-item .label {
+      color: #ccc;
+    }
+
+    .info-item .value {
+      font-weight: bold;
+    }
+
+    .info-item.saldo .value {
+        color: #25D366;
+    }
+
+    .about-me {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #333;
+        border-radius: 5px;
+    }
+
+    .about-me h3 {
+        margin-top: 0;
+        color: #ffbb00;
+    }
+
+    .profile-actions {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .action-button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 5px;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .action-button.logout {
+        background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="https://nasukafoods.site">🏠<br>Home</a>
+    <a href="https://nasukafoods.site/login" id="logout-link-top">🔍<br>Logout</a>
+    <a href="https://nasukafoods.site/pesanan.html">➕<br>Riwayat Pesanan</a>
+    <a href="https://nasukafoods.site/o">📨<br>TopUp</a>
+    <a href="https://nasukafoods.site/tes">👤<br>Profile</a>
+  </div>
+
+  <div class="container">
+    <div class="profile-header">
+      <div class="profile-avatar">👤</div>
+      <div class="username" id="profile-username">Memuat...</div>
+    </div>
+
+    <div class="profile-info">
+      <div class="info-item">
+        <span class="label">Nama Lengkap:</span>
+        <span class="value" id="nama-lengkap">Memuat...</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Nomor HP:</span>
+        <span class="value" id="nomor-hp">Memuat...</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Alamat Lengkap:</span>
+        <span class="value" id="alamat-lengkap">Memuat...</span>
+      </div>
+      <div class="info-item saldo">
+        <span class="label">Saldo:</span>
+        <span class="value" id="saldo">Memuat...</span>
+      </div>
+      <div class="info-item">
+        <span class="label">Tanggal Daftar:</span>
+        <span class="value" id="tanggal-daftar">Memuat...</span>
+      </div>
+    </div>
+
+    <div class="about-me">
+        <h3>Tentang Saya</h3>
+        <p id="tentang-saya">Memuat...</p>
+    </div>
+
+    <div class="profile-actions">
+        <a href="https://nasukafoods.site/pesanan.html" class="action-button">Riwayat Pesanan</a>
+        <a href="https://nasukafoods.site/o" class="action-button">Top Up Saldo</a>
+        <a href="#" id="logout-button" class="action-button logout">Logout</a>
+    </div>
+  </div>
+
+  <script>
+    // URL Website Anda
+    const WEBSITE_URL = 'https://nasukafoods.site'; 
+
+    // Fungsi untuk memformat saldo
+    function formatRupiah(number) {
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+    }
+
+    // Fungsi untuk memuat data pengguna dari localStorage
+    function loadUserData() {
+        const userDataString = localStorage.getItem('userData');
+        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+
+        if (!isLoggedIn || !userDataString) {
+            // Jika tidak ada data login atau status logout, arahkan ke halaman utama/login
+            alert('Silakan login terlebih dahulu.');
+            window.location.href = WEBSITE_URL;
+            return;
+        }
+
+        try {
+            const userData = JSON.parse(userDataString);
+
+            // Perbarui elemen-elemen HTML dengan data pengguna
+            document.getElementById('profile-username').textContent = userData['Username'] || 'N/A';
+            document.getElementById('nama-lengkap').textContent = userData['Nama Lengkap'] || 'N/A';
+            document.getElementById('nomor-hp').textContent = userData['Nomor HP'] || 'N/A';
+            document.getElementById('alamat-lengkap').textContent = userData['Alamat Lengkap'] || 'N/A';
+            
+            // Format Saldo
+            const saldo = parseFloat(userData['Saldo']);
+            document.getElementById('saldo').textContent = isNaN(saldo) ? 'N/A' : formatRupiah(saldo);
+            
+            document.getElementById('tanggal-daftar').textContent = userData['Tanggal Daftar'] || 'N/A';
+            document.getElementById('tentang-saya').textContent = userData['Tentang Saya'] || 'Tidak ada deskripsi.';
+
+        } catch (error) {
+            console.error('Gagal memuat data pengguna dari localStorage:', error);
+            alert('Terjadi kesalahan saat memuat data profil. Silakan coba login ulang.');
+            window.location.href = WEBSITE_URL;
+        }
+    }
+
+    // Fungsi Logout
+    function logout() {
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('userData');
+        alert('Anda telah logout.');
+        window.location.href = WEBSITE_URL; 
+    }
+
+    // Tambahkan event listener ke tombol logout
+    document.getElementById('logout-button').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+    });
+    
+    document.getElementById('logout-link-top').addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+    });
+
+    // Panggil fungsi muat data saat halaman dimuat
+    loadUserData();
+  </script>
+
+</body>
+</html>
