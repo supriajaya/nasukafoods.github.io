@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keranjang Non-Member - Nasuka.apk</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: black;
+      color: white;
+      padding-top: 50px;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+      z-index: 999;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .top-bar a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .product-list {
+        margin-top: 20px;
+    }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #222;
+        border-radius: 8px;
+    }
+    
+    .product-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        margin-right: 15px;
+    }
+    
+    .product-details {
+        flex-grow: 1;
+    }
+    
+    .product-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+    
+    .product-price {
+        font-size: 14px;
+        color: #ffbb00;
+        margin-top: 5px;
+    }
+
+    /* Quantity Controls */
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .quantity-controls button {
+        background-color: #444;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 4px;
+    }
+
+    .quantity-controls span {
+        margin: 0 10px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .checkout-button {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .checkout-button a {
+      background-color: #ffbb00;
+      color: black;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .empty-cart-message {
+      text-align: center;
+      margin-top: 50px;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar">
+    <a href="https://nasukafoods.site">🏠<br>Home</a>
+    <a href="https://nasukafoods.site">📥<br>Login</a>
+    <a href="https://nasukafoods.site">📝<br>Daftar</a>
+    <a href="https://nasukafoods.site/">🛒 <br>Keranjang</a>
+  </div>
+
+  <div class="container">
+    <h1>Keranjang Belanja (Non-Member)</h1>
+
+    <div class="product-list" id="cart-items">
+    </div>
+
+    <div class="checkout-button">
+        <a href="pembayaran-non-member.html">Lanjut ke Pembayaran</a>
+    </div>
+
+  </div>
+
+  <script>
+    function renderCart() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Clear existing content
+        cartItemsContainer.innerHTML = ''; 
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<div class="empty-cart-message">Keranjang Anda kosong.</div>';
+        } else {
+            cart.forEach((item, index) => {
+                const productItem = document.createElement('div');
+                productItem.classList.add('product-item');
+                
+                // Assuming 'price' format is 'Rp XXXXX'
+                productItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="product-details">
+                        <div class="product-name">${item.name}</div>
+                        <div class="quantity-controls">
+                            <button onclick="updateQuantity(${index}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 1)">+</button>
+                        </div>
+                        <div class="product-price">${item.price}</div>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(productItem);
+            });
+        }
+    }
+
+    function updateQuantity(index, change) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        if (cart[index]) {
+            // Update the quantity
+            cart[index].quantity += change;
+
+            // Ensure quantity doesn't drop below 1. If it does, remove the item.
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+
+            // Save updated cart back to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Re-render the cart display
+            renderCart();
+        }
+    }
+
+    // Initial render when the page loads
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
+
+</body>
+</html>
