@@ -259,16 +259,87 @@
         max-width: 36%;
       }
     }
+    
+    /* Login Form Styles */
+    .login-container {
+        padding: 20px;
+        background-color: #1a1a1a;
+        margin: 60px auto 20px;
+        max-width: 400px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .login-container h2 {
+        text-align: center;
+        color: #ffbb00;
+    }
+    .login-form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #555;
+        background-color: #333;
+        color: white;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .login-form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #25D366;
+        border: none;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    #login-status {
+        margin-top: 10px;
+        text-align: center;
+        color: #dc3545;
+        display: none;
+    }
+
+    /* Navigasi Dinamis */
+    .logged-in-nav, .logged-out-nav, .login-container {
+        display: none; /* Sembunyikan default */
+    }
+    
+    /* Tampilkan elemen berdasarkan state login */
+    .show-logged-out .logged-out-nav, .show-logged-out .login-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+    }
+    
+    .show-logged-in .logged-in-nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    /* Tampilkan produk saat login atau logout */
+    .show-logged-out .login-container {
+        display: block; /* Tampilkan form login di halaman utama jika logout */
+    }
+    
   </style>
 </head>
-<body>
+<body class="show-logged-out">
 
-  <div class="top-bar">
+  <div id="logged-out-nav" class="top-bar logged-out-nav">
+    <a href="https://nasukafoods.site/daftar.html">📝<br>Daftar</a>
+    <a href="#login-section">👤<br>Login</a> <a href="https://nasukafoods.site/keranjang-belanja.html">🛒<br>Keranjang Belanja</a>
+    <a href="https://nasukafoods.site/pembayaran.html">💰<br>Pembayaran</a>
+  </div>
+
+  <div id="logged-in-nav" class="top-bar logged-in-nav">
     <a href="https://nasukafoods.site">🏠<br>Home</a>
-    <a href="https://nasukafoods.site/login">🔍<br>Logout</a>
-    <a href="https://nasukafoods.site/pesanan.html">➕<br>Riwayat Pesanan</a>
+    <a href="#" id="logout-link">🔍<br>Logout</a> <a href="https://nasukafoods.site/pesanan.html">➕<br>Riwayat Pesanan</a>
     <a href="https://nasukafoods.site/o">📨<br>TopUp</a>
-    <a href="https://nasukafoods.site/tes">👤<br>Profile</a>
+    <a href="https://nasukafoods.site/profil.html">👤<br>Profil</a>
   </div>
 
   <section class="hero-section">
@@ -276,168 +347,268 @@
 
     <div class="info">
       <div class="location">📍Indramayu | Jawa Barat</div>
-      <div class="username">Arya Kawasaki Labs</div>
-    
+      <div id="hero-username" class="username">Pengunjung</div>
+      <div id="hero-desc" class="desc">Selamat datang di Nasuka Foods</div>
     </div>
 
     <div class="sidebar">
-    
       <div>❤️ 200.k</div>
       <div>💬 4.M</div>
-     
     </div>
   </section>
-<p>🛒</p>
+  
+  <p>🛒</p>
 
+  <div id="login-section" class="login-container">
+    <h2>Login Akun</h2>
+    <form id="loginForm" class="login-form">
+      <input type="text" id="loginUsername" name="username" placeholder="Username" required>
+      <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+      <button type="submit" id="loginButton">Login</button>
+    </form>
+    <div id="login-status"></div>
+  </div>
 
   <div class="small-products-row">
-    <a href="https://aryawilalodra.site" class="small-product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="small-product-item">
       <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil 1" />
       <div class="product-name">Produk Kecil A</div>
     </a>
-    <a href="https://aryawilalodra.site" class="small-product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="small-product-item">
       <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil 2" />
       <div class="product-name">Produk Kecil B</div>
-     
     </a>
-    
-        <a href="https://aryawilalodra.site" class="small-product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="small-product-item">
       <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil 1" />
       <div class="product-name">Produk Kecil A</div>
     </a>
-    <a href="https://aryawilalodra.site" class="small-product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="small-product-item">
       <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil 2" />
       <div class="product-name">Produk Kecil B</div>
-     
     </a>
   </div>
 
   <div class="horizontal-images">
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 1" />
       <div class="product-name">Cilok Premium</div>
       <div class="product-description">Cilok isi daging dengan bumbu kacang spesial.</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 2" />
       <div class="product-name">Cilok Jumbo</div>
       <div class="product-description">Ukuran lebih besar, kenikmatan maksimal.</div>
       <span class="buy-button">Beli Sekarang</span>
-    </a>Tukar poin dengan booster sosial media
-
-    <a href="https://aryawilalodra.site" class="product-item">
+    </a>
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 3" />
       <div class="product-name">Produk ke-3</div>
       <div class="product-description">Deskripsi Produk 3</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 4" />
       <div class="product-name">Produk ke-4</div>
       <div class="product-description">Deskripsi Produk 4</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 5" />
       <div class="product-name">Produk ke-5</div>
       <div class="product-description">Deskripsi Produk 5</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 6" />
       <div class="product-name">Produk ke-6</div>
       <div class="product-description">Deskripsi Produk 6</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 7" />
       <div class="product-name">Produk ke-7</div>
       <div class="product-description">Deskripsi Produk 7</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 8" />
       <div class="product-name">Produk ke-8</div>
       <div class="product-description">Deskripsi Produk 8</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 9" />
       <div class="product-name">Produk ke-9</div>
       <div class="product-description">Deskripsi Produk 9</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 10" />
       <div class="product-name">Produk ke-10</div>
       <div class="product-description">Deskripsi Produk 10</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 11" />
       <div class="product-name">Produk ke-11</div>
       <div class="product-description">Deskripsi Produk 11</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 12" />
       <div class="product-name">Produk ke-12</div>
       <div class="product-description">Deskripsi Produk 12</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 13" />
       <div class="product-name">Produk ke-13</div>
       <div class="product-description">Deskripsi Produk 13</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 14" />
       <div class="product-name">Produk ke-14</div>
       <div class="product-description">Deskripsi Produk 14</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 15" />
       <div class="product-name">Produk ke-15</div>
       <div class="product-description">Deskripsi Produk 15</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 16" />
       <div class="product-name">Produk ke-16</div>
       <div class="product-description">Deskripsi Produk 16</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 17" />
       <div class="product-name">Produk ke-17</div>
       <div class="product-description">Deskripsi Produk 17</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 18" />
       <div class="product-name">Produk ke-18</div>
       <div class="product-description">Deskripsi Produk 18</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 19" />
       <div class="product-name">Produk ke-19</div>
       <div class="product-description">Deskripsi Produk 19</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
+    <a href="https://nasukafoods.site/detail-produk.html" class="product-item">
       <img src="https://nasukafoods.site/wireless.jpg" alt="Gambar Produk 20" />
       <div class="product-name">Produk ke-20</div>
       <div class="product-description">Deskripsi Produk 20</div>
       <span class="buy-button">Beli Sekarang</span>
     </a>
-    <a href="https://aryawilalodra.site" class="product-item">
-      <img </span>
-    </a></div></div>
-    
+  </div>
+
+  <script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
+    const body = document.body;
+    const loginForm = document.getElementById('loginForm');
+    const loginButton = document.getElementById('loginButton');
+    const loginStatus = document.getElementById('login-status');
+    const logoutLink = document.getElementById('logout-link');
+    const heroUsername = document.getElementById('hero-username');
+    const heroDesc = document.getElementById('hero-desc');
+
+    // Fungsi untuk memperbarui tampilan berdasarkan status login
+    function updateLoginStatus(isLoggedIn, userData = null) {
+      if (isLoggedIn) {
+        body.classList.remove('show-logged-out');
+        body.classList.add('show-logged-in');
+        if (userData) {
+          heroUsername.textContent = userData['Nama Lengkap'] || userData['Username'] || 'Member Nasuka';
+          heroDesc.textContent = `Saldo Anda: Rp ${userData['Saldo'] ? parseFloat(userData['Saldo']).toLocaleString('id-ID') : '0'}`;
+        }
+        localStorage.setItem('userLoggedIn', 'true');
+        if (userData) {
+            localStorage.setItem('userData', JSON.stringify(userData));
+        }
+      } else {
+        body.classList.remove('show-logged-in');
+        body.classList.add('show-logged-out');
+        heroUsername.textContent = 'Pengunjung';
+        heroDesc.textContent = 'Selamat datang di Nasuka Foods';
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('userData');
+      }
+    }
+
+    // Cek status login saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        let userData = null;
+        try {
+            userData = JSON.parse(localStorage.getItem('userData'));
+        } catch (e) {
+            console.error("Failed to parse user data from localStorage", e);
+        }
+        updateLoginStatus(isLoggedIn, userData);
+    });
+
+    // Handle Login Form Submission
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            loginButton.disabled = true;
+            loginButton.textContent = 'Login...';
+            loginStatus.style.display = 'none';
+
+            const formData = new FormData(loginForm);
+            
+            // Tambahkan parameter 'action' = 'login'
+            formData.append('action', 'login');
+
+            const params = new URLSearchParams(formData);
+
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: params
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    loginStatus.textContent = result.message;
+                    loginStatus.style.color = '#25D366';
+                    updateLoginStatus(true, result.data);
+                } else {
+                    loginStatus.textContent = result.message || 'Login gagal.';
+                    loginStatus.style.color = '#dc3545';
+                    updateLoginStatus(false);
+                }
+            } catch (error) {
+                loginStatus.textContent = 'Terjadi kesalahan: ' + error.message;
+                loginStatus.style.color = '#dc3545';
+                updateLoginStatus(false);
+            } finally {
+                loginStatus.style.display = 'block';
+                loginButton.disabled = false;
+                loginButton.textContent = 'Login';
+            }
+        });
+    }
+
+    // Handle Logout
+    if (logoutLink) {
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            updateLoginStatus(false);
+        });
+    }
+  </script>
 
 </body>
 </html>
