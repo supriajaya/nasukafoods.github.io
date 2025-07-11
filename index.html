@@ -409,8 +409,8 @@
                 // Links for logged-in users
                 linksHTML = `
                     <a href="index.html">🏠<br>Home</a>
-                    <a href="#" onclick="openTopupModal()">💰<br>Topup</a>
-                    <a href="#" onclick="openProfileModal()">👮<br>Profil</a>
+                    <a href="deposits.html">💰<br>Topup</a>
+                    <a href="profil-pengguna.html">👮<br>Profil</a>
                     <a href="keranjang.html">🛒 <br>Keranjang</a>
                 `;
             } catch (e) {
@@ -425,8 +425,8 @@
             // Links for non-logged-in users
             linksHTML = `
                 <a href="index.html">🏠<br>Home</a>
-                <a href="login.html">📥<br>Login</a>
-                <a href="pendaftaran.html">📝<br>Daftar</a>
+                <a href="#" onclick="openLoginModal()">📥<br>Login</a>
+                <a href="https://nasukafoods.site/pendaftaran.html">📝<br>Daftar</a>
                 <a href="keranjang-non-member.html">🛒 <br>Keranjang</a>
             `;
         }
