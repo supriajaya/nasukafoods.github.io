@@ -21,6 +21,7 @@
       padding: 8px 0;
       font-size: 12px;
       z-index: 999;
+      background-color: rgba(0, 0, 0, 0.8);
     }
 
     .top-bar a {
@@ -153,18 +154,14 @@
 
 <body>
 
-  <div class="top-bar">
-    <a href="https://nasukafoods.site">🏠<br>Home</a>
-    <a href="https://nasukafoods.site">📥<br>Login</a>
-    <a href="https://nasukafoods.site">📝<br>Daftar</a>
-    <a href="https://nasukafoods.site/keranjang-non-member.html">🛒 <br>Keranjang</a>
-  </div>
+  <div class="top-bar" id="top-bar-links">
+    </div>
 
   <section class="hero-section">
     <video src="https://nasukafoods.site/kawasakih2.mp4" autoplay muted loop playsinline></video>
     <div class="info">
       <div class="location">Jawa Barat</div>
-      <div class="username">Proyek Apk</div>
+      <div class="username" id="user-greeting">Proyek Apk</div>
       <div class="desc">Pembangunan aplikasi</div>
       <div class="music">🎵 Nasuka Labs</div>
     </div>
@@ -207,14 +204,8 @@
   </div>
 
   <script>
-    // This function is no longer used for redirection in this revision
-    // function isUserLoggedIn() {
-    //   return false; 
-    // }
-
-    // Updated addToCart function to save clicked product data to localStorage only
     function addToCart(element) {
-      // Extract product data from the clicked element
+      // Extract product data
       const title = element.querySelector('.product-title').innerText;
       const price = element.querySelector('.product-price').innerText;
       const img = element.querySelector('.product-image').src;
@@ -226,7 +217,7 @@
           quantity: 1 
       };
 
-      // Retrieve existing cart data from localStorage, or initialize as an empty array
+      // Retrieve existing cart data or initialize as an empty array
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
       // Add the new product to the cart array
@@ -234,9 +225,63 @@
 
       // Save the updated cart array back to localStorage
       localStorage.setItem('cart', JSON.stringify(cart));
-
-      // Removed redirection logic. Clicking the product now only saves it to the cart.
     }
+
+    function updateUIBasedOnLoginStatus() {
+        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        const userData = localStorage.getItem('userData');
+        const topBarLinks = document.getElementById('top-bar-links');
+        const userGreeting = document.getElementById('user-greeting');
+
+        let linksHTML = '';
+
+        if (isLoggedIn && userData) {
+            try {
+                const user = JSON.parse(userData);
+                
+                // Update username in hero section
+                if (user['Nama Lengkap']) {
+                    userGreeting.textContent = user['Nama Lengkap'];
+                } else if (user['Username']) {
+                    userGreeting.textContent = user['Username'];
+                }
+
+                // Logged in links (Home, Topup, Logout, Keranjang)
+                linksHTML = `
+                    <a href="index.html">🏠<br>Home</a>
+                    <a href="topup.html">💰<br>Topup</a>
+                    <a href="#" onclick="logout()">🏃<br>Logout</a>
+                    <a href="keranjang.html">🛒 <br>Keranjang</a>
+                `;
+            } catch (e) {
+                // If user data is corrupted, treat as logged out
+                localStorage.removeItem('userLoggedIn');
+                localStorage.removeItem('userData');
+                updateUIBasedOnLoginStatus(); 
+                return;
+            }
+        } else {
+            // Guest/Non-member links (Home, Login, Daftar, Keranjang)
+            userGreeting.textContent = 'Proyek Apk'; 
+            linksHTML = `
+                <a href="index.html">🏠<br>Home</a>
+                <a href="https:nasukafoods.site/login.html">📥<br>Login</a>
+                <a href="daftar.html">📝<br>Daftar</a>
+                <a href="keranjang-non-member.html">🛒 <br>Keranjang</a>
+            `;
+        }
+
+        topBarLinks.innerHTML = linksHTML;
+    }
+
+    function logout() {
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('userData');
+        // Redirect to force UI update
+        window.location.href = 'index.html'; 
+    }
+
+    document.addEventListener('DOMContentLoaded', updateUIBasedOnLoginStatus);
   </script>
 
 </body>
