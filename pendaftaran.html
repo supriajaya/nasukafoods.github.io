@@ -7,8 +7,8 @@
   <style>
     body {
       font-family: sans-serif;
-      background-color: black;
-      color: white;
+      background-color: #FFFAFA; 
+      color: black; 
       margin: 0;
       padding: 0;
       display: flex;
@@ -40,7 +40,7 @@
       width: 90%;
       padding: 20px;
       margin-top: 60px;
-      background-color: #1a1a1a;
+      background-color: transparent; 
       border-radius: 8px;
     }
 
@@ -49,7 +49,7 @@
       font-weight: bold;
       margin-bottom: 20px;
       text-align: center;
-      color: #ffbb00;
+      color: #007BFF;
     }
 
     .form-group {
@@ -70,8 +70,8 @@
       padding: 10px;
       border-radius: 4px;
       border: 1px solid #555;
-      background-color: #444;
-      color: white;
+      background-color: transparent; 
+      color: black; 
       box-sizing: border-box;
     }
 
@@ -106,7 +106,7 @@
     }
     
     .login-link a {
-        color: #ffbb00;
+        color: #007BFF;
         text-decoration: none;
     }
 
@@ -119,7 +119,7 @@
     }
 
     .success {
-        background-color: #25D366;
+        background-color: transparent; /* Changed from #25D366 to transparent */
     }
 
     .error {
@@ -128,16 +128,8 @@
   </style>
 </head>
 <body>
-
-  <div class="top-bar">
-    <a href="https://nasukafoods.site/daftar.html">📝<br>Daftar</a>
-    <a href="https://nasukafoods.site/login">👤<br>Login</a>
-    <a href="https://nasukafoods.site/keranjang-belanja.html">🛒<br>Keranjang Belanja</a>
-    <a href="https://nasukafoods.site/pembayaran.html">💰<br>Pembayaran</a>
-  </div>
-
   <div class="container">
-    <div class="register-header">Pendaftaran Akun</div>
+    <div class="register-header">Daftar</div>
     
     <form id="registrationForm">
         <div class="form-group">
@@ -180,7 +172,6 @@
     const statusMessage = document.getElementById('status-message');
     const submitButton = document.getElementById('submitButton');
     
-    // URL GAS yang Anda simpan
     const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
 
     form.addEventListener('submit', async (e) => {
@@ -192,10 +183,8 @@
 
         const formData = new FormData(form);
         
-        // Tambahkan parameter 'action' = 'signup' agar kode.gs mengenali aksi pendaftaran
         formData.append('action', 'signup');
 
-        // Convert FormData to URLSearchParams for GAS
         const params = new URLSearchParams(formData);
 
         try {
@@ -208,7 +197,7 @@
                 const result = await response.json();
                 
                 if (result.status === 'success') {
-                    statusMessage.textContent = 'Pendaftaran berhasil! Silakan login.';
+                    statusMessage.textContent = 'Pendaftaran berhasil!.'; 
                     statusMessage.className = 'success';
                     form.reset(); 
                 } else {
@@ -228,6 +217,8 @@
             statusMessage.style.display = 'block';
         }
     });
+    
+    
   </script>
 </body>
 </html>
