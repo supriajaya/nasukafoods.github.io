@@ -368,7 +368,6 @@
     <a href="https://nasukafoods.site">🏠<br>Home</a>
     <a href="#login-section" id="login-nav-link">👤<br>Login</a> 
     <a href="#register-section" id="register-nav-link">📝<br>Daftar</a>
-    <a href="#cart-section" id="cart-nav-link">🛒<br>Keranjang</a>
   </div>
 
   <div id="logged-in-nav" class="top-bar logged-in-nav">
@@ -755,23 +754,11 @@
             addToCart(product);
         });
     });
-
-    // The checkout button already correctly links to the requested URL in the HTML:
-    // <a href="https://nasukafoods.site/pembayaran-non-member.html" id="checkout-button" style="display: none;">Checkout</a>
     
-    // The previous JS validation preventing navigation if the cart was empty is removed 
-    // to fulfill the request to make the button navigate directly.
     if (checkoutButton) {
         checkoutButton.addEventListener('click', (e) => {
-            // Check if the cart is empty before navigating, if necessary. 
-            // If the user intends for the link to always navigate regardless of cart content, 
-            // the conditional logic below (which was previously in the original script) can be removed.
-            
-            // Note: The user's request was to make the button "langsung menuju" (go directly to) the URL. 
-            // We will rely on the <a> tag's href attribute for navigation.
-            
             if (cart.length === 0) {
-                 e.preventDefault(); // Prevent navigation if cart is empty
+                 e.preventDefault(); 
                  alert("Keranjang belanja Anda kosong.");
              }
         });
