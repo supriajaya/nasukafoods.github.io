@@ -369,10 +369,10 @@
 <body class="show-logged-out">
 
   <div id="logged-out-nav" class="top-bar logged-out-nav">
-    <a href="#register-section" id="register-nav-link">📝<br>Daftar</a>
+    <a href="https://nasukafoods.site">🏠<br>Home</a>
     <a href="#login-section" id="login-nav-link">👤<br>Login</a> 
-    <a href="#cart-section" id="cart-nav-link">🛒<br>Keranjang Belanja</a>
-    <a href="https://nasukafoods.site/pembayaran.html">💰<br>Pembayaran</a>
+    <a href="#register-section" id="register-nav-link">📝<br>Daftar</a>
+    <a href="#cart-section" id="cart-nav-link">🛒<br>Keranjang</a>
   </div>
 
   <div id="logged-in-nav" class="top-bar logged-in-nav">
@@ -430,7 +430,7 @@
       <p id="empty-cart-message">Keranjang Anda kosong.</p>
     </div>
     <div class="cart-total" id="cart-total">Total: Rp 0</div>
-    <a href="#" id="checkout-button" style="display: none;">Checkout</a>
+    <a href="https://nasukafoods.site/pembayaran.html" id="checkout-button" style="display: none;">Checkout</a>
   </div>
 
   <div class="small-products-row">
@@ -630,7 +630,7 @@
     const heroUsername = document.getElementById('hero-username');
     const heroDesc = document.getElementById('hero-desc');
 
-    // Shopping Cart Data (menggunakan localStorage untuk persistensi sesi)
+    // Shopping Cart Data
     let cart = [];
 
     // Fungsi untuk mengelola tampilan form dan keranjang
@@ -721,11 +721,11 @@
     }
 
     // Fungsi untuk menghapus item dari keranjang
-    function removeFromCart(index) {
+    window.removeFromCart = function(index) {
         cart.splice(index, 1);
         saveCartToLocalStorage();
         renderCart();
-    }
+    };
 
     // Fungsi untuk render (menampilkan) isi keranjang
     function renderCart() {
@@ -782,13 +782,16 @@
         });
     });
 
-    // Handle Checkout (Redirect ke halaman checkout, jika diperlukan)
+    // Handle Checkout - Redirect ke halaman pembayaran
     if (checkoutButton) {
         checkoutButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Implementasi checkout (misal: redirect ke halaman pembayaran atau proses pesanan)
-            alert('Proses Checkout (Ini hanya simulasi).\nTotal Belanja: ' + cartTotalElement.textContent);
-            // window.location.href = 'https://nasukafoods.site/pembayaran.html'; 
+            // Cek apakah keranjang kosong sebelum redirect
+            if (cart.length === 0) {
+                e.preventDefault(); // Mencegah redirect jika keranjang kosong
+                alert("Keranjang belanja Anda kosong.");
+            } else {
+                // Biarkan link A melakukan navigasi ke href="https://nasukafoods.site/pembayaran.html"
+            }
         });
     }
 
