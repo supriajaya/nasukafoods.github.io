@@ -50,6 +50,7 @@
       margin-bottom: 20px;
     }
 
+    /* Modifikasi CSS untuk menampilkan gambar di dalam profile-avatar */
     .profile-avatar {
       width: 100px;
       height: 100px;
@@ -59,8 +60,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
-      color: #ffbb00;
+      overflow: hidden; /* Pastikan gambar memotong jika terlalu besar */
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Memastikan gambar mengisi area tanpa terdistorsi */
     }
 
     .username {
@@ -138,7 +144,9 @@
 
   <div class="container">
     <div class="profile-header">
-      <div class="profile-avatar">👤</div>
+      <div class="profile-avatar">
+          <img id="profile-image-display" src="https://nasukafoods.site/wireless.jpg" alt="Foto Profil">
+      </div>
       <div class="username" id="profile-username">Memuat...</div>
     </div>
 
@@ -200,7 +208,7 @@
 
         try {
             const userData = JSON.parse(userDataString);
-
+            
             // Perbarui elemen-elemen HTML dengan data pengguna
             document.getElementById('profile-username').textContent = userData['Username'] || 'N/A';
             document.getElementById('nama-lengkap').textContent = userData['Nama Lengkap'] || 'N/A';
@@ -213,6 +221,18 @@
             
             document.getElementById('tanggal-daftar').textContent = userData['Tanggal Daftar'] || 'N/A';
             document.getElementById('tentang-saya').textContent = userData['Tentang Saya'] || 'Tidak ada deskripsi.';
+
+            // Tampilkan foto profil dari Base64
+            const profileImageElement = document.getElementById('profile-image-display');
+            const fotoBase64 = userData['Foto Profil Base64'];
+            const fotoMimeType = userData['Foto Profil MimeType'];
+
+            if (fotoBase64 && fotoMimeType) {
+                profileImageElement.src = `data:${fotoMimeType};base64,${fotoBase64}`;
+            } else {
+                // Jika tidak ada foto profil, gunakan gambar default
+                profileImageElement.src = 'https://nasukafoods.site/wireless.jpg'; 
+            }
 
         } catch (error) {
             console.error('Gagal memuat data pengguna dari localStorage:', error);
