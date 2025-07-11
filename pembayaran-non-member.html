@@ -187,7 +187,6 @@
         let totalCartPrice = 0;
         let userData = null;
 
-        // Function to convert file to Base64
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -200,9 +199,8 @@
             });
         }
 
-        // Load cart data from localStorage
         function loadCartFromLocalStorage() {
-            const savedCart = localStorage.getItem('nasukaCart');
+            const savedCart = localStorage.getItem('cart');
             if (savedCart) {
                 try {
                     cartData = JSON.parse(savedCart);
@@ -213,7 +211,6 @@
             }
         }
 
-        // Render cart items on the payment page
         function renderCartItems() {
             itemList.innerHTML = '';
             totalCartPrice = 0;
@@ -229,7 +226,8 @@
             document.getElementById('cart-items-display').style.display = 'block';
 
             cartData.forEach(item => {
-                const itemTotal = item.price * item.quantity;
+                const basePrice = parseInt(item.price.replace(/Rp\s?\.?/g, '').replace(/\./g, ''));
+                const itemTotal = basePrice * item.quantity;
                 totalCartPrice += itemTotal;
                 totalItems += item.quantity;
 
@@ -250,7 +248,6 @@
             itemCountDisplay.textContent = totalItems;
         }
 
-        // Load user data from localStorage and pre-fill form fields
         function loadUserData() {
             const savedUserData = localStorage.getItem('userData');
             const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
@@ -271,7 +268,7 @@
                     userData = null;
                 }
             } else {
-                // Non-member (Guest) handling
+                
                 document.getElementById('tipe-pelanggan').value = 'Guest';
                 document.getElementById('username').value = 'N/A';
                 document.getElementById('full-name').value = '';
@@ -280,7 +277,6 @@
             }
         }
 
-        // Handle payment method selection visibility
         paymentMethodSelect.addEventListener('change', (e) => {
             if (e.target.value === 'Transfer Bank') {
                 uploadSection.classList.remove('hidden');
@@ -289,7 +285,6 @@
             }
         });
 
-        // Handle form submission
         checkoutForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -308,7 +303,6 @@
             const paymentMethod = formData.get('Metode Pembayaran');
             const file = buktiTransferInput.files[0];
 
-            // 1. Handle file upload for 'Transfer Bank'
             if (paymentMethod === 'Transfer Bank') {
                 if (!file) {
                     formStatus.textContent = 'Mohon unggah bukti pembayaran.';
@@ -331,24 +325,17 @@
                 }
             }
             
-            // 2. Add cart data to formData
             const productList = cartData.map(item => `${item.name} (x${item.quantity})`).join(', ');
             formData.append('Produk', productList);
             formData.append('Kuantitas', cartData.reduce((sum, item) => sum + item.quantity, 0));
             formData.append('Total Harga', totalCartPrice);
             
-            // 3. Add status, date, and action
             formData.append('Status Pesanan', 'Pending');
             formData.append('Tanggal', new Date().toLocaleDateString('en-US'));
             formData.append('action', 'submitOrder');
 
-            // 4. Convert FormData to a URLSearchParams object or JSON for submission
-            // We convert formData to an object suitable for JSON submission to GAS 
-            // since the previous kode.gs handles JSON or standard parameters.
-            
             const payload = {};
             formData.forEach((value, key) => {
-                // Ensure correct handling of 'Bukti Transfer' which is now replaced by base64/mime type.
                 if (key !== 'Bukti Transfer') {
                     payload[key] = value;
                 }
@@ -369,10 +356,8 @@
                     formStatus.textContent = result.message || 'Pesanan berhasil ditempatkan.';
                     formStatus.classList.add('success');
                     
-                    // Clear the cart in localStorage after successful order
-                    localStorage.removeItem('nasukaCart');
+                    localStorage.removeItem('cart');
                     
-                    // Redirect or refresh after a short delay
                     setTimeout(() => {
                         window.location.href = '/'; 
                     }, 2000);
@@ -390,7 +375,6 @@
             }
         });
 
-        // Initialize page: Load data and render items
         document.addEventListener('DOMContentLoaded', () => {
             loadCartFromLocalStorage();
             loadUserData();
