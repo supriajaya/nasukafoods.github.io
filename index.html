@@ -8,11 +8,10 @@
     body {
       margin: 0;
       font-family: sans-serif;
-      color: white;
-      background-color: black;
+      color: black;
+      background-color: white;
     }
 
-    /* Top Bar */
     .top-bar {
       position: fixed;
       top: 0;
@@ -31,7 +30,6 @@
       text-align: center;
     }
 
-    /* Hero Section */
     .hero-section {
       position: relative;
       height: 20vh;
@@ -65,6 +63,7 @@
 
     .info {
       left: 10px;
+      color: white;
     }
 
     .info .location {
@@ -91,6 +90,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      color: white;
     }
 
     .sidebar div {
@@ -98,7 +98,6 @@
       font-size: 12px;
     }
 
-    /* Product Section */
     .product-list {
       display: flex;
       flex-wrap: nowrap;
@@ -111,7 +110,7 @@
     .product-card {
       min-width: 75px; 
       text-align: center;
-      color: white;
+      color: black;
       text-decoration: none;
       display: flex;
       flex-direction: column;
@@ -144,7 +143,6 @@
       color: #ffbb00;
     }
 
-    /* Modal Styles (Login, Topup, & Profile) */
     .modal {
       display: none;
       position: fixed;
@@ -166,6 +164,7 @@
       width: 90%;
       max-width: 400px;
       border-radius: 8px;
+      color: white;
     }
 
     .close-button {
@@ -237,7 +236,6 @@
         text-decoration: none;
     }
 
-    /* Profile specific styles */
     .profile-info p {
         margin: 10px 0;
         padding-bottom: 5px;
@@ -300,28 +298,6 @@
     </a>
   </div>
 
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" onclick="closeLoginModal()">&times;</span>
-      <h2 style="color: #ffbb00; text-align: center;">Login Member</h2>
-      <form id="modalLoginForm">
-          <div class="form-group">
-              <label for="modalUsername">Username:</label>
-              <input type="text" id="modalUsername" name="Username" required>
-          </div>
-          <div class="form-group">
-              <label for="modalPassword">Password:</label>
-              <input type="password" id="modalPassword" name="Password" required>
-          </div>
-          <button type="submit" id="modalLoginButton">Masuk</button>
-      </form>
-      <div id="modalStatusMessage" class="status-message"></div>
-      <div class="register-link">
-          Belum punya akun? <a href="daftar.html">Daftar sekarang</a>
-      </div>
-    </div>
-  </div>
-
   <div id="topupModal" class="modal">
     <div class="modal-content">
       <span class="close-button" onclick="closeTopupModal()">&times;</span>
@@ -366,7 +342,7 @@
       
       if (!isLoggedIn) {
         alert('Anda harus login terlebih dahulu untuk menambahkan produk ke keranjang.');
-        openLoginModal();
+        window.location.href = 'https://nasukafoods.site/login.html';
         return;
       }
       
@@ -406,7 +382,6 @@
                     userGreeting.textContent = user['Username'];
                 }
 
-                // Links for logged-in users
                 linksHTML = `
                     <a href="index.html">🏠<br>Home</a>
                     <a href="">📖<br>Riwayat</a>
@@ -414,7 +389,6 @@
                     <a href="keranjang.html">🛒 <br>Keranjang</a>
                 `;
             } catch (e) {
-                // If userData is corrupt, log out and reset
                 localStorage.removeItem('userLoggedIn');
                 localStorage.removeItem('userData');
                 updateUIBasedOnLoginStatus(); 
@@ -422,10 +396,9 @@
             }
         } else {
             userGreeting.textContent = 'Proyek Apk'; 
-            // Links for non-logged-in users
             linksHTML = `
                 <a href="index.html">🏠<br>Home</a>
-                <a href="#" onclick="openLoginModal()">📥<br>Login</a>
+                <a href="https://nasukafoods.site/login.html">📥<br>Login</a>
                 <a href="https://nasukafoods.site/pendaftaran.html">📝<br>Daftar</a>
                 <a href="keranjang-non-member.html">🛒 <br>Keranjang</a>
             `;
@@ -437,86 +410,10 @@
     function logout() {
         localStorage.removeItem('userLoggedIn');
         localStorage.removeItem('userData');
-        localStorage.removeItem('cart'); // Clear cart on logout
+        localStorage.removeItem('cart');
         window.location.href = 'index.html'; 
     }
 
-    // --- Login Modal Functions ---
-    const loginModal = document.getElementById('loginModal');
-    const modalLoginForm = document.getElementById('modalLoginForm');
-    const modalLoginButton = document.getElementById('modalLoginButton');
-    const modalStatusMessage = document.getElementById('modalStatusMessage');
-
-    function openLoginModal() {
-        loginModal.style.display = 'block';
-    }
-
-    function closeLoginModal() {
-        loginModal.style.display = 'none';
-        modalStatusMessage.textContent = ''; 
-        modalLoginButton.textContent = 'Masuk';
-        modalLoginButton.disabled = false;
-        modalLoginForm.reset();
-    }
-
-    // Handle login form submission inside the modal
-    modalLoginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        modalLoginButton.disabled = true;
-        modalLoginButton.textContent = 'Memproses...';
-        modalStatusMessage.textContent = '';
-        modalStatusMessage.classList.remove('success', 'error');
-
-        const username = document.getElementById('modalUsername').value;
-        const password = document.getElementById('modalPassword').value;
-
-        const payload = new URLSearchParams({
-            action: 'login',
-            Username: username,
-            Password: password
-        });
-
-        try {
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: payload.toString(),
-            });
-
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                modalStatusMessage.textContent = 'Login berhasil. Mengalihkan...';
-                modalStatusMessage.classList.add('success');
-                
-                // Store user data in localStorage
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userData', JSON.stringify(result.user));
-
-                // Redirect or refresh UI after successful login
-                setTimeout(() => {
-                    closeLoginModal();
-                    updateUIBasedOnLoginStatus();
-                }, 500);
-
-            } else {
-                modalStatusMessage.textContent = result.message || 'Login gagal. Periksa username dan password Anda.';
-                modalStatusMessage.classList.add('error');
-                modalLoginButton.disabled = false;
-                modalLoginButton.textContent = 'Masuk';
-            }
-        } catch (error) {
-            modalStatusMessage.textContent = 'Terjadi kesalahan jaringan atau server.';
-            modalStatusMessage.classList.add('error');
-            modalLoginButton.disabled = false;
-            modalLoginButton.textContent = 'Masuk';
-        }
-    });
-
-    // --- Topup Modal Functions ---
     const topupModal = document.getElementById('topupModal');
     const modalTopupForm = document.getElementById('modalTopupForm');
     const modalTopupButton = document.getElementById('modalTopupButton');
@@ -525,7 +422,7 @@
     function openTopupModal() {
         const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
         if (!isLoggedIn) {
-            openLoginModal();
+            window.location.href = 'https://nasukafoods.site/login.html';
             return;
         }
         topupModal.style.display = 'block';
@@ -539,7 +436,6 @@
         modalTopupForm.reset();
     }
 
-    // Handle topup form submission
     modalTopupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -560,7 +456,6 @@
         const customerName = userData['Nama Lengkap'];
         const customerPhone = userData['Nomor HP'];
         
-        // Ensure data is available
         if (!customerName || !customerPhone) {
              modalTopupStatus.textContent = 'Data pengguna tidak lengkap. Silakan perbarui profil Anda.';
              modalTopupStatus.classList.add('error');
@@ -593,7 +488,6 @@
             if (result.status === 'success') {
                 modalTopupStatus.textContent = 'Pengajuan top up berhasil. Silakan lakukan transfer.';
                 modalTopupStatus.classList.add('success');
-                // Optionally redirect or inform user to check status
             } else {
                 modalTopupStatus.textContent = result.message || 'Gagal mengajukan top up.';
                 modalTopupStatus.classList.add('error');
@@ -607,14 +501,13 @@
         }
     });
 
-    // --- Profile Modal Functions ---
     const profileModal = document.getElementById('profileModal');
     const profileInfoContent = document.getElementById('profileInfoContent');
 
     function openProfileModal() {
         const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
         if (!isLoggedIn) {
-            openLoginModal();
+            window.location.href = 'https://nasukafoods.site/login.html';
             return;
         }
 
@@ -623,7 +516,6 @@
             populateProfileInfo(userData);
             profileModal.style.display = 'block';
         } else {
-            // Handle case where user is technically logged in but userData is missing
             alert('Gagal memuat data profil. Silakan coba login ulang.');
             logout();
         }
@@ -636,7 +528,6 @@
     function populateProfileInfo(user) {
         let profileHTML = '';
 
-        // Displaying relevant profile fields based on stored sheet names (Customers)
         profileHTML += `<p><strong>ID Pelanggan:</strong> ${user['Customers ID'] || '-'}</p>`;
         profileHTML += `<p><strong>Nama Lengkap:</strong> ${user['Nama Lengkap'] || '-'}</p>`;
         profileHTML += `<p><strong>Username:</strong> ${user['Username'] || '-'}</p>`;
@@ -645,8 +536,6 @@
         profileHTML += `<p><strong>Saldo:</strong> Rp ${user['Saldo'] || '0'}</p>`;
         profileHTML += `<p><strong>Tentang Saya:</strong> ${user['Tentang Saya'] || '-'}</p>`;
         profileHTML += `<p><strong>Tanggal Daftar:</strong> ${user['Tanggal Daftar'] || '-'}</p>`;
-
-        // Note: Password and Foto Profil are not displayed for security/UI reasons here
 
         profileInfoContent.innerHTML = profileHTML;
     }
