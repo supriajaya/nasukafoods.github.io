@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nasuka Foods</title>
+  <title>Nasuka.apk</title>
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
-      background-color: black;
       color: white;
+      background-color: black;
     }
 
     .top-bar {
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(0, 0, 0, 0.7);
       display: flex;
       justify-content: space-around;
       padding: 8px 0;
@@ -32,12 +31,11 @@
 
     .hero-section {
       position: relative;
-      height: 25vh;
+      height: 20vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding-top: 40px;
     }
 
     .hero-section video {
@@ -53,8 +51,16 @@
     .promo-text,
     .info,
     .sidebar {
-      position: relative;
-      z-index: 1;
+     position: relative;
+     z-index: 1;
+    }
+
+    .promo-text {
+      text-align: center;
+      margin-top: 5vh;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 0 20px;
     }
 
     .info, .sidebar {
@@ -97,886 +103,139 @@
       font-size: 12px;
     }
 
-    .gallery {
-      background: #111;
-      padding: 20px 10px 80px;
+    /* Product Section Styles */
+    .product-list {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 10px;
+      gap: 15px;
+      margin-top: 10px;
     }
 
-    .gallery img {
-      width: 100%;
-      max-width: 500px;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      display: block;
-      margin: 20px auto;
-      border-radius: 0;
-      box-shadow: none;
-      background: none;
+    .product-card {
+      min-width: 75px; 
+      text-align: center;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
     }
 
-    .video-container {
-      position: relative;
-      width: 100%;
-      max-width: 800px;
-      aspect-ratio: 16 / 9;
-      margin: 30px auto;
-      border-radius: 12px;
+    .product-image-container {
+      width: 75px; 
+      height: 75px;
       overflow: hidden;
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
     }
 
-    .video-container video {
+    .product-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .horizontal-images {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 20px auto;
-      max-width: 800px;
+    .product-title {
+      font-size: 10px; 
+      margin-top: 4px;
     }
 
-    .product-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      min-width: 150px;
-      max-width: 45%;
-      margin: 10px;
-      text-align: center;
-      text-decoration: none;
-      color: white;
-    }
-
-    .product-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      border-radius: 0;
-      box-shadow: none;
-      background: none;
-      aspect-ratio: 1 / 1;
-    }
-
-    .product-item .product-name {
+    .product-price {
       font-weight: bold;
-      margin-top: 10px;
-      font-size: 16px;
-    }
-
-    .product-item .product-description {
-      font-size: 12px;
-      margin-top: 5px;
-      color: #ccc;
-    }
-
-    .product-item .buy-button {
-      display: inline-block;
-      background-color: #25D366;
-      color: white;
-      padding: 8px 15px;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-      margin-top: 10px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .small-products-row {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 20px auto;
-      max-width: 800px;
-    }
-
-    .small-product-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      min-width: 80px;
-      max-width: 17.6%;
-      margin: 5px;
-      text-align: center;
-      text-decoration: none;
-      color: white;
-    }
-
-    .small-product-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      border-radius: 0;
-      box-shadow: none;
-      background: none;
-      aspect-ratio: 1 / 1;
-    }
-
-    .small-product-item .product-name {
-      font-weight: bold;
-      margin-top: 5px;
-      font-size: 10px;
-    }
-
-    .small-product-item .product-description {
-      display: none;
-    }
-
-    .small-product-item .buy-button {
-      display: inline-block;
-      background-color: #25D366;
-      color: white;
-      padding: 4px 8px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-weight: bold;
-      margin-top: 5px;
-      font-size: 10px;
-      cursor: pointer;
-    }
-
-    .vertical-products {
-      display: flex;
-      flex-direction: column;
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 0 10px;
-    }
-
-    .vertical-products .product-item {
-      display: block;
-      width: 100%;
-      max-width: none;
-      margin: 15px auto;
-      text-align: left;
-      
-    }
-    
-    .vertical-products .product-item img {
-        aspect-ratio: 16 / 9;
-        max-height: 400px;
-        object-fit: cover;
-    }
-    
-    .vertical-products .product-details {
-        padding: 10px 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .vertical-products .product-name {
-        margin-top: 0;
-        font-size: 20px;
-    }
-
-    @media (max-width: 600px) {
-      .horizontal-images .product-item {
-        max-width: 90%;
-      }
-      .small-products-row .small-product-item {
-        max-width: 36%;
-      }
-    }
-    
-    .form-container, .cart-container {
-        padding: 20px;
-        background-color: #1a1a1a;
-        margin: 60px auto 20px;
-        max-width: 400px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        display: none;
-    }
-    .form-container h2, .cart-container h2 {
-        text-align: center;
-        color: #ffbb00;
-    }
-    .form-container input, .form-container textarea {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #555;
-        background-color: #333;
-        color: white;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-    .form-container button {
-        width: 100%;
-        padding: 10px;
-        background-color: #25D366;
-        border: none;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        border-radius: 44px;
-    }
-    .form-status {
-        margin-top: 10px;
-        text-align: center;
-        color: #dc3545;
-        display: none;
-    }
-
-    .cart-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #333;
-        padding-bottom: 10px;
-    }
-    .cart-item img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        margin-right: 15px;
-        border-radius: 4px;
-    }
-    .cart-details {
-        flex-grow: 1;
-    }
-    .cart-details .item-name {
-        font-weight: bold;
-    }
-    .cart-details .item-price {
-        color: #ffbb00;
-    }
-    .cart-item button {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .cart-total {
-        margin-top: 20px;
-        padding-top: 15px;
-        border-top: 2px solid #ffbb00;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: right;
-    }
-    #checkout-button {
-        background-color: #25D366;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        border-radius: 5px;
-        margin-top: 15px;
-        display: block;
-        cursor: pointer;
-    }
-
-    .logged-in-nav, .logged-out-nav {
-        display: none; 
-    }
-    
-    .show-logged-out .logged-out-nav {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        width: 100%;
-    }
-    
-    .show-logged-in .logged-in-nav {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        width: 100%;
+      font-size: 9px;
+      margin-top: 2px;
+      color: #ffbb00;
     }
   </style>
 </head>
-<body class="show-logged-out">
 
-  <div id="logged-out-nav" class="top-bar logged-out-nav">
-    <a href="https://nasukafoods.site">🏠<br>Home</a>
-    <a href="#login-section" id="login-nav-link">👤<br>Login</a> 
-    <a href="#register-section" id="register-nav-link">📝<br>Daftar</a>
-    <a href="#cart-section" id="cart-nav-link">🛒<br>Keranjang Non Member</a> 
-  </div>
+<body>
 
-  <div id="logged-in-nav" class="top-bar logged-in-nav">
+  <div class="top-bar">
     <a href="https://nasukafoods.site">🏠<br>Home</a>
-    <a href="#" id="logout-link">🔍<br>Logout</a> 
-    <a href="https://nasukafoods.site/pesanan.html">➕<br>Riwayat Pesanan</a>
-    <a href="https://nasukafoods.site/deposit.html">📨<br>TopUp</a>
-    <a href="https://nasukafoods.site/profil-pengguna.html">👤<br>Profil</a>
+    <a href="https://nasukafoods.site">📥<br>Login</a>
+    <a href="https://nasukafoods.site">📝<br>Daftar</a>
+    <a href="https://nasukafoods.site/keranjang-non-member">🛒 <br>Keranjang</a>
   </div>
 
   <section class="hero-section">
-    <video src="https://nasukafoods.site/kawasakifast.mp4" autoplay muted playsinline></video>
-
+    <video src="https://nasukafoods.site/kawasakih2.mp4" autoplay muted loop playsinline></video>
     <div class="info">
-      <div class="location">📍Indramayu | Jawa Barat</div>
-      <div id="hero-username" class="username">Pengunjung</div>
-      <div id="hero-desc" class="desc">Selamat datang di Nasuka Foods</div>
+      <div class="location">Jawa Barat</div>
+      <div class="username">Proyek Apk</div>
+      <div class="desc">Pembangunan aplikasi</div>
+      <div class="music">🎵 Nasuka Labs</div>
     </div>
-
     <div class="sidebar">
       <div>❤️ 200.k</div>
       <div>💬 4.M</div>
+      <div>🔗 Share</div>
     </div>
   </section>
-  
-  <p>🛒</p>
 
-  <div id="login-section" class="form-container">
-    <h2>Login Akun</h2>
-    <form id="loginForm">
-      <input type="text" id="loginUsername" name="username" placeholder="Username" required>
-      <input type="password" id="loginPassword" name="password" placeholder="Password" required>
-      <button type="submit" id="loginButton">Login</button>
-    </form>
-    <div id="login-status" class="form-status"></div>
-  </div>
-
-  <div id="register-section" class="form-container">
-    <h2>Daftar Akun Baru</h2>
-    <form id="registerForm">
-      <input type="text" name="Nama Lengkap" placeholder="Nama Lengkap" required>
-      <input type="tel" name="Nomor HP" placeholder="Nomor HP (WhatsApp)" required>
-      <input type="text" name="Username" placeholder="Username" required>
-      <input type="password" name="Password" placeholder="Password" required>
-      <textarea name="Alamat Lengkap" placeholder="Alamat Lengkap" rows="3" required></textarea>
-      <textarea name="Tentang Saya" placeholder="Tentang Saya (Opsional)" rows="2"></textarea>
-      <button type="submit" id="registerButton">Daftar</button>
-    </form>
-    <div id="register-status" class="form-status"></div>
-  </div>
-
-  <div id="cart-section" class="cart-container">
-    <h2>Keranjang Belanja</h2>
-    <div id="cart-items-list">
-      <p id="empty-cart-message">Keranjang Anda kosong.</p>
-    </div>
-    <div class="cart-total" id="cart-total">Total: Rp 0</div>
-    <a href="https://nasukafoods.site/pembayaran-non-member.html" id="checkout-button" style="display: none;">Checkout</a>
-  </div>
-
-  <div class="small-products-row">
-    <a href="javascript:void(0);" class="small-product-item" 
-       data-name="Produk Kecil A" data-price="5000" data-image="https://nasukafoods.site/image/sosial-media.png">
-      <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil A" />
-      <div class="product-name">Produk Kecil A</div>
-    </a>
-    <a href="javascript:void(0);" class="small-product-item" 
-       data-name="Produk Kecil B" data-price="7500" data-image="https://nasukafoods.site/image/sosial-media.png">
-      <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil B" />
-      <div class="product-name">Produk Kecil B</div>
-    </a>
-    <a href="javascript:void(0);" class="small-product-item" 
-       data-name="Produk Kecil C" data-price="10000" data-image="https://nasukafoods.site/image/sosial-media.png">
-      <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil C" />
-      <div class="product-name">Produk Kecil C</div>
-    </a>
-    <a href="javascript:void(0);" class="small-product-item" 
-       data-name="Produk Kecil D" data-price="12000" data-image="https://nasukafoods.site/image/sosial-media.png">
-      <img src="https://nasukafoods.site/image/sosial-media.png" alt="Produk Kecil D" />
-      <div class="product-name">Produk Kecil D</div>
-    </a>
-  </div>
-
-  <div class="horizontal-images">
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Cilok Premium" data-price="15000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Cilok Premium" />
-      <div class="product-name">Cilok Premium</div>
-      <div class="product-description">Cilok isi daging dengan bumbu kacang spesial.</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Cilok Jumbo" data-price="20000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Cilok Jumbo" />
-      <div class="product-name">Cilok Jumbo</div>
-      <div class="product-description">Ukuran lebih besar, kenikmatan maksimal.</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-3" data-price="18000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-3" />
-      <div class="product-name">Produk ke-3</div>
-      <div class="product-description">Deskripsi Produk 3</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-4" data-price="25000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-4" />
-      <div class="product-name">Produk ke-4</div>
-      <div class="product-description">Deskripsi Produk 4</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-5" data-price="30000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-5" />
-      <div class="product-name">Produk ke-5</div>
-      <div class="product-description">Deskripsi Produk 5</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-6" data-price="10000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-6" />
-      <div class="product-name">Produk ke-6</div>
-      <div class="product-description">Deskripsi Produk 6</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-7" data-price="8000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-7" />
-      <div class="product-name">Produk ke-7</div>
-      <div class="product-description">Deskripsi Produk 7</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-8" data-price="11000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-8" />
-      <div class="product-name">Produk ke-8</div>
-      <div class="product-description">Deskripsi Produk 8</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-9" data-price="14000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-9" />
-      <div class="product-name">Produk ke-9</div>
-      <div class="product-description">Deskripsi Produk 9</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-10" data-price="16000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-10" />
-      <div class="product-name">Produk ke-10</div>
-      <div class="product-description">Deskripsi Produk 10</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-11" data-price="19000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-11" />
-      <div class="product-name">Produk ke-11</div>
-      <div class="product-description">Deskripsi Produk 11</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-12" data-price="21000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-12" />
-      <div class="product-name">Produk ke-12</div>
-      <div class="product-description">Deskripsi Produk 12</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-13" data-price="23000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-13" />
-      <div class="product-name">Produk ke-13</div>
-      <div class="product-description">Deskripsi Produk 13</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-14" data-price="28000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-14" />
-      <div class="product-name">Produk ke-14</div>
-      <div class="product-description">Deskripsi Produk 14</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-15" data-price="32000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-15" />
-      <div class="product-name">Produk ke-15</div>
-      <div class="product-description">Deskripsi Produk 15</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-16" data-price="13000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-16" />
-      <div class="product-name">Produk ke-16</div>
-      <div class="product-description">Deskripsi Produk 16</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-17" data-price="9000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-17" />
-      <div class="product-name">Produk ke-17</div>
-      <div class="product-description">Deskripsi Produk 17</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-18" data-price="22000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-18" />
-      <div class="product-name">Produk ke-18</div>
-      <div class="product-description">Deskripsi Produk 18</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-19" data-price="27000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-19" />
-      <div class="product-name">Produk ke-19</div>
-      <div class="product-description">Deskripsi Produk 19</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk ke-20" data-price="35000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk ke-20" />
-      <div class="product-name">Produk ke-20</div>
-      <div class="product-description">Deskripsi Produk 20</div>
-      <span class="buy-button">Beli Sekarang</span>
-    </a>
-  </div>
-
-  <div class="vertical-products">
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk Terbaru 1" data-price="40000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 1" />
-      <div class="product-details">
-          <div class="product-info">
-              <div class="product-name">Produk Terbaru 1</div>
-              <div class="product-description">Deskripsi lengkap Produk Terbaru 1.</div>
-          </div>
-          <span class="buy-button">Beli Sekarang</span>
+  <div class="product-list">
+    <a onclick="addToCart(this)" class="product-card">
+      <div class="product-image-container">
+        <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 1">
       </div>
+      <div class="product-title">Produk 1</div>
+      <div class="product-price">Rp 50.000</div>
     </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk Terbaru 2" data-price="45000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 2" />
-      <div class="product-details">
-          <div class="product-info">
-              <div class="product-name">Produk Terbaru 2</div>
-              <div class="product-description">Deskripsi lengkap Produk Terbaru 2.</div>
-          </div>
-          <span class="buy-button">Beli Sekarang</span>
+    <a onclick="addToCart(this)" class="product-card">
+      <div class="product-image-container">
+        <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 2">
       </div>
+      <div class="product-title">Produk 2</div>
+      <div class="product-price">Rp 75.000</div>
     </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk Terbaru 3" data-price="50000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 3" />
-      <div class="product-details">
-          <div class="product-info">
-              <div class="product-name">Produk Terbaru 3</div>
-              <div class="product-description">Deskripsi lengkap Produk Terbaru 3.</div>
-          </div>
-          <span class="buy-button">Beli Sekarang</span>
+    <a onclick="addToCart(this)" class="product-card">
+      <div class="product-image-container">
+        <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 3">
       </div>
+      <div class="product-title">Produk 3</div>
+      <div class="product-price">Rp 120.000</div>
     </a>
-    <a href="javascript:void(0);" class="product-item" 
-       data-name="Produk Terbaru 4" data-price="55000" data-image="https://nasukafoods.site/wireless.jpg">
-      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 4" />
-      <div class="product-details">
-          <div class="product-info">
-              <div class="product-name">Produk Terbaru 4</div>
-              <div class="product-description">Deskripsi lengkap Produk Terbaru 4.</div>
-          </div>
-          <span class="buy-button">Beli Sekarang</span>
+    <a onclick="addToCart(this)" class="product-card">
+      <div class="product-image-container">
+        <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
       </div>
+      <div class="product-title">Produk 4</div>
+      <div class="product-price">Rp 45.000</div>
     </a>
   </div>
 
   <script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
-    const body = document.body;
-    
-    const loginForm = document.getElementById('loginForm');
-    const loginButton = document.getElementById('loginButton');
-    const loginStatus = document.getElementById('login-status');
-    const loginSection = document.getElementById('login-section');
-    const loginNavLink = document.getElementById('login-nav-link');
-    
-    const registerForm = document.getElementById('registerForm');
-    const registerButton = document.getElementById('registerButton');
-    const registerStatus = document.getElementById('register-status');
-    const registerSection = document.getElementById('register-section');
-    const registerNavLink = document.getElementById('register-nav-link');
+    // This function is no longer used for redirection in this revision
+    // function isUserLoggedIn() {
+    //   return false; 
+    // }
 
-    const cartSection = document.getElementById('cart-section');
-    const cartNavLink = document.getElementById('cart-nav-link');
-    const cartItemsList = document.getElementById('cart-items-list');
-    const cartTotalElement = document.getElementById('cart-total');
-    const checkoutButton = document.getElementById('checkout-button');
-    const emptyCartMessage = document.getElementById('empty-cart-message');
+    // Updated addToCart function to save clicked product data to localStorage only
+    function addToCart(element) {
+      // Extract product data from the clicked element
+      const title = element.querySelector('.product-title').innerText;
+      const price = element.querySelector('.product-price').innerText;
+      const img = element.querySelector('.product-image').src;
+      
+      const product = { 
+          name: title, 
+          price: price, 
+          image: img,
+          quantity: 1 
+      };
 
-    const logoutLink = document.getElementById('logout-link');
-    const heroUsername = document.getElementById('hero-username');
-    const heroDesc = document.getElementById('hero-desc');
+      // Retrieve existing cart data from localStorage, or initialize as an empty array
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    let cart = [];
+      // Add the new product to the cart array
+      cart.push(product);
 
-    function toggleSection(sectionId) {
-        const sections = document.querySelectorAll('.form-container, .cart-container');
-        sections.forEach(section => {
-            if (section.id !== sectionId) {
-                section.style.display = 'none';
-            }
-        });
+      // Save the updated cart array back to localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
 
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection.style.display === 'block') {
-            targetSection.style.display = 'none';
-        } else {
-            targetSection.style.display = 'block';
-        }
-    }
-
-    function updateLoginStatus(isLoggedIn, userData = null) {
-      if (isLoggedIn) {
-        body.classList.remove('show-logged-out');
-        body.classList.add('show-logged-in');
-        if (userData) {
-          heroUsername.textContent = userData['Nama Lengkap'] || userData['Username'] || 'Member Nasuka';
-          const saldo = userData['Saldo'] ? parseFloat(userData['Saldo']) : 0;
-          heroDesc.textContent = `Saldo Anda: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(saldo)}`;
-        }
-        localStorage.setItem('userLoggedIn', 'true');
-        if (userData) {
-            localStorage.setItem('userData', JSON.stringify(userData));
-        }
-        
-        loginSection.style.display = 'none';
-        registerSection.style.display = 'none';
-        cartSection.style.display = 'none';
-
-      } else {
-        body.classList.remove('show-logged-in');
-        body.classList.add('show-logged-out');
-        heroUsername.textContent = 'Pengunjung';
-        heroDesc.textContent = 'Selamat datang di Nasuka Foods';
-        localStorage.removeItem('userLoggedIn');
-        localStorage.removeItem('userData');
-        
-        cart = [];
-        saveCartToLocalStorage();
-        renderCart();
-      }
-    }
-
-    function loadCartFromLocalStorage() {
-        const savedCart = localStorage.getItem('nasukaCart');
-        if (savedCart) {
-            try {
-                cart = JSON.parse(savedCart);
-            } catch (e) {
-                console.error("Failed to parse cart data from localStorage", e);
-                cart = [];
-            }
-        }
-    }
-
-    function saveCartToLocalStorage() {
-        localStorage.setItem('nasukaCart', JSON.stringify(cart));
-    }
-
-    function addToCart(product) {
-        const existingItem = cart.find(item => item.name === product.name);
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({ ...product, quantity: 1 });
-        }
-        saveCartToLocalStorage();
-        renderCart();
-        alert(`${product.name} telah ditambahkan ke keranjang!`);
-    }
-
-    window.removeFromCart = function(index) {
-        cart.splice(index, 1);
-        saveCartToLocalStorage();
-        renderCart();
-    };
-
-    function renderCart() {
-        cartItemsList.innerHTML = '';
-        let total = 0;
-
-        if (cart.length === 0) {
-            emptyCartMessage.style.display = 'block';
-            checkoutButton.style.display = 'none';
-        } else {
-            emptyCartMessage.style.display = 'none';
-            checkoutButton.style.display = 'block';
-
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-
-                const cartItemElement = document.createElement('div');
-                cartItemElement.classList.add('cart-item');
-                
-                cartItemElement.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-details">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-price">
-                            ${item.quantity} x ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price)}
-                        </div>
-                    </div>
-                    <button onclick="removeFromCart(${index})">Hapus</button>
-                `;
-                cartItemsList.appendChild(cartItemElement);
-            });
-        }
-
-        cartTotalElement.textContent = `Total: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(total)}`;
-    }
-
-    // New function to handle product clicks and check login status
-    function handleProductClick(e) {
-        e.preventDefault(); 
-        const targetElement = e.target.closest('.product-item, .small-product-item');
-        
-        const product = {
-            name: targetElement.getAttribute('data-name'),
-            price: parseFloat(targetElement.getAttribute('data-price')),
-            image: targetElement.getAttribute('data-image')
-        };
-
-        addToCart(product);
-        
-        // Remove the automatic cart popup for non-members here
-        // const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        // if (!isLoggedIn) {
-        //     toggleSection('cart-section');
-        // }
-    }
-
-    // Attach the new click handler to all product items
-    document.querySelectorAll('.product-item, .small-product-item').forEach(link => {
-        link.addEventListener('click', handleProductClick);
-    });
-    
-    if (checkoutButton) {
-        checkoutButton.addEventListener('click', (e) => {
-            if (cart.length === 0) {
-                 e.preventDefault(); 
-                 alert("Keranjang belanja Anda kosong.");
-             }
-        });
-    }
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-        loadCartFromLocalStorage();
-        renderCart(); 
-        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        let userData = null;
-        try {
-            userData = JSON.parse(localStorage.getItem('userData'));
-        } catch (e) {
-            console.error("Failed to parse user data from localStorage", e);
-        }
-        updateLoginStatus(isLoggedIn, userData);
-    });
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            loginButton.disabled = true;
-            loginButton.textContent = 'Login...';
-            loginStatus.style.display = 'none';
-
-            const formData = new FormData(loginForm);
-            formData.append('action', 'login');
-            const params = new URLSearchParams(formData);
-
-            try {
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: params
-                });
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    loginStatus.textContent = result.message;
-                    loginStatus.style.color = '#25D366';
-                    updateLoginStatus(true, result.data);
-                } else {
-                    loginStatus.textContent = result.message || 'Login gagal.';
-                    loginStatus.style.color = '#dc3545';
-                    updateLoginStatus(false);
-                }
-            } catch (error) {
-                loginStatus.textContent = 'Terjadi kesalahan: ' + error.message;
-                loginStatus.style.color = '#dc3545';
-                updateLoginStatus(false);
-            } finally {
-                loginButton.disabled = false;
-                loginButton.textContent = 'Login';
-            }
-        });
-    }
-
-    if (registerForm) {
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            registerButton.disabled = true;
-            registerButton.textContent = 'Mendaftar...';
-            registerStatus.style.display = 'none';
-
-            const formData = new FormData(registerForm);
-            formData.append('action', 'signup');
-            const params = new URLSearchParams(formData);
-
-            try {
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    body: params
-                });
-
-                const result = await response.json();
-                
-                registerStatus.textContent = result.message;
-                registerStatus.style.display = 'block';
-                
-                if (result.status === 'success') {
-                    registerStatus.style.color = '#25D366';
-                    registerForm.reset(); 
-                    toggleSection('login-section');
-                } else {
-                    registerStatus.style.color = '#dc3545';
-                }
-            } catch (error) {
-                registerStatus.textContent = 'Terjadi kesalahan: ' + error.message;
-                registerStatus.style.color = '#dc3545';
-            } finally {
-                registerButton.disabled = false;
-                registerButton.textContent = 'Daftar';
-            }
-        });
-    }
-
-    if (logoutLink) {
-        logoutLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            updateLoginStatus(false);
-        });
-    }
-
-    if (loginNavLink) {
-        loginNavLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSection('login-section');
-        });
-    }
-
-    if (registerNavLink) {
-        registerNavLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSection('register-section');
-        });
-    }
-
-    if (cartNavLink) {
-        cartNavLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            renderCart();
-            toggleSection('cart-section');
-        });
+      // Removed redirection logic. Clicking the product now only saves it to the cart.
     }
   </script>
 
