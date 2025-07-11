@@ -244,6 +244,41 @@
       cursor: pointer;
     }
 
+    .vertical-products {
+      display: flex;
+      flex-direction: column;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 10px;
+    }
+
+    .vertical-products .product-item {
+      display: block;
+      width: 100%;
+      max-width: none;
+      margin: 15px auto;
+      text-align: left;
+      
+    }
+    
+    .vertical-products .product-item img {
+        aspect-ratio: 16 / 9;
+        max-height: 400px;
+        object-fit: cover;
+    }
+    
+    .vertical-products .product-details {
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .vertical-products .product-name {
+        margin-top: 0;
+        font-size: 20px;
+    }
+
     @media (max-width: 600px) {
       .horizontal-images .product-item {
         max-width: 90%;
@@ -284,7 +319,7 @@
         color: white;
         font-weight: bold;
         cursor: pointer;
-        border-radius: 4px;
+        border-radius: 44px;
     }
     .form-status {
         margin-top: 10px;
@@ -595,6 +630,53 @@
     </a>
   </div>
 
+  <div class="vertical-products">
+    <a href="javascript:void(0);" class="product-item" 
+       data-name="Produk Terbaru 1" data-price="40000" data-image="https://nasukafoods.site/wireless.jpg">
+      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 1" />
+      <div class="product-details">
+          <div class="product-info">
+              <div class="product-name">Produk Terbaru 1</div>
+              <div class="product-description">Deskripsi lengkap Produk Terbaru 1.</div>
+          </div>
+          <span class="buy-button">Beli Sekarang</span>
+      </div>
+    </a>
+    <a href="javascript:void(0);" class="product-item" 
+       data-name="Produk Terbaru 2" data-price="45000" data-image="https://nasukafoods.site/wireless.jpg">
+      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 2" />
+      <div class="product-details">
+          <div class="product-info">
+              <div class="product-name">Produk Terbaru 2</div>
+              <div class="product-description">Deskripsi lengkap Produk Terbaru 2.</div>
+          </div>
+          <span class="buy-button">Beli Sekarang</span>
+      </div>
+    </a>
+    <a href="javascript:void(0);" class="product-item" 
+       data-name="Produk Terbaru 3" data-price="50000" data-image="https://nasukafoods.site/wireless.jpg">
+      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 3" />
+      <div class="product-details">
+          <div class="product-info">
+              <div class="product-name">Produk Terbaru 3</div>
+              <div class="product-description">Deskripsi lengkap Produk Terbaru 3.</div>
+          </div>
+          <span class="buy-button">Beli Sekarang</span>
+      </div>
+    </a>
+    <a href="javascript:void(0);" class="product-item" 
+       data-name="Produk Terbaru 4" data-price="55000" data-image="https://nasukafoods.site/wireless.jpg">
+      <img src="https://nasukafoods.site/wireless.jpg" alt="Produk Terbaru 4" />
+      <div class="product-details">
+          <div class="product-info">
+              <div class="product-name">Produk Terbaru 4</div>
+              <div class="product-description">Deskripsi lengkap Produk Terbaru 4.</div>
+          </div>
+          <span class="buy-button">Beli Sekarang</span>
+      </div>
+    </a>
+  </div>
+
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
     const body = document.body;
@@ -822,7 +904,6 @@
                 loginStatus.style.color = '#dc3545';
                 updateLoginStatus(false);
             } finally {
-                loginStatus.style.display = 'block';
                 loginButton.disabled = false;
                 loginButton.textContent = 'Login';
             }
