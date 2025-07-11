@@ -368,6 +368,7 @@
     <a href="https://nasukafoods.site">🏠<br>Home</a>
     <a href="#login-section" id="login-nav-link">👤<br>Login</a> 
     <a href="#register-section" id="register-nav-link">📝<br>Daftar</a>
+    <a href="#cart-section" id="cart-nav-link">🛒<br>Keranjang Non Member</a> 
   </div>
 
   <div id="logged-in-nav" class="top-bar logged-in-nav">
@@ -752,13 +753,12 @@
         };
 
         addToCart(product);
-
-        // Check if the user is a non-member (not logged in)
-        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        if (!isLoggedIn) {
-            // If non-member, show the cart popup
-            toggleSection('cart-section');
-        }
+        
+        // Remove the automatic cart popup for non-members here
+        // const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        // if (!isLoggedIn) {
+        //     toggleSection('cart-section');
+        // }
     }
 
     // Attach the new click handler to all product items
