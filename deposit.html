@@ -175,7 +175,7 @@
   </div>
 
   <script>
-    // URL Google Apps Script yang baru disimpan
+    // URL Google Apps Script yang terbaru
     const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
     const form = document.getElementById('depositForm');
     const submitButton = document.getElementById('submitButton');
@@ -203,7 +203,7 @@
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
-                // Hapus awalan data:image/jpeg;base64,
+                // Hapus awalan data:image/jpeg;base64, dll. untuk GAS
                 const base64String = reader.result.split(',')[1];
                 resolve(base64String);
             };
@@ -222,23 +222,18 @@
 
         // Mengumpulkan data formulir
         const formData = new FormData(form);
-        const dataToSend = {};
-
-        // Ubah FormData menjadi objek JavaScript (kecuali file input)
-        formData.forEach((value, key) => {
-            if (key !== 'buktiTransfer') {
-                dataToSend[key] = value;
-            }
-        });
-
-        // Proses file bukti transfer menjadi Base64
+        
+        // Proses file bukti transfer menjadi Base64 dan menambahkannya ke FormData
         const file = buktiTransferInput.files[0];
 
         if (file) {
             try {
                 const base64Data = await readFileAsBase64(file);
-                dataToSend['buktiTransferBase64'] = base64Data;
-                dataToSend['buktiTransferMimeType'] = file.type;
+                // Menambahkan data Base64 dan MIME type ke FormData
+                formData.append('buktiTransferBase64', base64Data);
+                formData.append('buktiTransferMimeType', file.type);
+                // Menghapus file Blob dari FormData asli agar tidak dikirim ganda
+                formData.delete('buktiTransfer'); 
             } catch (error) {
                 displayStatus('Gagal membaca file bukti transfer.', 'error');
                 submitButton.disabled = false;
@@ -252,35 +247,42 @@
             return;
         }
 
-        dataToSend['action'] = 'deposit';
+        // Menambahkan action ke FormData
+        formData.append('action', 'deposit');
 
-        // Kirim data JSON ke Apps Script
-        await sendDataToGAS(dataToSend);
+        // Kirim FormData ke Apps Script
+        await sendDataToGAS(formData);
     });
 
-    // Fungsi untuk mengirim data JSON ke Google Apps Script
+    // Fungsi untuk mengirim data FormData ke Google Apps Script
     async function sendDataToGAS(data) {
         try {
-            // Mengirim data sebagai payload JSON
+            // Mengirim FormData. Penting: Tidak perlu mengatur header Content-Type di sini. 
+            // Browser akan mengaturnya secara otomatis sebagai multipart/form-data.
             const response = await fetch(GAS_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data) 
+                body: data 
             });
 
+            // Pastikan respons berhasil (status 200-299)
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Google Apps Script harus mengembalikan respons JSON
             const result = await response.json();
             
             if (result.status === 'success') {
                 displayStatus(result.message, 'success');
-                // Reset form setelah berhasil jika diinginkan
+                // Reset form setelah berhasil
                 form.reset();
                 populateUserData(); // Isi ulang data member setelah reset
             } else {
                 displayStatus(result.message || 'Pengajuan deposit gagal.', 'error');
             }
         } catch (error) {
+            // Menangkap error jaringan/fetch
+            console.error("Fetch error:", error);
             displayStatus('Terjadi kesalahan koneksi: ' + error.message, 'error');
         } finally {
             submitButton.disabled = false;
