@@ -740,19 +740,30 @@
         cartTotalElement.textContent = `Total: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(total)}`;
     }
 
-    document.querySelectorAll('.product-item, .small-product-item').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            const targetElement = e.target.closest('.product-item, .small-product-item');
-            
-            const product = {
-                name: targetElement.getAttribute('data-name'),
-                price: parseFloat(targetElement.getAttribute('data-price')),
-                image: targetElement.getAttribute('data-image')
-            };
+    // New function to handle product clicks and check login status
+    function handleProductClick(e) {
+        e.preventDefault(); 
+        const targetElement = e.target.closest('.product-item, .small-product-item');
+        
+        const product = {
+            name: targetElement.getAttribute('data-name'),
+            price: parseFloat(targetElement.getAttribute('data-price')),
+            image: targetElement.getAttribute('data-image')
+        };
 
-            addToCart(product);
-        });
+        addToCart(product);
+
+        // Check if the user is a non-member (not logged in)
+        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        if (!isLoggedIn) {
+            // If non-member, show the cart popup
+            toggleSection('cart-section');
+        }
+    }
+
+    // Attach the new click handler to all product items
+    document.querySelectorAll('.product-item, .small-product-item').forEach(link => {
+        link.addEventListener('click', handleProductClick);
     });
     
     if (checkoutButton) {
