@@ -76,6 +76,12 @@
       margin-top: 5px;
     }
 
+    .info .balance {
+        font-size: 14px;
+        font-weight: bold;
+        color: black;
+    }
+
     .sidebar {
       right: 10px;
       display: flex;
@@ -123,62 +129,33 @@
     }
 
     .product-title {
-      font-size: 10px;
-      margin-top: 4px;
+      font-size: 15.6px;
+      margin-top: 6px;
     }
 
     .product-price {
       font-weight: bold;
-      font-size: 9px;
-      margin-top: 2px;
-      color: #ffbb00;
+      font-size: 14.1px;
+      margin-top: 3px;
+      color: black;
     }
 
     .add-to-cart-btn {
-      background-color: #25D366;
+      background-color: #8B0000;
       color: white;
       border: none;
-      padding: 5px 10px;
-      font-size: 8px;
+      padding: 7.5px 15px;
+      font-size: 12.5px;
       border-radius: 4px;
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 6px;
       width: 100%;
       box-sizing: border-box;
       text-align: center;
     }
 
     .add-to-cart-btn:hover {
-      background-color: #1a8a47;
-    }
-
-    .video-section {
-      width: 100%;
-      height: 10vh;
-      padding: 10px;
-      box-sizing: border-box;
-      text-align: center;
-    }
-
-    .video-container {
-      width: 95%;
-      height: 100%;
-      margin: 0 auto;
-      border: 2px solid #333;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: black;
-    }
-
-    .video-container video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      background-color: #5e0000;
     }
 
     .modal {
@@ -214,7 +191,7 @@
 
     .close-button:hover,
     .close-button:focus {
-      color: #ffbb00;
+      color: black;
       text-decoration: none;
       cursor: pointer;
     }
@@ -228,7 +205,7 @@
         margin-bottom: 8px;
         font-weight: bold;
     }
-    input[type="text"], input[type="password"], input[type="number"], select {
+    input, select {
         width: 100%;
         padding: 12px;
         border: 1px solid #333;
@@ -238,7 +215,7 @@
         box-sizing: border-box;
         font-size: 16px;
     }
-    button[type="submit"] {
+    button {
         width: 100%;
         padding: 15px;
         background-color: #25D366;
@@ -250,7 +227,7 @@
         border-radius: 4px;
         margin-top: 10px;
     }
-    button[type="submit"]:hover {
+    button:hover {
         background-color: #1a8a47;
     }
     .status-message {
@@ -270,7 +247,7 @@
         text-align: center;
     }
     .register-link a {
-        color: #ffbb00;
+        color: black;
         text-decoration: none;
     }
 
@@ -280,7 +257,7 @@
         border-bottom: 1px solid #333;
     }
     .profile-info strong {
-        color: #ffbb00;
+        color: black;
     }
   </style>
 </head>
@@ -295,7 +272,7 @@
     <div class="info">
       <div class="location">Jawa Barat</div>
       <div class="username" id="user-greeting">Proyek Apk</div>
-
+      <div class="balance" id="user-balance"></div>
     </div>
     <div class="sidebar">
       <div>❤️ 200.k</div>
@@ -306,15 +283,19 @@
 
   <div class="product-list">
     <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
+      <a href="https://nasukafoods.site/produk-detail-1.html">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 1">
         </div>
         <div class="product-title">Produk 1</div>
         <div class="product-price">Rp 50.000</div>
       </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Masukin Ke Keranjang</button>
+      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
+
+
+
+
     <div class="product-card">
       <a href="https://nasukafoods.site/product-detail.html">
         <div class="product-image-container">
@@ -323,7 +304,7 @@
         <div class="product-title">Produk 2</div>
         <div class="product-price">Rp 75.000</div>
       </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Masukin Ke Keranjang</button>
+      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
     <div class="product-card">
       <a href="https://nasukafoods.site/product-detail.html">
@@ -333,7 +314,7 @@
         <div class="product-title">Produk 3</div>
         <div class="product-price">Rp 120.000</div>
       </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Masukin Ke Keranjang</button>
+      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
     <div class="product-card">
       <a href="https://nasukafoods.site/product-detail.html">
@@ -343,20 +324,17 @@
         <div class="product-title">Produk 4</div>
         <div class="product-price">Rp 45.000</div>
       </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Masukin Ke Keranjang</button>
+      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
   </div>
 
-  <section class="video-section">
-    <div class="video-container">
-        <video src="https://nasukafoods.site/kawasakih2.mp4" controls playsinline loop></video>
-    </div>
-  </section>
+
+
 
   <div id="topupModal" class="modal">
     <div class="modal-content">
       <span class="close-button" onclick="closeTopupModal()">&times;</span>
-      <h2 style="color: #ffbb00; text-align: center;">Top Up Saldo</h2>
+      <h2 style="color: black; text-align: center;">Top Up Saldo</h2>
       <form id="modalTopupForm">
         <div class="form-group">
             <label for="topupAmount">Jumlah Deposit (Rp):</label>
@@ -380,7 +358,7 @@
   <div id="profileModal" class="modal">
     <div class="modal-content">
       <span class="close-button" onclick="closeProfileModal()">&times;</span>
-      <h2 style="color: #ffbb00; text-align: center;">Profil Pengguna</h2>
+      <h2 style="color: black; text-align: center;">Profil Pengguna</h2>
       <div class="profile-info" id="profileInfoContent">
         </div>
       <div style="text-align: center; margin-top: 20px;">
@@ -392,8 +370,19 @@
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
 
+    function formatRupiah(number) {
+        const num = parseFloat(number);
+        if (isNaN(num)) {
+            return 'Rp 0';
+        }
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(num);
+    }
+
     function addToCart(element) {
-      // Find the closest product-card parent
       const productCard = element.closest('.product-card');
       if (!productCard) return;
 
@@ -415,23 +404,72 @@
       alert(`${title} berhasil ditambahkan ke keranjang.`);
     }
 
+    async function fetchUserBalance(userData) {
+        const userBalanceElement = document.getElementById('user-balance');
+
+        // Display 'Memuat saldo...' initially
+        userBalanceElement.textContent = 'Memuat saldo...';
+
+        const identifier = userData['Username'] || userData['Nomor HP'];
+        const identifierType = userData['Username'] ? 'Username' : 'Nomor HP';
+
+        if (!identifier) {
+            userBalanceElement.textContent = 'Saldo: -';
+            return;
+        }
+
+        try {
+            const payload = new URLSearchParams({
+                action: 'getUserData',
+                identifier: identifier,
+                identifierType: identifierType
+            });
+
+            const response = await fetch(GAS_URL + '?' + payload.toString(), {
+                method: 'GET'
+            });
+
+            const result = await response.json();
+
+            if (result.status === 'success' && result.data && result.data['Saldo'] !== undefined) {
+                const latestSaldo = result.data['Saldo'];
+                userBalanceElement.textContent = `Saldo: ${formatRupiah(latestSaldo)}`;
+
+                // Update localStorage with the latest Saldo
+                let updatedUserData = { ...userData,
+                    'Saldo': latestSaldo
+                };
+                localStorage.setItem('userData', JSON.stringify(updatedUserData));
+            } else {
+                userBalanceElement.textContent = 'Saldo: Rp 0';
+            }
+        } catch (error) {
+            userBalanceElement.textContent = 'Gagal memuat saldo.';
+        }
+    }
+
     function updateUIBasedOnLoginStatus() {
         const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        const userData = localStorage.getItem('userData');
+        const userDataString = localStorage.getItem('userData');
         const topBarLinks = document.getElementById('top-bar-links');
         const userGreeting = document.getElementById('user-greeting');
+        const userBalanceElement = document.getElementById('user-balance');
 
         let linksHTML = '';
 
-        if (isLoggedIn && userData) {
+        if (isLoggedIn && userDataString) {
             try {
-                const user = JSON.parse(userData);
+                const user = JSON.parse(userDataString);
 
+                // Update username
                 if (user['Nama Lengkap']) {
                     userGreeting.textContent = user['Nama Lengkap'];
                 } else if (user['Username']) {
                     userGreeting.textContent = user['Username'];
                 }
+
+                // Call fetchUserBalance to get and display the latest saldo from the sheet
+                fetchUserBalance(user);
 
                 linksHTML = `
                     <a href="index.html">🏠<br>Home</a>
@@ -440,16 +478,27 @@
                     <a href="keranjang.html">🛒 <br>Keranjang</a>
                 `;
             } catch (e) {
+                // Handle parsing errors
                 localStorage.removeItem('userLoggedIn');
                 localStorage.removeItem('userData');
-                updateUIBasedOnLoginStatus();
-                return;
+
+
+
+
+  userGreeting.textContent = 'Hai selamat datang';
+  userBalanceElement.textContent = '';
+
+
+                linksHTML = `
+                    <a href="index.html">🏠<br>Home</a>
+                    <a href="https://nasukafoods.site/login.html">📥<br>Login</a>
+                    <a href="https://nasukafoods.site/keranjang-non-member.html">🛒 <br>Keranjang</a>
+                `;
             }
-
-
         } else {
+            // Not logged in
             userGreeting.textContent = 'Hai selamat datang';
-
+            userBalanceElement.textContent = '';
 
             linksHTML = `
                 <a href="index.html">🏠<br>Home</a>
@@ -488,6 +537,8 @@
         modalTopupButton.textContent = 'Ajukan Top Up';
         modalTopupButton.disabled = false;
         modalTopupForm.reset();
+        // Refresh saldo display when closing top-up modal
+        updateUIBasedOnLoginStatus();
     }
 
     modalTopupForm.addEventListener('submit', async (e) => {
@@ -587,7 +638,8 @@
         profileHTML += `<p><strong>Username:</strong> ${user['Username'] || '-'}</p>`;
         profileHTML += `<p><strong>Nomor HP:</strong> ${user['Nomor HP'] || '-'}</p>`;
         profileHTML += `<p><strong>Alamat:</strong> ${user['Alamat Lengkap'] || '-'}</p>`;
-        profileHTML += `<p><strong>Saldo:</strong> Rp ${user['Saldo'] || '0'}</p>`;
+        // Use the Saldo from localStorage for the profile modal
+        profileHTML += `<p><strong>Saldo:</strong> ${user['Saldo'] ? formatRupiah(user['Saldo']) : 'Rp 0'}</p>`;
         profileHTML += `<p><strong>Tentang Saya:</strong> ${user['Tentang Saya'] || '-'}</p>`;
         profileHTML += `<p><strong>Tanggal Daftar:</strong> ${user['Tanggal Daftar'] || '-'}</p>`;
 
