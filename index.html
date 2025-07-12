@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Nasuka Shop</title>
+
 <style>
 body {
   margin: 0;
@@ -90,8 +91,8 @@ body {
 
 .product-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns, equal width */
-  gap: 15px; /* Spacing between products */
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 15px; 
   padding: 20px 10px;
 }
 
@@ -137,22 +138,20 @@ body {
   background-color: #f9f9f9;
 }
 
-/* Modal Overlay Styles */
 .modal-overlay {
-  display: none; /* Hidden by default */
+  display: none; 
   position: fixed; 
   z-index: 1000; 
   left: 0;
   top: 0;
   width: 100%; 
   height: 100%; 
-  background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+  background-color: rgba(0,0,0,0.5); 
   overflow: auto;
   justify-content: center;
   align-items: center;
 }
 
-/* Modal Content Styles (Adapted Profile Section) */
 #profileSection, #loginSection, #registerSection {
   background-color: #fefefe;
   padding: 20px;
@@ -176,7 +175,6 @@ body {
   cursor: pointer;
 }
 
-/* Ensure payment section remains hidden in main flow */
 .payment-section {
   display: none;
 }
@@ -225,7 +223,7 @@ body {
     margin: 5px 0;
 }
 </style>
-</head>
+
 <body>
 <section class="hero-section">
 <div class="info">
@@ -237,7 +235,7 @@ body {
 <div class="sidebar">
   <div>❤️ 200.k</div>
   <div>💬 4.M</div>
-  <div>🛒 Keranjang</div>
+  <div>🛒</div>
 </div>
 
 </section>
@@ -311,6 +309,9 @@ body {
 
       <label for="nomorHP">Nomor HP:</label>
       <input type="tel" id="nomorHP" required>
+      
+      <label for="sosialMedia">Sosial Media:</label>
+      <input type="text" id="sosialMedia" value="Akun tiktok (Misal : @supria-jaya)">
 
       <label for="fhoto">Fhoto:</label>
       <input type="file" id="fhoto" accept="image/*">
@@ -377,18 +378,28 @@ body {
   <div class="order-details">
     <p><strong>Produk:</strong> <span id="paymentProductName"></span></p>
     <p><strong>Harga:</strong> <span id="paymentProductPrice"></span></p>
+    <p><strong>Kuantitas:</strong> <span id="paymentQuantity">1</span></p> 
+    <p><strong>Total Harga:</strong> <span id="paymentTotal"></span></p> 
     <p><strong>Nama:</strong> <span id="paymentName"></span></p>
     <p><strong>Alamat:</strong> <span id="paymentAddress"></span></p>
     <p><strong>Nomor HP:</strong> <span id="paymentPhone"></span></p>
+    <p><strong>Sosial Media:</strong> <span id="paymentSocialMedia"></span></p> 
   </div>
   
   <form id="paymentForm" class="payment-form">
+    <label for="kuantitasInput">Kuantitas:</label>
+    <input type="number" id="kuantitasInput" min="1" value="1" required>
+
     <label for="metodePembayaran">Metode Pembayaran:</label>
     <select id="metodePembayaran" required>
       <option value="">Pilih Metode Pembayaran</option>
       <option value="Transfer Bank">Transfer Bank</option>
-      <option value="E-Wallet">E-Wallet</option>
+      <option value="Qris">Qris</option>
+      <option value="Tunai">Tunai</option>
     </select>
+
+    <label for="buktiPembayaran">Bukti Pembayaran:</label>
+    <input type="file" id="buktiPembayaran" accept="image/*">
 
     <label for="catatan">Catatan (opsional):</label>
     <input type="text" id="catatan">
@@ -402,32 +413,30 @@ body {
 <a href="#" id="loginNav">✅<br>Layn</a>
 <a href="https://nasukafoods.site">➕<br>Pes</a>
 <a href="https://nasukafoods.site">📨<br>Otf</a>
-<a href="#" id="profileNav">👤<br>Profile</a>
+<a href="#" id="profileNav">👤<br>Profil</a>
 </div>
 
 <script>
-  // GAS URL for Customers sheet (from memory)
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbx5KBwWoK59Ppp6bfo49QSmzUhwJH1QuYJ-xAHBytGvBGgJDun0tuixzBwq3Nt4bfWF3w/exec';
 
-  // Profile Section Script (Data Diri)
-  document.getElementById('profileForm').addEventListener('submit', async function(event) {
+document.getElementById('profileForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     
     const namaLengkap = document.getElementById('namaLengkap').value;
     const alamatLengkap = document.getElementById('alamatLengkap').value;
     const nomorHP = document.getElementById('nomorHP').value;
+    const sosialMedia = document.getElementById('sosialMedia').value;
     const kataKataHariIni = document.getElementById('kataKataHariIni').value;
     const statusMessage = document.getElementById('statusMessage');
     
-    // Save data to localStorage
     if (typeof(Storage) !== "undefined") {
       localStorage.setItem('visitorData_namaLengkap', namaLengkap);
       localStorage.setItem('visitorData_alamatLengkap', alamatLengkap);
       localStorage.setItem('visitorData_nomorHP', nomorHP);
+      localStorage.setItem('visitorData_sosialMedia', sosialMedia);
       localStorage.setItem('visitorData_kataKataHariIni', kataKataHariIni);
     }
 
-    // Prepare data for Google Sheet submission
     const now = new Date();
     const tanggalDaftar = now.toLocaleString();
     
@@ -436,14 +445,13 @@ body {
       'Nama Lengkap': namaLengkap,
       'Alamat Lengkap': alamatLengkap,
       'Nomor HP': nomorHP,
+      'Sosial Media': sosialMedia,
       'Tanggal Daftar': tanggalDaftar,
       'Kata Kata Hari Ini': kataKataHariIni 
     };
 
-    // Convert formData object to URLSearchParams (standard form data)
     const urlParams = new URLSearchParams(formData);
 
-    // Send data to Google Apps Script
     statusMessage.textContent = 'Mengirim data...';
     statusMessage.style.color = 'blue';
 
@@ -466,15 +474,14 @@ body {
     }
   });
 
-  // Load Data Function (on page load)
-  function loadVisitorData() {
+function loadVisitorData() {
     if (typeof(Storage) !== "undefined") {
       const namaLengkap = localStorage.getItem('visitorData_namaLengkap');
       const alamatLengkap = localStorage.getItem('visitorData_alamatLengkap');
       const nomorHP = localStorage.getItem('visitorData_nomorHP');
+      const sosialMedia = localStorage.getItem('visitorData_sosialMedia');
       const kataKataHariIni = localStorage.getItem('visitorData_kataKataHariIni');
 
-      // Populate profile form fields
       if (namaLengkap) {
         document.getElementById('namaLengkap').value = namaLengkap;
       }
@@ -484,80 +491,69 @@ body {
       if (nomorHP) {
         document.getElementById('nomorHP').value = nomorHP;
       }
+      if (sosialMedia) {
+        document.getElementById('sosialMedia').value = sosialMedia;
+      }
       if (kataKataHariIni) {
         document.getElementById('kataKataHariIni').value = kataKataHariIni;
       }
       
-      return { namaLengkap, alamatLengkap, nomorHP, kataKataHariIni };
+      return { namaLengkap, alamatLengkap, nomorHP, sosialMedia, kataKataHariIni };
     }
     return {};
   }
   
-  // Modal Logic for Profile Section
-  const profileModal = document.getElementById('profileModal');
-  const profileNav = document.getElementById('profileNav');
-  const closeProfileModal = document.getElementById('closeProfileModal');
-  const paymentSection = document.getElementById('paymentSection');
+const profileModal = document.getElementById('profileModal');
+const profileNav = document.getElementById('profileNav');
+const closeProfileModal = document.getElementById('closeProfileModal');
+const paymentSection = document.getElementById('paymentSection');
+const loginModal = document.getElementById('loginModal');
+const registerModal = document.getElementById('registerModal');
+const loginNav = document.getElementById('loginNav');
+const closeLoginModal = document.getElementById('closeLoginModal');
+const registerLink = document.getElementById('registerLink');
+const closeRegisterModal = document.getElementById('closeRegisterModal');
 
-  // Open the modal and load data
-  profileNav.addEventListener('click', function(event) {
+profileNav.addEventListener('click', function(event) {
     event.preventDefault(); 
     
-    // Hide other modals/sections if visible
     paymentSection.style.display = 'none';
-    document.getElementById('loginModal').style.display = 'none';
-    document.getElementById('registerModal').style.display = 'none';
+    loginModal.style.display = 'none';
+    registerModal.style.display = 'none';
 
     profileModal.style.display = 'flex'; 
-    loadVisitorData(); // Load data when opening the profile modal
-  });
+    loadVisitorData(); 
+});
 
-  // Close the modal when the close button is clicked
-  closeProfileModal.addEventListener('click', function() {
+closeProfileModal.addEventListener('click', function() {
     profileModal.style.display = 'none';
-  });
+});
 
-  // Login Modal Logic
-  const loginModal = document.getElementById('loginModal');
-  const loginNav = document.getElementById('loginNav');
-  const closeLoginModal = document.getElementById('closeLoginModal');
-
-  // Open the login modal
-  loginNav.addEventListener('click', function(event) {
+loginNav.addEventListener('click', function(event) {
     event.preventDefault();
     
-    // Hide other modals/sections if visible
     paymentSection.style.display = 'none';
     profileModal.style.display = 'none';
-    document.getElementById('registerModal').style.display = 'none';
+    registerModal.style.display = 'none';
     
     loginModal.style.display = 'flex';
-  });
+});
 
-  // Close the login modal
-  closeLoginModal.addEventListener('click', function() {
+closeLoginModal.addEventListener('click', function() {
     loginModal.style.display = 'none';
-  });
-  
-  // Register Modal Logic (New)
-  const registerModal = document.getElementById('registerModal');
-  const registerLink = document.getElementById('registerLink');
-  const closeRegisterModal = document.getElementById('closeRegisterModal');
+});
 
-  // Open register modal and close login modal when "Disini" is clicked
-  registerLink.addEventListener('click', function(event) {
+registerLink.addEventListener('click', function(event) {
     event.preventDefault();
     loginModal.style.display = 'none';
     registerModal.style.display = 'flex';
-  });
+});
 
-  // Close register modal
-  closeRegisterModal.addEventListener('click', function() {
+closeRegisterModal.addEventListener('click', function() {
     registerModal.style.display = 'none';
-  });
+});
 
-  // Close modals if the user clicks outside of the modal content
-  window.addEventListener('click', function(event) {
+window.addEventListener('click', function(event) {
     if (event.target == profileModal) {
       profileModal.style.display = 'none';
     }
@@ -567,43 +563,60 @@ body {
     if (event.target == registerModal) {
       registerModal.style.display = 'none';
     }
-  });
+});
 
-  // Payment Form Script
-  const buyButtons = document.querySelectorAll('.buy-button');
+const buyButtons = document.querySelectorAll('.buy-button');
+const kuantitasInput = document.getElementById('kuantitasInput');
 
-  buyButtons.forEach(button => {
+kuantitasInput.addEventListener('input', updatePaymentDetails);
+
+let currentProductPrice = 0; // Variable to store the price of the current product
+
+function updatePaymentDetails() {
+    const quantity = parseInt(kuantitasInput.value) || 0;
+    
+    // Calculate total price using the stored base price
+    const total = currentProductPrice * quantity;
+
+    document.getElementById('paymentQuantity').textContent = quantity;
+    document.getElementById('paymentTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+}
+
+buyButtons.forEach(button => {
     button.addEventListener('click', function(event) {
       event.preventDefault();
 
-      // Hide modals if visible
       profileModal.style.display = 'none';
       loginModal.style.display = 'none';
       registerModal.style.display = 'none';
-
-      // Get product details from the button's parent element (product-item)
+      
       const productItem = this.closest('.product-item');
       const productName = productItem.querySelector('.product-name').textContent;
-      const productPrice = productItem.querySelector('.product-price').textContent;
+      const productPriceText = productItem.querySelector('.product-price').textContent;
       
-      // Load visitor data from localStorage
+      // Extract numeric price from data-price attribute and store it
+      currentProductPrice = parseInt(productItem.querySelector('.product-price').dataset.price);
+
       const visitorData = loadVisitorData();
 
       // Populate payment form details
       document.getElementById('paymentProductName').textContent = productName;
-      document.getElementById('paymentProductPrice').textContent = productPrice;
+      document.getElementById('paymentProductPrice').textContent = productPriceText;
       document.getElementById('paymentName').textContent = visitorData.namaLengkap || 'Belum diisi';
       document.getElementById('paymentAddress').textContent = visitorData.alamatLengkap || 'Belum diisi';
       document.getElementById('paymentPhone').textContent = visitorData.nomorHP || 'Belum diisi';
+      document.getElementById('paymentSocialMedia').textContent = visitorData.sosialMedia || 'Belum diisi';
+
+      // Reset quantity input to 1 and update total price
+      kuantitasInput.value = 1;
+      updatePaymentDetails(); 
 
       // Show payment section
       paymentSection.style.display = 'block';
     });
-  });
+});
 
-  // Initialize data load on page load
-  document.addEventListener('DOMContentLoaded', loadVisitorData);
-
+document.addEventListener('DOMContentLoaded', loadVisitorData);
 </script>
 </body>
 </html>
