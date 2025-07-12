@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: sans-serif;
-      background-color: white;
+      background-color: white; /* Dipertahankan sebagai putih karena diminta di awal */
       color: black;
       margin: 0;
       padding: 0;
@@ -21,7 +21,8 @@
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      /* background: rgba(0, 0, 0, 0.7); */ /* Dihapus */
+      background: none; /* Dihapus */
       display: flex;
       justify-content: space-around;
       padding: 8px 0;
@@ -40,9 +41,11 @@
       width: 90%;
       padding: 20px;
       margin-top: 60px;
-      background-color: #1a1a1a;
+      /* background-color: #1a1a1a; */ /* Dihapus */
+      background-color: transparent; /* Dihapus */
       border-radius: 8px;
-      /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */ /* Baris ini dihapus untuk menghilangkan bingkai */
+      /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */ /* Dihapus */
+      box-shadow: none; /* Dihapus */
       color: white;
     }
 
@@ -55,7 +58,8 @@
     .profile-avatar {
       width: 100px;
       height: 100px;
-      background-color: #333;
+      /* background-color: #333; */ /* Dihapus */
+      background-color: transparent; /* Dihapus */
       border-radius: 50%;
       margin: 0 auto 10px;
       display: flex;
@@ -102,7 +106,8 @@
     .about-me {
         margin-top: 20px;
         padding: 15px;
-        background-color: #333;
+        /* background-color: #333; */ /* Dihapus */
+        background-color: transparent; /* Dihapus */
         border-radius: 5px;
     }
 
