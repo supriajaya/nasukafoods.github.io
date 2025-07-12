@@ -3,43 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nasuka.apk</title>
+  <title>Nasuka Foods</title>
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
-      color: black;
-      background-color: white;
-    }
-
-    .top-bar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      font-size: 12px;
-      z-index: 999;
-      background-color: rgba(0, 0, 0, 0);
-    }
-
-    .top-bar a {
+      background-color: black;
       color: white;
-      text-decoration: none;
-      text-align: center;
     }
 
     .hero-section {
       position: relative;
-      height: 20vh;
+      height: 50vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    .hero-section .hero-image {
+    .hero-section video {
       position: absolute;
       top: 0;
       left: 0;
@@ -52,8 +34,17 @@
     .promo-text,
     .info,
     .sidebar {
-     position: relative;
-     z-index: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .promo-text {
+      text-align: center;
+      margin-top: 5vh;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 6px black;
+      padding: 0 20px;
     }
 
     .info, .sidebar {
@@ -63,7 +54,6 @@
 
     .info {
       left: 10px;
-      color: white;
     }
 
     .info .location {
@@ -72,14 +62,17 @@
     }
 
     .info .username {
+      font-weight: bold;
+    }
+
+    .info .desc {
       font-size: 14px;
       margin-top: 5px;
     }
 
-    .info .balance {
-        font-size: 14px;
-        font-weight: bold;
-        color: black;
+    .info .music {
+      font-size: 12px;
+      color: #ffbb00;
     }
 
     .sidebar {
@@ -87,7 +80,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: white;
     }
 
     .sidebar div {
@@ -95,626 +87,129 @@
       font-size: 12px;
     }
 
-    .product-list {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding: 10px;
-      gap: 15px;
-      margin-top: 10px;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      padding: 1px;
-      margin-top: 10px;
-    }
-
-    .product-card {
-      min-width: 100px;
-      text-align: center;
-      color: black;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: default; /* Ubah cursor default untuk card */
-    }
-
-    /* Revisi CSS untuk container gambar dan gambar itu sendiri */
-    .product-image-container {
-      width: 100px; /* Lebar default untuk list */
-      height: 100px; /* Tinggi default untuk list */
-      overflow: hidden;
-    }
-
-    .product-grid .product-image-container {
-        width: 150px; /* Lebar untuk grid */
-        height: 150px; /* Tinggi untuk grid */
-        padding-bottom: 0;
-        position: relative;
-    }
-
-    .product-image { /* Berlaku untuk semua gambar produk */
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Ini yang memastikan gambar mengisi frame tanpa bergeser */
-        display: block;
-    }
-    /* Akhir Revisi CSS */
-
-    .product-link-wrapper { /* Wrapper baru untuk elemen yang bisa diklik menuju detail produk */
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        width: 100%; /* Agar mengisi lebar product-card */
-        cursor: pointer;
-    }
-
-    .product-title {
-      font-size: 15.6px;
-      margin-top: 6px;
-    }
-
-    .product-price {
-      font-weight: bold;
-      font-size: 14.1px;
-      margin-top: 3px;
-      color: black;
-    }
-
-    .add-to-cart-btn {
-      background-color: #8B0000;
-      color: white;
-      border: none;
-      padding: 7.5px 15px;
-      font-size: 12.5px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 6px;
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
-    }
-
-    .add-to-cart-btn:hover {
-      background-color: #5e0000;
-    }
-
-    .modal {
-      display: none;
+    .bottom-bar {
       position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+      z-index: 999;
+    }
+
+    .bottom-bar a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .gallery {
+      background: #111;
+      padding: 20px 10px 80px;
+    }
+
+    .gallery img {
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      margin: 30px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    .video-container video {
       width: 100%;
       height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.9);
-      padding-top: 60px;
-    }
-
-    .modal-content {
-      background-color: #1a1a1a;
-      margin: 5% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 8px;
-      color: white;
-    }
-
-    .close-button {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close-button:hover,
-    .close-button:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-        text-align: left;
-    }
-    label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-    }
-    input, select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #333;
-        background-color: #333;
-        color: white;
-        border-radius: 44px;
-        box-sizing: border-box;
-        font-size: 16px;
-    }
-    button {
-        width: 100%;
-        padding: 15px;
-        background-color: #25D366;
-        border: none;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        border-radius: 4px;
-        margin-top: 10px;
-    }
-    button:hover {
-        background-color: #1a8a47;
-    }
-    .status-message {
-        margin-top: 20px;
-        font-weight: bold;
-        text-align: center;
-    }
-    .error {
-        color: #dc3545;
-    }
-    .success {
-        color: #25D366;
-    }
-    .register-link {
-        margin-top: 15px;
-        font-size: 14px;
-        text-align: center;
-    }
-    .register-link a {
-        color: black;
-        text-decoration: none;
-    }
-
-    .profile-info p {
-        margin: 10px 0;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #333;
-    }
-    .profile-info strong {
-        color: black;
+      object-fit: cover;
+      display: block;
     }
   </style>
 </head>
-
 <body>
 
-  <div class="top-bar" id="top-bar-links">
+  <section class="hero-section">
+    <video src="https://nasukafoods.site/kawasakih2.mp4" autoplay muted loop playsinline></video>
+
+    <div class="promo-text">
+      Nasuka Labs <br />
+      <strong>KAWASAKI</strong>
     </div>
 
-  <section class="hero-section">
-    <img src="https://nasukafoods.site/wireless.jpg" alt="Hero Image" class="hero-image">
     <div class="info">
-      <div class="location">Jawa Barat</div>
-      <div class="username" id="user-greeting">Proyek Apk</div>
-      <div class="balance" id="user-balance"></div>
+      <div class="location">📍Indramayu | Jawa Barat</div>
+      <div class="username">Arya Kawasaki Labs</div>
+      <div class="desc">Modifikasi body custom kawasaki</div>
+      <div class="music">🎵 Created - Nasuka garage</div>
     </div>
+
     <div class="sidebar">
-      <div>❤️ 790.M</div>
-      <div>💬 427.M</div>
+      <div>❤️ 200.k</div>
+      <div>💬 4.M</div>
       <div>🔗 Share</div>
     </div>
   </section>
 
-  <div class="product-list">
-    <div class="product-card">
-      <a href="https://nasukafoods.site/produk-detail-1.html" class="product-link-wrapper">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/tiktok-viewers.png" alt="Produk 1">
-        </div>
-        <div class="product-title"><strong>CILOK</strong></div>
-        <div class="product-price">Rp 240.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
+  <p>Video diatas konon sirkel yang paling sulit ditembus, dengan mesin super charger 1.000cc </p>
+  <p> Tapi sensasi berkendara ala motor sport, pengendali kuda besi bukan sekedar menaiki mesin, bisa kamu dapatkan cukup dengan harga Rp 7.000.000</p>
+
+  <section class="gallery">
+    <img src="https://nasukafoods.site/kawasakiax.png" alt="Kawasaki Ax Custom" />
+    <p>Bahan yang kita pakai adalah kawasaki Ax 125</p>
+    <img src="https://nasukafoods.site/kawasakiaxori.jpeg" alt="Kawasaki Ax Ori" />
+   
+    <p><strong>Story</strong></p>
+    <p>Lahir 2008 dengan mesin 125cc, Stang laki dan mono shock centre yang membuatnya stabil untuk bermanuver layaknya rider sirkuit, namun dengan harga sekitar 30jt (mengikuti dollar saat itu), Dikenal dengan sparepart setara harga motor sport tapi power setara supra yang sulit diterima pasar, Hingga pada akhirnya disuntik mati oleh Kawasaki</p>
+    <p><strong>Kenapa dihidupkan lagi</strong></p>
+    <p>Baik, kita urai pelan pelan</p>
+    <p>✅ Mode single rider</p>
+    <p>✅ Sparepart serba murah di toko online</p>
+    <p>✅ Mekanisme mesin sangat sederhana</p>
+    <p>✅ Hemat BBM</p>
+    <p>✅ Tidak tergantung sama Aki</p>
+    <p>✅ Minim perawatan</p>
+    <p>✅ Maskulin</p>
+    <p>✅ Dan tentang hobi dan kepuasan berkendara</p>
+    <p>Terkadang kita mendengar lelucon, "Laki koq pake matic, gak sekalian pake lipstic?" joke yang sering kita dengar secara langsung maupun desas desus angin lewat dari penganut paham The Man Of Masculinity 🤭</p>
+    <p>Wtf, ini bukan soal itu, Arya kawasaki labs memang menyukai modifikasi mesin maupun body, siapa tau kamu berminat, Kami siap buatkan motor semi sport menjadi motor tampilan pejantan tangguh</p>
+    <p><strong>Pencarian bahan + Surat surat</strong></p>
+    <img src="https://nasukafoods.site/stnkbpkb.jpg" alt="Cilok Sajian 3" />
+    <p>Kawasaki ax sudah tidak diproduksi lagi, Untuk itu kita akan menjelajahi tiap sudut kota hingga pelosok desa, dan kita rombak total, atau kamu punya bahannya sendiri dan ingin motor kesayangan mu Nasuka Labs modifikasi? tinggal kontak aja, Harga bisa bisik bisik di whatsapp</p>
+    <p><strong>Rasakan sensasi Kawasaki H2 pada Kawasaki Ax Nasuka Labs 😊</strong></p>
+
+    <!-- VIDEO MANIS -->
+    <div class="video-container">
+      <video src="https://nasukafoods.site/kawasakifast.mp4" controls playsinline></video>
     </div>
+  <p><strong>Video hanya pemanis</strong></p>
+    <a href="https://wa.me/62859109819017?text=Halo%20Arya%20saya%20mau%20memesan%20kawasaki%20ax" 
+       target="_blank" 
+       style="display: inline-block; background-color: #25D366; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+      📲 Kontak WhatsApp
+    </a>
+  </section>
 
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/paketcilok.jpg" alt="Produk 2">
-        </div>
-        <div class="product-title">Produk 2</div>
-        <div class="product-price">Rp 75.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/lacak-lokasi.gif" alt="Produk 3">
-        </div>
-        <div class="product-title">Produk 3</div>
-        <div class="product-price">Rp 120.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-
-
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
-        </div>
-        <div class="product-title">Produk 4</div>
-        <div class="product-price">Rp 45.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-
-
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
-        </div>
-        <div class="product-title">Produk 4</div>
-        <div class="product-price">Rp 45.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-
-
+  <div class="bottom-bar">
+    <a href="https://nasukafoods.site">🏠<br>Home</a>
+    <a href="https://nasukafoods.site/discover.html">🔍<br>Layanan</a>
+    <a href="https://nasukafoods.site/pesanan.html">➕<br>Pesanan</a>
+    <a href="https://nasukafoods.site/otomotif.html">📨<br>Otomotif</a>
+    <a href="https://nasukafoods.site/profil.html">👤<br>Profile</a>
   </div>
-
-
-
-  <div class="product-grid">
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 5">
-        </div>
-        <div class="product-title">Produk 5</div>
-        <div class="product-price">Rp 60.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 6">
-        </div>
-        <div class="product-title">Produk 6</div>
-        <div class="product-price">Rp 90.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-  </div>
-
-
-
-
-  <div id="topupModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" onclick="closeTopupModal()">&times;</span>
-      <h2 style="color: black; text-align: center;">Top Up Saldo</h2>
-      <form id="modalTopupForm">
-        <div class="form-group">
-            <label for="topupAmount">Jumlah Deposit (Rp):</label>
-            <input type="number" id="topupAmount" name="JumlahDeposit" min="10000" required>
-        </div>
-        <div class="form-group">
-            <label for="paymentMethod">Metode Pembayaran:</label>
-            <select id="paymentMethod" name="MetodePembayaran" required>
-                <option value="">Pilih Metode</option>
-                <option value="Transfer Bank">Transfer Bank</option>
-                <option value="Dana">Dana</option>
-                <option value="GoPay">GoPay</option>
-            </select>
-        </div>
-        <button type="submit" id="modalTopupButton">Ajukan Top Up</button>
-      </form>
-      <div id="modalTopupStatus" class="status-message"></div>
-    </div>
-  </div>
-
-  <div id="profileModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" onclick="closeProfileModal()">&times;</span>
-      <h2 style="color: black; text-align: center;">Profil Pengguna</h2>
-      <div class="profile-info" id="profileInfoContent">
-        </div>
-      <div style="text-align: center; margin-top: 20px;">
-        <button onclick="logout()" style="width: auto; padding: 10px 20px; background-color: #dc3545;">Logout</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtT_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
-
-    function formatRupiah(number) {
-        const num = parseFloat(number);
-        if (isNaN(num)) {
-            return 'Rp 0';
-        }
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0
-        }).format(num);
-    }
-
-    function addToCart(element) {
-      const productCard = element.closest('.product-card');
-      if (!productCard) return;
-
-      const title = productCard.querySelector('.product-title').innerText;
-      const price = productCard.querySelector('.product-price').innerText;
-      const img = productCard.querySelector('.product-image').src;
-      // Ambil URL detail produk dari product-link-wrapper
-      const detailUrl = productCard.querySelector('.product-link-wrapper').href;
-
-
-      const product = {
-          name: title,
-          price: price,
-          image: img,
-          quantity: 1,
-          detailUrl: detailUrl // Tambahkan URL detail produk
-      };
-
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const existingProductIndex = cart.findIndex(item => item.detailUrl === detailUrl);
-
-      if (existingProductIndex > -1) {
-          cart[existingProductIndex].quantity += 1;
-      } else {
-          cart.push(product);
-      }
-
-
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`${title} berhasil ditambahkan ke keranjang.`);
-    }
-
-    async function fetchUserBalance(userData) {
-        const userBalanceElement = document.getElementById('user-balance');
-
-        userBalanceElement.textContent = 'Memuat saldo...';
-
-        const identifier = userData['Username'] || userData['Nomor HP'];
-        const identifierType = userData['Username'] ? 'Username' : 'Nomor HP';
-
-        if (!identifier) {
-            userBalanceElement.textContent = 'Saldo: -';
-            return;
-        }
-
-        try {
-            const payload = new URLSearchParams({
-                action: 'getUserData',
-                identifier: identifier,
-                identifierType: identifierType
-            });
-
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: payload.toString(),
-            });
-
-            const result = await response.json();
-
-            if (result.status === 'success' && result.data && result.data['Saldo'] !== undefined) {
-                const latestSaldo = result.data['Saldo'];
-                userBalanceElement.textContent = `Saldo: ${formatRupiah(latestSaldo)}`;
-
-                let updatedUserData = { ...userData,
-                    'Saldo': latestSaldo
-                };
-                localStorage.setItem('userData', JSON.stringify(updatedUserData));
-            } else {
-                userBalanceElement.textContent = result.message || 'Saldo: Rp 0';
-            }
-        } catch (error) {
-            console.error("Error fetching user balance:", error);
-            userBalanceElement.textContent = 'Gagal memuat saldo.';
-        }
-    }
-
-    function updateUIBasedOnLoginStatus() {
-        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        const userDataString = localStorage.getItem('userData');
-        const topBarLinks = document.getElementById('top-bar-links');
-        const userGreeting = document.getElementById('user-greeting');
-        const userBalanceElement = document.getElementById('user-balance');
-
-        let linksHTML = '';
-
-        if (isLoggedIn && userDataString) {
-            try {
-                const user = JSON.parse(userDataString);
-
-                if (user['Nama Lengkap']) {
-                    userGreeting.textContent = user['Nama Lengkap'];
-                } else if (user['Username']) {
-                    userGreeting.textContent = user['Username'];
-                }
-
-                fetchUserBalance(user);
-
-                linksHTML = `
-                    <a href="index.html">🏠<br>Home</a>
-                    <a href="">📖<br>Riwayat</a>
-                    <a href="profil-pengguna.html">👮<br>Profil</a>
-                    <a href="keranjang.html">🛒 <br>Keranjang</a>
-                `;
-            } catch (e) {
-                localStorage.removeItem('userLoggedIn');
-                localStorage.removeItem('userData');
-
-                userGreeting.textContent = 'Hai selamat datang';
-                userBalanceElement.textContent = '';
-
-                linksHTML = `
-                    <a href="index.html">🏠<br>Home</a>
-                    <a href="https://nasukafoods.site/login.html">📥<br>Login</a>
-                    <a href="https://nasukafoods.site/keranjang-non-member.html">🛒 <br>Keranjang</a>
-                `;
-            }
-        } else {
-            userGreeting.textContent = 'Hai selamat datang';
-            userBalanceElement.textContent = '';
-
-            linksHTML = `
-                <a href="index.html">🏠<br>Home</a>
-                <a href="https://nasukafoods.site/login.html">📥<br>Login</a>
-                <a href="https://nasukafoods.site/keranjang-non-member.html">🛒 <br>Keranjang</a>
-            `;
-        }
-
-        topBarLinks.innerHTML = linksHTML;
-    }
-
-    function logout() {
-        localStorage.removeItem('userLoggedIn');
-        localStorage.removeItem('userData');
-        localStorage.removeItem('cart');
-        window.location.href = 'index.html';
-    }
-
-    const topupModal = document.getElementById('topupModal');
-    const modalTopupForm = document.getElementById('modalTopupForm');
-    const modalTopupButton = document.getElementById('modalTopupButton');
-    const modalTopupStatus = document.getElementById('modalTopupStatus');
-
-    function openTopupModal() {
-        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        if (!isLoggedIn) {
-            window.location.href = 'https://nasukafoods.site/login.html';
-            return;
-        }
-        topupModal.style.display = 'block';
-    }
-
-    function closeTopupModal() {
-        topupModal.style.display = 'none';
-        modalTopupStatus.textContent = '';
-        modalTopupButton.textContent = 'Ajukan Top Up';
-        modalTopupButton.disabled = false;
-        modalTopupForm.reset();
-        updateUIBasedOnLoginStatus();
-    }
-
-    modalTopupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if (!userData) {
-            modalTopupStatus.textContent = 'Sesi login berakhir. Silakan login kembali.';
-            modalTopupStatus.classList.add('error');
-            return;
-        }
-
-        modalTopupButton.disabled = true;
-        modalTopupButton.textContent = 'Mengirim Permintaan...';
-        modalTopupStatus.textContent = '';
-        modalTopupStatus.classList.remove('success', 'error');
-
-        const amount = document.getElementById('topupAmount').value;
-        const method = document.getElementById('paymentMethod').value;
-        const customerName = userData['Nama Lengkap'];
-        const customerPhone = userData['Nomor HP'];
-
-        if (!customerName || !customerPhone) {
-             modalTopupStatus.textContent = 'Data pengguna tidak lengkap. Silakan perbarui profil Anda.';
-             modalTopupStatus.classList.add('error');
-             modalTopupButton.disabled = false;
-             modalTopupButton.textContent = 'Ajukan Top Up';
-             return;
-        }
-
-        const payload = new URLSearchParams({
-            action: 'recordDeposit',
-            Tanggal: new Date().toISOString().slice(0, 10),
-            NamaPelanggan: customerName,
-            NomorHP: customerPhone,
-            JumlahDeposit: amount,
-            MetodePembayaran: method,
-            Status: 'Pending'
-        });
-
-        try {
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: payload.toString(),
-            });
-
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                modalTopupStatus.textContent = 'Pengajuan top up berhasil. Silakan lakukan transfer.';
-                modalTopupStatus.classList.add('success');
-            } else {
-                modalTopupStatus.textContent = result.message || 'Gagal mengajukan top up.';
-                modalTopupStatus.classList.add('error');
-            }
-        } catch (error) {
-            modalTopupStatus.textContent = 'Terjadi kesalahan jaringan atau server.';
-            modalTopupStatus.classList.add('error');
-        } finally {
-            modalTopupButton.disabled = false;
-            modalTopupButton.textContent = 'Ajukan Top Up';
-        }
-    });
-
-    const profileModal = document.getElementById('profileModal');
-    const profileInfoContent = document.getElementById('profileInfoContent');
-
-    function openProfileModal() {
-        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        if (!isLoggedIn) {
-            window.location.href = 'https://nasukafoods.site/login.html';
-            return;
-        }
-
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if (userData) {
-            populateProfileInfo(userData);
-            profileModal.style.display = 'block';
-        } else {
-            alert('Gagal memuat data profil. Silakan coba login ulang.');
-            logout();
-        }
-    }
-
-    function closeProfileModal() {
-        profileModal.style.display = 'none';
-    }
-
-    function populateProfileInfo(user) {
-        let profileHTML = '';
-
-        profileHTML += `<p><strong>ID Pelanggan:</strong> ${user['Customers ID'] || '-'}</p>`;
-        profileHTML += `<p><strong>Nama Lengkap:</strong> ${user['Nama Lengkap'] || '-'}</p>`;
-        profileHTML += `<p><strong>Username:</strong> ${user['Username'] || '-'}</p>`;
-        profileHTML += `<p><strong>Nomor HP:</strong> ${user['Nomor HP'] || '-'}</p>`;
-        profileHTML += `<p><strong>Alamat:</strong> ${user['Alamat Lengkap'] || '-'}</p>`;
-        profileHTML += `<p><strong>Saldo:</strong> ${user['Saldo'] ? formatRupiah(user['Saldo']) : 'Rp 0'}</p>`;
-        profileHTML += `<p><strong>Tentang Saya:</strong> ${user['Tentang Saya'] || '-'}</p>`;
-        profileHTML += `<p><strong>Tanggal Daftar:</strong> ${user['Tanggal Daftar'] || '-'}</p>`;
-
-        profileInfoContent.innerHTML = profileHTML;
-    }
-
-    document.addEventListener('DOMContentLoaded', updateUIBasedOnLoginStatus);
-  </script>
 
 </body>
 </html>
