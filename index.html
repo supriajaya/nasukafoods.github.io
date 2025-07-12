@@ -1,123 +1,609 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nasuka Foods</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: white;
-      color: black;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nasuka Shop</title>
+<style>
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: white;
+  color: black;
+}
+.hero-section {
+  position: relative;
+  height: 15vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-    .hero-section {
-      position: relative;
-      height: 15vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+.hero-section video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
 
-    .hero-section video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-    }
+.info, .sidebar {
+  position: absolute;
+  bottom: 20px;
+}
 
-  
-    .info, .sidebar {
-      position: absolute;
-      bottom: 20px;
-    }
+.info {
+  left: 10px;
+}
 
-    .info {
-      left: 10px;
-    }
+.info .location {
+  font-size: 12px;
+  color: #333;
+}
 
-    .info .location {
-      font-size: 12px;
-      color: #333;
-    }
+.info .username {
+  font-weight: bold;
+}
 
-    .info .username {
-      font-weight: bold;
-    }
+.info .adress {
+  font-size: 14px;
+  margin-top: 5px;
+}
 
-    .info .adress {
-      font-size: 14px;
-      margin-top: 5px;
-    }
+.info .balance {
+  font-size: 12px;
+  color: #ffbb00;
+}
 
-    .info .balance {
-      font-size: 12px;
-      color: #ffbb00;
-    }
+.sidebar {
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    .sidebar {
-      right: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+.sidebar div {
+  margin: 8px 0;
+  font-size: 12px;
+}
 
-    .sidebar div {
-      margin: 8px 0;
-      font-size: 12px;
-    }
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: transparent);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  font-size: 12px;
+  z-index: 999;
+}
 
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: transparent);
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      font-size: 12px;
-      z-index: 999;
-    }
+.bottom-bar a {
+  color: white;
+  text-decoration: none;
+  text-align: center;
+}
 
-    .bottom-bar a {
-      color: white;
-      text-decoration: none;
-      text-align: center;
-    }
+.product-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns, equal width */
+  gap: 15px; /* Spacing between products */
+  padding: 20px 10px;
+}
 
-    
-  </style>
+.product-item {
+  text-align: center;
+  padding: 10px;
+}
+
+.product-item img {
+  width: 100%;
+  height: auto;
+}
+
+.product-name {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.product-price {
+  color: #333;
+  margin-top: 5px;
+}
+
+.buy-button {
+  background-color: #ffbb00;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.profile-section, .payment-section {
+  padding: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* Modal Overlay Styles */
+.modal-overlay {
+  display: none; /* Hidden by default */
+  position: fixed; 
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+  overflow: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content Styles (Adapted Profile Section) */
+#profileSection, #loginSection, #registerSection {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  max-width: 90%;
+  width: 400px; 
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Ensure payment section remains hidden in main flow */
+.payment-section {
+  display: none;
+}
+
+.profile-section h2, .payment-section h2, #loginSection h2, #registerSection h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-form label, .payment-form label, .login-form label, .register-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.profile-form input, .payment-form input, .payment-form select, .login-form input, .register-form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.profile-form button, .payment-form button, .login-form button, .register-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-form button:hover, .payment-form button:hover, .login-form button:hover, .register-form button:hover {
+  background-color: #45a049;
+}
+
+.order-details {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.order-details p {
+    margin: 5px 0;
+}
+</style>
 </head>
 <body>
+<section class="hero-section">
+<div class="info">
+<div class="location">📍 Jawa Barat</div>
+<div class="username">#</div>
+<div class="adress">Kota</div>
+<div class="balance">Saldo</div>
+</div>
+<div class="sidebar">
+  <div>❤️ 200.k</div>
+  <div>💬 4.M</div>
+  <div>🛒 Keranjang</div>
+</div>
 
-  <section class="hero-section">
-    <div class="info">
-      <div class="location">📍 Jawa Barat</div>
-      <div class="username">#</div>
-      <div class="adress">Kota</div>
-      <div class="balance">Saldo</div>
-    </div>
+</section>
+<div class="product-container">
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 1">
+<div class="product-name">Produk 1</div>
+<div class="product-price" data-price="10000">Rp 10.000</div>
+<button class="buy-button" data-product="Produk 1">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 2">
+<div class="product-name">Produk 2</div>
+<div class="product-price" data-price="5000">Rp 5.000</div>
+<button class="buy-button" data-product="Produk 2">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 3">
+<div class="product-name">Produk 3</div>
+<div class="product-price" data-price="15000">Rp 15.000</div>
+<button class="buy-button" data-product="Produk 3">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
+<div class="product-name">Produk 4</div>
+<div class="product-price" data-price="20000">Rp 20.000</div>
+<button class="buy-button" data-product="Produk 4">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 5">
+<div class="product-name">Produk 5</div>
+<div class="product-price" data-price="25000">Rp 25.000</div>
+<button class="buy-button" data-product="Produk 5">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 6">
+<div class="product-name">Produk 6</div>
+<div class="product-price" data-price="30000">Rp 30.000</div>
+<button class="buy-button" data-product="Produk 6">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 7">
+<div class="product-name">Produk 7</div>
+<div class="product-price" data-price="35000">Rp 35.000</div>
+<button class="buy-button" data-product="Produk 7">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 8">
+<div class="product-name">Produk 8</div>
+<div class="product-price" data-price="40000">Rp 40.000</div>
+<button class="buy-button" data-product="Produk 8">Beli Sekarang</button>
+</div>
+<div class="product-item">
+<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 9">
+<div class="product-name">Produk 9</div>
+<div class="product-price" data-price="45000">Rp 45.000</div>
+<button class="buy-button" data-product="Produk 9">Beli Sekarang</button>
+</div>
+</div>
 
-    <div class="sidebar">
-      <div>❤️ 200.k</div>
-      <div>💬 4.M</div>
-      <div>🔗 Share</div>
-    </div>
-  </section>
+<div id="profileModal" class="modal-overlay">
+  <div id="profileSection" class="profile-section">
+    <span class="close-button" id="closeProfileModal">&times;</span>
+    <h2>Data Diri Pengunjung</h2>
+    <form id="profileForm" class="profile-form">
+      <label for="namaLengkap">Nama Lengkap:</label>
+      <input type="text" id="namaLengkap" required>
 
-  
-  <div class="bottom-bar">
-    <a href="https://nasukafoods.site">🏠<br>Home</a>
-<a href="https://nasukafoods.site">✅<br>Layn</a>
-    <a href="https://nasukafoods.site/pesanan.html">➕<br>Pes</a>
-    <a href="https://nasukafoods.site/otomotif.html">📨<br>Otf</a>
-    <a href="https://nasukafoods.site/profil.html">👤<br>Profile</a>
+      <label for="alamatLengkap">Alamat Lengkap:</label>
+      <input type="text" id="alamatLengkap" required>
+
+      <label for="nomorHP">Nomor HP:</label>
+      <input type="tel" id="nomorHP" required>
+
+      <label for="fhoto">Fhoto:</label>
+      <input type="file" id="fhoto" accept="image/*">
+
+      <label for="kataKataHariIni">Kata Kata Hari Ini:</label>
+      <input type="text" id="kataKataHariIni">
+
+      <button type="submit" id="simpanDataButton">Simpan Data Diri</button>
+    </form>
+    <div id="statusMessage"></div>
   </div>
+</div>
 
+<div id="loginModal" class="modal-overlay">
+  <div id="loginSection" class="profile-section">
+    <span class="close-button" id="closeLoginModal">&times;</span>
+    <h2>Login Pengunjung</h2>
+    <form id="loginForm" class="login-form">
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" required>
+
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" required>
+
+      <button type="submit">Login</button>
+    </form>
+    <p>belum punya akun? bikin akun <a href="#" id="registerLink">Disini</a> untuk pengalaman lebih asik</p>
+  </div>
+</div>
+
+<div id="registerModal" class="modal-overlay">
+  <div id="registerSection" class="profile-section">
+    <span class="close-button" id="closeRegisterModal">&times;</span>
+    <h2>Pendaftaran Akun</h2>
+    <form id="registerForm" class="register-form">
+      <label for="regUsername">Username:</label>
+      <input type="text" id="regUsername" required>
+
+      <label for="regPassword">Password:</label>
+      <input type="password" id="regPassword" required>
+      
+      <label for="regNamaLengkap">Nama Lengkap:</label>
+      <input type="text" id="regNamaLengkap" required>
+
+      <label for="regAlamatLengkap">Alamat Lengkap:</label>
+      <input type="text" id="regAlamatLengkap" required>
+
+      <label for="regNomorHP">Nomor HP:</label>
+      <input type="tel" id="regNomorHP" required>
+
+      <label for="regFotoProfil">Foto Profil:</label>
+      <input type="file" id="regFotoProfil" accept="image/*">
+
+      <label for="regTentangSaya">Tentang Saya:</label>
+      <input type="text" id="regTentangSaya">
+
+      <button type="submit">Daftar</button>
+    </form>
+  </div>
+</div>
+
+<div id="paymentSection" class="payment-section">
+  <h2>Form Pembayaran</h2>
+  <div class="order-details">
+    <p><strong>Produk:</strong> <span id="paymentProductName"></span></p>
+    <p><strong>Harga:</strong> <span id="paymentProductPrice"></span></p>
+    <p><strong>Nama:</strong> <span id="paymentName"></span></p>
+    <p><strong>Alamat:</strong> <span id="paymentAddress"></span></p>
+    <p><strong>Nomor HP:</strong> <span id="paymentPhone"></span></p>
+  </div>
+  
+  <form id="paymentForm" class="payment-form">
+    <label for="metodePembayaran">Metode Pembayaran:</label>
+    <select id="metodePembayaran" required>
+      <option value="">Pilih Metode Pembayaran</option>
+      <option value="Transfer Bank">Transfer Bank</option>
+      <option value="E-Wallet">E-Wallet</option>
+    </select>
+
+    <label for="catatan">Catatan (opsional):</label>
+    <input type="text" id="catatan">
+
+    <button type="submit">Lanjutkan Pembayaran</button>
+  </form>
+</div>
+
+<div class="bottom-bar">
+<a href="https://nasukafoods.site">🏠<br>Home</a>
+<a href="#" id="loginNav">✅<br>Layn</a>
+<a href="https://nasukafoods.site">➕<br>Pes</a>
+<a href="https://nasukafoods.site">📨<br>Otf</a>
+<a href="#" id="profileNav">👤<br>Profile</a>
+</div>
+
+<script>
+  // GAS URL for Customers sheet (from memory)
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
+
+  // Profile Section Script (Data Diri)
+  document.getElementById('profileForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const namaLengkap = document.getElementById('namaLengkap').value;
+    const alamatLengkap = document.getElementById('alamatLengkap').value;
+    const nomorHP = document.getElementById('nomorHP').value;
+    const kataKataHariIni = document.getElementById('kataKataHariIni').value;
+    const statusMessage = document.getElementById('statusMessage');
+    
+    // Save data to localStorage
+    if (typeof(Storage) !== "undefined") {
+      localStorage.setItem('visitorData_namaLengkap', namaLengkap);
+      localStorage.setItem('visitorData_alamatLengkap', alamatLengkap);
+      localStorage.setItem('visitorData_nomorHP', nomorHP);
+      localStorage.setItem('visitorData_kataKataHariIni', kataKataHariIni);
+    }
+
+    // Prepare data for Google Sheet submission
+    const now = new Date();
+    const tanggalDaftar = now.toLocaleString();
+    
+    const formData = {
+      action: 'addCustomer', 
+      'Nama Lengkap': namaLengkap,
+      'Alamat Lengkap': alamatLengkap,
+      'Nomor HP': nomorHP,
+      'Tanggal Daftar': tanggalDaftar,
+      'Kata Kata Hari Ini': kataKataHariIni 
+    };
+
+    // Convert formData object to URLSearchParams (standard form data)
+    const urlParams = new URLSearchParams(formData);
+
+    // Send data to Google Apps Script
+    statusMessage.textContent = 'Mengirim data...';
+    statusMessage.style.color = 'blue';
+
+    try {
+      const response = await fetch(GAS_URL, {
+        method: 'POST',
+        body: urlParams
+      });
+
+      if (response.ok) {
+        statusMessage.textContent = 'Data berhasil disimpan lokal dan dikirim ke sheet!';
+        statusMessage.style.color = 'green';
+      } else {
+        statusMessage.textContent = 'Data disimpan lokal, tetapi gagal mengirim ke sheet.';
+        statusMessage.style.color = 'orange';
+      }
+    } catch (error) {
+      statusMessage.textContent = 'Data disimpan lokal, tetapi terjadi kesalahan saat mengirim ke sheet.';
+      statusMessage.style.color = 'red';
+    }
+  });
+
+  // Load Data Function (on page load)
+  function loadVisitorData() {
+    if (typeof(Storage) !== "undefined") {
+      const namaLengkap = localStorage.getItem('visitorData_namaLengkap');
+      const alamatLengkap = localStorage.getItem('visitorData_alamatLengkap');
+      const nomorHP = localStorage.getItem('visitorData_nomorHP');
+      const kataKataHariIni = localStorage.getItem('visitorData_kataKataHariIni');
+
+      // Populate profile form fields
+      if (namaLengkap) {
+        document.getElementById('namaLengkap').value = namaLengkap;
+      }
+      if (alamatLengkap) {
+        document.getElementById('alamatLengkap').value = alamatLengkap;
+      }
+      if (nomorHP) {
+        document.getElementById('nomorHP').value = nomorHP;
+      }
+      if (kataKataHariIni) {
+        document.getElementById('kataKataHariIni').value = kataKataHariIni;
+      }
+      
+      return { namaLengkap, alamatLengkap, nomorHP, kataKataHariIni };
+    }
+    return {};
+  }
+  
+  // Modal Logic for Profile Section
+  const profileModal = document.getElementById('profileModal');
+  const profileNav = document.getElementById('profileNav');
+  const closeProfileModal = document.getElementById('closeProfileModal');
+  const paymentSection = document.getElementById('paymentSection');
+
+  // Open the modal and load data
+  profileNav.addEventListener('click', function(event) {
+    event.preventDefault(); 
+    
+    // Hide other modals/sections if visible
+    paymentSection.style.display = 'none';
+    document.getElementById('loginModal').style.display = 'none';
+    document.getElementById('registerModal').style.display = 'none';
+
+    profileModal.style.display = 'flex'; 
+    loadVisitorData(); // Load data when opening the profile modal
+  });
+
+  // Close the modal when the close button is clicked
+  closeProfileModal.addEventListener('click', function() {
+    profileModal.style.display = 'none';
+  });
+
+  // Login Modal Logic
+  const loginModal = document.getElementById('loginModal');
+  const loginNav = document.getElementById('loginNav');
+  const closeLoginModal = document.getElementById('closeLoginModal');
+
+  // Open the login modal
+  loginNav.addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    // Hide other modals/sections if visible
+    paymentSection.style.display = 'none';
+    profileModal.style.display = 'none';
+    document.getElementById('registerModal').style.display = 'none';
+    
+    loginModal.style.display = 'flex';
+  });
+
+  // Close the login modal
+  closeLoginModal.addEventListener('click', function() {
+    loginModal.style.display = 'none';
+  });
+  
+  // Register Modal Logic (New)
+  const registerModal = document.getElementById('registerModal');
+  const registerLink = document.getElementById('registerLink');
+  const closeRegisterModal = document.getElementById('closeRegisterModal');
+
+  // Open register modal and close login modal when "Disini" is clicked
+  registerLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    loginModal.style.display = 'none';
+    registerModal.style.display = 'flex';
+  });
+
+  // Close register modal
+  closeRegisterModal.addEventListener('click', function() {
+    registerModal.style.display = 'none';
+  });
+
+  // Close modals if the user clicks outside of the modal content
+  window.addEventListener('click', function(event) {
+    if (event.target == profileModal) {
+      profileModal.style.display = 'none';
+    }
+    if (event.target == loginModal) {
+      loginModal.style.display = 'none';
+    }
+    if (event.target == registerModal) {
+      registerModal.style.display = 'none';
+    }
+  });
+
+  // Payment Form Script
+  const buyButtons = document.querySelectorAll('.buy-button');
+
+  buyButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      // Hide modals if visible
+      profileModal.style.display = 'none';
+      loginModal.style.display = 'none';
+      registerModal.style.display = 'none';
+
+      // Get product details from the button's parent element (product-item)
+      const productItem = this.closest('.product-item');
+      const productName = productItem.querySelector('.product-name').textContent;
+      const productPrice = productItem.querySelector('.product-price').textContent;
+      
+      // Load visitor data from localStorage
+      const visitorData = loadVisitorData();
+
+      // Populate payment form details
+      document.getElementById('paymentProductName').textContent = productName;
+      document.getElementById('paymentProductPrice').textContent = productPrice;
+      document.getElementById('paymentName').textContent = visitorData.namaLengkap || 'Belum diisi';
+      document.getElementById('paymentAddress').textContent = visitorData.alamatLengkap || 'Belum diisi';
+      document.getElementById('paymentPhone').textContent = visitorData.nomorHP || 'Belum diisi';
+
+      // Show payment section
+      paymentSection.style.display = 'block';
+    });
+  });
+
+  // Initialize data load on page load
+  document.addEventListener('DOMContentLoaded', loadVisitorData);
+
+</script>
 </body>
 </html>
