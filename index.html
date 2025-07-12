@@ -112,7 +112,6 @@
       margin-top: 10px;
     }
 
-
     .product-card {
       min-width: 100px;
       text-align: center;
@@ -121,7 +120,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      cursor: pointer;
+      cursor: default;
     }
 
     .product-image-container {
@@ -137,13 +136,20 @@
         position: relative;
     }
 
-    .product-grid .product-image {
+    .product-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
     }
 
+    .product-link-wrapper {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        width: 100%;
+        cursor: pointer;
+    }
 
     .product-title {
       font-size: 15.6px;
@@ -158,9 +164,9 @@
     }
 
     .add-to-cart-btn {
-      background-color: #8B0000;
+      background-color: rgba(139, 0, 0, 0.5);
       color: white;
-      border: none;
+      border: 1px solid orange;
       padding: 7.5px 15px;
       font-size: 12.5px;
       border-radius: 4px;
@@ -172,7 +178,7 @@
     }
 
     .add-to-cart-btn:hover {
-      background-color: #5e0000;
+      background-color: rgba(94, 0, 0, 0.7);
     }
 
     .modal {
@@ -268,14 +274,6 @@
         text-decoration: none;
     }
 
-    .profile-info p {
-        margin: 10px 0;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #333;
-    }
-    .profile-info strong {
-        color: black;
-    }
   </style>
 </head>
 
@@ -300,7 +298,7 @@
 
   <div class="product-list">
     <div class="product-card">
-      <a href="https://nasukafoods.site/produk-detail-1.html">
+      <a href="https://nasukafoods.site/produk-detail-1.html" class="product-link-wrapper">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/tiktok-viewers.png" alt="Produk 1">
         </div>
@@ -311,7 +309,7 @@
     </div>
 
     <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
+      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/paketcilok.jpg" alt="Produk 2">
         </div>
@@ -321,7 +319,7 @@
       <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
     <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
+      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/lacak-lokasi.gif" alt="Produk 3">
         </div>
@@ -330,10 +328,10 @@
       </a>
       <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
-    
-    
+
+
     <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
+      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
         </div>
@@ -342,10 +340,10 @@
       </a>
       <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
-    
-    
+
+
     <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
+      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
         </div>
@@ -354,15 +352,15 @@
       </a>
       <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
-    
-    
+
+
   </div>
-  
-  
- 
+
+
+
   <div class="product-grid">
     <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
+      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 5">
         </div>
@@ -372,7 +370,7 @@
       <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
     </div>
     <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
+      <a href="https://nasukafoods.site/product-detail.html" class="product-link-wrapper">
         <div class="product-image-container">
           <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 6">
         </div>
@@ -410,20 +408,8 @@
     </div>
   </div>
 
-  <div id="profileModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" onclick="closeProfileModal()">&times;</span>
-      <h2 style="color: black; text-align: center;">Profil Pengguna</h2>
-      <div class="profile-info" id="profileInfoContent">
-        </div>
-      <div style="text-align: center; margin-top: 20px;">
-        <button onclick="logout()" style="width: auto; padding: 10px 20px; background-color: #dc3545;">Logout</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtT_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
 
     function formatRupiah(number) {
         const num = parseFloat(number);
@@ -444,16 +430,24 @@
       const title = productCard.querySelector('.product-title').innerText;
       const price = productCard.querySelector('.product-price').innerText;
       const img = productCard.querySelector('.product-image').src;
+      const detailUrl = productCard.querySelector('.product-link-wrapper').href;
 
       const product = {
           name: title,
           price: price,
           image: img,
-          quantity: 1
+          quantity: 1,
+          detailUrl: detailUrl
       };
 
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push(product);
+      const existingProductIndex = cart.findIndex(item => item.detailUrl === detailUrl);
+
+      if (existingProductIndex > -1) {
+          cart[existingProductIndex].quantity += 1;
+      } else {
+          cart.push(product);
+      }
 
       localStorage.setItem('cart', JSON.stringify(cart));
       alert(`${title} berhasil ditambahkan ke keranjang.`);
@@ -479,12 +473,12 @@
                 identifierType: identifierType
             });
 
-            const response = await fetch(GAS_URL, { // URL diubah, tidak ada '?'
-                method: 'POST', // <-- Ini perubahan utamanya: dari GET ke POST
+            const response = await fetch(GAS_URL, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: payload.toString(), // Data dikirim di body
+                body: payload.toString(),
             });
 
             const result = await response.json();
@@ -501,7 +495,7 @@
                 userBalanceElement.textContent = result.message || 'Saldo: Rp 0';
             }
         } catch (error) {
-            console.error("Error fetching user balance:", error); // Menggunakan console.error untuk debugging
+            console.error("Error fetching user balance:", error);
             userBalanceElement.textContent = 'Gagal memuat saldo.';
         }
     }
@@ -530,7 +524,7 @@
                 linksHTML = `
                     <a href="index.html">🏠<br>Home</a>
                     <a href="">📖<br>Riwayat</a>
-                    <a href="javascript:void(0);" onclick="openProfileModal()">👮<br>Profil</a>
+                    <a href="https://nasukafoods.site/profil-pengguna.html">👮<br>Profil</a>
                     <a href="keranjang.html">🛒 <br>Keranjang</a>
                 `;
             } catch (e) {
@@ -654,45 +648,6 @@
             modalTopupButton.textContent = 'Ajukan Top Up';
         }
     });
-
-    const profileModal = document.getElementById('profileModal');
-    const profileInfoContent = document.getElementById('profileInfoContent');
-
-    function openProfileModal() {
-        const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
-        if (!isLoggedIn) {
-            window.location.href = 'https://nasukafoods.site/login.html';
-            return;
-        }
-
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if (userData) {
-            populateProfileInfo(userData);
-            profileModal.style.display = 'block';
-        } else {
-            alert('Gagal memuat data profil. Silakan coba login ulang.');
-            logout();
-        }
-    }
-
-    function closeProfileModal() {
-        profileModal.style.display = 'none';
-    }
-
-    function populateProfileInfo(user) {
-        let profileHTML = '';
-
-        profileHTML += `<p><strong>ID Pelanggan:</strong> ${user['Customers ID'] || '-'}</p>`;
-        profileHTML += `<p><strong>Nama Lengkap:</strong> ${user['Nama Lengkap'] || '-'}</p>`;
-        profileHTML += `<p><strong>Username:</strong> ${user['Username'] || '-'}</p>`;
-        profileHTML += `<p><strong>Nomor HP:</strong> ${user['Nomor HP'] || '-'}</p>`;
-        profileHTML += `<p><strong>Alamat:</strong> ${user['Alamat Lengkap'] || '-'}</p>`;
-        profileHTML += `<p><strong>Saldo:</strong> ${user['Saldo'] ? formatRupiah(user['Saldo']) : 'Rp 0'}</p>`;
-        profileHTML += `<p><strong>Tentang Saya:</strong> ${user['Tentang Saya'] || '-'}</p>`;
-        profileHTML += `<p><strong>Tanggal Daftar:</strong> ${user['Tanggal Daftar'] || '-'}</p>`;
-
-        profileInfoContent.innerHTML = profileHTML;
-    }
 
     document.addEventListener('DOMContentLoaded', updateUIBasedOnLoginStatus);
   </script>
