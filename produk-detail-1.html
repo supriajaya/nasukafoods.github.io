@@ -85,7 +85,7 @@
         }
         .actions {
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             gap: 15px;
             margin-top: 20px;
         }
@@ -97,7 +97,7 @@
             font-size: 16px;
             font-weight: bold;
             transition: background-color 0.3s;
-            text-align: center; 
+            text-align: center;
         }
         .btn-orange {
             background-color: #ff5b00;
@@ -141,7 +141,7 @@
                 padding: 30px;
             }
             .actions {
-                flex-direction: row; 
+                flex-direction: row;
             }
         }
         @media (max-width: 767px) {
@@ -155,7 +155,7 @@
                 padding: 20px;
             }
             .actions .btn {
-                width: 100%; 
+                width: 100%;
             }
         }
     </style>
@@ -164,16 +164,16 @@
 
 <div class="container">
     <div class="product-gallery">
-        <img src="https://nasukafoods.site/wireless.jpg" alt="Product Image" class="main-image">
+        <img id="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Product Image" class="main-image">
     </div>
 
-    <form class="product-details" action="https://nasukafoods.site/pembayaran.html" method="POST">
-        
-        <input type="hidden" name="product_id" value="12345">
-        <input type="hidden" name="product_name" value="Judul Produk Contoh Nasuka Foods">
-        <input type="hidden" name="price" value="240000">
+    <form class="product-details" id="productForm">
 
-        <h1 class="product-name">Judul Produk Contoh Nasuka Foods</h1>
+        <input type="hidden" id="product-id-input" name="product_id" value="12345">
+        <input type="hidden" id="product-name-input" name="product_name" value="Judul Produk Contoh Nasuka Foods">
+        <input type="hidden" id="product-price-input" name="price" value="240000">
+
+        <h1 class="product-name" id="product-display-name">Produk Nasuka Foods</h1>
 
         <div class="rating">
             <i class="fas fa-star"></i>
@@ -181,49 +181,118 @@
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
             <i class="fas fa-star-half-alt"></i>
-            <span>(4.5 / 5) | Bintang gak bisa turun</span>
-        </div>
+            <span>(4.5 / 5) | Bintang gak bisa turun</span></div>
 
         <div class="price-section">
-            <div class="product-price">
-                Rp 240.000 <span class="discount-badge">-10%</span>
-            </div>
-            <div class="original-price">Rp 300.000</div>
-        </div>
-
+        <div class="product-price" id="product-display-price">Rp 240.000 <span class="discount-badge">-10%</span> </div>
+<div class="original-price" id="product-display-original-price">Rp 300.000</div>
+</div>
         <div class="description-section">
-            <h2 class="description-title">Deskripsi Produk</h2>
-            <p class="description-content">
-                Ini adalah deskripsi produk contoh untuk detail-produk.html. Produk ini memiliki kualitas terbaik dan tersedia dalam berbagai varian. Cocok untuk kebutuhan sehari-hari Anda.
-            </p>
+  <h2 class="description-title">Deskripsi Produk</h2>
+  <p class="description-content">
+Produk ini memiliki kualitas terbaik dan tersedia dalam berbagai varian. Cocok untuk kebutuhan sehari-hari Anda.  </p>
+
             <ul>
-                <li>Berat: 500 gram</li>
-                <li>Bahan: Alami</li>
-                <li>Garansi: 1 tahun</li>
+            <li>Berat: 500 gram</li>
+            <li>Bahan: Alami</li>
+            <li>Garansi: 1 tahun</li>
             </ul>
-        </div>
+            </div>
+
 
         <div class="actions">
-            <button type="button" class="btn btn-white" onclick="addToCart()">
-                <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
-            </button>
-            <button type="submit" class="btn btn-orange">
-                <i class="fas fa-shopping-bag"></i> Beli Sekarang
-            </button>
-        </div>
+        <button type="button" class="btn btn-white" onclick="addToCart()">
+        <i class="fas fa-cart-plus"></i> Tambah ke Keranjang</button></div>
 
-        <div class="seller-info">
-            <p class="seller-name">Dijual oleh: Toko Official Nasuka Foods</p>
-            <p>Pengiriman: Jakarta Pusat</p>
-        </div>
-    </form>
-</div>
+ <div class="seller-info">
+ <p class="seller-name">Dijual oleh: Toko Official Nasuka Foods</p>
+  <p>Pengiriman: Jakarta Pusat</p></div></form></div>
 
 <script>
-    function addToCart() {
-        // Logika untuk menambah produk ke keranjang
-        alert('Produk ditambahkan ke keranjang!');
+    function formatRupiah(amount) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(amount);
     }
+
+    function addToCart() {
+        const productId = document.getElementById('product-id-input').value;
+        const productName = document.getElementById('product-name-input').value;
+        const productPrice = parseFloat(document.getElementById('product-price-input').value);
+        const productImage = document.getElementById('product-image').src;
+
+        const product = {
+            id: productId,
+            name: productName,
+            price: productPrice,
+            image: productImage,
+            quantity: 1
+        };
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Check if product already exists in cart, then increment quantity
+        const existingProductIndex = cart.findIndex(item => item.id === productId);
+        if (existingProductIndex > -1) {
+            cart[existingProductIndex].quantity += 1;
+        } else {
+            cart.push(product);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert(`${productName} berhasil ditambahkan ke keranjang.`);
+    }
+
+    // Fungsi untuk handle Beli Sekarang
+    document.getElementById('productForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Mencegah form submit secara default
+
+        const productId = document.getElementById('product-id-input').value;
+        const productName = document.getElementById('product-name-input').value;
+        const productPrice = parseFloat(document.getElementById('product-price-input').value);
+        const productImage = document.getElementById('product-image').src;
+
+        const productToBuy = {
+            id: productId,
+            name: productName,
+            price: productPrice,
+            image: productImage,
+            quantity: 1 // For direct buy, assume quantity is 1
+        };
+
+        // Simpan produk yang akan dibeli langsung ke localStorage, bisa dalam key terpisah
+        // atau sebagai array yang hanya berisi 1 produk.
+        localStorage.setItem('directBuyProduct', JSON.stringify([productToBuy]));
+
+        // Arahkan ke halaman pembayaran
+        window.location.href = 'https://nasukafoods.site/pembayaran.html';
+    });
+
+    // Anda bisa menambahkan fungsi untuk memuat detail produk secara dinamis di sini
+    // Misalnya, jika Anda ingin URL produknya seperti produk-detail.html?id=123
+    // function loadProductDetails() {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const productId = urlParams.get('id');
+    //     if (productId) {
+    //         // Lakukan fetch data produk dari backend atau data lokal
+    //         // Lalu update elemen-elemen di halaman (product-name, price, image, etc.)
+    //         // Contoh dummy:
+    //         if (productId === '12345') {
+    //             document.getElementById('product-image').src = "https://nasukafoods.site/wireless.jpg";
+    //             document.getElementById('product-id-input').value = "12345";
+    //             document.getElementById('product-name-input').value = "Judul Produk Contoh Nasuka Foods";
+    //             document.getElementById('product-price-input').value = "240000";
+    //             document.getElementById('product-display-name').textContent = "Judul Produk Contoh Nasuka Foods";
+    //             document.getElementById('product-display-price').innerHTML = `Rp ${formatRupiah(240000)} <span class="discount-badge">-10%</span>`;
+    //             document.getElementById('product-display-original-price').textContent = `Rp ${formatRupiah(300000)}`;
+    //         }
+    //         // Tambahkan lebih banyak kondisi untuk produk lain
+    //     }
+    // }
+    //
+    // document.addEventListener('DOMContentLoaded', loadProductDetails);
 </script>
 
 </body>
