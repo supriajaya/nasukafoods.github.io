@@ -458,10 +458,11 @@
 
         userBalanceElement.textContent = 'Memuat saldo...';
 
-        const identifier = userData['Username'] || userData['Nomor HP'];
-        const identifierType = userData['Username'] ? 'Username' : 'Nomor HP';
+        // Prioritize Nomor HP first, then Username
+        const identifier = userData['Nomor HP'] || userData['Username'];
+        const identifierType = userData['Nomor HP'] ? 'Nomor HP' : (userData['Username'] ? 'Username' : null);
 
-        if (!identifier) {
+        if (!identifier || !identifierType) {
             userBalanceElement.textContent = 'Saldo: -';
             return;
         }
@@ -519,7 +520,12 @@
                     userGreeting.textContent = user['Username'];
                 }
 
-                fetchUserBalance(user);
+                // Call fetchUserBalance only if user data is valid
+                if (user && (user['Nomor HP'] || user['Username'])) {
+                    fetchUserBalance(user);
+                } else {
+                    userBalanceElement.textContent = 'Saldo: -';
+                }
 
                 linksHTML = `
                     <a href="index.html">🏠<br>Home</a>
