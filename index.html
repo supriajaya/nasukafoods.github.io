@@ -95,66 +95,80 @@
       font-size: 12px;
     }
 
-    .product-list {
+    /* New style for the two-column product section */
+    .two-column-products {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Divide into two equal columns */
+        gap: 10px; /* Space between the two product cards */
+        padding: 10px; /* Padding around the whole section */
+        margin-top: 10px;
+    }
+
+    .two-column-products .product-card {
+        text-align: center;
+        color: black;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        width: 100%; /* Take full width of its grid column */
+    }
+
+    .two-column-products .product-image-container {
+        width: 100%;
+        padding-bottom: 100%; /* Make it square */
+        position: relative;
+        height: 0;
+        overflow: hidden; /* Ensure image doesn't overflow container */
+    }
+
+    .two-column-products .product-image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Styles for the new 4-product row */
+    .four-product-row {
       display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
+      flex-wrap: nowrap; /* Keep products in a single row */
+      overflow-x: auto; /* Enable horizontal scrolling if needed */
       padding: 10px;
-      gap: 15px;
+      gap: 10px; /* Space between product cards */
       margin-top: 10px;
     }
 
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      padding: 1px;
-      margin-top: 10px;
-    }
-
-
-    .product-card {
-      min-width: 100px;
+    .four-product-row .product-item {
+      min-width: 100px; /* Adjust as needed for desired item width */
+      flex: 0 0 auto; /* Prevent items from growing/shrinking */
       text-align: center;
       color: black;
       text-decoration: none;
       display: flex;
       flex-direction: column;
       align-items: center;
-      cursor: pointer;
     }
 
-    .product-image-container {
-      width: 100px;
-      height: 100px;
-      overflow: hidden;
+    .four-product-row .product-image-link {
+        display: block; /* Make the link a block to contain the image */
+        width: 100px; /* Fixed width for images in this row */
+        height: 100px; /* Fixed height for images in this row */
+        overflow: hidden;
+        cursor: pointer;
     }
 
-    .product-grid .product-image-container {
-        width: 150px;
-        height: 150px;
-        padding-bottom: 0;
-        position: relative;
+    .four-product-row .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    .product-grid .product-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-
-    .product-title {
-      font-size: 15.6px;
-      margin-top: 6px;
-    }
-
-    .product-price {
-      font-weight: bold;
-      font-size: 14.1px;
-      margin-top: 3px;
-      color: black;
+    .four-product-row .add-to-cart-btn {
+      margin-top: 6px; /* Space between image and button */
+      width: 100px; /* Make button same width as image for consistency */
     }
 
     .add-to-cart-btn {
@@ -165,8 +179,6 @@
       font-size: 12.5px;
       border-radius: 4px;
       cursor: pointer;
-      margin-top: 6px;
-      width: 100%;
       box-sizing: border-box;
       text-align: center;
     }
@@ -298,94 +310,44 @@
     </div>
   </section>
 
-  <div class="product-list">
-    <div class="product-card">
-      <a href="https://nasukafoods.site/produk-detail-1.html">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/tiktok-viewers.png" alt="Produk 1">
-        </div>
-        <div class="product-title"><strong>CILOK</strong></div>
-        <div class="product-price">Rp 240.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/paketcilok.jpg" alt="Produk 2">
-        </div>
-        <div class="product-title">Produk 2</div>
-        <div class="product-price">Rp 75.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/lacak-lokasi.gif" alt="Produk 3">
-        </div>
-        <div class="product-title">Produk 3</div>
-        <div class="product-price">Rp 120.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-    
-    
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
-        </div>
-        <div class="product-title">Produk 4</div>
-        <div class="product-price">Rp 45.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-    
-    
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
-        </div>
-        <div class="product-title">Produk 4</div>
-        <div class="product-price">Rp 45.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
-    </div>
-    
-    
+  <div class="two-column-products">
+   
   </div>
-  
-  
- 
-  <div class="product-grid">
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 5">
-        </div>
-        <div class="product-title">Produk 5</div>
-        <div class="product-price">Rp 60.000</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
+  <div class="four-product-row">
+    <div class="product-item">
+      <a href="https://nasukafoods.site/produk-detail-1.html" class="product-image-link">
+        <img class="product-image" src="https://nasukafoods.site/tiktok-likes.jpg" alt="Produk 1">
+      </a>Rp 200
+      <button class="add-to-cart-btn" onclick="addToCart(this)" data-product-name="Produk A" data-product-price="200">Add</button>
     </div>
-    <div class="product-card">
-      <a href="https://nasukafoods.site/product-detail.html">
-        <div class="product-image-container">
-          <img class="product-image" src="https://nasukafoods.site/wireless.jpg" alt="Produk 6">
-        </div>
-        <div class="product-title">Produk 6</div>
-        <div class="product-price">Rp 90.000</div>
+    <div class="product-item">
+      <a href="https://nasukafoods.site/produk-detail-10.html" class="product-image-link">
+        <img class="product-image" src="https://via.placeholder.com/100/00FF00/000000?text=Produk+10" alt="Produk 2">
       </a>
-      <button class="add-to-cart-btn" onclick="addToCart(this)">Add</button>
+      <button class="add-to-cart-btn" onclick="addToCart(this)" data-product-name="Produk B" data-product-price="200000">Add</button>
+    </div>
+    
+    
+    
+    
+    <div class="product-item">
+      <a href="https://nasukafoods.site/produk-detail-11.html" class="product-image-link">
+        <img class="product-image" src="https://via.placeholder.com/100/FF00FF/000000?text=Produk+11" alt="Produk 3">
+      </a>
+      <button class="add-to-cart-btn" onclick="addToCart(this)" data-product-name="Produk C" data-product-price="250000">Add</button>
+    </div>
+    
+    
+    
+    
+    
+    <div class="product-item">
+      <a href="https://nasukafoods.site/produk-detail-12.html" class="product-image-link">
+        <img class="product-image" src="https://via.placeholder.com/100/00FFFF/000000?text=Produk+12" alt="Produk 4">
+      </a>
+      <button class="add-to-cart-btn" onclick="addToCart(this)" data-product-name="Produk D" data-product-price="300000">Add</button>
     </div>
   </div>
-
-
-
-
   <div id="topupModal" class="modal">
     <div class="modal-content">
       <span class="close-button" onclick="closeTopupModal()">&times;</span>
@@ -423,7 +385,7 @@
   </div>
 
   <script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtT_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
 
     function formatRupiah(number) {
         const num = parseFloat(number);
@@ -438,16 +400,16 @@
     }
 
     function addToCart(element) {
-      const productCard = element.closest('.product-card');
-      if (!productCard) return;
+      const productItem = element.closest('.product-item') || element.closest('.product-card');
+      if (!productItem) return;
 
-      const title = productCard.querySelector('.product-title').innerText;
-      const price = productCard.querySelector('.product-price').innerText;
-      const img = productCard.querySelector('.product-image').src;
+      const title = element.getAttribute('data-product-name');
+      const price = element.getAttribute('data-product-price');
+      const img = productItem.querySelector('.product-image').src;
 
       const product = {
           name: title,
-          price: price,
+          price: `Rp ${price}`, // Format price with 'Rp '
           image: img,
           quantity: 1
       };
@@ -479,12 +441,12 @@
                 identifierType: identifierType
             });
 
-            const response = await fetch(GAS_URL, { // URL diubah, tidak ada '?'
-                method: 'POST', // <-- Ini perubahan utamanya: dari GET ke POST
+            const response = await fetch(GAS_URL, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: payload.toString(), // Data dikirim di body
+                body: payload.toString(),
             });
 
             const result = await response.json();
@@ -501,7 +463,7 @@
                 userBalanceElement.textContent = result.message || 'Saldo: Rp 0';
             }
         } catch (error) {
-            console.error("Error fetching user balance:", error); // Menggunakan console.error untuk debugging
+            console.error("Error fetching user balance:", error);
             userBalanceElement.textContent = 'Gagal memuat saldo.';
         }
     }
