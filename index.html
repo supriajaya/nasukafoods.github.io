@@ -314,8 +314,8 @@
         <h3>Nama Produk 1</h3>
         <p>Deskripsi singkat produk.</p>
         <div class="price" data-raw-price="150000">Rp 150.000</div>
-        <button class="buy-button" 
-                data-product-name="Nama Produk 1" 
+        <button class="buy-button"
+                data-product-name="Nama Produk 1"
                 data-product-price="150000"
                 data-product-image="https://via.placeholder.com/150/0000FF/FFFFFF?text=Produk+1">Beli Sekarang</button>
       </div>
@@ -324,8 +324,8 @@
         <h3>Nama Produk 2</h3>
         <p>Deskripsi singkat produk.</p>
         <div class="price" data-raw-price="250000">Rp 250.000</div>
-        <button class="buy-button" 
-                data-product-name="Nama Produk 2" 
+        <button class="buy-button"
+                data-product-name="Nama Produk 2"
                 data-product-price="250000"
                 data-product-image="https://via.placeholder.com/150/FF0000/FFFFFF?text=Produk+2">Beli Sekarang</button>
       </div>
@@ -334,14 +334,14 @@
         <h3>Nama Produk 3</h3>
         <p>Deskripsi singkat produk.</p>
         <div class="price" data-raw-price="100000">Rp 100.000</div>
-        <button class="buy-button" 
-                data-product-name="Nama Produk 3" 
+        <button class="buy-button"
+                data-product-name="Nama Produk 3"
                 data-product-price="100000"
                 data-product-image="https://via.placeholder.com/150/00FF00/FFFFFF?text=Produk+3">Beli Sekarang</button>
       </div>
     </div>
   </div>
-  
+
   <div id="orderHistorySection">
     <h2>Riwayat Pesanan Anda</h2>
     <div id="orderList">
@@ -352,7 +352,7 @@
   <div class="bottom-bar">
     <a href="#home" id="navHome">🏠<br>Beranda</a>
     <a href="#order-history" id="navOrderHistory">➕<br>Riwayat Pesanan</a>
-    
+
     <a href="#" id="navLogin" class="logged-out-nav">➡️<br>Masuk</a>
     <a href="#" id="navRegister" class="logged-out-nav">📝<br>Daftar</a>
 
@@ -365,7 +365,7 @@
     <div class="modal-content">
       <span class="close-button payment-close-button">&times;</span>
       <h2>Detail Pesanan & Pembayaran</h2>
-      
+
       <div class="product-display-in-modal">
         <img id="modalProductImage" src="" alt="Foto Produk">
         <div class="product-details-in-modal">
@@ -438,7 +438,7 @@
 
         <label for="regPhone">Nomor HP:</label>
         <input type="tel" id="regPhone" name="Nomor HP" placeholder="Contoh: 081234567890" required>
-        
+
         <label for="regSocialMedia">Media Sosial (Opsional):</label>
         <input type="text" id="regSocialMedia" name="Sosial Media" placeholder="Contoh: @username_ig">
 
@@ -456,12 +456,12 @@
   <script>
     const paymentModal = document.getElementById("paymentModal");
     const loginModal = document.getElementById("loginModal");
-    const registerModal = document.getElementById("registerModal"); 
+    const registerModal = document.getElementById("registerModal");
 
     const paymentCloseButton = document.getElementsByClassName("payment-close-button")[0];
     const loginCloseButton = document.getElementsByClassName("login-close-button")[0];
-    const registerCloseButton = document.getElementsByClassName("register-close-button")[0]; 
-    
+    const registerCloseButton = document.getElementsByClassName("register-close-button")[0];
+
     const modalProductImage = document.getElementById("modalProductImage");
     const modalProductNameDisplay = document.getElementById("modalProductName");
     const modalProductPriceDisplay = document.getElementById("modalProductPrice");
@@ -490,7 +490,7 @@
     const navProfile = document.getElementById('navProfile');
 
     // URL Apps Script Anda yang sudah diperbarui
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec'; 
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
 
 
     function showSection(sectionId) {
@@ -556,17 +556,17 @@
     });
 
     updateNavigation();
-    showSection('home'); 
+    showSection('home');
 
     document.querySelectorAll('.buy-button').forEach(button => {
       button.addEventListener('click', function() {
         const productName = this.dataset.productName;
         const productPrice = parseFloat(this.dataset.productPrice);
         const productImage = this.dataset.productImage;
-        
+
         modalProductImage.src = productImage;
         modalProductNameDisplay.textContent = productName;
-        modalProductPriceDisplay.textContent = "Rp " + productPrice.toLocaleString('id-ID'); 
+        modalProductPriceDisplay.textContent = "Rp " + productPrice.toLocaleString('id-ID');
 
         hiddenProductNameInput.value = productName;
         hiddenProductPriceInput.value = productPrice;
@@ -645,6 +645,11 @@
     });
 
     async function sendDataToGAS(dataToSend, buttonElement, originalButtonText) {
+      // --- Revisi: Tambahan untuk debugging ---
+      console.log('Data yang akan dikirim ke GAS:', dataToSend);
+      console.log('Body JSON yang akan dikirim:', JSON.stringify(dataToSend));
+      // --- Akhir revisi debugging ---
+
       try {
         const response = await fetch(WEB_APP_URL, {
           method: 'POST',
@@ -685,20 +690,20 @@
             updateNavigation();
           } else if (dataToSend.action === 'registerUser') {
             alert('Pendaftaran berhasil! Silakan login. ' + result.message);
-            registerForm.reset(); 
-            registerModal.style.display = "none"; 
+            registerForm.reset();
+            registerModal.style.display = "none";
             loginModal.style.display = "block";
           }
         } else {
-          alert(dataToSend.action.includes('Order') ? 'Gagal membuat pesanan: ' + result.message : 
-                dataToSend.action === 'loginUser' ? 'Login gagal: ' + result.message : 
+          alert(dataToSend.action.includes('Order') ? 'Gagal membuat pesanan: ' + result.message :
+                dataToSend.action === 'loginUser' ? 'Login gagal: ' + result.message :
                 'Pendaftaran gagal: ' + result.message);
         }
       } catch (error) {
         buttonElement.disabled = false;
         buttonElement.textContent = originalButtonText;
         alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
-        console.error('GAS Error:', error);
+        console.error('GAS Error (frontend catch block):', error); // Ubah log ini agar lebih spesifik
       }
     }
 
@@ -725,13 +730,13 @@
         const data = Object.fromEntries(formData.entries());
         data.action = 'registerUser';
 
-        sendDataToGAS(data, submitRegisterButton, 'Daftar Sekarang'); 
+        sendDataToGAS(data, submitRegisterButton, 'Daftar Sekarang');
     });
 
 
     function loadOrderHistory() {
         const orders = JSON.parse(localStorage.getItem('guestOrders')) || [];
-        orderListDiv.innerHTML = ''; 
+        orderListDiv.innerHTML = '';
 
         if (orders.length === 0) {
             noOrdersMessage.style.display = 'block';
