@@ -1,622 +1,776 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nasuka Shop</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nasuka</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: black;
+      color: white;
+    }
 
-<style>
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background-color: white;
-  color: black;
-}
-.hero-section {
-  position: relative;
-  height: 15vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+    .hero-section {
+      position: relative;
+      height: 20vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 5vh;
+    }
 
-.hero-section video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
+    .hero-section video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
 
-.info, .sidebar {
-  position: absolute;
-  bottom: 20px;
-}
+    .promo-text {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 6px black;
+      padding: 0 20px;
+      z-index: 1;
+    }
 
-.info {
-  left: 10px;
-}
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+      z-index: 999;
+    }
 
-.info .location {
-  font-size: 12px;
-  color: #333;
-}
+    .bottom-bar a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      padding: 5px 10px;
+    }
 
-.info .username {
-  font-weight: bold;
-}
+    .content-area {
+      padding: 20px;
+      margin-bottom: 50px;
+      text-align: center;
+    }
 
-.info .adress {
-  font-size: 14px;
-  margin-top: 5px;
-}
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+    }
 
-.info .balance {
-  font-size: 12px;
-  color: #ffbb00;
-}
+    .product-item {
+      background-color: #333;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
 
-.sidebar {
-  right: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    .product-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 8px;
+    }
 
-.sidebar div {
-  margin: 8px 0;
-  font-size: 12px;
-}
+    .product-item h3 {
+      font-size: 16px;
+      margin: 0 0 5px 0;
+    }
 
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: transparent);
-  display: flex;
-  justify-content: space-around;
-  padding: 8px 0;
-  font-size: 12px;
-  z-index: 999;
-}
+    .product-item p {
+      font-size: 14px;
+      color: #ccc;
+      margin: 0;
+    }
 
-.bottom-bar a {
-  color: white;
-  text-decoration: none;
-  text-align: center;
-}
+    .product-item .price {
+      font-weight: bold;
+      color: #ffbb00;
+      margin-top: 5px;
+    }
 
-.product-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); 
-  gap: 15px; 
-  padding: 20px 10px;
-}
+    .product-item button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 13px;
+    }
 
-.product-item {
-  text-align: center;
-  padding: 10px;
-}
+    .product-item button:hover {
+      background-color: #0056b3;
+    }
 
-.product-item img {
-  width: 100%;
-  height: auto;
-}
+    #paymentModal, #loginModal, #registerModal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+      padding-top: 60px;
+    }
 
-.product-name {
-  font-weight: bold;
-  margin-top: 10px;
-}
+    .modal-content {
+      background-color: #222;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 10px;
+      position: relative;
+    }
 
-.product-price {
-  color: #333;
-  margin-top: 5px;
-}
+    .close-button {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
+    }
 
-.buy-button {
-  background-color: #ffbb00;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  margin-top: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
+    .close-button:hover,
+    .close-button:focus {
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
 
-.profile-section, .payment-section {
-  padding: 20px;
-  max-width: 600px;
-  margin: 20px auto;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
+    .modal-content h2 {
+      text-align: center;
+      color: #ffbb00;
+      margin-top: 0;
+    }
 
-.modal-overlay {
-  display: none; 
-  position: fixed; 
-  z-index: 1000; 
-  left: 0;
-  top: 0;
-  width: 100%; 
-  height: 100%; 
-  background-color: rgba(0,0,0,0.5); 
-  overflow: auto;
-  justify-content: center;
-  align-items: center;
-}
+    .modal-content label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
 
-#profileSection, #loginSection, #registerSection {
-  background-color: #fefefe;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-  max-width: 90%;
-  width: 400px; 
-}
+    .modal-content input[type="text"],
+    .modal-content input[type="tel"],
+    .modal-content input[type="password"],
+    .modal-content select,
+    .modal-content textarea,
+    .modal-content input[type="file"],
+    .modal-content input[type="email"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #555;
+      background-color: #444;
+      color: white;
+    }
 
-.close-button {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
+    .modal-content input[type="file"] {
+      padding: 8px;
+    }
 
-.close-button:hover,
-.close-button:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
+    .modal-content button[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
 
-.payment-section {
-  display: none;
-}
+    .modal-content button[type="submit"]:hover {
+      background-color: #218838;
+    }
 
-.profile-section h2, .payment-section h2, #loginSection h2, #registerSection h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    .product-display-in-modal {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      background-color: #3a3a3a;
+      padding: 10px;
+      border-radius: 5px;
+    }
 
-.profile-form label, .payment-form label, .login-form label, .register-form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
+    .product-display-in-modal img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-right: 15px;
+    }
 
-.profile-form input, .payment-form input, .payment-form select, .login-form input, .register-form input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+    .product-details-in-modal {
+      flex-grow: 1;
+    }
 
-.profile-form button, .payment-form button, .login-form button, .register-form button {
-  width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+    .product-details-in-modal h3 {
+      margin: 0 0 5px 0;
+      font-size: 18px;
+    }
 
-.profile-form button:hover, .payment-form button:hover, .login-form button:hover, .register-form button:hover {
-  background-color: #45a049;
-}
+    .product-details-in-modal p {
+      margin: 0;
+      font-size: 16px;
+      color: #ffbb00;
+      font-weight: bold;
+    }
 
-.order-details {
-    margin-bottom: 15px;
-    padding: 10px;
-    background-color: #eee;
-    border-radius: 5px;
-}
+    #orderHistorySection {
+      display: none;
+      padding: 20px;
+      text-align: left;
+    }
 
-.order-details p {
-    margin: 5px 0;
-}
-</style>
+    #orderHistorySection h2 {
+      text-align: center;
+      color: #ffbb00;
+      margin-bottom: 20px;
+    }
 
+    .order-item {
+      background-color: #333;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .order-item img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .order-details {
+      flex-grow: 1;
+    }
+
+    .order-details h4 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+      color: white;
+    }
+
+    .order-details p {
+      margin: 0;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    .order-details .status {
+      font-weight: bold;
+      color: #00ff00;
+    }
+  </style>
+</head>
 <body>
-<section class="hero-section">
-<div class="info">
-<div class="location">📍 Jawa Barat</div>
-<div class="username">#</div>
-<div class="adress">Kota</div>
-<div class="balance">Saldo</div>
-</div>
-<div class="sidebar">
-  <div>❤️ 200.k</div>
-  <div>💬 4.M</div>
-  <div>🛒</div>
-</div>
 
-</section>
-<div class="product-container">
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 1">
-<div class="product-name">Produk 1</div>
-<div class="product-price" data-price="10000">Rp 10.000</div>
-<button class="buy-button" data-product="Produk 1">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 2">
-<div class="product-name">Produk 2</div>
-<div class="product-price" data-price="5000">Rp 5.000</div>
-<button class="buy-button" data-product="Produk 2">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 3">
-<div class="product-name">Produk 3</div>
-<div class="product-price" data-price="15000">Rp 15.000</div>
-<button class="buy-button" data-product="Produk 3">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 4">
-<div class="product-name">Produk 4</div>
-<div class="product-price" data-price="20000">Rp 20.000</div>
-<button class="buy-button" data-product="Produk 4">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 5">
-<div class="product-name">Produk 5</div>
-<div class="product-price" data-price="25000">Rp 25.000</div>
-<button class="buy-button" data-product="Produk 5">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 6">
-<div class="product-name">Produk 6</div>
-<div class="product-price" data-price="30000">Rp 30.000</div>
-<button class="buy-button" data-product="Produk 6">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 7">
-<div class="product-name">Produk 7</div>
-<div class="product-price" data-price="35000">Rp 35.000</div>
-<button class="buy-button" data-product="Produk 7">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 8">
-<div class="product-name">Produk 8</div>
-<div class="product-price" data-price="40000">Rp 40.000</div>
-<button class="buy-button" data-product="Produk 8">Beli Sekarang</button>
-</div>
-<div class="product-item">
-<img src="https://nasukafoods.site/wireless.jpg" alt="Produk 9">
-<div class="product-name">Produk 9</div>
-<div class="product-price" data-price="45000">Rp 45.000</div>
-<button class="buy-button" data-product="Produk 9">Beli Sekarang</button>
-</div>
-</div>
+  <section class="hero-section" id="homeSection">
+    <video src="https://nasukafoods.site/kawasakih2.mp4" autoplay muted loop playsinline></video>
 
-<div id="profileModal" class="modal-overlay">
-  <div id="profileSection" class="profile-section">
-    <span class="close-button" id="closeProfileModal">&times;</span>
-    <h2>Data Diri Pengunjung</h2>
-    <form id="profileForm" class="profile-form">
-      <label for="namaLengkap">Nama Lengkap:</label>
-      <input type="text" id="namaLengkap" required>
+    <div class="promo-text">
+      Selamat Datang di Nasuka Labs<br />
+      <strong>Jelajahi Produk Kami!</strong>
+    </div>
+  </section>
 
-      <label for="alamatLengkap">Alamat Lengkap:</label>
-      <input type="text" id="alamatLengkap" required>
-
-      <label for="nomorHP">Nomor HP:</label>
-      <input type="tel" id="nomorHP" required>
-      
-      <label for="sosialMedia">Sosial Media:</label>
-      <input type="text" id="sosialMedia" value="Akun tiktok (Misal : @supria-jaya)">
-
-      <label for="fhoto">Fhoto:</label>
-      <input type="file" id="fhoto" accept="image/*">
-
-      <label for="kataKataHariIni">Kata Kata Hari Ini:</label>
-      <input type="text" id="kataKataHariIni">
-
-      <button type="submit" id="simpanDataButton">Simpan Data Diri</button>
-    </form>
-    <div id="statusMessage"></div>
-  </div>
-</div>
-
-<div id="loginModal" class="modal-overlay">
-  <div id="loginSection" class="profile-section">
-    <span class="close-button" id="closeLoginModal">&times;</span>
-    <h2>Login Pengunjung</h2>
-    <form id="loginForm" class="login-form">
-      <label for="loginUsername">Username:</label>
-      <input type="text" id="loginUsername" required>
-
-      <label for="loginPassword">Password:</label>
-      <input type="password" id="loginPassword" required>
-
-      <button type="submit">Login</button>
-    </form>
-    <p>belum punya akun? bikin akun <a href="#" id="registerLink">Disini</a> untuk pengalaman lebih asik</p>
-  </div>
-</div>
-
-<div id="registerModal" class="modal-overlay">
-  <div id="registerSection" class="profile-section">
-    <span class="close-button" id="closeRegisterModal">&times;</span>
-    <h2>Pendaftaran Akun</h2>
-    <form id="registerForm" class="register-form">
-      <label for="regUsername">Username:</label>
-      <input type="text" id="regUsername" required>
-
-      <label for="regPassword">Password:</label>
-      <input type="password" id="regPassword" required>
-      
-      <label for="regNamaLengkap">Nama Lengkap:</label>
-      <input type="text" id="regNamaLengkap" required>
-
-      <label for="regAlamatLengkap">Alamat Lengkap:</label>
-      <input type="text" id="regAlamatLengkap" required>
-
-      <label for="regNomorHP">Nomor HP:</label>
-      <input type="tel" id="regNomorHP" required>
-
-      <label for="regFotoProfil">Foto Profil:</label>
-      <input type="file" id="regFotoProfil" accept="image/*">
-
-      <label for="regTentangSaya">Tentang Saya:</label>
-      <input type="text" id="regTentangSaya">
-
-      <button type="submit">Daftar</button>
-    </form>
-  </div>
-</div>
-
-<div id="paymentSection" class="payment-section">
-  <h2>Form Pembayaran</h2>
-  <div class="order-details">
-    <p><strong>Produk:</strong> <span id="paymentProductName"></span></p>
-    <p><strong>Harga:</strong> <span id="paymentProductPrice"></span></p>
-    <p><strong>Kuantitas:</strong> <span id="paymentQuantity">1</span></p> 
-    <p><strong>Total Harga:</strong> <span id="paymentTotal"></span></p> 
-    <p><strong>Nama:</strong> <span id="paymentName"></span></p>
-    <p><strong>Alamat:</strong> <span id="paymentAddress"></span></p>
-    <p><strong>Nomor HP:</strong> <span id="paymentPhone"></span></p>
-    <p><strong>Sosial Media:</strong> <span id="paymentSocialMedia"></span></p> 
+  <div class="content-area" id="productSection">
+    <h2>Produk Terbaru</h2>
+    <div class="product-grid">
+      <div class="product-item">
+        <img src="https://via.placeholder.com/150/0000FF/FFFFFF?text=Produk+1" alt="Produk 1">
+        <h3>Nama Produk 1</h3>
+        <p>Deskripsi singkat produk.</p>
+        <div class="price" data-raw-price="150000">Rp 150.000</div>
+        <button class="buy-button" 
+                data-product-name="Nama Produk 1" 
+                data-product-price="150000"
+                data-product-image="https://via.placeholder.com/150/0000FF/FFFFFF?text=Produk+1">Beli Sekarang</button>
+      </div>
+      <div class="product-item">
+        <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=Produk+2" alt="Produk 2">
+        <h3>Nama Produk 2</h3>
+        <p>Deskripsi singkat produk.</p>
+        <div class="price" data-raw-price="250000">Rp 250.000</div>
+        <button class="buy-button" 
+                data-product-name="Nama Produk 2" 
+                data-product-price="250000"
+                data-product-image="https://via.placeholder.com/150/FF0000/FFFFFF?text=Produk+2">Beli Sekarang</button>
+      </div>
+      <div class="product-item">
+        <img src="https://via.placeholder.com/150/00FF00/FFFFFF?text=Produk+3" alt="Produk 3">
+        <h3>Nama Produk 3</h3>
+        <p>Deskripsi singkat produk.</p>
+        <div class="price" data-raw-price="100000">Rp 100.000</div>
+        <button class="buy-button" 
+                data-product-name="Nama Produk 3" 
+                data-product-price="100000"
+                data-product-image="https://via.placeholder.com/150/00FF00/FFFFFF?text=Produk+3">Beli Sekarang</button>
+      </div>
+    </div>
   </div>
   
-  <form id="paymentForm" class="payment-form">
-    <label for="kuantitasInput">Kuantitas:</label>
-    <input type="number" id="kuantitasInput" min="1" value="1" required>
+  <div id="orderHistorySection">
+    <h2>Riwayat Pesanan Anda</h2>
+    <div id="orderList">
+      <p style="text-align: center; color: #aaa;" id="noOrdersMessage">Belum ada pesanan.</p>
+    </div>
+  </div>
 
-    <label for="metodePembayaran">Metode Pembayaran:</label>
-    <select id="metodePembayaran" required>
-      <option value="">Pilih Metode Pembayaran</option>
-      <option value="Transfer Bank">Transfer Bank</option>
-      <option value="Qris">Qris</option>
-      <option value="Tunai">Tunai</option>
-    </select>
-
-    <label for="buktiPembayaran">Bukti Pembayaran:</label>
-    <input type="file" id="buktiPembayaran" accept="image/*">
-
-    <label for="catatan">Catatan (opsional):</label>
-    <input type="text" id="catatan">
-
-    <button type="submit">Lanjutkan Pembayaran</button>
-  </form>
-</div>
-
-<div class="bottom-bar">
-<a href="https://nasukafoods.site">🏠<br>Home</a>
-<a href="#" id="loginNav">✅<br>Layn</a>
-<a href="https://nasukafoods.site">➕<br>Pes</a>
-<a href="https://nasukafoods.site">📨<br>Otf</a>
-<a href="#" id="profileNav">👤<br>Profil</a>
-</div>
-
-<script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbx5KBwWoK59Ppp6bfo49QSmzUhwJH1QuYJ-xAHBytGvBGgJDun0tuixzBwq3Nt4bfWF3w/exec';
-
-document.getElementById('profileForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
+  <div class="bottom-bar">
+    <a href="#home" id="navHome">🏠<br>Beranda</a>
+    <a href="#order-history" id="navOrderHistory">➕<br>Riwayat Pesanan</a>
     
-    const namaLengkap = document.getElementById('namaLengkap').value;
-    const alamatLengkap = document.getElementById('alamatLengkap').value;
-    const nomorHP = document.getElementById('nomorHP').value;
-    const sosialMedia = document.getElementById('sosialMedia').value;
-    const kataKataHariIni = document.getElementById('kataKataHariIni').value;
-    const statusMessage = document.getElementById('statusMessage');
+    <a href="#" id="navLogin" class="logged-out-nav">➡️<br>Masuk</a>
+    <a href="#" id="navRegister" class="logged-out-nav">📝<br>Daftar</a>
+
+    <a href="#benefit" id="navBenefit" class="logged-in-nav" style="display:none;">🎁<br>Benefit</a>
+    <a href="#notif" id="navNotif" class="logged-in-nav" style="display:none;">🔔<br>Notif</a>
+    <a href="https://nasukafoods.site/profil.html" id="navProfile" class="logged-in-nav" style="display:none;">👤<br>Profil</a>
+  </div>
+
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button payment-close-button">&times;</span>
+      <h2>Detail Pesanan & Pembayaran</h2>
+      
+      <div class="product-display-in-modal">
+        <img id="modalProductImage" src="" alt="Foto Produk">
+        <div class="product-details-in-modal">
+          <h3><span id="modalProductName"></span></h3>
+          <p>Total: <span id="modalProductPrice"></span></p>
+        </div>
+      </div>
+
+      <form id="guestPaymentForm">
+        <input type="hidden" id="hiddenProductName" name="Produk">
+        <input type="hidden" id="hiddenProductPrice" name="Total Harga">
+        <input type="hidden" id="hiddenProductImage" name="Gambar Produk">
+
+
+        <label for="guestName">Nama Lengkap:</label>
+        <input type="text" id="guestName" name="Nama" placeholder="Masukkan nama lengkap" required>
+
+        <label for="guestAddress">Alamat Lengkap:</label>
+        <textarea id="guestAddress" name="Alamat" placeholder="Masukkan alamat lengkap" rows="3" required></textarea>
+
+        <label for="guestPhone">Nomor HP:</label>
+        <input type="tel" id="guestPhone" name="Nomor HP" placeholder="Contoh: 081234567890" required>
+
+        <label for="guestSocialMedia">Media Sosial (Opsional):</label>
+        <input type="text" id="guestSocialMedia" name="Media Sosial" placeholder="Contoh: @username_ig">
+
+        <label for="paymentMethod">Metode Pembayaran:</label>
+        <select id="paymentMethod" name="Metode Pembayaran" required>
+          <option value="">Pilih Metode</option>
+          <option value="Transfer Bank">Transfer Bank</option>
+          <option value="E-Wallet">E-Wallet</option>
+          </select>
+
+        <label for="proofOfPayment">Kirim Bukti Pembayaran:</label>
+        <input type="file" id="proofOfPayment" name="Bukti Pembayaran" accept="image/*" required>
+        <small style="color:#aaa; display:block; margin-top:-10px; margin-bottom:15px;">Unggah foto bukti transfer/pembayaran.</small>
+
+
+        <button type="submit" id="submitOrderButton">Konfirmasi Pesanan</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button login-close-button">&times;</span>
+      <h2>Masuk ke Akun Anda</h2>
+      <form id="loginForm">
+        <label for="loginUsername">Username:</label>
+        <input type="text" id="loginUsername" name="username" placeholder="Masukkan username Anda" required>
+
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" name="password" placeholder="Masukkan password Anda" required>
+
+        <button type="submit" id="submitLoginButton">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button register-close-button">&times;</span>
+      <h2>Daftar Akun Baru</h2>
+      <form id="registerForm">
+        <label for="regName">Nama Lengkap:</label>
+        <input type="text" id="regName" name="Nama" placeholder="Masukkan nama lengkap Anda" required>
+
+        <label for="regAddress">Alamat Lengkap:</label>
+        <textarea id="regAddress" name="Alamat" placeholder="Masukkan alamat lengkap Anda" rows="2" required></textarea>
+
+        <label for="regPhone">Nomor HP:</label>
+        <input type="tel" id="regPhone" name="Nomor HP" placeholder="Contoh: 081234567890" required>
+        
+        <label for="regSocialMedia">Media Sosial (Opsional):</label>
+        <input type="text" id="regSocialMedia" name="Sosial Media" placeholder="Contoh: @username_ig">
+
+        <label for="regUsername">Username:</label>
+        <input type="text" id="regUsername" name="Username" placeholder="Buat username" required>
+
+        <label for="regPassword">Password:</label>
+        <input type="password" id="regPassword" name="Password" placeholder="Buat password" required>
+
+        <button type="submit" id="submitRegisterButton">Daftar Sekarang</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const paymentModal = document.getElementById("paymentModal");
+    const loginModal = document.getElementById("loginModal");
+    const registerModal = document.getElementById("registerModal"); 
+
+    const paymentCloseButton = document.getElementsByClassName("payment-close-button")[0];
+    const loginCloseButton = document.getElementsByClassName("login-close-button")[0];
+    const registerCloseButton = document.getElementsByClassName("register-close-button")[0]; 
     
-    if (typeof(Storage) !== "undefined") {
-      localStorage.setItem('visitorData_namaLengkap', namaLengkap);
-      localStorage.setItem('visitorData_alamatLengkap', alamatLengkap);
-      localStorage.setItem('visitorData_nomorHP', nomorHP);
-      localStorage.setItem('visitorData_sosialMedia', sosialMedia);
-      localStorage.setItem('visitorData_kataKataHariIni', kataKataHariIni);
+    const modalProductImage = document.getElementById("modalProductImage");
+    const modalProductNameDisplay = document.getElementById("modalProductName");
+    const modalProductPriceDisplay = document.getElementById("modalProductPrice");
+
+    const hiddenProductNameInput = document.getElementById("hiddenProductName");
+    const hiddenProductPriceInput = document.getElementById("hiddenProductPrice");
+    const hiddenProductImageInput = document.getElementById("hiddenProductImage");
+
+    const guestPaymentForm = document.getElementById('guestPaymentForm');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const orderListDiv = document.getElementById('orderList');
+    const noOrdersMessage = document.getElementById('noOrdersMessage');
+    const submitOrderButton = document.getElementById('submitOrderButton');
+    const submitLoginButton = document.getElementById('submitLoginButton');
+    const submitRegisterButton = document.getElementById('submitRegisterButton');
+
+    const homeSection = document.getElementById('homeSection');
+    const productSection = document.getElementById('productSection');
+    const orderHistorySection = document.getElementById('orderHistorySection');
+
+    // Elemen navigasi baru
+    const navLogin = document.getElementById('navLogin');
+    const navRegister = document.getElementById('navRegister');
+    const navBenefit = document.getElementById('navBenefit');
+    const navNotif = document.getElementById('navNotif');
+    const navProfile = document.getElementById('navProfile');
+
+
+    function showSection(sectionId) {
+        homeSection.style.display = 'none';
+        productSection.style.display = 'none';
+        orderHistorySection.style.display = 'none';
+
+        if (sectionId === 'home') {
+            homeSection.style.display = 'flex';
+            productSection.style.display = 'block';
+        } else if (sectionId === 'order-history') {
+            orderHistorySection.style.display = 'block';
+            loadOrderHistory();
+        }
     }
 
-    const now = new Date();
-    const tanggalDaftar = now.toLocaleString();
-    
-    const formData = {
-      action: 'addCustomer', 
-      'Nama Lengkap': namaLengkap,
-      'Alamat Lengkap': alamatLengkap,
-      'Nomor HP': nomorHP,
-      'Sosial Media': sosialMedia,
-      'Tanggal Daftar': tanggalDaftar,
-      'Kata Kata Hari Ini': kataKataHariIni 
-    };
+    // Fungsi untuk memperbarui tampilan navigasi
+    function updateNavigation() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-    const urlParams = new URLSearchParams(formData);
+        if (isLoggedIn) {
+            navLogin.style.display = 'none';
+            navRegister.style.display = 'none';
+            navBenefit.style.display = 'block';
+            navNotif.style.display = 'block';
+            navProfile.style.display = 'block';
+        } else {
+            navLogin.style.display = 'block';
+            navRegister.style.display = 'block';
+            navBenefit.style.display = 'none';
+            navNotif.style.display = 'none';
+            navProfile.style.display = 'none';
+        }
+    }
 
-    statusMessage.textContent = 'Mengirim data...';
-    statusMessage.style.color = 'blue';
+    document.getElementById('navHome').addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection('home');
+    });
 
-    try {
-      const response = await fetch(GAS_URL, {
-        method: 'POST',
-        body: urlParams
+    document.getElementById('navOrderHistory').addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection('order-history');
+    });
+
+    document.getElementById('navLogin').addEventListener('click', function(e) {
+        e.preventDefault();
+        loginModal.style.display = "block";
+    });
+
+    document.getElementById('navRegister').addEventListener('click', function(e) {
+        e.preventDefault();
+        registerModal.style.display = "block";
+    });
+
+    // Event listener untuk navigasi baru (Benefit, Notif, Profil)
+    // Untuk Benefit dan Notif, saat ini hanya alert, Anda bisa menggantinya dengan fungsi yang lebih kompleks
+    navBenefit.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Halaman Benefit akan datang!');
+        // Di sini Anda bisa menambahkan logika untuk menampilkan section Benefit
+    });
+
+    navNotif.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Halaman Notifikasi akan datang!');
+        // Di sini Anda bisa menambahkan logika untuk menampilkan section Notifikasi
+    });
+
+    // Navigasi Profil akan mengarahkan ke profil.html
+    // Tidak perlu event listener di sini karena sudah ada href="profil.html"
+
+    // Panggil updateNavigation saat halaman pertama kali dimuat
+    updateNavigation();
+    showSection('home'); 
+
+    document.querySelectorAll('.buy-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const productName = this.dataset.productName;
+        const productPrice = parseFloat(this.dataset.productPrice);
+        const productImage = this.dataset.productImage;
+        
+        modalProductImage.src = productImage;
+        modalProductNameDisplay.textContent = productName;
+        modalProductPriceDisplay.textContent = "Rp " + productPrice.toLocaleString('id-ID'); 
+
+        hiddenProductNameInput.value = productName;
+        hiddenProductPriceInput.value = productPrice;
+        hiddenProductImageInput.value = productImage;
+
+        paymentModal.style.display = "block";
       });
+    });
 
-      if (response.ok) {
-        statusMessage.textContent = 'Data berhasil disimpan lokal dan dikirim ke sheet!';
-        statusMessage.style.color = 'green';
-      } else {
-        statusMessage.textContent = 'Data disimpan lokal, tetapi gagal mengirim ke sheet.';
-        statusMessage.style.color = 'orange';
-      }
-    } catch (error) {
-      statusMessage.textContent = 'Data disimpan lokal, tetapi terjadi kesalahan saat mengirim ke sheet.';
-      statusMessage.style.color = 'red';
+    paymentCloseButton.onclick = function() {
+      paymentModal.style.display = "none";
     }
-  });
 
-function loadVisitorData() {
-    if (typeof(Storage) !== "undefined") {
-      const namaLengkap = localStorage.getItem('visitorData_namaLengkap');
-      const alamatLengkap = localStorage.getItem('visitorData_alamatLengkap');
-      const nomorHP = localStorage.getItem('visitorData_nomorHP');
-      const sosialMedia = localStorage.getItem('visitorData_sosialMedia');
-      const kataKataHariIni = localStorage.getItem('visitorData_kataKataHariIni');
-
-      if (namaLengkap) {
-        document.getElementById('namaLengkap').value = namaLengkap;
-      }
-      if (alamatLengkap) {
-        document.getElementById('alamatLengkap').value = alamatLengkap;
-      }
-      if (nomorHP) {
-        document.getElementById('nomorHP').value = nomorHP;
-      }
-      if (sosialMedia) {
-        document.getElementById('sosialMedia').value = sosialMedia;
-      }
-      if (kataKataHariIni) {
-        document.getElementById('kataKataHariIni').value = kataKataHariIni;
-      }
-      
-      return { namaLengkap, alamatLengkap, nomorHP, sosialMedia, kataKataHariIni };
+    loginCloseButton.onclick = function() {
+      loginModal.style.display = "none";
     }
-    return {};
-  }
-  
-const profileModal = document.getElementById('profileModal');
-const profileNav = document.getElementById('profileNav');
-const closeProfileModal = document.getElementById('closeProfileModal');
-const paymentSection = document.getElementById('paymentSection');
-const loginModal = document.getElementById('loginModal');
-const registerModal = document.getElementById('registerModal');
-const loginNav = document.getElementById('loginNav');
-const closeLoginModal = document.getElementById('closeLoginModal');
-const registerLink = document.getElementById('registerLink');
-const closeRegisterModal = document.getElementById('closeRegisterModal');
 
-profileNav.addEventListener('click', function(event) {
-    event.preventDefault(); 
-    
-    paymentSection.style.display = 'none';
-    loginModal.style.display = 'none';
-    registerModal.style.display = 'none';
-
-    profileModal.style.display = 'flex'; 
-    loadVisitorData(); 
-});
-
-closeProfileModal.addEventListener('click', function() {
-    profileModal.style.display = 'none';
-});
-
-loginNav.addEventListener('click', function(event) {
-    event.preventDefault();
-    
-    paymentSection.style.display = 'none';
-    profileModal.style.display = 'none';
-    registerModal.style.display = 'none';
-    
-    loginModal.style.display = 'flex';
-});
-
-closeLoginModal.addEventListener('click', function() {
-    loginModal.style.display = 'none';
-});
-
-registerLink.addEventListener('click', function(event) {
-    event.preventDefault();
-    loginModal.style.display = 'none';
-    registerModal.style.display = 'flex';
-});
-
-closeRegisterModal.addEventListener('click', function() {
-    registerModal.style.display = 'none';
-});
-
-window.addEventListener('click', function(event) {
-    if (event.target == profileModal) {
-      profileModal.style.display = 'none';
+    registerCloseButton.onclick = function() {
+      registerModal.style.display = "none";
     }
-    if (event.target == loginModal) {
-      loginModal.style.display = 'none';
+
+    window.onclick = function(event) {
+      if (event.target == paymentModal) {
+        paymentModal.style.display = "none";
+      }
+      if (event.target == loginModal) {
+        loginModal.style.display = "none";
+      }
+      if (event.target == registerModal) {
+        registerModal.style.display = "none";
+      }
     }
-    if (event.target == registerModal) {
-      registerModal.style.display = 'none';
-    }
-});
 
-const buyButtons = document.querySelectorAll('.buy-button');
-const kuantitasInput = document.getElementById('kuantitasInput');
-
-kuantitasInput.addEventListener('input', updatePaymentDetails);
-
-let currentProductPrice = 0; // Variable to store the price of the current product
-
-function updatePaymentDetails() {
-    const quantity = parseInt(kuantitasInput.value) || 0;
-    
-    // Calculate total price using the stored base price
-    const total = currentProductPrice * quantity;
-
-    document.getElementById('paymentQuantity').textContent = quantity;
-    document.getElementById('paymentTotal').textContent = `Rp ${total.toLocaleString('id-ID')}`;
-}
-
-buyButtons.forEach(button => {
-    button.addEventListener('click', function(event) {
+    guestPaymentForm.addEventListener('submit', function(event) {
       event.preventDefault();
 
-      profileModal.style.display = 'none';
-      loginModal.style.display = 'none';
-      registerModal.style.display = 'none';
-      
-      const productItem = this.closest('.product-item');
-      const productName = productItem.querySelector('.product-name').textContent;
-      const productPriceText = productItem.querySelector('.product-price').textContent;
-      
-      // Extract numeric price from data-price attribute and store it
-      currentProductPrice = parseInt(productItem.querySelector('.product-price').dataset.price);
+      submitOrderButton.disabled = true;
+      submitOrderButton.textContent = 'Memproses...';
 
-      const visitorData = loadVisitorData();
+      const formData = new FormData(this);
+      const data = {};
+      let fileData = null;
 
-      // Populate payment form details
-      document.getElementById('paymentProductName').textContent = productName;
-      document.getElementById('paymentProductPrice').textContent = productPriceText;
-      document.getElementById('paymentName').textContent = visitorData.namaLengkap || 'Belum diisi';
-      document.getElementById('paymentAddress').textContent = visitorData.alamatLengkap || 'Belum diisi';
-      document.getElementById('paymentPhone').textContent = visitorData.nomorHP || 'Belum diisi';
-      document.getElementById('paymentSocialMedia').textContent = visitorData.sosialMedia || 'Belum diisi';
+      for (let [key, value] of formData.entries()) {
+        if (key === 'Bukti Pembayaran' && value instanceof File) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            fileData = {
+              fileName: value.name,
+              mimeType: value.type,
+              data: btoa(e.target.result)
+            };
+            sendOrderToGAS(data, fileData);
+          };
+          reader.readAsBinaryString(value);
+        } else {
+          data[key] = value;
+        }
+      }
 
-      // Reset quantity input to 1 and update total price
-      kuantitasInput.value = 1;
-      updatePaymentDetails(); 
-
-      // Show payment section
-      paymentSection.style.display = 'block';
+      if (!fileData && !formData.get('Bukti Pembayaran')) {
+         sendOrderToGAS(data, null);
+      }
     });
-});
 
-document.addEventListener('DOMContentLoaded', loadVisitorData);
-</script>
+    function sendOrderToGAS(formData, fileData) {
+      const gasUrl = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXzZ8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
+
+      google.script.run
+        .withSuccessHandler(function(response) {
+          submitOrderButton.disabled = false;
+          submitOrderButton.textContent = 'Konfirmasi Pesanan';
+
+          if (response.success) {
+            alert('Pesanan Anda berhasil dibuat! ' + response.message);
+            const orderData = {};
+            for (const key in formData) {
+                orderData[key] = formData[key];
+            }
+            orderData['ID Orders'] = response.orderId;
+            orderData['Tanggal'] = new Date().toLocaleString('id-ID');
+            orderData['Status Pesanan'] = 'Menunggu Konfirmasi';
+            orderData['Gambar Produk'] = hiddenProductImageInput.value;
+
+            const existingOrders = JSON.parse(localStorage.getItem('guestOrders')) || [];
+            existingOrders.push(orderData);
+            localStorage.setItem('guestOrders', JSON.stringify(existingOrders));
+
+            guestPaymentForm.reset();
+            paymentModal.style.display = "none";
+            showSection('order-history');
+          } else {
+            alert('Gagal membuat pesanan: ' + response.message);
+          }
+        })
+        .withFailureHandler(function(error) {
+          submitOrderButton.disabled = false;
+          submitOrderButton.textContent = 'Konfirmasi Pesanan';
+          alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
+          console.error('GAS Error:', error);
+        })
+        .processGuestOrder(formData, fileData);
+    }
+
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        submitLoginButton.disabled = true;
+        submitLoginButton.textContent = 'Memproses...';
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        google.script.run
+            .withSuccessHandler(function(response) {
+                submitLoginButton.disabled = false;
+                submitLoginButton.textContent = 'Login';
+
+                if (response.success) {
+                    alert('Login berhasil! Selamat datang, ' + response.username);
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('loggedInUsername', response.username);
+                    loginModal.style.display = "none";
+                    updateNavigation(); // Perbarui navigasi setelah login
+                } else {
+                    alert('Login gagal: ' + response.message);
+                }
+            })
+            .withFailureHandler(function(error) {
+                submitLoginButton.disabled = false;
+                submitLoginButton.textContent = 'Login';
+                alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
+                console.error('GAS Login Error:', error);
+            })
+            .loginUser(data.username, data.password);
+    });
+
+    registerForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        submitRegisterButton.disabled = true;
+        submitRegisterButton.textContent = 'Memproses...';
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        google.script.run
+            .withSuccessHandler(function(response) {
+                submitRegisterButton.disabled = false;
+                submitRegisterButton.textContent = 'Daftar Sekarang';
+
+                if (response.success) {
+                    alert('Pendaftaran berhasil! Silakan login. ' + response.message);
+                    registerForm.reset(); 
+                    registerModal.style.display = "none"; 
+                    loginModal.style.display = "block";
+                } else {
+                    alert('Pendaftaran gagal: ' + response.message);
+                }
+            })
+            .withFailureHandler(function(error) {
+                submitRegisterButton.disabled = false;
+                submitRegisterButton.textContent = 'Daftar Sekarang';
+                alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
+                console.error('GAS Register Error:', error);
+            })
+            .registerUser(data); 
+    });
+
+    function loadOrderHistory() {
+        const orders = JSON.parse(localStorage.getItem('guestOrders')) || [];
+        orderListDiv.innerHTML = ''; 
+
+        if (orders.length === 0) {
+            noOrdersMessage.style.display = 'block';
+        } else {
+            noOrdersMessage.style.display = 'none';
+            orders.reverse().forEach(order => {
+                const orderItem = document.createElement('div');
+                orderItem.classList.add('order-item');
+                orderItem.innerHTML = `
+                    <img src="${order['Gambar Produk']}" alt="${order['Produk']}">
+                    <div class="order-details">
+                        <h4>${order['Produk']} - Rp${parseFloat(order['Total Harga']).toLocaleString('id-ID')}</h4>
+                        <p>ID Pesanan: ${order['ID Orders']}</p>
+                        <p>Tanggal: ${order['Tanggal']}</p>
+                        <p>Nama: ${order['Nama']}</p>
+                        <p>Status: <span class="status">${order['Status Pesanan']}</span></p>
+                    </div>
+                `;
+                orderListDiv.appendChild(orderItem);
+            });
+        }
+    }
+
+    loadOrderHistory();
+
+  </script>
 </body>
 </html>
