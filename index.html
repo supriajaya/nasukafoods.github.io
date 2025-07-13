@@ -483,12 +483,15 @@
     const productSection = document.getElementById('productSection');
     const orderHistorySection = document.getElementById('orderHistorySection');
 
-    // Elemen navigasi baru
     const navLogin = document.getElementById('navLogin');
     const navRegister = document.getElementById('navRegister');
     const navBenefit = document.getElementById('navBenefit');
     const navNotif = document.getElementById('navNotif');
     const navProfile = document.getElementById('navProfile');
+
+    // --- PASTIKAN URL APPS SCRIPT ANDA DI SINI SUDAH BENAR ---
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXzZ8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec'; 
+    // --- AKHIR URL APPS SCRIPT ANDA ---
 
 
     function showSection(sectionId) {
@@ -505,7 +508,6 @@
         }
     }
 
-    // Fungsi untuk memperbarui tampilan navigasi
     function updateNavigation() {
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
@@ -544,24 +546,16 @@
         registerModal.style.display = "block";
     });
 
-    // Event listener untuk navigasi baru (Benefit, Notif, Profil)
-    // Untuk Benefit dan Notif, saat ini hanya alert, Anda bisa menggantinya dengan fungsi yang lebih kompleks
     navBenefit.addEventListener('click', function(e) {
         e.preventDefault();
         alert('Halaman Benefit akan datang!');
-        // Di sini Anda bisa menambahkan logika untuk menampilkan section Benefit
     });
 
     navNotif.addEventListener('click', function(e) {
         e.preventDefault();
         alert('Halaman Notifikasi akan datang!');
-        // Di sini Anda bisa menambahkan logika untuk menampilkan section Notifikasi
     });
 
-    // Navigasi Profil akan mengarahkan ke profil.html
-    // Tidak perlu event listener di sini karena sudah ada href="profil.html"
-
-    // Panggil updateNavigation saat halaman pertama kali dimuat
     updateNavigation();
     showSection('home'); 
 
@@ -614,46 +608,65 @@
       submitOrderButton.textContent = 'Memproses...';
 
       const formData = new FormData(this);
-      const data = {};
+      const data = { action: 'processGuestOrder' };
       let fileData = null;
+
+      const readerPromises = [];
 
       for (let [key, value] of formData.entries()) {
         if (key === 'Bukti Pembayaran' && value instanceof File) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            fileData = {
-              fileName: value.name,
-              mimeType: value.type,
-              data: btoa(e.target.result)
-            };
-            sendOrderToGAS(data, fileData);
-          };
-          reader.readAsBinaryString(value);
+            readerPromises.push(new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fileData = {
+                        fileName: value.name,
+                        mimeType: value.type,
+                        data: e.target.result.split(',')[1]
+                    };
+                    resolve();
+                };
+                reader.readAsDataURL(value);
+            }));
         } else {
-          data[key] = value;
+            data[key] = value;
         }
       }
 
-      if (!fileData && !formData.get('Bukti Pembayaran')) {
-         sendOrderToGAS(data, null);
-      }
-    });
-
-    function sendOrderToGAS(formData, fileData) {
-      const gasUrl = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXzZ8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
-
-      google.script.run
-        .withSuccessHandler(function(response) {
+      Promise.all(readerPromises).then(() => {
+        if (fileData) {
+            data['Bukti Pembayaran'] = fileData;
+        }
+        sendDataToGAS(data, submitOrderButton, 'Konfirmasi Pesanan');
+      }).catch(error => {
+          console.error("Error reading file:", error);
+          alert("Gagal membaca file bukti pembayaran.");
           submitOrderButton.disabled = false;
           submitOrderButton.textContent = 'Konfirmasi Pesanan';
+      });
+    });
 
-          if (response.success) {
-            alert('Pesanan Anda berhasil dibuat! ' + response.message);
+    async function sendDataToGAS(dataToSend, buttonElement, originalButtonText) {
+      try {
+        const response = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dataToSend)
+        });
+        const result = await response.json();
+
+        buttonElement.disabled = false;
+        buttonElement.textContent = originalButtonText;
+
+        if (result.success) {
+          if (dataToSend.action === 'processGuestOrder') {
+            alert('Pesanan Anda berhasil dibuat! ' + result.message);
             const orderData = {};
-            for (const key in formData) {
-                orderData[key] = formData[key];
+            for (const key in dataToSend) {
+                orderData[key] = dataToSend[key];
             }
-            orderData['ID Orders'] = response.orderId;
+            orderData['ID Orders'] = result.orderId;
             orderData['Tanggal'] = new Date().toLocaleString('id-ID');
             orderData['Status Pesanan'] = 'Menunggu Konfirmasi';
             orderData['Gambar Produk'] = hiddenProductImageInput.value;
@@ -665,17 +678,29 @@
             guestPaymentForm.reset();
             paymentModal.style.display = "none";
             showSection('order-history');
-          } else {
-            alert('Gagal membuat pesanan: ' + response.message);
+          } else if (dataToSend.action === 'loginUser') {
+            alert('Login berhasil! Selamat datang, ' + result.username);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('loggedInUsername', result.username);
+            loginModal.style.display = "none";
+            updateNavigation();
+          } else if (dataToSend.action === 'registerUser') {
+            alert('Pendaftaran berhasil! Silakan login. ' + result.message);
+            registerForm.reset(); 
+            registerModal.style.display = "none"; 
+            loginModal.style.display = "block";
           }
-        })
-        .withFailureHandler(function(error) {
-          submitOrderButton.disabled = false;
-          submitOrderButton.textContent = 'Konfirmasi Pesanan';
-          alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
-          console.error('GAS Error:', error);
-        })
-        .processGuestOrder(formData, fileData);
+        } else {
+          alert(dataToSend.action.includes('Order') ? 'Gagal membuat pesanan: ' + result.message : 
+                dataToSend.action === 'loginUser' ? 'Login gagal: ' + result.message : 
+                'Pendaftaran gagal: ' + result.message);
+        }
+      } catch (error) {
+        buttonElement.disabled = false;
+        buttonElement.textContent = originalButtonText;
+        alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
+        console.error('GAS Error:', error);
+      }
     }
 
     loginForm.addEventListener('submit', function(event) {
@@ -686,29 +711,9 @@
 
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
+        data.action = 'loginUser';
 
-        google.script.run
-            .withSuccessHandler(function(response) {
-                submitLoginButton.disabled = false;
-                submitLoginButton.textContent = 'Login';
-
-                if (response.success) {
-                    alert('Login berhasil! Selamat datang, ' + response.username);
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('loggedInUsername', response.username);
-                    loginModal.style.display = "none";
-                    updateNavigation(); // Perbarui navigasi setelah login
-                } else {
-                    alert('Login gagal: ' + response.message);
-                }
-            })
-            .withFailureHandler(function(error) {
-                submitLoginButton.disabled = false;
-                submitLoginButton.textContent = 'Login';
-                alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
-                console.error('GAS Login Error:', error);
-            })
-            .loginUser(data.username, data.password);
+        sendDataToGAS(data, submitLoginButton, 'Login');
     });
 
     registerForm.addEventListener('submit', function(event) {
@@ -719,29 +724,11 @@
 
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
+        data.action = 'registerUser';
 
-        google.script.run
-            .withSuccessHandler(function(response) {
-                submitRegisterButton.disabled = false;
-                submitRegisterButton.textContent = 'Daftar Sekarang';
-
-                if (response.success) {
-                    alert('Pendaftaran berhasil! Silakan login. ' + response.message);
-                    registerForm.reset(); 
-                    registerModal.style.display = "none"; 
-                    loginModal.style.display = "block";
-                } else {
-                    alert('Pendaftaran gagal: ' + response.message);
-                }
-            })
-            .withFailureHandler(function(error) {
-                submitRegisterButton.disabled = false;
-                submitRegisterButton.textContent = 'Daftar Sekarang';
-                alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
-                console.error('GAS Register Error:', error);
-            })
-            .registerUser(data); 
+        sendDataToGAS(data, submitRegisterButton, 'Daftar Sekarang'); 
     });
+
 
     function loadOrderHistory() {
         const orders = JSON.parse(localStorage.getItem('guestOrders')) || [];
