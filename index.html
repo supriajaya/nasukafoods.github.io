@@ -454,22 +454,31 @@
   </div>
 
   <script>
+    // URL Google Apps Script kamu
+    // Ini adalah endpoint tempat data form akan dikirim
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
+
+    // Mendapatkan elemen-elemen modal
     const paymentModal = document.getElementById("paymentModal");
     const loginModal = document.getElementById("loginModal");
     const registerModal = document.getElementById("registerModal");
 
+    // Mendapatkan tombol close untuk setiap modal
     const paymentCloseButton = document.getElementsByClassName("payment-close-button")[0];
     const loginCloseButton = document.getElementsByClassName("login-close-button")[0];
     const registerCloseButton = document.getElementsByClassName("register-close-button")[0];
 
+    // Elemen untuk menampilkan detail produk di modal pembayaran
     const modalProductImage = document.getElementById("modalProductImage");
     const modalProductNameDisplay = document.getElementById("modalProductName");
     const modalProductPriceDisplay = document.getElementById("modalProductPrice");
 
+    // Input hidden untuk menyimpan data produk yang akan dikirim ke GAS
     const hiddenProductNameInput = document.getElementById("hiddenProductName");
     const hiddenProductPriceInput = document.getElementById("hiddenProductPrice");
     const hiddenProductImageInput = document.getElementById("hiddenProductImage");
 
+    // Form dan tombol submit
     const guestPaymentForm = document.getElementById('guestPaymentForm');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
@@ -479,20 +488,19 @@
     const submitLoginButton = document.getElementById('submitLoginButton');
     const submitRegisterButton = document.getElementById('submitRegisterButton');
 
+    // Bagian-bagian utama halaman
     const homeSection = document.getElementById('homeSection');
     const productSection = document.getElementById('productSection');
     const orderHistorySection = document.getElementById('orderHistorySection');
 
+    // Elemen navigasi
     const navLogin = document.getElementById('navLogin');
     const navRegister = document.getElementById('navRegister');
     const navBenefit = document.getElementById('navBenefit');
     const navNotif = document.getElementById('navNotif');
     const navProfile = document.getElementById('navProfile');
 
-    // URL Apps Script Anda yang sudah diperbarui
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
-
-
+    // Fungsi untuk menampilkan bagian halaman tertentu
     function showSection(sectionId) {
         homeSection.style.display = 'none';
         productSection.style.display = 'none';
@@ -503,10 +511,11 @@
             productSection.style.display = 'block';
         } else if (sectionId === 'order-history') {
             orderHistorySection.style.display = 'block';
-            loadOrderHistory();
+            loadOrderHistory(); // Memuat riwayat pesanan saat bagian ini ditampilkan
         }
     }
 
+    // Fungsi untuk memperbarui tampilan navigasi berdasarkan status login
     function updateNavigation() {
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
@@ -525,6 +534,7 @@
         }
     }
 
+    // Event listener untuk navigasi
     document.getElementById('navHome').addEventListener('click', function(e) {
         e.preventDefault();
         showSection('home');
@@ -555,27 +565,32 @@
         alert('Halaman Notifikasi akan datang!');
     });
 
+    // Inisialisasi navigasi dan bagian halaman saat load
     updateNavigation();
     showSection('home');
 
+    // Event listener untuk tombol 'Beli Sekarang' pada setiap produk
     document.querySelectorAll('.buy-button').forEach(button => {
       button.addEventListener('click', function() {
         const productName = this.dataset.productName;
         const productPrice = parseFloat(this.dataset.productPrice);
         const productImage = this.dataset.productImage;
 
+        // Mengisi detail produk ke modal pembayaran
         modalProductImage.src = productImage;
         modalProductNameDisplay.textContent = productName;
         modalProductPriceDisplay.textContent = "Rp " + productPrice.toLocaleString('id-ID');
 
+        // Mengisi input hidden di form untuk dikirim ke Apps Script
         hiddenProductNameInput.value = productName;
         hiddenProductPriceInput.value = productPrice;
         hiddenProductImageInput.value = productImage;
 
-        paymentModal.style.display = "block";
+        paymentModal.style.display = "block"; // Menampilkan modal pembayaran
       });
     });
 
+    // Menutup modal saat tombol close diklik
     paymentCloseButton.onclick = function() {
       paymentModal.style.display = "none";
     }
@@ -588,6 +603,7 @@
       registerModal.style.display = "none";
     }
 
+    // Menutup modal jika area di luar modal diklik
     window.onclick = function(event) {
       if (event.target == paymentModal) {
         paymentModal.style.display = "none";
@@ -600,11 +616,12 @@
       }
     }
 
+    // Event listener untuk submit form pembayaran tamu
     guestPaymentForm.addEventListener('submit', function(event) {
-      event.preventDefault();
+      event.preventDefault(); // Mencegah refresh halaman
 
-      submitOrderButton.disabled = true;
-      submitOrderButton.textContent = 'Memproses...';
+      submitOrderButton.disabled = true; // Nonaktifkan tombol submit
+      submitOrderButton.textContent = 'Memproses...'; // Ubah teks tombol
 
       const formData = new FormData(this);
       const data = { action: 'processGuestOrder' };
@@ -612,6 +629,7 @@
 
       const readerPromises = [];
 
+      // Membaca data form dan file bukti pembayaran
       for (let [key, value] of formData.entries()) {
         if (key === 'Bukti Pembayaran' && value instanceof File) {
             readerPromises.push(new Promise((resolve) => {
@@ -620,17 +638,18 @@
                     fileData = {
                         fileName: value.name,
                         mimeType: value.type,
-                        data: e.target.result.split(',')[1]
+                        data: e.target.result.split(',')[1] // Data Base64
                     };
                     resolve();
                 };
-                reader.readAsDataURL(value);
+                reader.readAsDataURL(value); // Membaca file sebagai Data URL
             }));
         } else {
             data[key] = value;
         }
       }
 
+      // Setelah file dibaca, kirim data ke Apps Script
       Promise.all(readerPromises).then(() => {
         if (fileData) {
             data['Bukti Pembayaran'] = fileData;
@@ -644,28 +663,27 @@
       });
     });
 
+    // Fungsi untuk mengirim data ke Google Apps Script
     async function sendDataToGAS(dataToSend, buttonElement, originalButtonText) {
-      // --- Revisi: Tambahan untuk debugging ---
       console.log('Data yang akan dikirim ke GAS:', dataToSend);
-      console.log('Body JSON yang akan dikirim:', JSON.stringify(dataToSend));
-      // --- Akhir revisi debugging ---
 
       try {
         const response = await fetch(WEB_APP_URL, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json' // Penting: Mengirim data sebagai JSON
           },
-          body: JSON.stringify(dataToSend)
+          body: JSON.stringify(dataToSend) // Mengubah objek JS menjadi string JSON
         });
-        const result = await response.json();
+        const result = await response.json(); // Menerima respons JSON dari Apps Script
 
-        buttonElement.disabled = false;
-        buttonElement.textContent = originalButtonText;
+        buttonElement.disabled = false; // Aktifkan kembali tombol
+        buttonElement.textContent = originalButtonText; // Kembalikan teks tombol
 
         if (result.success) {
           if (dataToSend.action === 'processGuestOrder') {
             alert('Pesanan Anda berhasil dibuat! ' + result.message);
+            // Simpan riwayat pesanan ke localStorage untuk ditampilkan di Riwayat Pesanan
             const orderData = {};
             for (const key in dataToSend) {
                 orderData[key] = dataToSend[key];
@@ -679,20 +697,20 @@
             existingOrders.push(orderData);
             localStorage.setItem('guestOrders', JSON.stringify(existingOrders));
 
-            guestPaymentForm.reset();
-            paymentModal.style.display = "none";
-            showSection('order-history');
+            guestPaymentForm.reset(); // Reset form
+            paymentModal.style.display = "none"; // Tutup modal
+            showSection('order-history'); // Tampilkan riwayat pesanan
           } else if (dataToSend.action === 'loginUser') {
             alert('Login berhasil! Selamat datang, ' + result.username);
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('loggedInUsername', result.username);
             loginModal.style.display = "none";
-            updateNavigation();
+            updateNavigation(); // Perbarui navigasi setelah login
           } else if (dataToSend.action === 'registerUser') {
             alert('Pendaftaran berhasil! Silakan login. ' + result.message);
             registerForm.reset();
             registerModal.style.display = "none";
-            loginModal.style.display = "block";
+            loginModal.style.display = "block"; // Arahkan ke login setelah daftar
           }
         } else {
           alert(dataToSend.action.includes('Order') ? 'Gagal membuat pesanan: ' + result.message :
@@ -703,10 +721,11 @@
         buttonElement.disabled = false;
         buttonElement.textContent = originalButtonText;
         alert('Terjadi kesalahan saat menghubungi server: ' + error.message);
-        console.error('GAS Error (frontend catch block):', error); // Ubah log ini agar lebih spesifik
+        console.error('GAS Error (frontend catch block):', error); 
       }
     }
 
+    // Event listener untuk submit form login
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -715,11 +734,12 @@
 
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
-        data.action = 'loginUser';
+        data.action = 'loginUser'; // Menentukan aksi untuk Apps Script
 
         sendDataToGAS(data, submitLoginButton, 'Login');
     });
 
+    // Event listener untuk submit form registrasi
     registerForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -728,20 +748,21 @@
 
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
-        data.action = 'registerUser';
+        data.action = 'registerUser'; // Menentukan aksi untuk Apps Script
 
         sendDataToGAS(data, submitRegisterButton, 'Daftar Sekarang');
     });
 
-
+    // Fungsi untuk memuat dan menampilkan riwayat pesanan dari localStorage
     function loadOrderHistory() {
         const orders = JSON.parse(localStorage.getItem('guestOrders')) || [];
-        orderListDiv.innerHTML = '';
+        orderListDiv.innerHTML = ''; // Kosongkan daftar pesanan
 
         if (orders.length === 0) {
-            noOrdersMessage.style.display = 'block';
+            noOrdersMessage.style.display = 'block'; // Tampilkan pesan jika tidak ada pesanan
         } else {
-            noOrdersMessage.style.display = 'none';
+            noOrdersMessage.style.display = 'none'; // Sembunyikan pesan
+            // Tampilkan pesanan terbaru di paling atas
             orders.reverse().forEach(order => {
                 const orderItem = document.createElement('div');
                 orderItem.classList.add('order-item');
@@ -760,6 +781,7 @@
         }
     }
 
+    // Memuat riwayat pesanan saat halaman pertama kali dimuat
     loadOrderHistory();
 
   </script>
