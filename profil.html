@@ -3,354 +3,187 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profil</title>
+  <title>Nasukafoods - Profil Pengguna</title>
   <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: black;
-      color: white;
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; font-size: 0.9em; }
+    header { background-color: #4CAF50; color: white; padding: 1em 0; text-align: center; }
+    nav { background-color: #333; color: white; padding: 0.5em 0; text-align: center; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 1.1em; }
+    .container { width: 80%; max-width: 800px; margin: 20px auto; padding: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #4CAF50; font-size: 1.8em; margin-bottom: 30px; }
+    footer { background-color: #333; color: white; text-align: center; padding: 0.8em 0; margin-top: 20px; font-size: 0.8em; }
+    .profile-section { margin-bottom: 25px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
+    .profile-info p { margin-bottom: 8px; font-size: 0.9em; }
+    .profile-info p strong { display: inline-block; width: 140px; color: #555; }
+    .profile-picture-display { text-align: center; margin-bottom: 20px; }
+    .profile-picture-display img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #4CAF50; }
+    .edit-button {
+      background-color: #007bff; color: white; padding: 10px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.95em; margin: 0 auto; display: block;
     }
+    .edit-button:hover { background-color: #0056b3; }
 
-    .top-sidebar {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      padding: 8px;
-      z-index: 1000;
+    .modal {
+      display: none; position: fixed; z-index: 999; left: 0; top: 0;
+      width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
     }
-
-
-
-    .file-list-scrollable {
-      padding: 0 16px;
-      max-height: 200px; /* cukup untuk 5 baris */
-      overflow-y: auto;
-      border-bottom: 1px solid #d0d7de;
+    .modal-content {
+      background-color: #fff; margin: 10% auto; padding: 20px; border: 1px solid #888;
+      width: 90%; max-width: 500px; border-radius: 8px; position: relative;
     }
+    .close { position: absolute; top: 10px; right: 15px; font-size: 22px; font-weight: bold; color: #aaa; cursor: pointer; }
+    .close:hover { color: #000; }
 
-    .file-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #d0d7de;
-      padding: 12px 0;
-      font-size: 14px;
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 0.9em; }
+    .form-group input[type="text"], .form-group input[type="tel"], .form-group textarea {
+      width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 0.9em;
     }
-
-    .file-name {
-      display: flex;
-      align-items: center;
-      color: #0969da;
-      text-decoration: none;
+    .form-group input[type="file"] {
+      width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background-color: #fff; cursor: pointer;
     }
-
-    .top-left-button {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 1001;
-      transition: background 0.3s;
+    .form-group input[type="file"]::file-selector-button {
+      background-color: #007bff; color: white; padding: 7px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 8px;
     }
-
-    .top-left-button:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-    .hero-section {
-      position: relative;
-      height: 50vh;
-      background: url('https://nasukafoods.site/fotoarya1.jpg') no-repeat center center/cover;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .promo-text {
-      text-align: center;
-      margin-top: 3vh;
-      font-size: 24px;
-      font-weight: bold;
-      text-shadow: 0 0 6px black;
-      padding: 0 20px;
-    }
-
-    .info, .sidebar {
-      position: absolute;
-      bottom: 20px;
-    }
-
-    .info {
-      left: 10px;
-    }
-
-    .info .location {
-      font-size: 12px;
-      color: #ccc;
-    }
-
-    .info .username a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .info .desc {
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
-    .info .music {
-      font-size: 12px;
-      color: #ffbb00;
-    }
-
-    .sidebar {
-      right: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .sidebar div {
-      margin: 8px 0;
-      font-size: 12px;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .glow {
-      animation: glowHeart 0.6s ease-in-out;
-    }
-
-    @keyframes glowHeart {
-      0%   { text-shadow: 0 0 0px red; transform: scale(1); }
-      50%  { text-shadow: 0 0 20px red; transform: scale(1.3); }
-      100% { text-shadow: 0 0 0px red; transform: scale(1); }
-    }
-
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
+    .form-group input[type="file"]::file-selector-button:hover { background-color: #0056b3; }
+    .save-button {
+      background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;
       width: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      font-size: 12px;
-      z-index: 999;
     }
-
-    .bottom-bar a {
-      color: white;
-      text-decoration: none;
-      text-align: center;
-    }
-
-    .gallery {
-      background: #111;
-      padding: 20px 10px 80px;
-    }
-
-    .gallery img {
-      width: 100%;
-      max-width: 500px;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      display: block;
-      margin: 20px auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
-    }
-
-    #comment-locked-text {
-      font-size: 10px;
-      color: #ccc;
-      display: none;
-      margin-top: -5px;
-    }
-
-    .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      justify-content: center;
-      align-items: flex-start;
-      padding-top: 5%;
-      z-index: 2000;
-    }
-
-    .popup-content {
-      background: #000;
-      padding: 0;
-      border-radius: 10px;
-      max-width: 90%;
-      max-height: 90%;
-      position: relative;
-    }
-
-    .popup-content video {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
-
-    .close-popup {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      font-size: 20px;
-      cursor: pointer;
-      color: white;
-      z-index: 10;
-    }
-
-    .close-popup:hover {
-      color: red;
-    }
+    .save-button:hover { background-color: #218838; }
   </style>
 </head>
 <body>
-
-  <!-- Tombol 📺 -->
-  <div class="top-left-button" id="tv-button">📺</div>
-
-  <!-- Sidebar kanan atas -->
-  <div class="top-sidebar"></div>
-
-  <!-- POPUP Video -->
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <span class="close-popup" id="closePopup">✖</span>
-      <video id="popupVideo" controls autoplay>
-        <source src="https://nasukafoods.site/mandor.mp4" type="video/mp4">
-        Browser Anda tidak mendukung video.
-      </video>
-    </div>
-  </div>
-
-  <section class="hero-section">
-    <div class="promo-text"></div>
-
-    <div class="info">
-      <div class="location">📍Indramayu | Jawa Barat</div>
-      <div class="username">
-        <a href="https://nasukafoods.site/daftarpesanan.html">Nasuka Corporation</a>
+  <header>
+    <h1>Nasukafoods</h1>
+  </header>
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="login.html">Login</a>
+    <a href="#">Notif</a>
+    <a href="#">Logout</a>
+    <a href="profil.html">Profil</a>
+  </nav>
+  <div class="container">
+    <h2>Profil Pengguna</h2>
+    <div class="profile-section">
+      <div class="profile-picture-display">
+        <img id="display-profile-picture" src="https://via.placeholder.com/120?text=No+Pic" alt="Foto Profil" />
       </div>
-      <div class="desc">Arya wilalodra</div>
-      <div class="music">Founder nasuka foods</div>
+      <div class="profile-info">
+        <p><strong>ID Pengguna:</strong> <span id="display-id"></span></p>
+        <p><strong>Nama Lengkap:</strong> <span id="display-nama"></span></p>
+        <p><strong>Nomor HP:</strong> <span id="display-telepon"></span></p>
+        <p><strong>Alamat Pengiriman:</strong> <span id="display-alamat"></span></p>
+        <p><strong>Sosial Media:</strong> <span id="display-sosialMedia"></span></p>
+        <p><strong>Kata Kata Hari Ini:</strong> <span id="display-kataKata"></span></p>
+      </div>
+      <button class="edit-button" id="editProfileBtn">Edit Profil</button>
     </div>
-
-    <div class="sidebar">
-      <div id="love-icon">❤️ 9.M</div>
-      <div id="comment-icon">💬 780.K</div>
-      <div id="comment-locked-text">komentar dikunci</div>
-      <div>🔗 Share</div>
-    </div>
-  </section>
-
-  <section class="gallery">
-    <img src="https://nasukafoods.site/fotoarya2.jpeg" alt="Profil Arya" />
-    <p>Arya juga berprofesi sebagai Aplikator...</p>
-
-    <img src="https://nasukafoods.site/kawasakiax.png" alt="Cilok Sajian 2" />
-    <p><strong>Awal nasuka lahir :</strong> Tak berselang lama, Covid menginvasi...</p>
-
-    <img src="https://nasukafoods.site/nasukakoki1.jpg" alt="Nasuka Koki" />
-    <p>Arya jualan cilok dengan citarasa yang sama...</p>
-
-    <img src="https://nasukafoods.site/fotocibaduyut.jpeg" alt="Cibaduyut" />
-    <p>Membawa rasa yang dulu pernah ada...</p>
-
-    </a>
-  </section>
-
-
-<!-- Scrollable file list -->
-  <div class="file-list-scrollable">
-      
-      
-  <div class="file-item"><a class="file-name" href="https://nasukafoods.site/contohartikel.html"><img class="icon" src="https://img.icons8.com/ios-filled/16/document--v1.png"/><span>KARTU TANDA PENGENAL</span></a><span>3 tahun yang lalu</span></div>
-  
-  
-    
-  <div class="file-item"><a class="file-name" href="https://nasukafoods.site/isiangajih.html"><img class="icon" src="https://img.icons8.com/ios-filled/16/document--v1.png"/><span>CARA MEMBUAT CILOK ISIAN GAJIH</span></a><span>3 tahun yang lalu</span></div>
-    
-    
-    
-    <div class="file-item"><a class="file-name" href="https://nasukafoods.site/formlaporan.html"><img class="icon" src="https://img.icons8.com/ios-filled/16/document--v1.png"/><span>KIRIM LAPORAN KE ARYA</span></a><span>4 days ago</span></div>
-    
-    
-    <div class="file-item"><a class="file-name" href="#"><img class="icon" src="https://img.icons8.com/ios-filled/16/document--v1.png"/><span>CARA MEMBUAT TELOR GULUNG</span></a><span>4 days ago</span></div>
-    <div class="file-item"><a class="file-name" href="#"><img class="icon" src="https://img.icons8.com/ios-filled/16/image.png"/><span>CARA MEMBUAT FORMULIR PESANAN</span></a><span>3 days ago</span></div>
-    <div class="file-item"><a class="file-name" href="#"><img class="icon" src="https://img.icons8.com/ios-filled/16/image.png"/><span>CARA MEMBUAT WEBSITE</span></a><span>3 days ago</span></div>
-    <div class="file-item"><a class="file-name" href="#"><img class="icon" src="https://img.icons8.com/ios-filled/16/document--v1.png"/><span>CARA MEMBUAT PROFIL ACP</span></a><span>yesterday</span></div>
-    <div class="file-item"><a class="file-name" href="#"><img class="icon" src="https://img.icons8.com/ios-filled/16/document--v1.png"/><span>CARA MENANGIS YANG BENAR</span></a><span>11 hours ago</span></div>
-    <div class="file-item"><a class="file-name" href="#"><img class="icon" src="https://img.icons8.com/ios-filled/16/image.png"/><span>CARA MEMPERBAIKI MESIN KAWASAKI AX</span></a><span>3 days ago</span></div>
-    <div class="file-item"><a class="file-name" href="#"><img class="icon" src="https://img.icons8.com/ios-filled/16/image.png"/><span>ARSg</span></a><span>3 days ago</span></div>
   </div>
 
-
-
-
-
-  <div class="bottom-bar">
-    <a href="https://nasukafoods.site/index.html">🏠<br>Home</a>
-    <a href="https://nasukafoods.site/discover.html">🔍<br>Layanan</a>
-    <a href="https://nasukafoods.site/pesanan.html">➕<br>Pesanan</a>
-    <a href="https://nasukafoods.site/otomotif.html">📨<br>Otomotif</a>
-    <a href="https://nasukafoods.site/profil.html">👤<br>Profil</a>
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Edit Profil</h3>
+      <form id="profileForm">
+        <div class="form-group">
+          <label for="input-nama">Nama Lengkap:</label>
+          <input type="text" id="input-nama" required />
+        </div>
+        <div class="form-group">
+          <label for="input-telepon">Nomor HP:</label>
+          <input type="tel" id="input-telepon" required />
+        </div>
+        <div class="form-group">
+          <label for="input-alamat">Alamat Pengiriman:</label>
+          <textarea id="input-alamat" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-sosialMedia">Sosial Media:</label>
+          <input type="text" id="input-sosialMedia" />
+        </div>
+        <div class="form-group">
+          <label for="input-profile-picture">Foto Profil:</label>
+          <input type="file" id="input-profile-picture" accept="image/*" />
+        </div>
+        <button type="submit" class="save-button">Simpan Perubahan</button>
+      </form>
+    </div>
   </div>
+
+  <footer>
+    <p>&copy; 2025 Nasukafoods</p>
+  </footer>
 
   <script>
-      
-      
-             
-<input type="text" id="searchInput" class="repo-search" placeholder="Cari berkas..." onkeyup="filterRepos()" />
-</div>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
 
-
-    const loveIcon = document.getElementById("love-icon");
-    const popup = document.getElementById("popup");
-    const closePopup = document.getElementById("closePopup");
-    const popupVideo = document.getElementById("popupVideo");
-    const tvButton = document.getElementById("tv-button");
-
-    loveIcon.addEventListener("click", () => {
-      loveIcon.classList.add("glow");
-      alert("Terima kasih sudah klik ❤️");
-      setTimeout(() => {
-        loveIcon.classList.remove("glow");
-      }, 600);
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProfileData();
+      document.getElementById('editProfileBtn').onclick = () => document.getElementById('editModal').style.display = 'block';
+      document.getElementById('closeModal').onclick = () => document.getElementById('editModal').style.display = 'none';
+      window.onclick = (e) => { if (e.target == document.getElementById('editModal')) document.getElementById('editModal').style.display = 'none'; };
+      document.getElementById('profileForm').addEventListener('submit', saveProfileData);
     });
 
-    tvButton.addEventListener("click", () => {
-      popup.style.display = "flex";
-      popupVideo.currentTime = 0;
-      popupVideo.play();
-    });
+    function loadProfileData() {
+      const data = JSON.parse(localStorage.getItem('profileData')) || {};
+      document.getElementById('display-id').textContent = data.id || '';
+      document.getElementById('display-nama').textContent = data.nama || '';
+      document.getElementById('display-telepon').textContent = data.telepon || '';
+      document.getElementById('display-alamat').textContent = data.alamat || '';
+      document.getElementById('display-sosialMedia').textContent = data.sosialMedia || '';
+      document.getElementById('display-kataKata').textContent = data.kataKata || '';
+      document.getElementById('display-profile-picture').src = data.profilePictureUrl || 'https://via.placeholder.com/120?text=No+Pic';
 
-    closePopup.addEventListener("click", () => {
-      popup.style.display = "none";
-      popupVideo.pause();
-    });
+      document.getElementById('input-nama').value = data.nama || '';
+      document.getElementById('input-telepon').value = data.telepon || '';
+      document.getElementById('input-alamat').value = data.alamat || '';
+      document.getElementById('input-sosialMedia').value = data.sosialMedia || '';
+    }
 
-    const commentIcon = document.getElementById("comment-icon");
-    const commentText = document.getElementById("comment-locked-text");
+    async function saveProfileData(e) {
+      e.preventDefault();
+      let data = JSON.parse(localStorage.getItem('profileData')) || {};
+      if (!data.id) {
+        data.id = 'USR-' + Date.now();
+        data.tanggalMasuk = new Date().toLocaleDateString('id-ID');
+        data.saldo = '0';
+      }
 
-    commentIcon.addEventListener("click", () => {
-      commentText.style.display = commentText.style.display === "none" ? "block" : "none";
-    });
+      data.nama = document.getElementById('input-nama').value;
+      data.telepon = document.getElementById('input-telepon').value;
+      data.alamat = document.getElementById('input-alamat').value;
+      data.sosialMedia = document.getElementById('input-sosialMedia').value;
+
+      const file = document.getElementById('input-profile-picture').files[0];
+      const formData = new FormData();
+      formData.append('action', 'saveProfile');
+      formData.append('user_id', data.id);
+      formData.append('nama', data.nama);
+      formData.append('telepon', data.telepon);
+      formData.append('alamat', data.alamat);
+      formData.append('sosialMedia', data.sosialMedia);
+      formData.append('saldo', data.saldo);
+      formData.append('tanggalMasuk', data.tanggalMasuk);
+      if (file) formData.append('profile_picture_file', file);
+      else formData.append('current_profile_picture_url', data.profilePictureUrl || '');
+
+      try {
+        const res = await fetch(WEB_APP_URL, { method: 'POST', body: formData });
+        const result = await res.text();
+        if (result === "Success") {
+          localStorage.setItem('profileData', JSON.stringify(data));
+          loadProfileData();
+          document.getElementById('editModal').style.display = 'none';
+          alert('Profil berhasil disimpan!');
+        } else {
+          alert('Gagal: ' + result);
+        }
+      } catch {
+        alert('Gagal terhubung ke server');
+      }
+    }
   </script>
 </body>
 </html>
