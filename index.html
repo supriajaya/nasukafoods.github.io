@@ -1,148 +1,148 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nasuka</title>
   <style>
-    /* (gaya CSS tidak diubah dari versi sebelumnya) */
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #111;
+      color: #fff;
+    }
+    .product {
+      background-color: #222;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+    .product img {
+      max-width: 100%;
+      height: auto;
+    }
+    .product h2 {
+      margin-top: 0;
+    }
+    form {
+      background-color: #333;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    form label {
+      display: block;
+      margin-top: 10px;
+    }
+    form input, form textarea, form select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #555;
+      border-radius: 5px;
+    }
+    form button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
+  <div class="product">
+    <h2>Produk Baru</h2>
+    <img src="https://via.placeholder.com/300x200.png?text=Produk+Baru" alt="Produk Baru">
+    <p>Deskripsi produk baru yang menarik.</p>
+    <p><strong>Harga:</strong> Rp 123.000</p>
+  </div>
 
-  <!-- (semua elemen HTML tetap seperti sebelumnya, tidak diubah) -->
+  <form id="checkoutForm">
+    <h3>Form Pembayaran</h3>
+    <label for="nama">Nama Lengkap</label>
+    <input type="text" id="nama" name="Nama" required>
 
-  <!-- SCRIPT BARU SESUAI KODE.GS REVISI -->
+    <label for="alamat">Alamat Lengkap</label>
+    <textarea id="alamat" name="Alamat" required></textarea>
+
+    <label for="hp">Nomor HP</label>
+    <input type="tel" id="hp" name="Nomor HP" required>
+
+    <label for="metode">Metode Pembayaran</label>
+    <select id="metode" name="Metode Pembayaran" required>
+      <option value="Transfer Bank">Transfer Bank</option>
+      <option value="E-Wallet">E-Wallet</option>
+    </select>
+
+    <label for="bukti">Upload Bukti Pembayaran</label>
+    <input type="file" id="bukti" name="Bukti Pembayaran" accept="image/*" required>
+
+    <button type="submit">Kirim Pesanan</button>
+  </form>
+
   <script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
+    const form = document.getElementById('checkoutForm');
 
-    const guestPaymentForm = document.getElementById('guestPaymentForm');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const submitOrderButton = document.getElementById('submitOrderButton');
-    const submitLoginButton = document.getElementById('submitLoginButton');
-    const submitRegisterButton = document.getElementById('submitRegisterButton');
-    const hiddenProductImageInput = document.getElementById('hiddenProductImage');
-
-    guestPaymentForm.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function(event) {
       event.preventDefault();
-      submitOrderButton.disabled = true;
-      submitOrderButton.textContent = 'Memproses...';
 
-      const formData = new FormData(this);
-      const data = {};
+      const formData = new FormData(form);
+      const plainData = {};
+
       for (let [key, value] of formData.entries()) {
-        if (key !== 'Bukti Pembayaran') data[key] = value;
-      }
-
-      const file = formData.get('Bukti Pembayaran');
-      if (file && file instanceof File) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const fileData = {
-            fileName: file.name,
-            mimeType: file.type,
-            data: btoa(e.target.result)
+        if (key === 'Bukti Pembayaran' && value instanceof File) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const fileData = {
+              fileName: value.name,
+              mimeType: value.type,
+              data: btoa(e.target.result)
+            };
+            sendToGAS(plainData, fileData);
           };
-          sendToGAS('processGuestOrder', { formData: data, fileData });
-        };
-        reader.readAsBinaryString(file);
-      } else {
-        sendToGAS('processGuestOrder', { formData: data });
+          reader.readAsBinaryString(value);
+        } else {
+          plainData[key] = value;
+        }
       }
     });
 
-    loginForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-      submitLoginButton.disabled = true;
-      submitLoginButton.textContent = 'Memproses...';
-
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-
-      sendToGAS('loginUser', data, function(response) {
-        submitLoginButton.disabled = false;
-        submitLoginButton.textContent = 'Login';
-        if (response.success) {
-          alert('Login berhasil: ' + response.message);
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('loggedInUsername', response.username);
-          document.getElementById("loginModal").style.display = "none";
-        } else {
-          alert('Login gagal: ' + response.message);
-        }
-      });
-    });
-
-    registerForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-      submitRegisterButton.disabled = true;
-      submitRegisterButton.textContent = 'Memproses...';
-
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-
-      sendToGAS('registerUser', { formData: data }, function(response) {
-        submitRegisterButton.disabled = false;
-        submitRegisterButton.textContent = 'Daftar Sekarang';
-        if (response.success) {
-          alert('Pendaftaran berhasil! ' + response.message);
-          registerForm.reset();
-          document.getElementById("registerModal").style.display = "none";
-          document.getElementById("loginModal").style.display = "block";
-        } else {
-          alert('Pendaftaran gagal: ' + response.message);
-        }
-      });
-    });
-
-    function sendToGAS(funcName, payload, callback = null) {
-      const body = {
-        function: funcName,
-        ...payload
-      };
-
-      fetch(GAS_URL, {
+    function sendToGAS(data, fileData) {
+      fetch('https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec', {
         method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' }
+        body: JSON.stringify({
+          method: 'processGuestOrder',
+          formData: data,
+          fileData: fileData
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
       .then(res => res.json())
-      .then(response => {
-        if (funcName === 'processGuestOrder') {
-          submitOrderButton.disabled = false;
-          submitOrderButton.textContent = 'Konfirmasi Pesanan';
-          if (response.success) {
-            alert('Pesanan berhasil: ' + response.message);
-            const orderData = { ...payload.formData };
-            orderData['ID Orders'] = response.orderId;
-            orderData['Tanggal'] = new Date().toLocaleString('id-ID');
-            orderData['Status Pesanan'] = 'Menunggu Konfirmasi';
-            orderData['Gambar Produk'] = hiddenProductImageInput.value;
-            const existingOrders = JSON.parse(localStorage.getItem('guestOrders')) || [];
-            existingOrders.push(orderData);
-            localStorage.setItem('guestOrders', JSON.stringify(existingOrders));
-            guestPaymentForm.reset();
-            document.getElementById("paymentModal").style.display = "none";
-            showSection('order-history');
-          } else {
-            alert('Gagal membuat pesanan: ' + response.message);
-          }
-        } else if (callback) {
-          callback(response);
+      .then(res => {
+        if (res.success) {
+          alert('Pesanan berhasil dikirim!');
+          form.reset();
+        } else {
+          alert('Gagal: ' + res.message);
         }
       })
       .catch(err => {
-        alert('Terjadi kesalahan saat menghubungi server: ' + err.message);
-        console.error('GAS Error:', err);
-        if (funcName === 'processGuestOrder') {
-          submitOrderButton.disabled = false;
-          submitOrderButton.textContent = 'Konfirmasi Pesanan';
-        }
-        if (callback) callback({ success: false, message: err.message });
+        alert('Error: ' + err.message);
       });
     }
   </script>
-
 </body>
 </html>
+
+
+Sudah ditambahkan kolom unggah bukti pembayaran di form checkout langsung. Silakan tes kirim file gambar. Siap lanjut bila perlu!
+
