@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil VIP - Nasukafoods</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h2 {
+      color: #4CAF50;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 20px 0;
+      border: 3px solid #4CAF50;
+    }
+    .profile-info p {
+      margin: 10px 0;
+      font-size: 16px;
+      text-align: left;
+    }
+    .btn {
+      margin-top: 15px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+    }
+    .edit-btn {
+      background-color: #2196F3;
+    }
+    .edit-btn:hover {
+      background-color: #1976D2;
+    }
+    .topup-btn {
+      background-color: #FF9800;
+    }
+    .topup-btn:hover {
+      background-color: #F57C00;
+    }
+    .logout-btn {
+      background-color: #f44336;
+    }
+    .logout-btn:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Profil VIP</h2>
+    <img src="" alt="Foto Profil" id="fotoProfil" class="profile-pic" />
+    <div class="profile-info" id="profileContainer">
+      <p><strong>ID:</strong> <span id="id">-</span></p>
+      <p><strong>Nama:</strong> <span id="nama">-</span></p>
+      <p><strong>Alamat:</strong> <span id="alamat">-</span></p>
+      <p><strong>Telepon:</strong> <span id="telepon">-</span></p>
+      <p><strong>Username:</strong> <span id="username">-</span></p>
+      <p><strong>Sosial Media:</strong> <span id="sosial">-</span></p>
+      <p><strong>Saldo:</strong> <span id="saldo">-</span></p>
+      <p><strong>Bunga (%):</strong> <span id="bunga">-</span></p>
+      <p><strong>Bunga (Rp):</strong> <span id="bungaRp">-</span></p>
+      <p><strong>Kata-kata Hari Ini:</strong> <span id="kata">-</span></p>
+      <p><strong>Tanggal Masuk:</strong> <span id="tanggal">-</span></p>
+    </div>
+    <button class="btn edit-btn" onclick="editProfil()">Edit Profil</button>
+    <button class="btn topup-btn" onclick="topupSaldo()">Topup Saldo</button>
+    <button class="btn logout-btn" onclick="logout()">Keluar</button>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem('profileData'));
+    const userType = localStorage.getItem('userType');
+
+    if (!user || userType !== 'VIP') {
+      alert('Kamu belum login sebagai VIP!');
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('id').textContent = user.id || '-';
+      document.getElementById('nama').textContent = user.nama || '-';
+      document.getElementById('alamat').textContent = user.alamat || '-';
+      document.getElementById('telepon').textContent = user.telepon || '-';
+      document.getElementById('username').textContent = user.username || '-';
+      document.getElementById('sosial').textContent = user.sosial || '-';
+      document.getElementById('saldo').textContent = 'Rp ' + (user.saldo || '0');
+      document.getElementById('bunga').textContent = user.bunga || '0';
+      document.getElementById('bungaRp').textContent = 'Rp ' + (user.bungaRupiah || '0');
+      document.getElementById('kata').textContent = user.kataHariIni || '-';
+      document.getElementById('tanggal').textContent = user.tanggalMasuk || '-';
+
+      const foto = user.fotoProfil || '';
+      document.getElementById('fotoProfil').src = foto !== '' ? foto : 'default-avatar.png';
+    }
+
+    function logout() {
+      localStorage.removeItem('userType');
+      localStorage.removeItem('profileData');
+      window.location.href = 'index.html';
+    }
+
+    function editProfil() {
+      window.location.href = 'edit-profil.html';
+    }
+
+    function topupSaldo() {
+      window.location.href = 'topup.html';
+    }
+  </script>
+</body>
+</html>
