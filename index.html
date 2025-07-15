@@ -1,201 +1,208 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nasukafoods - Toko Online</title>
-    
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* CSS dasar untuk tampilan */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        header {
-            background-color: #4CAF50; /* Warna hijau khas makanan */
-            color: white;
-            padding: 1em 0;
-            text-align: center;
-        }
-        nav {
-            background-color: #333;
-            color: white;
-            padding: 0.5em 0;
-            text-align: center;
-        }
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px 0;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .product-card {
-            border-radius: 8px;
-            overflow: hidden;
-            text-align: center;
-            padding-bottom: 15px;
-        }
-        .product-card img {
-            max-width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto;
-        }
-        .product-card h3 {
-            margin: 15px 0 10px;
-            color: #4CAF50;
-        }
-        .product-card p {
-            font-size: 1.1em;
-            color: #555;
-            margin-bottom: 15px;
-            padding: 0 15px;
-        }
-        .product-card .price {
-            font-weight: bold;
-            color: #e67e22;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            padding: 0 15px;
-        }
-        .product-card .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 0 15px;
-        }
-        .product-card button {
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
-            width: 100%;
-        }
-        .product-card .buy-now-btn {
-            background-color: transparent;
-            color: #333;
-            border: 2px solid #e67e22;
-        }
-        .product-card .buy-now-btn:hover {
-            background-color: #e67e22;
-            color: white;
-            border-color: #d35400;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1em 0;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nasukafoods - Toko Online</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+    nav {
+      background-color: #333;
+      color: white;
+      padding: 0.5em 0;
+      text-align: center;
+    }
+    nav a, nav button {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      background: none;
+      border: none;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+      overflow: hidden;
+      padding: 20px 0;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      padding-bottom: 15px;
+    }
+    .product-card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto;
+    }
+    .product-card h3 {
+      margin: 15px 0 10px;
+      color: #4CAF50;
+    }
+    .product-card p {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 15px;
+      padding: 0 15px;
+    }
+    .product-card .price {
+      font-weight: bold;
+      color: #e67e22;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      padding: 0 15px;
+    }
+    .product-card .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0 15px;
+    }
+    .product-card button {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+      width: 100%;
+    }
+    .product-card .buy-now-btn {
+      background-color: transparent;
+      color: #333;
+      border: 2px solid #e67e22;
+    }
+    .product-card .buy-now-btn:hover {
+      background-color: #e67e22;
+      color: white;
+      border-color: #d35400;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 1em 0;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Nasukafoods</h1>
+    <p>Solusi Makanan Sehat dan Lezat Anda</p>
+  </header>
 
-    <header>
-        <h1>Nasukafoods</h1>
-        <p>Solusi Makanan Sehat dan Lezat Anda</p>
-    </header>
+  <nav>
+    <a href="#home">Beranda</a>
+    <a href="Event">Event</a>
+    <a href="">Promo</a>
+    <a href="#" id="profilLink">Profil</a>
+  </nav>
 
-    <nav>
-        <a href="#home">Beranda</a>
-        <a href="#products">Produk</a>
-        <a href="#about">Tentang Kami</a>
-        <a href="profil.html">Profil</a>
-    </nav>
-
-    <div class="container" id="products">
-        <h2>Produk Kami</h2>
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 1">
-                <h3 data-name="Nasi Goreng Spesial">Nasi Goreng Spesial</h3>
-                <p>Nasi goreng dengan bumbu rahasia dan topping melimpah.</p>
-                <p class="price" data-price="25000">Rp 25.000</p>
-                <div class="button-group">
-                    <button class="buy-now-btn" onclick="goToPayment('Nasi Goreng Spesial', 25000)">Beli Sekarang</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 2">
-                <h3 data-name="Ayam Bakar Madu">Ayam Bakar Madu</h3>
-                <p>Ayam bakar empuk dengan lumuran madu asli.</p>
-                <p class="price" data-price="35000">Rp 35.000</p>
-                <div class="button-group">
-                    <button class="buy-now-btn" onclick="goToPayment('Ayam Bakar Madu', 35000)">Beli Sekarang</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 3">
-                <h3 data-name="Salad Buah Segar">Salad Buah Segar</h3>
-                <p>Campuran buah-buahan segar dengan saus spesial.</p>
-                <p class="price" data-price="20000">Rp 20.000</p>
-                <div class="button-group">
-                    <button class="buy-now-btn" onclick="goToPayment('Salad Buah Segar', 20000)">Beli Sekarang</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 4">
-                <h3 data-name="Mie Ayam Bakso">Mie Ayam Bakso</h3>
-                <p>Mie ayam lengkap dengan bakso urat dan pangsit.</p>
-                <p class="price" data-price="22000">Rp 22.000</p>
-                <div class="button-group">
-                    <button class="buy-now-btn" onclick="goToPayment('Mie Ayam Bakso', 22000)">Beli Sekarang</button>
-                </div>
-            </div>
+  <div class="container" id="products">
+    <h2>Produk Kami</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 1">
+        <h3 data-name="Nasi Goreng Spesial">Nasi Goreng Spesial</h3>
+        <p>Nasi goreng dengan bumbu rahasia dan topping melimpah.</p>
+        <p class="price" data-price="25000">Rp 25.000</p>
+        <div class="button-group">
+          <button class="buy-now-btn" onclick="goToPayment('Nasi Goreng Spesial', 25000)">Beli Sekarang</button>
         </div>
+      </div>
+      <div class="product-card">
+        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 2">
+        <h3 data-name="Ayam Bakar Madu">Ayam Bakar Madu</h3>
+        <p>Ayam bakar empuk dengan lumuran madu asli.</p>
+        <p class="price" data-price="35000">Rp 35.000</p>
+        <div class="button-group">
+          <button class="buy-now-btn" onclick="goToPayment('Ayam Bakar Madu', 35000)">Beli Sekarang</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 3">
+        <h3 data-name="Salad Buah Segar">Salad Buah Segar</h3>
+        <p>Campuran buah-buahan segar dengan saus spesial.</p>
+        <p class="price" data-price="20000">Rp 20.000</p>
+        <div class="button-group">
+          <button class="buy-now-btn" onclick="goToPayment('Salad Buah Segar', 20000)">Beli Sekarang</button>
+        </div>
+      </div>
+      <div class="product-card">
+        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 4">
+        <h3 data-name="Mie Ayam Bakso">Mie Ayam Bakso</h3>
+        <p>Mie ayam lengkap dengan bakso urat dan pangsit.</p>
+        <p class="price" data-price="22000">Rp 22.000</p>
+        <div class="button-group">
+          <button class="buy-now-btn" onclick="goToPayment('Mie Ayam Bakso', 22000)">Beli Sekarang</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <footer>
-        <p>&copy; 2025 Nasukafoods. Semua Hak Dilindungi.</p>
-    </footer>
+  <footer>
+    <p>&copy; 2025 Nasukafoods. Semua Hak Dilindungi.</p>
+  </footer>
 
-    <script>
-        function goToPayment(productName, productPrice) {
-            // Simpan detail produk yang diklik ke localStorage
-            const orderDetails = {
-                name: productName,
-                price: productPrice,
-                quantity: 1 // Asumsi kuantitas 1 karena langsung "Beli Sekarang"
-            };
-            localStorage.setItem('currentOrder', JSON.stringify(orderDetails));
+  <script>
+    function goToPayment(productName, productPrice) {
+      const orderDetails = {
+        name: productName,
+        price: productPrice,
+        quantity: 1
+      };
+      localStorage.setItem('currentOrder', JSON.stringify(orderDetails));
 
-            // Contoh data pengunjung (bisa didapatkan dari form login/registrasi)
-            // Anda bisa memuat data ini dari profil.html atau dari form login/daftar yang sebenarnya
-            // Untuk demo, saya masukkan data dummy di sini:
-            const visitorData = {
-                nama: "Budi Santoso",
-                email: "budi.santoso@example.com",
-                telepon: "081234567890",
-                alamat: "Jl. Contoh No. 123, Kota Contoh, Provinsi Contoh",
-                catatan: ""
-            };
-            // Simpan data pengunjung ke localStorage
-            localStorage.setItem('visitorInfo', JSON.stringify(visitorData));
+      const visitorData = {
+        nama: "Budi Santoso",
+        email: "budi.santoso@example.com",
+        telepon: "081234567890",
+        alamat: "Jl. Contoh No. 123, Kota Contoh, Provinsi Contoh",
+        catatan: ""
+      };
+      localStorage.setItem('visitorInfo', JSON.stringify(visitorData));
 
-            // Arahkan ke halaman pembayaran.html di direktori yang sama
-            window.location.href = 'pembayaran.html';
-        }
-    </script>
+      window.location.href = 'pembayaran.html';
+    }
+
+    const userType = localStorage.getItem('userType');
+    const profilBtn = document.getElementById('profilLink');
+
+    if (userType === 'VIP') {
+      profilBtn.addEventListener('click', e => {
+        e.preventDefault();
+        window.location.href = 'profil-vip.html';
+      });
+    } else {
+      profilBtn.addEventListener('click', e => {
+        e.preventDefault();
+        window.location.href = 'profil-guest.html';
+      });
+    }
+  </script>
 </body>
 </html>
