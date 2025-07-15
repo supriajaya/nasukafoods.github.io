@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nasukafoods - Profil Pengunjung</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      font-size: 0.9em;
+    }
+    header {
+      padding: 1em 0;
+      text-align: center;
+    }
+    nav {
+      text-align: center;
+      padding: 0.5em 0;
+    }
+    nav a {
+      color: inherit;
+      margin: 0 15px;
+      text-decoration: none;
+      font-size: 1.1em;
+    }
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 30px;
+    }
+    footer {
+      text-align: center;
+      padding: 0.8em 0;
+      margin-top: 20px;
+      font-size: 0.8em;
+    }
+    .profile-section {
+      margin-bottom: 25px;
+      padding: 20px;
+    }
+    .profile-picture-display {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .profile-picture-display img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .edit-link {
+      text-align: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .edit-link:hover {
+      text-decoration: underline;
+    }
+    .profile-info p {
+      margin-bottom: 8px;
+      font-size: 0.9em;
+    }
+    .profile-info p strong {
+      display: inline-block;
+      width: 120px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="tel"],
+    .form-group input[type="file"],
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 0.9em;
+      box-sizing: border-box;
+    }
+    .save-button {
+      color: black;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 1em;
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      inset: 0;
+    }
+
+    .modal-content {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    @media (min-width: 600px) {
+      .modal-content {
+        width: 90vw;
+        height: 90vh;
+        margin: 5vh auto;
+        padding: 30px;
+      }
+    }
+
+    .close-button {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-button:hover {
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nasukafoods</h1>
+  </header>
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+  <div class="container">
+    <div id="profile-display-section" class="profile-section">
+      <div class="profile-picture-display">
+        <img id="display-profile-picture" src="https://via.placeholder.com/120?text=No+Pic" alt="Foto Profil">
+      </div>
+      <div class="edit-link" onclick="openModal()">EDIT PROFIL</div>
+      <div class="profile-info">
+        <p><strong>ID Pengguna:</strong> <span id="display-id"></span></p>
+        <p><strong>Nama Lengkap:</strong> <span id="display-nama"></span></p>
+        <p><strong>Nomor HP:</strong> <span id="display-telepon"></span></p>
+        <p><strong>Alamat Pengiriman:</strong> <span id="display-alamat"></span></p>
+        <p><strong>Sosial Media:</strong> <span id="display-sosialMedia"></span></p>
+        <p style="font-style: italic;">Untuk fitur lengkap (Saldo, Notifikasi, dll.), silakan Login.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <h3>Ubah Profil</h3>
+      <form id="profileForm">
+        <div class="form-group">
+          <label for="input-nama">Nama Lengkap:</label>
+          <input type="text" id="input-nama" required>
+        </div>
+        <div class="form-group">
+          <label for="input-telepon">Nomor HP:</label>
+          <input type="tel" id="input-telepon" required>
+        </div>
+        <div class="form-group">
+          <label for="input-alamat">Alamat Pengiriman:</label>
+          <textarea id="input-alamat" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="input-sosialMedia">Sosial Media:</label>
+          <input type="text" id="input-sosialMedia">
+        </div>
+        <div class="form-group">
+          <label for="input-foto">Foto Profil:</label>
+          <input type="file" id="input-foto" accept="image/*">
+        </div>
+        <button type="submit" class="save-button">Simpan Perubahan</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Nasukafoods</p>
+  </footer>
+
+  <script>
+    let currentProfileData = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('profileForm').addEventListener('submit', saveProfileData);
+      document.getElementById('input-foto').addEventListener('change', handleProfilePicUpload);
+      loadProfileDataFromLocalStorage();
+    });
+
+    function openModal() {
+      document.getElementById("profileModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("profileModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target === document.getElementById("profileModal")) {
+        closeModal();
+      }
+    }
+
+    function generateUniqueId() {
+      return 'GUEST-' + Date.now() + Math.floor(Math.random() * 1000);
+    }
+
+    function loadProfileDataFromLocalStorage() {
+      const profileDataJSON = localStorage.getItem('profileData');
+      if (profileDataJSON) {
+        currentProfileData = JSON.parse(profileDataJSON);
+      } else {
+        currentProfileData = {
+          id: generateUniqueId(),
+          nama: 'Pengunjung',
+          telepon: '',
+          alamat: '',
+          sosialMedia: '',
+          profilePictureUrl: 'https://via.placeholder.com/120?text=No+Pic'
+        };
+      }
+      renderProfileUI(currentProfileData);
+      localStorage.setItem('profileData', JSON.stringify(currentProfileData));
+    }
+
+    function renderProfileUI(data) {
+      document.getElementById('display-id').textContent = data.id;
+      document.getElementById('display-nama').textContent = data.nama;
+      document.getElementById('display-telepon').textContent = data.telepon;
+      document.getElementById('display-alamat').textContent = data.alamat;
+      document.getElementById('display-sosialMedia').textContent = data.sosialMedia;
+      document.getElementById('display-profile-picture').src = data.profilePictureUrl;
+      document.getElementById('input-nama').value = data.nama;
+      document.getElementById('input-telepon').value = data.telepon;
+      document.getElementById('input-alamat').value = data.alamat;
+      document.getElementById('input-sosialMedia').value = data.sosialMedia;
+    }
+
+    function saveProfileData(e) {
+      e.preventDefault();
+      currentProfileData.nama = document.getElementById('input-nama').value;
+      currentProfileData.telepon = document.getElementById('input-telepon').value;
+      currentProfileData.alamat = document.getElementById('input-alamat').value;
+      currentProfileData.sosialMedia = document.getElementById('input-sosialMedia').value;
+      localStorage.setItem('profileData', JSON.stringify(currentProfileData));
+      renderProfileUI(currentProfileData);
+      closeModal();
+    }
+
+    function handleProfilePicUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentProfileData.profilePictureUrl = e.target.result;
+        localStorage.setItem('profileData', JSON.stringify(currentProfileData));
+        document.getElementById('display-profile-picture').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+ 
+  
+</body>
+</html>
