@@ -3,170 +3,237 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nasukafoods - Toko Online</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Nasuka</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-    header {
-      background-color: #4CAF50;
+      font-family: sans-serif;
+      background-color: #fefefe;
       color: white;
-      padding: 1em 0;
-      text-align: center;
     }
-    nav {
-      background-color: #333;
-      color: white;
-      padding: 0.5em 0;
-      text-align: center;
-    }
-    nav a, nav button {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      background: none;
-      border: none;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    .container {
-      width: 80%;
-      margin: auto;
+
+    .hero-section {
+      position: relative;
+      height: 20vh;
       overflow: hidden;
-      padding: 20px 0;
-    }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .product-card {
-      border-radius: 8px;
-      overflow: hidden;
-      text-align: center;
-      padding-bottom: 15px;
-    }
-    .product-card img {
-      max-width: 100%;
-      height: 200px;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto;
-    }
-    .product-card h3 {
-      margin: 15px 0 10px;
-      color: #4CAF50;
-    }
-    .product-card p {
-      font-size: 1.1em;
-      color: #555;
-      margin-bottom: 15px;
-      padding: 0 15px;
-    }
-    .product-card .price {
-      font-weight: bold;
-      color: #e67e22;
-      font-size: 1.2em;
-      margin-bottom: 15px;
-      padding: 0 15px;
-    }
-    .product-card .button-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      padding: 0 15px;
+      justify-content: space-between;
     }
-    .product-card button {
+
+    .hero-section video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .promo-text,
+    .info,
+    .sidebar {
+      position: relative;
+      z-index: 1;
+    }
+
+    .promo-text {
+      text-align: center;
+      margin-top: 5vh;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 6px black;
+      padding: 0 20px;
+    }
+
+    .info, .sidebar {
+      position: absolute;
+      bottom: 20px;
+    }
+
+    .info {
+      left: 10px;
+    }
+
+    .info .katakata {
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    .info .username {
+      font-weight: bold;
+    }
+
+    .info .about {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .info .balance {
+      font-size: 12px;
+      color: #ffbb00;
+    }
+
+    .sidebar {
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar div {
+      margin: 8px 0;
+      font-size: 12px;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: none;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+      z-index: 999;
+    }
+
+    .top-bar a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .product-section {
+      padding: 20px 10px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .product {
+      width: 23%;
+      box-sizing: border-box;
+      text-align: center;
+      color: black;
+      margin-bottom: 20px;
+    }
+
+    .product img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .product h4 {
+      margin: 0 0 5px;
+      font-size: 14px;
+    }
+
+    .product p {
+      margin: 0;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .product button {
+      margin-top: 12px;
+      padding: 6px 12px;
+      font-size: 12px;
+      background-color: #ff6600;
+      color: white;
       border: none;
-      padding: 10px 20px;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
-      width: 100%;
+      transition: background-color 0.3s ease;
     }
-    .product-card .buy-now-btn {
-      background-color: transparent;
-      color: #333;
-      border: 2px solid #e67e22;
+
+    .product button:hover {
+      background-color: #cc5200;
     }
-    .product-card .buy-now-btn:hover {
-      background-color: #e67e22;
-      color: white;
-      border-color: #d35400;
+
+    .bling {
+      animation: bling 1.5s infinite ease-in-out;
+      box-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
     }
-    footer {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 1em 0;
-      margin-top: 20px;
+
+    @keyframes bling {
+      0% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.9); }
+      100% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.3); }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Nasukafoods</h1>
-    <p>Solusi Makanan Sehat dan Lezat Anda</p>
-  </header>
 
-  <nav>
-    <a href="#home">Beranda</a>
-    <a href="Event">Event</a>
-    <a href="">Promo</a>
-    <a href="#" id="profilLink">Profil</a>
-  </nav>
-
-  <div class="container" id="products">
-    <h2>Produk Kami</h2>
-    <div class="product-grid">
-      <div class="product-card">
-        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 1">
-        <h3 data-name="Nasi Goreng Spesial">Nasi Goreng Spesial</h3>
-        <p>Nasi goreng dengan bumbu rahasia dan topping melimpah.</p>
-        <p class="price" data-price="25000">Rp 25.000</p>
-        <div class="button-group">
-          <button class="buy-now-btn" onclick="goToPayment('Nasi Goreng Spesial', 25000)">Beli Sekarang</button>
-        </div>
-      </div>
-      <div class="product-card">
-        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 2">
-        <h3 data-name="Ayam Bakar Madu">Ayam Bakar Madu</h3>
-        <p>Ayam bakar empuk dengan lumuran madu asli.</p>
-        <p class="price" data-price="35000">Rp 35.000</p>
-        <div class="button-group">
-          <button class="buy-now-btn" onclick="goToPayment('Ayam Bakar Madu', 35000)">Beli Sekarang</button>
-        </div>
-      </div>
-      <div class="product-card">
-        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 3">
-        <h3 data-name="Salad Buah Segar">Salad Buah Segar</h3>
-        <p>Campuran buah-buahan segar dengan saus spesial.</p>
-        <p class="price" data-price="20000">Rp 20.000</p>
-        <div class="button-group">
-          <button class="buy-now-btn" onclick="goToPayment('Salad Buah Segar', 20000)">Beli Sekarang</button>
-        </div>
-      </div>
-      <div class="product-card">
-        <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk Makanan 4">
-        <h3 data-name="Mie Ayam Bakso">Mie Ayam Bakso</h3>
-        <p>Mie ayam lengkap dengan bakso urat dan pangsit.</p>
-        <p class="price" data-price="22000">Rp 22.000</p>
-        <div class="button-group">
-          <button class="buy-now-btn" onclick="goToPayment('Mie Ayam Bakso', 22000)">Beli Sekarang</button>
-        </div>
-      </div>
+  <section class="hero-section">
+    <img src="https://nasukafoods.site/lacak-lokasi.gif" autoplay muted loop playsinline></img>
+    <div class="top-bar">
+      <a href="#home"><br>🏠 Beranda</a>
+      <a href="#"><br>❤️ Promo</a>
+      <a href="#" id="profilLink"><br>👤 Profil</a>
     </div>
-  </div>
+    <div class="info">
+      <div class="katakata">bahagia</div>
+      <div class="username">Arya Kawasaki Labs</div>
+      <div class="about">kawasaki</div>
+      <div class="balance">💵 </div>
+    </div>
+    <div class="sidebar">
+      <div>❤️ 200.k</div>
+      <div>💬 4.M</div>
+      <div>🔗 Share</div>
+    </div>
+  </section>
 
-  <footer>
-    <p>&copy; 2025 Nasukafoods. Semua Hak Dilindungi.</p>
-  </footer>
+  <section class="product-section">
+    <div class="product">
+      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 1">
+      <h4>Produk 1</h4>
+      <p>Deskripsi singkat </p>
+      <button onclick="goToPayment('Produk 1', 10000)">Beli Sekarang</button>
+    </div>
+    <div class="product">
+      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 2">
+      <h4>Produk 2</h4>
+      <p>Deskripsi singkat</p>
+      <button onclick="goToPayment('Produk 2', 12000)">Beli Sekarang</button>
+    </div>
+    <div class="product">
+      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 3">
+      <h4>Produk 3</h4>
+      <p>Deskripsi singkat</p>
+      <button onclick="goToPayment('Produk 3', 15000)">Beli Sekarang</button>
+    </div>
+    <div class="product">
+      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 4">
+      <h4>Produk 4</h4>
+      <p>Deskripsi singkat</p>
+      <button onclick="goToPayment('Produk 4', 8000)">Beli Sekarang</button>
+    </div>
+    <div class="product">
+      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 5">
+      <h4>Produk 5</h4>
+      <p>Deskripsi singkat </p>
+      <button onclick="goToPayment('Produk 5', 20000)">Beli Sekarang</button>
+    </div>
+
+    <div class="product bling">
+      <a href="http://aryawilalodra.site" target="_blank">
+        <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="Lacak Lokasi">
+      </a>
+      <h4>Lacak Lokasi</h4>
+      <p>Klik untuk melacak lokasi</p>
+    </div>
+
+    <div class="product">
+      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 6">
+      <h4>Produk 6</h4>
+      <p>Deskripsi singkat</p>
+      <button onclick="goToPayment('Produk 6', 9000)">Beli Sekarang</button>
+    </div>
+  </section>
 
   <script>
     function goToPayment(productName, productPrice) {
@@ -204,5 +271,6 @@
       });
     }
   </script>
+
 </body>
 </html>
