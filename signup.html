@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daftar Akun - Nasukafoods</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #4CAF50;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="tel"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      border: none;
+      width: 100%;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .footer-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .footer-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Daftar Akun Baru</h2>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="telepon">Nomor HP</label>
+        <input type="tel" id="telepon" required />
+      </div>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+      </div>
+      <button type="submit">Daftar</button>
+    </form>
+    <div class="footer-link">
+      Sudah punya akun? <a href="login.html">Login di sini</a>
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = 'USR-' + Date.now();
+      const telepon = document.getElementById('telepon').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const tanggalMasuk = new Date().toLocaleDateString('id-ID');
+
+      const formData = new FormData();
+      formData.append('action', 'saveProfile');
+      formData.append('user_id', id);
+      formData.append('telepon', telepon);
+      formData.append('username', username);
+      formData.append('password', password);
+      formData.append('saldo', '0');
+      formData.append('tanggalMasuk', tanggalMasuk);
+
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          body: formData
+        });
+        const result = await res.text();
+        if (result === "Success") {
+          alert("Pendaftaran berhasil! Silakan login.");
+          window.location.href = "login.html";
+        } else {
+          alert("Gagal: " + result);
+        }
+      } catch {
+        alert("Gagal terhubung ke server.");
+      }
+    });
+  </script>
+</body>
+</html>
