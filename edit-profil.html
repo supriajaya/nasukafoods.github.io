@@ -1,262 +1,180 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Pengguna</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        .profile-container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .profile-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .profile-img-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid #f8f9fa;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .profile-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .profile-edit-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            text-align: center;
-            padding: 5px 0;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .profile-img-container:hover .profile-edit-overlay {
-            opacity: 1;
-        }
-        .form-group label {
-            font-weight: 500;
-        }
-        .text-muted {
-            font-size: 0.9rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Profil - Nasukafoods</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #4CAF50;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .profile-pic-preview {
+      display: block;
+      width: 120px;
+      height: 120px;
+      margin: 15px auto;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #4CAF50;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .btn:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-
-<div class="container mt-5">
-    <div class="profile-container">
-        <div class="profile-header">
-            <h3>Profil Pengguna</h3>
-            <p id="profile-status" class="text-danger"></p>
-        </div>
-
-        <div class="profile-img-container">
-            <img id="profile-image-display" src="https://nasukafoods.site/wireless.jpg" alt="Foto Profil" class="profile-img">
-            <input type="file" id="edit-profile-image" style="display: none;" accept="image/*">
-            <div class="profile-edit-overlay" onclick="document.getElementById('edit-profile-image').click()">
-                Ubah Foto
-            </div>
-        </div>
-        
-        <form id="editProfileForm" class="mt-4">
-            <div class="mb-3 form-group">
-                <label for="editUsername" class="form-label">Username</label>
-                <input type="text" class="form-control" id="editUsername" name="Username" required>
-            </div>
-            <div class="mb-3 form-group">
-                <label for="editNamaLengkap" class="form-label">Nama Lengkap</label>
-                <input type="text" class="form-control" id="editNamaLengkap" name="Nama Lengkap" required>
-            </div>
-            <div class="mb-3 form-group">
-                <label for="editNomorHP" class="form-label">Nomor HP</label>
-                <input type="tel" class="form-control" id="editNomorHP" name="Nomor HP" required>
-            </div>
-            <div class="mb-3 form-group">
-                <label for="editAlamatLengkap" class="form-label">Alamat Lengkap</label>
-                <textarea class="form-control" id="editAlamatLengkap" name="Alamat Lengkap" rows="3" required></textarea>
-            </div>
-            <div class="mb-3 form-group">
-                <label for="editTentangSaya" class="form-label">Tentang Saya</label>
-                <textarea class="form-control" id="editTentangSaya" name="Tentang Saya" rows="3"></textarea>
-            </div>
-            <div class="mb-3 form-group">
-                <label for="editPassword" class="form-label">Password (Kosongkan jika tidak ingin diubah)</label>
-                <input type="password" class="form-control" id="editPassword" name="Password">
-            </div>
-            
-            <button type="submit" class="btn btn-primary w-100 mt-3" id="saveProfileBtn">Simpan Perubahan</button>
-        </form>
-
-        <div class="mt-4 text-center">
-            <button class="btn btn-secondary" onclick="logout()">Logout</button>
-        </div>
+  <div class="container">
+    <h2>Edit Profil</h2>
+    <img src="default-avatar.png" id="previewFoto" class="profile-pic-preview" />
+    <div class="form-group">
+      <label for="fotoProfil">Foto Profil</label>
+      <input type="file" id="fotoProfil" accept="image/*" />
     </div>
-</div>
+    <div class="form-group">
+      <label for="nama">Nama</label>
+      <input type="text" id="nama" />
+    </div>
+    <div class="form-group">
+      <label for="alamat">Alamat</label>
+      <textarea id="alamat"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="telepon">Telepon</label>
+      <input type="text" id="telepon" />
+    </div>
+    <div class="form-group">
+      <label for="sosial">Sosial Media</label>
+      <input type="text" id="sosial" />
+    </div>
+    <div class="form-group">
+      <label for="kata">Kata-kata Hari Ini</label>
+      <textarea id="kata"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" />
+    </div>
+    <button class="btn" onclick="simpanProfil()">Simpan</button>
+  </div>
 
-<script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycby84KGedeLwHiRBb4O0_rkzhYQh6r2-HgwtD_gcq6ubVwFy8jn_GbSxiBjctKm2b9ruZg/exec';
+  <script>
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+    const profileData = JSON.parse(localStorage.getItem('profileData'));
 
-    document.addEventListener('DOMContentLoaded', () => {
-        loadProfileData();
+    if (!profileData) {
+      alert("Kamu belum login.");
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('nama').value = profileData.nama || '';
+      document.getElementById('alamat').value = profileData.alamat || '';
+      document.getElementById('telepon').value = profileData.telepon || '';
+      document.getElementById('sosial').value = profileData.sosial || '';
+      document.getElementById('kata').value = profileData.kataHariIni || '';
+      document.getElementById('username').value = profileData.username || '';
+      document.getElementById('password').value = profileData.password || '';
+      document.getElementById('previewFoto').src = profileData.fotoProfil || 'default-avatar.png';
+    }
+
+    document.getElementById('fotoProfil').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('previewFoto').src = e.target.result;
+          profileData.fotoProfil = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
     });
 
-    let currentImageData = null; // Menyimpan data gambar sementara untuk upload
-    let currentMimeType = null;
-    let originalUsername = ''; // Menyimpan username awal untuk identifikasi
+    function simpanProfil() {
+      profileData.nama = document.getElementById('nama').value;
+      profileData.alamat = document.getElementById('alamat').value;
+      profileData.telepon = document.getElementById('telepon').value;
+      profileData.sosial = document.getElementById('sosial').value;
+      profileData.kataHariIni = document.getElementById('kata').value;
+      profileData.username = document.getElementById('username').value;
+      profileData.password = document.getElementById('password').value;
 
-    function loadProfileData() {
-        const userDataString = localStorage.getItem('userData');
-        if (!userDataString) {
-            alert('Anda harus login terlebih dahulu.');
-            window.location.href = 'login.html'; 
-            return;
+      localStorage.setItem('profileData', JSON.stringify(profileData));
+
+      fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          aksi: 'updateProfil',
+          id: profileData.id,
+          nama: profileData.nama,
+          alamat: profileData.alamat,
+          telepon: profileData.telepon,
+          sosial: profileData.sosial,
+          kataHariIni: profileData.kataHariIni,
+          username: profileData.username,
+          password: profileData.password,
+          fotoProfil: profileData.fotoProfil || ''
+        }),
+        headers: {
+          'Content-Type': 'application/json'
         }
-
-        const userData = JSON.parse(userDataString);
-        originalUsername = userData['Username']; 
-
-        // Tampilkan data ke formulir
-        document.getElementById('editUsername').value = userData['Username'] || '';
-        document.getElementById('editNamaLengkap').value = userData['Nama Lengkap'] || '';
-        document.getElementById('editNomorHP').value = userData['Nomor HP'] || '';
-        document.getElementById('editAlamatLengkap').value = userData['Alamat Lengkap'] || '';
-        document.getElementById('editTentangSaya').value = userData['Tentang Saya'] || '';
-        
-        // Tampilkan gambar profil
-        const profileImageElement = document.getElementById('profile-image-display');
-        const fotoBase64 = userData['Foto Profil Base64'];
-        const fotoMimeType = userData['Foto Profil MimeType'];
-
-        if (fotoBase64 && fotoMimeType) {
-            profileImageElement.src = `data:${fotoMimeType};base64,${fotoBase64}`;
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success') {
+          alert("Profil berhasil disimpan dan diperbarui.");
+          window.location.href = 'profil-vip.html';
         } else {
-            profileImageElement.src = 'https://nasukafoods.site/wireless.jpg';
+          alert("Gagal memperbarui data ke server.");
         }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Terjadi kesalahan saat menyimpan ke server.");
+      });
     }
-
-    // Mendapatkan data gambar dari input file
-    document.getElementById('edit-profile-image').addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64Data = e.target.result;
-                // Simpan Base64 data dan MimeType
-                currentImageData = base64Data.split(',')[1];
-                currentMimeType = file.type;
-
-                // Tampilkan pratinjau gambar baru
-                document.getElementById('profile-image-display').src = base64Data;
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const form = e.target;
-        const formData = new FormData(form);
-        const saveProfileBtn = document.getElementById('saveProfileBtn');
-        const statusElement = document.getElementById('profile-status');
-
-        formData.append('action', 'update_profile'); 
-        formData.append('originalUsername', originalUsername); 
-
-        // Tambahkan data gambar jika ada perubahan
-        if (currentImageData && currentMimeType) {
-            formData.append('profileImageBase64', currentImageData);
-            formData.append('profileImageMimeType', currentMimeType);
-        }
-
-        saveProfileBtn.disabled = true;
-        statusElement.textContent = 'Menyimpan...';
-
-        try {
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                body: formData 
-            });
-
-            const result = await response.json();
-
-            if (result.status === 'success') {
-                statusElement.textContent = result.message;
-                statusElement.className = 'text-success';
-                
-                // Perbarui data di localStorage setelah update berhasil
-                updateLocalStorage(formData);
-
-            } else {
-                statusElement.textContent = 'Gagal menyimpan: ' + result.message;
-                statusElement.className = 'text-danger';
-            }
-        } catch (error) {
-            statusElement.textContent = 'Terjadi kesalahan jaringan atau server.';
-            statusElement.className = 'text-danger';
-            console.error('Error:', error);
-        } finally {
-            saveProfileBtn.disabled = false;
-        }
-    });
-
-    function updateLocalStorage(formData) {
-        const userDataString = localStorage.getItem('userData');
-        let userData = userDataString ? JSON.parse(userDataString) : {};
-
-        // Perbarui data berdasarkan FormData
-        for (let pair of formData.entries()) {
-            const key = pair[0];
-            const value = pair[1];
-
-            // Abaikan aksi dan originalUsername
-            if (key !== 'action' && key !== 'originalUsername') {
-                
-                // Tambahkan data gambar ke localStorage jika diunggah
-                if (key === 'profileImageBase64') {
-                    userData['Foto Profil Base64'] = value;
-                } else if (key === 'profileImageMimeType') {
-                    userData['Foto Profil MimeType'] = value;
-                } else if (key !== 'Password') { 
-                    // Perbarui data lain (termasuk Username, Nama Lengkap, dll.)
-                    userData[key] = value;
-                }
-            }
-        }
-        
-        localStorage.setItem('userData', JSON.stringify(userData));
-        
-        // Atur ulang variabel global untuk sinkronisasi jika Username berubah
-        originalUsername = userData['Username'];
-        
-        // Hapus data gambar sementara setelah disimpan
-        currentImageData = null;
-        currentMimeType = null;
-    }
-
-    function logout() {
-        localStorage.removeItem('userData');
-        alert('Anda telah logout.');
-        window.location.href = 'login.html'; 
-    }
-</script>
-
+  </script>
 </body>
 </html>
