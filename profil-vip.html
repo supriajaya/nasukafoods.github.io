@@ -1,130 +1,126 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profil VIP - Nasukafoods</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil VIP</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
+      font-family: sans-serif;
+      padding: 1rem;
+      background: #f2f2f2;
     }
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 30px;
+    .profile {
+      background: white;
+      padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
     }
-    h2 {
-      color: #4CAF50;
-    }
-    .profile-pic {
-      width: 120px;
-      height: 120px;
+    img {
+      width: 100px;
       border-radius: 50%;
-      object-fit: cover;
-      margin: 20px 0;
-      border: 3px solid #4CAF50;
     }
-    .profile-info p {
-      margin: 10px 0;
-      font-size: 16px;
-      text-align: left;
+    p {
+      margin: 0.5rem 0;
     }
-    .btn {
-      margin-top: 15px;
-      padding: 12px;
-      width: 100%;
+    .btn-container {
+      margin-bottom: 1rem;
+    }
+    button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
       color: white;
+      border-radius: 5px;
+      cursor: pointer;
     }
-    .edit-btn {
-      background-color: #2196F3;
-    }
-    .edit-btn:hover {
-      background-color: #1976D2;
-    }
-    .topup-btn {
-      background-color: #FF9800;
-    }
-    .topup-btn:hover {
-      background-color: #F57C00;
-    }
-    .logout-btn {
-      background-color: #f44336;
-    }
-    .logout-btn:hover {
-      background-color: #d32f2f;
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <div class="btn-container">
+    <button onclick="goHome()">🏠 Home</button>
+    <button onclick="logout()">🚪 Logout</button>
+  </div>
+
+  <div class="profile">
     <h2>Profil VIP</h2>
-    <img src="" alt="Foto Profil" id="fotoProfil" class="profile-pic" />
-    <div class="profile-info" id="profileContainer">
-      <p><strong>ID:</strong> <span id="id">-</span></p>
-      <p><strong>Nama:</strong> <span id="nama">-</span></p>
-      <p><strong>Alamat:</strong> <span id="alamat">-</span></p>
-      <p><strong>Telepon:</strong> <span id="telepon">-</span></p>
-      <p><strong>Username:</strong> <span id="username">-</span></p>
-      <p><strong>Sosial Media:</strong> <span id="sosial">-</span></p>
-      <p><strong>Saldo:</strong> <span id="saldo">-</span></p>
-      <p><strong>Bunga (%):</strong> <span id="bunga">-</span></p>
-      <p><strong>Bunga (Rp):</strong> <span id="bungaRp">-</span></p>
-      <p><strong>Kata-kata Hari Ini:</strong> <span id="kata">-</span></p>
-      <p><strong>Tanggal Masuk:</strong> <span id="tanggal">-</span></p>
-    </div>
-    <button class="btn edit-btn" onclick="editProfil()">Edit Profil</button>
-    <button class="btn topup-btn" onclick="topupSaldo()">Topup Saldo</button>
-    <button class="btn logout-btn" onclick="logout()">Keluar</button>
+    <img id="foto" src="" alt="Foto Profil" />
+    <p><strong>ID:</strong> <span id="id"></span></p>
+    <p><strong>Status:</strong> <span id="status"></span></p>
+    <p><strong>Nama:</strong> <span id="nama"></span></p>
+    <p><strong>Alamat:</strong> <span id="alamat"></span></p>
+    <p><strong>Telepon:</strong> <span id="telepon"></span></p>
+    <p><strong>Sosial Media:</strong> <span id="sosial"></span></p>
+    <p><strong>Username:</strong> <span id="username"></span></p>
+    <p><strong>Saldo:</strong> <span id="saldo"></span></p>
+    <p><strong>Kata Kata:</strong> <span id="katakata"></span></p>
+    <p><strong>Bunga:</strong> <span id="bunga"></span></p>
+    <p><strong>Bunga Rupiah:</strong> <span id="bungarp"></span></p>
+    <p><strong>Tanggal Masuk:</strong> <span id="masuk"></span></p>
   </div>
 
   <script>
-    const user = JSON.parse(localStorage.getItem('profileData'));
-    const userType = localStorage.getItem('userType');
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+    const username = localStorage.getItem("username");
 
-    if (!user || userType !== 'VIP') {
-      alert('Kamu belum login sebagai VIP!');
-      window.location.href = 'login.html';
-    } else {
-      document.getElementById('id').textContent = user.id || '-';
-      document.getElementById('nama').textContent = user.nama || '-';
-      document.getElementById('alamat').textContent = user.alamat || '-';
-      document.getElementById('telepon').textContent = user.telepon || '-';
-      document.getElementById('username').textContent = user.username || '-';
-      document.getElementById('sosial').textContent = user.sosial || '-';
-      document.getElementById('saldo').textContent = 'Rp ' + (user.saldo || '0');
-      document.getElementById('bunga').textContent = user.bunga || '0';
-      document.getElementById('bungaRp').textContent = 'Rp ' + (user.bungaRupiah || '0');
-      document.getElementById('kata').textContent = user.kataHariIni || '-';
-      document.getElementById('tanggal').textContent = user.tanggalMasuk || '-';
-
-      const foto = user.fotoProfil || '';
-      document.getElementById('fotoProfil').src = foto !== '' ? foto : 'default-avatar.png';
+    if (!username) {
+      alert("Username tidak ditemukan. Silakan login ulang.");
+      window.location.href = "login.html";
     }
+
+    function formatRupiah(angka) {
+      if (!angka || isNaN(angka)) return "Rp 0";
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.error || !data.Username) {
+          alert("Data tidak ditemukan. Silakan login ulang.");
+          window.location.href = "login.html";
+          return;
+        }
+
+        document.getElementById("id").textContent = data.ID || "-";
+        document.getElementById("status").textContent = data.Status || "-";
+        document.getElementById("nama").textContent = data.Nama || "_";
+        document.getElementById("alamat").textContent = data.Alamat || "_";
+        document.getElementById("telepon").textContent = data.Telepon || "-";
+        document.getElementById("sosial").textContent = data["Sosial Media"] || "-";
+        document.getElementById("username").textContent = data.Username || "-";
+        document.getElementById("saldo").textContent = formatRupiah(data.Saldo);
+        document.getElementById("katakata").textContent = data["Kata Kata Hari Ini"] || "-";
+        document.getElementById("bunga").textContent = (data.Bunga || "0") + "%";
+        document.getElementById("bungarp").textContent = formatRupiah(data["Bunga Rupiah"]);
+        document.getElementById("masuk").textContent = data["Tanggal Masuk"] || "-";
+        document.getElementById("foto").src = data.Foto || "";
+      })
+      .catch(err => {
+        alert("Gagal koneksi: " + err);
+      });
 
     function logout() {
-      localStorage.removeItem('userType');
-      localStorage.removeItem('profileData');
-      window.location.href = 'index.html';
+      localStorage.removeItem("username");
+      window.location.href = "index.html";
     }
 
-    function editProfil() {
-      window.location.href = 'edit-profil.html';
+    function goHome() {
+      window.location.href = "index.html";
     }
+    
+    
+   
+document.body.addEventListener('click', e => {
+  if (e.target.closest('button, a, input[type=submit]')) {
+    setTimeout(updateSaldo, 500);
+  }
+});
 
-    function topupSaldo() {
-      window.location.href = 'topup.html';
-    }
   </script>
 </body>
 </html>
