@@ -178,13 +178,13 @@
     <div class="top-bar">
       <a href="#home"><br>🏠 Beranda</a>
       <a href="#"><br>❤️ Promo</a>
-      <a href="#" id="profilLink"><br>👤 Profil</a>
+      <a href="login.html" id="profilLink"><br>📥 LOGIN</a>
     </div>
     <div class="info">
       <div class="katakata">bahagia</div>
-      <div class="username">Arya Kawasaki Labs</div>
+      <div class="username" id="nama">Pengunjung</div>
       <div class="about">kawasaki</div>
-      <div class="balance">💵 </div>
+      <div class="balance" id="saldo">💵 Rp 0</div>
     </div>
     <div class="sidebar">
       <div>❤️ 200.k</div>
@@ -254,6 +254,32 @@
   </section>
 
   <script>
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+    const username = localStorage.getItem("username");
+    const userType = localStorage.getItem("userType");
+    const profilBtn = document.getElementById("profilLink");
+
+    if (username) {
+      fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.Username) {
+            document.getElementById("nama").textContent = data.Nama || "_";
+            document.getElementById("saldo").textContent = "💵 " + formatRupiah(data.Saldo || 0);
+            profilBtn.innerHTML = "<br>👤 PROFIL";
+            profilBtn.href = "profil-vip.html";
+          }
+        })
+        .catch(err => {
+          console.log("Gagal koneksi:", err);
+        });
+    }
+
+    function formatRupiah(angka) {
+      if (!angka || isNaN(angka)) return "Rp 0";
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     function goToPayment(productName, productPrice) {
       const orderDetails = {
         name: productName,
@@ -270,23 +296,13 @@
         catatan: ""
       };
       localStorage.setItem('visitorInfo', JSON.stringify(visitorData));
+      
+      
+      
+      
+      
 
       window.location.href = 'pembayaran.html';
-    }
-
-    const userType = localStorage.getItem('userType');
-    const profilBtn = document.getElementById('profilLink');
-
-    if (userType === 'VIP') {
-      profilBtn.addEventListener('click', e => {
-        e.preventDefault();
-        window.location.href = 'profil-vip.html';
-      });
-    } else {
-      profilBtn.addEventListener('click', e => {
-        e.preventDefault();
-        window.location.href = 'profil-guest.html';
-      });
     }
   </script>
 
