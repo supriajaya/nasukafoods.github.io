@@ -3,124 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daftar Akun - Nasukafoods</title>
+  <title>Daftar Akun</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
+      font-family: sans-serif;
+      background: #f2f2f2;
+      padding: 1rem;
     }
-    .container {
-      max-width: 400px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 30px;
+    form {
+      background: white;
+      padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h2 {
-      text-align: center;
-      color: #4CAF50;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #333;
-      font-weight: bold;
-    }
-    input[type="text"],
-    input[type="tel"],
-    input[type="password"] {
+    input, textarea, button {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      font-size: 1rem;
     }
     button {
-      background-color: #4CAF50;
+      background: black;
       color: white;
-      padding: 12px;
       border: none;
-      width: 100%;
       border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .footer-link {
-      text-align: center;
-      margin-top: 15px;
-    }
-    .footer-link a {
-      color: #007bff;
-      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <form id="signupForm">
     <h2>Daftar Akun Baru</h2>
-    <form id="signupForm">
-      <div class="form-group">
-        <label for="telepon">Nomor HP</label>
-        <input type="tel" id="telepon" required />
-      </div>
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" required />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" required />
-      </div>
-      <button type="submit">Daftar</button>
-    </form>
-    <div class="footer-link">
-      Sudah punya akun? <a href="login.html">Login di sini</a>
-    </div>
-  </div>
+    <input type="text" name="nama" placeholder="Nama Lengkap" required />
+    <textarea name="alamat" placeholder="Alamat Lengkap" required></textarea>
+    <input type="tel" name="telepon" placeholder="Nomor Telepon" required />
+    <input type="text" name="sosmed" placeholder="Sosial Media (Opsional)" />
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button type="submit">Daftar</button>
+  </form>
 
   <script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzZ-BSqSdaMcMrTZQqofVXw2dwIoYqddG5VzYe8Wz81GvCwvt1rnujzigzHBNo5hXZ5/exec';
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
 
-    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const id = 'USR-' + Date.now();
-      const telepon = document.getElementById('telepon').value.trim();
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
-      const tanggalMasuk = new Date().toLocaleDateString('id-ID');
+      const form = e.target;
+      const data = new FormData(form);
 
-      const formData = new FormData();
-      formData.append('action', 'saveProfile');
-      formData.append('user_id', id);
-      formData.append('telepon', telepon);
-      formData.append('username', username);
-      formData.append('password', password);
-      formData.append('saldo', '0');
-      formData.append('tanggalMasuk', tanggalMasuk);
+      const params = new URLSearchParams();
+      params.append("action", "signup");
+      params.append("nama", data.get("nama"));
+      params.append("alamat", data.get("alamat"));
+      params.append("telepon", data.get("telepon"));
+      params.append("sosmed", data.get("sosmed") || "");
+      params.append("username", data.get("username"));
+      params.append("password", data.get("password"));
 
       try {
-        const res = await fetch(WEB_APP_URL, {
-          method: 'POST',
-          body: formData
+        const res = await fetch(URL_GAS, {
+          method: "POST",
+          body: params
         });
-        const result = await res.text();
-        if (result === "Success") {
-          alert("Pendaftaran berhasil! Silakan login.");
+        const text = await res.text();
+        if (text.includes("Success")) {
+          alert("Pendaftaran berhasil!");
           window.location.href = "login.html";
         } else {
-          alert("Gagal: " + result);
+          alert("Gagal daftar: " + text);
         }
-      } catch {
-        alert("Gagal terhubung ke server.");
+      } catch (err) {
+        alert("Gagal konek ke server: " + err.message);
       }
     });
   </script>
