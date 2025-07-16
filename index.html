@@ -138,19 +138,25 @@
     }
 
     .product button {
-      margin-top: 12px;
       padding: 6px 12px;
       font-size: 12px;
-      background-color: #ff6600;
-      color: white;
+      background: transparent;
+      color: inherit;
       border: none;
-      border-radius: 5px;
+      border-radius: 0;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
     .product button:hover {
-      background-color: #cc5200;
+      text-decoration: underline;
+    }
+
+    .button-frame {
+      border: 2px solid #007bff;
+      padding: 6px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 12px;
     }
 
     .bling {
@@ -168,7 +174,7 @@
 <body>
 
   <section class="hero-section">
-    <img src="https://nasukafoods.site/lacak-lokasi.gif" autoplay muted loop playsinline></img>
+    <img src="https://nasukafoods.site/teknologi.jpg" autoplay muted loop playsinline></img>
     <div class="top-bar">
       <a href="#home"><br>🏠 Beranda</a>
       <a href="#"><br>❤️ Promo</a>
@@ -189,49 +195,61 @@
 
   <section class="product-section">
     <div class="product">
-      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 1">
+      <img src="https://nasukafoods.site/teknologi.jpg" alt="Produk 1">
       <h4>Produk 1</h4>
       <p>Deskripsi singkat </p>
-      <button onclick="goToPayment('Produk 1', 10000)">Beli Sekarang</button>
+      <div class="button-frame">
+        <button onclick="goToPayment('Produk 1', 10000)">Beli Sekarang</button>
+      </div>
     </div>
     <div class="product">
-      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 2">
+      <img src="https://nasukafoods.site/teknologi.jpg" alt="Produk 2">
       <h4>Produk 2</h4>
       <p>Deskripsi singkat</p>
-      <button onclick="goToPayment('Produk 2', 12000)">Beli Sekarang</button>
+      <div class="button-frame">
+        <button onclick="goToPayment('Produk 2', 12000)">Beli Sekarang</button>
+      </div>
     </div>
     <div class="product">
-      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 3">
+      <img src="https://nasukafoods.site/teknologi.jpg" alt="Produk 3">
       <h4>Produk 3</h4>
       <p>Deskripsi singkat</p>
-      <button onclick="goToPayment('Produk 3', 15000)">Beli Sekarang</button>
+      <div class="button-frame">
+        <button onclick="goToPayment('Produk 3', 15000)">Beli Sekarang</button>
+      </div>
     </div>
     <div class="product">
-      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 4">
+      <img src="https://nasukafoods.site/teknologi.jpg" alt="Produk 4">
       <h4>Produk 4</h4>
       <p>Deskripsi singkat</p>
-      <button onclick="goToPayment('Produk 4', 8000)">Beli Sekarang</button>
+      <div class="button-frame">
+        <button onclick="goToPayment('Produk 4', 8000)">Beli Sekarang</button>
+      </div>
     </div>
     <div class="product">
-      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 5">
+      <img src="https://nasukafoods.site/teknologi.jpg" alt="Produk 5">
       <h4>Produk 5</h4>
       <p>Deskripsi singkat </p>
-      <button onclick="goToPayment('Produk 5', 20000)">Beli Sekarang</button>
+      <div class="button-frame">
+        <button onclick="goToPayment('Produk 5', 20000)">Beli Sekarang</button>
+      </div>
     </div>
 
     <div class="product bling">
       <a href="http://aryawilalodra.site" target="_blank">
-        <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="Lacak Lokasi">
+        <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Lacak Lokasi">
       </a>
       <h4>Lacak Lokasi</h4>
       <p>Klik untuk melacak lokasi</p>
     </div>
 
     <div class="product">
-      <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Produk 6">
+      <img src="https://nasukafoods.site/teknologi.jpg" alt="Produk 6">
       <h4>Produk 6</h4>
       <p>Deskripsi singkat</p>
-      <button onclick="goToPayment('Produk 6', 9000)">Beli Sekarang</button>
+      <div class="button-frame">
+        <button onclick="goToPayment('Produk 6', 9000)">Beli Sekarang</button>
+      </div>
     </div>
   </section>
 
