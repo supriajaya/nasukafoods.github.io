@@ -1,426 +1,166 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nasukafoods - Pembayaran</title>
-    <link rel="stylesheet" href="style.css"> 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            font-size: 0.8em;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 1em 0;
-            text-align: center;
-        }
-        header h1 {
-            font-size: 2em;
-        }
-        header p {
-            font-size: 0.9em;
-        }
-        nav {
-            background-color: #333;
-            color: white;
-            padding: 0.5em 0;
-            text-align: center;
-        }
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 1.1em;
-        }
-        .container {
-            width: 80%;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 30px;
-        }
-        h2 {
-            text-align: center;
-            color: #4CAF50;
-            font-size: 1.8em;
-            margin-bottom: 30px;
-        }
-        .invoice-section {
-            margin-bottom: 25px;
-            padding: 20px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .invoice-section:last-of-type {
-            border-bottom: none;
-        }
-        .invoice-section h3 {
-            color: #555;
-            margin-top: 0;
-            border-bottom: none; 
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        .order-summary table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 0.9em;
-        }
-        .order-summary table th,
-        .order-summary table td {
-            padding: 8px 0;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        .order-summary table th {
-            font-weight: bold;
-            color: #777;
-        }
-        .order-summary table tr:last-child td {
-            border-bottom: none;
-        }
-        .order-summary .total-row td {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #e67e22;
-            border-top: 2px solid #ddd;
-            padding-top: 12px;
-        }
-        .order-summary .total-row td:last-child {
-            text-align: right;
-        }
-        .visitor-details p {
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-        .visitor-details p strong {
-            display: inline-block;
-            width: 100px;
-            color: #555;
-        }
-        .form-group {
-            margin-bottom: 12px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-            color: #555;
-            font-size: 0.9em;
-        }
-        .form-group input[type="file"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #fff;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-        .form-group input[type="file"]::file-selector-button {
-            background-color: #007bff;
-            color: white;
-            padding: 7px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 8px;
-            transition: background-color 0.3s ease;
-            font-size: 0.9em;
-        }
-        .form-group input[type="file"]::file-selector-button:hover {
-            background-color: #0056b3;
-        }
-        .payment-options input[type="radio"] {
-            margin-right: 8px;
-        }
-        .payment-options label {
-            display: inline-block;
-            margin-right: 16px;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-        .pay-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            display: block;
-            width: 100%;
-            margin-top: 16px;
-            transition: background-color 0.3s ease;
-        }
-        .pay-button:hover {
-            background-color: #3e8e41;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 0.8em 0;
-            margin-top: 16px;
-            font-size: 0.8em;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pembayaran</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    h1 { text-align: center; color: #4CAF50; }
+    .section { background: white; padding: 15px; margin: 10px 0; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    table th, table td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; }
+    .total { font-weight: bold; color: #e67e22; }
+    label { display: block; margin-top: 8px; }
+    input[type="file"] { margin-top: 5px; }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:disabled { background: #ccc; }
+    #kwitansi {
+      background: #fff;
+      border: 2px dashed #4CAF50;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 6px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Nasukafoods</h1>
-        <p>Proses Pembayaran Pesanan Anda</p>
-    </header>
-    <nav>
-        <a href="index.html">Beranda</a>
-        <a href="index.html#products">Produk</a>
-        <a href="index.html#about">Tentang Kami</a>
-        <a href="profil.html">Profil</a>
-        <a href="pembayaran.html">Pembayaran</a>
-    </nav>
-    <div class="container">
-        <h2>Detail Pembayaran</h2>
-        <div class="invoice-section order-summary">
-            <h3>Ringkasan Pesanan</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Deskripsi</th>
-                        <th>Kuantitas</th>
-                        <th>Harga Satuan</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody id="order-list">
-                </tbody>
-                <tfoot>
-                    <tr class="total-row">
-                        <td colspan="3">Total Pembayaran</td>
-                        <td id="order-total">Rp 0</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <div class="invoice-section visitor-details">
-            <h3>Detail Pengunjung</h3>
-            <p><strong>ID Pengguna:</strong> <span id="display-id"></span></p>
-            <p><strong>Nama Lengkap:</strong> <span id="display-nama"></span></p>
-            <p><strong>Nomor HP:</strong> <span id="display-telepon"></span></p>
-            <p><strong>Alamat Pengiriman:</strong> <span id="display-alamat"></span></p>
-            <p><strong>Sosial Media:</strong> <span id="display-sosialMedia"></span></p>
-            <p><strong>Saldo:</strong> <span id="display-saldo"></span></p>
-            <p><strong>Tanggal Masuk:</strong> <span id="display-tanggalMasuk"></span></p>
-            <p id="profile-warning-message" style="color: red; font-size: 0.8em; margin-top: 10px; display: none;"></p>
-        </div>
-        <form id="paymentForm" action="#" method="POST" enctype="multipart/form-data">
-            <div class="invoice-section payment-options">
-                <h3>Pilih Metode Pembayaran</h3>
-                <div class="form-group">
-                    <label>
-                        <input type="radio" name="metode_pembayaran" value="transfer_bank" checked> Transfer Bank (BCA/Mandiri)
-                    </label>
-                    <label>
-                        <input type="radio" name="metode_pembayaran" value="ovo"> OVO
-                    </label>
-                    <label>
-                        <input type="radio" name="metode_pembayaran" value="gopay"> GoPay
-                    </label>
-                    <label>
-                        <input type="radio" name="metode_pembayaran" value="cod"> Bayar di Tempat (COD)
-                    </label>
-                </div>
-            </div>
-            <div class="invoice-section upload-proof">
-                <h3>Unggah Bukti Pembayaran</h3>
-                <p style="font-size: 0.9em; color: #777;">(Hanya untuk metode pembayaran Transfer Bank, OVO, atau GoPay)</p>
-                <div class="form-group">
-                    <label for="bukti_pembayaran">Pilih File Bukti Pembayaran:</label>
-                    <input type="file" id="bukti_pembayaran" name="bukti_pembayaran_file" accept="image/*">
-                </div>
-            </div>
-            <button type="submit" class="pay-button">Lanjutkan Pembayaran</button>
-        </form>
-    </div>
-    <footer>
-        <p>&copy; 2025 Nasukafoods. Semua Hak Dilindungi.</p>
-    </footer>
-  <!-- ...semua bagian sebelumnya TIDAK DIUBAH (CSS, header, nav, dsb) -->
-<!-- Fokus perubahan di <script> paling bawah -->
-<script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+  <h1>Pembayaran</h1>
 
-    document.addEventListener('DOMContentLoaded', function () {
-        loadOrderDetails();
-        displayProfileData();
-        document.getElementById('paymentForm').addEventListener('submit', handlePaymentSubmission);
-    });
+  <div class="section">
+    <h2>Data Pesanan</h2>
+    <table>
+      <tr><th>Produk</th><td id="namaProduk">-</td></tr>
+      <tr><th>Harga</th><td id="hargaProduk">-</td></tr>
+      <tr><th>Kuantitas</th><td id="jumlahProduk">-</td></tr>
+      <tr><th>Total</th><td id="totalHarga" class="total">-</td></tr>
+    </table>
+  </div>
 
-    function loadOrderDetails() {
-        const orderList = document.getElementById('order-list');
-        const orderTotal = document.getElementById('order-total');
-        const currentOrderJSON = localStorage.getItem('currentOrder');
-        let totalAmount = 0;
-        orderList.innerHTML = '';
-        if (currentOrderJSON) {
-            const orderDetails = JSON.parse(currentOrderJSON);
-            const listItem = document.createElement('tr');
-            listItem.innerHTML = `
-                <td>${orderDetails.name}</td>
-                <td>${orderDetails.quantity}</td>
-                <td>Rp ${orderDetails.price.toLocaleString('id-ID')}</td>
-                <td>Rp ${(orderDetails.price * orderDetails.quantity).toLocaleString('id-ID')}</td>
-            `;
-            orderList.appendChild(listItem);
-            totalAmount += orderDetails.price * orderDetails.quantity;
-        } else {
-            const listItem = document.createElement('tr');
-            listItem.innerHTML = `<td colspan="4">Tidak ada pesanan yang dipilih.</td>`;
-            orderList.appendChild(listItem);
-        }
-        orderTotal.textContent = `Rp ${totalAmount.toLocaleString('id-ID')}`;
-    }
+  <div class="section">
+    <h2>Data Pengguna</h2>
+    <p><strong>Nama:</strong> <span id="namaUser">-</span></p>
+    <p><strong>Telepon:</strong> <span id="teleponUser">-</span></p>
+    <p><strong>Alamat:</strong> <span id="alamatUser">-</span></p>
+    <p><strong>Saldo:</strong> <span id="saldoUser">-</span></p>
+  </div>
 
-    function displayProfileData() {
-        const profileDataJSON = localStorage.getItem('profileData');
-        const profileWarningMessage = document.getElementById('profile-warning-message');
-        const displayId = document.getElementById('display-id');
-        const displayNama = document.getElementById('display-nama');
-        const displayTelepon = document.getElementById('display-telepon');
-        const displayAlamat = document.getElementById('display-alamat');
-        const displaySosialMedia = document.getElementById('display-sosialMedia');
-        const displaySaldo = document.getElementById('display-saldo');
-        const displayTanggalMasuk = document.getElementById('display-tanggalMasuk');
+  <div class="section">
+    <h2>Metode Pembayaran</h2>
+    <label><input type="radio" name="metode" value="SALDO" checked> Saldo</label>
+    <label><input type="radio" name="metode" value="TRANSFER_BANK"> Transfer Bank</label>
+    <label><input type="radio" name="metode" value="QRIS"> QRIS</label>
+    <label><input type="radio" name="metode" value="TUNAI"> Tunai</label>
+    <label id="buktiLabel">Upload Bukti (jika perlu): <input type="file" id="bukti" accept="image/*"></label>
+  </div>
 
-        if (profileDataJSON) {
-            const profileData = JSON.parse(profileDataJSON);
-            displayId.textContent = profileData.id || 'N/A';
-            displayNama.textContent = profileData.nama || 'Tidak Tersedia';
-            displayTelepon.textContent = profileData.telepon || 'Tidak Tersedia';
-            displayAlamat.textContent = profileData.alamat || 'Tidak Tersedia';
-            displaySosialMedia.textContent = profileData.sosialMedia || 'Tidak Tersedia';
-            displaySaldo.textContent = profileData.saldo || 'N/A';
-            displayTanggalMasuk.textContent = profileData.tanggalMasuk || 'N/A';
-            profileWarningMessage.style.display = 'none';
-        } else {
-            displayId.textContent = 'N/A';
-            displayNama.textContent = 'Tidak Tersedia';
-            displayTelepon.textContent = 'Tidak Tersedia';
-            displayAlamat.textContent = 'Tidak Tersedia';
-            displaySosialMedia.textContent = 'Tidak Tersedia';
-            displaySaldo.textContent = 'N/A';
-            displayTanggalMasuk.textContent = 'N/A';
-            profileWarningMessage.textContent = 'Data profil tidak ditemukan. Harap kunjungi halaman Profil terlebih dahulu.';
-            profileWarningMessage.style.display = 'block';
-        }
-    }
+  <button onclick="submitOrder()">Bayar Sekarang</button>
 
-    async function handlePaymentSubmission(event) {
-        event.preventDefault();
+  <div id="kwitansi">
+    <h3>✅ Pembayaran Berhasil</h3>
+    <p><strong>Produk:</strong> <span id="kwitansiProduk"></span></p>
+    <p><strong>Total Bayar:</strong> <span id="kwitansiTotal"></span></p>
+    <p><strong>Sisa Saldo:</strong> <span id="kwitansiSaldo"></span></p>
+    <button onclick="window.location.href='index.html'">Kembali ke Beranda</button>
+  </div>
 
-        const metodePembayaran = document.querySelector('input[name="metode_pembayaran"]:checked').value;
-        const buktiPembayaranFile = document.getElementById('bukti_pembayaran').files[0];
+  <script>
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+    const order = JSON.parse(localStorage.getItem("currentOrder") || "{}");
+    const username = localStorage.getItem("username");
 
-        const namaDisplayed = document.getElementById('display-nama').textContent;
-        if (namaDisplayed === 'Tidak Tersedia' || namaDisplayed === '') {
-            alert('Data profil belum lengkap. Harap kunjungi halaman Profil terlebih dahulu.');
-            return;
-        }
+    document.getElementById("namaProduk").textContent = order.name || "-";
+    document.getElementById("hargaProduk").textContent = formatRupiah(order.price || 0);
+    document.getElementById("jumlahProduk").textContent = order.quantity || 1;
+    document.getElementById("totalHarga").textContent = formatRupiah(order.price * order.quantity);
 
-        if ((metodePembayaran === 'transfer_bank' || metodePembayaran === 'ovo' || metodePembayaran === 'gopay') && !buktiPembayaranFile) {
-            alert('Mohon unggah bukti pembayaran untuk metode ini.');
-            return;
-        }
-
-        const submitButton = document.querySelector('.pay-button');
-        submitButton.disabled = true;
-        submitButton.textContent = 'Memproses...';
-
-        const formData = new FormData();
-        formData.append('action', 'submitOrder');
-
-        const currentOrderJSON = localStorage.getItem('currentOrder');
-        let orderDetails = {};
-        if (currentOrderJSON) {
-            orderDetails = JSON.parse(currentOrderJSON);
-            formData.append('product_name', orderDetails.name);
-            formData.append('product_price', orderDetails.price);
-            formData.append('product_quantity', orderDetails.quantity);
-            formData.append('total_pembayaran', (orderDetails.price * orderDetails.quantity));
-        } else {
-            formData.append('product_name', 'Tidak Ada');
-            formData.append('product_price', '0');
-            formData.append('product_quantity', '0');
-            formData.append('total_pembayaran', '0');
-        }
-
-        const profileDataJSON = localStorage.getItem('profileData');
-        if (profileDataJSON) {
-            const profileData = JSON.parse(profileDataJSON);
-            formData.append('user_id', profileData.id || '');
-            formData.append('user_nama', profileData.nama || '');
-            formData.append('user_telepon', profileData.telepon || '');
-            formData.append('user_alamat', profileData.alamat || '');
-            formData.append('user_sosialMedia', profileData.sosialMedia || '');
-            formData.append('user_saldo', profileData.saldo || '');
-            formData.append('user_tanggalMasuk', profileData.tanggalMasuk || '');
-        }
-
-        formData.append('metode_pembayaran', metodePembayaran);
-
-        if (buktiPembayaranFile) {
-            try {
-                const base64Image = await toBase64(buktiPembayaranFile);
-                formData.append('bukti_pembayaran_base64', base64Image);
-            } catch (error) {
-                alert('Gagal membaca file bukti pembayaran.');
-                submitButton.disabled = false;
-                submitButton.textContent = 'Lanjutkan Pembayaran';
-                return;
-            }
-        }
-
-        try {
-            const response = await fetch(WEB_APP_URL, {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.text();
-            if (response.ok && result === "Success") {
-                alert('Terima kasih! Pesanan Anda berhasil dikirim.');
-                localStorage.removeItem('currentOrder');
-                window.location.reload();
-            } else {
-                alert('Terjadi kesalahan saat mengirim data: ' + result);
-            }
-        } catch (error) {
-            console.error('Error saat mengirim data:', error);
-            alert('Terjadi kesalahan jaringan. Silakan coba lagi.');
-        } finally {
-            submitButton.disabled = false;
-            submitButton.textContent = 'Lanjutkan Pembayaran';
-        }
-    }
-
-    function toBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (error) => reject(error);
-            reader.readAsDataURL(file);
+    if (username) {
+      fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
+        .then(res => res.json())
+        .then(data => {
+          window.userData = data;
+          document.getElementById("namaUser").textContent = data.Nama || "-";
+          document.getElementById("teleponUser").textContent = data.Telepon || "-";
+          document.getElementById("alamatUser").textContent = data.Alamat || "-";
+          document.getElementById("saldoUser").textContent = formatRupiah(data.Saldo || 0);
         });
     }
-</script>
+
+    document.querySelectorAll('input[name="metode"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const metode = document.querySelector('input[name="metode"]:checked').value;
+        document.getElementById("buktiLabel").style.display = 
+          (metode === "SALDO" || metode === "TUNAI") ? "none" : "block";
+      });
+    });
+
+    async function submitOrder() {
+      const metode = document.querySelector('input[name="metode"]:checked').value;
+      const file = document.getElementById("bukti").files[0];
+      const formData = new FormData();
+
+      formData.append("action", "submitOrder");
+      formData.append("product_name", order.name || "");
+      formData.append("product_price", order.price || 0);
+      formData.append("product_quantity", order.quantity || 1);
+      formData.append("total_pembayaran", order.price * order.quantity);
+      formData.append("metode_pembayaran", metode);
+      if (username) formData.append("username", username);
+
+      if (file && metode !== "SALDO" && metode !== "TUNAI") {
+        const base64 = await fileToBase64(file);
+        formData.append("bukti_pembayaran_base64", base64);
+      }
+
+      try {
+        const res = await fetch(URL_GAS, { method: "POST", body: formData });
+        const result = await res.json();
+
+        if (result.status === "Success") {
+          localStorage.removeItem("currentOrder");
+
+          if (metode === "SALDO") {
+            document.getElementById("kwitansiProduk").textContent = order.name;
+            document.getElementById("kwitansiTotal").textContent = formatRupiah(order.price * order.quantity);
+            document.getElementById("kwitansiSaldo").textContent = formatRupiah(result.saldo_terbaru || 0);
+            document.getElementById("kwitansi").style.display = "block";
+          } else {
+            alert("Pembayaran berhasil!");
+            window.location.href = "index.html";
+          }
+        } else {
+          alert("Gagal: " + (result.message || "Tidak diketahui"));
+        }
+      } catch (e) {
+        alert("Koneksi gagal");
+        console.error(e);
+      }
+    }
+
+    function formatRupiah(angka) {
+      if (!angka || isNaN(angka)) return "Rp 0";
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
 </body>
 </html>
-
-
-
-
