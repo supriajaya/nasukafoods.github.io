@@ -14,7 +14,7 @@
 
     .hero-section {
       position: relative;
-      height: 20vh;
+      height: 15vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -49,17 +49,14 @@
 
     .info, .sidebar {
       position: absolute;
-      bottom: 20px;
+      bottom: 5px;
     }
 
     .info {
-      left: 10px;
+      left: 6px;
     }
 
-    .info .katakata {
-      font-size: 12px;
-      color: #ccc;
-    }
+    
 
     .info .username {
       font-weight: bold;
@@ -75,18 +72,6 @@
       color: bold  black;
     }
 
-    .sidebar {
-      right: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .sidebar div {
-      margin: 8px 0;
-      font-size: 12px;
-    }
-
     .top-bar {
       position: fixed;
       top: 0;
@@ -94,8 +79,8 @@
       background: none;
       display: flex;
       justify-content: space-around;
-      padding: 8px 0;
-      font-size: 12px;
+      padding: 1px 0;
+      font-size: 15px;
       z-index: 999;
     }
 
@@ -159,37 +144,23 @@
       margin-top: 12px;
     }
 
-    .bling {
-      animation: bling 1.5s infinite ease-in-out;
-      box-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
-    }
-
-    @keyframes bling {
-      0% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.3); }
-      50% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.9); }
-      100% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.3); }
-    }
+ 
   </style>
 </head>
 <body>
 
   <section class="hero-section">
-    <img src="https://nasukafoods.site/tekn.jpg"</img>
+    <img src="https://nasukafoods.site/tekn.jpg" alt="Hero Background">
     <div class="top-bar">
       <a href="#home"><br>🏠 Beranda</a>
-      <a href="#"><br>❤️ Promo</a>
+      <a href="#"><br>🎁 Promo</a>
+      <a href="https://nasukafoods.site/nasuka.apk" download><br>⬇️ Unduh App</a>
       <a href="login.html" id="profilLink"><br>📥 LOGIN</a>
     </div>
     <div class="info">
-  
       <div class="username" id="nama"></div>
       <div class="about">Saldo</div>
       <div class="balance" id="saldo">💵 Rp 0</div>
-    </div>
-    <div class="sidebar">
-      <div>❤️ 25.7M</div>
-      <div>💬 42.1M</div>
-      
     </div>
   </section>
 
@@ -206,7 +177,6 @@
       <img src="https://nasukafoods.site/armour.jpg" alt="Udud">
       <h4>Udud Armor</h4>
       <p>Rp 10.000</p>
-    
       <div class="button-frame">
         <button onclick="goToPayment('Udud  Armor', 10000)">Beli Sekarang</button>
       </div>
@@ -225,38 +195,6 @@
       <p>Rp 1.000</p>
       <div class="button-frame">
         <button onclick="goToPayment('Sempel', 1000)">Beli Sekarang</button>
-      </div>
-    </div>
-    <div class="product">
-      <img src="https://nasukafoods.site/sisri.jpg" alt="Sisri">
-      <h4>Es Sisri</h4>
-      <p>Rp 1.500</p>
-      <div class="button-frame">
-        <button onclick="goToPayment('Es Sisri', 1500)">Beli Sekarang</button>
-      </div>
-    </div>
-
-    <div class="product 
-      <a href="https://nasukafoods.site/nasuka.apk">
-        <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Lokasi" >
-      </a>
-
-      
-      <h4>Nasuka.apk</h4>
-      <p>📍</p>
-      <p>Sampel Pemograman</p>
-      <p>bbbb</p>
-    </div>
-
-
-
-
-    <div class="product">
-      <img src="https://nasukafoods.site/basosapi.jpg" alt="Baso Sapi">
-      <h4>Baso Sapi</h4>
-      <p>Rp 500</p>
-      <div class="button-frame">
-        <button onclick="goToPayment("Baso sapi", 9000)">Beli Sekarang</button>
       </div>
     </div>
   </section>
@@ -304,11 +242,6 @@
         catatan: ""
       };
       localStorage.setItem('visitorInfo', JSON.stringify(visitorData));
-      
-      
-      
-      
-      
 
       window.location.href = 'pembayaran.html';
     }
