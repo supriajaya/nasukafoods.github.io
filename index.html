@@ -58,11 +58,9 @@
 
     
 
-    .info .username {
-      font-weight: bold;
-    }
+    
 
-    .info .about {
+    .info .username {
       font-size: 14px;
       margin-top: 5px;
     }
@@ -102,7 +100,7 @@
       box-sizing: border-box;
       text-align: center;
       color: black;
-      margin-bottom: 20px;
+      margin-bottom: 2px;
     }
 
     .product img {
@@ -117,13 +115,13 @@
     }
 
     .product p {
-      margin: 0;
+      margin: 10;
       font-size: 12px;
       color: #444;
     }
 
     .product button {
-      padding: 6px 12px;
+      padding: 6px 2px;
       font-size: 12px;
       background: transparent;
       color: inherit;
@@ -139,9 +137,9 @@
     .button-frame {
       border: 2px solid #007bff;
       padding: 6px;
-      border-radius: 8px;
+      border-radius: 2px;
       display: inline-block;
-      margin-top: 12px;
+      margin-top: 1px;
     }
 
  
@@ -153,14 +151,14 @@
     <img src="https://nasukafoods.site/tekn.jpg" alt="Hero Background">
     <div class="top-bar">
       <a href="#home"><br>🏠 Beranda</a>
-      <a href="#"><br>🎁 Promo</a>
+      <a href="juara.html"><br>🎁 Promo</a>
       <a href="https://nasukafoods.site/nasuka.apk" download><br>⬇️ Unduh App</a>
       <a href="login.html" id="profilLink"><br>📥 LOGIN</a>
     </div>
     <div class="info">
+     
       <div class="username" id="nama"></div>
-      <div class="about">Saldo</div>
-      <div class="balance" id="saldo">💵 Rp 0</div>
+      <div class="balance" id="saldo">💵 </div>
     </div>
   </section>
 
@@ -212,7 +210,7 @@
           if (data && data.Username) {
             document.getElementById("nama").textContent = data.Nama || "_";
             document.getElementById("saldo").textContent = "💵 " + formatRupiah(data.Saldo || 0);
-            profilBtn.innerHTML = "<br>👤 PROFIL";
+            profilBtn.innerHTML = "<br>👤 PROFI";
             profilBtn.href = "profil-vip.html";
           }
         })
