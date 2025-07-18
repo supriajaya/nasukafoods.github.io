@@ -1,1 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pembayaran Digital</title>
+  <link rel="manifest" href="/manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #f4f4f4;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .produk-container {
+      width: 100%;
+      max-width: 400px;
+      overflow-x: auto;
+      white-space: nowrap;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+
+    .produk-card {
+      display: inline-block;
+      width: 140px;
+      background: white;
+      margin-right: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      vertical-align: top;
+      cursor: pointer;
+    }
+
+    .produk-card img {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .produk-card p {
+      font-size: 12px;
+      margin: 5px 0 0;
+    }
+
+    .produk-card .deskripsi {
+      font-size: 11px;
+      color: #555;
+      margin-top: 3px;
+    }
+
+    .struk {
+      background: #fff;
+      width: 380px;
+      padding: 20px;
+      border: 1px dashed #333;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .struk h1 {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .struk p {
+      margin: 3px 0;
+      font-size: 14px;
+    }
+    .line {
+      border-top: 1px dashed #000;
+      margin: 10px 0;
+    }
+    .label {
+      display: inline-block;
+      width: 130px;
+    }
+    .bold { font-weight: bold; }
+    input[type="text"],
+    input[type="url"],
+    select {
+      width: 100%;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: inherit;
+    }
+    label {
+      font-size: 14px;
+      display: block;
+      margin: 8px 0 3px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #000;
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+    #kwitansi, #customAlert {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      z-index: 999;
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      text-align: left;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      border: 2px dashed #4CAF50;
+    }
+    #kwitansi p, #customAlert p {
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    #customAlert button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #4CAF50;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #deskripsiOrder {
+      font-size: 12px;
+      color: #444;
+      font-style: italic;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="produk-container" id="produkContainer"></div>
+
+  <div class="struk">
+    <h1>LAYANAN TIKTOK</h1>
+    <p><span class="label">Layanan</span><span id="layanan">-</span></p>
+    <p><span class="label">Harga</span><span id="harga">-</span></p>
+    <p><span class="label">Jumlah</span><span id="jumlah">-</span></p>
+    <p><span class="label bold">Total</span><span id="total">-</span></p>
+    <div id="inputManualBox" style="margin-top:10px;"></div>
+    <div id="deskripsiOrder"></div>
+    <div class="line"></div>
+    <p><span class="label">Nama</span><span id="nama">-</span></p>
+    <p><span class="label">Telepon</span><span id="telepon">-</span></p>
+    <p><span class="label">Sosial Media</span><span id="sosmed">-</span></p>
+    <p><span class="label">Saldo</span><span id="saldo">-</span></p>
+    <div class="line"></div>
+    <p class="bold">Metode Pembayaran: SALDO</p>
+    <button id="btnBayar" style="display: none;" onclick="submitDigital()">Bayar Sekarang</button>
+  </div>
+
+  <div id="kwitansi">
+    <p class="bold">✅ PEMBAYARAN BERHASIL</p>
+    <p>Layanan: <span id="kLayanan"></span></p>
+    <p>Total: <span id="kTotal"></span></p>
+    <p>Nama: <span id="kNama"></span></p>
+    <p>Telepon: <span id="kTelepon"></span></p>
+    <p id="kSaldoBox">Sisa Saldo: <span id="kSaldo"></span></p>
+    <p style="margin-top:10px; font-weight: bold;">Pesanan akan segera kami proses</p>
+    <button onclick="location.href='index.html'">🏠 Kembali</button>
+  </div>
+
+  <div id="customAlert">
+    <p id="customAlertMsg"></p>
+    <button onclick="closeCustomAlert()">OK</button>
+  </div>
+
+  <script>
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+    const username = localStorage.getItem("username");
+    let userSaldo = 0, userData = {};
+    <!-- pada bagian <script> di bawah ini, ganti bagian produkList -->
+const produkList = [
+  { name: "tiktok viewers", price: 1000, desc: "Layanan tiktok viewers 1.", img: "https://nasukafoods.site/tekn.jpg" },
+  { name: "tiktok likes", price: 1500, desc: "Tambahkan like ke video Anda agar makin viral.", img: "https://nasukafoods.site/tekn.jpg" },
+  { name: "Produk 3", price: 1200, desc: "Komentar positif otomatis untuk memperkuat engagement.", img: "https://nasukafoods.site/tekn.jpg" },
+  { name: "Produk 4", price: 2000, desc: "Tingkatkan viewers video dengan cepat dan aman.", img: "https://nasukafoods.site/tekn.jpg" },
+  { name: "Produk 5", price: 1100, desc: "Auto share ke grup TikTok komunitas.", img: "https://nasukafoods.site/tekn.jpg" },
+  { name: "Produk 6", price: 2500, desc: "Auto followers harian 100 akun/hari selama seminggu.", img: "https://nasukafoods.site/tekn.jpg" },
+  { name: "Produk 7", price: 3000, desc: "Booster engagement TikTok full satu paket promosi.", img: "https://nasukafoods.site/tekn.jpg" },
+  { name: "Produk 8", price: 900, desc: "Konsultasi dan optimasi akun TikTok Anda.", img: "https://nasukafoods.site/tekn.jpg" }
+];
+
+produkList.forEach((p, i) => {
+  const div = document.createElement("div");
+  div.className = "produk-card";
+  div.innerHTML = `
+    <img src="${p.img}" alt="${p.name}">
+    <p>${p.name}</p>
+    <p class="deskripsi">${p.desc}</p>
+  `;
+  div.onclick = () => pilihProduk(p);
+  produkContainer.appendChild(div);
+});
+
+
+    function pilihProduk(p) {
+      const order = {
+        name: p.name,
+        price: p.price,
+        quantity: 1,
+        desc: p.desc
+      };
+      localStorage.setItem("currentOrder", JSON.stringify(order));
+      document.getElementById("layanan").textContent = order.name;
+      document.getElementById("harga").textContent = formatRupiah(order.price);
+      document.getElementById("jumlah").textContent = order.quantity;
+      document.getElementById("total").textContent = formatRupiah(order.price * order.quantity);
+      document.getElementById("deskripsiOrder").textContent = order.desc || "";
+
+      const inputBox = document.getElementById("inputManualBox");
+      if (order.name.toLowerCase().includes("viewer") || order.name.toLowerCase().includes("like")) {
+        inputBox.innerHTML = '<label for="target">Link Video TikTok</label><input type="url" id="target" placeholder="https://www.tiktok.com/...">';
+      } else {
+        const usernameTikTok = extractTikTokUsername(userData["Sosial Media"] || "");
+        inputBox.innerHTML = '<label>Username TikTok</label><input type="text" id="target" value="' + usernameTikTok + '" readonly>';
+      }
+    }
+
+    if (username) {
+      fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
+        .then(res => res.json())
+        .then(data => {
+          userData = data;
+          userSaldo = parseInt((data.Saldo || "0").toString().replace(/[^0-9]/g, ""));
+          document.getElementById("nama").textContent = data.Nama || "-";
+          document.getElementById("telepon").textContent = data.Telepon || "-";
+          document.getElementById("sosmed").textContent = data["Sosial Media"] || "-";
+          document.getElementById("saldo").textContent = formatRupiah(userSaldo);
+          document.getElementById("btnBayar").style.display = "block";
+        });
+    }
+
+    function extractTikTokUsername(sosmed) {
+      if (!sosmed) return "";
+      if (sosmed.includes("tiktok.com")) {
+        const match = sosmed.match(/tiktok\.com\/@([\w\d._]+)/);
+        return match ? "@" + match[1] : "";
+      }
+      return sosmed.startsWith("@") ? sosmed : "@" + sosmed;
+    }
+
+    function showCustomAlert(msg) {
+      document.getElementById("customAlertMsg").textContent = msg;
+      document.getElementById("customAlert").style.display = "block";
+    }
+
+    function closeCustomAlert() {
+      document.getElementById("customAlert").style.display = "none";
+    }
+
+    async function submitDigital() {
+      const btn = document.getElementById("btnBayar");
+      btn.disabled = true;
+      btn.textContent = "Loading...";
+      const order = JSON.parse(localStorage.getItem("currentOrder") || "{}");
+      const qty = parseInt(order.quantity || 1);
+      const price = parseInt(order.price || 0);
+      const total = qty * price;
+      const target = document.getElementById("target").value.trim();
+      if (!target) {
+        showCustomAlert("Isian target TikTok wajib diisi");
+        btn.disabled = false;
+        btn.textContent = "Bayar Sekarang";
+        return;
+      }
+      if (userSaldo < total) {
+        showCustomAlert("Saldo tidak cukup.");
+        btn.disabled = false;
+        btn.textContent = "Bayar Sekarang";
+        return;
+      }
+      const formData = new FormData();
+      formData.append("action", "submitOrder");
+      formData.append("product_name", order.name || "");
+      formData.append("product_price", price);
+      formData.append("product_quantity", qty);
+      formData.append("total_pembayaran", total);
+      formData.append("metode_pembayaran", "SALDO");
+      formData.append("username", username || "");
+      formData.append("target", target);
+      formData.append("tipe", "digital");
+      try {
+        const res = await fetch(URL_GAS, { method: "POST", body: formData });
+        const result = await res.json();
+        if (result.status === "Success") {
+          localStorage.removeItem("currentOrder");
+          document.getElementById("kLayanan").textContent = order.name;
+          document.getElementById("kTotal").textContent = formatRupiah(total);
+          document.getElementById("kNama").textContent = userData.Nama || "-";
+          document.getElementById("kTelepon").textContent = userData.Telepon || "-";
+          document.getElementById("kSaldoBox").style.display = "block";
+          document.getElementById("kSaldo").textContent = formatRupiah(result.saldo_terbaru || 0);
+          document.getElementById("kwitansi").style.display = "block";
+          btn.style.display = "none";
+        } else {
+          showCustomAlert("Gagal: " + (result.message || "Tidak diketahui"));
+          btn.disabled = false;
+          btn.textContent = "Bayar Sekarang";
+        }
+      } catch (err) {
+        showCustomAlert("Koneksi gagal");
+        btn.disabled = false;
+        btn.textContent = "Bayar Sekarang";
+        console.error(err);
+      }
+    }
+
+    function formatRupiah(angka) {
+      if (!angka || isNaN(angka)) return "Rp 0";
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+  </script>
+</body>
+</html>
 
