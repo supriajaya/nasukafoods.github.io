@@ -1,67 +1,176 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profil VIP</title>
   <style>
     body {
-      font-family: sans-serif;
-      padding: 1rem;
+      font-family: Arial, sans-serif;
+      margin: 0;
       background: #f2f2f2;
     }
-    .profile {
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
       background: white;
       padding: 1rem;
-      border-radius: 8px;
-    }
-    img {
-      width: 100px;
-      border-radius: 50%;
-    }
-    p {
-      margin: 0.5rem 0;
-    }
-    .btn-container {
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       margin-bottom: 1rem;
     }
-    button {
+
+    .profile-header img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
       margin-right: 1rem;
-      padding: 0.5rem 1rem;
+      border: 2px solid #ccc;
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-info #username {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .profile-info #status {
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+    }
+
+    .stat {
+      text-align: center;
+      flex: 1;
+    }
+
+    .stat span {
+      display: block;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .bio {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      font-style: italic;
+      color: #444;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .details {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .details p {
+      margin: 0.5rem 0;
+    }
+
+    .details strong {
+      width: 140px;
+      display: inline-block;
+      color: #333;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+
+    button {
+      padding: 0.6rem 1.2rem;
       background-color: #007bff;
-      border: none;
       color: white;
-      border-radius: 5px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #0056b3;
     }
   </style>
 </head>
 <body>
+            <div class="container">
 
-  <div class="btn-container">
-    <button onclick="goHome()">🏠 Home</button>
-    <button onclick="logout()">🚪 Logout</button>
+    <div class="profile-header">
+      <img id="foto" src="" alt="Foto Profil">
+      
+      
+      
+      <div class="profile-info">
+        <div id="nama">Supria Hahaha</div>
+        </div>
+      </div>
+    
+
+    <div class="stats">
+        
+
+      
+ <div class="stat"> <span id="saldo">Rp 0</span>
+        Saldo </div>
+ <div class="stat"> <span id="bunga">0%</span>
+        Benefit </div>
+ <div class="stat"> <span id="bungarp">Rp 0</span>
+        Bonus Top Up </div> </div>
+    
+    
+           <div class="bio" id="alamat">-</div>
+
+<div class="details">
+        
+<p><strong>ID:</strong> <span id="id">-</span></p>
+<p><strong>Status:</strong> <span id="status">-</span>
+        </p>
+      <p><strong>Telepon:</strong> <span id="telepon">-</span></p>
+      <p><strong>Username:</strong> <span id="username">-</span></p>
+      <p><strong>Sosial Media:</strong> <span id="sosial">-</span></p>
+    </div>
+
+    <div class="btns">
+    
+     <button onclick="goHome()">🏠 Beranda</button>
+      <button onclick="">🎁 Top Up</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+
   </div>
 
-  <div class="profile">
-    <h2>Profil VIP</h2>
-    <img id="foto" src="" alt="Foto Profil" />
-    <p><strong>ID:</strong> <span id="id"></span></p>
-    <p><strong>Status:</strong> <span id="status"></span></p>
-    <p><strong>Nama:</strong> <span id="nama"></span></p>
-    <p><strong>Alamat:</strong> <span id="alamat"></span></p>
-    <p><strong>Telepon:</strong> <span id="telepon"></span></p>
-    <p><strong>Sosial Media:</strong> <span id="sosial"></span></p>
-    <p><strong>Username:</strong> <span id="username"></span></p>
-    <p><strong>Saldo:</strong> <span id="saldo"></span></p>
-    <p><strong>Kata Kata:</strong> <span id="katakata"></span></p>
-    <p><strong>Bunga:</strong> <span id="bunga"></span></p>
-    <p><strong>Bunga Rupiah:</strong> <span id="bungarp"></span></p>
-    <p><strong>Tanggal Masuk:</strong> <span id="masuk"></span></p>
-  </div>
+
+
+
 
   <script>
     const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
@@ -94,10 +203,10 @@
         document.getElementById("sosial").textContent = data["Sosial Media"] || "-";
         document.getElementById("username").textContent = data.Username || "-";
         document.getElementById("saldo").textContent = formatRupiah(data.Saldo);
-        document.getElementById("katakata").textContent = data["Kata Kata Hari Ini"] || "-";
+        
         document.getElementById("bunga").textContent = (data.Bunga || "0") + "%";
         document.getElementById("bungarp").textContent = formatRupiah(data["Bunga Rupiah"]);
-        document.getElementById("masuk").textContent = data["Tanggal Masuk"] || "-";
+        
         document.getElementById("foto").src = data.Foto || "";
       })
       .catch(err => {
@@ -121,6 +230,17 @@ document.body.addEventListener('click', e => {
   }
 });
 
-  </script>
+  
+
+</script>
+
+
+
+
+
+
+
+  
+ 
 </body>
 </html>
