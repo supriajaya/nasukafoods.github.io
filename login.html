@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login Akun Nasuka</title>
+  <link rel="manifest" href="/manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
   <style>
     body {
       font-family: sans-serif;
@@ -63,29 +69,43 @@
           password
         })
       })
-        .then(res => res.json())
-        .then(data => {
-          if (data.login === "success") {
-            localStorage.setItem("username", data.Username || "");
-            localStorage.setItem("user_id", data.id || ""); // <== REVISI INI PENTING
+      .then(res => res.json())
+      .then(data => {
+        if (data.login === "success") {
+          const userId = data.ID || data.id || "";
+          localStorage.setItem("username", data.Username || "");
+          localStorage.setItem("user_id", userId);
+
+          // ✅ Update status ke ONLINE setelah login
+          fetch(URL_GAS, {
+            method: "POST",
+            body: new URLSearchParams({
+              action: "updateProfil",
+              id: userId,
+              status: "ONLINE"
+            })
+          }).then(() => {
             window.location.href = "index.html";
-          } else {
-            alert("Login gagal: " + data.message);
-          }
-        })
-        .catch(err => {
-          alert("Terjadi kesalahan: " + err);
-        });
+          });
+
+        } else {
+          alert("Login gagal: " + data.message);
+        }
+      })
+      .catch(err => {
+        alert("Terjadi kesalahan: " + err);
+      });
     });
-    
-    
-    
-   
-document.body.addEventListener('click', e => {
-  if (e.target.closest('button, a, input[type=submit]')) {
-    setTimeout(updateSaldo, 500);
-  }
-});
+
+    document.body.addEventListener('click', e => {
+      if (e.target.closest('button, a, input[type=submit]')) {
+        setTimeout(updateSaldo, 500);
+      }
+    });
+
+    function updateSaldo() {
+      // kosong, placeholder untuk fungsi nanti
+    }
   </script>
 </body>
 </html>
