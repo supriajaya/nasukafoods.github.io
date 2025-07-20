@@ -5,17 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pembayaran Digital</title>
   <link rel="manifest" href="/manifest.json" />
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-  </script>
   <style>
     * { box-sizing: border-box; }
     body {
       font-family: 'Courier New', Courier, monospace;
       background: #f4f4f4;
-      padding: 20px;
+      margin: 0;
+      padding: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -23,11 +19,11 @@
 
     .produk-container {
       width: 100%;
-      max-width: 400px;
       overflow-x: auto;
       white-space: nowrap;
       margin-bottom: 20px;
       padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
     }
 
     .produk-card {
@@ -38,6 +34,7 @@
       padding: 10px;
       border-radius: 8px;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      scroll-snap-align: start;
       vertical-align: top;
       cursor: pointer;
     }
@@ -46,45 +43,56 @@
       width: 100%;
       height: 80px;
       object-fit: cover;
-      border-radius: 5px;
+      border-radius: 1px;
     }
 
     .produk-card p {
-      font-size: 12px;
+      font-size: 16px;
       margin: 5px 0 0;
     }
 
     .produk-card .deskripsi {
-      font-size: 11px;
+      font-size: 13px;
       color: #555;
       margin-top: 3px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
 
     .struk {
       background: #fff;
-      width: 380px;
+      width: 100%;
+      max-width: 400px;
       padding: 20px;
       border: 1px dashed #333;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
+
     .struk h1 {
       text-align: center;
-      font-size: 18px;
+      font-size: 14px;
       margin-bottom: 10px;
     }
+
     .struk p {
       margin: 3px 0;
-      font-size: 14px;
+      font-size: 16px;
     }
+
     .line {
       border-top: 1px dashed #000;
-      margin: 10px 0;
+      margin: 15px 0;
     }
+
     .label {
       display: inline-block;
       width: 130px;
     }
+
     .bold { font-weight: bold; }
+
     input[type="text"],
     input[type="url"],
     select {
@@ -95,12 +103,15 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       font-family: inherit;
+      font-size: 14px;
     }
+
     label {
       font-size: 14px;
       display: block;
       margin: 8px 0 3px;
     }
+
     button {
       margin-top: 15px;
       padding: 10px;
@@ -108,13 +119,15 @@
       background: #000;
       color: #fff;
       border: none;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
     }
+
     button:disabled {
       background: #aaa;
       cursor: not-allowed;
     }
+
     #kwitansi, #customAlert {
       display: none;
       position: fixed;
@@ -124,15 +137,18 @@
       z-index: 999;
       border-radius: 10px;
       padding: 20px;
-      width: 300px;
+      width: 90%;
+      max-width: 320px;
       text-align: left;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
       border: 2px dashed #4CAF50;
     }
+
     #kwitansi p, #customAlert p {
       font-size: 14px;
       margin: 5px 0;
     }
+
     #customAlert button {
       margin-top: 10px;
       padding: 8px 16px;
@@ -142,36 +158,60 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
     #deskripsiOrder {
-      font-size: 12px;
+      font-size: 15px;
       color: #444;
       font-style: italic;
       margin-top: 5px;
     }
+
+    @media (max-width: 480px) {
+      .label {
+        width: 100px;
+        font-size: 14px;
+      }
+
+      .struk p, .struk h1 {
+        font-size: 14px;
+      }
+
+      .produk-card {
+        width: 120px;
+        font-size: 13px;
+      }
+
+      .produk-card p {
+        font-size: 14px;
+      }
+
+      button {
+        font-size: 14px;
+      }
+    }
+
+    * {
+      font-weight: bold !important;
+    }
   </style>
 </head>
 <body>
-
   <div class="produk-container" id="produkContainer"></div>
-
   <div class="struk">
     <h1>LAYANAN TIKTOK</h1>
     <p><span class="label">Layanan</span><span id="layanan">-</span></p>
     <p><span class="label">Harga</span><span id="harga">-</span></p>
-    <p><span class="label">Jumlah</span><span id="jumlah">-</span></p>
-    <p><span class="label bold">Total</span><span id="total">-</span></p>
     <div id="inputManualBox" style="margin-top:10px;"></div>
     <div id="deskripsiOrder"></div>
     <div class="line"></div>
     <p><span class="label">Nama</span><span id="nama">-</span></p>
     <p><span class="label">Telepon</span><span id="telepon">-</span></p>
-    <p><span class="label">Sosial Media</span><span id="sosmed">-</span></p>
+    <p><span class="label">Username</span><span id="sosmed">-</span></p>
     <p><span class="label">Saldo</span><span id="saldo">-</span></p>
     <div class="line"></div>
     <p class="bold">Metode Pembayaran: SALDO</p>
     <button id="btnBayar" style="display: none;" onclick="submitDigital()">Bayar Sekarang</button>
   </div>
-
   <div id="kwitansi">
     <p class="bold">✅ PEMBAYARAN BERHASIL</p>
     <p>Layanan: <span id="kLayanan"></span></p>
@@ -182,7 +222,6 @@
     <p style="margin-top:10px; font-weight: bold;">Pesanan akan segera kami proses</p>
     <button onclick="location.href='index.html'">🏠 Kembali</button>
   </div>
-
   <div id="customAlert">
     <p id="customAlertMsg"></p>
     <button onclick="closeCustomAlert()">OK</button>
@@ -192,30 +231,24 @@
     const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
     const username = localStorage.getItem("username");
     let userSaldo = 0, userData = {};
-    <!-- pada bagian <script> di bawah ini, ganti bagian produkList -->
-const produkList = [
-  { name: "tiktok viewers", price: 1000, desc: "Layanan tiktok viewers 1.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "tiktok likes", price: 1500, desc: "Tambahkan like ke video Anda agar makin viral.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 3", price: 1200, desc: "Komentar positif otomatis untuk memperkuat engagement.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 4", price: 2000, desc: "Tingkatkan viewers video dengan cepat dan aman.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 5", price: 1100, desc: "Auto share ke grup TikTok komunitas.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 6", price: 2500, desc: "Auto followers harian 100 akun/hari selama seminggu.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 7", price: 3000, desc: "Booster engagement TikTok full satu paket promosi.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 8", price: 900, desc: "Konsultasi dan optimasi akun TikTok Anda.", img: "https://nasukafoods.site/tekn.jpg" }
-];
 
-produkList.forEach((p, i) => {
-  const div = document.createElement("div");
-  div.className = "produk-card";
-  div.innerHTML = `
-    <img src="${p.img}" alt="${p.name}">
-    <p>${p.name}</p>
-    <p class="deskripsi">${p.desc}</p>
-  `;
-  div.onclick = () => pilihProduk(p);
-  produkContainer.appendChild(div);
-});
+    const produkList = [
+      { name: "Followers", price: 1200, desc: "Komentar positif otomatis untuk memperkuat engagement.", img: "https://nasukafoods.site/tekn.jpg" },
+      { name: "likes", price: 1500, desc: "Tambahkan like ke video Anda agar makin viral.", img: "https://nasukafoods.site/tekn.jpg" },
+      { name: "Produk 8", price: 900, desc: "Konsultasi dan optimasi akun TikTok Anda.", img: "https://nasukafoods.site/tekn.jpg" }
+    ];
 
+    produkList.forEach((p, i) => {
+      const div = document.createElement("div");
+      div.className = "produk-card";
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.name}">
+        <p>${p.name}</p>
+        <p class="deskripsi">${p.desc}</p>
+      `;
+      div.onclick = () => pilihProduk(p);
+      produkContainer.appendChild(div);
+    });
 
     function pilihProduk(p) {
       const order = {
@@ -227,10 +260,7 @@ produkList.forEach((p, i) => {
       localStorage.setItem("currentOrder", JSON.stringify(order));
       document.getElementById("layanan").textContent = order.name;
       document.getElementById("harga").textContent = formatRupiah(order.price);
-      document.getElementById("jumlah").textContent = order.quantity;
-      document.getElementById("total").textContent = formatRupiah(order.price * order.quantity);
       document.getElementById("deskripsiOrder").textContent = order.desc || "";
-
       const inputBox = document.getElementById("inputManualBox");
       if (order.name.toLowerCase().includes("viewer") || order.name.toLowerCase().includes("like")) {
         inputBox.innerHTML = '<label for="target">Link Video TikTok</label><input type="url" id="target" placeholder="https://www.tiktok.com/...">';
