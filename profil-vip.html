@@ -2,245 +2,122 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Profil VIP</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f2f2f2;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 1rem;
-    }
-
-    .profile-header {
-      display: flex;
-      align-items: center;
-      background: white;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 1rem;
-    }
-
-    .profile-header img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 1rem;
-      border: 2px solid #ccc;
-    }
-
-    .profile-info {
-      flex: 1;
-    }
-
-    .profile-info #username {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .profile-info #status {
-      font-size: 0.9rem;
-      color: #777;
-    }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      background: white;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 1rem;
-    }
-
-    .stat {
-      text-align: center;
-      flex: 1;
-    }
-
-    .stat span {
-      display: block;
-      font-weight: bold;
-      font-size: 1.1rem;
-      color: #333;
-    }
-
-    .bio {
-      background: white;
-      padding: 1rem;
-      border-radius: 12px;
-      font-style: italic;
-      color: #444;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .details {
-      background: white;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .details p {
-      margin: 0.5rem 0;
-    }
-
-    .details strong {
-      width: 140px;
-      display: inline-block;
-      color: #333;
-    }
-
-    .btns {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1.5rem;
-    }
-
-    button {
-      padding: 0.6rem 1.2rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; background: #f2f2f2; }
+    .container { max-width: 600px; margin: auto; padding: 1rem; }
+    .profile-header { display: flex; align-items: center; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .profile-header img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-right: 1rem; border: 2px solid #ccc; }
+    .profile-info { flex: 1; }
+    .profile-info #username { font-size: 1.5rem; font-weight: bold; color: #333; }
+    .profile-info #status { font-size: 0.9rem; color: #777; }
+    .stats { display: flex; justify-content: space-between; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .stat { text-align: center; flex: 1; }
+    .stat span { display: block; font-weight: bold; font-size: 1.1rem; color: #333; }
+    .bio { background: white; padding: 1rem; border-radius: 12px; font-style: italic; color: #444; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .details { background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .details p { margin: 0.5rem 0; }
+    .details strong { width: 140px; display: inline-block; color: #333; }
+    .btns { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+    button { padding: 0.6rem 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    button:hover { background-color: #0056b3; }
   </style>
 </head>
 <body>
-            <div class="container">
-
+  <div class="container">
     <div class="profile-header">
-      <img id="foto" src="" alt="Foto Profil">
-      
-      
-      
+      <img id="foto" src="" alt="Foto Profil" />
       <div class="profile-info">
-        <div id="nama">Supria Hahaha</div>
-        </div>
+        <div id="nama">Loading...</div>
       </div>
-    
-
+    </div>
     <div class="stats">
-        
-
-      
- <div class="stat"> <span id="saldo">Rp 0</span>
-        Saldo </div>
- <div class="stat"> <span id="bunga">0%</span>
-        Benefit </div>
- <div class="stat"> <span id="bungarp">Rp 0</span>
-        Bonus Top Up </div> </div>
-    
-    
-           <div class="bio" id="alamat">-</div>
-
-<div class="details">
-        
-<p><strong>ID:</strong> <span id="id">-</span></p>
-<p><strong>Status:</strong> <span id="status">-</span>
-        </p>
+      <div class="stat"><span id="saldo">Rp 0</span>Saldo</div>
+      <div class="stat"><span id="bunga">0%</span>Benefit</div>
+      <div class="stat"><span id="bungarp">Rp 0</span>Bonus Top Up</div>
+    </div>
+    <div class="bio" id="alamat">-</div>
+    <div class="details">
+      <p><strong>ID:</strong> <span id="id">-</span></p>
+      <p><strong>Status:</strong> <span id="status">-</span></p>
       <p><strong>Telepon:</strong> <span id="telepon">-</span></p>
       <p><strong>Username:</strong> <span id="username">-</span></p>
       <p><strong>Sosial Media:</strong> <span id="sosial">-</span></p>
+      <p><strong>Poin:</strong> <span id="poin">-</span></p>
+      <p><strong>Tanggal Daftar:</strong> <span id="tanggal">-</span></p>
     </div>
-
     <div class="btns">
-    
-     <button onclick="goHome()">🏠 Beranda</button>
-      <button onclick="">🎁 Top Up</button>
-      <button onclick="logout()">🚪 Logout</button>
+      <button onclick="goHome()">🏠 Beranda</button>
+      <button onclick="topUp()">🎁 Top Up</button>
+      <button id="logoutBtn">🚪 Logout</button>
     </div>
-
   </div>
-
-
-
-
-
   <script>
-    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
-    const username = localStorage.getItem("username");
+  const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
 
-    if (!username) {
-      alert("Username tidak ditemukan. Silakan login ulang.");
-      window.location.href = "login.html";
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idFromURL = urlParams.get("id");
+    const idFromLocal = localStorage.getItem("user_id");
+
+    const finalId = idFromURL || idFromLocal;
+
+    if (!finalId) {
+      alert("ID tidak ditemukan. Silakan login dulu.");
+      window.location.href = "index.html";
+      return;
     }
 
-    function formatRupiah(angka) {
-      if (!angka || isNaN(angka)) return "Rp 0";
-      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-
-    fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
+    fetch(`${URL_GAS}?action=getProfile&user_id=${encodeURIComponent(finalId)}`)
       .then(res => res.json())
       .then(data => {
-        if (data.error || !data.Username) {
-          alert("Data tidak ditemukan. Silakan login ulang.");
-          window.location.href = "login.html";
+        if (!data || !data.Username) {
+          alert("Data tidak ditemukan.");
+          window.location.href = "index.html";
           return;
         }
-
-        document.getElementById("id").textContent = data.ID || "-";
-        document.getElementById("status").textContent = data.Status || "-";
-        document.getElementById("nama").textContent = data.Nama || "_";
-        document.getElementById("alamat").textContent = data.Alamat || "_";
-        document.getElementById("telepon").textContent = data.Telepon || "-";
-        document.getElementById("sosial").textContent = data["Sosial Media"] || "-";
-        document.getElementById("username").textContent = data.Username || "-";
-        document.getElementById("saldo").textContent = formatRupiah(data.Saldo);
-        
-        document.getElementById("bunga").textContent = (data.Bunga || "0") + "%";
-        document.getElementById("bungarp").textContent = formatRupiah(data["Bunga Rupiah"]);
-        
-        document.getElementById("foto").src = data.Foto || "";
+        tampilkanProfil(data);
       })
-      .catch(err => {
-        alert("Gagal koneksi: " + err);
+      .catch(() => {
+        alert("Gagal koneksi ke server.");
+        window.location.href = "index.html";
       });
 
-    function logout() {
-      localStorage.removeItem("username");
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.clear();
       window.location.href = "index.html";
-    }
+    });
+  });
 
-    function goHome() {
-      window.location.href = "index.html";
-    }
-    
-    
-   
-document.body.addEventListener('click', e => {
-  if (e.target.closest('button, a, input[type=submit]')) {
-    setTimeout(updateSaldo, 500);
+  function tampilkanProfil(data) {
+    document.getElementById("id").textContent = data.ID || "-";
+    document.getElementById("status").textContent = data.Status || "-";
+    document.getElementById("nama").textContent = data.Nama || "-";
+    document.getElementById("alamat").textContent = data.Alamat || "-";
+    document.getElementById("telepon").textContent = data.Telepon || "-";
+    document.getElementById("sosial").textContent = data["Sosial Media"] || "-";
+    document.getElementById("username").textContent = data.Username || "-";
+    document.getElementById("saldo").textContent = formatRupiah(data.Saldo);
+    document.getElementById("bunga").textContent = (data.Bunga || "0") + "%";
+    document.getElementById("bungarp").textContent = formatRupiah(data["Bunga Rupiah"]);
+    document.getElementById("foto").src = data.Foto || "";
+    document.getElementById("poin").textContent = data.Poin || "0";
+    document.getElementById("tanggal").textContent = data["Tanggal Daftar"] || "-";
   }
-});
 
-  
+  function formatRupiah(angka) {
+    if (!angka || isNaN(angka)) return "Rp 0";
+    return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
 
+  function goHome() {
+    window.location.href = "index.html";
+  }
+
+  function topUp() {
+    alert("Fitur Top Up belum tersedia.");
+  }
 </script>
-
-
-
-
-
-
-
-  
- 
 </body>
 </html>
