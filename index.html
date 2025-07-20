@@ -3,336 +3,408 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pembayaran Digital</title>
-  <link rel="manifest" href="/manifest.json" />
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-  </script>
+  <title>Nasuka</title>
   <style>
-    * { box-sizing: border-box; }
     body {
-      font-family: 'Courier New', Courier, monospace;
-      background: #f4f4f4;
-      padding: 20px;
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #fefefe;
+      color: white;
+      padding-bottom: 60px;
+    }
+    #profilLink {
+      display: none;
+    }
+    .hero-section {
+      position: relative;
+      height: 15vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      justify-content: space-between;
     }
-
-    .produk-container {
+    .hero-section video,
+    .hero-section img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 400px;
-      overflow-x: auto;
-      white-space: nowrap;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-    }
-
-    .produk-card {
-      display: inline-block;
-      width: 140px;
-      background: white;
-      margin-right: 10px;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      vertical-align: top;
-      cursor: pointer;
-    }
-
-    .produk-card img {
-      width: 100%;
-      height: 80px;
+      height: 100%;
       object-fit: cover;
-      border-radius: 5px;
+      z-index: 0;
     }
-
-    .produk-card p {
-      font-size: 12px;
-      margin: 5px 0 0;
+    .promo-text,
+    .info,
+    .sidebar {
+      position: relative;
+      z-index: 1;
     }
-
-    .produk-card .deskripsi {
-      font-size: 11px;
-      color: #555;
-      margin-top: 3px;
-    }
-
-    .struk {
-      background: #fff;
-      width: 380px;
-      padding: 20px;
-      border: 1px dashed #333;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    .struk h1 {
+    .promo-text {
       text-align: center;
-      font-size: 18px;
-      margin-bottom: 10px;
+      margin-top: 5vh;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 6px black;
+      padding: 0 20px;
     }
-    .struk p {
-      margin: 3px 0;
+    .info,
+    .sidebar {
+      position: absolute;
+      bottom: 5px;
+    }
+    .info {
+      left: 6px;
+    }
+    .info .username {
       font-size: 14px;
-    }
-    .line {
-      border-top: 1px dashed #000;
-      margin: 10px 0;
-    }
-    .label {
-      display: inline-block;
-      width: 130px;
-    }
-    .bold { font-weight: bold; }
-    input[type="text"],
-    input[type="url"],
-    select {
-      width: 100%;
       margin-top: 5px;
-      margin-bottom: 10px;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-family: inherit;
     }
-    label {
-      font-size: 14px;
-      display: block;
-      margin: 8px 0 3px;
+    .info .balance {
+      font-size: 17px;
+      color: white;
     }
-    button {
-      margin-top: 15px;
-      padding: 10px;
-      width: 100%;
-      background: #000;
-      color: #fff;
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
+
+    .product-section {
+      display: flex;
+      overflow-x: auto;
+      padding: 20px 2px;
+      gap: 10px;
+      scroll-behavior: smooth;
     }
-    button:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-    #kwitansi, #customAlert {
+    .product-section::-webkit-scrollbar {
       display: none;
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff;
-      z-index: 999;
+    }
+    .product {
+      flex: 0 0 auto;
+      width: 90px;
+      margin: 0;
+      padding: 0;
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      text-align: center;
+      color: black;
+    }
+    .product.sticky-susu {
+      position: sticky;
+      left: 0;
+      background: none !important;
+      border: none !important;
+      z-index: 10;
+    }
+    .product img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border: none !important;
+      box-shadow: none !important;
+      background: none !important;
+    }
+    .product h4,
+    .product p {
+      margin: 0;
+      padding: 0;
+      background: none !important;
+      border: none !important;
+    }
+    .marquee {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      box-sizing: border-box;
+      color: redll;
+      padding: 10px 0;
+      position: relative;
+    }
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-kiri 10s linear infinite;
+    }
+    @keyframes scroll-kiri {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .glow-wrapper {
+      animation: blingBling 1.5s infinite alternate;
+      padding: 5px;
+      background: black;
       border-radius: 10px;
-      padding: 20px;
-      width: 300px;
-      text-align: left;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      border: 2px dashed #4CAF50;
+      position: relative;
     }
-    #kwitansi p, #customAlert p {
-      font-size: 14px;
-      margin: 5px 0;
+    @keyframes blingBling {
+      0% {
+        box-shadow: 0 0 10px silver, 0 0 20px blue, 0 0 30px blue;
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 15px grey, 0 0 25px grey, 0 0 35px grey;
+        transform: scale(1);
+      }    
+      100% {
+        box-shadow: 0 0 10px silver, 0 0 20px silver, 0 0 30px silver;
+        transform: scale(1);
+      }
     }
-    #customAlert button {
-      margin-top: 10px;
-      padding: 8px 16px;
-      background: #4CAF50;
+    .glow-wrapper .glow-text {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 12px;
+      text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 2px 6px;
+      border-radius: 5px;
+      z-index: 2;
+    }
+    nav {
+      
+      color: red;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 99;
+    }
+    nav button {
+      background: #444;
       border: none;
       color: white;
+      padding: 8px 12px;
       border-radius: 5px;
       cursor: pointer;
     }
-    #deskripsiOrder {
-      font-size: 12px;
-      color: #444;
-      font-style: italic;
-      margin-top: 5px;
+    nav button:hover {
+      background: #777;
     }
+    
+    
+    .large-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.large-product {
+  background: #fff;
+  border-radius: 10px;
+  text-align: center;
+  color: black;
+  width: 100%;
+}
+
+.large-product img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+.large-product h4, .large-product p {
+  margin: 5px 0;
+}
+    
+    
   </style>
 </head>
 <body>
 
-  <div class="produk-container" id="produkContainer"></div>
+<section class="hero-section">
+  <img src="https://nasukafoods.site/tekn.jpg" alt="Hero Background">
+  <div class="info">
+    <div class="username" id="nama"></div>
+    <div class="balance" id="saldo">💵 </div>
+  </div>
+</section>
 
-  <div class="struk">
-    <h1>LAYANAN TIKTOK</h1>
-    <p><span class="label">Layanan</span><span id="layanan">-</span></p>
-    <p><span class="label">Harga</span><span id="harga">-</span></p>
-    <p><span class="label">Jumlah</span><span id="jumlah">-</span></p>
-    <p><span class="label bold">Total</span><span id="total">-</span></p>
-    <div id="inputManualBox" style="margin-top:10px;"></div>
-    <div id="deskripsiOrder"></div>
-    <div class="line"></div>
-    <p><span class="label">Nama</span><span id="nama">-</span></p>
-    <p><span class="label">Telepon</span><span id="telepon">-</span></p>
-    <p><span class="label">Sosial Media</span><span id="sosmed">-</span></p>
-    <p><span class="label">Saldo</span><span id="saldo">-</span></p>
-    <div class="line"></div>
-    <p class="bold">Metode Pembayaran: SALDO</p>
-    <button id="btnBayar" style="display: none;" onclick="submitDigital()">Bayar Sekarang</button>
+<div id="online-status" style="text-align:left; color:black; font-weight:bold; padding:3px;">User yang lagi ONLINE (...)</div>
+
+<section class="product-section">
+  <div class="product sticky-susu">
+    <div class="marquee" style="position: absolute; top: 0; left: 0; z-index: 10; color: white; font-size: 15px;">
+      <span><strong>🎁 Beli Produk Digital Sekarang! Booster 1.K Likes Cuma 5.000 🎁</strong></span>
+    </div>
+    <div class="glow-wrapper">
+      <img src="https://nasukafoods.site/tekn.jpg" alt="Sosmed"
+        onclick="goToPayment('', 12000, 'digital')"          
+        style="width: 100%; display: block;">
+      <div class="glow-text">Booster✨</div>
+    </div>
   </div>
 
-  <div id="kwitansi">
-    <p class="bold">✅ PEMBAYARAN BERHASIL</p>
-    <p>Layanan: <span id="kLayanan"></span></p>
-    <p>Total: <span id="kTotal"></span></p>
-    <p>Nama: <span id="kNama"></span></p>
-    <p>Telepon: <span id="kTelepon"></span></p>
-    <p id="kSaldoBox">Sisa Saldo: <span id="kSaldo"></span></p>
-    <p style="margin-top:10px; font-weight: bold;">Pesanan akan segera kami proses</p>
-    <button onclick="location.href='index.html'">🏠 Kembali</button>
+  <div class="product">
+    <img src="https://nasukafoods.site/susubendera.jpg" alt="Susu" onclick="goToDeskripsi('Susu Bendera', 16500)">
+    <h4>Susu</h4>
+    <p>Rp 16.500</p>
+    <div class="button-frame"><button onclick="goToPayment('Susu Bendera', 16500, 'fisik')">Beli Sekarang</button></div>
   </div>
 
-  <div id="customAlert">
-    <p id="customAlertMsg"></p>
-    <button onclick="closeCustomAlert()">OK</button>
+  <div class="product">
+    <img src="https://nasukafoods.site/paketcilok.jpg" alt="Udud" onclick="goToDeskripsi('Udud Armor', 10000)">
+    <h4>Paket Cilok</h4>
+    <p>Rp 10.000</p>
+    <div class="button-frame"><button onclick="goToPayment('Udud Armor', 10000, 'fisik')">Beli Sekarang</button></div>
   </div>
 
-  <script>
-    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
-    const username = localStorage.getItem("username");
-    let userSaldo = 0, userData = {};
-    <!-- pada bagian <script> di bawah ini, ganti bagian produkList -->
-const produkList = [
-  { name: "tiktok viewers", price: 1000, desc: "Layanan tiktok viewers 1.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "tiktok likes", price: 1500, desc: "Tambahkan like ke video Anda agar makin viral.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 3", price: 1200, desc: "Komentar positif otomatis untuk memperkuat engagement.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 4", price: 2000, desc: "Tingkatkan viewers video dengan cepat dan aman.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 5", price: 1100, desc: "Auto share ke grup TikTok komunitas.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 6", price: 2500, desc: "Auto followers harian 100 akun/hari selama seminggu.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 7", price: 3000, desc: "Booster engagement TikTok full satu paket promosi.", img: "https://nasukafoods.site/tekn.jpg" },
-  { name: "Produk 8", price: 900, desc: "Konsultasi dan optimasi akun TikTok Anda.", img: "https://nasukafoods.site/tekn.jpg" }
-];
+  <div class="product">
+    <img src="https://nasukafoods.site/armour.jpg" alt="Udud" onclick="goToDeskripsi('Udud Armor', 10000)">
+    <h4>Udud Armor</h4>
+    <p>Rp 10.000</p>
+    <div class="button-frame"><button onclick="goToPayment('Udud Armor', 10000, 'fisik')">Beli Sekarang</button></div>
+  </div>
 
-produkList.forEach((p, i) => {
-  const div = document.createElement("div");
-  div.className = "produk-card";
-  div.innerHTML = `
-    <img src="${p.img}" alt="${p.name}">
-    <p>${p.name}</p>
-    <p class="deskripsi">${p.desc}</p>
-  `;
-  div.onclick = () => pilihProduk(p);
-  produkContainer.appendChild(div);
-});
+  <div class="product">
+    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Udud" onclick="goToDeskripsi('Udud Armor', 10000)">
+    <h4>Nash</h4>
+    <p>Rp 10.000</p>
+    <div class="button-frame"><button onclick="goToPayment('Udud Armor', 10000, 'fisik')">Beli Sekarang</button></div>
+  </div>
+  
+  
+  
+  
+</section>
+</section> <!-- Penutup product-section lama -->
+
+<div class="large-product-grid">
+  <div class="large-product">
+    <img src="https://nasukafoods.site/bumbukacang.jpeg" alt="Sambel Kearifan" onclick="goToDeskripsi('Sambel Kearifan Lokal', 25000)">
+    <h4>Sambel Kacang</h4>
+    <p>Rp 25.000</p>
+    <button onclick="goToPayment('Sambel Kearifan Lokal', 25000, 'fisik')">Beli Sekarang</button>
+  </div>
+
+  <div class="large-product">
+    <img src="https://nasukafoods.site/isiangajih.png" alt="Kerupuk Viral" onclick="goToDeskripsi('Kerupuk Viral', 8000)">
+    <h4>Cilok Isian Gajih</h4>
+    <p>Rp 900 an</p>
+    <button onclick="goToPayment('Kerupuk Viral', 8000, 'fisik')">Beli Sekarang</button>
+  </div>
+</div>
 
 
-    function pilihProduk(p) {
-      const order = {
-        name: p.name,
-        price: p.price,
-        quantity: 1,
-        desc: p.desc
-      };
-      localStorage.setItem("currentOrder", JSON.stringify(order));
-      document.getElementById("layanan").textContent = order.name;
-      document.getElementById("harga").textContent = formatRupiah(order.price);
-      document.getElementById("jumlah").textContent = order.quantity;
-      document.getElementById("total").textContent = formatRupiah(order.price * order.quantity);
-      document.getElementById("deskripsiOrder").textContent = order.desc || "";
+<div class="large-product-grid">
+  <div class="large-product">
+    <img src="https://nasukafoods.site/paket-cilok-keju.jpg" alt="Sambel Kearifan" onclick="goToDeskripsi('Sambel Kearifan Lokal', 25000)">
+    <h4>Cilok Keju</h4>
+    <p>Rp 25.000</p>
+    <button onclick="goToPayment('Sambel Kearifan Lokal', 25000, 'fisik')">Beli Sekarang</button>
+  </div>
 
-      const inputBox = document.getElementById("inputManualBox");
-      if (order.name.toLowerCase().includes("viewer") || order.name.toLowerCase().includes("like")) {
-        inputBox.innerHTML = '<label for="target">Link Video TikTok</label><input type="url" id="target" placeholder="https://www.tiktok.com/...">';
-      } else {
-        const usernameTikTok = extractTikTokUsername(userData["Sosial Media"] || "");
-        inputBox.innerHTML = '<label>Username TikTok</label><input type="text" id="target" value="' + usernameTikTok + '" readonly>';
-      }
-    }
+  <div class="large-product">
+    <img src="https://nasukafoods.site/paket-cilok-pedas.jpg" alt="Kerupuk Viral" onclick="goToDeskripsi('Kerupuk Viral', 8000)">
+    <h4>Cilok Ayam Pedas</h4>
+    <p>Rp 400 an</p>
+    <button onclick="goToPayment('Kerupuk Viral', 8000, 'fisik')">Beli Sekarang</button>
+  </div>
+</div>
 
-    if (username) {
-      fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
-        .then(res => res.json())
-        .then(data => {
-          userData = data;
-          userSaldo = parseInt((data.Saldo || "0").toString().replace(/[^0-9]/g, ""));
-          document.getElementById("nama").textContent = data.Nama || "-";
-          document.getElementById("telepon").textContent = data.Telepon || "-";
-          document.getElementById("sosmed").textContent = data["Sosial Media"] || "-";
-          document.getElementById("saldo").textContent = formatRupiah(userSaldo);
-          document.getElementById("btnBayar").style.display = "block";
-        });
-    }
 
-    function extractTikTokUsername(sosmed) {
-      if (!sosmed) return "";
-      if (sosmed.includes("tiktok.com")) {
-        const match = sosmed.match(/tiktok\.com\/@([\w\d._]+)/);
-        return match ? "@" + match[1] : "";
-      }
-      return sosmed.startsWith("@") ? sosmed : "@" + sosmed;
-    }
 
-    function showCustomAlert(msg) {
-      document.getElementById("customAlertMsg").textContent = msg;
-      document.getElementById("customAlert").style.display = "block";
-    }
 
-    function closeCustomAlert() {
-      document.getElementById("customAlert").style.display = "none";
-    }
 
-    async function submitDigital() {
-      const btn = document.getElementById("btnBayar");
-      btn.disabled = true;
-      btn.textContent = "Loading...";
-      const order = JSON.parse(localStorage.getItem("currentOrder") || "{}");
-      const qty = parseInt(order.quantity || 1);
-      const price = parseInt(order.price || 0);
-      const total = qty * price;
-      const target = document.getElementById("target").value.trim();
-      if (!target) {
-        showCustomAlert("Isian target TikTok wajib diisi");
-        btn.disabled = false;
-        btn.textContent = "Bayar Sekarang";
-        return;
-      }
-      if (userSaldo < total) {
-        showCustomAlert("Saldo tidak cukup.");
-        btn.disabled = false;
-        btn.textContent = "Bayar Sekarang";
-        return;
-      }
-      const formData = new FormData();
-      formData.append("action", "submitOrder");
-      formData.append("product_name", order.name || "");
-      formData.append("product_price", price);
-      formData.append("product_quantity", qty);
-      formData.append("total_pembayaran", total);
-      formData.append("metode_pembayaran", "SALDO");
-      formData.append("username", username || "");
-      formData.append("target", target);
-      formData.append("tipe", "digital");
-      try {
-        const res = await fetch(URL_GAS, { method: "POST", body: formData });
-        const result = await res.json();
-        if (result.status === "Success") {
-          localStorage.removeItem("currentOrder");
-          document.getElementById("kLayanan").textContent = order.name;
-          document.getElementById("kTotal").textContent = formatRupiah(total);
-          document.getElementById("kNama").textContent = userData.Nama || "-";
-          document.getElementById("kTelepon").textContent = userData.Telepon || "-";
-          document.getElementById("kSaldoBox").style.display = "block";
-          document.getElementById("kSaldo").textContent = formatRupiah(result.saldo_terbaru || 0);
-          document.getElementById("kwitansi").style.display = "block";
-          btn.style.display = "none";
-        } else {
-          showCustomAlert("Gagal: " + (result.message || "Tidak diketahui"));
-          btn.disabled = false;
-          btn.textContent = "Bayar Sekarang";
+
+<nav>
+  <button onclick="location.href='index.html'">🏠 Home</button>
+  <button onclick="location.href='trophy.html'">🚪 Pintu</button>
+  <button id="loginBtn" onclick="location.href='login.html'">🔐 Login</button>
+  <button id="logoutBtn" onclick="logoutUser()" style="display:none;">🚫 Logout</button>
+</nav>
+
+<script>
+  const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+  const username = localStorage.getItem("username");
+
+  if (username) {
+    fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.Username) {
+          document.getElementById("nama").textContent = data.Nama || "_";
+          document.getElementById("saldo").textContent = "💵 " + formatRupiah(data.Saldo || 0);
+          document.getElementById("loginBtn").style.display = "none";
+          document.getElementById("logoutBtn").style.display = "inline-block";
         }
-      } catch (err) {
-        showCustomAlert("Koneksi gagal");
-        btn.disabled = false;
-        btn.textContent = "Bayar Sekarang";
-        console.error(err);
-      }
-    }
+      })
+      .catch(err => console.log("Gagal koneksi:", err));
+  }
 
-    function formatRupiah(angka) {
-      if (!angka || isNaN(angka)) return "Rp 0";
-      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  function logoutUser() {
+    localStorage.clear();
+    location.reload();
+  }
+
+  function formatRupiah(angka) {
+    if (!angka || isNaN(angka)) return "Rp 0";
+    return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function goToPayment(productName, productPrice, productType) {
+    const orderDetails = {
+      name: productName,
+      price: productPrice,
+      quantity: 1,
+      type: productType
+    };
+    localStorage.setItem('currentOrder', JSON.stringify(orderDetails));
+
+    const visitorData = {
+      nama: "Budi Santoso",
+      email: "budi.santoso@example.com",
+      telepon: "081234567890",
+      alamat: "Jl. Contoh No. 123, Kota Contoh, Provinsi Contoh",
+      catatan: ""
+    };
+    localStorage.setItem('visitorInfo', JSON.stringify(visitorData));
+
+    if (productType === 'digital') {
+      window.location.href = 'digital-payment.html';
+    } else {
+      window.location.href = 'pembayaran.html';
     }
-  </script>
+  }
+
+  function goToDeskripsi(productName, productPrice) {
+    const detail = {
+      name: productName,
+      price: productPrice
+    };
+    localStorage.setItem('deskripsiProduk', JSON.stringify(detail));
+    window.location.href = 'deskripsi.html';
+  }
+
+  const IP_KEY = (() => {
+    let key = localStorage.getItem("visitorID");
+    if (!key) {
+      key = "id_" + Math.random().toString(36).substring(2);
+      localStorage.setItem("visitorID", key);
+    }
+    return key;
+  })();
+
+  function updateOnline() {
+    fetch(`${URL_GAS}?action=updateOnlineStatus&ip=${IP_KEY}`)
+      .then(() => fetch(`${URL_GAS}?action=getOnlineCount`))
+      .then(res => res.json())
+      .then(data => {
+        const onlineStatus = document.getElementById('online-status');
+        if (onlineStatus && data.count) {
+          onlineStatus.textContent = `User yang lagi ONLINE (${data.count})`;
+        }
+      })
+      .catch(err => console.warn("Gagal update online:", err));
+  }
+
+  updateOnline();
+  setInterval(updateOnline, 10000);
+</script>
+
 </body>
 </html>
