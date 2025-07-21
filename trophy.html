@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://nasukafoods.site/kempangapi.gif') no-repeat center center fixed;
+      background: url('https://nasukafoods.site/kembangapi.gif') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
       margin: 0;
@@ -57,29 +57,29 @@
       margin: 10px 0 5px;
     }
     .step p {
-      font-size: 13px;
+      font-size: 33px;
       margin: 2px 0;
       padding: 0 4px;
     }
 
     .first {
       height: 160px;
-      background: linear-gradient(to top, #FFD700, #fff9c4);
+      background: linear-gradient(to top, red, #fff9c4);
     }
     .second {
       height: 130px;
-      background: linear-gradient(to top, #C0C0C0, #e0e0e0);
+      background: linear-gradient(to top, blue, #e0e0e0);
     }
     .third {
       height: 110px;
-      background: linear-gradient(to top, #cd7f32, #ffcc99);
+      background: linear-gradient(to top, grey, #ffcc99);
     }
 
     .others {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 3px;
     }
     .others .person {
       background: rgba(0, 0, 0, 0.6);
@@ -122,21 +122,21 @@
   <div class="podium">
     <div class="step second" id="podium-2">
       <img class="photo" src="" alt="">
-      <h2>High</h2>
+      <h2></h2>
       <p class="name">-</p>
-      <p class="poin">0 Poin</p>
+      <p class="poin"></p>
     </div>
     <div class="step first" id="podium-1">
       <img class="photo" src="" alt="">
-      <h2>King</h2>
+      <h2></h2>
       <p class="name">-</p>
-      <p class="poin">0 Poin</p>
+      <p class="poin"></p>
     </div>
     <div class="step third" id="podium-3">
       <img class="photo" src="" alt="">
-      <h2>Mentri</h2>
+      <h2></h2>
       <p class="name">-</p>
-      <p class="poin">0 Poin</p>
+      <p class="poin"></p>
     </div>
   </div>
   <div class="others"></div>
@@ -175,7 +175,7 @@
           el.querySelector('.photo').src = peserta.foto;
           el.querySelector('.photo').alt = peserta.nama;
           el.querySelector('.name').textContent = peserta.nama;
-          el.querySelector('.poin').textContent = `${peserta.poin} Poin`;
+          el.querySelector('.poin').textContent = `${peserta.poin} Gold`;
         } else if (el) {
           el.style.display = 'none';
         }
@@ -191,7 +191,7 @@
           <img src="${p.foto}" alt="${p.nama}">
           <div>
             <strong>${p.nama}</strong><br>
-            <span>${p.poin} Poin</span>
+            <span>${p.poin} Gold</span>
           </div>
         `;
         othersContainer.appendChild(div);
