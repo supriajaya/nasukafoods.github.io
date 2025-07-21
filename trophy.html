@@ -2,199 +2,199 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Leaderboard Nasuka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leaderboard Podium Sultan</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: ligth gray;
-      padding: 20px;
-      margin: 0;
-      color: #000;
-      overflow: hidden;
-      position: relative;
-    }
-
-    h1 {
-      text-align: center;
-      color: #1D3557;
-      margin-bottom: 40px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #ffffff;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      color: #000;
-    }
-
-    th, td {
-      padding: 12px 15px;
-      border-bottom: 1px solid #ccc;
-      text-align: left;
-    }
-
-    th.hidden, td.hidden {
-      display: none;
-    }
-
-    th {
-      background: #457B9D;
+      background: url('https://nasukafoods.site/kempangapi.gif') no-repeat center center fixed;
+      background-size: cover;
       color: #fff;
+      margin: 0;
+      padding: 20px 10px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 40px;
+      text-shadow: 1px 1px 4px #000;
+    }
+    .podium {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 15px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+    .step {
+      position: relative;
+      width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      border-radius: 10px 10px 0 0;
+      box-shadow: inset 0 2px 5px rgba(255,255,255,0.1),
+                  0 0 15px rgba(255,255,255,0.15);
+      padding-top: 60px;
+      box-sizing: border-box;
+    }
+    .step .photo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fff;
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 8px rgba(255,255,255,0.3);
+    }
+    .step h2 {
+      font-size: 14px;
+      margin: 10px 0 5px;
+    }
+    .step p {
+      font-size: 13px;
+      margin: 2px 0;
+      padding: 0 4px;
     }
 
-    tr:nth-child(even) {
-      background-color: #F1FAEE;
+    .first {
+      height: 160px;
+      background: linear-gradient(to top, #FFD700, #fff9c4);
+    }
+    .second {
+      height: 130px;
+      background: linear-gradient(to top, #C0C0C0, #e0e0e0);
+    }
+    .third {
+      height: 110px;
+      background: linear-gradient(to top, #cd7f32, #ffcc99);
     }
 
-    .rank {
-      font-weight: bold;
+    .others {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .others .person {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 95%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      box-shadow: 0 0 5px rgba(255,255,255,0.1);
+    }
+    .others .person img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #555;
     }
 
-    .glow {
-      color: blue;
-      font-weight: bold;
-      text-shadow: 0 0 10px #blue, 0 0 20px red, 0 0 30px green;
-      animation: shake 0.8s infinite alternate;
-    }
-
-    @keyframes shake {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(2deg); }
-      50% { transform: rotate(0deg); }
-      75% { transform: rotate(-2deg); }
-      100% { transform: rotate(0deg); }
-    }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      background-color: red;
-      opacity: 0.8;
-      z-index: 10;
-      pointer-events: none;
-      animation: fall linear forwards;
-    }
-
-    @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
+    @media (max-width: 600px) {
+      .step {
+        width: 70px;
+        padding-top: 50px;
+      }
+      .step .photo {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+      }
+      .step h2, .step p {
+        font-size: 12px;
       }
     }
   </style>
 </head>
 <body>
-  <h1>Royal Spender</h1>
-  <canvas id="fireworks"></canvas>
-  <table id="leaderboard-table">
-    <thead>
-      <tr>
-        <th>Peringkat</th>
-        <th>Nama</th>
-        <th class="hidden">Total Belanja</th>
-        <th>Poin</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <h1>Top 3 Sultan</h1>
+  <div class="podium">
+    <div class="step second" id="podium-2">
+      <img class="photo" src="" alt="">
+      <h2>High</h2>
+      <p class="name">-</p>
+      <p class="poin">0 Poin</p>
+    </div>
+    <div class="step first" id="podium-1">
+      <img class="photo" src="" alt="">
+      <h2>King</h2>
+      <p class="name">-</p>
+      <p class="poin">0 Poin</p>
+    </div>
+    <div class="step third" id="podium-3">
+      <img class="photo" src="" alt="">
+      <h2>Mentri</h2>
+      <p class="name">-</p>
+      <p class="poin">0 Poin</p>
+    </div>
+  </div>
+  <div class="others"></div>
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
 
-    fetch(`${GAS_URL}?action=leaderboard`)
-      .then(res => res.json())
-      .then(data => {
-        const tbody = document.querySelector('#leaderboard-table tbody');
-        data.forEach((item, index) => {
-          const total = parseFloat(item.total) || 0;
-          const poin = Math.floor(total / 1000);
-          const row = document.createElement('tr');
-          const glowClass = index === 0 ? 'glow' : '';
-          row.innerHTML = `
-            <td class="rank">#${index + 1}</td>
-            <td class="${glowClass}">${item.nama}</td>
-            <td class="hidden">Rp ${total.toLocaleString('id-ID')}</td>
-            <td>${poin} poin</td>
-          `;
-          tbody.appendChild(row);
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch(`${GAS_URL}?action=leaderboard`)
+        .then(res => res.json())
+        .then(data => {
+          const formatted = data.map(d => ({
+            nama: d.nama,
+            poin: Math.floor((parseFloat(d.total) || 0) / 1000),
+            foto: d.foto || 'https://via.placeholder.com/70'
+          }));
+          isiLeaderboard(formatted);
+        })
+        .catch(err => {
+          console.error('Gagal memuat leaderboard:', err);
         });
+    });
 
-        showFireworks();
-        launchConfetti(100);
+    function isiLeaderboard(data) {
+      const urutanPodiumIds = ['podium-1', 'podium-2', 'podium-3'];
+      const podiumMapping = {
+        'podium-1': data[0],
+        'podium-2': data[1],
+        'podium-3': data[2]
+      };
+      urutanPodiumIds.forEach(id => {
+        const el = document.getElementById(id);
+        const peserta = podiumMapping[id];
+        if (el && peserta) {
+          el.style.display = 'flex';
+          el.querySelector('.photo').src = peserta.foto;
+          el.querySelector('.photo').alt = peserta.nama;
+          el.querySelector('.name').textContent = peserta.nama;
+          el.querySelector('.poin').textContent = `${peserta.poin} Poin`;
+        } else if (el) {
+          el.style.display = 'none';
+        }
       });
 
-    function showFireworks() {
-      const canvas = document.getElementById('fireworks');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      const particles = [];
-      for (let i = 0; i < 100; i++) {
-        particles.push({
-          x: canvas.width / 2,
-          y: canvas.height / 2,
-          angle: Math.random() * 2 * Math.PI,
-          speed: Math.random() * 6 + 2,
-          radius: Math.random() * 2 + 2,
-          alpha: 1,
-          decay: Math.random() * 0.01 + 0.005,
-          color: `hsl(${Math.random() * 360}, 100%, 50%)`
-        });
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-          p.x += Math.cos(p.angle) * p.speed;
-          p.y += Math.sin(p.angle) * p.speed;
-          p.alpha -= p.decay;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
-          ctx.fillStyle = `rgba(${hexToRgb(p.color)}, ${p.alpha})`;
-          ctx.fill();
-        });
-
-        if (particles.some(p => p.alpha > 0)) {
-          requestAnimationFrame(animate);
-        }
-      }
-
-      animate();
-
-      function hexToRgb(hsl) {
-        const ctx = document.createElement('canvas').getContext('2d');
-        ctx.fillStyle = hsl;
-        return ctx.fillStyle.match(/\d+/g).slice(0, 3).join(',');
-      }
-    }
-
-    function launchConfetti(amount) {
-      for (let i = 0; i < amount; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.left = `${Math.random() * window.innerWidth}px`;
-        confetti.style.top = `-10px`;
-        confetti.style.backgroundColor = getRandomColor();
-        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
-        document.body.appendChild(confetti);
-
-        setTimeout(() => confetti.remove(), 5000);
-      }
-
-      function getRandomColor() {
-        const colors = ['yellow', 'blue', '#00FFFF', '#ADFF2F', 'green'];
-        return colors[Math.floor(Math.random() * colors.length)];
+      const othersContainer = document.querySelector('.others');
+      othersContainer.innerHTML = '';
+      for (let i = 3; i < data.length; i++) {
+        const p = data[i];
+        const div = document.createElement('div');
+        div.classList.add('person');
+        div.innerHTML = `
+          <img src="${p.foto}" alt="${p.nama}">
+          <div>
+            <strong>${p.nama}</strong><br>
+            <span>${p.poin} Poin</span>
+          </div>
+        `;
+        othersContainer.appendChild(div);
       }
     }
   </script>
