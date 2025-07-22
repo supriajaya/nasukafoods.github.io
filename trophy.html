@@ -7,139 +7,192 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://nasukafoods.site/kembangapi.gif') no-repeat center center fixed;
+      background: url('https://nasukafoods.site/gol.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #fff;
-      margin: 0;
-      padding: 20px 10px;
+      color: white;
       text-align: center;
+      margin: 0;
+      padding-bottom: 80px;
     }
-    h1 {
-      font-size: 26px;
-      margin-bottom: 40px;
-      text-shadow: 1px 1px 4px #000;
+
+    .podium, .others {
+      margin: 0 auto;
+      width: 90%;
+      max-width: 400px;
+      padding: 1px;
     }
-    .podium {
+
+    .podium > div, .person {
       display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 15px;
-      margin-bottom: 50px;
+      align-items: center;
+      background: rgba(0,0,0,0.5);
+      padding: 1px;
+      margin: 10px 0;
+      border-radius: 12px;
       flex-wrap: wrap;
     }
-    .step {
-      position: relative;
-      width: 90px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      border-radius: 10px 10px 0 0;
-      box-shadow: inset 0 2px 5px rgba(255,255,255,0.1),
-                  0 0 15px rgba(255,255,255,0.15);
-      padding-top: 60px;
-      box-sizing: border-box;
-    }
-    .step .photo {
+
+    .photo-wrapper {
       width: 60px;
       height: 60px;
+      background-size: cover;
+      background-position: center;
       border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #fff;
-      position: absolute;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 0 8px rgba(255,255,255,0.3);
+      margin-right: 12px;
+      flex-shrink: 0;
     }
-    .step h2 {
+
+    .photo {
+      width: 60px;
+      height: 60px;
+      border-radius: 10%;
+    }
+
+    .header-img {
+      width: 100%;
+      max-width: 300px;
+      margin: 5px auto;
+    }
+
+    .footer-buttons {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      z-index: 999;
+    }
+
+    .footer-buttons button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 12px 10px;
       font-size: 14px;
-      margin: 10px 0 5px;
-    }
-    .step p {
-      font-size: 33px;
-      margin: 2px 0;
-      padding: 0 4px;
-    }
-
-    .first {
-      height: 160px;
-      background: linear-gradient(to top, red, #fff9c4);
-    }
-    .second {
-      height: 130px;
-      background: linear-gradient(to top, blue, #e0e0e0);
-    }
-    .third {
-      height: 110px;
-      background: linear-gradient(to top, grey, #ffcc99);
+      border: none;
+      border-radius: 8px;
+      background-color: gold;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .others {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-    }
-    .others .person {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 10px 14px;
-      border-radius: 12px;
-      max-width: 400px;
-      width: 95%;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-align: left;
-      box-shadow: 0 0 5px rgba(255,255,255,0.1);
-    }
-    .others .person img {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #555;
+    .footer-buttons button:hover {
+      background-color: orange;
     }
 
-    @media (max-width: 600px) {
-      .step {
-        width: 70px;
-        padding-top: 50px;
-      }
-      .step .photo {
+    .others img {
+      width: 50px;
+      height: 50px;
+    }
+
+    @media screen and (max-width: 480px) {
+      .photo-wrapper, .photo {
         width: 50px;
         height: 50px;
-        top: -25px;
       }
-      .step h2, .step p {
+
+      .header-img {
+        max-width: 200px;
+      }
+
+      .footer-buttons button {
         font-size: 12px;
+        padding: 10px;
+      }
+
+      .person {
+        flex-direction: row;
       }
     }
+    
+    @keyframes bling-emas {
+  0%, 100% { text-shadow: 0 0 5px gold, 0 0 10px yellow; color: gold; }
+  50% { text-shadow: 0 0 15px white, 0 0 25px gold; color: white; }
+}
+
+@keyframes bling-perak {
+  0%, 100% { text-shadow: 0 0 5px silver, 0 0 10px lightgray; color: silver; }
+  50% { text-shadow: 0 0 15px white, 0 0 25px silver; color: white; }
+}
+
+@keyframes bling-perunggu {
+  0%, 100% { text-shadow: 0 0 5px peru, 0 0 10px sienna; color: peru; }
+  50% { text-shadow: 0 0 15px white, 0 0 25px peru; color: white; }
+}
+
+.bling-emas {
+  animation: bling-emas 1s infinite;
+  font-weight: bold;
+}
+
+.bling-perak {
+  animation: bling-perak 2s infinite;
+  font-weight: bold;
+}
+
+.bling-perunggu {
+  animation: bling-perunggu 3s infinite;
+  font-weight: bold;
+}
+    .marquee-container {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-left 20s linear infinite;
+  color: gold;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-shadow: 1px 1px 2px black;
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+    
   </style>
 </head>
 <body>
-  <h1>Top 3 Sultan</h1>
+  <div class="header-img">
+    <img src="https://nasukafoods.site/winggame.gif" alt="Leader" style="width:100%;">
+  </div><div class="marquee-container">
+  <div class="marquee">🏆 SELAMAT KEPADA PARA JUARA! TETAP SEMANGAT DAN RAIH PODIUM NASUKA! 🏆</div>
+</div>
+
   <div class="podium">
-    <div class="step second" id="podium-2">
-      <img class="photo" src="" alt="">
-      <h2></h2>
-      <p class="name">-</p>
-      <p class="poin"></p>
+    <div id="podium-1" style="display:none">
+      <div class="photo-wrapper" data-podium="1"><img class="photo" /></div>
+      <div><div class="name"></div><div class="poin"></div></div>
     </div>
-    <div class="step first" id="podium-1">
-      <img class="photo" src="" alt="">
-      <h2></h2>
-      <p class="name">-</p>
-      <p class="poin"></p>
+    <div id="podium-2" style="display:none">
+      <div class="photo-wrapper" data-podium="2"><img class="photo" /></div>
+      <div><div class="name"></div><div class="poin"></div></div>
     </div>
-    <div class="step third" id="podium-3">
-      <img class="photo" src="" alt="">
-      <h2></h2>
-      <p class="name">-</p>
-      <p class="poin"></p>
+    <div id="podium-3" style="display:none">
+      <div class="photo-wrapper" data-podium="3"><img class="photo" /></div>
+      <div><div class="name"></div><div class="poin"></div></div>
     </div>
   </div>
+  
+  ⏫
+
   <div class="others"></div>
+
+  <div class="footer-buttons">
+    <button onclick="window.location.href='index.html'">🏠 Beranda</button>
+    <button onclick="window.location.href='cekot.html'">Reward</button>
+  </div>
 
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
@@ -151,12 +204,14 @@
           const formatted = data.map(d => ({
             nama: d.nama,
             poin: Math.floor((parseFloat(d.total) || 0) / 1000),
-            foto: d.foto || 'https://via.placeholder.com/70'
+            foto: d.foto || 'https://via.placeholder.com/70',
+            username: (d.username || '').trim().toLowerCase()
           }));
+
           isiLeaderboard(formatted);
         })
         .catch(err => {
-          console.error('Gagal memuat leaderboard:', err);
+          console.error("Gagal ambil data leaderboard:", err);
         });
     });
 
@@ -172,9 +227,19 @@
         const peserta = podiumMapping[id];
         if (el && peserta) {
           el.style.display = 'flex';
-          el.querySelector('.photo').src = peserta.foto;
-          el.querySelector('.photo').alt = peserta.nama;
-          el.querySelector('.name').textContent = peserta.nama;
+          const photoWrapper = el.querySelector('.photo-wrapper');
+          const photoImg = el.querySelector('.photo');
+          photoImg.src = peserta.foto;
+          photoImg.alt = peserta.nama;
+          const rank = photoWrapper.dataset.podium;
+          photoWrapper.style.backgroundImage = `url('https://nasukafoods.site/bg-juara${rank}.png')`;
+          
+          const nameDiv = el.querySelector('.name');
+nameDiv.innerHTML = `<strong>${peserta.nama}</strong>`;
+if (id === 'podium-1') nameDiv.classList.add('bling-emas');
+else if (id === 'podium-2') nameDiv.classList.add('bling-perak');
+else if (id === 'podium-3') nameDiv.classList.add('bling-perunggu');
+
           el.querySelector('.poin').textContent = `${peserta.poin} Gold`;
         } else if (el) {
           el.style.display = 'none';
@@ -188,9 +253,9 @@
         const div = document.createElement('div');
         div.classList.add('person');
         div.innerHTML = `
-          <img src="${p.foto}" alt="${p.nama}">
+          <img src="${p.foto}" alt="${p.nama}" style="border-radius:10%;margin-right:10px;">
           <div>
-            <strong>${p.nama}</strong><br>
+            #${i + 1} ${p.nama}<br>
             <span>${p.poin} Gold</span>
           </div>
         `;
