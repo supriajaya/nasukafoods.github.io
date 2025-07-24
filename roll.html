@@ -2,7 +2,12 @@
 <html lang="id">      
 <head>      
   <meta charset="UTF-8">      
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+      
+     <meta name="viewport" content="width=1024">
+     
+     
+     
+     
   <title>Roll Game</title> <style>      
         $('#resultDisplay').html(`    
   <div class="gif-wrapper">    
@@ -40,6 +45,19 @@
     @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }      
     @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }      
     
+            
+            
+  html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* fullscreen tinggi */
+  width: 100vw;  /* fullscreen lebar */
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
             
             
 #taruhanSelect {    
@@ -90,13 +108,19 @@
 body {      
 background-image: url('https://nasukafoods.site/gol.jpg'); }      
           
-#stage {      
-      margin: 0 auto;      
-      width: 600px;      
-      padding: 0 0 40px;      
-          }      
+
   
-     
+     #stage {
+  width: 100%;
+  max-width: 100vw;
+  height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
                                  
                                  
                                                  
@@ -114,6 +138,20 @@ background-image: url('https://nasukafoods.site/gol.jpg'); }
       width: 96px;      
       float: left;      
       transform-style: preserve-3d;        }    
+        
+        
+        
+        .roll {
+  width: 18vw;
+  height: 18vw;
+}
+
+.roll p {
+  font-size: 6vw;
+  line-height: 18vw;
+}
+        
+        
         
     .roll {      
       position: absolute;      
