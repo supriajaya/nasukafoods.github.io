@@ -2,167 +2,20 @@
 <html lang="id">      
 <head>      
   <meta charset="UTF-8">      
-  <title>Roll Game</title>      
-   
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-  <style>      
-            
-          
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Roll Game</title> <style>      
         $('#resultDisplay').html(`    
   <div class="gif-wrapper">    
-    <img src="https://yourdomain.com/.gif" alt="Menang" class="gif-bg">    
-    <div class="gif-text">+${perakHadiah.toLocaleString('id-ID')} Perak 🎉</div>    
+    <img src="https://yourdomain.com/matahari1.gif" alt="Menang" class="gif-bg">    
+    <div class="gif-text">+${perakHadiah.toLocaleString('id-ID')} Perak</div>    
   </div>    
 `);    
             
-            
-            
-            
-            
-        #taruhanSelect {    
-  font-size: 4px;     /* Ukuran tulisan */    
-  padding: 10px 20px;  /* Ruang dalam kotak */    
-  width: 400px;        /* Lebar kotak */    
-  height: 400px;        /* Tinggi kotak */    
-  border-radius: 50px; /* Opsional: membulatkan sudut */    
-}    
-            
-            
-       
-  
-.gif-wrapper {    
-  width: 100%;    
-  height: 100%;    
-  position: relative;    
-}    
-    
-.gif-bg {    
-  width: 100%;    
-  height: 100%;    
-  object-fit: contain; /* atau "cover" jika ingin memenuhi kotak */    
-  display: block;    
-}    
-    
-  .gif-text {    
-    position: absolute;    
-    top: 50%;    
-    left: 50%;    
-    transform: translate(-50%, -50%);    
-    font-size: 58px;    
-    font-weight: bold;    
-    color: yellow;    
-    text-shadow: 2px 2px 4px #000;    
-    z-index: 10;    
-    white-space: nowrap;    
-  }    
-    
-            
-            
-            
-            
-            
-    
-          
-          body, html {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-#wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  max-width: 100%;
-  min-height: 100vh;
-  padding: 10px;
-}
-          
-          
-          
-          
-          
-          
-          
-          
-    #stage {      
-      margin: 0 auto;      
-      width: 600px;      
-      padding: 0 0 40px;      
-    }      
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-    .perspective-on { perspective: 1000px; }      
+            .perspective-on { perspective: 1000px; }      
     .perspective-off { perspective: 0; }      
-          
-          
-    #rotate {      
-      margin: 0 auto;      
-      width: 560px;      
-      height: 560px;      
-      padding-top: 600px;      
-      transform-style: preserve-3d;      
-    }      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    .ring {      
-      margin: 0 auto;      
-      height: 96px;      
-      width: 96px;      
-      float: left;      
-      transform-style: preserve-3d;      
-    }      
-    .roll {      
-      position: absolute;      
-      width: 96px;      
-      height: 96px;      
-      box-sizing: border-box;      
-      opacity: 0.9;      
-      color: rgba(0,0,0,0.9);      
-      background: #fff;      
-      border: solid 2px #000;      
-      backface-visibility: hidden;      
-    }      
-    .roll p {      
-      font-size: 38px;      
-      font-weight: bold;      
-      line-height: 96px;      
-      margin: 0;      
-      text-align: center;      
-    }      
-    .backface-on { backface-visibility: visible; }      
-        
-    }      
-    label {      
-      cursor: pointer;      
-      display: inline-block;      
-      width: 45%;      
-      text-align: center;      
-    }      
-    .tilted { transform: rotateY(45deg); }      
+    
+    
+                .tilted { transform: rotateY(45deg); }      
     .spin-0  { transform: rotateX(-3600deg); }      
     .spin-1  { transform: rotateX(-3636deg); }      
     .spin-2  { transform: rotateX(-3672deg); }      
@@ -186,11 +39,112 @@
     @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }      
     @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }      
     @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }      
+    
+            
+            
+#taruhanSelect {    
+  font-size: 20px;     /* Ukuran tulisan */    
+  padding: 10px 20px;  /* Ruang dalam kotak */    
+  width: 200px;        /* Lebar kotak */    
+  height: 100px;        /* Tinggi kotak */    
+  
+}    
+   
+#resultDisplay {    
+  position: absolute;    
+  top: 50%;    
+  left: 50%;    
+  transform: translate(-50%, -50%);    
+  width: 700px;   /* Ganti ukuran di sini */    
+  height: 700px;  /* Ganti ukuran di sini */    
+  z-index: 9999;    
+  pointer-events: none;    
+}    
+    
+.gif-wrapper {    
+  width: 100%;    
+  height: 100%;    
+  position: relative;    
+}    
+    
+.gif-bg {    
+  width: 100%;    
+  height: 100%;    
+  object-fit: contain;
+  display: block;    
+}    
+    
+.gif-text {    
+    position: absolute;    
+    top: 50%;    
+    left: 50%;    
+    transform: translate(-50%, -50%);    
+    font-size: 58px;    
+    font-weight: bold;    
+    color: yellow;    
+    text-shadow: 2px 2px 4px #000;    
+    z-index: 10;    
+    white-space: nowrap;    
+  }  
+            
+body {      
+background-image: url('https://nasukafoods.site/gol.jpg'); }      
+          
+#stage {      
+      margin: 0 auto;      
+      width: 600px;      
+      padding: 0 0 40px;      
+          }      
+  
+     
+                                 
+                                 
+                                                 
+          
+    #rotate {      
+      margin: 0 auto;      
+      width: 560px;      
+      height: 500px;      
+      padding-top: 200px;      
+      transform-style: preserve-3d;      }   
+      
+    .ring {      
+      margin: 0 auto;      
+      height: 96px;      
+      width: 96px;      
+      float: left;      
+      transform-style: preserve-3d;        }    
+        
+    .roll {      
+      position: absolute;      
+      width: 96px;      
+      height: 96px;      
+      box-sizing: border-box;      
+      opacity: 0.9;      
+      color: rgba(0,0,0,0.9);      
+      background: #fff;      
+      border: solid 2px #000;      
+      backface-visibility: hidden;    }      
+      
+    .roll p {      
+      font-size: 50px;      
+      font-weight: bold;      
+      line-height: 96px;      
+      margin: 0;      
+      text-align: center;      }      
+    
+    
+     .backface-on { backface-visibility: visible; }  
+             
+             }      
+    label {      
+      cursor: pointer;      
+      display: inline-block;      
+      width: 45%;      
+      text-align: center;      
+    }      
        
-    #resultDisplay { color: #000; }      
-    #scoreDisplay { color: green; }      
-    #jumlahSpinDisplay { color: darkorange; }      
-    #jumlahMenangDisplay { color: blue; }      
+    #resultDisplay { color: #000; }         
     #angkaOutput {      
       font-size: 24px;      
       margin-top: 10px;      
@@ -205,11 +159,7 @@
 }    
         
         
-    #taruhanSelect {      
-      font-size: 16px;      
-      margin-top: 10px;      
-      padding: 5px;      
-    }      
+    
         
         
     @keyframes blink-glow {    
@@ -232,8 +182,6 @@
   transform: scale(1.5); /* tambahan pembesaran */    
 }    
     
-    
-    
 label {    
   font-size: 28px;    
   display: flex;    
@@ -241,12 +189,8 @@ label {
   justify-content: center;    
   gap: 10px;    
   padding: 10px;    
-  color: white; /* Tambahkan baris ini untuk mengubah warna */    
+  color: white; 
 }    
-    
-    
-    
-    
     
 #perakSayaDisplay {    
   margin-left: 0;    
@@ -279,7 +223,8 @@ label {
   background: none;    
 }    
        
-   
+        
+  
         
   </style>      
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>      
@@ -296,12 +241,11 @@ label {
     <option value="100">100 perak</option>      
     <option value="250">250 perak</option>      
     <option value="500">500 perak</option>      
-    <option value="1000">1000 perak</option>      
-    <option value="1250">1250 perak</option>      
-    <option value="2500">2500 perak</option>      
-    <option value="5000">5000 perak</option>      
+    <option value="1000">1.000 perak</option>      
+    <option value="5000">5.000 perak</option>      
+    <option value="10000">10.000 perak</option>      
   </select>    
-</header>    
+</header>      
           
           
           
@@ -567,7 +511,7 @@ else {
             
             
           $('.go').prop('disabled', false);    
-$('.go').removeClass('disabled'); // Hapus class agar gambar kembali berwarna    
+$('.go').removeClass('disabled'); 
 $('.go img').attr('src', 'https://nasukafoods.site/guld.jpg');    
              
               
@@ -609,3 +553,5 @@ $('.go img').attr('src', 'https://nasukafoods.site/guld.jpg');
   </script>      
 </body>      
 </html>    
+    
+  
