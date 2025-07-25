@@ -409,7 +409,7 @@
 
 
 <nav>
-  <button onclick="location.href='profil-vip.html'">👤 Profil</button>
+  <button onclick="handleProfileClick()">👤 Profil</button>
   <button onclick="location.href='galeri.html'">🚪 Pintu</button>
 </nav>
 
@@ -627,9 +627,16 @@ function displayRotatingToas(toas) {
     document.getElementById("onlineCount").textContent = fakeCount + " pengguna online";
   }
 
-  // Jalankan pertama kali + update berkala
-  updateFakeOnlineUI();
-  setInterval(updateFakeOnlineUI, 3000); // update tiap 10 detik
+  function handleProfileClick() {
+    const username = localStorage.getItem("username");
+    if (username) {
+      window.location.href = "profil-vip.html";
+    } else {
+      alert("Silakan login terlebih dahulu.");
+      window.location.href = "https://nasukafoods.site/login.html";
+    }
+  }
+
  
 </script>
 </body>
