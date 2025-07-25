@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transfer Saldo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Transfer Saldo</h2>
+
+  <label>Username Penerima:</label>
+  <input type="text" id="recipient" placeholder="Masukkan username tujuan" />
+
+  <label>Jumlah Saldo:</label>
+  <input type="number" id="amount" placeholder="Masukkan nominal saldo" />
+
+  <button onclick="kirimTransfer()">Transfer</button>
+
+  <div id="status"></div>
+
+  <script>
+    const sender = localStorage.getItem('username') || sessionStorage.getItem('username');
+
+    if (!sender) {
+      document.body.innerHTML = '<h3>Pengguna tidak terdeteksi. Silakan login dulu.</h3>';
+    }
+
+    function kirimTransfer() {
+      const recipient = document.getElementById('recipient').value.trim().toLowerCase();
+      const amount = parseFloat(document.getElementById('amount').value.trim());
+      const statusDiv = document.getElementById('status');
+
+      if (!recipient || isNaN(amount) || amount <= 0) {
+        statusDiv.textContent = 'Isian tidak valid.';
+        return;
+      }
+
+      fetch('https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          action: 'transferSaldo',
+          sender: sender,
+          recipient: recipient,
+          amount: amount
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        statusDiv.textContent = res.message || 'Gagal memproses.';
+        if (res.status === 'success') {
+          statusDiv.style.color = 'green';
+        } else {
+          statusDiv.style.color = 'red';
+        }
+      })
+      .catch(err => {
+        statusDiv.textContent = 'Terjadi kesalahan jaringan.';
+        statusDiv.style.color = 'red';
+      });
+    }
+  </script>
+</body>
+</html>
