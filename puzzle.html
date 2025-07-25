@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sliding Puzzle 25 Kotak</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: monospace;
+  background: url('https://nasukafoods.site/teknologi.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#previewBox {
+  margin-bottom: 10px;
+  border: 2px solid #666;
+  border-radius: 5px;
+  overflow: hidden;
+  width: 100px;
+  height: 100px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+#previewBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#puzzle {
+  display: grid;
+  grid-template-columns: repeat(5, 64px);
+  grid-template-rows: repeat(5, 64px);
+  gap: 3px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+canvas {
+  width: 64px;
+  height: 64px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+canvas.empty {
+  background: #ddd;
+  box-shadow: none;
+  cursor: default;
+}
+
+#rewardBox {
+  margin-top: 15px;
+  padding: 10px;
+  background: #4caf50;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  display: none;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #45a049;
+}
+</style>
+</head>
+<body>
+
+<div id="previewBox">
+  <img id="previewImage" src="https://nasukafoods.site/nasukafoods.jpg" alt="Preview" />
+</div>
+
+<div id="puzzle"></div>
+<button id="resetBtn">Acak Ulang</button>
+<div id="rewardBox"></div>
+
+
+<script>
+const size = 5;
+const tileSize = 64;
+const puzzle = document.getElementById('puzzle');
+const resetBtn = document.getElementById('resetBtn');
+const rewardBox = document.getElementById('rewardBox');
+
+let positions = [];
+let img = new Image();
+img.crossOrigin = "anonymous";
+img.src = 'https://nasukafoods.site/nasukafoods.jpg';
+
+document.getElementById('previewImage').src = img.src;
+
+function initPositions() {
+  positions = [];
+  for(let i=0; i < size*size; i++) {
+    positions.push(i);
+  }
+}
+
+function shuffle(array) {
+  for(let i=array.length-1; i>0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function render() {
+  puzzle.innerHTML = '';
+  for(let i=0; i < positions.length; i++) {
+    const tileIndex = positions[i];
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = tileSize;
+    canvas.classList.add('tile');
+    if(tileIndex === size*size -1) {
+      canvas.classList.add('empty');
+    } else {
+      drawTile(canvas, tileIndex);
+      canvas.addEventListener('click', () => moveTile(i));
+    }
+    puzzle.appendChild(canvas);
+  }
+}
+
+function drawTile(canvas, tileIndex) {
+  const ctx = canvas.getContext('2d');
+  const row = Math.floor(tileIndex / size);
+  const col = tileIndex % size;
+  const s = Math.min(img.width, img.height);
+  const sx = (img.width > img.height) ? (img.width - s) / 2 + col * (s / size) : col * (s / size);
+  const sy = (img.height > img.width) ? (img.height - s) / 2 + row * (s / size) : row * (s / size);
+  const sw = s / size;
+  const sh = s / size;
+
+  ctx.clearRect(0, 0, tileSize, tileSize);
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, tileSize, tileSize);
+}
+
+function isAdjacent(pos1, pos2) {
+  const x1 = pos1 % size;
+  const y1 = Math.floor(pos1 / size);
+  const x2 = pos2 % size;
+  const y2 = Math.floor(pos2 / size);
+  return (Math.abs(x1 - x2) + Math.abs(y1 - y2)) === 1;
+}
+
+function moveTile(tilePos) {
+  const emptyPos = positions.indexOf(size*size -1);
+  if(isAdjacent(tilePos, emptyPos)) {
+    [positions[tilePos], positions[emptyPos]] = [positions[emptyPos], positions[tilePos]];
+    render();
+    if(checkWin()) {
+      showReward(500);
+    }
+  }
+}
+
+function checkWin() {
+  for(let i=0; i < positions.length; i++) {
+    if(positions[i] !== i) {
+      rewardBox.style.display = 'none';
+      return false;
+    }
+  }
+  return true;
+}
+
+function showReward(amount) {
+  rewardBox.textContent = `🎉 Selamat! Kamu dapat reward Rp ${amount.toLocaleString('id-ID')}`;
+  rewardBox.style.display = 'block';
+}
+
+function shuffleUntilSolvable() {
+  do {
+    shuffle(positions);
+  } while(!isSolvable(positions) || checkWin());
+  rewardBox.style.display = 'none';
+}
+
+function isSolvable(arr) {
+  let invCount = 0;
+  for(let i=0; i < arr.length -1; i++) {
+    for(let j=i+1; j < arr.length; j++) {
+      if(arr[i] !== size*size -1 && arr[j] !== size*size -1 && arr[i] > arr[j]) {
+        invCount++;
+      }
+    }
+  }
+  const emptyRow = Math.floor(arr.indexOf(size*size -1) / size);
+  if(size % 2 === 1) {
+    return invCount % 2 === 0;
+  } else {
+    if((size - emptyRow) % 2 === 0) {
+      return invCount % 2 === 1;
+    } else {
+      return invCount % 2 === 0;
+    }
+  }
+}
+
+resetBtn.addEventListener('click', () => {
+  shuffleUntilSolvable();
+  render();
+});
+
+img.onload = () => {
+  initPositions();
+  shuffleUntilSolvable();
+  render();
+};
+</script>
+
+</body>
+</html>
