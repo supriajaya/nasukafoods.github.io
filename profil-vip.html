@@ -34,8 +34,8 @@
     </div>
     <div class="stats">
       <div class="stat"><span id="saldo">Rp 0</span>Saldo</div>
-      <div class="stat"><span id="bunga">0%</span>Benefit</div>
-      <div class="stat"><span id="bungarp">Rp 0</span>Bonus Top Up</div>
+      <div class="stat"><span id="bunga">0%</span>Bunga</div>
+      <div class="stat"><span id="bungarp">Rp 0</span>Bunga Rupiah</div>
     </div>
     <div class="bio" id="alamat">-</div>
     <div class="details">
@@ -45,6 +45,8 @@
       <p><strong>Username:</strong> <span id="username">-</span></p>
       <p><strong>Sosial Media:</strong> <span id="sosial">-</span></p>
       <p><strong>Poin:</strong> <span id="poin">-</span></p>
+      <p><strong>Perak:</strong> <span id="perak">-</span></p>
+      <p><strong>Gold:</strong> <span id="gold">-</span></p>
       <p><strong>Tanggal Daftar:</strong> <span id="tanggal">-</span></p>
     </div>
     <div class="btns">
@@ -103,6 +105,11 @@
     document.getElementById("bungarp").textContent = formatRupiah(data["Bunga Rupiah"]);
     document.getElementById("foto").src = data.Foto || "";
     document.getElementById("poin").textContent = data.Poin || "0";
+    document.getElementById("perak").textContent = data.Perak || "0";
+    document.getElementById("gold").textContent = data.gold|| "0";
+    
+    
+    
     document.getElementById("tanggal").textContent = data["Tanggal Daftar"] || "-";
   }
 
