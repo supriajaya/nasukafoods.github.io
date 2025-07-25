@@ -3,128 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Profil VIP</title>
+  <title>Profil & Transfer Saldo</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f2f2f2; }
-    .container { max-width: 600px; margin: auto; padding: 1rem; }
-    .profile-header { display: flex; align-items: center; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 1rem; }
-    .profile-header img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-right: 1rem; border: 2px solid #ccc; }
-    .profile-info { flex: 1; }
-    .profile-info #username { font-size: 1.5rem; font-weight: bold; color: #333; }
-    .profile-info #status { font-size: 0.9rem; color: #777; }
-    .stats { display: flex; justify-content: space-between; background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 1rem; }
-    .stat { text-align: center; flex: 1; }
-    .stat span { display: block; font-weight: bold; font-size: 1.1rem; color: #333; }
-    .bio { background: white; padding: 1rem; border-radius: 12px; font-style: italic; color: #444; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .details { background: white; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .details p { margin: 0.5rem 0; }
-    .details strong { width: 140px; display: inline-block; color: #333; }
-    .btns { display: flex; justify-content: space-between; margin-top: 1.5rem; }
-    button { padding: 0.6rem 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-    button:hover { background-color: #0056b3; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="profile-header">
-      <img id="foto" src="" alt="Foto Profil" />
-      <div class="profile-info">
-        <div id="nama">Loading...</div>
-      </div>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fafafa;
+    margin: 0;
+    padding: 0;
+    color: #262626;
+  }
+
+  .main-wrapper {
+    max-width: 935px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .profile-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .profile-top img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #dbdbdb;
+  }
+
+  .profile-top h2 {
+    margin: 1rem 0 0.2rem;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .profile-top p#username {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 0.5rem;
+  }
+
+  .profile-top p#alamat {
+    font-size: 14px;
+    color: #444;
+    max-width: 400px;
+  }
+
+  .profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+  }
+
+  .profile-stats div {
+    text-align: center;
+  }
+
+  .profile-stats div strong {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .profile-stats div span {
+    font-size: 14px;
+    color: #888;
+  }
+
+  .btns {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .btns button {
+    background: #0095f6;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .btns button#logoutBtn {
+    background: #ed4956;
+  }
+
+  .transfer-box {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .transfer-box h2 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 1rem;
+  }
+
+  .transfer-box label {
+    display: block;
+    font-size: 14px;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+
+  .transfer-box input {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 14px;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    outline: none;
+  }
+
+  .transfer-box button {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.7rem;
+    font-size: 14px;
+    font-weight: 600;
+    background: #00cc88;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #status {
+    margin-top: 1rem;
+    font-size: 14px;
+    text-align: center;
+  }
+</style>
+
+<div class="main-wrapper">
+  <div class="profile-top">
+    <img id="foto" src="" alt="Foto Profil" />
+    <h2 id="nama">Memuat...</h2>
+    <p id="username">@username</p>
+    <p id="alamat">Bio belum tersedia</p>
+  </div>
+
+  <div class="profile-stats">
+    <div>
+      <strong id="saldo">Rp 0</strong>
+      <span>Saldo</span>
     </div>
-    <div class="stats">
-      <div class="stat"><span id="saldo">Rp 0</span>Saldo</div>
-      <div class="stat"><span id="bunga">0%</span>Bunga</div>
-      <div class="stat"><span id="bungarp">Rp 0</span>Bunga Rupiah</div>
+    <div>
+      <strong id="perak">0</strong>
+      <span>Perak</span>
     </div>
-    <div class="bio" id="alamat">-</div>
-    <div class="details">
-      <p><strong>ID:</strong> <span id="id">-</span></p>
-      <p><strong>Status:</strong> <span id="status">-</span></p>
-      <p><strong>Telepon:</strong> <span id="telepon">-</span></p>
-      <p><strong>Username:</strong> <span id="username">-</span></p>
-      <p><strong>Sosial Media:</strong> <span id="sosial">-</span></p>
-      <p><strong>Poin:</strong> <span id="poin">-</span></p>
-      <p><strong>Perak:</strong> <span id="perak">-</span></p>
-      <p><strong>Gold:</strong> <span id="gold">-</span></p>
-      <p><strong>Tanggal Daftar:</strong> <span id="tanggal">-</span></p>
-    </div>
-    <div class="btns">
-      <button onclick="goHome()">🏠 Beranda</button>
-      <button onclick="topUp()">🎁 Top Up</button>
-      <button id="logoutBtn">🚪 Logout</button>
+    <div>
+      <strong id="statusProfil">-</strong>
+      <span>Status</span>
     </div>
   </div>
+
+
+  
+ 
+      
+<p><strong>ID:</strong> <span id="id">-</span></p>
+        <p><strong>Telepon:</strong> <span id="telepon">-</
+              span></p>        
+        <p><strong>Sosial Media:</strong> <span id="sosial">-</span></p>
+      </div>
+
+     
+    </div>
+
+    <div id="transferSection" class="transfer-section-desktop">
+      
+      
+      <input type="text" id="recipient" placeholder="Masukkan username tujuan" />
+      
+      <input type="number" id="amount" placeholder="Masukkan nominal saldo" />
+      <button onclick="kirimTransfer()">Transfer</button>
+      <div id="status"></div>
+    </div>
+  </div>     <div class="btns">
+        <button onclick="goHome()">🏠 Beranda <button onclick="topUp()">🎁 Top Up</button></button>
+       
+        <button id="logoutBtn">🚪 Logout</button>
+      </div>
+    </div>
+
   <script>
-  const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const idFromURL = urlParams.get("id");
-    const idFromLocal = localStorage.getItem("user_id");
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const idFromURL = urlParams.get("id");
+      const idFromLocal = localStorage.getItem("user_id");
+      const finalId = idFromURL || idFromLocal;
 
-    const finalId = idFromURL || idFromLocal;
+      if (!finalId) {
+        alert("ID tidak ditemukan. Silakan login dulu.");
+        window.location.href = "index.html";
+        return;
+      }
 
-    if (!finalId) {
-      alert("ID tidak ditemukan. Silakan login dulu.");
-      window.location.href = "index.html";
-      return;
-    }
-
-    fetch(`${URL_GAS}?action=getProfile&user_id=${encodeURIComponent(finalId)}`)
-      .then(res => res.json())
-      .then(data => {
-        if (!data || !data.Username) {
-          alert("Data tidak ditemukan.");
+      fetch(`${URL_GAS}?action=getProfile&user_id=${encodeURIComponent(finalId)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data || !data.Username) {
+            alert("Data tidak ditemukan.");
+            window.location.href = "index.html";
+            return;
+          }
+          tampilkanProfil(data);
+        })
+        .catch(() => {
+          alert("Gagal koneksi ke server.");
           window.location.href = "index.html";
-          return;
-        }
-        tampilkanProfil(data);
-      })
-      .catch(() => {
-        alert("Gagal koneksi ke server.");
+        });
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.clear();
         window.location.href = "index.html";
       });
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.clear();
-      window.location.href = "index.html";
     });
-  });
 
-  function tampilkanProfil(data) {
-    document.getElementById("id").textContent = data.ID || "-";
-    document.getElementById("status").textContent = data.Status || "-";
-    document.getElementById("nama").textContent = data.Nama || "-";
-    document.getElementById("alamat").textContent = data.Alamat || "-";
-    document.getElementById("telepon").textContent = data.Telepon || "-";
-    document.getElementById("sosial").textContent = data["Sosial Media"] || "-";
-    document.getElementById("username").textContent = data.Username || "-";
-    document.getElementById("saldo").textContent = formatRupiah(data.Saldo);
-    document.getElementById("bunga").textContent = (data.Bunga || "0") + "%";
-    document.getElementById("bungarp").textContent = formatRupiah(data["Bunga Rupiah"]);
-    document.getElementById("foto").src = data.Foto || "";
-    document.getElementById("poin").textContent = data.Poin || "0";
-    document.getElementById("perak").textContent = data.Perak || "0";
-    document.getElementById("gold").textContent = data.gold|| "0";
-    
-    
-    
-    document.getElementById("tanggal").textContent = data["Tanggal Daftar"] || "-";
-  }
+    function tampilkanProfil(data) {
+      document.getElementById("id").textContent = data.ID || "-";
+      document.getElementById("statusProfil").textContent = data.Status || "-";
+      document.getElementById("nama").textContent = data.Nama || "-";
+      document.getElementById("alamat").textContent = data.Alamat || "Bio belum tersedia.";
+      document.getElementById("telepon").textContent = data.Telepon || "-";
+      document.getElementById("sosial").textContent = data["Sosial Media"] || "-";
+      document.getElementById("username").textContent = data.Username || "-";
+      document.getElementById("saldo").textContent = formatRupiah(data.Saldo);
+      document.getElementById("foto").src = data.Foto || "";
+      document.getElementById("perak").textContent = data.Perak || "0";
+    }
 
-  function formatRupiah(angka) {
-    if (!angka || isNaN(angka)) return "Rp 0";
-    return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
+    function formatRupiah(angka) {
+      if (!angka || isNaN(angka)) return "Rp 0";
+      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-  function goHome() {
-    window.location.href = "index.html";
-  }
+    function goHome() {
+      window.location.href = "index.html";
+    }
 
-  function topUp() {
-    alert("Fitur Top Up belum tersedia.");
-  }
-</script>
+    function topUp() {
+      alert("Fitur Top Up belum tersedia.");
+    }
+
+    const sender = localStorage.getItem('username') || sessionStorage.getItem('username');
+
+    if (!sender) {
+      document.getElementById("transferSection").innerHTML = '<h3>Pengguna tidak terdeteksi. Silakan login dulu.</h3>';
+    }
+
+    function kirimTransfer() {
+      const recipient = document.getElementById('recipient').value.trim().toLowerCase();
+      const amount = parseFloat(document.getElementById('amount').value.trim());
+      const statusDiv = document.getElementById('status');
+
+      if (!recipient || isNaN(amount) || amount <= 0) {
+        statusDiv.textContent = 'Isian tidak valid. Mohon lengkapi semua kolom dengan benar.';
+        statusDiv.style.color = 'red';
+        return;
+      }
+
+      statusDiv.textContent = 'Memproses transfer...';
+      statusDiv.style.color = 'grey';
+
+      fetch(URL_GAS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          action: 'transferSaldo',
+          sender: sender,
+          recipient: recipient,
+          amount: amount
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        statusDiv.textContent = res.message || 'Gagal memproses transfer.';
+        if (res.status === 'success') {
+          statusDiv.style.color = 'lime';
+          document.getElementById('recipient').value = '';
+          document.getElementById('amount').value = '';
+          const urlParams = new URLSearchParams(window.location.search);
+          const idFromURL = urlParams.get("id");
+          const idFromLocal = localStorage.getItem("user_id");
+          const finalId = idFromURL || idFromLocal;
+          fetch(`${URL_GAS}?action=getProfile&user_id=${encodeURIComponent(finalId)}`)
+            .then(res => res.json())
+            .then(data => tampilkanProfil(data));
+        } else {
+          statusDiv.style.color = 'red';
+        }
+      })
+      .catch(err => {
+        console.error('Network error:', err);
+        statusDiv.textContent = 'Terjadi kesalahan jaringan. Silakan coba lagi.';
+        statusDiv.style.color = 'red';
+      });
+    }
+  </script>
 </body>
 </html>
