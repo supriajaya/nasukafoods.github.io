@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beli Perak</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      padding: 2rem;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.7rem;
+      font-size: 1rem;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Beli Perak</h2>
+
+  <input type="text" id="username" placeholder="Username" />
+  <input type="number" id="jumlahSaldo" placeholder="Jumlah Saldo untuk Ditukar" />
+
+  <button onclick="beliPerak()">Tukar Sekarang</button>
+
+  <div id="result"></div>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec'; // Ganti dengan URL Web App GAS kamu
+
+    function beliPerak() {
+      const username = document.getElementById('username').value.trim().toLowerCase();
+      const jumlahSaldo = document.getElementById('jumlahSaldo').value.trim();
+
+      if (!username || !jumlahSaldo) {
+        alert('Harap isi semua kolom.');
+        return;
+      }
+
+      fetch(scriptURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          action: 'beliPerak',
+          username: username,
+          jumlahSaldo: jumlahSaldo
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        const resultDiv = document.getElementById('result');
+        if (data.status === 'success') {
+          resultDiv.style.color = 'green';
+          resultDiv.innerText = data.message + `\nSisa Saldo: ${data.sisaSaldo}\nTotal Perak: ${data.totalPerak}`;
+        } else {
+          resultDiv.style.color = 'red';
+          resultDiv.innerText = data.message;
+        }
+      })
+      .catch(err => {
+        document.getElementById('result').innerText = 'Gagal menghubungi server.';
+      });
+    }
+  </script>
+
+</body>
+</html>
