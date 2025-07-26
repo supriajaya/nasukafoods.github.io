@@ -1,337 +1,392 @@
-
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
-  <title>Burung</title>  
-  <style>  
-    body {  
-      -webkit-touch-callout: none;  
-      -webkit-user-select: none;  
-      -khtml-user-select: none;  
-      -moz-user-select: none;  
-      -ms-user-select: none;  
-      user-select: none;  
-      overflow: hidden;  
-    }  
-  
-    input { position: fixed; left: -10px; top: -10px; }  
-    h1 { margin: 0; text-align: center; }  
-    h2 { position: fixed; right: 20px; bottom: 0; font-size: 18px; color: red; }  
-  
-    .wrapper {  
-      height: 500px;  
-      background: -webkit-linear-gradient(top, hsla(210,70%,80%,1) 0%, hsla(210,50%,100%,1) 100%);  
-      position: relative;  
-      cursor: crosshair;  
-    }  
-  
-    .sum {  
-      position: fixed;  
-      left: 45%;  
-      top: 60px;  
-      font-size: 24px;  
-      font-weight: bold;  
-    }  
-  
-    .input-circle ~ .pajaro { opacity: 0; transition: 0.3s cubic-bezier(0,.43,1,0); animation: move 8s infinite alternate; }  
-    .input-circle1:not(:checked) ~ .pajaro1,  
-    .input-circle2:not(:checked) ~ .pajaro2,  
-    .input-circle3:not(:checked) ~ .pajaro3,  
-    .input-circle4:not(:checked) ~ .pajaro4,  
-    .input-circle5:not(:checked) ~ .pajaro5,  
-    .input-circle6:not(:checked) ~ .pajaro6 { opacity: 1; }  
-  
-    .input-circle1:checked ~ .pajaro1 span,  
-    .input-circle2:checked ~ .pajaro2 span,  
-    .input-circle3:checked ~ .pajaro3 span,  
-    .input-circle4:checked ~ .pajaro4 span,  
-    .input-circle5:checked ~ .pajaro5 span,  
-    .input-circle6:checked ~ .pajaro6 span { display: block; }  
-  
-.input-circle7:not(:checked) ~ .pajaro7,  
-.input-circle8:not(:checked) ~ .pajaro8,  
-.input-circle9:not(:checked) ~ .pajaro9,  
-.input-circle10:not(:checked) ~ .pajaro10,  
-.input-circle11:not(:checked) ~ .pajaro11,  
-.input-circle12:not(:checked) ~ .pajaro12 { opacity: 1; }  
-  
-.input-circle7:checked ~ .pajaro7 span,  
-.input-circle8:checked ~ .pajaro8 span,  
-.input-circle9:checked ~ .pajaro9 span,  
-.input-circle10:checked ~ .pajaro10 span,  
-.input-circle11:checked ~ .pajaro11 span,  
-.input-circle12:checked ~ .pajaro12 span { display: block; }  
-  
-.pajaro7  { top: 150px; animation-delay: -4s !important; transform: scale(1.0); }  
-.pajaro8  { top: 250px; animation-delay: -5s !important; transform: scale(0.7); }  
-.pajaro9  { top: 300px; animation-delay: -6s !important; transform: scale(1.1); }  
-.pajaro10 { top: 150px; animation-delay: -7s !important; transform: scale(0.9); }  
-.pajaro11 { top: 250px; animation-delay: -8s !important; transform: scale(1.2); }  
-.pajaro12 { top: 300px; animation-delay: -9s !important; transform: scale(0.6); }  
-  
-  
-  
-  
-    .pajaro {  
-      position: absolute;  
-      left: 0;  
-      cursor: crosshair;  
-      background: black;  
-      border-radius: 50% 50% 20% 20%;  
-      color: white;  
-      line-height: 20px;  
-      letter-spacing: 2px;  
-      font-size: 0.8em;  
-      text-align: center;  
-      margin-top: -20px;  
-      margin-left: -10px;  
-      width: 15px;  
-      height: 15px;  
-      animation: planeo 0.8s linear infinite;  
-      z-index: 999;  
-    }  
-  
-    .pajaro > span {  
-      display: none;  
-      position: absolute;  
-      z-index: 2;  
-      left: -250%;  
-      bottom: -50%;  
-      background-color: white;  
-      border: solid 2px #000;  
-      width: 80px;  
-      height: 30px;  
-      padding: 10px;  
-      border-radius: 50%;  
-    }  
-  
-    .pajaro > span:before {  
-      content: "10 Perak";  
-      color: red;  
-      font-weight: bold;  
-    }  
-  
-    .pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }  
-    .pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }  
-    .pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }  
-    .pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }  
-    .pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }  
-    .pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }  
-  
-    @keyframes move {  
-      0% { left: 0%; }  
-      20% { left: 20%; top: 50%; }  
-      40% { top: 30%; left: 60%; }  
-      60% { top: 80%; left: 80%; }  
-      80% { top: 10%; left: 20%; }  
-      100% { top: 30%; left: 20%; }  
-    }  
-  
-    .timer {  
-      background-color: #333;  
-      width: 300px;  
-      height: 50px;  
-      position: fixed;  
-    }  
-  
-    .timer span {  
-      display: block;  
-      background: repeating-linear-gradient(-45deg, #000, rgba(0, 0, 0, 0) 25px, #FFF 25px, #FFF 50px);  
-      width: 300px;  
-      height: 50px;  
-      animation: timer 60s linear;  
-    }  
-  
-    .timer span:before {  
-      content: "SISA WAKTU";  
-      display: block;  
-      position: absolute;  
-      z-index: 3;  
-      left: 0;  
-      right: 0;  
-      top: 0;  
-      bottom: 0;  
-      text-align: center;  
-      line-height: 50px;  
-      font-size: 25px;  
-      color: red;  
-    }  
-  
-    @keyframes timer {  
-      0% { width: 10px; }  
-      100% { width: 300px; display: block; }  
-    }  
-  
-    .gameover {  
-      position: fixed;  
-      z-index: 100000;  
-      left: 0;  
-      top: 0;  
-      bottom: 0;  
-      right: 0;  
-      background-color: rgba(0,0,0,0.8);  
-      animation: gameover 60s linear forwards;  
-      font-size: 80px;  
-      color: white;  
-      font-weight: bold;  
-      text-align: center;  
-      line-height: 500px;  
-    }  
-  
-    @keyframes gameover {  
-      0% { left: -5000px; bottom: 100%; }  
-      97% { left: -5000px; bottom: 100%; }  
-      100% { left: 0px; }  
-    }  
-  
-    .pajaro:after,  
-    .pajaro:before {  
-      content: "";  
-      position: absolute;  
-      top: 50%;  
-      left: 50%;  
-    }  
-  
-    .pajaro:after {  
-      border-radius: 100% 100% 0 0;  
-      box-shadow: inset 0px 5px 0 black;  
-      width: 100px;  
-      height: 100px;  
-      margin-top: -7px;  
-      margin-left: -50px;  
-      transform-origin: 100% 0%;  
-      animation: alas 3s linear infinite;  
-    }  
-  
-    .pajaro:before {  
-      background: #FFC37F;  
-      border-radius: 100% 0% 20% 0%;  
-      margin-top: 3px;  
-      margin-left: -4px;  
-      width: 6px;  
-      height: 6px;  
-      transform: rotateZ(45deg);  
-    }  
-  
-    @keyframes alas {  
-      50% { transform: rotateX(-1440deg); }  
-    }  
-  
-    @keyframes planeo {  
-      40% {  
-        transform: rotateZ(2deg) translateX(2px) translateY(10px) translateZ(0);  
-        line-height: 16px;  
-        font-size: 0.6em;  
-      }  
-      80% {  
-        transform: rotateZ(-2deg) translateX(5px) translateY(8px) translateZ(0);  
-      }  
-    }  
-  </style>  
-</head>  
-<body>  
-  <div class="wrapper">  
-    <div class="timer"><span></span></div>  
-    <div class="gameover">WAKTU HABIS</div>  
-    <h2>Nasuka</h2>  
-  
-    <input class="input-circle input-circle1" type="radio" id="circle1">  
-    <input class="input-circle input-circle2" type="radio" id="circle2">  
-    <input class="input-circle input-circle3" type="radio" id="circle3">  
-    <input class="input-circle input-circle4" type="radio" id="circle4">  
-    <input class="input-circle input-circle5" type="radio" id="circle5">  
-    <input class="input-circle input-circle6" type="radio" id="circle6">  
-  
-    <label for="circle1" class="pajaro pajaro1"><span></span></label>  
-    <label for="circle2" class="pajaro pajaro2"><span></span></label>  
-    <label for="circle3" class="pajaro pajaro3"><span></span></label>  
-    <label for="circle4" class="pajaro pajaro4"><span></span></label>  
-    <label for="circle5" class="pajaro pajaro5"><span></span></label>  
-    <label for="circle6" class="pajaro pajaro6"><span></span></label>  
-  
-  
-<input class="input-circle input-circle7" type="radio" id="circle7">  
-<input class="input-circle input-circle8" type="radio" id="circle8">  
-<input class="input-circle input-circle9" type="radio" id="circle9">  
-<input class="input-circle input-circle10" type="radio" id="circle10">  
-<input class="input-circle input-circle11" type="radio" id="circle11">  
-<input class="input-circle input-circle12" type="radio" id="circle12">  
-  
-<label for="circle7" class="pajaro pajaro7"><span></span></label>  
-<label for="circle8" class="pajaro pajaro8"><span></span></label>  
-<label for="circle9" class="pajaro pajaro9"><span></span></label>  
-<label for="circle10" class="pajaro pajaro10"><span></span></label>  
-<label for="circle11" class="pajaro pajaro11"><span></span></label>  
-<label for="circle12" class="pajaro pajaro12"><span></span></label>  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-    <div class="sum">PERAK : </div>  
-  </div>  
-  <script>
-  let totalPerak = 0;
-  const sumDisplay = document.querySelector('.sum');
-  const burungInputs = document.querySelectorAll('.input-circle');
-
-  
-  burungInputs.forEach((input) => {
-    input.addEventListener('change', function () {
-      if (input.checked) {
-        totalPerak += 10;
-        sumDisplay.textContent = 'PERAK : ' + totalPerak;
-      }
-    });
-  });
-
-  
-  function kirimPerakKeSheet(username, jumlahPerak) {
-    const url = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
-
-    const formData = new FormData();
-    formData.append('action', 'updatePerak');
-    formData.append('username', username);
-    formData.append('changeAmount', jumlahPerak);
-
-    fetch(url, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.text())
-    .then(result => {
-      alert(`Hadiah ${jumlahPerak} perak berhasil dikirim ke akun ${username}!\nRespon: ${result}`);
-      console.log('Server response:', result);
-    })
-    .catch(error => {
-      console.error('Error saat mengirim:', error);
-      alert("Gagal mengirim perak ke server.");
-    });
-  }
-
-  
-  setTimeout(() => {
-    burungInputs.forEach(input => input.disabled = true);
-
-    const username = (localStorage.getItem('username') || 'guest').trim().toLowerCase();
-
-    if (username && totalPerak > 0) {
-      kirimPerakKeSheet(username, totalPerak);
-    } else {
-      console.log("Username kosong atau belum dapat perak.");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Burung</title>
+  <style>
+    body {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      overflow: hidden;
     }
-  }, 60000);
-</script>
-</body>  
-  
-  
-  
-  
+
+    input { position: fixed; left: -10px; top: -10px; }
+    h1 { margin: 0; text-align: center; }
+    h2 { position: fixed; right: 20px; bottom: 0; font-size: 18px; color: red; }
+
+    .wrapper {
+      height: 500px;
+      background: -webkit-linear-gradient(top, hsla(210,70%,80%,1) 0%, hsla(210,50%,100%,1) 100%);
+      position: relative;
+      cursor: crosshair;
+    }
+
+    .sum {
+      position: fixed;
+      left: 45%;
+      top: 60px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .input-circle ~ .pajaro { opacity: 0; transition: 0.3s cubic-bezier(0,.43,1,0); animation: move 8s infinite alternate; }
+    .input-circle1:not(:checked) ~ .pajaro1,
+    .input-circle2:not(:checked) ~ .pajaro2,
+    .input-circle3:not(:checked) ~ .pajaro3,
+    .input-circle4:not(:checked) ~ .pajaro4,
+    .input-circle5:not(:checked) ~ .pajaro5,
+    .input-circle6:not(:checked) ~ .pajaro6,
+    .input-circle7:not(:checked) ~ .pajaro7,
+    .input-circle8:not(:checked) ~ .pajaro8,
+    .input-circle9:not(:checked) ~ .pajaro9,
+    .input-circle10:not(:checked) ~ .pajaro10,
+    .input-circle11:not(:checked) ~ .pajaro11,
+    .input-circle12:not(:checked) ~ .pajaro12,
+    .input-circle13:not(:checked) ~ .pajaro13,
+    .input-circle14:not(:checked) ~ .pajaro14,
+    .input-circle15:not(:checked) ~ .pajaro15,
+    .input-circle16:not(:checked) ~ .pajaro16,
+    .input-circle17:not(:checked) ~ .pajaro17,
+    .input-circle18:not(:checked) ~ .pajaro18,
+    .input-circle19:not(:checked) ~ .pajaro19,
+    .input-circle20:not(:checked) ~ .pajaro20,
+    .input-circle21:not(:checked) ~ .pajaro21,
+    .input-circle22:not(:checked) ~ .pajaro22,
+    .input-circle23:not(:checked) ~ .pajaro23,
+    .input-circle24:not(:checked) ~ .pajaro24,
+    .input-circle25:not(:checked) ~ .pajaro25,
+    .input-circle26:not(:checked) ~ .pajaro26,
+    .input-circle27:not(:checked) ~ .pajaro27 { opacity: 1; }
+
+    .input-circle1:checked ~ .pajaro1 span,
+    .input-circle2:checked ~ .pajaro2 span,
+    .input-circle3:checked ~ .pajaro3 span,
+    .input-circle4:checked ~ .pajaro4 span,
+    .input-circle5:checked ~ .pajaro5 span,
+    .input-circle6:checked ~ .pajaro6 span,
+    .input-circle7:checked ~ .pajaro7 span,
+    .input-circle8:checked ~ .pajaro8 span,
+    .input-circle9:checked ~ .pajaro9 span,
+    .input-circle10:checked ~ .pajaro10 span,
+    .input-circle11:checked ~ .pajaro11 span,
+    .input-circle12:checked ~ .pajaro12 span,
+    .input-circle13:checked ~ .pajaro13 span,
+    .input-circle14:checked ~ .pajaro14 span,
+    .input-circle15:checked ~ .pajaro15 span,
+    .input-circle16:checked ~ .pajaro16 span,
+    .input-circle17:checked ~ .pajaro17 span,
+    .input-circle18:checked ~ .pajaro18 span,
+    .input-circle19:checked ~ .pajaro19 span,
+    .input-circle20:checked ~ .pajaro20 span,
+    .input-circle21:checked ~ .pajaro21 span,
+    .input-circle22:checked ~ .pajaro22 span,
+    .input-circle23:checked ~ .pajaro23 span,
+    .input-circle24:checked ~ .pajaro24 span,
+    .input-circle25:checked ~ .pajaro25 span,
+    .input-circle26:checked ~ .pajaro26 span,
+    .input-circle27:checked ~ .pajaro27 span { display: block; }
+
+    .pajaro7  { top: 150px; animation-delay: -4s !important; transform: scale(1.0); }
+    .pajaro8  { top: 250px; animation-delay: -5s !important; transform: scale(0.7); }
+    .pajaro9  { top: 300px; animation-delay: -6s !important; transform: scale(1.1); }
+    .pajaro10 { top: 150px; animation-delay: -7s !important; transform: scale(0.9); }
+    .pajaro11 { top: 250px; animation-delay: -8s !important; transform: scale(1.2); }
+    .pajaro12 { top: 300px; animation-delay: -9s !important; transform: scale(0.6); }
+    .pajaro13 { top: 70px; animation-delay: -10s !important; transform: scale(1.3); }
+    .pajaro14 { top: 120px; animation-delay: -11s !important; transform: scale(0.85); }
+    .pajaro15 { top: 180px; animation-delay: -12s !important; transform: scale(1.15); }
+    .pajaro16 { top: 220px; animation-delay: -13s !important; transform: scale(0.95); }
+    .pajaro17 { top: 280px; animation-delay: -14s !important; transform: scale(1.05); }
+    .pajaro18 { top: 320px; animation-delay: -15s !important; transform: scale(0.75); }
+    .pajaro19 { top: 90px; animation-delay: -16s !important; transform: scale(1.25); }
+    .pajaro20 { top: 140px; animation-delay: -17s !important; transform: scale(0.65); }
+    .pajaro21 { top: 190px; animation-delay: -18s !important; transform: scale(1.0); }
+    .pajaro22 { top: 240px; animation-delay: -19s !important; transform: scale(0.8); }
+    .pajaro23 { top: 290px; animation-delay: -20s !important; transform: scale(1.1); }
+    .pajaro24 { top: 340px; animation-delay: -21s !important; transform: scale(0.7); }
+    .pajaro25 { top: 60px; animation-delay: -22s !important; transform: scale(1.0); }
+    .pajaro26 { top: 110px; animation-delay: -23s !important; transform: scale(0.9); }
+    .pajaro27 { top: 160px; animation-delay: -24s !important; transform: scale(1.2); }
+
+    .pajaro {
+      position: absolute;
+      left: 0;
+      cursor: crosshair;
+      background: black;
+      border-radius: 50% 50% 20% 20%;
+      color: white;
+      line-height: 20px;
+      letter-spacing: 2px;
+      font-size: 0.8em;
+      text-align: center;
+      margin-top: -20px;
+      margin-left: -10px;
+      width: 15px;
+      height: 15px;
+      animation: planeo 0.8s linear infinite;
+      z-index: 999;
+    }
+
+    .pajaro > span {
+      display: none;
+      position: absolute;
+      z-index: 2;
+      left: -250%;
+      bottom: -50%;
+      background-color: white;
+      border: solid 2px #000;
+      width: 80px;
+      height: 30px;
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    .pajaro > span:before {
+      content: "10 Perak";
+      color: red;
+      font-weight: bold;
+    }
+
+    .pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }
+    .pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }
+    .pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }
+    .pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }
+    .pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }
+    .pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }
+
+    @keyframes move {
+      0% { left: 0%; }
+      20% { left: 20%; top: 50%; }
+      40% { top: 30%; left: 60%; }
+      60% { top: 80%; left: 80%; }
+      80% { top: 10%; left: 20%; }
+      100% { top: 30%; left: 20%; }
+    }
+
+    .timer {
+      background-color: #333;
+      width: 300px;
+      height: 50px;
+      position: fixed;
+    }
+
+    .timer span {
+      display: block;
+      background: repeating-linear-gradient(-45deg, #000, rgba(0, 0, 0, 0) 25px, #FFF 25px, #FFF 50px);
+      width: 300px;
+      height: 50px;
+      animation: timer 60s linear;
+    }
+
+    .timer span:before {
+      content: "SISA WAKTU";
+      display: block;
+      position: absolute;
+      z-index: 3;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      text-align: center;
+      line-height: 50px;
+      font-size: 25px;
+      color: red;
+    }
+
+    @keyframes timer {
+      0% { width: 10px; }
+      100% { width: 300px; display: block; }
+    }
+
+    .gameover {
+      position: fixed;
+      z-index: 100000;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background-color: rgba(0,0,0,0.8);
+      animation: gameover 60s linear forwards;
+      font-size: 80px;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      line-height: 500px;
+    }
+
+    @keyframes gameover {
+      0% { left: -5000px; bottom: 100%; }
+      97% { left: -5000px; bottom: 100%; }
+      100% { left: 0px; }
+    }
+
+    .pajaro:after,
+    .pajaro:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    .pajaro:after {
+      border-radius: 100% 100% 0 0;
+      box-shadow: inset 0px 5px 0 black;
+      width: 100px;
+      height: 100px;
+      margin-top: -7px;
+      margin-left: -50px;
+      transform-origin: 100% 0%;
+      animation: alas 3s linear infinite;
+    }
+
+    .pajaro:before {
+      background: #FFC37F;
+      border-radius: 100% 0% 20% 0%;
+      margin-top: 3px;
+      margin-left: -4px;
+      width: 6px;
+      height: 6px;
+      transform: rotateZ(45deg);
+    }
+
+    @keyframes alas {
+      50% { transform: rotateX(-1440deg); }
+    }
+
+    @keyframes planeo {
+      40% {
+        transform: rotateZ(2deg) translateX(2px) translateY(10px) translateZ(0);
+        line-height: 16px;
+        font-size: 0.6em;
+      }
+      80% {
+        transform: rotateZ(-2deg) translateX(5px) translateY(8px) translateZ(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="timer"><span></span></div>
+    <div class="gameover">WAKTU HABIS</div>
+    <h2>Nasuka</h2>
+
+    <input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">
+    <input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">
+    <input class="input-circle input-circle3" type="radio" id="circle3" name="burung_group">
+    <input class="input-circle input-circle4" type="radio" id="circle4" name="burung_group">
+    <input class="input-circle input-circle5" type="radio" id="circle5" name="burung_group">
+    <input class="input-circle input-circle6" type="radio" id="circle6" name="burung_group">
+    <input class="input-circle input-circle7" type="radio" id="circle7" name="burung_group">
+    <input class="input-circle input-circle8" type="radio" id="circle8" name="burung_group">
+    <input class="input-circle input-circle9" type="radio" id="circle9" name="burung_group">
+    <input class="input-circle input-circle10" type="radio" id="circle10" name="burung_group">
+    <input class="input-circle input-circle11" type="radio" id="circle11" name="burung_group">
+    <input class="input-circle input-circle12" type="radio" id="circle12" name="burung_group">
+    <input class="input-circle input-circle13" type="radio" id="circle13" name="burung_group">
+    <input class="input-circle input-circle14" type="radio" id="circle14" name="burung_group">
+    <input class="input-circle input-circle15" type="radio" id="circle15" name="burung_group">
+    <input class="input-circle input-circle16" type="radio" id="circle16" name="burung_group">
+    <input class="input-circle input-circle17" type="radio" id="circle17" name="burung_group">
+    <input class="input-circle input-circle18" type="radio" id="circle18" name="burung_group">
+    <input class="input-circle input-circle19" type="radio" id="circle19" name="burung_group">
+    <input class="input-circle input-circle20" type="radio" id="circle20" name="burung_group">
+    <input class="input-circle input-circle21" type="radio" id="circle21" name="burung_group">
+    <input class="input-circle input-circle22" type="radio" id="circle22" name="burung_group">
+    <input class="input-circle input-circle23" type="radio" id="circle23" name="burung_group">
+    <input class="input-circle input-circle24" type="radio" id="circle24" name="burung_group">
+    <input class="input-circle input-circle25" type="radio" id="circle25" name="burung_group">
+    <input class="input-circle input-circle26" type="radio" id="circle26" name="burung_group">
+    <input class="input-circle input-circle27" type="radio" id="circle27" name="burung_group">
+
+
+    <label for="circle1" class="pajaro pajaro1"><span></span></label>
+    <label for="circle2" class="pajaro pajaro2"><span></span></label>
+    <label for="circle3" class="pajaro pajaro3"><span></span></label>
+    <label for="circle4" class="pajaro pajaro4"><span></span></label>
+    <label for="circle5" class="pajaro pajaro5"><span></span></label>
+    <label for="circle6" class="pajaro pajaro6"><span></span></label>
+    <label for="circle7" class="pajaro pajaro7"><span></span></label>
+    <label for="circle8" class="pajaro pajaro8"><span></span></label>
+    <label for="circle9" class="pajaro pajaro9"><span></span></label>
+    <label for="circle10" class="pajaro pajaro10"><span></span></label>
+    <label for="circle11" class="pajaro pajaro11"><span></span></label>
+    <label for="circle12" class="pajaro pajaro12"><span></span></label>
+    <label for="circle13" class="pajaro pajaro13"><span></span></label>
+    <label for="circle14" class="pajaro pajaro14"><span></span></label>
+    <label for="circle15" class="pajaro pajaro15"><span></span></label>
+    <label for="circle16" class="pajaro pajaro16"><span></span></label>
+    <label for="circle17" class="pajaro pajaro17"><span></span></label>
+    <label for="circle18" class="pajaro pajaro18"><span></span></label>
+    <label for="circle19" class="pajaro pajaro19"><span></span></label>
+    <label for="circle20" class="pajaro pajaro20"><span></span></label>
+    <label for="circle21" class="pajaro pajaro21"><span></span></label>
+    <label for="circle22" class="pajaro pajaro22"><span></span></label>
+    <label for="circle23" class="pajaro pajaro23"><span></span></label>
+    <label for="circle24" class="pajaro pajaro24"><span></span></label>
+    <label for="circle25" class="pajaro pajaro25"><span></span></label>
+    <label for="circle26" class="pajaro pajaro26"><span></span></label>
+    <label for="circle27" class="pajaro pajaro27"><span></span></label>
+
+
+    <div class="sum">PERAK : </div>
+  </div>
+  <script>
+    let totalPerak = 0;
+    const sumDisplay = document.querySelector('.sum');
+    const burungInputs = document.querySelectorAll('.input-circle');
+
+
+    burungInputs.forEach((input) => {
+      input.addEventListener('change', function () {
+        if (input.checked) {
+          totalPerak += 10;
+          sumDisplay.textContent = 'PERAK : ' + totalPerak;
+        }
+      });
+    });
+
+
+    function kirimPerakKeSheet(username, jumlahPerak) {
+      const url = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+
+      const formData = new FormData();
+      formData.append('action', 'updatePerak');
+      formData.append('username', username);
+      formData.append('changeAmount', jumlahPerak);
+
+      fetch(url, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert(`Hadiah ${jumlahPerak} perak berhasil dikirim ke akun Anda`);
+        console.log('Server response:', result);
+      })
+      .catch(error => {
+        console.error('Error saat mengirim:', error);
+        alert("Gagal mengirim perak ke server.");
+      });
+    }
+
+
+    setTimeout(() => {
+      burungInputs.forEach(input => input.disabled = true);
+
+      const username = (localStorage.getItem('username') || 'guest').trim().toLowerCase();
+
+      if (username && totalPerak > 0) {
+        kirimPerakKeSheet(username, totalPerak);
+      } else {
+        console.log("Username kosong atau belum dapat perak.");
+      }
+    }, 60000);
+  </script>
+</body>
 </html>
