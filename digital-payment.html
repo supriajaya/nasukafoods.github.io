@@ -226,20 +226,15 @@
     <p id="customAlertMsg"></p>
     <button onclick="closeCustomAlert()">OK</button>
   </div>
-
-  <script>
+<script>
     const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
     const username = localStorage.getItem("username");
     let userSaldo = 0, userData = {};
 
     const produkList = [
       { name: "1.K Followers", price: 40000, desc: "Tingkatkan jumlah followers anda untuk memperkuat value anda sebagai konten kreator.", img: "https://nasukafoods.site/tiktokfoll.gif" },
-      
       { name: "1.K likes", price: 5000, desc: "Tambahkan like ke video Anda agar makin viral.", img: "https://nasukafoods.site/tiktoklik.gif" },
-      
       { name: "10.K Viewers", price: 2000, desc: "Tampilkan jumlah viewers di video anda, buat konten anda makin Fyp.", img: "https://nasukafoods.site/sosial.gif" }
-      
-      
     ];
 
     produkList.forEach((p, i) => {
@@ -261,7 +256,7 @@
         quantity: 1,
         desc: p.desc
       };
-      localStorage.setItem("currentOrder", JSON.stringify(order));
+      localStorage.setItem("currentOrders", JSON.stringify(order));
       document.getElementById("layanan").textContent = order.name;
       document.getElementById("harga").textContent = formatRupiah(order.price);
       document.getElementById("deskripsiOrder").textContent = order.desc || "";
@@ -274,12 +269,107 @@
       }
     }
 
+
+    async function submitDigital() {
+        const btn = document.getElementById("btnBayar");
+        btn.disabled = true;
+        btn.textContent = "Loading...";
+
+        const order = JSON.parse(localStorage.getItem("currentOrders") || "{}");
+        const qty = parseInt(order.quantity || 1);
+        const price = parseInt(order.price || 0);
+        const total = qty * price;
+        const target = document.getElementById("target").value.trim();
+
+        if (!target) {
+            showCustomAlert("Isian target TikTok wajib diisi");
+            btn.disabled = false;
+            btn.textContent = "Bayar Sekarang";
+            return;
+        }
+
+        if (userSaldo < total) {
+            showCustomAlert("Saldo tidak cukup.");
+            btn.disabled = false;
+            btn.textContent = "Bayar Sekarang";
+            return;
+        }
+
+        // Ini bagian tampilan ringkasan kwitansi sebelum fetch,
+        // akan diperbarui lagi dengan data server jika sukses.
+        document.getElementById("kLayanan").textContent = order.name;
+        document.getElementById("kTotal").textContent = formatRupiah(total);
+        document.getElementById("kNama").textContent = userData.Nama || "-";
+        document.getElementById("kTelepon").textContent = userData.Telepon || "-";
+        document.getElementById("kSaldoBox").style.display = "block";
+        document.getElementById("kSaldo").textContent = formatRupiah(userSaldo - total); // Saldo sementara untuk tampilan
+        document.getElementById("kwitansi").style.display = "block";
+
+        const formData = new URLSearchParams();
+        formData.append("action", "submitOrders");
+        formData.append("username", username || "");
+        formData.append("total", total);
+        formData.append("product_name", order.name || "");
+        formData.append("product_quantity", qty);
+        formData.append("product_price", price);
+
+        try {
+            const res = await fetch(URL_GAS, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: formData
+            });
+
+            const resultText = await res.text();
+            let result;
+            try {
+                result = JSON.parse(resultText);
+            } catch (e) {
+                showCustomAlert("Error parsing response: " + resultText);
+                btn.disabled = false;
+                btn.textContent = "Bayar Sekarang";
+                return;
+            }
+
+            if (result.status === "Success") {
+                showCustomAlert("Order berhasil dan saldo diperbarui. Saldo terbaru: " + formatRupiah(result.saldo_terbaru));
+                localStorage.removeItem("currentOrders");
+                userSaldo = result.saldo_terbaru;
+
+                // --- PERBAIKAN PENTING DI SINI ---
+                // Perbarui elemen saldo utama di halaman dengan saldo aktual dari server
+                document.getElementById("saldo").textContent = formatRupiah(userSaldo);
+                // Perbarui saldo di kwitansi dengan nilai aktual dari server
+                document.getElementById("kSaldo").textContent = formatRupiah(userSaldo);
+                // --- AKHIR PERBAIKAN ---
+
+                btn.style.display = "none";
+            } else {
+                showCustomAlert("Error: " + result.message);
+                btn.disabled = false;
+                btn.textContent = "Bayar Sekarang";
+            }
+        } catch (err) {
+            showCustomAlert("Koneksi gagal: " + err.message);
+            btn.disabled = false;
+            btn.textContent = "Bayar Sekarang";
+            console.error(err);
+        }
+    }
+
+
     if (username) {
       fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
         .then(res => res.json())
         .then(data => {
           userData = data;
-          userSaldo = parseInt((data.Saldo || "0").toString().replace(/[^0-9]/g, ""));
+          // --- PERBAIKAN PENTING DI SINI untuk parsing saldo awal ---
+          let saldoDariData = String(data.Saldo || "0").replace(/[^0-9,.]/g, ''); // Hapus semua kecuali angka, koma, titik
+          saldoDariData = saldoDariData.replace(/\./g, '').replace(/,/g, '.'); // Konversi format desimal Indonesia/Rupiah ke standar US
+          userSaldo = parseFloat(saldoDariData);
+          if (isNaN(userSaldo)) userSaldo = 0; // Pastikan default ke 0 jika parsing gagal
+          // --- AKHIR PERBAIKAN ---
+
           document.getElementById("nama").textContent = data.Nama || "-";
           document.getElementById("telepon").textContent = data.Telepon || "-";
           document.getElementById("sosmed").textContent = data["Sosial Media"] || "-";
@@ -306,67 +396,14 @@
       document.getElementById("customAlert").style.display = "none";
     }
 
-    async function submitDigital() {
-      const btn = document.getElementById("btnBayar");
-      btn.disabled = true;
-      btn.textContent = "Loading...";
-      const order = JSON.parse(localStorage.getItem("currentOrder") || "{}");
-      const qty = parseInt(order.quantity || 1);
-      const price = parseInt(order.price || 0);
-      const total = qty * price;
-      const target = document.getElementById("target").value.trim();
-      if (!target) {
-        showCustomAlert("Isian target TikTok wajib diisi");
-        btn.disabled = false;
-        btn.textContent = "Bayar Sekarang";
-        return;
-      }
-      if (userSaldo < total) {
-        showCustomAlert("Saldo tidak cukup.");
-        btn.disabled = false;
-        btn.textContent = "Bayar Sekarang";
-        return;
-      }
-      const formData = new FormData();
-      formData.append("action", "submitOrder");
-      formData.append("product_name", order.name || "");
-      formData.append("product_price", price);
-      formData.append("product_quantity", qty);
-      formData.append("total_pembayaran", total);
-      formData.append("metode_pembayaran", "SALDO");
-      formData.append("username", username || "");
-      formData.append("target", target);
-      formData.append("tipe", "digital");
-      try {
-        const res = await fetch(URL_GAS, { method: "POST", body: formData });
-        const result = await res.json();
-        if (result.status === "Success") {
-          localStorage.removeItem("currentOrder");
-          document.getElementById("kLayanan").textContent = order.name;
-          document.getElementById("kTotal").textContent = formatRupiah(total);
-          document.getElementById("kNama").textContent = userData.Nama || "-";
-          document.getElementById("kTelepon").textContent = userData.Telepon || "-";
-          document.getElementById("kSaldoBox").style.display = "block";
-          document.getElementById("kSaldo").textContent = formatRupiah(result.saldo_terbaru || 0);
-          document.getElementById("kwitansi").style.display = "block";
-          btn.style.display = "none";
-        } else {
-          showCustomAlert("Gagal: " + (result.message || "Tidak diketahui"));
-          btn.disabled = false;
-          btn.textContent = "Bayar Sekarang";
-        }
-      } catch (err) {
-        showCustomAlert("Koneksi gagal");
-        btn.disabled = false;
-        btn.textContent = "Bayar Sekarang";
-        console.error(err);
-      }
-    }
-
     function formatRupiah(angka) {
       if (!angka || isNaN(angka)) return "Rp 0";
       return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
-  </script>
+</script>
+
+  
 </body>
 </html>
+
+yang mana?
