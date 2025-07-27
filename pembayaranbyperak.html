@@ -1,0 +1,421 @@
+<!DOCTYPE html>  <html lang="id">    <head>    
+  <meta charset="UTF-8" />    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>    
+  <title>Pembayaran Perak</title>    
+  <link rel="manifest" href="/manifest.json" />    
+  <style>    
+    * { box-sizing: border-box; }    
+    body {    
+      font-family: 'Courier New', Courier, monospace;    
+      background: #f4f4f4;    
+      margin: 0;    
+      padding: 10px;    
+      display: flex;    
+      flex-direction: column;    
+      align-items: center;    
+    }  .produk-container {    
+  width: 100%;    
+  overflow-x: auto;    
+  white-space: nowrap;    
+  margin-bottom: 20px;    
+  padding-bottom: 10px;    
+  scroll-snap-type: x mandatory;    
+}    .produk-card {
+display: inline-block;
+width: 140px;
+background: white;
+margin-right: 10px;
+padding: 10px;
+border-radius: 8px;
+box-shadow: 0 0 5px rgba(0,0,0,0.1);
+scroll-snap-align: start;
+vertical-align: top;
+cursor: pointer;
+}
+
+.produk-card img {
+width: 100%;
+height: 80px;
+object-fit: cover;
+border-radius: 1px;
+}
+
+.produk-card p {
+font-size: 16px;
+margin: 5px 0 0;
+}
+
+.produk-card .deskripsi {
+font-size: 13px;
+color: #555;
+margin-top: 3px;
+overflow: hidden;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+}
+
+.struk {
+background: #fff;
+width: 100%;
+max-width: 400px;
+padding: 20px;
+border: 1px dashed #333;
+box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.struk h1 {
+text-align: center;
+font-size: 14px;
+margin-bottom: 10px;
+}
+
+.struk p {
+margin: 3px 0;
+font-size: 16px;
+}
+
+.line {
+border-top: 1px dashed #000;
+margin: 15px 0;
+}
+
+.label {
+display: inline-block;
+width: 130px;
+}
+
+.bold { font-weight: bold; }
+
+input[type="text"],
+input[type="url"],
+select {
+width: 100%;
+margin-top: 5px;
+margin-bottom: 10px;
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-family: inherit;
+font-size: 14px;
+}
+
+label {
+font-size: 14px;
+display: block;
+margin: 8px 0 3px;
+}
+
+button {
+margin-top: 15px;
+padding: 10px;
+width: 100%;
+background: #000;
+color: #fff;
+border: none;
+font-size: 15px;
+cursor: pointer;
+}
+
+button:disabled {
+background: #aaa;
+cursor: not-allowed;
+}
+
+#kwitansi, #customAlert {
+display: none;
+position: fixed;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+background: #fff;
+z-index: 999;
+border-radius: 10px;
+padding: 20px;
+width: 90%;
+max-width: 320px;
+text-align: left;
+box-shadow: 0 0 10px rgba(0,0,0,0.3);
+border: 2px dashed #4CAF50;
+}
+
+#kwitansi p, #customAlert p {
+font-size: 14px;
+margin: 5px 0;
+}
+
+#customAlert button {
+margin-top: 10px;
+padding: 8px 16px;
+background: #4CAF50;
+border: none;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+}
+
+#deskripsiOrder {
+font-size: 15px;
+color: #444;
+font-style: italic;
+margin-top: 5px;
+}
+
+@media (max-width: 480px) {
+.label {
+width: 100px;
+font-size: 14px;
+}
+
+.struk p, .struk h1 {
+font-size: 14px;
+}
+
+.produk-card {
+width: 120px;
+font-size: 13px;
+}
+
+.produk-card p {
+font-size: 14px;
+}
+
+button {
+font-size: 14px;
+}
+}
+
+{
+font-weight: bold !important;
+}
+
+</style>    
+</head>    
+<body>    
+  <div class="produk-container" id="produkContainer"></div>    
+  <div class="struk">    
+    <h1>PENUKARAN PERAK REWARD</h1>    
+    <p><span class="label">Layanan</span><span id="layanan">-</span></p>    
+    <p><span class="label">Tukar Perak</span><span id="harga">-</span></p>    
+    <div id="inputManualBox" style="margin-top:10px;"></div>    
+    <div id="deskripsiOrder"></div>    
+    <div class="line"></div>    
+    <p><span class="label">Nama</span><span id="nama">-</span></p>    
+    <p><span class="label">Telepon</span><span id="telepon">-</span></p>    
+    <p><span class="label">Username</span><span id="sosmed">-</span></p>    
+    <p><span class="label">Perak</span><span id="Perak">-</span></p>    
+    <div class="line"></div>  <button id="btnBayar" style="display: none;" onclick="submitDigital()">Tukar Sekarang</button>    </div>    
+    
+  <div id="kwitansi">    
+    <p class="bold">✅ PENUKARAN BERHASIL</p>    
+    <p>Layanan: <span id="kLayanan"></span></p>    
+    <p>Perak Yang Ditukar: <span id="kTotal"></span></p>    
+    <p>Nama: <span id="kNama"></span></p>    
+    <p>Telepon: <span id="kTelepon"></span></p>    
+    <p id="kPerakBox">Sisa Perak: <span id="kPerak"></span></p>    
+    <p style="margin-top:10px; font-weight: bold;">Pesanan akan segera kami proses</p>    
+    <button onclick="location.href='index.html'">🏠 Kembali</button>    
+  </div>    
+  
+  <script>    
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";    
+    const username = localStorage.getItem("username");    
+    let userPerak = 0, userData = {};    const produkList = [    
+  { name: "500 Followers", price: 50000, desc: "Tingkatkan jumlah followers anda untuk memperkuat value anda sebagai konten kreator.", img: "https://nasukafoods.site/tiktokfoll.gif" },    
+  { name: "200 likes", price: 20000, desc: "Tambahkan like ke video Anda agar makin viral.", img: "https://nasukafoods.site/tiktoklik.gif" },    
+  { name: "10.K Viewers", price: 2000, desc: "Tampilkan jumlah viewers di video anda, buat konten anda makin Fyp.", img: "https://nasukafoods.site/sosial.gif" },    
+  { name: "100.K Viewers", price: 15000, desc: "Sangat meningkatkan jumlah viewers pada video Anda, membuatnya sangat populer.", img: "https://nasukafoods.site/sosial.gif" }    
+];    
+
+produkList.forEach((p, i) => {    
+  const div = document.createElement("div");    
+  div.className = "produk-card";    
+  div.innerHTML = `    
+    <img src="${p.img}" alt="${p.name}">    
+    <p>${p.name}</p>    
+    <p class="deskripsi">${p.desc}</p>    
+  `;    
+  div.onclick = () => pilihProduk(p);    
+  produkContainer.appendChild(div);    
+});    
+
+function pilihProduk(p) {    
+  const order = {    
+    name: p.name,    
+    price: p.price,    
+    quantity: 1,    
+    desc: p.desc    
+  };    
+  localStorage.setItem("currentOrders", JSON.stringify(order));    
+  document.getElementById("layanan").textContent = order.name;    
+  document.getElementById("harga").textContent = formatRupiah(order.price);    
+  document.getElementById("deskripsiOrder").textContent = order.desc || "";    
+  const inputBox = document.getElementById("inputManualBox");    
+  if (order.name.toLowerCase().includes("viewer") || order.name.toLowerCase().includes("like")) {    
+    inputBox.innerHTML = '<label for="target">Link Video TikTok</label><input type="url" id="target" placeholder="https://www.tiktok.com/...">';    
+  } else {    
+    const usernameTikTok = extractTikTokUsername(userData["Sosial Media"] || "");    
+    inputBox.innerHTML = '<label>Username TikTok</label><input type="text" id="target" value="' + usernameTikTok + '" readonly>';    
+  }    
+}    
+
+
+async function submitDigital() {    
+    const btn = document.getElementById("btnBayar");    
+    btn.disabled = true;    
+    btn.textContent = "Loading...";    
+
+    const order = JSON.parse(localStorage.getItem("currentOrders") || "{}");    
+    // Pastikan harga produk dan kuantitas diubah menjadi angka bulat    
+    const qty = parseInt(order.quantity || 1);    
+    const price = parseInt(order.price || 0);    
+    const total = qty * price;    
+    const target = document.getElementById("target").value.trim();    
+
+    // Debugging di sisi klien    
+    console.log("--- DEBUG PEMBAYARAN ---");    
+    console.log("Order: ", order);    
+    console.log("Harga Produk (price): ", price);    
+    console.log("Jumlah Produk (qty): ", qty);    
+    console.log("Total Pembayaran (total): ", total);    
+    console.log("Saldo Perak Pengguna (userPerak): ", userPerak);    
+    console.log("Tipe userPerak: ", typeof userPerak);    
+    console.log("Tipe total: ", typeof total);    
+    console.log("Perbandingan userPerak < total: ", userPerak < total);    
+
+
+    if (!target) {    
+        showCustomAlert("Isian target TikTok wajib diisi");    
+        btn.disabled = false;    
+        btn.textContent = "Bayar Sekarang";    
+        return;    
+    }    
+
+    // Cek saldo di sisi klien sebelum mengirim ke GAS    
+    if (userPerak < total) {    
+        showCustomAlert("Perak tidak cukup. Saldo Anda: " + formatRupiah(userPerak) + ", Total Pembayaran: " + formatRupiah(total));    
+        btn.disabled = false;    
+        btn.textContent = "Bayar Sekarang";    
+        return;    
+    }    
+
+     
+    document.getElementById("kLayanan").textContent = order.name;    
+    document.getElementById("kTotal").textContent = formatRupiah(total);    
+    document.getElementById("kNama").textContent = userData.Nama || "-";    
+    document.getElementById("kTelepon").textContent = userData.Telepon || "-";    
+    document.getElementById("kPerakBox").style.display = "block";    
+    document.getElementById("kPerak").textContent = formatRupiah(userPerak - total);     
+    document.getElementById("kwitansi").style.display = "block";    
+
+    const formData = new URLSearchParams();    
+    formData.append("action", "submitPerak");    
+    formData.append("username", username || "");    
+    formData.append("total", total);    
+    formData.append("payment_method", "Perak");    
+    formData.append("product_name", order.name || "");    
+    formData.append("product_quantity", qty);    
+    formData.append("product_price", price);    
+
+    try {    
+        const res = await fetch(URL_GAS, {    
+            method: "POST",    
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },    
+            body: formData    
+        });    
+
+        const resultText = await res.text();    
+        let result;    
+        try {    
+            result = JSON.parse(resultText);    
+        } catch (e) {    
+            console.error("Error parsing response JSON:", resultText);    
+            showCustomAlert("Error parsing response: " + resultText);    
+            btn.disabled = false;    
+            btn.textContent = "Bayar Sekarang";    
+            return;    
+        }    
+        console.log("Respons dari GAS: ", result); // Log respons dari GAS    
+
+        if (result.status === "Success") {    
+            showCustomAlert("Order berhasil, biaya layanan " + formatRupiah(result.Perak_terbaru));    
+            localStorage.removeItem("currentOrders");    
+            userPerak = parseFloat(result.Perak_terbaru || 0);    
+             
+            document.getElementById("Perak").textContent = formatRupiah(userPerak);    
+            document.getElementById("kPerak").textContent = formatRupiah(userPerak);    
+             
+
+            btn.style.display = "none";    
+        } else {    
+            showCustomAlert("Error: " + result.message);    
+            btn.disabled = false;    
+            btn.textContent = "Bayar Sekarang";    
+        }    
+    } catch (err) {    
+        showCustomAlert("Koneksi gagal: " + err.message);    
+        btn.disabled = false;    
+        btn.textContent = "Bayar Sekarang";    
+        console.error(err);    
+    }    
+}    
+
+
+if (username) {    
+  fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)    
+    .then(res => res.json())    
+    .then(data => {    
+      userData = data;    
+      console.log("Data user dari GAS:", data); // Log data lengkap dari GAS    
+          
+      // Pastikan konversi ke angka yang benar dan robust    
+      let perakValue = data.Perak;    
+      if (typeof perakValue === 'string') {    
+          // Hapus semua karakter yang bukan angka atau titik (untuk desimal)    
+          // Kemudian ganti koma dengan titik jika ada (untuk format desimal)    
+          perakValue = perakValue.replace(/[^0-9,.]/g, '').replace(',', '.');    
+      }    
+      userPerak = parseFloat(perakValue || "0"); // Menggunakan || "0" untuk memastikan selalu ada string yang bisa di-parse    
+          
+      if (isNaN(userPerak)) {    
+          userPerak = 0;    
+          console.warn("Konversi Perak gagal, diatur ke 0. Nilai asli:", data.Perak, "Nilai setelah pembersihan:", perakValue);    
+      }    
+      console.log("User Perak setelah konversi (di frontend):", userPerak);    
+
+
+      document.getElementById("nama").textContent = data.Nama || "-";    
+      document.getElementById("telepon").textContent = data.Telepon || "-";    
+      document.getElementById("sosmed").textContent = data["Sosial Media"] || "-";    
+      document.getElementById("Perak").textContent = formatRupiah(userPerak);    
+      document.getElementById("btnBayar").style.display = "block";    
+    })    
+    .catch(error => {    
+        console.error("Error fetching user data:", error);    
+        showCustomAlert("Gagal memuat data pengguna.");    
+    });    
+}    
+
+function extractTikTokUsername(sosmed) {    
+  if (!sosmed) return "";    
+  if (sosmed.includes("tiktok.com")) {    
+    const match = sosmed.match(/tiktok\.com\/@([\w\d._]+)/);    
+    return match ? "@" + match[1] : "";    
+  }    
+  return sosmed.startsWith("@") ? sosmed : "@" + sosmed;    
+}    
+
+function showCustomAlert(msg) {    
+  document.getElementById("customAlertMsg").textContent = msg;    
+  document.getElementById("customAlert").style.display = "block";    
+}    
+
+function closeCustomAlert() {    
+  document.getElementById("customAlert").style.display = "none";    
+}    
+
+function formatRupiah(angka) {    
+  if (!angka || isNaN(angka)) return "";    
+  return '' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");    
+}
+
+</script>  </body></html>
