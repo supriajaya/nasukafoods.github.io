@@ -264,18 +264,7 @@
 </head>
 <body>
 
-
-<div id="toa-display-area" style="text-align: center; padding: 10px;  margin-top: 0.10px;">
-    <div class="toa-marquee-container">
-        <span class="toa-marquee-text"></span>
-    </div>
-</div>
-
-
 <section class="hero-section">
-
-    
-    
 
 <div id="toa-display-area" style="text-align: center; padding: 10px;  margin-top: 2px;">
     <div class="toa-marquee-container">
@@ -290,9 +279,8 @@
   </div>
   
   <div class="online-box">
-  <div id="online-status">Transaksi Terbaru (...)</div>
-  <div id="onlineCount">0 pengguna online</div>
-</div>
+  <div id="online-status">Online (...)</div>
+  
   
   
 </section>
@@ -392,7 +380,7 @@
   </div>
 
   <div class="large-product">
-    <img src="https://nasukafoods.site/wingungu.gif" alt="Kerupuk" onclick="window.location.href='https://nasukafoods.site/trophy.html'">
+    <img src="https://nasukafoods.site/wingungu.gif" alt="Kerupuk" onclick="window.location.href='https://nasukafoods.site/leaderboardperak.html'">
     <h4>Leaderboard</h4>
     
    
@@ -510,7 +498,7 @@
       
       const onlineStatus = document.getElementById('online-status');
       if (onlineStatus && data.count) {
-        onlineStatus.textContent = `Transaksi sukses(${data.count})`;
+        onlineStatus.textContent = `Online (${data.count})`;
       }
 
       await loadToaData(); 
@@ -519,6 +507,15 @@
       console.warn("Gagal update online atau memuat Toa:", err);
     }
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   async function loadToaData() {
       try {
@@ -545,7 +542,7 @@
           
           
           
-          const toaDisplayElement = document.getElementById('toa-display-area');
+const toaDisplayElement = document.getElementById('toa-display-area');
           if (toaDisplayElement) {
               toaDisplayElement.innerHTML = '<p style="color: red;">Gagal memuat Toa.</p>';
           }
@@ -557,7 +554,11 @@ function displayRotatingToas(toas) {
     if (!toaDisplayElement) return;
     if (toaIntervalId) clearInterval(toaIntervalId);
 
-    if (toas.length === 0) {
+    if (toas.length === 0) 
+    
+    
+    
+    {
         toaDisplayElement.innerHTML = '<p>Tidak ada pengumuman aktif saat ini.</p>';
         return;
     }
@@ -567,7 +568,8 @@ function displayRotatingToas(toas) {
         const nama = toa.Nama || 'Anonim';
         const pesan = toa.Pesan || 'Tidak ada pesan.';
 
-        toaDisplayElement.innerHTML = `
+
+toaDisplayElement.innerHTML = `
             <div class="marquee"><span><strong>${nama}:</strong> ${pesan}</span></div>
         `;
 
@@ -577,69 +579,23 @@ function displayRotatingToas(toas) {
     showNextToa();
     
     
-    toaIntervalId = setInterval(showNextToa, 4000); 
+    toaIntervalId = setInterval(showNextToa, 1000); 
 }
 
 
-function displayRotatingToas(toas) {
-    const toaDisplayElement = document.getElementById('toa-display-area');
-    if (!toaDisplayElement) return;
-
-    
-    if (toaIntervalId) {
-        clearInterval(toaIntervalId);
-    }
-
-    if (toas.length === 0) {
-       
-        toaDisplayElement.querySelector('.toa-marquee-text').textContent = 'Tidak ada pengumuman aktif saat ini.';
-        return;
-    }
 
 
-    const toaSpan = toaDisplayElement.querySelector('.toa-marquee-text');
 
-    function showNextToa() {
-        const toa = toas[currentToaIndex];
-        const nama = toa.Nama || 'Anonim';
-        const pesan = toa.Pesan || 'Tidak ada pesan.';
 
-        
-        toaSpan.textContent = ` ⭐ ${nama}  :  ${pesan}`;
 
-      
-        currentToaIndex = (currentToaIndex + 1) % toas.length;
-    }
 
-    showNextToa();
-    toaIntervalId = setInterval(showNextToa, 4000);
-}
+
 
 
   
   updateOnline();
-
   setInterval(updateOnline, 10000); 
   
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function getFakeOnlineCount() {
-    const hour = new Date().getHours();
-    
-    if (hour >= 7 && hour <= 17) return rand(800, 3000);   // jam kerja, misal realistis
-    
-    
-    if (hour >= 18 && hour <= 22) return rand(40, 70);  // malam
-    return rand(10, 30);                                // dini hari
-  }
-
-  function updateFakeOnlineUI() {
-    const fakeCount = getFakeOnlineCount();
-    document.getElementById("onlineCount").textContent = fakeCount + " pengguna online";
-  }
-
   function handleProfileClick() {
     const username = localStorage.getItem("username");
     if (username) {
