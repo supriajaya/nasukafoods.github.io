@@ -2,187 +2,255 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <title>Profil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nasukafoods - Profil Pengguna</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; font-size: 0.9em; }
-    header { background-color: #4CAF50; color: white; padding: 1em 0; text-align: center; }
-    nav { background-color: #333; color: white; padding: 0.5em 0; text-align: center; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 1.1em; }
-    .container { width: 80%; max-width: 800px; margin: 20px auto; padding: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    h2 { text-align: center; color: #4CAF50; font-size: 1.8em; margin-bottom: 30px; }
-    footer { background-color: #333; color: white; text-align: center; padding: 0.8em 0; margin-top: 20px; font-size: 0.8em; }
-    .profile-section { margin-bottom: 25px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; }
-    .profile-info p { margin-bottom: 8px; font-size: 0.9em; }
-    .profile-info p strong { display: inline-block; width: 140px; color: #555; }
-    .profile-picture-display { text-align: center; margin-bottom: 20px; }
-    .profile-picture-display img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #4CAF50; }
-    .edit-button {
-      background-color: #007bff; color: white; padding: 10px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 0.95em; margin: 0 auto; display: block;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      color: #333;
     }
-    .edit-button:hover { background-color: #0056b3; }
 
-    .modal {
-      display: none; position: fixed; z-index: 999; left: 0; top: 0;
-      width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      margin-top: 20px;
     }
-    .modal-content {
-      background-color: #fff; margin: 10% auto; padding: 20px; border: 1px solid #888;
-      width: 90%; max-width: 500px; border-radius: 8px; position: relative;
-    }
-    .close { position: absolute; top: 10px; right: 15px; font-size: 22px; font-weight: bold; color: #aaa; cursor: pointer; }
-    .close:hover { color: #000; }
 
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 0.9em; }
-    .form-group input[type="text"], .form-group input[type="tel"], .form-group textarea {
-      width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 0.9em;
+    .profile-picture {
+      text-align: center;
+      margin-bottom: 15px;
     }
-    .form-group input[type="file"] {
-      width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background-color: #fff; cursor: pointer;
+
+    .profile-picture img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #007bff;
     }
-    .form-group input[type="file"]::file-selector-button {
-      background-color: #007bff; color: white; padding: 7px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 8px;
+
+    .profile-name {
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
     }
-    .form-group input[type="file"]::file-selector-button:hover { background-color: #0056b3; }
-    .save-button {
-      background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;
-      width: 100%;
+
+    .profile-status {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 20px;
     }
-    .save-button:hover { background-color: #218838; }
+
+    .info-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .info-card {
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .info-card strong {
+      display: block;
+      color: #555;
+      margin-bottom: 3px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    .fitur-section {
+      margin-top: 20px;
+    }
+
+    .fitur-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 13px;
+      color: #007bff;
+    }
+
+    .fitur-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .fitur-item {
+      background: #eaf1ff;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .fitur-item strong {
+      font-size: 11px;
+      display: block;
+      color: #444;
+      margin-bottom: 2px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .buttons button {
+      background-color: #007bff;
+      color: white;
+      font-size: 12px;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Nasukafoods</h1>
-  </header>
-  <nav>
-    <a href="index.html">Beranda</a>
-    <a href="login.html">Login</a>
-    <a href="#">Notif</a>
-    <a href="#">Logout</a>
-    <a href="profil.html">Profil</a>
-  </nav>
   <div class="container">
-    <h2>Profil Pengguna</h2>
-    <div class="profile-section">
-      <div class="profile-picture-display">
-        <img id="display-profile-picture" src="https://via.placeholder.com/120?text=No+Pic" alt="Foto Profil" />
+    <div class="profile-picture">
+      <img id="foto" src="https://nasukafoods.site/tekn.jpg" alt="" />
+    </div>
+    <div class="profile-name" id="nama">Memuat...</div>
+    <div class="profile-status">ID: <span id="id"></span> | <span id="status"></span></div>
+
+    <div class="info-section">
+        
+      <div class="info-card"><strong>Username</strong><span id="username"></span></div>
+       <div class="info-card"><strong>Password</strong><span id="password"></span></div>
+      <div class="info-card"><strong>Tiktok</strong><span id="tiktok"></span></div>
+       <div class="info-card"><strong>Facebook</strong><span id="facebook"></span></div>
+      
+      
+      
+      
+      
+      
+      <div class="info-card"><strong>Saldo</strong><span id="saldo"></span></div>
+      <div class="info-card"><strong>Perak</strong><span id="perak"></span></div>
+      <div class="info-card"><strong>Platinum</strong><span id="platinum"></span></div>
+      <div class="info-card"><strong>Gold</strong><span id="gold"></span></div>
+      <div class="info-card"><strong>Jenis</strong><span id="jenis"></span></div>
+      <div class="info-card"><strong>Usia</strong><span id="usia"></span></div>
+      <div class="info-card"><strong>Telepon</strong><span id="telepon"></span></div>
+      <div class="info-card"><strong>Tanggal</strong><span id="tanggal"></span></div>
+    </div> 
+      
+      
+      <div class="info-card" style="grid-column: span 2;"><strong>Alamat</strong><span id="alamat"></span></div>
+      
+      
+     
+
+
+
+    <div class="fitur-section">
+      <div class="fitur-title">Fitur Lainnya</div>
+      <div class="fitur-grid">
+        <div class="fitur-item"><strong>Event Tukar Perak</strong><span id="fitura"></span></div>
+        <div class="fitur-item"><strong>Event Tukar Platinum</strong><span id="fiturb"></span></div>
+        <div class="fitur-item"><strong>Event Tukar Gold</strong><span id="fiturc"></span></div>
+        <div class="fitur-item"><strong>Event Diskon 99%</strong><span id="fiturd"></span></div>
+        <div class="fitur-item"><strong>Bazar Produk Digital</strong><span id="fiture"></span></div>
+        <div class="fitur-item"><strong>Apresiasi Juara</strong><span id="fiturf"></span></div>
+        <div class="fitur-item"><strong>Produk Sponsor</strong><span id="fiturg"></span></div>
+        <div class="fitur-item"><strong>Give Away</strong><span id="fiturh"></span></div>
+        <div class="fitur-item"><strong>Turnamen Catur</strong><span id="fituri"></span></div>
+        <div class="fitur-item"><strong>Nasuka Challenge</strong><span id="fiturj"></span></div>
       </div>
-      <div class="profile-info">
-        <p><strong>ID Pengguna:</strong> <span id="display-id"></span></p>
-        <p><strong>Nama Lengkap:</strong> <span id="display-nama"></span></p>
-        <p><strong>Nomor HP:</strong> <span id="display-telepon"></span></p>
-        <p><strong>Alamat Pengiriman:</strong> <span id="display-alamat"></span></p>
-        <p><strong>Sosial Media:</strong> <span id="display-sosialMedia"></span></p>
-        <p><strong>Kata Kata Hari Ini:</strong> <span id="display-kataKata"></span></p>
-      </div>
-      <button class="edit-button" id="editProfileBtn">Edit Profil</button>
+    </div>
+
+    <div class="buttons">
+      <button onclick="goHome()">🏠 Home</button>
+      <button onclick="goTopUp()">💰 Bank Saya</button>
+      <button onclick="logout()">🚪 Logout</button>
     </div>
   </div>
-
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <h3>Edit Profil</h3>
-      <form id="profileForm">
-        <div class="form-group">
-          <label for="input-nama">Nama Lengkap:</label>
-          <input type="text" id="input-nama" required />
-        </div>
-        <div class="form-group">
-          <label for="input-telepon">Nomor HP:</label>
-          <input type="tel" id="input-telepon" required />
-        </div>
-        <div class="form-group">
-          <label for="input-alamat">Alamat Pengiriman:</label>
-          <textarea id="input-alamat" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="input-sosialMedia">Sosial Media:</label>
-          <input type="text" id="input-sosialMedia" />
-        </div>
-        <div class="form-group">
-          <label for="input-profile-picture">Foto Profil:</label>
-          <input type="file" id="input-profile-picture" accept="image/*" />
-        </div>
-        <button type="submit" class="save-button">Simpan Perubahan</button>
-      </form>
-    </div>
-  </div>
-
-  <footer>
-    <p>&copy; 2025 Nasukafoods</p>
-  </footer>
 
   <script>
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+    const urlGAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+    const id = localStorage.getItem("userID");
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadProfileData();
-      document.getElementById('editProfileBtn').onclick = () => document.getElementById('editModal').style.display = 'block';
-      document.getElementById('closeModal').onclick = () => document.getElementById('editModal').style.display = 'none';
-      window.onclick = (e) => { if (e.target == document.getElementById('editModal')) document.getElementById('editModal').style.display = 'none'; };
-      document.getElementById('profileForm').addEventListener('submit', saveProfileData);
-    });
+    if (!id) {
+      document.body.innerHTML = "<p style='text-align:center; padding: 20px;'>ID tidak ditemukan. Silakan login ulang.</p>";
+    } else {
+      fetch(`${urlGAS}?action=getProfil&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("nama").innerText = data.Nama || "-";
+          document.getElementById("id").innerText = data.ID || "-";
+          document.getElementById("status").innerText = data.Status || "-";
+          document.getElementById("username").innerText = data.Username || "-";
+document.getElementById("password").innerText = data.Password || "_";
+document.getElementById("facebook").innerText = data.Facebook || "-";
+document.getElementById("tiktok").innerText = data.Tiktok || "_";   
+          
+          
+document.getElementById("saldo").innerText = formatRupiah(data.Saldo);         
+document.getElementById("perak").innerText = data.Perak || "_";          document.getElementById("platinum").innerText = data.Platinum || "_";
+document.getElementById("gold").innerText = data.Gold || "_";
+          document.getElementById("jenis").innerText = data.Jenis || "-";
+          document.getElementById("usia").innerText = data.Usia || "-";
+          document.getElementById("telepon").innerText = data.Telepon || "-";
+document.getElementById("tanggal").innerText = data["Tanggal Daftar"] || "-";
+          
+          document.getElementById("alamat").innerText = data.Alamat || "-";
+          
+          document.getElementById("foto").src = data.Foto || "https://via.placeholder.com/120.png?text=No+Foto";
 
-    function loadProfileData() {
-      const data = JSON.parse(localStorage.getItem('profileData')) || {};
-      document.getElementById('display-id').textContent = data.id || '';
-      document.getElementById('display-nama').textContent = data.nama || '';
-      document.getElementById('display-telepon').textContent = data.telepon || '';
-      document.getElementById('display-alamat').textContent = data.alamat || '';
-      document.getElementById('display-sosialMedia').textContent = data.sosialMedia || '';
-      document.getElementById('display-kataKata').textContent = data.kataKata || '';
-      document.getElementById('display-profile-picture').src = data.profilePictureUrl || 'https://via.placeholder.com/120?text=No+Pic';
-
-      document.getElementById('input-nama').value = data.nama || '';
-      document.getElementById('input-telepon').value = data.telepon || '';
-      document.getElementById('input-alamat').value = data.alamat || '';
-      document.getElementById('input-sosialMedia').value = data.sosialMedia || '';
+          // Fitur
+          document.getElementById("fitura").innerText = data["Fitur A"] || "-";
+          document.getElementById("fiturb").innerText = data["Fitur B"] || "-";
+          document.getElementById("fiturc").innerText = data["Fitur C"] || "-";
+          document.getElementById("fiturd").innerText = data["Fitur D"] || "-";
+          document.getElementById("fiture").innerText = data["Fitur E"] || "-";
+          document.getElementById("fiturf").innerText = data["Fitur F"] || "-";
+          document.getElementById("fiturg").innerText = data["Fitur G"] || "-";
+          document.getElementById("fiturh").innerText = data["Fitur H"] || "-";
+          document.getElementById("fituri").innerText = data["Fitur I"] || "-";
+          document.getElementById("fiturj").innerText = data["Fitur J"] || "-";
+        })
+        .catch(err => {
+          document.body.innerHTML = `<p style='text-align:center; padding: 20px;'>Gagal memuat profil: ${err}</p>`;
+        });
     }
 
-    async function saveProfileData(e) {
-      e.preventDefault();
-      let data = JSON.parse(localStorage.getItem('profileData')) || {};
-      if (!data.id) {
-        data.id = 'USR-' + Date.now();
-        data.tanggalMasuk = new Date().toLocaleDateString('id-ID');
-        data.saldo = '0';
-      }
+    function formatRupiah(angka) {
+      const number = parseInt(angka);
+      return isNaN(number) ? "Rp 0" : "Rp " + number.toLocaleString("id-ID");
+    }
 
-      data.nama = document.getElementById('input-nama').value;
-      data.telepon = document.getElementById('input-telepon').value;
-      data.alamat = document.getElementById('input-alamat').value;
-      data.sosialMedia = document.getElementById('input-sosialMedia').value;
+    function goHome() {
+      window.location.href = "index.html";
+    }
 
-      const file = document.getElementById('input-profile-picture').files[0];
-      const formData = new FormData();
-      formData.append('action', 'saveProfile');
-      formData.append('user_id', data.id);
-      formData.append('nama', data.nama);
-      formData.append('telepon', data.telepon);
-      formData.append('alamat', data.alamat);
-      formData.append('sosialMedia', data.sosialMedia);
-      formData.append('saldo', data.saldo);
-      formData.append('tanggalMasuk', data.tanggalMasuk);
-      if (file) formData.append('profile_picture_file', file);
-      else formData.append('current_profile_picture_url', data.profilePictureUrl || '');
+    function goTopUp() {
+      window.location.href = "topup.html";
+    }
 
-      try {
-        const res = await fetch(WEB_APP_URL, { method: 'POST', body: formData });
-        const result = await res.text();
-        if (result === "Success") {
-          localStorage.setItem('profileData', JSON.stringify(data));
-          loadProfileData();
-          document.getElementById('editModal').style.display = 'none';
-          alert('Profil berhasil disimpan!');
-        } else {
-          alert('Gagal: ' + result);
-        }
-      } catch {
-        alert('Gagal terhubung ke server');
-      }
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
     }
   </script>
 </body>
