@@ -2,611 +2,256 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <title>Profil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nasuka</title>
   <style>
     body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: #fefefe;
-      color: white;
-      padding-bottom: 60px;
-    }
-    #profilLink {
-      display: none;
-    }
-    .hero-section {
-      position: relative;
-      height: 15vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    #toa-display-area {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 5;
-  padding: 5px 0;
-  box-sizing: border-box;
-  background-color: transparent);
-  color: white;
-  text-shadow: 0 0 3px black;
-}
-
-.toa-marquee-container {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  box-sizing: border-box;
-  position: relative;
-}
-
-.toa-marquee-text {
-  display: inline-block;
-  padding-left: 100%;
-  animation: scroll-kiri 15s linear infinite;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-    
-  
-    .hero-section video,
-    .hero-section img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-    }
-    .promo-text,
-    .info,
-    .sidebar {
-      position: relative;
-      z-index: 1;
-    }
-    .promo-text {
-      text-align: center;
-      margin-top: 5vh;
-      font-size: 24px;
-      font-weight: bold;
-      text-shadow: 0 0 6px black;
-      padding: 0 20px;
-    }
-    .info,
-    .sidebar {
-      position: absolute;
-      bottom: 5px;
-    }
-    .info {
-      left: 6px;
-    }
-    .info .username {
-      font-size: 14px;
-      margin-top: 5px;
-    }
-    .info .balance {
-      font-size: 17px;
-      color: white;
-    }
-
-    .product-section {
-      display: flex;
-      overflow-x: auto;
-      padding: 20px 2px;
-      gap: 10px;
-      scroll-behavior: smooth;
-    }
-    .product-section::-webkit-scrollbar {
-      display: none;
-    }
-    .product {
-      flex: 0 0 auto;
-      width: 90px;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
       margin: 0;
       padding: 0;
-      background: none !important;
-      border: none !important;
-      box-shadow: none !important;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .profile-picture {
       text-align: center;
-      color: black;
+      margin-bottom: 15px;
     }
-    .product.sticky-susu {
-      position: sticky;
-      left: 0;
-      background: none !important;
-      border: none !important;
-      z-index: 10;
-    }
-    .product img {
-      width: 100%;
-      aspect-ratio: 1/1;
+
+    .profile-picture img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
       object-fit: cover;
-      border: none !important;
-      box-shadow: none !important;
-      background: none !important;
+      border: 3px solid #007bff;
     }
-    .product h4,
-    .product p {
-      margin: 0;
-      padding: 0;
-      background: none !important;
-      border: none !important;
-    }
-    .marquee {
-      width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      box-sizing: border-box;
-      color: redll;
-      padding: 10px 0;
-      position: relative;
-    }
-    .marquee span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll-kiri 10s linear infinite;
-    }
-    @keyframes scroll-kiri {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-    .glow-wrapper {
-      animation: blingBling 1.5s infinite alternate;
-      padding: 5px;
-      background: black;
-      border-radius: 10px;
-      position: relative;
-    }
-    @keyframes blingBling {
-      0% {
-        box-shadow: 0 0 10px silver, 0 0 20px blue, 0 0 30px blue;
-        transform: scale(1);
-      }
-      50% {
-        box-shadow: 0 0 15px grey, 0 0 25px grey, 0 0 35px grey;
-        transform: scale(1);
-      }    
-      100% {
-        box-shadow: 0 0 10px silver, 0 0 20px silver, 0 0 30px silver;
-        transform: scale(1);
-      }
-    }
-    .glow-wrapper .glow-text {
-      position: absolute;
-      bottom: 5px;
-      left: 5px;
-      color: #fff;
+
+    .profile-name {
+      text-align: center;
+      font-size: 20px;
       font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .profile-status {
+      text-align: center;
       font-size: 12px;
-      text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
-      background-color: rgba(0, 0, 0, 0.4);
-      padding: 2px 6px;
-      border-radius: 5px;
-      z-index: 2;
+      color: #666;
+      margin-bottom: 20px;
     }
-    nav {
-      
-      color: red;
+
+    .info-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .info-card {
+      background-color: #f7f9fc;
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .info-card strong {
+      display: block;
+      color: #555;
+      margin-bottom: 3px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    .fitur-section {
+      margin-top: 20px;
+    }
+
+    .fitur-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 13px;
+      color: #007bff;
+    }
+
+    .fitur-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .fitur-item {
+      background: #eaf1ff;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .fitur-item strong {
+      font-size: 11px;
+      display: block;
+      color: #444;
+      margin-bottom: 2px;
+    }
+
+    .buttons {
       display: flex;
       justify-content: space-around;
-      align-items: center;
-      padding: 10px;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 99;
+      margin-top: 20px;
     }
-    nav button {
-      background: #444;
-      border: none;
+
+    .buttons button {
+      background-color: #007bff;
       color: white;
-      padding: 8px 12px;
-      border-radius: 5px;
+      font-size: 12px;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
       cursor: pointer;
     }
-    nav button:hover {
-      background: #777;
+
+    .buttons button:hover {
+      background-color: #0056b3;
     }
-    
-    
-    .large-product-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 10px;
-}
-
-.large-product {
-  background: #fff;
-  border-radius: 10px;
-  text-align: center;
-  color: black;
-  width: 100%;
-}
-
-.large-product img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 10px 10px 0 0;
-}
-.large-product h4, .large-product p {
-  margin: 5px 0;
-}
-    .online-box {
-  position: absolute;
-  bottom: 5px;
-  right: 6px;
-  text-align: right;
-  z-index: 2;
-  font-size: 13px;
-  color: white;
-  text-shadow: 0 0 3px black;
-}
-#online-status {
-  font-weight: bold;
-}
-#onlineCount {
-  font-weight: normal;
-  font-size: 12px;
-  color: lightgray;
-}
-    
   </style>
 </head>
 <body>
-
-<section class="hero-section">
-
-<div id="toa-display-area" style="text-align: center; padding: 10px;  margin-top: 2px;">
-    <div class="toa-marquee-container">
-        <span class="toa-marquee-text"></span>
+  <div class="container">
+    <div class="profile-picture">
+      <img id="foto" src="https://nasukafoods.site/tekn.jpg" alt="" />
     </div>
-</div>
+    <div class="profile-name" id="nama">Memuat...</div>
+    <div class="profile-status">ID: <span id="id"></span> | <span id="status"></span></div>
 
-  <img src="https://nasukafoods.site/tekn.jpg" alt="Hero Background">
-  <div class="info">
-    <div class="username" id="nama"></div>
-    <div class="balance" id="saldo">💵 </div>
-  </div>
-  
-  <div class="online-box">
-  <div id="online-status">Online (...)</div>
-  
-  
-  
-</section>
-
-
-
-
-<section class="product-section">
-  <div class="product sticky-susu">
-    <div class="marquee" style="position: absolute; top: 0; left: 0; z-index: 10; color: white; font-size: 15px;">
-      <span><strong>🎁 Beli Produk Digital Sekarang!  1.K Likes Cuma 5RB 🎁</strong></span>
-    </div>
-    <div class="glow-wrapper">
-      <img src="https://nasukafoods.site/tiktokfoll.gif" alt="Sosmed"
-        onclick="goToPayment('', 12000, 'digital')"          
-        style="width: 100%; display: block;">
-      <div class="glow-text">Booster✨</div>
-    </div>
-  </div>
-
-
-
- 
-      <div class="product">
-  
-    <img src="https://nasukafoods.site/pitasebar.gif" alt=""
-    <h4><strong>Rp 0</strong></h4>
-    <p>___</p>
-    
-    
-    <button onclick="window.location.href='https://nasukafoods.site/pembayaranbyperak.html'""" >Tukar Perak</button>
-  </div>
-  
-  
-    <div class="product">
-  
-    <img src="https://nasukafoods.site/nasukabird.jpg" alt=""
-    <h4><strong>Nasuka Bird</strong></h4>
-    <p>___</p>
-    
-    
-    <button onclick="window.location.href='https://nasukafoods.site/burung.html'" >Ambil Perak</button>
-  </div>
-  
-  
-  
- 
-  <div class="product">
-    <img src="https://nasukafoods.site/armour.jpg" alt="Udud" onclick="goToDeskripsi('Udud Armor', 10000)">
-    <h4>Udud Armor</h4>
-    <p>Rp 10.000</p>
-    <div class="button-frame"><button onclick="goToPayment('Udud Armor', 10000, 'fisik')">Beli Sekarang</button></div>
-  </div>
-
-  <div class="product">
-    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Udud" onclick="goToDeskripsi('Udud Armor', 10000)">
-    <h4>Nash</h4>
-    <p>Rp 10.000</p>
-    <div class="button-frame"><button onclick="goToPayment('Udud Armor', 10000, 'fisik')">Beli Sekarang</button></div>
-  </div>
-  
-  
-  
-  
-</section>
-</section> 
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="large-product-grid">
-  <div class="large-product">
-    <img src="https://nasukafoods.site/paketcilok.jpg" alt="" <a href="https://nasukafoods.site/.html">
-    <h4>Paket Cilok Gajih</h4>
-    <p>Rp 99.000</p>
-    <button onclick="goToPayment('Sambel Kearifan Lokal', 25000, 'fisik')">Beli Sekarang</button>
-  </div>
-
-  <div class="large-product">
-    <img src="https://nasukafoods.site/wingungu.gif" alt="Kerupuk" onclick="window.location.href='https://nasukafoods.site/leaderboardperak.html'">
-    <h4>Leaderboard</h4>
-    
-   
-  </div>
-</div>
-
-
-<div class="large-product-grid">
-  <div class="large-product">
-    <img src="https://nasukafoods.site/paket-cilok-keju.jpg" alt="Sambel Kearifan" onclick="goToDeskripsi('Sambel Kearifan Lokal', 25000)">
-    <h4>Cilok Keju</h4>
-    <p>Rp 25.000</p>
-    <button onclick="goToPayment('Sambel Kearifan Lokal', 25000, 'fisik')">Beli Sekarang</button>
-  </div>
-
-  <div class="large-product">
-    <img src="https://nasukafoods.site/paket-cilok-pedas.jpg" alt="Kerupuk Viral" onclick="goToDeskripsi('Kerupuk Viral', 8000)">
-    <h4>Cilok Ayam Pedas</h4>
-    <p>Rp 400 an</p>
-    <button onclick="goToPayment('Kerupuk Viral', 8000, 'fisik')">Beli Sekarang</button>
-  </div>
-</div>
-
-
-
-
-
-
-<nav>
-  <button onclick="handleProfileClick()">👤 Profil</button>
-  <button onclick="location.href='galeri.html'">🚪 Pintu</button>
-</nav>
-
-
-<script>
-  const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
-  const username = localStorage.getItem("username");
-
-  let currentToaIndex = 0;
-  let toaIntervalId;
-
-  if (username) {
-    fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.Username) {
-          document.getElementById("nama").textContent = data.Nama || "_";
-          document.getElementById("saldo").textContent = "💵 " + formatRupiah(data.Saldo || 0);
-          document.getElementById("loginBtn").style.display = "none";
-          document.getElementById("logoutBtn").style.display = "inline-block";
-        }
-      })
-      .catch(err => console.log("Gagal koneksi profil:", err));
-  }
-
-  function logoutUser() {
-    localStorage.clear();
-    location.reload();
-  }
-
-  function formatRupiah(angka) {
-    if (!angka || isNaN(angka)) return "Rp 0";
-    return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  }
-
-  function goToPayment(productName, productPrice, productType) {
-    const orderDetails = {
-      name: productName,
-      price: productPrice,
-      quantity: 1,
-      type: productType
-    };
-    localStorage.setItem('currentOrder', JSON.stringify(orderDetails));
-
-    const visitorData = {
-      nama: "Budi Santoso", 
-      email: "budi.santoso@example.com",
-      telepon: "081234567890",
-      alamat: "Jl. Contoh No. 123, Kota Contoh, Provinsi Contoh",
-      catatan: ""
-    };
-    localStorage.setItem('visitorInfo', JSON.stringify(visitorData));
-
-    if (productType === 'digital') {
-      window.location.href = 'digital-payment.html';
-    } else {
-      window.location.href = 'pembayaran.html';
-    }
-  }
-
-  function goToDeskripsi(productName, productPrice) {
-    const detail = {
-      name: productName,
-      price: productPrice
-    };
-    localStorage.setItem('deskripsiProduk', JSON.stringify(detail));
-    window.location.href = 'deskripsi.html';
-  }
-
-  const IP_KEY = (() => {
-    let key = localStorage.getItem("visitorID");
-    if (!key) {
-      key = "id_" + Math.random().toString(36).substring(2);
-      localStorage.setItem("visitorID", key);
-    }
-    return key;
-  })();
-
-  async function updateOnline() {
-    try {
-      await fetch(`${URL_GAS}?action=updateOnlineStatus&ip=${IP_KEY}`);
+    <div class="info-section">
+        
+      <div class="info-card"><strong>Username</strong><span id="username"></span></div>
+       <div class="info-card"><strong>Password</strong><span id="password"></span></div>
+      <div class="info-card"><strong>Tiktok</strong><span id="tiktok"></span></div>
+       <div class="info-card"><strong>Facebook</strong><span id="facebook"></span></div>
       
-      const res = await fetch(`${URL_GAS}?action=getOnlineCount`);
-      const data = await res.json();
       
-      const onlineStatus = document.getElementById('online-status');
-      if (onlineStatus && data.count) {
-        onlineStatus.textContent = `Online (${data.count})`;
-      }
-
-      await loadToaData(); 
-
-    } catch (err) {
-      console.warn("Gagal update online atau memuat Toa:", err);
-    }
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  async function loadToaData() {
-      try {
-          const response = await fetch(`${URL_GAS}?action=getToa`); 
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json(); 
-          const toas = data.toas; 
-
-          const activeToas = toas.filter(item => {
-              const statusValue = String(item.Status || '').trim().toLowerCase();
-              return statusValue === 'aktif';
-          });
-
-          displayRotatingToas(activeToas);
-          
-      } catch (error) {
-          console.error("Gagal mengambil data Toa:", error);
-          
-          
-          
-          
-          
-          
-          
-const toaDisplayElement = document.getElementById('toa-display-area');
-          if (toaDisplayElement) {
-              toaDisplayElement.innerHTML = '<p style="color: red;">Gagal memuat Toa.</p>';
-          }
-      }
-  }
-
-function displayRotatingToas(toas) {
-    const toaDisplayElement = document.getElementById('toa-display-area'); 
-    if (!toaDisplayElement) return;
-    if (toaIntervalId) clearInterval(toaIntervalId);
-
-    if (toas.length === 0) 
-    
-    
-    
-    {
-        toaDisplayElement.innerHTML = '<p>Tidak ada pengumuman aktif saat ini.</p>';
-        return;
-    }
-
-    function showNextToa() {
-        const toa = toas[currentToaIndex];
-        const nama = toa.Nama || 'Anonim';
-        const pesan = toa.Pesan || 'Tidak ada pesan.';
-
-
-toaDisplayElement.innerHTML = `
-            <div class="marquee"><span><strong>${nama}:</strong> ${pesan}</span></div>
-        `;
-
-        currentToaIndex = (currentToaIndex + 1) % toas.length;
-    }
-
-    showNextToa();
-    
-    
-    toaIntervalId = setInterval(showNextToa, 1000); 
-}
+      
+      
+      
+      
+      <div class="info-card"><strong>Saldo</strong><span id="saldo"></span></div>
+      <div class="info-card"><strong>Perak</strong><span id="perak"></span></div>
+      <div class="info-card"><strong>Platinum</strong><span id="platinum"></span></div>
+      <div class="info-card"><strong>Gold</strong><span id="gold"></span></div>
+      <div class="info-card"><strong>Jenis</strong><span id="jenis"></span></div>
+      <div class="info-card"><strong>Usia</strong><span id="usia"></span></div>
+      <div class="info-card"><strong>Telepon</strong><span id="telepon"></span></div>
+      <div class="info-card"><strong>Tanggal</strong><span id="tanggal"></span></div>
+    </div> 
+      
+      
+      <div class="info-card" style="grid-column: span 2;"><strong>Alamat</strong><span id="alamat"></span></div>
+      
+      
+     
 
 
 
+    <div class="fitur-section">
+      <div class="fitur-title">Fitur Lainnya</div>
+      <div class="fitur-grid">
+        <div class="fitur-item"><strong>Event Tukar Perak</strong><span id="fitura"></span></div>
+        <div class="fitur-item"><strong>Event Tukar Platinum</strong><span id="fiturb"></span></div>
+        <div class="fitur-item"><strong>Event Tukar Gold</strong><span id="fiturc"></span></div>
+        <div class="fitur-item"><strong>Event Diskon 99%</strong><span id="fiturd"></span></div>
+        <div class="fitur-item"><strong>Bazar Produk Digital</strong><span id="fiture"></span></div>
+        <div class="fitur-item"><strong>Apresiasi Juara</strong><span id="fiturf"></span></div>
+        <div class="fitur-item"><strong>Produk Sponsor</strong><span id="fiturg"></span></div>
+        <div class="fitur-item"><strong>Give Away</strong><span id="fiturh"></span></div>
+        <div class="fitur-item"><strong>Turnamen Catur</strong><span id="fituri"></span></div>
+        <div class="fitur-item"><strong>Nasuka Challenge</strong><span id="fiturj"></span></div>
+      </div>
+    </div>
 
+    <div class="buttons">
+      <button onclick="goHome()">🏠 Home</button>
+      <button onclick="goTopUp()">💰 Bank Saya</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
 
+  <script>
+    const urlGAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+    const id = localStorage.getItem("userID");
 
-
-
-
-
-
-  
-  updateOnline();
-  setInterval(updateOnline, 10000); 
-  
-  function handleProfileClick() {
-    const username = localStorage.getItem("username");
-    if (username) {
-      window.location.href = "profil-vip.html";
+    if (!id) {
+      document.body.innerHTML = "<p style='text-align:center; padding: 20px;'>ID tidak ditemukan. Silakan login ulang.</p>";
     } else {
-      alert("Silakan login terlebih dahulu.");
-      window.location.href = "https://nasukafoods.site/login.html";
-    }
-  }
+      fetch(`${urlGAS}?action=getProfil&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("nama").innerText = data.Nama || "-";
+          document.getElementById("id").innerText = data.ID || "-";
+          document.getElementById("status").innerText = data.Status || "-";
+          document.getElementById("username").innerText = data.Username || "-";
+document.getElementById("password").innerText = data.Password || "_";
+document.getElementById("facebook").innerText = data.Facebook || "-";
+document.getElementById("tiktok").innerText = data.Tiktok || "_";   
+          
+          
+document.getElementById("saldo").innerText = formatRupiah(data.Saldo);         
+document.getElementById("perak").innerText = data.Perak || "_";          document.getElementById("platinum").innerText = data.Platinum || "_";
+document.getElementById("gold").innerText = data.Gold || "_";
+          document.getElementById("jenis").innerText = data.Jenis || "-";
+          document.getElementById("usia").innerText = data.Usia || "-";
+          document.getElementById("telepon").innerText = data.Telepon || "-";
+document.getElementById("tanggal").innerText = data["Tanggal Daftar"] || "-";
+          
+          document.getElementById("alamat").innerText = data.Alamat || "-";
+          
+          document.getElementById("foto").src = data.Foto || "https://via.placeholder.com/120.png?text=No+Foto";
 
- 
-</script>
+          // Fitur
+          document.getElementById("fitura").innerText = data["Fitur A"] || "-";
+          document.getElementById("fiturb").innerText = data["Fitur B"] || "-";
+          document.getElementById("fiturc").innerText = data["Fitur C"] || "-";
+          document.getElementById("fiturd").innerText = data["Fitur D"] || "-";
+          document.getElementById("fiture").innerText = data["Fitur E"] || "-";
+          document.getElementById("fiturf").innerText = data["Fitur F"] || "-";
+          document.getElementById("fiturg").innerText = data["Fitur G"] || "-";
+          document.getElementById("fiturh").innerText = data["Fitur H"] || "-";
+          document.getElementById("fituri").innerText = data["Fitur I"] || "-";
+          document.getElementById("fiturj").innerText = data["Fitur J"] || "-";
+        })
+        .catch(err => {
+          document.body.innerHTML = `<p style='text-align:center; padding: 20px;'>Gagal memuat profil: ${err}</p>`;
+        });
+    }
+
+    function formatRupiah(angka) {
+      const number = parseInt(angka);
+      return isNaN(number) ? "Rp 0" : "Rp " + number.toLocaleString("id-ID");
+    }
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+    function goTopUp() {
+      window.location.href = "topup.html";
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+  </script>
 </body>
 </html>
