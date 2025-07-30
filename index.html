@@ -315,63 +315,72 @@
   <div><img src="https://nasukafoods.site/grid8.jpg" alt="Grid 8"></div>
 </div>
 
+
 <script>
 const userId = localStorage.getItem("userID");
 const loginBtn = document.getElementById("loginBtn");
 const fotoProfil = document.getElementById("fotoProfil");
+const baseURL = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+
 
 if (userId) {
-  // Ambil profil
-  fetch(`https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getProfil&id=${userId}`)
+
+  fetch(`${baseURL}?action=getProfil&id=${userId}`)
     .then(res => res.json())
     .then(data => {
       if (fotoProfil) {
-        if (data?.Foto && data.Foto !== "undefined" && data.Foto !== "null") {
-          fotoProfil.src = data.Foto;
-          fotoProfil.alt = data.Nama || "User";
-        } else {
-          fotoProfil.src = "https://nasukafoods.site/default.jpg";
-          fotoProfil.alt = "Default";
-        }
+        const foto = data?.Foto;
+        fotoProfil.src = (foto && foto !== "undefined" && foto !== "null") ? foto : "https://nasukafoods.site/default.jpg";
+        fotoProfil.alt = data?.Nama || "User";
         fotoProfil.style.cursor = "pointer";
-        fotoProfil.addEventListener("click", () => {
-          window.location.href = "profil.html";
-        });
+        
       }
     })
     .catch(err => console.error("Gagal ambil foto profil:", err));
+
+
+  
+
+fotoProfil.onclick = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const { latitude, longitude } = pos.coords;
+        fetch(`${baseURL}?action=getLokasi&id=${userId}&lat=${latitude}&lon=${longitude}`)
+          .finally(() => location.href = "profil.html");
+      },
+      () => location.href = "profil.html"
+    );
+  } else {
+    location.href = "profil.html";
+  }
+};
+
+ 
+  loginBtn.textContent = "🗂️ DASHBOARD";
+  loginBtn.onclick = () => location.href = "index.html";
+
+ 
+  document.querySelectorAll(".nasuka").forEach(el => el.style.display = "none");
+  const iframe = document.querySelector("iframe");
+  if (iframe) iframe.style.display = "none";
+
+} else {
+ 
+  loginBtn.textContent = "🗂️ LOGIN";
+  loginBtn.onclick = () => location.href = "login.html";
+  document.querySelectorAll(".hanya-login").forEach(el => el.style.display = "none");
 }
 
-// Update jumlah online
 let onlineCount = Math.floor(Math.random() * 31) + 310;
 const onlineEl = document.querySelector('.fake-online');
 function updateOnline() {
   const delta = Math.floor(Math.random() * 5) - 2;
-  onlineCount += delta;
-  if (onlineCount < 310) onlineCount = 310;
-  if (onlineCount > 340) onlineCount = 500;
+  onlineCount = Math.max(310, Math.min(onlineCount + delta, 500));
   onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
 }
 setInterval(updateOnline, 5000);
-
-// Atur tombol login dan tampilan
-if (userId) {
-  loginBtn.textContent = "🗂️ DASHBOARD";
-  loginBtn.onclick = () => window.location.href = "index.html";
-
-  document.querySelectorAll(".nasuka").forEach(el => el.style.display = "none");
-  const iframe = document.querySelector("iframe");
-  if (iframe) iframe.style.display = "none";
-} else {
-  loginBtn.textContent = "🗂️ LOGIN";
-  loginBtn.onclick = () => window.location.href = "login.html";
-  document.querySelectorAll(".hanya-login").forEach(el => el.style.display = "none");
-}
 </script>
-
-
-
-
 
 </body>
 </html>
