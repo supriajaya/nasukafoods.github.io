@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uji Lokasi</title>
+</head>
+<body style="font-family:sans-serif;padding:20px;">
+
+  <h2>Uji Permintaan Lokasi</h2>
+  <button onclick="mintaLokasi()" style="padding:10px 20px;font-size:16px;">Coba Minta Lokasi</button>
+
+  <p id="hasil" style="margin-top:20px;"></p>
+
+  <script>
+    function mintaLokasi() {
+      const hasil = document.getElementById("hasil");
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            const { latitude, longitude } = pos.coords;
+            hasil.textContent = `✅ Lokasi diterima: ${latitude}, ${longitude}`;
+          },
+          err => {
+            hasil.textContent = `❌ Gagal: ${err.message}`;
+          }
+        );
+      } else {
+        hasil.textContent = "❌ Geolocation tidak didukung di browser ini.";
+      }
+    }
+  </script>
+
+</body>
+</html>
