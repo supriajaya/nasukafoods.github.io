@@ -137,22 +137,20 @@
     <div class="info-section">
         
       <div class="info-card"><strong>Username</strong><span id="username"></span></div>
-       <div class="info-card"><strong>Password</strong><span id="password"></span></div>
+      <div class="info-card"><strong>Saldo</strong><span id="saldo"></span></div>    
       <div class="info-card"><strong>Tiktok</strong><span id="tiktok"></span></div>
        <div class="info-card"><strong>Facebook</strong><span id="facebook"></span></div>
       
       
       
-      
-      
-      
-      <div class="info-card"><strong>Saldo</strong><span id="saldo"></span></div>
       <div class="info-card"><strong>Perak</strong><span id="perak"></span></div>
       <div class="info-card"><strong>Platinum</strong><span id="platinum"></span></div>
       <div class="info-card"><strong>Gold</strong><span id="gold"></span></div>
-      <div class="info-card"><strong>Jenis</strong><span id="jenis"></span></div>
-      <div class="info-card"><strong>Usia</strong><span id="usia"></span></div>
-      <div class="info-card"><strong>Telepon</strong><span id="telepon"></span></div>
+     <div class="info-card"><strong>Telepon</strong><span id="telepon"></span></div> 
+     
+      
+       <div class="info-card"><strong>Jenis Kelamin</strong><span id="jenis"></span></div>
+     
       <div class="info-card"><strong>Tanggal</strong><span id="tanggal"></span></div>
     </div> 
       
@@ -175,14 +173,26 @@
         <div class="fitur-item"><strong>Apresiasi Juara</strong><span id="fiturf"></span></div>
         <div class="fitur-item"><strong>Produk Sponsor</strong><span id="fiturg"></span></div>
         <div class="fitur-item"><strong>Give Away</strong><span id="fiturh"></span></div>
-        <div class="fitur-item"><strong>Turnamen Catur</strong><span id="fituri"></span></div>
-        <div class="fitur-item"><strong>Nasuka Challenge</strong><span id="fiturj"></span></div>
-      </div>
+ 
+        
+        
+        <a href="bank.html" style="text-decoration: none; color: inherit;">
+  <div class="fitur-item"><strong>Bank Pribadi</strong><span id="fituri"></span></div>
+</a>
+      <a href="riwayat-transaksi.html" style="text-decoration: none; color: inherit;">
+  <div class="fitur-item"><strong>Riwayat Transaksi</strong><span id="fiturj"></span></div>
+</a>
+      
+      
+      
+      
+      
+      
+      
     </div>
 
     <div class="buttons">
       <button onclick="goHome()">🏠 Home</button>
-      <button onclick="goTopUp()">💰 Bank Pribadi</button>
       <button onclick="logout()">🚪 Logout</button>
     </div>
   </div>
@@ -201,7 +211,6 @@
           document.getElementById("id").innerText = data.ID || "-";
           document.getElementById("status").innerText = data.Status || "-";
           document.getElementById("username").innerText = data.Username || "-";
-document.getElementById("password").innerText = data.Password || "_";
 document.getElementById("facebook").innerText = data.Facebook || "-";
 document.getElementById("tiktok").innerText = data.Tiktok || "_";   
           
@@ -209,10 +218,18 @@ document.getElementById("tiktok").innerText = data.Tiktok || "_";
 document.getElementById("saldo").innerText = formatRupiah(data.Saldo);         
 document.getElementById("perak").innerText = data.Perak || "_";          document.getElementById("platinum").innerText = data.Platinum || "_";
 document.getElementById("gold").innerText = data.Gold || "_";
+
+
+
+
           document.getElementById("jenis").innerText = data.Jenis || "-";
-          document.getElementById("usia").innerText = data.Usia || "-";
-          document.getElementById("telepon").innerText = data.Telepon || "-";
           
+          
+          document.getElementById("telepon").innerText = data.Telepon || "-";
+
+          
+          
+         
           
           
 const tanggalAsli = data["Tanggal Daftar"];
