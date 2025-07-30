@@ -220,7 +220,30 @@
 }
 
 
+.produk-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  overflow-x: auto;
+}
+.produk-bar::-webkit-scrollbar {
+  display: none;
+}
 
+.produk-item {
+  width: 80px;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.produk-item {
+  border: 2px solid #2196F3;
+  padding: 2px;
+}
     
   </style>
 </head>
@@ -253,25 +276,39 @@
 
   <iframe src="https://nasukafoods.site/info-all-leaderboard.html"></iframe>
 
-  <!-- GAMBAR BAWAH (disembunyikan jika belum login) -->
 <img src="https://nasukafoods.site/teknologi.jpg" alt="Foto Tambahan" class="gambar-bawah hanya-login" />
 
-<!-- PRODUK SCROLL (disembunyikan jika belum login) -->
-<div class="produk-scroll hanya-login">
-  <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Produk 1">
-  <img src="https://nasukafoods.site/produk2.jpg" alt="Produk 2">
-  <img src="https://nasukafoods.site/produk3.jpg" alt="Produk 3">
-  <img src="https://nasukafoods.site/produk4.jpg" alt="Produk 4">
-  <img src="https://nasukafoods.site/produk5.jpg" alt="Produk 5">
-  <img src="https://nasukafoods.site/produk6.jpg" alt="Produk 6">
+
+<div class="produk-bar hanya-login">
+    
+    
+    
+    
+  <img src="https://nasukafoods.site/default.jpg" alt="Foto Profil" class="produk-item hanya-login" id="fotoProfil">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="produk-scroll">
+    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Produk 2">
+    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Produk 3">
+    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Produk 4">
+    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Produk 5">
+    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Produk 6">
+  </div>
 </div>
 
-<!-- PRODUK GRID (disembunyikan jika belum login) -->
+
 <div class="produk-grid hanya-login">
   <div><img src="https://nasukafoods.site/nasukafoods.jpg" alt="Grid 1"></div>
-  <div><img src="https://nasukafoods.site/grid2.jpg" alt="Grid 2"></div>
-  <div><img src="https://nasukafoods.site/grid3.jpg" alt="Grid 3"></div>
-  <div><img src="https://nasukafoods.site/grid4.jpg" alt="Grid 4"></div>
+  <div><img src="https://nasukafoods.site/nasukafoods.jpg" alt="Grid 2"></div>
+  <div><img src="https://nasukafoods.site/nasukafoods.jpg" alt="Grid 3"></div>
+  <div><img src="https://nasukafoods.site/nasukafoods.jpg" alt="Grid 4"></div>
   <div><img src="https://nasukafoods.site/grid5.jpg" alt="Grid 5"></div>
   <div><img src="https://nasukafoods.site/grid6.jpg" alt="Grid 6"></div>
   <div><img src="https://nasukafoods.site/grid7.jpg" alt="Grid 7"></div>
@@ -279,21 +316,33 @@
 </div>
 
 <script>
-  
-
-const id = localStorage.getItem("ID");
 const userId = localStorage.getItem("userID");
 const loginBtn = document.getElementById("loginBtn");
+const fotoProfil = document.getElementById("fotoProfil");
 
-if (id) {
-  fetch(`https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getProfil&id=${id}`)
+if (userId) {
+  // Ambil profil
+  fetch(`https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getProfil&id=${userId}`)
     .then(res => res.json())
     .then(data => {
-      document.getElementById("nama").textContent = data.nama || "User";
-      document.getElementById("saldo").textContent = data.saldo || "0";
-    });
+      if (fotoProfil) {
+        if (data?.Foto && data.Foto !== "undefined" && data.Foto !== "null") {
+          fotoProfil.src = data.Foto;
+          fotoProfil.alt = data.Nama || "User";
+        } else {
+          fotoProfil.src = "https://nasukafoods.site/default.jpg";
+          fotoProfil.alt = "Default";
+        }
+        fotoProfil.style.cursor = "pointer";
+        fotoProfil.addEventListener("click", () => {
+          window.location.href = "profil.html";
+        });
+      }
+    })
+    .catch(err => console.error("Gagal ambil foto profil:", err));
 }
 
+// Update jumlah online
 let onlineCount = Math.floor(Math.random() * 31) + 310;
 const onlineEl = document.querySelector('.fake-online');
 function updateOnline() {
@@ -305,24 +354,24 @@ function updateOnline() {
 }
 setInterval(updateOnline, 5000);
 
+// Atur tombol login dan tampilan
 if (userId) {
   loginBtn.textContent = "🗂️ DASHBOARD";
-  loginBtn.onclick = () => window.location.href = "dashboard.html";
+  loginBtn.onclick = () => window.location.href = "index.html";
 
-  const cards = document.querySelectorAll(".nasuka");
-  cards.forEach(card => card.style.display = "none");
-
+  document.querySelectorAll(".nasuka").forEach(el => el.style.display = "none");
   const iframe = document.querySelector("iframe");
   if (iframe) iframe.style.display = "none";
 } else {
   loginBtn.textContent = "🗂️ LOGIN";
   loginBtn.onclick = () => window.location.href = "login.html";
-
-  // SEMBUNYIKAN SEMUA YANG KHUSUS UNTUK LOGIN
-  const hanyaLogin = document.querySelectorAll('.hanya-login');
-  hanyaLogin.forEach(el => el.style.display = "none");
+  document.querySelectorAll(".hanya-login").forEach(el => el.style.display = "none");
 }
+</script>
 
-  </script>
+
+
+
+
 </body>
 </html>
