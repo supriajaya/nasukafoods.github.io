@@ -20,7 +20,32 @@
       align-items: center;
       flex-wrap: wrap;
     }
+.produk-scroll {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    gap: 8px;
+    margin-top: -5px;
+  }
 
+  .produk-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  
+  
+  
+  .produk-scroll img {
+  width: 70px;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+  
+  
     header h2 {
       margin: 0;
       font-size: 18px;
@@ -100,24 +125,9 @@
       margin-bottom: 8px;
     }
 
-    .artikel {
-      background-color: #ffffff;
-      padding: 20px;
-      margin: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .artikel h3 {
-      margin-top: 0;
-      color: #2196F3;
-    }
-
     iframe {
       width: 98%;
-      height: 400px;
+      height: 500%;
       border: 1px solid #ccc;
       border-radius: 0px;
       margin: 0px 0;
@@ -139,6 +149,22 @@
     .login-btn:hover {
       background-color: #388E3C;
     }
+
+    
+
+.gambar-bawah {
+  display: block;
+  width: 8px;
+  height: 80px;
+  margin: 10px auto;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
 
     @media (max-width: 480px) {
       .nasuka {
@@ -163,14 +189,42 @@
       iframe {
         height: 400px;
       }
+
+      .gambar-bawah {
+        width: 95%;
+      }
     }
+    
+    .produk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+}
+
+.produk-grid div {
+  background: #fff;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+
+   
+    .produk-grid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+
+
+    
   </style>
 </head>
 <body>
-  <header>
-    <h2 id="nama">User</h2>
-    <div class="saldo">Saldo: <span id="saldo">0</span></div>
-  </header>
 
   <div class="container">
     <div class="nasuka">
@@ -184,15 +238,7 @@
     <div class="nasuka">
       <div class="nasuka-info left">
         <p>.</p>
-        
-        
-        
         <h3 id="loginBtn" style="cursor: pointer;"> 🗂️ LOGIN</h3>
-        
-        
-        
-        
-        
         <p>.</p>
         <h3> 📁 Faq</h3>
         <h3> 📁 Developer</h3>
@@ -201,52 +247,82 @@
         <h3> 📁 Keamanan Data</h3>
         <h3> 📁 Term & Condition</h3>
         <p>©Copyright Nasuka</p>
-        
       </div>
     </div>
   </div>
 
   <iframe src="https://nasukafoods.site/info-all-leaderboard.html"></iframe>
 
-  <script>
-    const id = localStorage.getItem("ID");
-    if (id) {
-      fetch(`https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getProfil&id=${id}`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("nama").textContent = data.nama || "User";
-          document.getElementById("saldo").textContent = data.saldo || "0";
-        });
-    }
+  <!-- GAMBAR BAWAH (disembunyikan jika belum login) -->
+<img src="https://nasukafoods.site/teknologi.jpg" alt="Foto Tambahan" class="gambar-bawah hanya-login" />
 
-    let onlineCount = Math.floor(Math.random() * 31) + 310;
-    const onlineEl = document.querySelector('.fake-online');
+<!-- PRODUK SCROLL (disembunyikan jika belum login) -->
+<div class="produk-scroll hanya-login">
+  <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Produk 1">
+  <img src="https://nasukafoods.site/produk2.jpg" alt="Produk 2">
+  <img src="https://nasukafoods.site/produk3.jpg" alt="Produk 3">
+  <img src="https://nasukafoods.site/produk4.jpg" alt="Produk 4">
+  <img src="https://nasukafoods.site/produk5.jpg" alt="Produk 5">
+  <img src="https://nasukafoods.site/produk6.jpg" alt="Produk 6">
+</div>
 
-    function updateOnline() {
-      const delta = Math.floor(Math.random() * 5) - 2;
-      onlineCount += delta;
-      if (onlineCount < 310) onlineCount = 310;
-      if (onlineCount > 340) onlineCount = 500;
-      onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
-    }
+<!-- PRODUK GRID (disembunyikan jika belum login) -->
+<div class="produk-grid hanya-login">
+  <div><img src="https://nasukafoods.site/nasukafoods.jpg" alt="Grid 1"></div>
+  <div><img src="https://nasukafoods.site/grid2.jpg" alt="Grid 2"></div>
+  <div><img src="https://nasukafoods.site/grid3.jpg" alt="Grid 3"></div>
+  <div><img src="https://nasukafoods.site/grid4.jpg" alt="Grid 4"></div>
+  <div><img src="https://nasukafoods.site/grid5.jpg" alt="Grid 5"></div>
+  <div><img src="https://nasukafoods.site/grid6.jpg" alt="Grid 6"></div>
+  <div><img src="https://nasukafoods.site/grid7.jpg" alt="Grid 7"></div>
+  <div><img src="https://nasukafoods.site/grid8.jpg" alt="Grid 8"></div>
+</div>
 
-    setInterval(updateOnline, 5000);
+<script>
+  
 
-    
-    
-    
-    const loginBtn = document.getElementById("loginBtn");
+const id = localStorage.getItem("ID");
 const userId = localStorage.getItem("userID");
+const loginBtn = document.getElementById("loginBtn");
+
+if (id) {
+  fetch(`https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getProfil&id=${id}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("nama").textContent = data.nama || "User";
+      document.getElementById("saldo").textContent = data.saldo || "0";
+    });
+}
+
+let onlineCount = Math.floor(Math.random() * 31) + 310;
+const onlineEl = document.querySelector('.fake-online');
+function updateOnline() {
+  const delta = Math.floor(Math.random() * 5) - 2;
+  onlineCount += delta;
+  if (onlineCount < 310) onlineCount = 310;
+  if (onlineCount > 340) onlineCount = 500;
+  onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
+}
+setInterval(updateOnline, 5000);
 
 if (userId) {
   loginBtn.textContent = "🗂️ DASHBOARD";
   loginBtn.onclick = () => window.location.href = "dashboard.html";
+
+  const cards = document.querySelectorAll(".nasuka");
+  cards.forEach(card => card.style.display = "none");
+
+  const iframe = document.querySelector("iframe");
+  if (iframe) iframe.style.display = "none";
 } else {
   loginBtn.textContent = "🗂️ LOGIN";
   loginBtn.onclick = () => window.location.href = "login.html";
+
+  // SEMBUNYIKAN SEMUA YANG KHUSUS UNTUK LOGIN
+  const hanyaLogin = document.querySelectorAll('.hanya-login');
+  hanyaLogin.forEach(el => el.style.display = "none");
 }
-    
-    
+
   </script>
 </body>
 </html>
