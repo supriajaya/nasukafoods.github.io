@@ -182,7 +182,7 @@
 
     <div class="buttons">
       <button onclick="goHome()">🏠 Home</button>
-      <button onclick="goTopUp()">💰 Bank Saya</button>
+      <button onclick="goTopUp()">💰 Bank Pribadi</button>
       <button onclick="logout()">🚪 Logout</button>
     </div>
   </div>
@@ -212,7 +212,27 @@ document.getElementById("gold").innerText = data.Gold || "_";
           document.getElementById("jenis").innerText = data.Jenis || "-";
           document.getElementById("usia").innerText = data.Usia || "-";
           document.getElementById("telepon").innerText = data.Telepon || "-";
-document.getElementById("tanggal").innerText = data["Tanggal Daftar"] || "-";
+          
+          
+          
+const tanggalAsli = data["Tanggal Daftar"];
+if (tanggalAsli) {
+  const tgl = new Date(tanggalAsli);
+  const tanggalFormatted = tgl.getDate().toString().padStart(2, '0') + '/' +
+                           (tgl.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                           tgl.getFullYear();
+  document.getElementById("tanggal").innerText = tanggalFormatted;
+} else {
+  document.getElementById("tanggal").innerText = "-";
+}
+          
+          
+          
+          
+          
+          
+          
+          
           
           document.getElementById("alamat").innerText = data.Alamat || "-";
           
@@ -245,7 +265,7 @@ document.getElementById("tanggal").innerText = data["Tanggal Daftar"] || "-";
     }
 
     function goTopUp() {
-      window.location.href = "topup.html";
+      window.location.href = "bank.html";
     }
 
     function logout() {
