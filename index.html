@@ -232,14 +232,20 @@
 
     setInterval(updateOnline, 5000);
 
-    document.getElementById("loginBtn").addEventListener("click", function () {
-  const id = localStorage.getItem("ID");
-  if (id) {
-    localStorage.clear();
-    alert("Berhasil logout.");
-  }
-  window.location.href = "login.html";
-});
+    
+    
+    
+    const loginBtn = document.getElementById("loginBtn");
+const userId = localStorage.getItem("userID");
+
+if (userId) {
+  loginBtn.textContent = "🗂️ DASHBOARD";
+  loginBtn.onclick = () => window.location.href = "dashboard.html";
+} else {
+  loginBtn.textContent = "🗂️ LOGIN";
+  loginBtn.onclick = () => window.location.href = "login.html";
+}
+    
     
   </script>
 </body>
