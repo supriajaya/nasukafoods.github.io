@@ -1,558 +1,619 @@
-<!DOCTYPE html>      
-<html lang="id">      
-<head>      
-  <meta charset="UTF-8">      
-      
-     <meta name="viewport" content="width=1024">
-     
-     
-     
-     
-  <title>Roll Game</title> <style>      
-        $('#resultDisplay').html(`    
-  <div class="gif-wrapper">    
-    <img src="https://yourdomain.com/matahari1.gif" alt="Menang" class="gif-bg">    
-    <div class="gif-text">+${perakHadiah.toLocaleString('id-ID')} Perak</div>    
-  </div>    
-`);    
-            
-            .perspective-on { perspective: 1000px; }      
-    .perspective-off { perspective: 0; }      
-    
-    
-                .tilted { transform: rotateY(45deg); }      
-    .spin-0  { transform: rotateX(-3600deg); }      
-    .spin-1  { transform: rotateX(-3636deg); }      
-    .spin-2  { transform: rotateX(-3672deg); }      
-    .spin-3  { transform: rotateX(-3708deg); }      
-    .spin-4  { transform: rotateX(-3744deg); }      
-    .spin-5  { transform: rotateX(-3780deg); }      
-    .spin-6  { transform: rotateX(-3816deg); }      
-    .spin-7  { transform: rotateX(-3852deg); }      
-    .spin-8  { transform: rotateX(-3888deg); }      
-    .spin-9  { transform: rotateX(-3924deg); }      
-    @keyframes back-spin { 100% { transform: rotateX(36deg); } }      
-    @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} }      
-    @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} }      
-    @keyframes spin-0  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } }      
-    @keyframes spin-1  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } }      
-    @keyframes spin-2  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } }      
-    @keyframes spin-3  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } }      
-    @keyframes spin-4  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } }      
-    @keyframes spin-5  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } }      
-    @keyframes spin-6  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } }      
-    @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }      
-    @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }      
-    @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }      
-    
-            
-            
- 
-            
-#taruhanSelect {    
-  font-size: 20px;     /* Ukuran tulisan */    
-  padding: 10px 20px;  /* Ruang dalam kotak */    
-  width: 200px;        /* Lebar kotak */    
-  height: 100px;        /* Tinggi kotak */    
-  
-}    
-   
-#resultDisplay {    
-  position: absolute;    
-  top: 50%;    
-  left: 50%;    
-  transform: translate(-50%, -50%);    
-  width: 700px;   /* Ganti ukuran di sini */    
-  height: 700px;  /* Ganti ukuran di sini */    
-  z-index: 9999;    
-  pointer-events: none;    
-}    
-    
-.gif-wrapper {    
-  width: 100%;    
-  height: 100%;    
-  position: relative;    
-}    
-    
-.gif-bg {    
-  width: 100%;    
-  height: 100%;    
-  object-fit: contain;
-  display: block;    
-}    
-    
-.gif-text {    
-    position: absolute;    
-    top: 50%;    
-    left: 50%;    
-    transform: translate(-50%, -50%);    
-    font-size: 58px;    
-    font-weight: bold;    
-    color: yellow;    
-    text-shadow: 2px 2px 4px #000;    
-    z-index: 10;    
-    white-space: nowrap;    
-  }  
-            
-body {      
-background-image: url('https://nasukafoods.site/gol.jpg'); }      
-                         
-          
-    #rotate {      
-      margin: 0 auto;      
-      width: 600px;      
-      height: 600px;      
-      padding-top: 700px;      
-      transform-style: preserve-3d;      }   
-      
-    .ring {      
-      margin: 0 auto;      
-      height: 115px;      
-      width: 115px;      
-      float: left;      
-      transform-style: preserve-3d;        }    
+<!DOCTYPE html>        
+<html lang="id">        
+<head>        
+  <meta charset="UTF-8">        
         
-        
-    .roll {      
-      position: absolute;      
-      width: 120px;      
-      height: 120px;      
-      box-sizing: border-box;      
-      opacity: 0.9;      
-      color: yellow;      
-      background: ;      
-      border: solid 5px ;      
-      backface-visibility: hidden;    }      
-      
-      
-      
-      
-    .roll p {      
-      font-size: 100px;      
-      font-weight: bold;      
-      line-height: 130px;      
-      margin: 0;      
-      text-align: center;      }      
-    
-    
-     .backface-on { backface-visibility: visible; }  
-             
-             }      
-    label {      
-      cursor: pointer;      
-      display: inline-block;      
-      width: 45%;      
-      text-align: center;      
-    }      
+     <meta name="viewport" content="width=1024">  
        
-    #resultDisplay { color: #000; }         
-    #angkaOutput {      
-      font-size: 24px;      
-      margin-top: 10px;      
-      color: blue;      
-    }      
-        
-        
-        
-    .go.disabled img {    
-  opacity: 0.5;    
-  filter: grayscale(100%);    
-}    
-        
-        
-    
-        
-        
-    @keyframes blink-glow {    
-  0%, 100% {    
-    text-shadow: 0 0 5px silver, 0 0 10px white, 0 0 15px silver;    
-    opacity: 1;    
-  }    
-  50% {    
-    text-shadow: 0 0 10px white, 0 0 20px silver, 0 0 30px white;    
-    opacity: 0.7;    
-  }    
-}    
-    
-    
-    
-#xray {    
-  width: 40px;        /* ukuran checkbox */    
-  height: 40px;    
-  margin-right: 10px; /* jarak ke teks */    
-  transform: scale(1.5); /* tambahan pembesaran */    
-}    
-    
-label {    
-  font-size: 28px;    
-  display: flex;    
-  align-items: center;    
-  justify-content: center;    
-  gap: 10px;    
-  padding: 10px;    
-  color: white; 
-}    
-    
-#perakSayaDisplay {    
-  margin-left: 0;    
-  text-align: left;    
-  font-size: 50px;    
-  font-weight: bold;    
-  color: black;    
-  animation: blink-glow 1.2s infinite;    
-}    
-    
-    
-    .go {    
-  background: none;    
-  border: none;    
-  padding: 0;    
-  margin: 0;    
-  box-shadow: none;    
-  outline: none;    
-  cursor: pointer;    
-}    
-    
-.spin-img {    
-  width: 400px;    
-  height: 200px;    
-  max-width: 100vw;    
-  object-fit: contain;    
-  display: block;    
-  border: none;    
-  box-shadow: none;    
-  background: none;    
-}    
        
-        
-  
-        
-  </style>      
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>      
-</head>      
-    
-    
-    
-<body>      
-          
-          
-      <header id="headerBar">    
-    
-  <select id="taruhanSelect">    
-    <option value="100">100 perak</option>      
-    <option value="250">250 perak</option>      
-    <option value="500">500 perak</option>      
-    <option value="1000">1.000 perak</option>      
-    <option value="5000">5.000 perak</option>      
-    <option value="10000">10.000 perak</option>      
-  </select>    
-</header>      
-          
-          
-          
-  <div id="stage" class="perspective-on">      
-    <div id="rotate">      
-      <div id="ring1" class="ring"></div>      
-      <div id="ring2" class="ring"></div>      
-      <div id="ring3" class="ring"></div>      
-      <div id="ring4" class="ring"></div>      
-      <div id="ring5" class="ring"></div>      
-    </div>      
-        
-        
-          
-        <div id="resultDisplay"></div>      
-    <div id="perakSayaDisplay">Perak: -</div>      
-          
-    <div>      
-            
-            
-            
-        <button class="go">    
-  <img src="https://nasukafoods.site/guld.jpg" alt="SPIN" class="spin-img" />    
-</button>    
-          
-        
-        
-        
-        
-    <div>      
-      <label><input type="checkbox" id="xray">Mode Miring</label>      
-    </div>      
+       
+       
+  <title>Roll Game</title> <style>        
+        $('#resultDisplay').html(`      
+  <div class="gif-wrapper">      
+    <img src="https://yourdomain.com/matahari1.gif" alt="Menang" class="gif-bg">      
+    <div class="gif-text">+${perakHadiah.toLocaleString('id-ID')} Perak</div>      
   </div>      
+`);      
+              
+            .perspective-on { perspective: 1000px; }        
+    .perspective-off { perspective: 0; }        
       
+      
+  #pesanBerjalan {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: black;
+    padding: 10px 0;
+    z-index: 9999;
+    color: yellow;
+    font-size: 22px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: blink-glow 1.2s infinite;
+    text-align: center;
+  }
+
+  #pesanBerjalan span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 40s linear infinite;
+  }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  @keyframes blink-glow {
+    0%, 100% {
+      text-shadow: 0 0 5px yellow, 0 0 10px orange, 0 0 15px red;
+      opacity: 1;
+    }
+    50% {
+      text-shadow: 0 0 10px red, 0 0 20px orange, 0 0 30px yellow;
+      opacity: 0.7;
+    }
+  }
+
+                .tilted { transform: rotateY(45deg); }        
+    .spin-0  { transform: rotateX(-3600deg); }        
+    .spin-1  { transform: rotateX(-3636deg); }        
+    .spin-2  { transform: rotateX(-3672deg); }        
+    .spin-3  { transform: rotateX(-3708deg); }        
+    .spin-4  { transform: rotateX(-3744deg); }        
+    .spin-5  { transform: rotateX(-3780deg); }        
+    .spin-6  { transform: rotateX(-3816deg); }        
+    .spin-7  { transform: rotateX(-3852deg); }        
+    .spin-8  { transform: rotateX(-3888deg); }        
+    .spin-9  { transform: rotateX(-3924deg); }        
+    @keyframes back-spin { 100% { transform: rotateX(36deg); } }        
+    @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} }        
+    @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} }        
+    @keyframes spin-0  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } }        
+    @keyframes spin-1  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } }        
+    @keyframes spin-2  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } }        
+    @keyframes spin-3  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } }        
+    @keyframes spin-4  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } }        
+    @keyframes spin-5  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } }        
+    @keyframes spin-6  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } }        
+    @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }        
+    @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }        
+    @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }        
+      
+              
+              
+   
+              
+#taruhanSelect {      
+  font-size: 20px;     /* Ukuran tulisan */      
+  padding: 10px 20px;  /* Ruang dalam kotak */      
+  width: 200px;        /* Lebar kotak */      
+  height: 100px;        /* Tinggi kotak */      
+    
+}      
      
-  <script>      
-    const username = localStorage.getItem('username');      
-    const gasWebAppLink = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';      
-    let perakSaya = 0;      
-    function updatePerakDisplay() {      
-      $('#perakSayaDisplay').text('Perak: ' + Math.round(perakSaya).toLocaleString('id-ID'));      
-    }      
-    function loadPerak() {      
-      const currentUsername = localStorage.getItem('username');      
-      if (!currentUsername) {      
-        $('#perakSayaDisplay').text('Perak: Tidak Cukup.');      
-        return;      
-      }      
-      fetch(`${gasWebAppLink}?action=getPerak&username=${encodeURIComponent(currentUsername)}`)      
-        .then(response => response.json())      
-        .then(data => {      
-          if (data.status === 'success' && typeof data.perak === 'number') {      
-            perakSaya = data.perak;      
-            updatePerakDisplay();      
-          } else {      
-            $('#perakSayaDisplay').text('Perak: Gagal memuat data.');      
-          }      
-        })      
-        .catch(() => {      
-          $('#perakSayaDisplay').text('Perak: Error memuat.');      
-        });      
-    }      
-    function updatePerakOnServer(changeAmount) {      
-      const currentUsername = localStorage.getItem('username');      
-      if (!currentUsername) return;      
-      const payload = {      
-        action: 'updatePerak',      
-        username: currentUsername,      
-        changeAmount: changeAmount      
-      };      
-      fetch(gasWebAppLink, {      
-        method: 'POST',      
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },      
-        body: new URLSearchParams(payload).toString()      
-      })      
-      .then(response => response.json())      
-      .then(data => {      
-        if (data.status === 'success' && typeof data.perak === 'number') {      
-          perakSaya = data.perak;      
-          updatePerakDisplay();      
-        } else {      
-          alert('Gagal mengupdate perak Anda: ' + (data.message || 'Unknown error.'));      
-          loadPerak();      
-        }      
-      })      
-      .catch(() => {      
-        alert('Gagal mengupdate perak Anda. Silakan coba lagi.');      
-        loadPerak();      
-      });      
-    }      
-    const ROLL_PER_REEL = 10;      
-    const REEL_RADIUS = 300;      
-    let currentSeeds = [0, 0, 0, 0, 0];      
-    let totalSpins = 0;      
-    let totalWins = 0;      
-    let totalLoses = 0;      
-    function updateSpinDisplay() {      
-      $('#jumlahSpinDisplay').text('Jumlah Spin: ' + totalSpins);      
-      $('#jumlahMenangDisplay').text('Jumlah Kemenangan: ' + totalWins);      
-    }      
-    function createROLL(ring) {      
-      const rollAngle = 360 / ROLL_PER_REEL;      
-      for (let i = 0; i < ROLL_PER_REEL; i++) {      
-        const roll = document.createElement('div');      
-        roll.className = 'roll';      
-        roll.style.transform = 'rotateX(' + (rollAngle * i) + 'deg) translateZ(' + REEL_RADIUS + 'px)';      
-        const p = document.createElement('p');      
-        p.textContent = i;      
-        roll.appendChild(p);      
-        ring.append(roll);      
-      }      
-    }      
-    function getSeed(base = null) {      
-      const spinNum = totalSpins + 1;      
-      let chance = 0;      
-      if (spinNum <= 10) chance = 1.00;      
-      else if (spinNum <= 20) chance = 0.40;      
-      else if (spinNum <= 35) chance = 0.5;      
-      else if (spinNum <= 75) chance = 0.35;      
-      else if (spinNum <= 100) chance = 0.2;      
-      else if (spinNum <= 101) chance = 1.00;      
-      if (chance > 0 && Math.random() < chance) {      
-        if (base !== null) return base;      
-      }      
-      return Math.floor(Math.random() * ROLL_PER_REEL);      
-    }      
-          
-          
-          
-          
-          
-          
-          
-          
-    function generateHasilDenganPola() {      
-  const chanceMenang = 0.3; // 30% winrate      
-  const hasil = [];      
-  if (Math.random() < chanceMenang) {      
-    const angka = Math.floor(Math.random() * ROLL_PER_REEL);      
-    const tipeMenang = Math.random();      
+#resultDisplay {      
+  position: absolute;      
+  top: 50%;      
+  left: 50%;      
+  transform: translate(-50%, -50%);      
+  width: 700px;   /* Ganti ukuran di sini */      
+  height: 700px;  /* Ganti ukuran di sini */      
+  z-index: 9999;      
+  pointer-events: none;      
+}      
+      
+.gif-wrapper {      
+  width: 100%;      
+  height: 100%;      
+  position: relative;      
+}      
+      
+.gif-bg {      
+  width: 100%;      
+  height: 100%;      
+  object-fit: contain;  
+  display: block;      
+}      
+      
+.gif-text {      
+    position: absolute;      
+    top: 50%;      
+    left: 50%;      
+    transform: translate(-50%, -50%);      
+    font-size: 58px;      
+    font-weight: bold;      
+    color: yellow;      
+    text-shadow: 2px 2px 4px #000;      
+    z-index: 10;      
+    white-space: nowrap;      
+  }    
+              
+body {        
+background-image: url('https://nasukafoods.site/'); }        
+                           
+            
+    #rotate {        
+      margin: 0 auto;        
+      width: 600px;        
+      height: 600px;        
+      padding-top: 700px;        
+      transform-style: preserve-3d;      }     
         
-    if (tipeMenang < 0.33) {      
-      hasil.push(angka, angka, angka);      
-      while (hasil.length < 5) hasil.push((angka + hasil.length) % ROLL_PER_REEL);      
-    } else if (tipeMenang < 0.66) {      
-      hasil.push(angka, angka, angka, angka);      
-      hasil.push((angka + 1) % ROLL_PER_REEL);      
-    } else {      
-      for (let i = 0; i < 5; i++) hasil.push(angka);      
-    }      
-  } else {      
-    do {      
-      for (let i = 0; i < 5; i++) {      
-        hasil[i] = Math.floor(Math.random() * ROLL_PER_REEL);      
-      }      
-      const count = {};      
-      hasil.forEach(a => count[a] = (count[a] || 0) + 1);      
-    } while (Object.values(count).some(v => v >= 3)); // hindari menang      
-  }      
-  return hasil;      
+    .ring {        
+      margin: 0 auto;        
+      height: 115px;        
+      width: 115px;        
+      float: left;        
+      transform-style: preserve-3d;        }      
+          
+          
+    .roll {        
+      position: absolute;        
+      width: 120px;        
+      height: 120px;        
+      box-sizing: border-box;        
+      opacity: 0.9;        
+      color: black;        
+      background: ;        
+      border: solid 5px ;        
+      backface-visibility: hidden;    }        
+        
+        
+        
+        
+    .roll p {        
+      font-size: 100px;        
+      font-weight: bold;        
+      line-height: 130px;        
+      margin: 0;        
+      text-align: center;      }        
+      
+      
+     .backface-on { backface-visibility: visible; }    
+               
+             }        
+    label {        
+      cursor: pointer;        
+      display: inline-block;        
+      width: 45%;        
+      text-align: center;        
+    }        
+         
+    #resultDisplay { color: #000; }           
+    #angkaOutput {        
+      font-size: 24px;        
+      margin-top: 10px;        
+      color: blue;        
+    }        
+          
+          
+          
+    .go.disabled img {      
+  opacity: 0.5;      
+  filter: grayscale(100%);      
 }      
           
           
+      
           
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-    function spin(timer) {      
-      const taruhan = parseFloat($('#taruhanSelect').val());      
-      if (isNaN(taruhan) || taruhan <= 0) return;      
-      if (perakSaya < taruhan) return;      
-          
-          
-          
+    @keyframes blink-glow {      
+  0%, 100% {      
+    text-shadow: 0 0 5px silver, 0 0 10px white, 0 0 15px silver;      
+    opacity: 1;      
+  }      
+  50% {      
+    text-shadow: 0 0 10px white, 0 0 20px silver, 0 0 30px white;      
+    opacity: 0.7;      
+  }      
+}      
+      
+      
+      
+#xray {      
+  width: 40px;        /* ukuran checkbox */      
+  height: 40px;      
+  margin-right: 10px; /* jarak ke teks */      
+  transform: scale(1.5); /* tambahan pembesaran */      
+}      
+      
+label {      
+  font-size: 28px;      
+  display: flex;      
+  align-items: center;      
+  justify-content: center;      
+  gap: 10px;      
+  padding: 10px;      
+  color: white;   
+}      
+      
+#perakSayaDisplay {      
+  margin-left: 0;      
+  text-align: left;      
+  font-size: 50px;      
+  font-weight: bold;      
+  color: black;      
+  animation: blink-glow 1.2s infinite;      
+}      
+      
+      
+    .go {      
+  background: none;      
+  border: none;      
+  padding: 0;      
+  margin: 0;      
+  box-shadow: none;      
+  outline: none;      
+  cursor: pointer;      
+}      
+      
+.spin-img {      
+  width: 400px;      
+  height: 200px;      
+  max-width: 100vw;      
+  object-fit: contain;      
+  display: block;      
+  border: none;      
+  box-shadow: none;      
+  background: none;      
+}      
          
-      $('.go').prop('disabled', true).addClass('disabled');    
           
-          
-          
-          
-          
-          
-      perakSaya -= taruhan;      
-      updatePerakDisplay();      
-      $('#resultDisplay').text('');      
-      const winningSeed = getSeed();      
-      for (let i = 1; i <= 5; i++) {      
-        let oldSeed = -1;      
-        const oldClass = $('#ring' + i).attr('class');      
-        if (oldClass && oldClass.length > 4) {      
-          oldSeed = parseInt(oldClass.slice(10));      
-        }      
-        let seed = Math.floor(Math.random() * ROLL_PER_REEL);      
-        while (oldSeed === seed) {      
-          seed = Math.floor(Math.random() * ROLL_PER_REEL);      
-        }      
-        currentSeeds[i - 1] = seed;      
-        $('#ring' + i)      
-          .css('animation', 'back-spin 1s, spin-' + seed + ' ' + (timer + i * 0.5) + 's')      
-          .attr('class', 'ring spin-' + seed);      
-      }      
-      setTimeout(() => {      
-        const hasil = currentSeeds;      
-        $('#angkaOutput').text('Angka keluar: ' + hasil.join(' '));      
-        const count = {};      
-        for (let angka of hasil) {      
-          count[angka] = (count[angka] || 0) + 1;      
-        }      
-        let menang = false;      
-        let perakHadiah = 0;      
-        let pesanRoll = '';      
-        const counts = Object.values(count);      
-        if (counts.includes(5)) {      
-          perakHadiah = taruhan * 6;      
-          pesanRoll = '5 ANGKA SAMA! 🎉';      
-          menang = true;      
-        } else if (counts.includes(4)) {      
-          perakHadiah = taruhan * 5;      
-          pesanRoll = '4 ANGKA SAMA! 🎉';      
-          menang = true;      
-        } else if (counts.includes(3)) {      
-          perakHadiah = taruhan * 4;      
-          pesanRoll = '3 ANGKA SAMA! 🎉';      
-          menang = true;      
-        }      
-        totalSpins++;      
-        let perubahanPerakUntukServer = 0;      
-            
-            
-        if (menang) {    
-  $('#resultDisplay').html(`    
-    <div class="gif-wrapper">    
-      <img src="https://nasukafoods.site/firework.gif" class="gif-bg">    
-      <div class="gif-text">+${perakHadiah.toLocaleString('id-ID')} Perak 🎉</div>    
-    </div>    
-  `);    
-}     
     
-else {    
-  $('#resultDisplay').html(`    
-    <div class="gif-wrapper">    
           
-    </div>    
-  `);    
-}    
+  </style>        
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>        
+</head>        
+      
+      
+      
+<body>        
+            
+            
+            <div id="pesanBerjalan">
+  <span>
+    Percayalah, kalah menang sudah disetting oleh pencipta mesin. Game ini diciptakan untuk edukasi bahwa tidak ada yang bisa mengalahkan bandar apapun alasannya. Untuk itu sampaikan pada semua pemain slot: jika menang berhentilah "itu pancingan", jika kalah berhentilah "atau hidup akan semakin hancur". Pesan admin: Carilah rezeki yang halal dan berhentilah berjudi 🙂
+  </span>
+</div>
             
             
             
             
             
-        updateSpinDisplay();      
-        updatePerakOnServer(perubahanPerakUntukServer);      
             
-            
-            
-            
-          $('.go').prop('disabled', false);    
-$('.go').removeClass('disabled'); 
-$('.go img').attr('src', 'https://nasukafoods.site/guld.jpg');    
-             
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-      }, (timer + 3.5) * 1000);      
-    }      
-    $(document).ready(function () {      
-      for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));      
-      updatePerakDisplay();      
-      updateSpinDisplay();      
-      loadPerak();      
-      $('.go').on('click', function () { spin(2); });      
-      $('#xray').on('click', function () {      
-        const tilt = $(this).is(':checked') ? 'tiltin' : 'tiltout';      
-        $('#rotate').css('animation', tilt + ' 2s 1');      
-        setTimeout(() => {      
-          $('#rotate').toggleClass('tilted');      
-          $('.roll').toggleClass('backface-on', $(this).is(':checked'));      
-        }, 2000);      
-      });      
-      $('#perspective').on('click', function () {      
-        $('#stage').toggleClass('perspective-on perspective-off');      
-      });      
-    });      
+      <header id="headerBar">      
+      
+  <select id="taruhanSelect">      
         
+    <option value="1000">1.000 perak</option>        
+    <option value="5000">5.000 perak</option>        
+    <option value="10000">10.000 perak</option>        
+  </select>      
+</header>        
+            
+            
+            
+  <div id="stage" class="perspective-on">        
+    <div id="rotate">        
+      <div id="ring1" class="ring"></div>        
+      <div id="ring2" class="ring"></div>        
+      <div id="ring3" class="ring"></div>        
+      <div id="ring4" class="ring"></div>        
+      <div id="ring5" class="ring"></div>        
+    </div>        
+          
+          
+            
+        <div id="resultDisplay"></div>        
+    <div id="perakSayaDisplay">Perak: -</div>        
+            
+    <div>        
+              
+              
+              
+        <button class="go">      
+  <img src="https://nasukafoods.site/guld.jpg" alt="SPIN" class="spin-img" />      
+</button>      
+            
+          
+          
+          
+          
+    <div>        
+      <label><input type="checkbox" id="xray">Mode Miring</label>        
+    </div>        
+  </div>        
         
-        
-        
-  </script>      
-</body>      
-</html>    
-    
+       
+  <script>        
+    const username = localStorage.getItem('username');        
+    const gasWebAppLink = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';        
+    let perakSaya = 0;        
+    function updatePerakDisplay() {        
+      $('#perakSayaDisplay').text('Perak: ' + Math.round(perakSaya).toLocaleString('id-ID'));        
+    }        
+      
+      
+    function loadPerak() {  
+  const userId = localStorage.getItem("userID");  
+  if (!userId) {  
+    $('#perakSayaDisplay').text('Perak: Tidak Dikenali');  
+    return;  
+  }  
+  
+  fetch(`${gasWebAppLink}?action=getProfil&id=${encodeURIComponent(userId)}`)  
+    .then(response => response.json())  
+    .then(data => {  
+      if (data && data.Perak) {  
+        perakSaya = parseInt(data.Perak) || 0;  
+        updatePerakDisplay();  
+      } else {  
+        $('#perakSayaDisplay').text('Perak: Tidak Ada Data');  
+      }  
+    })  
+    .catch(() => {  
+      $('#perakSayaDisplay').text('Perak: Error');  
+    });  
+}  
+      
+      
+    function updatePerakOnServer(changeAmount) {  
+  const userId = localStorage.getItem('userID');  
+  if (!userId) return;  
+  
+  const payload = {  
+    action: 'updatePerak',  
+    id: userId,  
+    changeAmount: changeAmount  
+  };  
+  
+  fetch(gasWebAppLink, {  
+    method: 'POST',  
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },  
+    body: new URLSearchParams(payload).toString()  
+  })  
+  .then(response => response.json())  
+  .then(data => {  
+    if (data.status === 'success' && typeof data.perak === 'number') {  
+      perakSaya = data.perak; // ← pakai langsung dari respon  
+      updatePerakDisplay();  
+    } else {  
+      alert('Gagal update perak: ' + (data.message || 'Error'));  
+    }  
+  })  
+  .catch(() => {  
+    alert('Gagal update perak. Silakan coba lagi.');  
+  });  
+}  
+      
+      
+    const ROLL_PER_REEL = 10;        
+    const REEL_RADIUS = 300;        
+    let currentSeeds = [0, 0, 0, 0, 0];        
+    let totalSpins = 0;        
+    let totalWins = 0;        
+    let totalLoses = 0;        
+    function updateSpinDisplay() {        
+      $('#jumlahSpinDisplay').text('Jumlah Spin: ' + totalSpins);        
+      $('#jumlahMenangDisplay').text('Jumlah Kemenangan: ' + totalWins);        
+    }        
+    function createROLL(ring) {        
+      const rollAngle = 360 / ROLL_PER_REEL;        
+      for (let i = 0; i < ROLL_PER_REEL; i++) {        
+        const roll = document.createElement('div');        
+        roll.className = 'roll';        
+        roll.style.transform = 'rotateX(' + (rollAngle * i) + 'deg) translateZ(' + REEL_RADIUS + 'px)';        
+        const p = document.createElement('p');        
+        p.textContent = i;        
+        roll.appendChild(p);        
+        ring.append(roll);        
+      }        
+    }        
+    function getSeed(base = null) {        
+      const spinNum = totalSpins + 1;        
+      let chance = 0;        
+      if (spinNum <= 10) chance = 1.00;        
+      else if (spinNum <= 20) chance = 0.40;        
+      else if (spinNum <= 35) chance = 0.5;        
+      else if (spinNum <= 75) chance = 0.35;        
+      else if (spinNum <= 100) chance = 0.2;        
+      else if (spinNum <= 101) chance = 1.00;        
+      if (chance > 0 && Math.random() < chance) {        
+        if (base !== null) return base;        
+      }        
+      return Math.floor(Math.random() * ROLL_PER_REEL);        
+    }        
+            
+            
+            
+            
+            
+            
+            
+            
+    function generateHasilDenganPola() {        
+  const chanceMenang = 0.3; // 30% winrate        
+  const hasil = [];        
+  if (Math.random() < chanceMenang) {        
+    const angka = Math.floor(Math.random() * ROLL_PER_REEL);        
+    const tipeMenang = Math.random();        
+          
+    if (tipeMenang < 0.33) {        
+      hasil.push(angka, angka, angka);        
+      while (hasil.length < 5) hasil.push((angka + hasil.length) % ROLL_PER_REEL);        
+    } else if (tipeMenang < 0.66) {        
+      hasil.push(angka, angka, angka, angka);        
+      hasil.push((angka + 1) % ROLL_PER_REEL);        
+    } else {        
+      for (let i = 0; i < 5; i++) hasil.push(angka);        
+    }        
+  } else {        
+    do {        
+      for (let i = 0; i < 5; i++) {        
+        hasil[i] = Math.floor(Math.random() * ROLL_PER_REEL);        
+      }        
+      const count = {};        
+      hasil.forEach(a => count[a] = (count[a] || 0) + 1);        
+    } while (Object.values(count).some(v => v >= 3)); // hindari menang        
+  }        
+  return hasil;        
+}        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+    function spin(timer) {        
+      const taruhan = parseFloat($('#taruhanSelect').val());        
+      if (isNaN(taruhan) || taruhan <= 0) return;        
+      if (perakSaya < taruhan) return;        
+            
+            
+            
+           
+      $('.go').prop('disabled', true).addClass('disabled');      
+            
+            
+            
+            
+            
+            
+      perakSaya -= taruhan;        
+      updatePerakDisplay();        
+      $('#resultDisplay').text('');        
+      const winningSeed = getSeed();        
+      for (let i = 1; i <= 5; i++) {        
+        let oldSeed = -1;        
+        const oldClass = $('#ring' + i).attr('class');        
+        if (oldClass && oldClass.length > 4) {        
+          oldSeed = parseInt(oldClass.slice(10));        
+        }        
+        let seed = Math.floor(Math.random() * ROLL_PER_REEL);        
+        while (oldSeed === seed) {        
+          seed = Math.floor(Math.random() * ROLL_PER_REEL);        
+        }        
+        currentSeeds[i - 1] = seed;        
+        $('#ring' + i)        
+          .css('animation', 'back-spin 1s, spin-' + seed + ' ' + (timer + i * 0.5) + 's')        
+          .attr('class', 'ring spin-' + seed);        
+      }        
+      setTimeout(() => {        
+        const hasil = currentSeeds;        
+        $('#angkaOutput').text('Angka keluar: ' + hasil.join(' '));        
+        const count = {};        
+        for (let angka of hasil) {        
+          count[angka] = (count[angka] || 0) + 1;        
+        }        
+        let menang = false;        
+        let perakHadiah = 0;        
+        let pesanRoll = '';        
+        const counts = Object.values(count);        
+        if (counts.includes(5)) {        
+          perakHadiah = taruhan * 6;        
+          pesanRoll = '5 ANGKA SAMA! ';        
+          menang = true;        
+        } else if (counts.includes(4)) {        
+          perakHadiah = taruhan * 5;        
+          pesanRoll = '4 ANGKA SAMA! ';        
+          menang = true;        
+        } else if (counts.includes(3)) {        
+          perakHadiah = taruhan * 4;        
+          pesanRoll = '3 ANGKA SAMA! ';        
+          menang = true;        
+        }        
+        totalSpins++;        
+          
+          
+          
+          
+            let perubahanPerakUntukServer = -taruhan; // Awalnya dikurangi taruhan  
+if (menang) {  
+  perubahanPerakUntukServer += perakHadiah; // Tambah hadiah jika menang  
+}  
+              
+        if (menang) {      
+  $('#resultDisplay').html(`      
+    <div class="gif-wrapper">      
+      <img src="https://nasukafoods.site/firework.gif" class="gif-bg">      
+      <div class="gif-text">+${perakHadiah.toLocaleString('id-ID')} Perak </div>      
+    </div>      
+  `);      
+}       
+      
+else {      
+  $('#resultDisplay').html(`      
+    <div class="gif-wrapper">      
+            
+    </div>      
+  `);      
+}      
+              
+              
+              
+              
+              
+        updateSpinDisplay();        
+        updatePerakOnServer(perubahanPerakUntukServer);        
+              
+              
+              
+              
+          $('.go').prop('disabled', false);      
+$('.go').removeClass('disabled');   
+$('.go img').attr('src', 'https://nasukafoods.site/guld.jpg');      
+               
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+      }, (timer + 3.5) * 1000);        
+    }        
+    $(document).ready(function () {        
+      for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));        
+      updatePerakDisplay();        
+      updateSpinDisplay();        
+      loadPerak();        
+      $('.go').on('click', function () { spin(2); });        
+      $('#xray').on('click', function () {        
+        const tilt = $(this).is(':checked') ? 'tiltin' : 'tiltout';        
+        $('#rotate').css('animation', tilt + ' 2s 1');        
+        setTimeout(() => {        
+          $('#rotate').toggleClass('tilted');        
+          $('.roll').toggleClass('backface-on', $(this).is(':checked'));        
+        }, 2000);        
+      });        
+      $('#perspective').on('click', function () {        
+        $('#stage').toggleClass('perspective-on perspective-off');        
+      });        
+    });        
+          
+          
+          
+          
+  </script>        
+</body>        
+</html>      
+      
   
