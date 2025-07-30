@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Riwayat Transaksi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .item {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .transaksi { font-weight: bold; font-size: 1.1em; }
+    .id, .tanggal, .metode {
+      font-size: 0.9em;
+      color: #666;
+    }
+    .foto {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Riwayat Transaksi</h2>
+  <div id="riwayatList">Memuat...</div>
+
+  <script>
+    const userID = localStorage.getItem("userID");
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+
+    fetch(`${URL_GAS}?action=getRiwayat&id=${userID}`)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("riwayatList");
+        if (data.length === 0) {
+          container.innerHTML = "Belum ada riwayat.";
+          return;
+        }
+
+        container.innerHTML = "";
+        data.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "item";
+
+          div.innerHTML = `
+            <div class="transaksi">${item.transaksi}</div>
+            <div class="id">ID: ${userID}</div>
+            <div class="tanggal">Tanggal: ${item.tanggal}</div>
+            ${item.metode ? `<div class="metode">Metode: ${item.metode}</div>` : ""}
+            ${item.foto ? `<img src="${item.foto}" class="foto">` : ""}
+          `;
+
+          container.appendChild(div);
+        });
+      })
+      .catch(() => {
+        document.getElementById("riwayatList").innerText = "Gagal memuat data.";
+      });
+  </script>
+
+</body>
+</html>
