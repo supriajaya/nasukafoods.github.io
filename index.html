@@ -18,6 +18,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     header h2 {
@@ -44,6 +45,7 @@
       overflow: hidden;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       text-align: center;
+      box-sizing: border-box;
     }
 
     .nasuka img {
@@ -112,6 +114,56 @@
       margin-top: 0;
       color: #2196F3;
     }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .login-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background-color: #388E3C;
+    }
+
+    @media (max-width: 480px) {
+      .nasuka {
+        flex: 0 0 49%;
+        font-size: 13px;
+      }
+
+      .nasuka-info h3 {
+        font-size: 14px;
+      }
+
+      .nasuka-info p,
+      .fake-online {
+        font-size: 12px;
+      }
+
+      .download-link {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      iframe {
+        height: 400px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -132,7 +184,15 @@
     <div class="nasuka">
       <div class="nasuka-info left">
         <p>.</p>
-        <h3> 🗂️ FILE</h3>
+        
+        
+        
+        <h3 id="loginBtn" style="cursor: pointer;"> 🗂️ LOGIN</h3>
+        
+        
+        
+        
+        
         <p>.</p>
         <h3> 📁 Faq</h3>
         <h3> 📁 Developer</h3>
@@ -141,19 +201,14 @@
         <h3> 📁 Keamanan Data</h3>
         <h3> 📁 Term & Condition</h3>
         <p>©Copyright Nasuka</p>
+        
       </div>
     </div>
   </div>
 
-  <div class="artikel">
-    <h3>Tentang Aplikasi Nasuka</h3>
-    <p>Nasuka menghadirkan layanan digital modern seperti booster sosial media, top up game, dan layanan hiburan lainnya. Semua layanan dirancang untuk memberikan pengalaman cepat, aman, dan terpercaya.</p>
-    <p>Kami juga menyediakan produk fisik pilihan yang dapat dibeli langsung melalui aplikasi. Dengan sistem reward, pengguna aktif berkesempatan mendapatkan gold, perak, atau platinum secara gratis.</p>
-    <p>Gabung sekarang dan nikmati layanan lengkap di platform Nasuka!</p>
-  </div>
+  <iframe src="https://aryawilalodra.site"></iframe>
 
   <script>
-    // Ambil data user
     const id = localStorage.getItem("ID");
     if (id) {
       fetch(`https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getProfil&id=${id}`)
@@ -164,12 +219,11 @@
         });
     }
 
-    // Fake online logic
     let onlineCount = Math.floor(Math.random() * 31) + 310;
     const onlineEl = document.querySelector('.fake-online');
 
     function updateOnline() {
-      const delta = Math.floor(Math.random() * 5) - 2; // -2 sampai +2
+      const delta = Math.floor(Math.random() * 5) - 2;
       onlineCount += delta;
       if (onlineCount < 310) onlineCount = 310;
       if (onlineCount > 340) onlineCount = 500;
@@ -177,6 +231,16 @@
     }
 
     setInterval(updateOnline, 5000);
+
+    document.getElementById("loginBtn").addEventListener("click", function () {
+  const id = localStorage.getItem("ID");
+  if (id) {
+    localStorage.clear();
+    alert("Berhasil logout.");
+  }
+  window.location.href = "login.html";
+});
+    
   </script>
 </body>
 </html>
