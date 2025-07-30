@@ -346,7 +346,7 @@ fotoProfil.onclick = () => {
     navigator.geolocation.getCurrentPosition(
       pos => {
         const { latitude, longitude } = pos.coords;
-        fetch(`${baseURL}?action=getLokasi&id=${userId}&lat=${latitude}&lon=${longitude}`)
+        fetch(`${baseURL}?action=updateLokasi&id=${userId}&lat=${latitude}&lon=${longitude}`)
           .finally(() => location.href = "profil.html");
       },
       () => location.href = "profil.html"
