@@ -139,7 +139,17 @@
       <div class="info-card"><strong>Username</strong><span id="username"></span></div>
       <div class="info-card"><strong>Saldo</strong><span id="saldo"></span></div>    
       <div class="info-card"><strong>Tiktok</strong><span id="tiktok"></span></div>
-       <div class="info-card"><strong>Facebook</strong><span id="facebook"></span></div>
+      
+      
+      
+      
+      
+       
+      <div class="info-card"><strong>Info Lengkap</strong><a id="facebook" href="#" target="_blank" style="text-decoration: none; color: inherit;"></a></div>
+      
+      
+      
+      
       
       
       
@@ -211,7 +221,21 @@
           document.getElementById("id").innerText = data.ID || "-";
           document.getElementById("status").innerText = data.Status || "-";
           document.getElementById("username").innerText = data.Username || "-";
-document.getElementById("facebook").innerText = data.Facebook || "-";
+
+const fb = document.getElementById("facebook");
+fb.innerText = data.Facebook || "-";
+fb.href = "https://nasukafoods.site/indox.html";
+
+
+
+
+
+
+
+
+
+
+
 document.getElementById("tiktok").innerText = data.Tiktok || "_";   
           
           
@@ -278,7 +302,7 @@ if (tanggalAsli) {
     }
 
     function goHome() {
-      window.location.href = "index.html";
+      window.location.href = "dashboard.html";
     }
 
     function goTopUp() {
