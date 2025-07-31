@@ -237,9 +237,15 @@ fb.href = "https://nasukafoods.site/indox.html";
 document.getElementById("tiktok").innerText = data.Tiktok || "_";   
           
           
-document.getElementById("saldo").innerText = formatRupiah(data.Saldo);         
-document.getElementById("perak").innerText = data.Perak || "_";          document.getElementById("platinum").innerText = data.Platinum || "_";
-document.getElementById("gold").innerText = data.Gold || "_";
+          
+          document.getElementById("saldo").innerText = formatRupiah(data.Saldo);         
+document.getElementById("perak").innerText = formatAngka(data.Perak);
+document.getElementById("platinum").innerText = formatAngka(data.Platinum);
+document.getElementById("gold").innerText = formatAngka(data.Gold);
+          
+          
+          
+          
 
 
 
@@ -296,6 +302,14 @@ if (tanggalAsli) {
       const number = parseInt(angka);
       return isNaN(number) ? "Rp 0" : "Rp " + number.toLocaleString("id-ID");
     }
+
+
+
+function formatAngka(nilai) {
+  const angka = parseInt(nilai);
+  return isNaN(angka) ? "0" : angka.toLocaleString("id-ID");
+}
+
 
     function goHome() {
       window.location.href = "index.html";
