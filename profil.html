@@ -2,317 +2,239 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Profil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nasuka Wireless</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f2f2f2;
       margin: 0;
-      padding: 0;
-      font-size: 13px;
-      color: #333;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    header {
+      background-color: #2196F3;
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    header .saldo {
+      font-size: 14px;
     }
 
     .container {
-      max-width: 400px;
-      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .nasuka {
+      flex: 0 0 48%;
       background-color: #fff;
-      padding: 20px 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      border-radius: 12px;
-      margin-top: 20px;
-    }
-
-    .profile-picture {
+      margin-bottom: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       text-align: center;
-      margin-bottom: 15px;
+      box-sizing: border-box;
     }
 
-    .profile-picture img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #007bff;
+    .nasuka img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
-    .profile-name {
+    .nasuka-info {
+      padding: 10px;
+    }
+
+    .nasuka-info.centered {
       text-align: center;
-      font-size: 20px;
+    }
+
+    .nasuka-info.left {
+      text-align: left;
+    }
+
+    .nasuka-info h3 {
+      margin: 0 0 5px;
+      font-size: 16px;
+    }
+
+    .nasuka-info p {
+      margin: 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .download-link {
+      display: inline-block;
+      background-color: #2196F3;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
       font-weight: bold;
       margin-top: 10px;
+      border: 2px solid #FFD700;
     }
 
-    .profile-status {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 20px;
+    .download-link:hover {
+      background-color: #1976D2;
+      border-color: #FFC107;
     }
 
-    .info-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .info-card {
-      background-color: #f7f9fc;
-      border-radius: 8px;
-      padding: 8px 10px;
-      text-align: left;
-      font-size: 12px;
-    }
-
-    .info-card strong {
-      display: block;
-      color: #555;
-      margin-bottom: 3px;
-      font-weight: 600;
-      font-size: 11px;
-    }
-
-    .fitur-section {
-      margin-top: 20px;
-    }
-
-    .fitur-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-      text-align: center;
+    .fake-online {
       font-size: 13px;
-      color: #007bff;
+      color: green;
+      margin-bottom: 8px;
     }
 
-    .fitur-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+    .artikel {
+      background-color: #ffffff;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    .fitur-item {
-      background: #eaf1ff;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 12px;
+    .artikel h3 {
+      margin-top: 0;
+      color: #2196F3;
     }
 
-    .fitur-item strong {
-      font-size: 11px;
-      display: block;
-      color: #444;
-      margin-bottom: 2px;
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 10px 0;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
-
-    .buttons button {
-      background-color: #007bff;
+    .login-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
       color: white;
-      font-size: 12px;
       border: none;
-      padding: 8px 14px;
       border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
       cursor: pointer;
     }
 
-    .buttons button:hover {
-      background-color: #0056b3;
+    .login-btn:hover {
+      background-color: #388E3C;
+    }
+
+    @media (max-width: 480px) {
+      .nasuka {
+        flex: 0 0 49%;
+        font-size: 13px;
+      }
+
+      .nasuka-info h3 {
+        font-size: 14px;
+      }
+
+      .nasuka-info p,
+      .fake-online {
+        font-size: 12px;
+      }
+
+      .download-link {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      iframe {
+        height: 400px;
+      }
     }
   </style>
 </head>
 <body>
+  
   <div class="container">
-    <div class="profile-picture">
-      <img id="foto" src="https://nasukafoods.site/tekn.jpg" alt="" />
-    </div>
-    <div class="profile-name" id="nama">Memuat...</div>
-    <div class="profile-status">ID: <span id="id"></span> | <span id="status"></span></div>
-
-    <div class="info-section">
+    <div class="nasuka">
         
-      <div class="info-card"><strong>Username</strong><span id="username"></span></div>
-      <div class="info-card"><strong>Saldo</strong><span id="saldo"></span></div>    
-      <div class="info-card"><strong>Tiktok</strong><span id="tiktok"></span></div>
-      
-      
-      
-      
-      
        
-      <div class="info-card"><strong>Info Lengkap</strong><a id="facebook" href="#" target="_blank" style="text-decoration: none; color: inherit;"></a></div>
+      <img id="foto-profil" src="https://nasukafoods.site/nasukafoods.jpg" alt="FOTO PROFIL" />
       
       
-      
-      
-      
-      
-      
-      <div class="info-card"><strong>Perak</strong><span id="perak"></span></div>
-      <div class="info-card"><strong>Platinum</strong><span id="platinum"></span></div>
-      <div class="info-card"><strong>Gold</strong><span id="gold"></span></div>
-     <div class="info-card"><strong>Telepon</strong><span id="telepon"></span></div> 
-     
-      
-       <div class="info-card"><strong>Jenis Kelamin</strong><span id="jenis"></span></div>
-     
-      <div class="info-card"><strong>Tanggal</strong><span id="tanggal"></span></div>
-    </div> 
-      
-      
-      <div class="info-card" style="grid-column: span 2;"><strong>Alamat</strong><span id="alamat"></span></div>
-      
-      
-     
-
-
-
-    <div class="fitur-section">
-      <div class="fitur-title">Fitur Lainnya</div>
-      <div class="fitur-grid">
-        <div class="fitur-item"><strong>Event Tukar Perak</strong><span id="fitura"></span></div>
-        <div class="fitur-item"><strong>Event Tukar Platinum</strong><span id="fiturb"></span></div>
-        <div class="fitur-item"><strong>Event Tukar Gold</strong><span id="fiturc"></span></div>
-        <div class="fitur-item"><strong>Event Diskon 99%</strong><span id="fiturd"></span></div>
-        <div class="fitur-item"><strong>Bazar Produk Digital</strong><span id="fiture"></span></div>
-        <div class="fitur-item"><strong>Apresiasi Juara</strong><span id="fiturf"></span></div>
-        <div class="fitur-item"><strong>Produk Sponsor</strong><span id="fiturg"></span></div>
-        <div class="fitur-item"><strong>Give Away</strong><span id="fiturh"></span></div>
- 
-        
-        
-        <a href="bank.html" style="text-decoration: none; color: inherit;">
-  <div class="fitur-item"><strong>Bank Pribadi</strong><span id="fituri"></span></div>
-</a>
-      <a href="riwayat-transaksi.html" style="text-decoration: none; color: inherit;">
-  <div class="fitur-item"><strong>Riwayat Transaksi</strong><span id="fiturj"></span></div>
-</a>
-      
-      
-      
-      
-      
-      
-      
+      <div class="nasuka-info centered">
+        <div class="fake-online">🟢 Online 327 pengguna</div>
+        <a href="bank.html" class="download-link" download>Bank</a>
+      </div>
     </div>
 
-    <div class="buttons">
-      <button onclick="goHome()">🏠 Home</button>
-      <button onclick="logout()">🚪 Logout</button>
+    <div class="nasuka">
+      <div class="nasuka-info left">
+     
+        
+        
+        
+         
+        
+        
+        
+        
+        
+        
+        <h3> 🗂️ PROFIL</h3>
+        <h3> 📁 Faq</h3>
+        <h3> 📁 Developer</h3>
+        <h3> 📁 Pengaduan</h3>
+        <h3> 📁 Refund Policy</h3>
+        <h3> 📁 Keamanan Data</h3>
+        <h3> 📁 Term & Condition</h3>
+        
+        
+      </div>
     </div>
   </div>
 
+  <iframe src="profil-iframe.html"></iframe>
+
+  
   <script>
-    const urlGAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
-    const id = localStorage.getItem("userID");
+  const id = localStorage.getItem("userID");
+  if (id) {
+    fetch(`https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getProfil&id=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.Foto) {
+          document.getElementById("foto-profil").src = data.Foto;
+        }
+      });
+  }
 
-    if (!id) {
-      document.body.innerHTML = "<p style='text-align:center; padding: 20px;'>ID tidak ditemukan. Silakan login ulang.</p>";
-    } else {
-      fetch(`${urlGAS}?action=getProfil&id=${id}`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("nama").innerText = data.Nama || "-";
-          document.getElementById("id").innerText = data.ID || "-";
-          document.getElementById("status").innerText = data.Status || "-";
-          document.getElementById("username").innerText = data.Username || "-";
+  let onlineCount = Math.floor(Math.random() * 31) + 310;
+  const onlineEl = document.querySelector('.fake-online');
 
-const fb = document.getElementById("facebook");
-fb.innerText = data.Facebook || "-";
-fb.href = "https://nasukafoods.site/indox.html";
-
-
-
-
-
-
-
-
-
-
-
-document.getElementById("tiktok").innerText = data.Tiktok || "_";   
-          
-          
-document.getElementById("saldo").innerText = formatRupiah(data.Saldo);         
-document.getElementById("perak").innerText = data.Perak || "_";          document.getElementById("platinum").innerText = data.Platinum || "_";
-document.getElementById("gold").innerText = data.Gold || "_";
-
-
-
-
-          document.getElementById("jenis").innerText = data.Jenis || "-";
-          
-          
-          document.getElementById("telepon").innerText = data.Telepon || "-";
-
-          
-          
-         
-          
-          
-const tanggalAsli = data["Tanggal Daftar"];
-if (tanggalAsli) {
-  const tgl = new Date(tanggalAsli);
-  const tanggalFormatted = tgl.getDate().toString().padStart(2, '0') + '/' +
-                           (tgl.getMonth() + 1).toString().padStart(2, '0') + '/' +
-                           tgl.getFullYear();
-  document.getElementById("tanggal").innerText = tanggalFormatted;
-} else {
-  document.getElementById("tanggal").innerText = "-";
-}
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          document.getElementById("alamat").innerText = data.Alamat || "-";
-          
-          document.getElementById("foto").src = data.Foto || "https://via.placeholder.com/120.png?text=No+Foto";
-
-          // Fitur
-          document.getElementById("fitura").innerText = data["Fitur A"] || "-";
-          document.getElementById("fiturb").innerText = data["Fitur B"] || "-";
-          document.getElementById("fiturc").innerText = data["Fitur C"] || "-";
-          document.getElementById("fiturd").innerText = data["Fitur D"] || "-";
-          document.getElementById("fiture").innerText = data["Fitur E"] || "-";
-          document.getElementById("fiturf").innerText = data["Fitur F"] || "-";
-          document.getElementById("fiturg").innerText = data["Fitur G"] || "-";
-          document.getElementById("fiturh").innerText = data["Fitur H"] || "-";
-          document.getElementById("fituri").innerText = data["Fitur I"] || "-";
-          document.getElementById("fiturj").innerText = data["Fitur J"] || "-";
-        })
-        .catch(err => {
-          document.body.innerHTML = `<p style='text-align:center; padding: 20px;'>Gagal memuat profil: ${err}</p>`;
-        });
-    }
-
-    function formatRupiah(angka) {
-      const number = parseInt(angka);
-      return isNaN(number) ? "Rp 0" : "Rp " + number.toLocaleString("id-ID");
-    }
-
-    function goHome() {
-      window.location.href = "index.html";
-    }
-
-    function goTopUp() {
-      window.location.href = "bank.html";
-    }
-
-    function logout() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    }
-  </script>
+  function updateOnline() {
+    const delta = Math.floor(Math.random() * 5) - 2;
+    onlineCount += delta;
+    if (onlineCount < 310) onlineCount = 310;
+    if (onlineCount > 340) onlineCount = 500;
+    onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
+  }
+  setInterval(updateOnline, 5000);
+</script>
+  
+  
 </body>
 </html>
