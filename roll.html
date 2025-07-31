@@ -20,6 +20,9 @@
     .perspective-off { perspective: 0; }        
       
       
+      
+      
+      
   #pesanBerjalan {
     position: fixed;
     top: 0;
@@ -89,10 +92,10 @@
    
               
 #taruhanSelect {      
-  font-size: 20px;     /* Ukuran tulisan */      
-  padding: 10px 20px;  /* Ruang dalam kotak */      
-  width: 200px;        /* Lebar kotak */      
-  height: 100px;        /* Tinggi kotak */      
+  font-size: 20px;       
+  padding: 10px 20px;       
+  width: 200px;       
+  height: 100px;            
     
 }      
      
@@ -134,7 +137,7 @@
   }    
               
 body {        
-background-image: url('https://nasukafoods.site/'); }        
+background-image: url('https://nasukafoods.site/pitasebar.gif'); }        
                            
             
     #rotate {        
@@ -216,10 +219,10 @@ background-image: url('https://nasukafoods.site/'); }
       
       
 #xray {      
-  width: 40px;        /* ukuran checkbox */      
+  width: 40px;        
   height: 40px;      
-  margin-right: 10px; /* jarak ke teks */      
-  transform: scale(1.5); /* tambahan pembesaran */      
+  margin-right: 10px; 
+  transform: scale(1.5);       
 }      
       
 label {      
@@ -264,7 +267,73 @@ label {
 }      
          
           
-    
+    #taruhanButton {
+  font-size: 22px;
+  padding: 12px 24px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #2196F3;
+}
+
+.taruhan-option {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  font-size: 20px;
+  background-color: #eee;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.taruhan-option:hover {
+  background-color: #2196F3;
+  color: white;
+  border-color: #2196F3;
+}
+
+#tutupModal {
+  margin-top: 10px;
+  background: #ccc;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
           
   </style>        
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>        
@@ -277,7 +346,7 @@ label {
             
             <div id="pesanBerjalan">
   <span>
-    Percayalah, kalah menang sudah disetting oleh pencipta mesin. Game ini diciptakan untuk edukasi bahwa tidak ada yang bisa mengalahkan bandar apapun alasannya. Untuk itu sampaikan pada semua pemain slot: jika menang berhentilah "itu pancingan", jika kalah berhentilah "atau hidup akan semakin hancur". Pesan admin: Carilah rezeki yang halal dan berhentilah berjudi 🙂
+    Kalah menang sudah disetting oleh pencipta mesin. Game ini diciptakan untuk edukasi bahwa tidak ada yang bisa mengalahkan bandar apapun alasannya, Game ini tidak ada unsur perjudian 🙂
   </span>
 </div>
             
@@ -288,12 +357,22 @@ label {
             
       <header id="headerBar">      
       
-  <select id="taruhanSelect">      
+ 
         
-    <option value="1000">1.000 perak</option>        
-    <option value="5000">5.000 perak</option>        
-    <option value="10000">10.000 perak</option>        
-  </select>      
+   
+   <button id="taruhanButton">Pasang</button>
+<div id="taruhanModal" class="modal">
+  <div class="modal-content">
+    <h3>Pasang</h3>
+    <button class="taruhan-option" data-value="1000">1.000 Perak</button>
+    <button class="taruhan-option" data-value="5000">5.000 Perak</button>
+    <button class="taruhan-option" data-value="10000">10.000 Perak</button>
+    <button id="tutupModal">Batal</button>
+  </div>
+</div>
+   
+   
+   
 </header>        
             
             
@@ -380,7 +459,7 @@ label {
   .then(response => response.json())  
   .then(data => {  
     if (data.status === 'success' && typeof data.perak === 'number') {  
-      perakSaya = data.perak; // ← pakai langsung dari respon  
+      perakSaya = data.perak; 
       updatePerakDisplay();  
     } else {  
       alert('Gagal update perak: ' + (data.message || 'Error'));  
@@ -420,7 +499,7 @@ label {
       if (spinNum <= 10) chance = 1.00;        
       else if (spinNum <= 20) chance = 0.40;        
       else if (spinNum <= 35) chance = 0.5;        
-      else if (spinNum <= 75) chance = 0.35;        
+      else if (spinNum <= 75) chance = 0.90;        
       else if (spinNum <= 100) chance = 0.2;        
       else if (spinNum <= 101) chance = 1.00;        
       if (chance > 0 && Math.random() < chance) {        
@@ -478,7 +557,13 @@ label {
             
             
     function spin(timer) {        
-      const taruhan = parseFloat($('#taruhanSelect').val());        
+    
+    
+      const taruhan = nilaiTaruhan;
+      
+      
+      
+      
       if (isNaN(taruhan) || taruhan <= 0) return;        
       if (perakSaya < taruhan) return;        
             
@@ -540,9 +625,9 @@ label {
           
           
           
-            let perubahanPerakUntukServer = -taruhan; // Awalnya dikurangi taruhan  
+            let perubahanPerakUntukServer = -taruhan; 
 if (menang) {  
-  perubahanPerakUntukServer += perakHadiah; // Tambah hadiah jika menang  
+  perubahanPerakUntukServer += perakHadiah; 
 }  
               
         if (menang) {      
@@ -575,19 +660,6 @@ else {
           $('.go').prop('disabled', false);      
 $('.go').removeClass('disabled');   
 $('.go img').attr('src', 'https://nasukafoods.site/guld.jpg');      
-               
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
       }, (timer + 3.5) * 1000);        
     }        
     $(document).ready(function () {        
@@ -607,8 +679,25 @@ $('.go img').attr('src', 'https://nasukafoods.site/guld.jpg');
       $('#perspective').on('click', function () {        
         $('#stage').toggleClass('perspective-on perspective-off');        
       });        
-    });        
+    });             
           
+          
+          let nilaiTaruhan = 1000;
+$('#taruhanButton').text('Roll: 1.000 Perak');
+
+$('#taruhanButton').on('click', function () {
+  $('#taruhanModal').fadeIn();
+});
+
+$('#tutupModal').on('click', function () {
+  $('#taruhanModal').fadeOut();
+});
+
+$('.taruhan-option').on('click', function () {
+  nilaiTaruhan = parseInt($(this).data('value'));
+  $('#taruhanButton').text('Taruhan: ' + nilaiTaruhan.toLocaleString('id-ID') + ' Perak');
+  $('#taruhanModal').fadeOut();
+});
           
           
           
