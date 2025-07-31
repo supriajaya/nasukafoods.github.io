@@ -167,7 +167,7 @@
   <p>Telepon: <span id="kTelepon"></span></p>
   <p id="kPerakBox">Sisa Perak: <span id="kPerak"></span></p>
   <p style="margin-top:10px; font-weight: bold;">Pesanan akan segera kami proses</p>
-  <button onclick="location.href='index.html'">🏠 Kembali</button>
+  <button onclick="location.href='penukaran-perak.html'">Oke</button>
 </div>
 
 <div id="customAlert">
@@ -176,6 +176,13 @@
 </div>
 
 <script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("btnBayar").disabled = true;
+});
+    
+    
+    
   const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
   const username = localStorage.getItem("userID");
   let userPerak = 0, userData = {};
@@ -248,7 +255,7 @@ formData.append("nama", userData.Nama || "-");
 formData.append("produk", order.name || "");
 formData.append("nominal", price);
 formData.append("metode", "Perak");
-formData.append("foto", target); // target = link/username TikTok
+formData.append("foto", target);
 
 
 
@@ -297,20 +304,34 @@ formData.append("foto", target); // target = link/username TikTok
   }
 
   if (username) {
+  
+  
     fetch(`${URL_GAS}?action=getProfil&id=${encodeURIComponent(username)}`)
-      .then(res => res.json())
-      .then(data => {
-        userData = data;
-        document.getElementById("nama").textContent = data.Nama || "-";
-        document.getElementById("telepon").textContent = data.Telepon || "-";
-        document.getElementById("sosmed").textContent = data["Tiktok"]?.trim() || "-";
-        userPerak = parseInt(data.Perak || 0);
-        document.getElementById("Perak").textContent = formatRupiah(userPerak);
-      })
-      .catch(error => {
-        showCustomAlert("Gagal memuat data pengguna.");
-      });
+  .then(res => res.json())
+  .then(data => {
+    userData = data;
+    document.getElementById("nama").textContent = data.Nama || "-";
+    document.getElementById("telepon").textContent = data.Telepon || "-";
+    document.getElementById("sosmed").textContent = data["Tiktok"]?.trim() || "-";
+    userPerak = parseInt(data.Perak || 0);
+    document.getElementById("Perak").textContent = formatRupiah(userPerak);
+
+ 
+    document.getElementById("btnBayar").disabled = false;
+  })
+  .catch(error => {
+    showCustomAlert("Gagal memuat data pengguna.");
+  });
+      
+      
+      
   }
+
+
+
+
+
+
 
   function extractTikTokUsername(sosmed) {
     if (!sosmed) return "";
