@@ -1,3 +1,39 @@
+<!DOCTYPE html>  <html lang="id">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <title>Nasuka Wireless</title>  
+  <style>  
+    body {  
+      margin: 0;  
+      font-family: 'Segoe UI', sans-serif;  
+      background-color: #f5f5f5;  
+    }  header {  
+  background-color: #2196F3;  
+  color: white;  
+  padding: 12px 16px;  
+  display: flex;  
+  justify-content: space-between;  
+  align-items: center;  
+  flex-wrap: wrap;  
+}
+
+.arya-scol {
+display: flex;
+overflow-x: auto;
+white-space: nowrap;
+padding: 10px;
+gap: 8px;
+margin-top: -5px;
+}
+
+.arya-scol::-webkit-scrollbar {
+display: none;
+}
+
+.arya-scol img {
+width: 70px;
+aspect-ratio: 1 / 1;
 border-radius: 8px;
 object-fit: cover;
 flex: 0 0 auto;
@@ -147,7 +183,7 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   }  
 }  
   
-.produk-grid {
+.arya-grid {
 
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -155,7 +191,7 @@ gap: 1px;
 padding: 10px;
 }
 
-.produk-grid  {
+.arya-grid  {
 background: ;
 border-radius: 8px;
 padding: 5px;
@@ -163,7 +199,7 @@ box-shadow: );
 text-align: center;
 }
 
-.produk-grid img {
+.arya-grid img {
 
 width: 100%;
 aspect-ratio: 1 / 1;
@@ -171,18 +207,18 @@ border-radius: 6px;
 object-fit: cover;
 }
 
-.produk-bar {
+.arya-bar {
 display: flex;
 align-items: center;
 gap: 8px;
 padding: 10px;
 overflow-x: auto;
 }
-.produk-bar::-webkit-scrollbar {
+.arya-bar::-webkit-scrollbar {
 display: none;
 }
 
-.produk-item {
+.arya-item {
 width: 80px;
 aspect-ratio: 1 / 1;
 border-radius: 8px;
@@ -191,7 +227,7 @@ flex-shrink: 0;
 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.produk-item {
+.arya-item {
 border: 2px solid #2196F3;
 padding: 2px;
 }
@@ -215,31 +251,31 @@ background-color: #388E3C;
 
 
 
-.produk-overlay {
+.arya-overlay {
   position: relative;
   display: inline-block;
 }
 
-.produk-overlay img {
+.arya-overlay img {
   display: block;
 }
 
 
-.produk-overlay span {
+.arya-overlay span {
   position: absolute;
   bottom: 4px;
   left: 4px;
   background: ;
-  color: white;
+  color: black;
   padding: 2px 1px;
   border-radius: 1px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: bold; /* ini bikin bold */
   max-width: 90%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-shadow: 0 0 6px orange, 0 0 8px green, 0 0 10px red; /* glow effect */
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */
 }
 
 .profil-overlay {
@@ -257,10 +293,10 @@ background-color: #388E3C;
   bottom: 4px;
   left: 4px;
   background: ;
-  color: black;
+  color: white;
   padding: 2px 1px;
   border-radius: 1px;
-  font-size: 15px;
+  font-size: 10px;
   font-weight: bold; /* ini bikin bold */
   max-width: 90%;
   white-space: nowrap;
@@ -287,7 +323,7 @@ background-color: #388E3C;
   bottom: 4px;
   left: 4px;
   background: ;
-  color: red;
+  color: black;
   padding: 2px 1px;
   border-radius: 1px;
   font-size: 15px;
@@ -300,135 +336,207 @@ background-color: #388E3C;
 }
 
 
+.blink-glow {
+  animation: blinkGlow 1s infinite alternate;
+  color: black;
+  text-shadow: 0 0 5px black, 0 0 10px #FFA500, 0 0 15px #FF4500;
+  font-weight: bolder;
+}
 
 
 
 
+@keyframes blinkGlow {
+  0% {
+    opacity: 1;
+    text-shadow: 0 0 5px blue, 0 0 10px #FFA500, 0 0 15px #FF4500;
+  }
+  100% {
+    opacity: 0.4;
+    text-shadow: 0 0 2px #FFD700, 0 0 4px #FFA500, 0 0 6px #FF4500;
+  }
+}
+
+
+.blink-marquee {
+  background-color: ;
+  color: black;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 14px;
+  animation: blinkText 1s infinite alternate;
+  text-shadow: 0 0 5px yellow, 0 0 10px orange, 0 0 15px red;
+}
+
+@keyframes blinkText {
+  0% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
 
 
   </style>  
 </head>  
 <body>    <div class="container">  
     <div class="nasuka">  
-      <img src="https://nasukafoods.site/nasukafoods.jpg" alt="nasuka1" />  
+   
+      
+      
+         <img src="https://nasukafoods.site/gambarkosong.jpg" alt="Loading" class="arya-item hanya-login" id="fotoProfil">   
+         
+         
+         <span id="namaUser" class="blink-glow">Memuat .....</span>
+         
+         
+         
+         
+         
+         
+    </a>
+  
+  
+      
+      
+      
+      
       <div class="nasuka-info centered">  
         <div class="fake-online">🟢 Online 327 pengguna</div>  
         <a href="https://nasukafoods.site/nasuka.apk" class="download-link" download>Download</a>  
       </div>  
     </div>  <div class="nasuka">  
   <div class="nasuka-info left">  
+    
+   
+   
+   
+   <h3>
+  <a id="linkProfil" href="#">📁 PROFIL</a>
+</h3>
+   
     <p>.</p>  
-    <h3 id="loginBtn" style="cursor: pointer;"> 🗂️ LOGIN</h3>  
-    <p>.</p>  
+    
+    
+    
     <h3> 📁 Faq</h3>  
+    <h3> 📁 Rules</h3>  
     <h3> 📁 Developer</h3>  
-    <h3> 📁 Pengaduan</h3>  
+   
+    <h3> 📁 Komunitas</h3>  
     <h3> 📁 Refund Policy</h3>  
     <h3> 📁 Keamanan Data</h3>  
     <h3> 📁 Term & Condition</h3>  
-    <p>©Copyright Nasuka</p>  
+   
   </div>  
 </div>
 
-  </div>    <iframe src="indix.html"></iframe>  <img src="https://nasukafoods.site/teknologi.jpg" alt="Foto Tambahan" class="gambar-bawah hanya-login" />  
+  </div>   
+  <marquee behavior="scroll" direction="left" scrollamount="4" class="blink-marquee">
+ Selamat datang di Nasuka Wireless! Platform super ringan hiburan slow mode on, Dapatkan perak gratis dari tap burung, roll, puzzle, dan game ringan lainnya! 🎁 !
+</marquee>
+  <div class="arya-bar hanya-login"> 
+      
   
-  <div class="produk-bar hanya-login"> 
-      <div class="profil-overlay">
-         <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Loading" class="produk-item hanya-login" id="fotoProfil">    <span>Profil</span>
-    </a>
+  <a href="penukaran-perak.html">
+  <div class="profil-overlay">
+    <img src="https://nasukafoods.site/tiktokfoll.gif" alt="Loading" class="arya-item hanya-login" id="fol">    
+    <span>TUKAR PERAK</span>
   </div>
-  
-  
-  <div class="produk-scol">
-      
-      
-       <div class="produk-overlay">        
-    <a href="pembayaran.html">
-<img src="https://nasukafoods.site/tiktokfoll.gif" alt="scol1"> <span>Tukar Perak</span></a></div>
+</a>
 
- <div class="produk-overlay">        
+  
+  
+  
+  
+  
+  
+  <div class="arya-scol">
+      
+      
+      
+      
+      
+       <div class="arya-overlay">        
     <a href="burung.html">
 <img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1"> <span>Ambil Perak</span></a></div>
-  
-  <div class="produk-overlay">        
-    <a href="https:roll.html">
-<img src="https://nasukafoods.site/roll.jpg" alt="scol1"> <span>Ambil perak</span></a></div>
 
-    <div class="produk-overlay">        
+ <div class="arya-overlay">        
+    <a href="roll.html">
+<img src="https://nasukafoods.site/roll.jpg" alt="scol1"> <span>Ambil Perak</span></a></div>
+  
+  <div class="arya-overlay">        
     <a href="puzzle.html">
-<img src="https://nasukafoods.site/puzzle.jpg" alt="scol1"> <span>Ambil Perak</span></a></div>
+<img src="https://nasukafoods.site/puzzle.jpg" alt="scol1"> <span>Ambil perak</span></a></div>
+
+    <div class="arya-overlay">        
+    <a href="puzzle.html">
+<img src="https://nasukafoods.site/paketcilok.jpg" alt="scol1"> <span>Ambil Perak</span></a></div>
   
 </div> </div></div> 
    
-   <div class="produk-grid hanya-login">   <div>  
-           
-   <div class="grid1-overlay">            
- <img src="https://nasukafoods.site/wingungu.gif" alt="Grid 1">  
-    <a href="https://nasukafoods.site/leaderboard"></a>  <span>Leaderboard</span></a></div></div>  
+<div class="arya-grid hanya-login">  
+  <div>
+    <div class="grid1-overlay">
+      <a href="leaderboard.html">
+        <img src="https://nasukafoods.site/wingungu.gif" alt="Leaderboard">
+        <span>Leaderboard</span>
+      </a>
+    </div>
+  </div>
+
+  <div>
+    <div class="grid1-overlay">
+      <a href="leaderboardperak.html">
+        <img src="https://nasukafoods.site/winggame.gif" alt="Rich Gold Master">
+        <span>Rich Gold Master</span>
+      </a>
+    </div>
+  </div>
+</div>
   
-  <div class="grid1-overlay">            
- <img src="https://nasukafoods.site/winggame.gif" alt="Grid 1">  
-    <a href="https://nasukafoods.site/leaderboardperak.html"</a><span>The Kings</span></a></div></div>  
-  
-  
-  
-  
-  
-  
-  
-</div>  <script>  
+  <script>  
 const userId = localStorage.getItem("userID");  
-const loginBtn = document.getElementById("loginBtn");  
 const fotoProfil = document.getElementById("fotoProfil");  
 const baseURL = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";  
+const linkProfil = document.getElementById("linkProfil");
+if (linkProfil) {
+  linkProfil.href = userId ? "profil.html" : "login.html";
+}
+
+if (userId) {
+  fetch(`${baseURL}?action=getProfil&id=${userId}`)
+    .then(res => res.json())
+    .then(data => {
+      if (fotoProfil) {
+        const foto = data?.Foto;
+        fotoProfil.src = (foto && foto !== "undefined" && foto !== "null") ? foto : "https://nasukafoods.site/default.jpg";
+        fotoProfil.alt = data?.Nama || "User";
+        fotoProfil.style.cursor = "pointer";
+
+        fotoProfil.addEventListener("click", () => {
+          window.location.href = "profil.html";
+        });
+      }
+
+      const namaUser = document.getElementById("namaUser");
+      if (namaUser) {
+        namaUser.textContent = data?.Nama || "User";
+      }
+    });
+}
+
+
+
+let onlineCount = Math.floor(Math.random() * 31) + 310;
+const onlineEl = document.querySelector('.fake-online');
+function updateOnline() {
+  const delta = Math.floor(Math.random() * 5) - 2;
+  onlineCount = Math.max(310, Math.min(onlineCount + delta, 500));
+  onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
+}
+setInterval(updateOnline, 5000);
+</script>
   
   
   
-if (userId) {  
-  
-  fetch(`${baseURL}?action=getProfil&id=${userId}`)  
-    .then(res => res.json())  
-    .then(data => {  
-      if (fotoProfil) {  
-        const foto = data?.Foto;  
-        fotoProfil.src = (foto && foto !== "undefined" && foto !== "null") ? foto : "https://nasukafoods.site/default.jpg";  
-        fotoProfil.alt = data?.Nama || "User";  
-        fotoProfil.style.cursor = "pointer";  
-  
-        // Tambahkan aksi klik ke profil.html  
-        fotoProfil.addEventListener("click", () => {  
-          location.href = "profil.html";  
-        });  
-      }  
-    })  
-    .catch(err => console.error("Gagal ambil foto profil:", err));  
-    
-  
-  
-   
-  loginBtn.textContent = "🗂️ DASHBOARD";  
-  loginBtn.onclick = () => location.href = "index.html";  
-  
-   
-  document.querySelectorAll(".nasuka").forEach(el => el.style.display = "none");  
-  const iframe = document.querySelector("iframe");  
-  if (iframe) iframe.style.display = "none";  
-  
-} else {  
-   
-  loginBtn.textContent = "🗂️ LOGIN";  
-  loginBtn.onclick = () => location.href = "login.html";  
-  document.querySelectorAll(".hanya-login").forEach(el => el.style.display = "none");  
-}  
-  
-let onlineCount = Math.floor(Math.random() * 31) + 310;  
-const onlineEl = document.querySelector('.fake-online');  
-function updateOnline() {  
-  const delta = Math.floor(Math.random() * 5) - 2;  
-  onlineCount = Math.max(310, Math.min(onlineCount + delta, 500));  
-  onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;  
-}  
-setInterval(updateOnline, 5000);  
+
 </script>  </body>  
 </html>  
-
