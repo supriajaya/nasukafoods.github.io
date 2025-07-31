@@ -28,11 +28,23 @@
 
     .sum {
       position: fixed;
-      left: 45%;
-      top: 60px;
-      font-size: 24px;
+      left: 5%;
+      top: 10px;
+      font-size: 15px;
       font-weight: bold;
     }
+    
+    
+    .sim {
+      position: fixed;
+      right: 5%;
+      top: 10px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+    
+    
+    
 
     .input-circle ~ .pajaro { opacity: 0; transition: 0.3s cubic-bezier(0,.43,1,0); animation: move 8s infinite alternate; }
     .input-circle1:not(:checked) ~ .pajaro1,
@@ -168,62 +180,7 @@
       100% { top: 30%; left: 20%; }
     }
 
-    .timer {
-      background-color: #333;
-      width: 300px;
-      height: 50px;
-      position: fixed;
-    }
-
-    .timer span {
-      display: block;
-      background: repeating-linear-gradient(-45deg, #000, rgba(0, 0, 0, 0) 25px, #FFF 25px, #FFF 50px);
-      width: 300px;
-      height: 50px;
-      animation: timer 60s linear;
-    }
-
-    .timer span:before {
-      content: "SISA WAKTU";
-      display: block;
-      position: absolute;
-      z-index: 3;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      text-align: center;
-      line-height: 50px;
-      font-size: 25px;
-      color: red;
-    }
-
-    @keyframes timer {
-      0% { width: 10px; }
-      100% { width: 300px; display: block; }
-    }
-
-    .gameover {
-      position: fixed;
-      z-index: 100000;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      background-color: rgba(0,0,0,0.8);
-      animation: gameover 60s linear forwards;
-      font-size: 80px;
-      color: white;
-      font-weight: bold;
-      text-align: center;
-      line-height: 500px;
-    }
-
-    @keyframes gameover {
-      0% { left: -5000px; bottom: 100%; }
-      97% { left: -5000px; bottom: 100%; }
-      100% { left: 0px; }
-    }
+   
 
     .pajaro:after,
     .pajaro:before {
@@ -258,23 +215,22 @@
       50% { transform: rotateX(-1440deg); }
     }
 
-    @keyframes planeo {
-      40% {
-        transform: rotateZ(2deg) translateX(2px) translateY(10px) translateZ(0);
-        line-height: 16px;
-        font-size: 0.6em;
-      }
-      80% {
-        transform: rotateZ(-2deg) translateX(5px) translateY(8px) translateZ(0);
-      }
-    }
+    
+      
+    
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <div class="timer"><span></span></div>
-    <div class="gameover">WAKTU HABIS</div>
-    <h2>Nasuka</h2>
+    
+    
+ <div class="wrapper">
+ <h2 id="judul" style="display:none;">Mulai Lagi</h2>
+    
+ 
+   
+    
+<button id="selesaiBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 20px;">SELESAI</button>
+
 
     <input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">
     <input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">
@@ -334,59 +290,106 @@
     <label for="circle27" class="pajaro pajaro27"><span></span></label>
 
 
-    <div class="sum">PERAK : </div>
-  </div>
-  <script>
-    let totalPerak = 0;
-    const sumDisplay = document.querySelector('.sum');
-    const burungInputs = document.querySelectorAll('.input-circle');
+    <div class="sum">Reward Perak : </div>
+      <div class="sim">Profil</div>
+  
+  
+  
+  <div id="alertBox" style="display:none;position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);
+background:white;padding:20px;border-radius:10px;box-shadow:0 0 10px black;z-index:9999;">
+  <div id="alertMsg" style="margin-bottom:10px;font-weight:bold;"></div>
+  <button onclick="alertBoxClose()">OK</button>
+</div>
+  
+  
+  <script>    
+     
+  let totalPerak = 0;
+  const sumDisplay = document.querySelector('.sum');
+  const burungInputs = document.querySelectorAll('.input-circle');
 
-
-    burungInputs.forEach((input) => {
-      input.addEventListener('change', function () {
-        if (input.checked) {
-          totalPerak += 10;
-          sumDisplay.textContent = 'PERAK : ' + totalPerak;
-        }
-      });
-    });
-
-
-    function kirimPerakKeSheet(username, jumlahPerak) {
-      const url = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
-
-      const formData = new FormData();
-      formData.append('action', 'updatePerak');
-      formData.append('username', username);
-      formData.append('changeAmount', jumlahPerak);
-
-      fetch(url, {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.text())
-      .then(result => {
-        alert(`Hadiah ${jumlahPerak} perak berhasil dikirim ke akun Anda`);
-        console.log('Server response:', result);
-      })
-      .catch(error => {
-        console.error('Error saat mengirim:', error);
-        alert("Gagal mengirim perak ke server.");
-      });
-    }
-
-
-    setTimeout(() => {
-      burungInputs.forEach(input => input.disabled = true);
-
-      const username = (localStorage.getItem('username') || 'guest').trim().toLowerCase();
-
-      if (username && totalPerak > 0) {
-        kirimPerakKeSheet(username, totalPerak);
-      } else {
-        console.log("Username kosong atau belum dapat perak.");
+  burungInputs.forEach((input) => {
+    input.addEventListener('change', function () {
+      if (input.checked) {
+        totalPerak += 100;
+        sumDisplay.textContent = 'Reward Perak : ' + totalPerak;
       }
-    }, 60000);
-  </script>
+    });
+  });
+
+  function kirimPerakKeSheet(id, jumlahPerak) {
+    const url = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+    const formData = new FormData();
+    formData.append('action', 'updatePerak');
+    formData.append('id', id);
+    formData.append('changeAmount', jumlahPerak);
+
+    fetch(url, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+    
+    alertBox(`Hadiah ${jumlahPerak} perak berhasil dikirim ke akun Anda`);
+      
+      console.log('Server response:', result);
+    })
+    .catch(error => {
+      console.error('Error saat mengirim:', error);
+      alert("Gagal mengirim perak.");
+    });
+  }
+
+ 
+  let selesaiClicked = false;
+document.getElementById('selesaiBtn').addEventListener('click', function () {
+  if (selesaiClicked) return;
+  selesaiClicked = true;
+  this.disabled = true;   
+  burungInputs.forEach(input => input.disabled = true);
+  const userID = localStorage.getItem('userID');
+  if (userID && totalPerak > 0) {
+    kirimPerakKeSheet(userID, totalPerak);
+  } else {
+    console.log("ID kosong atau belum dapat perak.");
+  }
+
+  const gameoverDiv = document.querySelector('.gameover');
+  if (gameoverDiv) gameoverDiv.style.left = '0';
+});
+  
+function alertBox(msg) {
+  document.getElementById('alertMsg').innerText = msg;
+  document.getElementById('alertBox').style.display = 'block';  
+  document.getElementById('judul').style.display = 'block';
+}
+function alertBoxClose() {
+  document.getElementById('alertBox').style.display = 'none';
+}  
+  document.getElementById('judul').addEventListener('click', function () { 
+  totalPerak = 0;
+  sumDisplay.textContent = 'Reward Perak : ' + totalPerak; 
+  burungInputs.forEach((input) => {
+    input.checked = false;
+    input.disabled = false;
+  });
+  
+  const selesaiBtn = document.getElementById('selesaiBtn');
+  selesaiBtn.disabled = false;
+  selesaiClicked = false;
+  alertBoxClose(); 
+  this.style.display = 'none'; 
+  console.log('Game diulang');
+});
+  
+  document.querySelector('.sim').addEventListener('click', function () {
+  window.location.href = 'profil.html';
+});
+  
+  
+</script>
+  
+  
 </body>
 </html>
