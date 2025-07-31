@@ -194,13 +194,15 @@
         
         
         
-        <h3> 🗂️ PROFIL</h3>
+        <h3> 🗂️ BERANDA</h3>
         <h3> 📁 Faq</h3>
         <h3> 📁 Developer</h3>
         <h3> 📁 Pengaduan</h3>
         <h3> 📁 Refund Policy</h3>
         <h3> 📁 Keamanan Data</h3>
         <h3> 📁 Term & Condition</h3>
+        
+       <h3 id="logoutBtn"> 📁 Logout</h3>   
         
         
       </div>
@@ -233,6 +235,12 @@
     onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
   }
   setInterval(updateOnline, 5000);
+  
+  
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear(); 
+  window.location.href = "index.html";
+});
 </script>
   
   
