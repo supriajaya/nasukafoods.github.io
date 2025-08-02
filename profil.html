@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nasuka Wireless</title>
+  <title>Profil</title>
   <style>
     body {
       margin: 0;
@@ -188,22 +188,19 @@
         
         
          
+        <h3 id="berandaBtn"> 🗂️ BERANDA</h3>
+<h3 id="faqBtn"> 📁 Faq</h3>
+<h3 id="developerBtn"> 📁 Developer</h3>
+<h3 id="pengaduanBtn"> 📁 Pengaduan</h3>
+<h3 id="refundBtn"> 📁 Refund Policy</h3>
+<h3 id="keamananBtn"> 📁 Keamanan Data</h3>
+<h3 id="termBtn"> 📁 Term & Condition</h3>
+<h3 id="logoutBtn"> 📁 Logout</h3>
         
         
         
         
-        
-        
-        <h3> 🗂️ BERANDA</h3>
-        <h3> 📁 Faq</h3>
-        <h3> 📁 Developer</h3>
-        <h3> 📁 Pengaduan</h3>
-        <h3> 📁 Refund Policy</h3>
-        <h3> 📁 Keamanan Data</h3>
-        <h3> 📁 Term & Condition</h3>
-        
-       <h3 id="logoutBtn"> 📁 Logout</h3>   
-        
+   
         
       </div>
     </div>
@@ -211,7 +208,6 @@
 
   <iframe src="profil-iframe.html"></iframe>
 
-  
   <script>
   const id = localStorage.getItem("userID");
   if (id) {
@@ -235,14 +231,42 @@
     onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
   }
   setInterval(updateOnline, 5000);
+
   
-  
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.clear(); 
+  document.getElementById("berandaBtn").addEventListener("click", () => {
   window.location.href = "index.html";
 });
+
+document.getElementById("faqBtn").addEventListener("click", () => {
+  window.location.href = "faq.html";
+});
+
+document.getElementById("developerBtn").addEventListener("click", () => {
+  window.location.href = "developer.html";
+});
+
+document.getElementById("pengaduanBtn").addEventListener("click", () => {
+  window.location.href = "pengaduan.html";
+});
+
+document.getElementById("refundBtn").addEventListener("click", () => {
+  window.location.href = "refund-policy.html";
+});
+
+document.getElementById("keamananBtn").addEventListener("click", () => {
+  window.location.href = "keamanan-data.html";
+});
+
+document.getElementById("termBtn").addEventListener("click", () => {
+  window.location.href = "term-&-condition.html";
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "index.html";
+});
+  
 </script>
-  
-  
+ 
 </body>
 </html>
