@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Chat Nasuka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f0f0;
+    }
+    header {
+      background-color: #075e54;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .search-container {
+      display: flex;
+      align-items: center;
+      width: 90%;
+      margin: 10px auto;
+    }
+    #search {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 20px 0 0 20px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+    #searchBtn {
+      padding: 8px 16px;
+      border: none;
+      background: #075e54;
+      color: white;
+      border-radius: 0 20px 20px 0;
+      cursor: pointer;
+    }
+    .user {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+    }
+    .user:hover {
+      background-color: #e6f2f0;
+    }
+    .username {
+      font-weight: bold;
+    }
+    .status {
+      font-size: 12px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+
+<header>Chat dengan Pengguna</header>
+
+<div class="search-container">
+  <input type="text" id="search" placeholder="Cari pengguna...">
+  <button id="searchBtn">🔍</button>
+</div>
+
+<div id="userList"></div>
+
+<script>
+  const userID = localStorage.userID;
+  const username = localStorage.username;
+
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+
+  async function loadUserList() {
+    try {
+      const res = await fetch(`${API_URL}?action=getSemuaUser`);
+      const data = await res.json();
+
+      const list = document.getElementById('userList');
+      list.innerHTML = '';
+
+      const keyword = document.getElementById('search').value.toLowerCase();
+
+      data.forEach(user => {
+        if (user.ID === userID) return;
+
+        const nama = user.Nama?.toLowerCase() || '';
+        const uname = user.Username?.toLowerCase() || '';
+
+        if (!nama.includes(keyword) && !uname.includes(keyword)) return;
+
+        const div = document.createElement('div');
+        div.className = 'user';
+        div.innerHTML = `
+          <div class="username">${user.Nama} (@${user.Username})</div>
+          <div class="status">Status: ${user.Status}</div>
+        `;
+        div.onclick = () => {
+          localStorage.setItem('chatWithID', user.ID);
+          localStorage.setItem('chatWithName', user.Nama);
+          window.location.href = 'chat.html';
+        };
+        list.appendChild(div);
+      });
+    } catch (err) {
+      alert("Gagal memuat daftar pengguna: " + err.message);
+    }
+  }
+
+  document.getElementById('search').addEventListener('input', loadUserList);
+  document.getElementById('searchBtn').addEventListener('click', loadUserList);
+
+  loadUserList();
+</script>
+
+</body>
+</html>
