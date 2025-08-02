@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Bank Nasuka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #e9ecef;
+      color: #333;
+    }
+
+    header {
+      background-color: #004085;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+
+    .box h3 {
+      margin-top: 0;
+      color: #004085;
+      border-bottom: 2px solid #dee2e6;
+      padding-bottom: 10px;
+    }
+
+    label {
+      font-weight: 500;
+      margin-top: 15px;
+      display: block;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ced4da;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      margin-top: 20px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .notif {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #28a745;
+    }
+
+   
+.container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.box {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 25px;
+  flex: 1 1 45%;
+  min-width: 300px;
+  box-sizing: border-box;
+}
+
+
+   @media (max-width: 768px) {
+  .box {
+    flex: 1 1 100%;
+  }
+}
+   
+   
+    
+  </style>
+</head>
+<body>
+
+<header>Ekosistem Lord</header>
+
+<div class="container">
+
+  <div class="box">
+    <h3>Konversi Saldo</h3>
+    <form id="formTukar">
+      <input type="hidden" name="action" value="tukar">
+      <input type="hidden" name="id" id="idTukar">
+
+      <label for="dari">Dari:</label>
+      <select name="dari" id="dari" required>
+        <option value="Saldo">Saldo</option>
+        <option value="Perak">Perak</option>
+        <option value="Platinum">Platinum</option>
+        <option value="Gold">Gold</option>
+      </select>
+
+      <label for="ke">Ke:</label>
+      <select name="ke" id="ke" required>
+        <option value="Perak">Perak</option>
+        <option value="Platinum">Platinum</option>
+        <option value="Gold">Gold</option>
+        <option value="Saldo">Saldo</option>
+      </select>
+
+      <label for="jumlahTukar">Jumlah:</label>
+      <input type="number" name="jumlah" id="jumlahTukar" required>
+
+      <button type="submit">Konversi Sekarang</button>
+    </form>
+    <p id="notifikasiTukar" class="notif"></p>
+  </div>
+
+  <div class="box">
+    <h3>Transfer Antar Pengguna</h3>
+    <form id="formTransfer">
+      <input type="hidden" name="action" value="transfer">
+      <input type="hidden" name="id" id="idTransfer">
+
+      <label for="username">Username Tujuan:</label>
+      <input type="text" name="username" id="username" required>
+
+      <label for="jenis">Jenis Saldo:</label>
+      <select name="jenis" id="jenis" required>
+        <option value="Saldo">Saldo</option>
+        <option value="Perak">Perak</option>
+        <option value="Platinum">Platinum</option>
+        <option value="Gold">Gold</option>
+      </select>
+
+      <label for="jumlahTransfer">Jumlah:</label>
+      <input type="number" name="jumlah" id="jumlahTransfer" required>
+
+      <button type="submit">Kirim Dana</button>
+    </form>
+    <p id="notifikasiTransfer" class="notif"></p>
+  </div>
+
+</div>
+
+<div style="padding: 20px; font-size: 15px; line-height: 1.6;">
+  <h3 style="color:#004085;">🗂️ Fitur Transaksi Antar Pengguna</h3>
+  <p>Menghadirkan kebebasan finansial dan interaksi sosial dalam satu ekosistem. Pengguna dapat dengan mudah mengirim <strong>Perak, Platinum, Gold</strong>, atau <strong>Saldo</strong> kepada pengguna lain, memperkuat jejaring sosial digital sekaligus membangun reputasi sebagai:</p>
+  <ul>
+    <li><strong>Kings of Perak</strong> – Pemain aktif dengan banyak transaksi Perak</li>
+    <li><strong>Platinum Lord</strong> – Simbol kekuasaan finansial digital</li>
+    <li><strong>Rich Gold Master</strong> – Status eksklusif untuk para elit transaksi Gold</li>
+  </ul>
+
+  <h3 style="color:#004085;">📁 Nilai Tukar</h3>
+  <p>Sistem konversi mengikuti standar nilai tukar internal sebagai berikut:</p>
+  <ul>
+    <li>1 <strong>Saldo</strong> = <strong>1.000 Perak</strong></li>
+    <li>1 <strong>Platinum</strong> = <strong>10.000 Perak</strong></li>
+    <li>1 <strong>Gold</strong> = <strong>100.000 Perak</strong></li>
+  </ul>
+  <p>Seluruh transaksi konversi dan transfer dicatat secara otomatis dalam sistem untuk menjamin transparansi, akuntabilitas, dan kenyamanan pengguna.</p>
+
+  <p style="margin-top:20px;"><em>Jadilah bagian dari elite digital. Kelola aset virtual Anda dengan cerdas, dan raih gelar finansial tertinggi di ekosistem.</em></p>
+</div>
+
+
+<script>
+  const id = localStorage.getItem("userID") || "";
+  document.getElementById("idTukar").value = id;
+  document.getElementById("idTransfer").value = id;
+
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+
+  document.getElementById("formTukar").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+
+    fetch(GAS_URL, {
+      method: "POST",
+      body: data
+    })
+    .then(res => res.text())
+    .then(text => {
+      document.getElementById("notifikasiTukar").textContent = text;
+    })
+    .catch(err => {
+      document.getElementById("notifikasiTukar").textContent = "Gagal: " + err.message;
+    });
+  });
+
+  document.getElementById("formTransfer").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+
+    fetch(GAS_URL, {
+      method: "POST",
+      body: data
+    })
+    .then(res => res.text())
+    .then(text => {
+      document.getElementById("notifikasiTransfer").textContent = text;
+    })
+    .catch(err => {
+      document.getElementById("notifikasiTransfer").textContent = "Gagal: " + err.message;
+    });
+  });
+</script>
+
+</body>
+</html>
