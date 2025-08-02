@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil</title>
+  <style>
+    
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url('https://nasukafoods.site/pitasebar.gif'); /* Ganti dengan URL gambar kamu */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+
+
+
+    header {
+      background-color: #2196F3;
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    header .saldo {
+      font-size: 14px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .nasuka {
+      flex: 0 0 48%;
+      background-color: #fff;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .nasuka img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .nasuka-info {
+      padding: 10px;
+    }
+
+    .nasuka-info.centered {
+      text-align: center;
+    }
+
+    .nasuka-info.left {
+      text-align: left;
+    }
+
+    .nasuka-info h3 {
+      margin: 0 0 5px;
+      font-size: 16px;
+    }
+
+    .nasuka-info p {
+      margin: 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .nama-juara {
+      display: inline-block;
+      background-color: #2196F3;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 10px;
+      border: 2px solid #FFD700;
+    }
+
+    .nama-juara:hover {
+      background-color: #1976D2;
+      border-color: #FFC107;
+    }
+
+    .gold-juara {
+      font-size: 13px;
+      color: green;
+      margin-bottom: 8px;
+    }
+
+    .artikel {
+      background-color: #ffffff;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .artikel h3 {
+      margin-top: 0;
+      color: #2196F3;
+    }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    .login-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background-color: #388E3C;
+    }
+
+    @media (max-width: 480px) {
+      .nasuka {
+        flex: 0 0 49%;
+        font-size: 13px;
+      }
+
+      .nasuka-info h3 {
+        font-size: 14px;
+      }
+
+      .nasuka-info p,
+      .gold-juara {
+        font-size: 12px;
+      }
+
+      .nama-juara {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      iframe {
+        height: 400px;
+      }
+    }
+    
+    .juara-1-container {
+  justify-content: center;
+}
+    
+    
+  </style>
+</head>
+<body>
+  
+  
+  
+   
+  <div class="container juara-1-container"></div>
+  
+
+ 
+    
+
+   
+  
+  <div class="container juara-lain-container"></div>
+  <div class="container">
+      
+      
+   
+   
+  
+   
+        
+      </div>
+    </div>
+  </div>
+<div class="container juara-lain-lagi-container"></div>
+
+
+
+<script>
+fetch("https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec?action=getLeaderboardGold")
+  .then(res => res.json())
+  
+  .then(data => {
+  const juara1Container = document.querySelector(".juara-1-container");
+  const juaraLainContainer = document.querySelector(".juara-lain-container"); // Juara 2-3
+  const juaraLainLagiContainer = document.querySelector(".juara-lain-lagi-container"); 
+
+  juara1Container.innerHTML = "";
+  juaraLainContainer.innerHTML = "";
+  juaraLainLagiContainer.innerHTML = "";
+
+  
+  const juara1 = data[0];
+  const card1 = document.createElement("div");
+  card1.className = "nasuka";
+  card1.innerHTML = `
+    <img src="${juara1.foto}" alt="FOTO PROFIL" />
+    <div class="nasuka-info right">
+      <div class="gold-juara">🟢 Rich Gold Master</div>
+      <a href="profiljuara1?id=${juara1.id}" class="nama-juara">${juara1.nama}</a>
+      <p>${juara1.gold} gold</p>
+    </div>
+  `;
+  juara1Container.appendChild(card1);
+
+
+  data.slice(1).forEach((user, index) => {
+    const juara = index + 2;
+    const card = document.createElement("div");
+    card.className = "nasuka";
+    card.innerHTML = `
+      <img src="${user.foto}" alt="FOTO PROFIL" />
+      <div class="nasuka-info right">
+        <div class="gold-juara">gold Juara ${juara}</div>
+        <a href="profiljuara${juara}?id=${user.id}" class="nama-juara">${user.nama}</a>
+        <p>${user.gold} gold</p>
+      </div>
+    `;
+
+    if (juara <= 3) {
+      juaraLainContainer.appendChild(card); 
+    } else {
+      juaraLainLagiContainer.appendChild(card);
+    }
+  });
+});
+  
+</script>
+
+</body>
+</html>
