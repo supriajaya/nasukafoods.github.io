@@ -443,23 +443,21 @@ background-color: #388E3C;
 
    
     <p>.</p>  
-    
+    <p>.</p>   
      <h3><a href="faq.html" style="text-decoration: none; color: inherit;">📁 Faq</a></h3>
-    
+ <p>.</p>   
    <h3><a href="rules.html" style="text-decoration: none; color: inherit;">📁 Rules</a></h3>
-  
-  
-  <h3><a href="developer.html" style="text-decoration: none; color: inherit;">📁 Developer</a></h3>
+  <p>.</p>     
 <h3><a href="komunitas.html" style="text-decoration: none; color: inherit;">📁 Komunitas</a></h3>
+   <p>.</p>   
 <h3><a href="refund-policy.html" style="text-decoration: none; color: inherit;">📁 Refund Policy</a></h3>
-<h3><a href="keamanan-data.html" style="text-decoration: none; color: inherit;">📁 Keamanan Data</a></h3>
+   <p>.</p>   
 <h3><a href="term-&-condition.html" style="text-decoration: none; color: inherit;">📁 Term & Condition</a></h3>
-
-<h3><a href="catur.html" style="text-decoration: none; color: inherit;">📁 Catur</a></h3>
+  
+   <p>.</p>   
   
   
-  
-    <h3><a href="chat-list.html" style="text-decoration: none; color: inherit;">📁 NasApp</a></h3>
+    <h3><a href="chat-list.html" style="text-decoration: none; color: inherit;">📁 Chat Whatsapp KW</a></h3>
 
     
     
@@ -471,6 +469,13 @@ background-color: #388E3C;
 </div>
 
   </div>   
+  
+  <div style="padding:10px;">
+  <input type="text" id="cariNama" placeholder="Cari Nama User" style="padding:6px; width: 70%;">
+  <button onclick="cariUserLain()" style="padding:6px 12px;">Cari</button>
+</div>
+  
+  
   <marquee behavior="scroll" direction="left" scrollamount="4" class="blink-marquee">
  Selamat datang di Nasuka Wireless....
 </marquee>
@@ -551,15 +556,13 @@ background-color: #388E3C;
 
   
 <script>
-const userId = localStorage.getItem("userID");  
-const fotoProfil = document.getElementById("fotoProfil");  
-const baseURL = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";  
+  
+const baseURL = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+const userId = new URLSearchParams(location.search).get("id") || localStorage.getItem("userID");
+
+const fotoProfil = document.getElementById("fotoProfil");
 const linkProfil = document.getElementById("linkProfil");
-
-if (linkProfil) {
-  linkProfil.href = userId ? "profil.html" : "login.html";
-}
-
+if (linkProfil) linkProfil.href = userId ? `profil.html?id=${encodeURIComponent(userId)}` : "login.html";
 
 if (userId) {
   fetch(`${baseURL}?action=getProfil&id=${userId}`)
@@ -567,20 +570,16 @@ if (userId) {
     .then(data => {
       if (fotoProfil) {
         const foto = data?.Foto;
-        fotoProfil.src = (foto && foto !== "undefined" && foto !== "null") ? foto : "https://nasukafoods.site/default.jpg";
+        fotoProfil.src = (foto && foto !== "undefined" && foto !== "null") ? foto : "https://nasukafoods.site/gambarkosong.jpg";
         fotoProfil.alt = data?.Nama || "User";
         fotoProfil.style.cursor = "pointer";
         fotoProfil.addEventListener("click", () => {
-          window.location.href = "profil.html";
+          window.location.href = `profil.html?id=${encodeURIComponent(userId)}`;
         });
       }
 
-      const namaUser = document.getElementById("namaUser");
-      if (namaUser) {
-        namaUser.textContent = data?.Nama || "User";
-      }
+      document.getElementById("namaUser").textContent = data?.Nama || "User";
 
-     
       const downloadBtn = document.querySelector('.download-link');
       if (downloadBtn) {
         downloadBtn.removeAttribute('href');
@@ -593,8 +592,6 @@ if (userId) {
     });
 }
 
-
-
 let onlineCount = Math.floor(Math.random() * 31) + 310;
 const onlineEl = document.querySelector('.fake-online');
 function updateOnline() {
@@ -604,16 +601,28 @@ function updateOnline() {
 }
 setInterval(updateOnline, 5000);
 
+function cariUserLain() {
+  const namaInput = document.getElementById("cariNama").value.trim().toLowerCase();
+  if (!namaInput) return alert("Masukkan nama pengguna.");
 
+  fetch(`${baseURL}?action=getSemuaUser`)
+    .then(res => res.json())
+    .then(users => {
+    
+    const cocok = users.find(user => (user.Nama || "").trim().toLowerCase() === namaInput);
+    
+    
+      
+      if (cocok?.ID) {
+        window.location.href = `profil.html?id=${encodeURIComponent(cocok.ID)}`;
+      } else {
+        alert("Pengguna tidak ditemukan.");
+      }
+    })
+    .catch(() => alert("Terjadi kesalahan saat mencari pengguna."));
+}
 
-
-
-
-
-
-
-
-
+   
 </script>
 
 
