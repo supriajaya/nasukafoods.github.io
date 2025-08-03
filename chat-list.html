@@ -71,31 +71,44 @@
 <script>
   const userID = localStorage.userID;
   const username = localStorage.username;
-
   const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+
+  let notifikasiMap = {};
+
+  async function ambilNotifikasi() {
+    try {
+      const res = await fetch(`${API_URL}?action=getChatList&id=${userID}`);
+      const data = await res.json();
+      notifikasiMap = {};
+      data.forEach(user => {
+        if (user.BelumDibaca && user.BelumDibaca > 0) {
+          notifikasiMap[user.ID] = user.BelumDibaca;
+        }
+      });
+    } catch (e) {
+      notifikasiMap = {};
+    }
+  }
 
   async function loadUserList() {
     try {
+      await ambilNotifikasi();
       const res = await fetch(`${API_URL}?action=getSemuaUser`);
       const data = await res.json();
-
       const list = document.getElementById('userList');
       list.innerHTML = '';
-
       const keyword = document.getElementById('search').value.toLowerCase();
-
       data.forEach(user => {
         if (user.ID === userID) return;
-
         const nama = user.Nama?.toLowerCase() || '';
         const uname = user.Username?.toLowerCase() || '';
-
         if (!nama.includes(keyword) && !uname.includes(keyword)) return;
-
+        const jumlah = notifikasiMap[user.ID] || 0;
+        const notif = jumlah > 0 ? `<span style='color:red; font-weight:bold;'> (${jumlah} pesan baru)</span>` : '';
         const div = document.createElement('div');
         div.className = 'user';
         div.innerHTML = `
-          <div class="username">${user.Nama} (@${user.Username})</div>
+          <div class="username">${user.Nama} (@${user.Username}) ${notif}</div>
           <div class="status">Status: ${user.Status}</div>
         `;
         div.onclick = () => {
@@ -118,3 +131,4 @@
 
 </body>
 </html>
+
