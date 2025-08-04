@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Daftar Chat Nasuka</title>
+  <title>Chat Teman</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     body {
@@ -59,15 +59,14 @@
 </head>
 <body>
 
-<header>Chat dengan Pengguna</header>
+<header>Chat dengan teman</header>
 
 <div class="search-container">
-  <input type="text" id="search" placeholder="Cari pengguna...">
+  <input type="text" id="search" placeholder="Cari Teman...">
   <button id="searchBtn">🔍</button>
 </div>
 
 <div id="userList"></div>
-
 <script>
   const userID = localStorage.userID;
   const username = localStorage.username;
@@ -78,7 +77,8 @@
   async function ambilNotifikasi() {
     try {
       const res = await fetch(`${API_URL}?action=getChatList&id=${userID}`);
-      const data = await res.json();
+      const data = await res.json(); // ✅ pastikan parsing JSON
+      // console.log(data); // opsional debug
       notifikasiMap = {};
       data.forEach(user => {
         if (user.BelumDibaca && user.BelumDibaca > 0) {
@@ -86,6 +86,7 @@
         }
       });
     } catch (e) {
+      console.error("Gagal ambil notifikasi:", e);
       notifikasiMap = {};
     }
   }
@@ -103,12 +104,14 @@
         const nama = user.Nama?.toLowerCase() || '';
         const uname = user.Username?.toLowerCase() || '';
         if (!nama.includes(keyword) && !uname.includes(keyword)) return;
+
         const jumlah = notifikasiMap[user.ID] || 0;
         const notif = jumlah > 0 ? `<span style='color:red; font-weight:bold;'> (${jumlah} pesan baru)</span>` : '';
+
         const div = document.createElement('div');
         div.className = 'user';
         div.innerHTML = `
-          <div class="username">${user.Nama} (@${user.Username}) ${notif}</div>
+          <div class="username">${user.Nama} ${notif}</div>
           <div class="status">Status: ${user.Status}</div>
         `;
         div.onclick = () => {
@@ -126,9 +129,9 @@
   document.getElementById('search').addEventListener('input', loadUserList);
   document.getElementById('searchBtn').addEventListener('click', loadUserList);
 
+  // Jalankan pertama kali
   loadUserList();
 </script>
 
 </body>
 </html>
-
