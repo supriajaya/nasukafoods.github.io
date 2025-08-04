@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>Nasuka Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
   <style>
     body {
       margin: 0;
@@ -28,13 +30,6 @@
       display: flex;
       padding: 10px;
       background: #f0f0f0;
-      position: sticky;
-      bottom: 0;
-      z-index: 10;
-    }
-
-    main {
-      padding-top: 60px;
     }
 
     header {
@@ -110,7 +105,7 @@
   <h1 id="receiverName">Memuat...</h1>
 </header>
 
-<div id="chat"></div>
+<div id="chat" style="margin-top:60px;"></div>
 
 <footer>
   <input type="text" id="messageInput" placeholder="Ketik pesan..."/>
@@ -118,92 +113,68 @@
 </footer>
 
 <script>
-const userID = localStorage.userID;
-const username = localStorage.username;
-const receiverID = localStorage.chatWithID;
-const receiverName = localStorage.chatWithName;
-const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+  const firebaseConfig = {
+    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
+    authDomain: "nasukachat.firebaseapp.com",
+    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukachat",
+    storageBucket: "nasukachat.firebasestorage.app",
+    messagingSenderId: "759589458121",
+    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
+  };
 
-document.getElementById('receiverName').textContent = receiverName;
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-let stopPolling = false;
-let intervalId = null;
+  const userID = localStorage.userID || '';
+  const username = localStorage.username || '';
+  const receiverID = localStorage.chatWithID || '';
+  const receiverName = localStorage.chatWithName || '';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
 
-window.addEventListener('beforeunload', () => {
-  stopPolling = true;
-  if (intervalId) clearInterval(intervalId);
-});
+  document.getElementById('receiverName').textContent = receiverName;
 
-async function loadProfil() {
-  try {
-    const res = await fetch(`${API_URL}?action=getProfil&id=${receiverID}`);
-    const data = await res.json();
-    if (data && data.Foto) {
-      document.getElementById('receiverPhoto').src = data.Foto;
-    }
-  } catch {}
-}
+  async function loadProfil() {
+    try {
+      const res = await fetch(`${API_URL}?action=getProfil&id=${receiverID}`);
+      const data = await res.json();
+      if (data && data.Foto) {
+        document.getElementById('receiverPhoto').src = data.Foto;
+      }
+    } catch {}
+  }
 
-async function loadChat() {
-  if (stopPolling) return;
-  try {
-    const res = await fetch(`${API_URL}?action=getChat&id1=${userID}&id2=${receiverID}`);
-    const json = await res.json();
-    const chat = document.getElementById('chat');
-    chat.innerHTML = '';
+  loadProfil();
 
-    const myID = String(userID || '').trim();
-    (json.messages || []).forEach(msg => {
-      const sender = String(msg.sender || '').trim();
-      const isMe = sender === myID;
+  const chatRef = db.ref('privateChat/' + buatKey(userID, receiverID));
+  const chatBox = document.getElementById('chat');
+  const textInput = document.getElementById('messageInput');
+  const sendBtn = document.getElementById('sendBtn');
 
-      const div = document.createElement('div');
-      div.className = 'message ' + (isMe ? 'me' : 'them');
-      div.textContent = msg.text;
-      chat.appendChild(div);
-    });
+  function buatKey(a, b) {
+    return [a, b].sort().join('_');
+  }
 
-    chat.scrollTop = chat.scrollHeight;
-  } catch {}
-}
+  function appendMessage(msg) {
+    const div = document.createElement('div');
+    div.className = 'message ' + (msg.sender === userID ? 'me' : 'them');
+    div.textContent = msg.text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 
-function tampilkanLangsung(teks) {
-  const chat = document.getElementById('chat');
-  const div = document.createElement('div');
-  div.className = 'message me';
-  div.textContent = teks;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-}
+  sendBtn.onclick = () => {
+    const text = textInput.value.trim();
+    if (!text) return;
+    const waktu = new Date().toISOString();
+    chatRef.push({ sender: userID, nama: username, text, waktu });
+    textInput.value = '';
+  };
 
-async function sendMessage() {
-  const input = document.getElementById('messageInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  tampilkanLangsung(text);
-  input.value = '';
-
-  const params = new URLSearchParams();
-  params.append('action', 'sendChat');
-  params.append('sender', userID);
-  params.append('receiver', receiverID);
-  params.append('text', text);
-
-  try {
-    await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString()
-    });
-  } catch {}
-}
-
-document.getElementById('sendBtn').addEventListener('click', sendMessage);
-
-loadProfil();
-intervalId = setInterval(loadChat, 3000);
-loadChat();
+  chatRef.on('child_added', snapshot => {
+    const data = snapshot.val();
+    appendMessage(data);
+  });
 </script>
 
 </body>
