@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Nasuka Chat</title>
+  <title>Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
     body {
@@ -19,6 +19,13 @@
       padding: 10px;
       display: flex;
       align-items: center;
+    }
+    #receiverPhoto {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
     }
     header h1 {
       font-size: 16px;
@@ -74,6 +81,7 @@
 <body>
 
 <header>
+  <img id="receiverPhoto" src="" alt="foto">
   <h1 id="receiverName">Memuat...</h1>
 </header>
 
@@ -85,56 +93,76 @@
 </footer>
 
 <script>
-  const userID = localStorage.userID;
-  const username = localStorage.username;
-  const receiverID = localStorage.chatWithID;
-  const receiverName = localStorage.chatWithName;
+const userID = localStorage.userID;
+const username = localStorage.username;
+const receiverID = localStorage.chatWithID;
+const receiverName = localStorage.chatWithName;
 
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
 
-  document.getElementById('receiverName').textContent = receiverName;
+document.getElementById('receiverName').textContent = receiverName;
 
-  async function loadChat() {
-    try {
-      const res = await fetch(`${API_URL}?action=getChat&id1=${userID}&id2=${receiverID}`);
-      const json = await res.json();
-      const chat = document.getElementById('chat');
-      chat.innerHTML = '';
+let stopPolling = false;
+let intervalId = null;
 
-      json.messages.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = 'message ' + (msg.sender === userID ? 'me' : 'them');
-        div.textContent = msg.text;
-        chat.appendChild(div);
-      });
+window.addEventListener('beforeunload', () => {
+  stopPolling = true;
+  if (intervalId) clearInterval(intervalId);
+});
 
-      chat.scrollTop = chat.scrollHeight;
-    } catch (err) {
-      alert("Gagal memuat chat: " + err.message);
+async function loadProfil() {
+  try {
+    const res = await fetch(`${API_URL}?action=getProfil&id=${receiverID}`);
+    const data = await res.json();
+    if (data && data.Foto) {
+      document.getElementById('receiverPhoto').src = data.Foto;
     }
-  }
+  } catch (err) {}
+}
 
-  async function sendMessage() {
-    const input = document.getElementById('messageInput');
-    const text = input.value.trim();
-    if (!text) return;
+async function loadChat() {
+  if (stopPolling) return;
+  try {
+    const res = await fetch(`${API_URL}?action=getChat&id1=${userID}&id2=${receiverID}`);
+    const json = await res.json();
+    const chat = document.getElementById('chat');
+    chat.innerHTML = '';
 
-    await fetch(API_URL, {
-      method: 'POST',
-      body: new URLSearchParams({
-        action: 'sendChat',
-        sender: userID,
-        receiver: receiverID,
-        text: text
-      })
+    json.messages.forEach(msg => {
+      const div = document.createElement('div');
+      div.className = 'message ' + (msg.sender === userID ? 'me' : 'them');
+      div.textContent = msg.text;
+      chat.appendChild(div);
     });
 
-    input.value = '';
-    loadChat();
+    chat.scrollTop = chat.scrollHeight;
+  } catch (err) {
+    if (!stopPolling) alert("Gagal memuat chat: " + err.message);
   }
+}
 
-  setInterval(loadChat, 3000);
+async function sendMessage() {
+  const input = document.getElementById('messageInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  await fetch(API_URL, {
+    method: 'POST',
+    body: new URLSearchParams({
+      action: 'sendChat',
+      sender: userID,
+      receiver: receiverID,
+      text: text
+    })
+  });
+
+  input.value = '';
   loadChat();
+}
+
+loadProfil();
+intervalId = setInterval(loadChat, 3000);
+loadChat();
 </script>
 
 </body>
