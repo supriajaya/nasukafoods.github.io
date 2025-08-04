@@ -5,207 +5,15 @@
   <title>Nasuka Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    
-    body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #e5ddd5;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-#chat {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-height: 0;
-}
-
-footer {
-  display: flex;
-  padding: 10px;
-  background: #f0f0f0;
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-}
-    
-    
-    
-
-main {
-  padding-top: 60px;
-}
-    header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Chat Teman</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f0f0;
-    }
-    header {
-      background-color: #075e54;
-      color: white;
-      padding: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-    }
-    .search-container {
+      background-color: #e5ddd5;
       display: flex;
-      align-items: center;
-      width: 90%;
-      margin: 10px auto;
+      flex-direction: column;
+      height: 100vh;
     }
-    #search {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 20px 0 0 20px;
-      border: 1px solid #ccc;
-      outline: none;
-    }
-    #searchBtn {
-      padding: 8px 16px;
-      border: none;
-      background: #075e54;
-      color: white;
-      border-radius: 0 20px 20px 0;
-      cursor: pointer;
-    }
-    .user {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
-    }
-    .user:hover {
-      background-color: #e6f2f0;
-    }
-    .username {
-      font-weight: bold;
-    }
-    .status {
-      font-size: 12px;
-      color: gray;
-    }
-  </style>
-</head>
-<body>
 
-<header>Chat dengan teman</header>
-
-<div class="search-container">
-  <input type="text" id="search" placeholder="Cari Teman...">
-  <button id="searchBtn">🔍</button>
-</div>
-
-<div id="userList"></div>
-<script>
-  const userID = localStorage.userID;
-  const username = localStorage.username;
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
-
-  let notifikasiMap = {};
-
-  async function ambilNotifikasi() {
-    try {
-      const res = await fetch(`${API_URL}?action=getChatList&id=${userID}`);
-      const data = await res.json(); // ✅ pastikan parsing JSON
-      // console.log(data); // opsional debug
-      notifikasiMap = {};
-      data.forEach(user => {
-        if (user.BelumDibaca && user.BelumDibaca > 0) {
-          notifikasiMap[user.ID] = user.BelumDibaca;
-        }
-      });
-    } catch (e) {
-      console.error("Gagal ambil notifikasi:", e);
-      notifikasiMap = {};
-    }
-  }
-
-  async function loadUserList() {
-    try {
-      await ambilNotifikasi();
-      const res = await fetch(`${API_URL}?action=getSemuaUser`);
-      const data = await res.json();
-      const list = document.getElementById('userList');
-      list.innerHTML = '';
-      const keyword = document.getElementById('search').value.toLowerCase();
-      data.forEach(user => {
-        if (user.ID === userID) return;
-        const nama = user.Nama?.toLowerCase() || '';
-        const uname = user.Username?.toLowerCase() || '';
-        if (!nama.includes(keyword) && !uname.includes(keyword)) return;
-
-        const jumlah = notifikasiMap[user.ID] || 0;
-        const notif = jumlah > 0 ? `<span style='color:red; font-weight:bold;'> (${jumlah} pesan baru)</span>` : '';
-
-        const div = document.createElement('div');
-        div.className = 'user';
-        div.innerHTML = `
-          <div class="username">${user.Nama} ${notif}</div>
-          <div class="status">Status: ${user.Status}</div>
-        `;
-        div.onclick = () => {
-          localStorage.setItem('chatWithID', user.ID);
-          localStorage.setItem('chatWithName', user.Nama);
-          window.location.href = 'chat.html';
-        };
-        list.appendChild(div);
-      });
-    } catch (err) {
-      alert("Gagal memuat daftar pengguna: " + err.message);
-    }
-  }
-
-  document.getElementById('search').addEventListener('input', loadUserList);
-  document.getElementById('searchBtn').addEventListener('click', loadUserList);
-
-  // Jalankan pertama kali
-  loadUserList();
-</script>
-
-</body>
-</html>
-  height: 60px;
-  background: #075e54;
-  color: white;
-  z-index: 1000;
-  display: flex;           /* Tambah ini */
-  align-items: center;     /* Tambah ini */
-  padding: 0 10px;         /* Tambah ini */
-  gap: 10px;               /* Tambah ini */
-}
-    
-    
-    
-    
-    #receiverPhoto {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-    header h1 {
-      font-size: 16px;
-      margin: 0;
-      flex: 1;
-    }
     #chat {
       flex: 1;
       overflow-y: auto;
@@ -213,7 +21,51 @@ main {
       display: flex;
       flex-direction: column;
       gap: 5px;
+      min-height: 0;
     }
+
+    footer {
+      display: flex;
+      padding: 10px;
+      background: #f0f0f0;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    main {
+      padding-top: 60px;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #075e54;
+      color: white;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 10px;
+    }
+
+    #receiverPhoto {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 16px;
+      margin: 0;
+      flex: 1;
+    }
+
     .message {
       max-width: 70%;
       padding: 8px 12px;
@@ -221,19 +73,17 @@ main {
       line-height: 1.4;
       word-break: break-word;
     }
+
     .me {
       background-color: #dcf8c6;
       align-self: flex-end;
     }
+
     .them {
       background-color: white;
       align-self: flex-start;
     }
-    footer {
-      display: flex;
-      padding: 10px;
-      background: #f0f0f0;
-    }
+
     input[type="text"] {
       flex: 1;
       padding: 8px;
@@ -241,6 +91,7 @@ main {
       border-radius: 20px;
       outline: none;
     }
+
     button {
       margin-left: 8px;
       padding: 8px 12px;
@@ -265,12 +116,12 @@ main {
   <input type="text" id="messageInput" placeholder="Ketik pesan..."/>
   <button id="sendBtn">Kirim</button>
 </footer>
+
 <script>
 const userID = localStorage.userID;
 const username = localStorage.username;
 const receiverID = localStorage.chatWithID;
 const receiverName = localStorage.chatWithName;
-
 const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
 
 document.getElementById('receiverName').textContent = receiverName;
@@ -302,7 +153,6 @@ async function loadChat() {
     chat.innerHTML = '';
 
     const myID = String(userID || '').trim();
-
     (json.messages || []).forEach(msg => {
       const sender = String(msg.sender || '').trim();
       const isMe = sender === myID;
@@ -317,10 +167,22 @@ async function loadChat() {
   } catch {}
 }
 
+function tampilkanLangsung(teks) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'message me';
+  div.textContent = teks;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
 async function sendMessage() {
   const input = document.getElementById('messageInput');
   const text = input.value.trim();
   if (!text) return;
+
+  tampilkanLangsung(text);
+  input.value = '';
 
   const params = new URLSearchParams();
   params.append('action', 'sendChat');
@@ -329,26 +191,18 @@ async function sendMessage() {
   params.append('text', text);
 
   try {
-    const res = await fetch(API_URL, {
+    await fetch(API_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params.toString()
     });
-
-    const result = await res.text();
-    if (result !== 'BLOCKED') {
-      input.value = '';
-      loadChat();
-    }
   } catch {}
 }
 
 document.getElementById('sendBtn').addEventListener('click', sendMessage);
 
 loadProfil();
-intervalId = setInterval(loadChat, 1000);
+intervalId = setInterval(loadChat, 3000);
 loadChat();
 </script>
 
