@@ -89,56 +89,70 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 const urlParams = new URLSearchParams(location.search);
-const viewedID = urlParams.get("id") || localStorage.getItem("userID");
-const currentID = localStorage.getItem("userID");
+const viewedID = urlParams.get("id") || localStorage.getItem("ID");
+const currentID = localStorage.getItem("ID");
 
 if (!currentID) location.href = "sign.html";
 
-db.ref("users/" + viewedID).get().then(snap => {
-  const data = snap.val();
-  if (!data) return alert("Data tidak ditemukan");
+db.ref("users").once("value").then(snap => {
+  const users = snap.val();
+  let ditemukan = false;
 
-  document.getElementById("foto-profil").src = data.foto || "https://nasukafoods.site/gambarkosong.jpg";
+  for (let key in users) {
+    const user = users[key];
+    if (user.ID === viewedID) {
+      ditemukan = true;
+      document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
 
-  document.getElementById("dataUser").innerHTML = `
-    <p>🎇 ${data.nama || '-'}</p>
-    <p>🎇 ${data.perak || 0}</p>
-    <p>🎇 ${data.jenis || '-'}</p>
-    <p>🎇 ${data.platinum || 0}</p>
-    <p>🎇 ${data.gold || 0}</p>
-    <p>🎇 ${data.saldo || 0}</p>
-    <p>🎇 ${data.username || '-'}</p>
-    <h3 id="logoutBtn">🚪 Logout</h3>
-  `;
+      document.getElementById("dataUser").innerHTML = `
+        <p>🎇 ${user.Nama || '-'}</p>
+        <p>🎇 ${user.Perak || 0}</p>
+        <p>🎇 ${user.Jenis || '-'}</p>
+        <p>🎇 ${user.Platinum || 0}</p>
+        <p>🎇 ${user.Gold || 0}</p>
+        <p>🎇 ${user.Saldo || 0}</p>
+        <p>🎇 ${user.Username || '-'}</p>
+        <h3 id="logoutBtn">🚪 Logout</h3>
+      `;
 
-  document.getElementById("logoutBtn").onclick = () => {
-    localStorage.clear();
-    location.href = "index.html";
-  };
+      document.getElementById("logoutBtn").onclick = () => {
+        localStorage.clear();
+        location.href = "index.html";
+      };
 
-  if (viewedID !== currentID) {
-    db.ref("friends/" + currentID + "/" + viewedID).get().then(friendSnap => {
-      if (!friendSnap.exists()) {
-        const btn = document.createElement("button");
-        btn.innerText = "Teman";
-        btn.className = "teman-btn";
-        btn.onclick = () => {
-          db.ref("friends/" + currentID + "/" + viewedID).set(true);
-          db.ref("friends/" + viewedID + "/" + currentID).set(true);
-          btn.remove();
-        };
-        document.getElementById("tombolAksi").appendChild(btn);
+      if (viewedID !== currentID) {
+        db.ref("friends/" + currentID + "/" + viewedID).get().then(friendSnap => {
+          if (!friendSnap.exists()) {
+            const btn = document.createElement("button");
+            btn.innerText = "Teman";
+            btn.className = "teman-btn";
+            btn.onclick = () => {
+              db.ref("friends/" + currentID + "/" + viewedID).set(true);
+              db.ref("friends/" + viewedID + "/" + currentID).set(true);
+              btn.remove();
+            };
+            document.getElementById("tombolAksi").appendChild(btn);
+          }
+        });
+      } else {
+        const editBtn = document.createElement("button");
+        editBtn.className = "login-btn";
+        editBtn.innerText = "Ubah Profil";
+        editBtn.onclick = () => location.href = "edit-profil-fire.html";
+        document.getElementById("tombolAksi").appendChild(editBtn);
       }
-    });
-  } else {
-    const editBtn = document.createElement("button");
-    editBtn.className = "login-btn";
-    editBtn.innerText = "Ubah Profil";
-    editBtn.onclick = () => location.href = "edit-profil-fire.html";
-    document.getElementById("tombolAksi").appendChild(editBtn);
+
+      break;
+    }
+  }
+
+  if (!ditemukan) {
+    alert("Pengguna tidak ditemukan");
   }
 });
 </script>
+
+
 
 </body>
 </html>
