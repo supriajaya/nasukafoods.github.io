@@ -69,66 +69,65 @@
   <div class="login-box">
     <h2>Login Nasuka</h2>
     <div id="error" class="error-msg"></div>
-    <input type="text" id="username" placeholder="Nama Pengguna" />
-    <input type="password" id="password" placeholder="Password" />
+    <input type="text" id="Username" placeholder="Nama Pengguna" />
+    <input type="Password" id="Password" placeholder="Password" />
     <button onclick="login()">Masuk</button>
   </div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-      authDomain: "nasukachat.firebaseapp.com",
-      databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "nasukachat",
-      storageBucket: "nasukachat.firebasestorage.app",
-      messagingSenderId: "759589458121",
-      appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-    };
+ <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
+    authDomain: "nasukachat.firebaseapp.com",
+    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukachat",
+    storageBucket: "nasukachat.firebasestorage.app",
+    messagingSenderId: "759589458121",
+    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-function login() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorDiv = document.getElementById("error");
-  const button = document.querySelector("button");
-  
-  errorDiv.textContent = "";
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  if (!username || !password) {
-    errorDiv.textContent = "Nama pengguna dan password wajib diisi.";
-    return;
-  }
+  function login() {
+    const username = document.getElementById("Username").value.trim();
+    const password = document.getElementById("Password").value.trim();
+    const errorDiv = document.getElementById("error");
+    const button = document.querySelector("button");
 
-  button.disabled = true;
-  button.textContent = "Tunggu sebentar ...";
+    errorDiv.textContent = "";
 
-  db.ref("users").once("value").then(snapshot => {
-    let found = false;
-    snapshot.forEach(child => {
-      const val = child.val();
+    if (!username || !password) {
+      errorDiv.textContent = "Nama pengguna dan password wajib diisi.";
+      return;
+    }
 
-      if ((val.nama === username || val.Nama === username) && val.password === password) {
-        localStorage.setItem("userID", child.key);
-        localStorage.setItem("username", val.nama || val.Nama || '');
-        localStorage.setItem("userPhoto", val.foto || 'https://nasukafoods.site/gambarkosong.jpg');
-        window.location.href = "index.html";
-        found = true;
+    button.disabled = true;
+    button.textContent = "Tunggu sebentar ...";
+
+    db.ref("users").once("value").then(snapshot => {
+      let found = false;
+      snapshot.forEach(child => {
+        const val = child.val();
+
+        if (val.Username === username && val.Password === password) {
+          localStorage.setItem("ID", val.ID);
+          localStorage.setItem("Username", val.Username);
+          window.location.href = "index.html";
+          found = true;
+        }
+      });
+
+      if (!found) {
+        errorDiv.textContent = "Akun tidak ditemukan atau password salah.";
+        button.disabled = false;
+        button.textContent = "Masuk";
       }
-    });
-
-    if (!found) {
-      errorDiv.textContent = "Akun tidak ditemukan atau password salah.";
+    }).catch(() => {
+      errorDiv.textContent = "Terjadi kesalahan, coba lagi.";
       button.disabled = false;
       button.textContent = "Masuk";
-    }
-  }).catch(() => {
-    errorDiv.textContent = "Terjadi kesalahan, coba lagi.";
-    button.disabled = false;
-    button.textContent = "Masuk";
-  });
-}
-    
-  </script>
+    });
+  }
+</script>
 </body>
 </html>
