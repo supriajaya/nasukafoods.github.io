@@ -43,11 +43,9 @@
   </style>
 </head>
 <body>
-
-<h2>Daftar Akun</h2>
-<input type="text" id="username" placeholder="Username">
-<input type="password" id="password" placeholder="Password">
-<button onclick="signup()">Signup</button>
+<input type="text" id="Username" placeholder="Username">
+<input type="password" id="Password" placeholder="Password">
+<button onclick="signup()">Buat Akun Sekarang</button>
 <div id="status"></div>
 
 <script>
@@ -60,30 +58,36 @@
     messagingSenderId: "759589458121",
     appId: "1:759589458121:web:d5670da0d080017e2ffd18"
   };
-
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
-
   function signup() {
-    const u = document.getElementById('username').value.trim();
-    const p = document.getElementById('password').value.trim();
+    const u = document.getElementById('Username').value.trim();   
+    const p = document.getElementById('Password').value.trim();    
     if (!u || !p) return tulis('Isi semua kolom');
-
     const ref = db.ref('users/' + u);
     ref.get().then(snap => {
       if (snap.exists()) return tulis('Username sudah digunakan');
-      const id = 'U' + Date.now();
-      ref.set({ username: u, password: p, id: id, perak: 0, platinum: 0, nama: u });
-      localStorage.setItem('userID', id);
-      localStorage.setItem('username', u);
-      window.location.href = 'index.html';
+      const id = 'VIP-' + Date.now();
+      const nm = 'Nama Belum Diupdate' ;
+      const ft = 'https://' ;
+      const tp = 'Belum Diupdate' ;
+      const al = 'Belum Diupdate' ;
+      const qt = 'Belum Diupdate' ;
+      const oo = '0' ;
+      const us = 'Belum Diupdate' ;
+      const jn = 'Belum Diupdate' ;
+      const pk = 'Belum Diupdate' ;
+      const st = 'Belum Diupdate' ;
+      const rk = 'Belum Diupdate' ;      
+      ref.set({ ID: id, Username: u, Password: p, Nama: nm, Foto: ft, Telepon: tp, Alamat: al, Jenis: jn, Status: st, Usia: us, Pekerjaan: pk, Rank: rk, Quetes: qt, Saldo: oo, Perak: oo, Platinum: oo, Gold: oo,});   
+
+      localStorage.setItem('ID', id);
+      localStorage.setItem('Username', u);
+      window.location.href = 'login.html';
     });
   }
 
   function tulis(teks) {
     document.getElementById('status').textContent = teks;
   }
-</script>
-
-</body>
-</html>
+</script></body></html>
