@@ -2,129 +2,88 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <title>Signup Nasuka</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daftar Akun</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e5ddd5;
       display: flex;
+      flex-direction: column;
+      height: 100vh;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
     }
 
-    form {
-      background: #ffffff;
-      padding: 2.5rem;
-      border-radius: 16px;
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-      width: 100%;
-      max-width: 420px;
-      animation: fadeIn 0.6s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    h2 {
-      margin-bottom: 1.5rem;
-      text-align: center;
-      color: #333;
-      font-weight: 600;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-
-    input:focus, textarea:focus {
-      border-color: #74ebd5;
-      box-shadow: 0 0 0 3px rgba(116, 235, 213, 0.3);
-      outline: none;
+    input {
+      padding: 10px;
+      margin: 8px;
+      width: 240px;
+      border: none;
+      border-radius: 5px;
     }
 
     button {
-      width: 100%;
-      padding: 0.75rem;
-      background: linear-gradient(to right, #43cea2, #185a9d);
+      padding: 10px 20px;
+      background: #075e54;
       color: white;
-      font-size: 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.3s ease;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      margin-top: 10px;
     }
 
-    button:hover {
-      background: linear-gradient(to right, #185a9d, #43cea2);
-    }
-
-    @media (max-width: 500px) {
-      form {
-        margin: 1rem;
-        padding: 2rem;
-      }
+    #status {
+      margin-top: 10px;
+      color: red;
     }
   </style>
 </head>
 <body>
-  <form id="signupForm">
-    <h2>Daftar Akun</h2>
-    <input type="text" name="nama" placeholder="Nama Lengkap" required />
-    <input type="text" name="username" placeholder="Username" required />
-    <input type="password" name="password" placeholder="Password" required />
-    
-    <button type="submit">Daftar</button>
-  </form>
 
-  <script>
-    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
+<h2>Daftar Akun</h2>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
+<button onclick="signup()">Signup</button>
+<div id="status"></div>
 
-    document.getElementById("signupForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const data = new FormData(form);
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
+    authDomain: "nasukachat.firebaseapp.com",
+    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukachat",
+    storageBucket: "nasukachat.firebasestorage.app",
+    messagingSenderId: "759589458121",
+    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
+  };
 
-      const params = new URLSearchParams();
-      params.append("action", "signup");
-    
-      params.append("nama", data.get("nama"));
-      params.append("username", data.get("username"));
-      params.append("password", data.get("password"));
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-      try {
-        const res = await fetch(URL_GAS, {
-          method: "POST",
-          body: params
-        });
-        const text = await res.text();
-        if (text.includes("Success")) {
-          alert("Pendaftaran berhasil!");
-          window.location.href = "login.html";
-        } else {
-          alert("Gagal daftar: " + text);
-        }
-      } catch (err) {
-        alert("Gagal konek ke server: " + err.message);
-      }
+  function signup() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    if (!u || !p) return tulis('Isi semua kolom');
+
+    const ref = db.ref('users/' + u);
+    ref.get().then(snap => {
+      if (snap.exists()) return tulis('Username sudah digunakan');
+      const id = 'U' + Date.now();
+      ref.set({ username: u, password: p, id: id, perak: 0, platinum: 0, nama: u });
+      localStorage.setItem('userID', id);
+      localStorage.setItem('username', u);
+      window.location.href = 'index.html';
     });
-  </script>
+  }
+
+  function tulis(teks) {
+    document.getElementById('status').textContent = teks;
+  }
+</script>
+
 </body>
 </html>
