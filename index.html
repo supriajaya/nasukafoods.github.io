@@ -461,7 +461,7 @@ background-color: #388E3C;
    
     <p>.</p>  
     <p>.</p>   
-     <h3><a href="edit-profil-fire.html" style="text-decoration: none; color: inherit;">📁 Edit</a></h3>
+     <h3><a href="edit-profil.html" style="text-decoration: none; color: inherit;">📁 Edit</a></h3>
  <p>.</p>   
    <h3><a href="rules.html" style="text-decoration: none; color: inherit;">📁 Rules</a></h3>
   <p>.</p>     
@@ -584,7 +584,6 @@ background-color: #388E3C;
 
 
 </div>
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const firebaseConfig = {
@@ -602,7 +601,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const db = firebase.database();
-  const userID = localStorage.getItem("userID");
+  const userID = localStorage.getItem("ID");
+  const username = localStorage.getItem("Username");
   const fotoEl = document.getElementById("fotoProfil");
   const namaEl = document.getElementById("namaUser");
   const profilLink = document.getElementById("linkProfil");
@@ -616,34 +616,31 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.textContent = "Masuk";
     btn.href = "login.html";
   } else {
-    db.ref("users/" + userID).once("value").then(snap => {
-      const data = snap.val();
-      if (!data) {
+    db.ref("users").once("value").then(snap => {
+      let ditemukan = false;
+      snap.forEach(child => {
+        const val = child.val();
+        if (val.ID === userID) {
+          const nama = val.Nama || "Tanpa Nama";
+          const foto = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+          namaEl.textContent = nama;
+          fotoEl.src = foto;
+          profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+          btn.textContent = "✅";
+          btn.removeAttribute("href");
+          btn.style.opacity = "0.6";
+          btn.style.cursor = "default";
+          ditemukan = true;
+        }
+      });
+      if (!ditemukan) {
         namaEl.textContent = "Akun tidak ditemukan";
-        profilLink.href = "sign.html";
         btn.textContent = "Masuk";
         btn.href = "login.html";
-        return;
       }
-
-      const nama = data.nama || data.Nama || "Tanpa Nama";
-      const foto = data.foto || data.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-
-      namaEl.textContent = nama;
-      fotoEl.src = foto;
-      profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-      btn.textContent = "✅";
-      btn.removeAttribute("href");
-      btn.style.opacity = "0.6";
-      btn.style.cursor = "default";
-    }).catch(() => {
-      namaEl.textContent = "Gagal memuat data";
-      btn.textContent = "Masuk";
-      btn.href = "login.html";
     });
 
     const notifRef = db.ref("notifPrivat/" + userID);
-
     notifRef.on("value", snap => {
       const data = snap.val();
       if (data) {
@@ -656,7 +653,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         notifEl.style.display = "inline-block";
         notifEl.textContent = `${jumlah} pesan dari ${namaPengirim}`;
-
         notifEl.onclick = () => {
           localStorage.setItem("chatWithID", dariID);
           localStorage.setItem("chatWithName", namaPengirim);
@@ -684,7 +680,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
 function cariUserLain() {
   const namaDicari = document.getElementById("cariNama").value.toLowerCase();
   if (!namaDicari) return;
@@ -697,12 +692,12 @@ function cariUserLain() {
     let hasil = [];
     for (let id in data) {
       const user = data[id];
-      const nama = (user.nama || user.Nama || "").toLowerCase();
+      const nama = (user.Nama || "").toLowerCase();
       if (nama.includes(namaDicari)) {
         hasil.push({
-          id: id,
-          nama: user.nama || user.Nama || "Tanpa Nama",
-          foto: user.foto || user.Foto || "https://nasukafoods.site/gambarkosong.jpg"
+          id: user.ID,
+          nama: user.Nama || "Tanpa Nama",
+          foto: user.Foto || "https://nasukafoods.site/gambarkosong.jpg"
         });
       }
     }
@@ -720,9 +715,7 @@ function cariUserLain() {
     `).join('');
   });
 }
-
-
-
 </script>
+
 </body>  
 </html>  
