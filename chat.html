@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Nasuka Chat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
-  <style>
+<!DOCTYPE html>  
+<html lang="id">  
+<head>  
+  <meta charset="UTF-8" />  
+  <title>Nasuka Chat</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>  
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>  
+  <style>  
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -14,8 +14,16 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
+      overflow: hidden;
     }
-
+    header {
+      background-color: #075e54;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+      flex-shrink: 0;
+    }
     #chat {
       flex: 1;
       overflow-y: auto;
@@ -23,44 +31,15 @@
       display: flex;
       flex-direction: column;
       gap: 5px;
-      min-height: 0;
     }
-
     footer {
+      position: sticky;
+      bottom: 0;
       display: flex;
       padding: 10px;
       background: #f0f0f0;
+      flex-shrink: 0;
     }
-
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: #075e54;
-      color: white;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      gap: 10px;
-    }
-
-    #receiverPhoto {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-
-    header h1 {
-      font-size: 16px;
-      margin: 0;
-      flex: 1;
-    }
-
     .message {
       max-width: 70%;
       padding: 8px 12px;
@@ -68,17 +47,14 @@
       line-height: 1.4;
       word-break: break-word;
     }
-
     .me {
       background-color: #dcf8c6;
       align-self: flex-end;
     }
-
     .them {
       background-color: white;
       align-self: flex-start;
     }
-
     input[type="text"] {
       flex: 1;
       padding: 8px;
@@ -86,7 +62,6 @@
       border-radius: 20px;
       outline: none;
     }
-
     button {
       margin-left: 8px;
       padding: 8px 12px;
@@ -96,86 +71,110 @@
       border-radius: 20px;
       cursor: pointer;
     }
-  </style>
-</head>
-<body>
+  </style>  
+</head>  
+<body>  
 
-<header>
-  <img id="receiverPhoto" src="https://nasukafoods.site/gambarkosong.jpg" alt="foto">
-  <h1 id="receiverName">Memuat...</h1>
-</header>
+<header id="chatHeader">Chat</header>
+<div id="chat"></div>  
 
-<div id="chat" style="margin-top:60px;"></div>
+<footer>  
+  <input type="text" id="messageInput" placeholder="Ketik pesan..."/>  
+  <button id="sendBtn">Kirim</button>  
+</footer>  
 
-<footer>
-  <input type="text" id="messageInput" placeholder="Ketik pesan..."/>
-  <button id="sendBtn">Kirim</button>
-</footer>
+<script>  
+const firebaseConfig = {  
+  apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",  
+  authDomain: "nasukachat.firebaseapp.com",  
+  databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",  
+  projectId: "nasukachat",  
+  storageBucket: "nasukachat.appspot.com",  
+  messagingSenderId: "759589458121",  
+  appId: "1:759589458121:web:d5670da0d080017e2ffd18"  
+};  
+  
+firebase.initializeApp(firebaseConfig);  
+const db = firebase.database();  
+  
+const userID = localStorage.userID || '';  
+const username = localStorage.username || '';  
+const receiverID = localStorage.chatWithID || '';  
+const receiverName = localStorage.chatWithName || 'Teman';  
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-    authDomain: "nasukachat.firebaseapp.com",
-    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasukachat",
-    storageBucket: "nasukachat.firebasestorage.app",
-    messagingSenderId: "759589458121",
-    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-  };
+document.getElementById('chatHeader').textContent = receiverName;
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+const chatRef = db.ref('privateChat/' + [userID, receiverID].sort().join('_'));  
+const chatBox = document.getElementById('chat');  
+const textInput = document.getElementById('messageInput');  
+const sendBtn = document.getElementById('sendBtn');  
+  
+function appendMessage(msg, key) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'message ' + (msg.sender === userID ? 'me' : 'them');
+  wrapper.dataset.key = key;
 
-  const userID = localStorage.userID || '';
-  const username = localStorage.username || '';
-  const receiverID = localStorage.chatWithID || '';
-  const receiverName = localStorage.chatWithName || '';
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+  const nameDiv = document.createElement('div');
+  nameDiv.textContent = msg.nama;
+  nameDiv.style.fontSize = '0.75em';
+  nameDiv.style.color = '#555';
+  nameDiv.style.marginBottom = '3px';
 
-  document.getElementById('receiverName').textContent = receiverName;
+  const text = document.createElement('div');
+  text.textContent = msg.text;
 
-  async function loadProfil() {
-    try {
-      const res = await fetch(`${API_URL}?action=getProfil&id=${receiverID}`);
-      const data = await res.json();
-      if (data && data.Foto) {
-        document.getElementById('receiverPhoto').src = data.Foto;
+  wrapper.appendChild(nameDiv);
+  wrapper.appendChild(text);
+  chatBox.appendChild(wrapper);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  if (msg.sender === userID) {
+    wrapper.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      if (confirm('Hapus pesan ini?')) {
+        chatRef.child(key).remove();
       }
-    } catch {}
+    });
   }
+}
 
-  loadProfil();
+sendBtn.onclick = () => {  
+  const text = textInput.value.trim();  
+  if (!text) return;  
 
-  const chatRef = db.ref('privateChat/' + buatKey(userID, receiverID));
-  const chatBox = document.getElementById('chat');
-  const textInput = document.getElementById('messageInput');
-  const sendBtn = document.getElementById('sendBtn');
+  const waktu = new Date().toISOString();  
+  chatRef.push({  
+    sender: userID,  
+    nama: username,  
+    text,  
+    waktu  
+  });  
 
-  function buatKey(a, b) {
-    return [a, b].sort().join('_');
-  }
+  textInput.value = '';  
+};  
 
-  function appendMessage(msg) {
-    const div = document.createElement('div');
-    div.className = 'message ' + (msg.sender === userID ? 'me' : 'them');
-    div.textContent = msg.text;
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  sendBtn.onclick = () => {
-    const text = textInput.value.trim();
-    if (!text) return;
-    const waktu = new Date().toISOString();
-    chatRef.push({ sender: userID, nama: username, text, waktu });
-    textInput.value = '';
-  };
-
-  chatRef.on('child_added', snapshot => {
-    const data = snapshot.val();
-    appendMessage(data);
+chatRef.limitToLast(100).once('value', snapshot => {
+  const list = [];
+  snapshot.forEach(child => {
+    list.push({ key: child.key, val: child.val() });
   });
-</script>
 
-</body>
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i >= list.length) {
+      clearInterval(interval);
+    } else {
+      const { key, val } = list[i++];
+      appendMessage(val, key);
+    }
+  }, 10);
+});
+
+chatRef.limitToLast(1).on('child_added', snapshot => {
+  const data = snapshot.val();  
+  const key = snapshot.key;  
+  appendMessage(data, key);  
+});
+</script>  
+</body>  
 </html>
