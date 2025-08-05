@@ -1,180 +1,137 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edit Profil - Nasukafoods</title>
+  <meta charset="UTF-8">
+  <title>Edit Profil</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       background: #f4f4f4;
-      margin: 0;
-      padding: 0;
+      padding: 20px;
     }
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 30px;
+    .form-container {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 24px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #4CAF50;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     input, textarea {
       width: 100%;
       padding: 10px;
-      font-size: 14px;
-      border-radius: 4px;
+      margin: 8px 0 16px;
       border: 1px solid #ccc;
+      border-radius: 4px;
     }
-    .profile-pic-preview {
-      display: block;
-      width: 120px;
-      height: 120px;
-      margin: 15px auto;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid #4CAF50;
+    label {
+      font-weight: bold;
     }
-    .btn {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
+    button {
+      background-color: #1877f2;
       color: white;
+      padding: 10px 18px;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 4px;
       cursor: pointer;
-      margin-top: 20px;
     }
-    .btn:hover {
-      background-color: #45a049;
+    button:hover {
+      background-color: #145dbf;
+    }
+    img.preview {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 12px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Edit Profil</h2>
-    <img src="default-avatar.png" id="previewFoto" class="profile-pic-preview" />
-    <div class="form-group">
-      <label for="fotoProfil">Foto Profil</label>
-      <input type="file" id="fotoProfil" accept="image/*" />
-    </div>
-    <div class="form-group">
-      <label for="nama">Nama</label>
-      <input type="text" id="nama" />
-    </div>
-    <div class="form-group">
-      <label for="alamat">Alamat</label>
-      <textarea id="alamat"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="telepon">Telepon</label>
-      <input type="text" id="telepon" />
-    </div>
-    <div class="form-group">
-      <label for="sosial">Sosial Media</label>
-      <input type="text" id="sosial" />
-    </div>
-    <div class="form-group">
-      <label for="kata">Kata-kata Hari Ini</label>
-      <textarea id="kata"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" id="username" />
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" />
-    </div>
-    <button class="btn" onclick="simpanProfil()">Simpan</button>
-  </div>
-
-  <script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
-    const profileData = JSON.parse(localStorage.getItem('profileData'));
-
-    if (!profileData) {
-      alert("Kamu belum login.");
-      window.location.href = 'login.html';
-    } else {
-      document.getElementById('nama').value = profileData.nama || '';
-      document.getElementById('alamat').value = profileData.alamat || '';
-      document.getElementById('telepon').value = profileData.telepon || '';
-      document.getElementById('sosial').value = profileData.sosial || '';
-      document.getElementById('kata').value = profileData.kataHariIni || '';
-      document.getElementById('username').value = profileData.username || '';
-      document.getElementById('password').value = profileData.password || '';
-      document.getElementById('previewFoto').src = profileData.fotoProfil || 'default-avatar.png';
-    }
-
-    document.getElementById('fotoProfil').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
+<div class="form-container">
+  <h2>Edit Profil</h2>
+  <form id="editForm">
+    <input type="hidden" id="ID">
+    <label>Username</label>
+    <input type="text" id="Username">
+    <label>Password</label>
+    <input type="password" id="Password">
+    <label>Nama</label>
+    <input type="text" id="Nama">
+    <label>Telepon</label>
+    <input type="text" id="Telepon">
+    <label>Alamat</label>
+    <textarea id="Alamat"></textarea>
+    <label>Foto Profil</label>
+    <img id="fotoPreview" class="preview" src="">
+    <input type="file" id="fotoProfilInput" accept="image/*">
+    <input type="hidden" id="Foto">
+    <button type="submit">Simpan Perubahan</button>
+  </form>
+  <div id="status"></div>
+</div>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
+    authDomain: "nasukachat.firebaseapp.com",
+    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukachat",
+    storageBucket: "nasukachat.appspot.com",
+    messagingSenderId: "759589458121",
+    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const userID = localStorage.getItem("ID");
+  const username = localStorage.getItem("Username");
+  if (!username) {
+    document.getElementById("status").innerText = "Username tidak ditemukan.";
+  } else {
+    document.getElementById("ID").value = userID;
+    db.ref("users/" + username).once("value").then(snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        document.getElementById("Username").value = data.Username || "";
+        document.getElementById("Password").value = data.Password || "";
+        document.getElementById("Nama").value = data.Nama || "";
+        document.getElementById("Telepon").value = data.Telepon || "";
+        document.getElementById("Alamat").value = data.Alamat || "";
+        document.getElementById("Foto").value = data.Foto || "";
+        document.getElementById("fotoPreview").src = data.Foto || "";
+      }
+    });
+    let selectedFile = null;
+    document.getElementById("fotoProfilInput").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        selectedFile = file;
         const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('previewFoto').src = e.target.result;
-          profileData.fotoProfil = e.target.result;
+        reader.onload = function(evt) {
+          document.getElementById("fotoPreview").src = evt.target.result;
+          document.getElementById("Foto").value = evt.target.result;
         };
         reader.readAsDataURL(file);
       }
     });
-
-    function simpanProfil() {
-      profileData.nama = document.getElementById('nama').value;
-      profileData.alamat = document.getElementById('alamat').value;
-      profileData.telepon = document.getElementById('telepon').value;
-      profileData.sosial = document.getElementById('sosial').value;
-      profileData.kataHariIni = document.getElementById('kata').value;
-      profileData.username = document.getElementById('username').value;
-      profileData.password = document.getElementById('password').value;
-
-      localStorage.setItem('profileData', JSON.stringify(profileData));
-
-      fetch(GAS_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          aksi: 'updateProfil',
-          id: profileData.id,
-          nama: profileData.nama,
-          alamat: profileData.alamat,
-          telepon: profileData.telepon,
-          sosial: profileData.sosial,
-          kataHariIni: profileData.kataHariIni,
-          username: profileData.username,
-          password: profileData.password,
-          fotoProfil: profileData.fotoProfil || ''
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 'success') {
-          alert("Profil berhasil disimpan dan diperbarui.");
-          window.location.href = 'profil-vip.html';
-        } else {
-          alert("Gagal memperbarui data ke server.");
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Terjadi kesalahan saat menyimpan ke server.");
+    document.getElementById("editForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = {
+        Username: document.getElementById("Username").value,
+        Password: document.getElementById("Password").value,
+        Nama: document.getElementById("Nama").value,
+        Telepon: document.getElementById("Telepon").value,
+        Alamat: document.getElementById("Alamat").value,
+        Foto: document.getElementById("Foto").value
+      };
+      db.ref("users/" + username).update(data).then(() => {
+        document.getElementById("status").innerText = "Profil berhasil diperbarui.";
+      }).catch(() => {
+        document.getElementById("status").innerText = "Gagal memperbarui profil.";
       });
-    }
-  </script>
+    });
+  }
+</script>
 </body>
 </html>
