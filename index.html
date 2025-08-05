@@ -3,6 +3,12 @@
   <meta charset="UTF-8" />  
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
   <title>Nasuka Wireless</title>  
+  
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  
+  
+  
   <style>  
     body {  
       margin: 0;  
@@ -430,21 +436,32 @@ background-color: #388E3C;
       
       <div class="nasuka-info centered">  
         <div class="fake-online">🟢 Online 327 pengguna</div>  
-        <a href="https://nasukafoods.site/nasuka.apk" class="download-link" download>Aplikasi Nasuka</a>  
+        
+        <a id="btnLoginNasuka" class="download-link" href="login.html">Masuk</a>
+        
+        
+        
       </div>  
     </div>  <div class="nasuka">  
   <div class="nasuka-info left">  
     
    
    
+    
+ 
+ <span id="notifBadge" style="position:absolute;top:5px;right:5px;background:red;color:white;border-radius:50%;padding:2px 6px;font-size:12px;display:none;">0</span>
    
-   
-<h3><a id="linkProfil" href=".html" style="text-decoration: none; color: inherit;">🗂️ PROFIL</a></h3>
+<h3>
+    
+    
+    
+    <a id="linkProfil" href="profil.html" style="text-decoration: none; color: inherit;">🗂️ PROFIL</a>
+    </h3>
 
    
     <p>.</p>  
     <p>.</p>   
-     <h3><a href="faq.html" style="text-decoration: none; color: inherit;">📁 Faq</a></h3>
+     <h3><a href="edit-profil-fire.html" style="text-decoration: none; color: inherit;">📁 Edit</a></h3>
  <p>.</p>   
    <h3><a href="rules.html" style="text-decoration: none; color: inherit;">📁 Rules</a></h3>
   <p>.</p>     
@@ -457,12 +474,10 @@ background-color: #388E3C;
    <p>.</p>   
   
   
-    <h3><a href="chat-list.html" style="text-decoration: none; color: inherit;">📁 Chat Whatsapp KW</a></h3>
+    <h3><a href="chat-list.html" style="text-decoration: none; color: inherit;">📁 Whatsapp KW</a></h3>
 
     
-    
-    
-    
+ 
     
     
     </div>  
@@ -474,6 +489,17 @@ background-color: #388E3C;
   <input type="text" id="cariNama" placeholder="Cari Nama User" style="padding:6px; width: 70%;">
   <button onclick="cariUserLain()" style="padding:6px 12px;">Cari</button>
 </div>
+
+
+<div id="modalHasil" style="display:none; position:fixed; top:20%; left:5%; right:5%; background:white; padding:16px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.3); max-height:60vh; overflow-y:auto; z-index:1000;">
+  <div style="text-align:right;">
+    <button onclick="document.getElementById('modalHasil').style.display='none'" style="padding:4px 8px;">✖</button>
+  </div>
+  <div id="listUser"></div>
+</div>
+
+
+
   
   
   <marquee behavior="scroll" direction="left" scrollamount="4" class="blink-marquee">
@@ -559,80 +585,144 @@ background-color: #388E3C;
 
 </div>
 
-
-
-  
 <script>
-  
-const baseURL = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
-const userId = new URLSearchParams(location.search).get("id") || localStorage.getItem("userID");
+document.addEventListener("DOMContentLoaded", function () {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
+    authDomain: "nasukachat.firebaseapp.com",
+    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukachat",
+    storageBucket: "nasukachat.firebasestorage.app",
+    messagingSenderId: "759589458121",
+    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
+  };
 
-const fotoProfil = document.getElementById("fotoProfil");
-const linkProfil = document.getElementById("linkProfil");
-if (linkProfil) linkProfil.href = userId ? `profil.html?id=${encodeURIComponent(userId)}` : "login.html";
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
+  }
 
-if (userId) {
-  fetch(`${baseURL}?action=getProfil&id=${userId}`)
-    .then(res => res.json())
-    .then(data => {
-      if (fotoProfil) {
-        const foto = data?.Foto;
-        fotoProfil.src = (foto && foto !== "undefined" && foto !== "null") ? foto : "https://nasukafoods.site/gambarkosong.jpg";
-        fotoProfil.alt = data?.Nama || "User";
-        fotoProfil.style.cursor = "pointer";
-        fotoProfil.addEventListener("click", () => {
-          window.location.href = `profil.html?id=${encodeURIComponent(userId)}`;
-        });
+  const db = firebase.database();
+  const userID = localStorage.getItem("userID");
+  const fotoEl = document.getElementById("fotoProfil");
+  const namaEl = document.getElementById("namaUser");
+  const profilLink = document.getElementById("linkProfil");
+  const btn = document.getElementById("btnLoginNasuka");
+  const notifEl = document.getElementById("notifBadge");
+
+  if (!userID) {
+    namaEl.textContent = "Silakan login";
+    fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
+    profilLink.href = "sign.html";
+    btn.textContent = "Masuk";
+    btn.href = "login.html";
+  } else {
+    db.ref("users/" + userID).once("value").then(snap => {
+      const data = snap.val();
+      if (!data) {
+        namaEl.textContent = "Akun tidak ditemukan";
+        profilLink.href = "sign.html";
+        btn.textContent = "Masuk";
+        btn.href = "login.html";
+        return;
       }
 
-      document.getElementById("namaUser").textContent = data?.Nama || "User";
+      const nama = data.nama || data.Nama || "Tanpa Nama";
+      const foto = data.foto || data.Foto || "https://nasukafoods.site/gambarkosong.jpg";
 
-      const downloadBtn = document.querySelector('.download-link');
-      if (downloadBtn) {
-        downloadBtn.removeAttribute('href');
-        downloadBtn.removeAttribute('download');
-        downloadBtn.style.backgroundColor = '#ccc';
-        downloadBtn.style.cursor = 'not-allowed';
-        downloadBtn.style.border = '2px solid #999';
-        downloadBtn.textContent = '✔️ Sudah Masuk';
+      namaEl.textContent = nama;
+      fotoEl.src = foto;
+      profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+      btn.textContent = "✅";
+      btn.removeAttribute("href");
+      btn.style.opacity = "0.6";
+      btn.style.cursor = "default";
+    }).catch(() => {
+      namaEl.textContent = "Gagal memuat data";
+      btn.textContent = "Masuk";
+      btn.href = "login.html";
+    });
+
+    const notifRef = db.ref("notifPrivat/" + userID);
+
+    notifRef.on("value", snap => {
+      const data = snap.val();
+      if (data) {
+        const keys = Object.keys(data);
+        const jumlah = keys.length;
+        const lastKey = keys[keys.length - 1];
+        const lastNotif = data[lastKey];
+        const dariID = lastNotif.dari;
+        const namaPengirim = lastNotif.nama || "pengguna";
+
+        notifEl.style.display = "inline-block";
+        notifEl.textContent = `${jumlah} pesan dari ${namaPengirim}`;
+
+        notifEl.onclick = () => {
+          localStorage.setItem("chatWithID", dariID);
+          localStorage.setItem("chatWithName", namaPengirim);
+          db.ref("notifPrivat/" + userID).remove().then(() => {
+            notifEl.style.display = "none";
+            window.location.href = "chat.html";
+          });
+        };
+      } else {
+        notifEl.style.display = "none";
       }
     });
-}
+  }
 
-let onlineCount = Math.floor(Math.random() * 31) + 310;
-const onlineEl = document.querySelector('.fake-online');
-function updateOnline() {
-  const delta = Math.floor(Math.random() * 5) - 2;
-  onlineCount = Math.max(310, Math.min(onlineCount + delta, 500));
-  onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
-}
-setInterval(updateOnline, 5000);
+  let online = Math.floor(Math.random() * 31) + 300;
+  const onlineEl = document.querySelector(".fake-online");
+
+  function updateOnline() {
+    const delta = Math.floor(Math.random() * 5) - 2;
+    online = Math.max(300, Math.min(online + delta, 500));
+    onlineEl.textContent = `🟢 Online ${online} pengguna`;
+  }
+
+  setInterval(updateOnline, 5000);
+});
+
+
 
 function cariUserLain() {
-  const namaInput = document.getElementById("cariNama").value.trim().toLowerCase();
-  if (!namaInput) return alert("Masukkan nama pengguna.");
+  const namaDicari = document.getElementById("cariNama").value.toLowerCase();
+  if (!namaDicari) return;
+  const listEl = document.getElementById("listUser");
+  listEl.innerHTML = "Memuat...";
+  document.getElementById("modalHasil").style.display = "block";
 
-  fetch(`${baseURL}?action=getSemuaUser`)
-    .then(res => res.json())
-    .then(users => {
-    
-    const cocok = users.find(user => (user.Nama || "").trim().toLowerCase() === namaInput);
-    
-    
-      
-      if (cocok?.ID) {
-        window.location.href = `profil.html?id=${encodeURIComponent(cocok.ID)}`;
-      } else {
-        alert("Pengguna tidak ditemukan.");
+  firebase.database().ref("users").once("value").then(snap => {
+    const data = snap.val();
+    let hasil = [];
+    for (let id in data) {
+      const user = data[id];
+      const nama = (user.nama || user.Nama || "").toLowerCase();
+      if (nama.includes(namaDicari)) {
+        hasil.push({
+          id: id,
+          nama: user.nama || user.Nama || "Tanpa Nama",
+          foto: user.foto || user.Foto || "https://nasukafoods.site/gambarkosong.jpg"
+        });
       }
-    })
-    .catch(() => alert("Terjadi kesalahan saat mencari pengguna."));
+    }
+
+    if (hasil.length === 0) {
+      listEl.innerHTML = "Tidak ditemukan.";
+      return;
+    }
+
+    listEl.innerHTML = hasil.map(u => `
+      <div onclick="window.location.href='profil.html?id=${encodeURIComponent(u.id)}'" style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid #eee;cursor:pointer;">
+        <img src="${u.foto}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+        <span>${u.nama}</span>
+      </div>
+    `).join('');
+  });
 }
 
-   
+
+
 </script>
-
-
-
 </body>  
 </html>  
