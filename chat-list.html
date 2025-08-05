@@ -84,32 +84,31 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  const userID = localStorage.userID || '';
-  const semuaUser = JSON.parse(localStorage.getItem("userData") || "{}");
+  const userID = localStorage.getItem("ID") || "";
 
   function tampilkanUserList() {
     const list = document.getElementById("userList");
     list.innerHTML = '';
     const keyword = document.getElementById("search").value.toLowerCase();
 
-    db.ref('users').once('value', (snapshot) => {
+    db.ref('users').once('value').then(snapshot => {
       const data = snapshot.val() || {};
       Object.keys(data).forEach(id => {
         if (id === userID) return;
         const user = data[id];
-        const nama = (user.nama || '').toLowerCase();
+        const nama = (user.Nama || '').toLowerCase();
         if (!nama.includes(keyword)) return;
 
         const div = document.createElement('div');
         div.className = 'user';
         div.id = `user-${id}`;
         div.innerHTML = `
-          <div class="username">${user.nama || ''}</div>
-          <div class="status">Status: ${user.status || '-'}</div>
+          <div class="username">${user.Nama || ''}</div>
+          <div class="status">Status: ${user.Status || '-'}</div>
         `;
         div.onclick = () => {
           localStorage.setItem('chatWithID', id);
-          localStorage.setItem('chatWithName', user.nama || '');
+          localStorage.setItem('chatWithName', user.Nama || '');
           window.location.href = 'chat.html';
         };
         list.appendChild(div);
@@ -117,32 +116,29 @@
     });
   }
 
-  async function tampilkanNotifikasi() {
-    const snap = await db.ref(`notifPrivat/${userID}`).once("value");
-    const data = snap.val() || {};
-    Object.keys(data).forEach(kirimID => {
-      const pesan = data[kirimID];
-      const namaPengirim = pesan.nama || "Pengguna";
-      
-      
-      const isi = typeof pesan === 'object' && pesan.isi ? pesan.isi : '[pesan baru]';
-      
-      
-      
-      const div = document.createElement("div");
-      div.className = "user";
-      div.innerHTML = `
-        <div class="username">${namaPengirim}</div>
-        <div class="status">${isi}</div>
-      `;
-      div.onclick = () => {
-        localStorage.setItem("chatWithID", kirimID);
-        localStorage.setItem("chatWithName", namaPengirim);
-        db.ref("notifPrivat/" + userID + "/" + kirimID).remove().then(() => {
-          window.location.href = "chat.html";
-        });
-      };
-      document.getElementById("userList").appendChild(div);
+  function tampilkanNotifikasi() {
+    db.ref(`notifPrivat/${userID}`).once("value").then(snap => {
+      const data = snap.val() || {};
+      Object.keys(data).forEach(kirimID => {
+        const pesan = data[kirimID];
+        const namaPengirim = pesan.Nama || "Pengguna";
+        const isi = typeof pesan === 'object' && pesan.isi ? pesan.isi : '[pesan baru]';
+
+        const div = document.createElement("div");
+        div.className = "user";
+        div.innerHTML = `
+          <div class="username">${namaPengirim}</div>
+          <div class="status">${isi}</div>
+        `;
+        div.onclick = () => {
+          localStorage.setItem("chatWithID", kirimID);
+          localStorage.setItem("chatWithName", namaPengirim);
+          db.ref("notifPrivat/" + userID + "/" + kirimID).remove().then(() => {
+            window.location.href = "chat.html";
+          });
+        };
+        document.getElementById("userList").appendChild(div);
+      });
     });
   }
 
