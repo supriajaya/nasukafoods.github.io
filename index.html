@@ -585,6 +585,11 @@ background-color: #388E3C;
 
 </div>
 <script>
+    
+    
+    
+    
+    
 document.addEventListener("DOMContentLoaded", function () {
   const firebaseConfig = {
     apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
@@ -616,27 +621,55 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.textContent = "Masuk";
     btn.href = "login.html";
   } else {
-    db.ref("users").once("value").then(snap => {
-      let ditemukan = false;
-      snap.forEach(child => {
-        const val = child.val();
-        if (val.ID === userID) {
-          const nama = val.Nama || "Tanpa Nama";
-          const foto = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-          namaEl.textContent = nama;
-          fotoEl.src = foto;
-          profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-          btn.textContent = "✅";
-          btn.removeAttribute("href");
-          btn.style.opacity = "0.6";
-          btn.style.cursor = "default";
-          ditemukan = true;
-        }
+    const nama = localStorage.getItem("Nama");
+    const foto = localStorage.getItem("Foto");
+
+    if (nama && foto) {
+      namaEl.textContent = nama;
+      fotoEl.src = foto;
+      profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+      btn.textContent = "✅";
+      btn.removeAttribute("href");
+      btn.style.opacity = "0.6";
+      btn.style.cursor = "default";
+    } else {
+      db.ref("users").once("value").then(snap => {
+        snap.forEach(child => {
+          const val = child.val();
+          if (val.ID === userID) {
+            const namaBaru = val.Nama || "Tanpa Nama";
+            const fotoBaru = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+            localStorage.setItem("Nama", namaBaru);
+            localStorage.setItem("Foto", fotoBaru);
+            namaEl.textContent = namaBaru;
+            fotoEl.src = fotoBaru;
+            profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+            btn.textContent = "✅";
+            btn.removeAttribute("href");
+            btn.style.opacity = "0.6";
+            btn.style.cursor = "default";
+          }
+        });
       });
-      if (!ditemukan) {
-        namaEl.textContent = "Akun tidak ditemukan";
-        btn.textContent = "Masuk";
-        btn.href = "login.html";
+    }
+
+    db.ref("users").on("child_changed", snap => {
+      const val = snap.val();
+      if (val.ID === userID) {
+        localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
+        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+        namaEl.textContent = val.Nama || "Tanpa Nama";
+        fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+      }
+    });
+
+    db.ref("users").on("child_added", snap => {
+      const val = snap.val();
+      if (val.ID === userID) {
+        localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
+        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+        namaEl.textContent = val.Nama || "Tanpa Nama";
+        fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
       }
     });
 
@@ -679,42 +712,8 @@ document.addEventListener("DOMContentLoaded", function () {
   setInterval(updateOnline, 5000);
 });
 
+    
 
-function cariUserLain() {
-  const namaDicari = document.getElementById("cariNama").value.toLowerCase();
-  if (!namaDicari) return;
-  const listEl = document.getElementById("listUser");
-  listEl.innerHTML = "Memuat...";
-  document.getElementById("modalHasil").style.display = "block";
-
-  firebase.database().ref("users").once("value").then(snap => {
-    const data = snap.val();
-    let hasil = [];
-    for (let id in data) {
-      const user = data[id];
-      const nama = (user.Nama || "").toLowerCase();
-      if (nama.includes(namaDicari)) {
-        hasil.push({
-          id: user.ID,
-          nama: user.Nama || "Tanpa Nama",
-          foto: user.Foto || "https://nasukafoods.site/gambarkosong.jpg"
-        });
-      }
-    }
-
-    if (hasil.length === 0) {
-      listEl.innerHTML = "Tidak ditemukan.";
-      return;
-    }
-
-    listEl.innerHTML = hasil.map(u => `
-      <div onclick="window.location.href='profil.html?id=${encodeURIComponent(u.id)}'" style="display:flex;align-items:center;gap:10px;padding:8px;border-bottom:1px solid #eee;cursor:pointer;">
-        <img src="${u.foto}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
-        <span>${u.nama}</span>
-      </div>
-    `).join('');
-  });
-}
 </script>
 
 </body>  
