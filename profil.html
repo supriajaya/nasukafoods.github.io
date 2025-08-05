@@ -4,30 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profil</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: #f5f5f5;
     }
-
-    header {
-      background-color: #2196F3;
-      color: white;
-      padding: 12px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
     .container {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       padding: 10px;
     }
-
     .nasuka {
       flex: 0 0 48%;
       background-color: #fff;
@@ -38,309 +28,117 @@
       text-align: center;
       box-sizing: border-box;
     }
-
     .nasuka img {
       width: 100%;
       height: auto;
       display: block;
     }
-
     .nasuka-info {
       padding: 10px;
     }
-
-    .nasuka-info.centered {
-      text-align: center;
-    }
-
     .nasuka-info.left {
       text-align: left;
     }
-
-    .nasuka-info h3 {
-      margin: 0 0 5px;
-      font-size: 16px;
-    }
-
-    .download-link {
-      display: inline-block;
-      background-color: #2196F3;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      margin-top: 10px;
-      border: 2px solid #FFD700;
-    }
-
-    .fake-online {
-      font-size: 13px;
-      color: green;
-      margin-bottom: 8px;
-    }
-
-    .artikel {
-      background-color: #ffffff;
-      padding: 20px;
-      margin: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .artikel h3 {
-      margin-top: 0;
-      color: #2196F3;
-    }
-
-    .login-btn {
-      display: inline-block;
+    .login-btn, .teman-btn {
       margin-top: 10px;
       padding: 10px 20px;
       background-color: #4CAF50;
       color: white;
       border: none;
       border-radius: 6px;
-      text-decoration: none;
       font-weight: bold;
       cursor: pointer;
-    }
-
-    .login-btn:hover {
-      background-color: #388E3C;
-    }
-
-    @media (max-width: 480px) {
-      .nasuka {
-        flex: 0 0 49%;
-        font-size: 13px;
-      }
-
-      .nasuka-info h3 {
-        font-size: 14px;
-      }
-
-      .fake-online {
-        font-size: 12px;
-      }
-
-      .download-link {
-        padding: 8px 12px;
-        font-size: 13px;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="nasuka">
-      <img id="foto-profil" src="https://nasukafoods.site/gambarkosong.jpg" alt="FOTO PROFIL" />
-      <div class="nasuka-info centered">
-        <div class="fake-online">🟢 Online 327 pengguna</div>
-        <a href="profil-iframe.html" class="download-link" download>Detail</a>
-      </div>
-    </div>
 
-    <div class="nasuka">
-        
-        <div class="nasuka-info left">
-  <p id="profil-nama">🎇 NAMA</p>
-  <p id="profil-kota">🎇 KOTA</p>
-  <p id="profil-jenis">🎇 JENIS</p>
-  <p id="profil-chapter">🎇 CHAPTER</p>
-  <p id="profil-gold">🎇 GOLD</p>
-  <p id="profil-badge">🎇 BADGE</p>
-  <p id="profil-rank">🎇 RANK</p>
-  <h3 id="logoutBtn">🚪 Logout</h3>
-</div>
-        </div>
-   </div>     
-     
- 
-
-  <div class="artikel" id="postPostingan">
-    <h3>📝 Tulis Postingan</h3>
-    <textarea id="postingan" rows="4" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;" placeholder="Tulis sesuatu..."></textarea>
-    <input type="file" id="mediaFile" accept="image/*,video/*" style="margin-top:10px;"><br/>
-    <button class="login-btn" onclick="postKeNasukaMedia()">Posting</button>
+<div class="container">
+  <div class="nasuka">
+    <img id="foto-profil" src="https://nasukafoods.site/gambarkosong.jpg" alt="FOTO PROFIL" />
+    <br/>
+    <div id="tombolAksi"></div>
   </div>
 
-  <div id="listPostingan" class="container" style="margin-top:20px; flex-wrap:wrap;"></div>
+  <div class="nasuka">
+    <div class="nasuka-info left" id="dataUser">
+      <p>🎇 Nama</p>
+      <p>🎇 Perak</p>
+      <p>🎇 Jenis</p>
+      <p>🎇 Platinum</p>
+      <p>🎇 Gold</p>
+      <p>🎇 Saldo</p>
+      <p>🎇 Username</p>
+      <h3 id="logoutBtn">🚪 Logout</h3>
+    </div>
+  </div>
+</div>
 
-  <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
-    const urlParams = new URLSearchParams(location.search);
-    const id = urlParams.get("id") || localStorage.getItem("userID");
-    let nama = "";
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
+  authDomain: "nasukachat.firebaseapp.com",
+  databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nasukachat",
+  storageBucket: "nasukachat.firebasestorage.app",
+  messagingSenderId: "759589458121",
+  appId: "1:759589458121:web:d5670da0d080017e2ffd18"
+};
 
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-if (id) {
-  fetch(`${GAS_URL}?action=getProfil&id=${id}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.Foto) document.getElementById("foto-profil").src = data.Foto;
-      if (data.Nama) nama = data.Nama;
+const urlParams = new URLSearchParams(location.search);
+const viewedID = urlParams.get("id") || localStorage.getItem("userID");
+const currentID = localStorage.getItem("userID");
 
-      const infoEl = document.querySelector('.nasuka-info.left');
-      infoEl.innerHTML = `
-        <p>🎇 ${data.Nama || 'N/A'}</p>
-        <p>🎇 ${data.Perak || 'N/A'}</p>
-        <p>🎇 ${data.Jenis || 'N/A'}</p>
-        <p>🎇 ${data.Platinum || 'N/A'}</p>
-        <p>🎇 ${data.Gold || 0}</p>
-        <p>🎇 ${data.Saldo || '-'}</p>
-        <p>🎇 ${data.Username || '-'}</p>
-        <h3 id="logoutBtn">🚪 Logout</h3>
-      `;
+if (!currentID) location.href = "sign.html";
 
-      document.getElementById("logoutBtn").onclick = () => {
-        localStorage.clear();
-        location.href = "index.html";
-      };
+db.ref("users/" + viewedID).get().then(snap => {
+  const data = snap.val();
+  if (!data) return alert("Data tidak ditemukan");
 
-      if (id === localStorage.getItem("userID")) tampilkanPostingan();
-    });
-}
+  document.getElementById("foto-profil").src = data.foto || "https://nasukafoods.site/gambarkosong.jpg";
 
+  document.getElementById("dataUser").innerHTML = `
+    <p>🎇 ${data.nama || '-'}</p>
+    <p>🎇 ${data.perak || 0}</p>
+    <p>🎇 ${data.jenis || '-'}</p>
+    <p>🎇 ${data.platinum || 0}</p>
+    <p>🎇 ${data.gold || 0}</p>
+    <p>🎇 ${data.saldo || 0}</p>
+    <p>🎇 ${data.username || '-'}</p>
+    <h3 id="logoutBtn">🚪 Logout</h3>
+  `;
 
+  document.getElementById("logoutBtn").onclick = () => {
+    localStorage.clear();
+    location.href = "index.html";
+  };
 
-if (id) {
-  fetch(`${GAS_URL}?action=getProfil&id=${id}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.Foto) document.getElementById("foto-profil").src = data.Foto;
-      if (data.Nama) nama = data.Nama;
-
-      document.getElementById("profil-nama").textContent = `🎇 ${data.Nama || 'N/A'}`;
-      document.getElementById("profil-kota").textContent = `🎇 ${data.Kota || 'N/A'}`;
-      document.getElementById("profil-jenis").textContent = `🎇 ${data.Jenis || 'N/A'}`;
-      document.getElementById("profil-chapter").textContent = `🎇 ${data.Usia || data.Chapter || 'N/A'}`;
-      document.getElementById("profil-gold").textContent = `🎇 ${data.Gold || 0}`;
-      document.getElementById("profil-badge").textContent = `🎇 ${data.Saldo || data.Badge || '-'}`;
-      document.getElementById("profil-rank").textContent = `🎇 ${data.Username || data.Rank || '-'}`;
-
-      document.getElementById("logoutBtn").onclick = () => {
-        localStorage.clear();
-        location.href = "index.html";
-      };
-
-      if (id === localStorage.getItem("userID")) tampilkanPostingan();
-    });
-}
-
-
-
-
-
-    let onlineCount = Math.floor(Math.random() * 31) + 310;
-    const onlineEl = document.querySelector('.fake-online');
-
-    function updateOnline() {
-      const delta = Math.floor(Math.random() * 5) - 2;
-      onlineCount += delta;
-      if (onlineCount < 310) onlineCount = 310;
-      if (onlineCount > 340) onlineCount = 500;
-      onlineEl.textContent = `🟢 Online ${onlineCount} pengguna`;
-    }
-    setInterval(updateOnline, 5000);
-
-    
-    document.getElementById("logoutBtn").onclick = () => {
-      localStorage.clear();
-      location.href = "index.html";
-    };
-
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function postKeNasukaMedia() {
-      const isi = document.getElementById("postingan").value.trim();
-      const fileInput = document.getElementById("mediaFile");
-      const file = fileInput.files[0];
-
-      if (!isi && !file) return alert("Isi atau media harus diisi.");
-
-      const formData = new FormData();
-      formData.append("action", "nasukaMedia");
-      formData.append("id", id);
-      formData.append("nama", nama);
-      formData.append("teks", isi);
-
-      if (file) {
-        const base64 = await toBase64(file);
-        formData.append("foto", base64);
+  if (viewedID !== currentID) {
+    db.ref("friends/" + currentID + "/" + viewedID).get().then(friendSnap => {
+      if (!friendSnap.exists()) {
+        const btn = document.createElement("button");
+        btn.innerText = "Teman";
+        btn.className = "teman-btn";
+        btn.onclick = () => {
+          db.ref("friends/" + currentID + "/" + viewedID).set(true);
+          db.ref("friends/" + viewedID + "/" + currentID).set(true);
+          btn.remove();
+        };
+        document.getElementById("tombolAksi").appendChild(btn);
       }
+    });
+  } else {
+    const editBtn = document.createElement("button");
+    editBtn.className = "login-btn";
+    editBtn.innerText = "Ubah Profil";
+    editBtn.onclick = () => location.href = "edit-profil-fire.html";
+    document.getElementById("tombolAksi").appendChild(editBtn);
+  }
+});
+</script>
 
-      fetch(GAS_URL, {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.text())
-      .then(() => {
-        alert("✅ Berhasil diposting!");
-        document.getElementById("postingan").value = "";
-        fileInput.value = "";
-        tampilkanPostingan();
-      })
-      .catch(() => alert("Gagal posting."));
-    }
-
-    function tampilkanPostingan() {
-      fetch(`${GAS_URL}?action=getNasukaMe`)
-        .then(res => res.json())
-        .then(data => {
-          const kontainer = document.getElementById("listPostingan");
-          kontainer.innerHTML = "";
-
-          data.reverse().forEach(post => {
-            if (post.ID !== id) return;
-            const div = document.createElement("div");
-            div.className = "nasuka";
-
-            const waktu = new Date(post.Waktu).toLocaleString("id-ID", {
-              dateStyle: "short",
-              timeStyle: "short"
-            });
-
-            div.innerHTML = `
-              <div style="display:flex; align-items:center; padding:10px;">
-                <img src="${post.FotoProfil || 'https://nasukafoods.site/nasukafoods.jpg'}" alt="Profil" style="width:40px; height:40px; border-radius:50%; margin-right:10px;">
-                <div>
-                  <h3 style="margin:0;">
-                    <a href="profil.html?id=${post.ID}" style="text-decoration:none; color:#2196F3;">
-                      ${post.Nama || '(Tanpa Nama)'}
-                    </a>
-                  </h3>
-                  <div style="font-size:12px; color:gray;">${waktu}</div>
-                </div>
-              </div>
-              <img src="${post.Foto || ''}" alt="Foto" />
-              <div class="nasuka-info left">
-                <p>${post.Teks || ''}</p>
-              </div>
-            `;
-            kontainer.appendChild(div);
-          });
-        });
-    }
-
-    const idLogin = localStorage.getItem("userID");
-    if (idLogin === id) {
-      document.getElementById("postPostingan").style.display = "block";
-      document.getElementById("listPostingan").style.display = "block";
-      tampilkanPostingan();
-    } else {
-      document.getElementById("postPostingan").style.display = "none";
-      document.getElementById("listPostingan").style.display = "none";
-    }
-  </script>
 </body>
 </html>
