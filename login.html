@@ -110,8 +110,13 @@
         const val = child.val();
 
         if (val.Username === username && val.Password === password) {
-          localStorage.setItem("ID", val.ID);
-          localStorage.setItem("Username", val.Username);
+    
+    localStorage.setItem("ID", val.ID);
+    localStorage.setItem("Nama", val.Nama);
+    localStorage.setItem("Foto", val.Foto);
+    localStorage.setItem("Saldo", val.Saldo);      
+    localStorage.setItem("Username", val.Username);     
+          
           window.location.href = "index.html";
           found = true;
         }
