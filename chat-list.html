@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Chat Teman</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
   <style>
     body {
       margin: 0;
@@ -67,71 +69,89 @@
 </div>
 
 <div id="userList"></div>
+
 <script>
-  const userID = localStorage.userID;
-  const username = localStorage.username;
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
+  const firebaseConfig = {
+    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
+    authDomain: "nasukachat.firebaseapp.com",
+    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukachat",
+    storageBucket: "nasukachat.firebasestorage.app",
+    messagingSenderId: "759589458121",
+    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
+  };
 
-  let notifikasiMap = {};
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  async function ambilNotifikasi() {
-    try {
-      const res = await fetch(`${API_URL}?action=getChatList&id=${userID}`);
-      const data = await res.json(); // ✅ pastikan parsing JSON
-      // console.log(data); // opsional debug
-      notifikasiMap = {};
-      data.forEach(user => {
-        if (user.BelumDibaca && user.BelumDibaca > 0) {
-          notifikasiMap[user.ID] = user.BelumDibaca;
-        }
-      });
-    } catch (e) {
-      console.error("Gagal ambil notifikasi:", e);
-      notifikasiMap = {};
-    }
-  }
+  const userID = localStorage.userID || '';
+  const semuaUser = JSON.parse(localStorage.getItem("userData") || "{}");
 
-  async function loadUserList() {
-    try {
-      await ambilNotifikasi();
-      const res = await fetch(`${API_URL}?action=getSemuaUser`);
-      const data = await res.json();
-      const list = document.getElementById('userList');
-      list.innerHTML = '';
-      const keyword = document.getElementById('search').value.toLowerCase();
-      data.forEach(user => {
-        if (user.ID === userID) return;
-        const nama = user.Nama?.toLowerCase() || '';
-        const uname = user.Username?.toLowerCase() || '';
-        if (!nama.includes(keyword) && !uname.includes(keyword)) return;
+  function tampilkanUserList() {
+    const list = document.getElementById("userList");
+    list.innerHTML = '';
+    const keyword = document.getElementById("search").value.toLowerCase();
 
-        const jumlah = notifikasiMap[user.ID] || 0;
-        const notif = jumlah > 0 ? `<span style='color:red; font-weight:bold;'> (${jumlah} pesan baru)</span>` : '';
+    db.ref('users').once('value', (snapshot) => {
+      const data = snapshot.val() || {};
+      Object.keys(data).forEach(id => {
+        if (id === userID) return;
+        const user = data[id];
+        const nama = (user.nama || '').toLowerCase();
+        if (!nama.includes(keyword)) return;
 
         const div = document.createElement('div');
         div.className = 'user';
+        div.id = `user-${id}`;
         div.innerHTML = `
-          <div class="username">${user.Nama} ${notif}</div>
-          <div class="status">Status: ${user.Status}</div>
+          <div class="username">${user.nama || ''}</div>
+          <div class="status">Status: ${user.status || '-'}</div>
         `;
         div.onclick = () => {
-          localStorage.setItem('chatWithID', user.ID);
-          localStorage.setItem('chatWithName', user.Nama);
+          localStorage.setItem('chatWithID', id);
+          localStorage.setItem('chatWithName', user.nama || '');
           window.location.href = 'chat.html';
         };
         list.appendChild(div);
       });
-    } catch (err) {
-      alert("Gagal memuat daftar pengguna: " + err.message);
-    }
+    });
   }
 
-  document.getElementById('search').addEventListener('input', loadUserList);
-  document.getElementById('searchBtn').addEventListener('click', loadUserList);
+  async function tampilkanNotifikasi() {
+    const snap = await db.ref(`notifPrivat/${userID}`).once("value");
+    const data = snap.val() || {};
+    Object.keys(data).forEach(kirimID => {
+      const pesan = data[kirimID];
+      const namaPengirim = pesan.nama || "Pengguna";
+      
+      
+      const isi = typeof pesan === 'object' && pesan.isi ? pesan.isi : '[pesan baru]';
+      
+      
+      
+      const div = document.createElement("div");
+      div.className = "user";
+      div.innerHTML = `
+        <div class="username">${namaPengirim}</div>
+        <div class="status">${isi}</div>
+      `;
+      div.onclick = () => {
+        localStorage.setItem("chatWithID", kirimID);
+        localStorage.setItem("chatWithName", namaPengirim);
+        db.ref("notifPrivat/" + userID + "/" + kirimID).remove().then(() => {
+          window.location.href = "chat.html";
+        });
+      };
+      document.getElementById("userList").appendChild(div);
+    });
+  }
 
-  // Jalankan pertama kali
-  loadUserList();
+  document.getElementById('searchBtn').addEventListener('click', () => {
+    tampilkanUserList();
+    tampilkanNotifikasi();
+  });
+
+  tampilkanNotifikasi();
 </script>
-
 </body>
 </html>
