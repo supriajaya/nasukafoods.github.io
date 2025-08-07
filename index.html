@@ -1,759 +1,692 @@
-<!DOCTYPE html>  <html lang="id">  
-<head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
-  <title>Nasuka Wireless</title>  
-  
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  
-  
-  
-  <style>  
-    body {  
-      margin: 0;  
-      font-family: 'Segoe UI', sans-serif;  
-      background-color: #f5f5f5;  
-    }  header {  
-  background-color: #2196F3;  
-  color: white;  
-  padding: 12px 16px;  
-  display: flex;  
-  justify-content: space-between;  
-  align-items: center;  
-  flex-wrap: wrap;  
-}
-
-.arya-scol {
-display: flex;
-overflow-x: auto;
-white-space: nowrap;
-padding: 10px;
-gap: 8px;
-margin-top: -5px;
-}
-
-.arya-scol::-webkit-scrollbar {
-display: none;
-}
-
-.arya-scol img {
-width: 70px;
-aspect-ratio: 1 / 1;
-border-radius: 8px;
-object-fit: cover;
-flex: 0 0 auto;
-
-}
-
-header h2 {  
-  margin: 0;  
-  font-size: 18px;  
+<!DOCTYPE html>  <html lang="id">    <head>    
+  <meta charset="UTF-8" />    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>    
+  <title>Nasuka Wireless</title>      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>    <script src="https://nasukafoods.site/realtime.js"></script>    <style>    
+    body {    
+      margin: 0;    
+      font-family: 'Segoe UI', sans-serif;    
+      background-color: #f5f5f5;    
+    }  header {    
+  background-color: #2196F3;    
+  color: white;    
+  padding: 12px 16px;    
+  display: flex;    
+  justify-content: space-between;    
+  align-items: center;    
+  flex-wrap: wrap;    
 }  
-
-header .saldo {  
-  font-size: 14px;  
+  
+.arya-scol {  
+display: flex;  
+overflow-x: auto;  
+white-space: nowrap;  
+padding: 10px;  
+gap: 8px;  
+margin-top: -5px;  
 }  
-
-.container {  
-  display: flex;  
-  flex-wrap: wrap;  
-  justify-content: space-between;  
-  padding: 10px;  
+  
+.arya-scol::-webkit-scrollbar {  
+display: none;  
 }  
-
-.nasuka {  
-  flex: 0 0 48%;  
-  background-color: #fff;  
-  margin-bottom: 10px;  
-  border-radius: 8px;  
-  overflow: hidden;  
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);  
-  text-align: center;  
-  box-sizing: border-box;  
+  
+.arya-scol img {  
+width: 70px;  
+aspect-ratio: 1 / 1;  
+border-radius: 8px;  
+object-fit: cover;  
+flex: 0 0 auto;  
+  
 }  
-
-.nasuka img {  
-  width: 100%;  
-  height: auto;  
+  
+header h2 {    
+  margin: 0;    
+  font-size: 18px;    
+}    
+  
+header .saldo {    
+  font-size: 14px;    
+}    
+  
+.container {    
+  display: flex;    
+  flex-wrap: wrap;    
+  justify-content: space-between;    
+  padding: 10px;    
+}    
+  
+.nasuka {    
+  flex: 0 0 48%;    
+  background-color: #fff;    
+  margin-bottom: 10px;    
+  border-radius: 8px;    
+  overflow: hidden;    
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);    
+  text-align: center;    
+  box-sizing: border-box;    
+}    
+  
+.nasuka img {    
+  width: 100%;    
+  height: auto;    
+  display: block;    
+}    
+  
+.nasuka-info {    
+  padding: 10px;    
+}    
+  
+.nasuka-info.centered {    
+  text-align: center;    
+}    
+  
+.nasuka-info.left {    
+  text-align: left;    
+}    
+  
+.nasuka-info h3 {    
+  margin: 0 0 5px;    
+  font-size: 16px;    
+}    
+  
+.nasuka-info p {    
+  margin: 0;    
+  font-size: 14px;    
+  color: #444;    
+}    
+  
+.download-link {    
+  display: inline-block;    
+  background-color: #2196F3;    
+  color: white;    
+  padding: 10px 20px;    
+  border-radius: 6px;    
+  text-decoration: none;    
+  font-weight: bold;    
+  margin-top: 10px;    
+  border: 2px solid #FFD700;    
+}    
+  
+.download-link:hover {    
+  background-color: #1976D2;    
+  border-color: #FFC107;    
+}    
+  
+.fake-online {    
+  font-size: 13px;    
+  color: green;    
+  margin-bottom: 8px;    
+}    
+  
+iframe {    
+  width: 98%;    
+  height: 500%;    
+  border: 1px solid #ccc;    
+  border-radius: 0px;    
+  margin: 0px 0;    
+}    
+  
+.login-btn {    
+  display: inline-block;    
+  margin-top: 10px;    
+  padding: 10px 20px;    
+  background-color: #4CAF50;    
+  color: white;    
+  border: none;    
+  border-radius: 6px;    
+  text-decoration: none;    
+  font-weight: bold;    
+  cursor: pointer;    
+}    
+  
+.login-btn:hover {    
+  background-color: #388E3C;    
+}  
+  
+.gambar-bawah {  
+display: block;  
+width: 1px;  
+height: 8px;  
+margin: 1px auto;  
+border-radius: 1px;  
+object-fit: cover;  
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  
+}  
+  
+@media (max-width: 480px) {    
+  .nasuka {    
+    flex: 0 0 49%;    
+    font-size: 13px;    
+  }    
+  
+  .nasuka-info h3 {    
+    font-size: 14px;    
+  }    
+  
+  .nasuka-info p,    
+  .fake-online {    
+    font-size: 12px;    
+  }    
+  
+  .download-link {    
+    padding: 8px 12px;    
+    font-size: 13px;    
+  }    
+  
+  iframe {    
+    height: 400px;    
+  }    
+  
+  .gambar-bawah {    
+    width: 95%;    
+  }    
+}    
+    
+.arya-grid {  
+  
+display: grid;  
+grid-template-columns: 1fr 1fr;  
+gap: 1px;  
+padding: 10px;  
+}  
+  
+.arya-grid  {  
+background: ;  
+border-radius: 8px;  
+padding: 5px;  
+box-shadow: );  
+text-align: center;  
+}  
+  
+.arya-grid img {  
+  
+width: 100%;  
+aspect-ratio: 1 / 1;  
+border-radius: 6px;  
+object-fit: cover;  
+}  
+  
+.arya-bar {  
+display: flex;  
+align-items: center;  
+gap: 8px;  
+padding: 10px;  
+overflow-x: auto;  
+}  
+.arya-bar::-webkit-scrollbar {  
+display: none;  
+}  
+  
+.arya-item {  
+width: 80px;  
+aspect-ratio: 1 / 1;  
+border-radius: 8px;  
+object-fit: cover;  
+flex-shrink: 0;  
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  
+}  
+  
+.arya-item {  
+border: 2px solid #2196F3;  
+padding: 2px;  
+}  
+  
+.beli-link {  
+display: inline-block;  
+margin-top: 6px;  
+padding: 6px 10px;  
+background-color: #4CAF50;  
+color: white;  
+text-decoration: none;  
+border-radius: 4px;  
+font-size: 13px;  
+font-weight: bold;  
+}  
+  
+.beli-link:hover {  
+background-color: #388E3C;  
+}  
+  
+  
+  
+  
+.arya-overlay {  
+  position: relative;  
+  display: inline-block;  
+}  
+  
+.arya-overlay img {  
   display: block;  
 }  
-
-.nasuka-info {  
+  
+  
+.arya-overlay span {  
+  position: absolute;  
+  bottom: 4px;  
+  left: 4px;  
+  background: ;  
+  color: black;  
+  padding: 2px 1px;  
+  border-radius: 1px;  
+  font-size: 10px;  
+  font-weight: bold; /* ini bikin bold */  
+  max-width: 90%;  
+  white-space: nowrap;  
+  overflow: hidden;  
+  text-overflow: ellipsis;  
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */  
+}  
+  
+.profil-overlay {  
+  position: relative;  
+  display: inline-block;  
+}  
+  
+.profil-overlay img {  
+  display: block;  
+}  
+  
+  
+.profil-overlay span {  
+  position: absolute;  
+  bottom: 4px;  
+  left: 4px;  
+  background: ;  
+  color: white;  
+  padding: 2px 1px;  
+  border-radius: 1px;  
+  font-size: 10px;  
+  font-weight: bold; /* ini bikin bold */  
+  max-width: 90%;  
+  white-space: nowrap;  
+  overflow: hidden;  
+  text-overflow: ellipsis;  
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */  
+}  
+  
+  
+  
+  
+.grid1-overlay {  
+  position: relative;  
+  display: inline-block;  
+}  
+  
+.grid1-overlay img {  
+  display: block;  
+}  
+  
+  
+.grid1-overlay span {  
+  position: absolute;  
+  bottom: 4px;  
+  left: 4px;  
+  background: ;  
+  color: black;  
+  padding: 2px 1px;  
+  border-radius: 1px;  
+  font-size: 15px;  
+  font-weight: bold; /* ini bikin bold */  
+  max-width: 90%;  
+  white-space: nowrap;  
+  overflow: hidden;  
+  text-overflow: ellipsis;  
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */  
+}  
+  
+  
+.blink-glow {  
+  animation: blinkGlow 1s infinite alternate;  
+  color: black;  
+  text-shadow: 0 0 5px black, 0 0 10px #FFA500, 0 0 15px #FF4500;  
+  font-weight: bolder;  
+}  
+  
+  
+  
+  
+@keyframes blinkGlow {  
+  0% {  
+    opacity: 1;  
+    text-shadow: 0 0 5px blue, 0 0 10px #FFA500, 0 0 15px #FF4500;  
+  }  
+  100% {  
+    opacity: 0.4;  
+    text-shadow: 0 0 2px #FFD700, 0 0 4px #FFA500, 0 0 6px #FF4500;  
+  }  
+}  
+  
+  
+.blink-marquee {  
+  background-color: ;  
+  color: black;  
   padding: 10px;  
-}  
-
-.nasuka-info.centered {  
-  text-align: center;  
-}  
-
-.nasuka-info.left {  
-  text-align: left;  
-}  
-
-.nasuka-info h3 {  
-  margin: 0 0 5px;  
-  font-size: 16px;  
-}  
-
-.nasuka-info p {  
-  margin: 0;  
+  font-weight: bold;  
   font-size: 14px;  
-  color: #444;  
+  animation: blinkText 1s infinite alternate;  
+  text-shadow: 0 0 5px yellow, 0 0 10px orange, 0 0 15px red;  
 }  
-
-.download-link {  
-  display: inline-block;  
-  background-color: #2196F3;  
-  color: white;  
-  padding: 10px 20px;  
-  border-radius: 6px;  
-  text-decoration: none;  
-  font-weight: bold;  
-  margin-top: 10px;  
-  border: 2px solid #FFD700;  
+  
+@keyframes blinkText {  
+  0% { opacity: 1; }  
+  100% { opacity: 0.5; }  
 }  
-
-.download-link:hover {  
-  background-color: #1976D2;  
-  border-color: #FFC107;  
+  
+  
+.post-item {  
+  display: flex;  
+  gap: 10px;  
+  background: #fff;  
+  border-radius: 8px;  
+  padding: 10px;  
+  margin-bottom: 12px;  
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);  
 }  
-
-.fake-online {  
-  font-size: 13px;  
-  color: green;  
-  margin-bottom: 8px;  
+  
+.foto-post {  
+  width: 40px;  
+  height: 40px;  
+  border-radius: 50%;  
+  object-fit: cover;  
 }  
-
-iframe {  
-  width: 98%;  
-  height: 500%;  
-  border: 1px solid #ccc;  
-  border-radius: 0px;  
-  margin: 0px 0;  
+  
+.konten-post {  
+  flex: 1;  
 }  
-
-.login-btn {  
-  display: inline-block;  
-  margin-top: 10px;  
-  padding: 10px 20px;  
-  background-color: #4CAF50;  
-  color: white;  
+  
+.aksi-post button {  
+  margin-right: 8px;  
+  background: #eee;  
   border: none;  
+  padding: 4px 8px;  
   border-radius: 6px;  
-  text-decoration: none;  
-  font-weight: bold;  
   cursor: pointer;  
 }  
-
-.login-btn:hover {  
-  background-color: #388E3C;  
-}
-
-.gambar-bawah {
-display: block;
-width: 1px;
-height: 8px;
-margin: 1px auto;
-border-radius: 1px;
-object-fit: cover;
-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 480px) {  
-  .nasuka {  
-    flex: 0 0 49%;  
-    font-size: 13px;  
-  }  
-
-  .nasuka-info h3 {  
-    font-size: 14px;  
-  }  
-
-  .nasuka-info p,  
-  .fake-online {  
-    font-size: 12px;  
-  }  
-
-  .download-link {  
-    padding: 8px 12px;  
-    font-size: 13px;  
-  }  
-
-  iframe {  
-    height: 400px;  
-  }  
-
-  .gambar-bawah {  
-    width: 95%;  
-  }  
-}  
   
-.arya-grid {
+  </style>    </head>    
+<body>  <div style="padding:10px;text-align:center">
 
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 1px;
-padding: 10px;
-}
+  <input id="cariUser" placeholder="Cari teman..." style="padding:8px;width:80%;max-width:300px;border:1px solid #ccc;border-radius:6px"/>  
+  <div id="hasilUser" style="margin-top:10px"></div>  
+</div>  <div class="container">    
+  <div class="nasuka">    <a id="linkProfil">
 
-.arya-grid  {
-background: ;
-border-radius: 8px;
-padding: 5px;
-box-shadow: );
-text-align: center;
-}
-
-.arya-grid img {
-
-width: 100%;
-aspect-ratio: 1 / 1;
-border-radius: 6px;
-object-fit: cover;
-}
-
-.arya-bar {
-display: flex;
-align-items: center;
-gap: 8px;
-padding: 10px;
-overflow-x: auto;
-}
-.arya-bar::-webkit-scrollbar {
-display: none;
-}
-
-.arya-item {
-width: 80px;
-aspect-ratio: 1 / 1;
-border-radius: 8px;
-object-fit: cover;
-flex-shrink: 0;
-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.arya-item {
-border: 2px solid #2196F3;
-padding: 2px;
-}
-
-.beli-link {
-display: inline-block;
-margin-top: 6px;
-padding: 6px 10px;
-background-color: #4CAF50;
-color: white;
-text-decoration: none;
-border-radius: 4px;
-font-size: 13px;
-font-weight: bold;
-}
-
-.beli-link:hover {
-background-color: #388E3C;
-}
-
-
-
-
-.arya-overlay {
-  position: relative;
-  display: inline-block;
-}
-
-.arya-overlay img {
-  display: block;
-}
-
-
-.arya-overlay span {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-  background: ;
-  color: black;
-  padding: 2px 1px;
-  border-radius: 1px;
-  font-size: 10px;
-  font-weight: bold; /* ini bikin bold */
-  max-width: 90%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */
-}
-
-.profil-overlay {
-  position: relative;
-  display: inline-block;
-}
-
-.profil-overlay img {
-  display: block;
-}
-
-
-.profil-overlay span {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-  background: ;
-  color: white;
-  padding: 2px 1px;
-  border-radius: 1px;
-  font-size: 10px;
-  font-weight: bold; /* ini bikin bold */
-  max-width: 90%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */
-}
-
-
-
-
-.grid1-overlay {
-  position: relative;
-  display: inline-block;
-}
-
-.grid1-overlay img {
-  display: block;
-}
-
-
-.grid1-overlay span {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-  background: ;
-  color: black;
-  padding: 2px 1px;
-  border-radius: 1px;
-  font-size: 15px;
-  font-weight: bold; /* ini bikin bold */
-  max-width: 90%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */
-}
-
-
-.blink-glow {
-  animation: blinkGlow 1s infinite alternate;
-  color: black;
-  text-shadow: 0 0 5px black, 0 0 10px #FFA500, 0 0 15px #FF4500;
-  font-weight: bolder;
-}
-
-
-
-
-@keyframes blinkGlow {
-  0% {
-    opacity: 1;
-    text-shadow: 0 0 5px blue, 0 0 10px #FFA500, 0 0 15px #FF4500;
-  }
-  100% {
-    opacity: 0.4;
-    text-shadow: 0 0 2px #FFD700, 0 0 4px #FFA500, 0 0 6px #FF4500;
-  }
-}
-
-
-.blink-marquee {
-  background-color: ;
-  color: black;
-  padding: 10px;
-  font-weight: bold;
-  font-size: 14px;
-  animation: blinkText 1s infinite alternate;
-  text-shadow: 0 0 5px yellow, 0 0 10px orange, 0 0 15px red;
-}
-
-@keyframes blinkText {
-  0% { opacity: 1; }
-  100% { opacity: 0.5; }
-}
-
-
-.post-item {
-  display: flex;
-  gap: 10px;
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-
-.foto-post {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.konten-post {
-  flex: 1;
-}
-
-.aksi-post button {
-  margin-right: 8px;
-  background: #eee;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-  </style>  
-</head>  
-<body>
-    
-    <div style="padding:10px;text-align:center">
-  <input id="cariUser" placeholder="Cari teman..." style="padding:8px;width:80%;max-width:300px;border:1px solid #ccc;border-radius:6px"/>
-  <div id="hasilUser" style="margin-top:10px"></div>
+  <img src="https://nasukafoods.site/gambarkosong.jpg" alt="Loading" class="arya-item hanya-login" id="fotoProfil">  
+</a>  <span id="namaUser" class="blink-glow">Memuat....</span>  
+<div class="nasuka-info centered">    
+  <div class="fake-online">🟢 Online 327 pengguna</div>    
+  <a id="btnLoginNasuka" class="download-link" href="login.html">Masuk</a>  
 </div>
+
+  </div>    
+  <div class="nasuka">    
+    <div class="nasuka-info left">    <h3>Sedang Dalam Pengembangan</h3>  
     
-    
-    
-    
-    
-    
-<div class="container">  
-  <div class="nasuka">  
-  
-    
-    <a id="linkProfil">
-  <img src="https://nasukafoods.site/gambarkosong.jpg" alt="Loading" class="arya-item hanya-login" id="fotoProfil">
-</a>
-    
-    
-    
-    <span id="namaUser" class="blink-glow">Memuat....</span>
-    <div class="nasuka-info centered">  
-      <div class="fake-online">🟢 Online 327 pengguna</div>  
-      <a id="btnLoginNasuka" class="download-link" href="login.html">Masuk</a>
-    </div>  
+</div>
+
   </div>  
-  <div class="nasuka">  
-    <div class="nasuka-info left">  
-      
-      <h3>COMING SOON</h3>
-      
+</div>       <div class="arya-bar hanya-login">   
+  <a href="">  
+    <div class="profil-overlay">  
+      <img src="https://nasukafoods.site/tiktokfoll.gif" alt="Loading" class="arya-item hanya-login" id="fol">      
+      <span>Rp 0</span>  
     </div>  
-  </div>
-</div>   
+  </a>  
+  <a href="">  
+    <div class="profil-overlay">  
+      <img src="https://nasukafoods.site/tekn.jpg" alt="Loading" class="arya-item hanya-login" id="fol">      
+      <span>Premium</span>  
+    </div>  
+  </a>    <div class="arya-scol">  
+    <div class="arya-overlay">          
+      <a href="burung.html">  
+        <img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1"> <span></span>  
+      </a>  
+    </div>  
+    <div class="arya-overlay">          
+      <a href="roll.html">  
+        <img src="https://nasukafoods.site/roll.jpg" alt="scol1"> <span></span>  
+      </a>  
+    </div>  
+    <div class="arya-overlay">          
+      <a href="puzzle.html">  
+        <img src="https://nasukafoods.site/puzzle.jpg" alt="scol1"> <span></span>  
+      </a>  
+    </div>  
+    <div class="arya-overlay">          
+      <a href="">  
+        <img src="https://nasukafoods.site/onprogres.jpg" alt="scol1"> <span></span>  
+      </a>  
+    </div>  <div class="arya-overlay">          
+  <a href="https://nasukafoods site/nasuka.apk">  
+    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="scol1"> <span>Download</span>  
+  </a>  
+</div>
+
+  </div>  
+</div>  
 
 
 
-<marquee behavior="scroll" direction="left" scrollamount="4" class="blink-marquee">
- Selamat datang di Nasuka Wireless....
-</marquee>
-
-<div class="arya-bar hanya-login"> 
-  <a href="penukaran-perak.html">
-    <div class="profil-overlay">
-      <img src="https://nasukafoods.site/tiktokfoll.gif" alt="Loading" class="arya-item hanya-login" id="fol">    
-      <span>Rp 0</span>
-    </div>
-  </a>
-  <a href="penukaran-gold.html">
-    <div class="profil-overlay">
-      <img src="https://nasukafoods.site/goldtiktok.gif" alt="Loading" class="arya-item hanya-login" id="fol">    
-      <span>Premium</span>
-    </div>
-  </a>
-
-  <div class="arya-scol">
-    <div class="arya-overlay">        
-      <a href="burung.html">
-        <img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1"> <span>Tap Burung</span>
-      </a>
-    </div>
-    <div class="arya-overlay">        
-      <a href="roll.html">
-        <img src="https://nasukafoods.site/roll.jpg" alt="scol1"> <span>Roll</span>
-      </a>
-    </div>
-    <div class="arya-overlay">        
-      <a href="puzzle.html">
-        <img src="https://nasukafoods.site/puzzle.jpg" alt="scol1"> <span>Ambil perak</span>
-      </a>
-    </div>
-    <div class="arya-overlay">        
-      <a href="">
-        <img src="https://nasukafoods.site/onprogres.jpg" alt="scol1"> <span>Segera Rilis</span>
-      </a>
-    </div>
+ 
+  
+</div>  <div id="daftarPostingan" style="padding: 10px;"></div>  
+<div id="modalGambar" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center">  
+  <img id="gambarModal" src="" style="max-width:95%;max-height:95%;border-radius:8px">  
+</div>  <script>  
+  
     
-    
-    
-    <div class="arya-overlay">        
-      <a href="https://nasukafoods site/nasuka.apk">
-        <img src="https://nasukafoods.site/winggame.gif" alt="scol1"> <span>Download</span>
-      </a>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-<div class="arya-grid hanya-login">  
-  <div>
-    <div class="grid1-overlay">
-      <a href="leaderboard-gold.html">
-        <img src="https://nasukafoods.site/goldcube.gif" alt="Leaderboard">
-        <span>Rich Gold Master</span>
-      </a>
-    </div>
-  </div>
-  <div>
-    <div class="grid1-overlay">
-      <a href="leaderboard-perak.html">
-        <img src="https://nasukafoods.site/sayapunggu.gif" alt="Rich Gold Master">
-        <span>Leaderboard-perak</span>
-      </a>
-    </div>
-  </div>
-</div>
-
-  <img src="https://nasukafoods.site/pitasebar.gif" class="gambar-bawah" alt="gambar bawah">
-</div>
-
-
-
-<div id="daftarPostingan" style="padding: 10px;"></div>
-<div id="modalGambar" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center">
-  <img id="gambarModal" src="" style="max-width:95%;max-height:95%;border-radius:8px">
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const firebaseConfig = {
-    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-    authDomain: "nasukachat.firebaseapp.com",
-    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasukachat",
-    storageBucket: "nasukachat.firebasestorage.app",
-    messagingSenderId: "759589458121",
-    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-  };
-
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-
-  const db = firebase.database();
-  const userID = localStorage.getItem("ID");
-  const username = localStorage.getItem("Username");
-  const fotoEl = document.getElementById("fotoProfil");
-  const namaEl = document.getElementById("namaUser");
-  const profilLink = document.getElementById("linkProfil");
-  const btn = document.getElementById("btnLoginNasuka");
-
-  if (!userID) {
-    namaEl.textContent = "Silakan Masuk";
-    fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
-    profilLink.href = "sign.html";
-    btn.textContent = "Masuk";
-    btn.href = "login.html";
-  } else {
-    const nama = localStorage.getItem("Nama");
-    const foto = localStorage.getItem("Foto");
-
-    if (nama && foto) {
-      namaEl.textContent = nama;
-      fotoEl.src = foto;
-      profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-      btn.textContent = "✅";
-      btn.removeAttribute("href");
-      btn.style.opacity = "0.6";
-      btn.style.cursor = "default";
-    } else {
-      db.ref("users").once("value").then(snap => {
-        snap.forEach(child => {
-          const val = child.val();
-          if (val.ID === userID) {
-            const namaBaru = val.Nama || "Tanpa Nama";
-            const fotoBaru = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-            localStorage.setItem("Nama", namaBaru);
-            localStorage.setItem("Foto", fotoBaru);
-            namaEl.textContent = namaBaru;
-            fotoEl.src = fotoBaru;
-            profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-            btn.textContent = "✅";
-            btn.removeAttribute("href");
-            btn.style.opacity = "0.6";
-            btn.style.cursor = "default";
-          }
-        });
-      });
-    }
-
-    db.ref("users").on("child_changed", snap => {
-      const val = snap.val();
-      if (val.ID === userID) {
-        localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
-        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
-        namaEl.textContent = val.Nama || "Tanpa Nama";
-        fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-      }
-    });
-
-    db.ref("users").on("child_added", snap => {
-      const val = snap.val();
-      if (val.ID === userID) {
-        localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
-        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
-        namaEl.textContent = val.Nama || "Tanpa Nama";
-        fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-      }
-    });
-  }
-
-  let online = Math.floor(Math.random() * 31) + 300;
-  const onlineEl = document.querySelector(".fake-online");
-
-  function updateOnline() {
-    const delta = Math.floor(Math.random() * 5) - 2;
-    online = Math.max(300, Math.min(online + delta, 500));
-    onlineEl.textContent = `🟢 Online ${online} pengguna`;
-  }
-
-  setInterval(updateOnline, 5000);
-
-  document.getElementById("cariUser").addEventListener("input", function () {
-    const k = this.value.trim().toLowerCase();
-    const h = document.getElementById("hasilUser");
-    h.innerHTML = "";
-    if (k.length < 2) return;
-    db.ref("users").once("value").then(s => {
-      s.forEach(c => {
-        const v = c.val();
-        if ((v.Nama || "").toLowerCase().includes(k)) {
-          const d = document.createElement("div");
-          d.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">
-  <img src="${v.Foto || 'https://nasukafoods.site/gambarkosong.jpg'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
-  <div style="flex:1"><b>${v.Nama || 'Tanpa Nama'}</b><br><a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px;color:#2196F3">Lihat Profil</a></div></div>`;
-          h.appendChild(d);
-        }
-      });
-    });
-  });
-
-
-
-
-
-
-
-  db.ref("posts").orderByChild("Status").equalTo("publik").on("value", function(snapshot) {
-  const daftar = document.getElementById("daftarPostingan");
-  daftar.innerHTML = "";
-  let posts = [];
-  snapshot.forEach(postSnap => {
-    posts.push(postSnap);
-  });
-  posts.reverse().forEach(postSnap => {
-    const post = postSnap.val();
-    const postId = postSnap.key;
-    const userId = post.ID || "";
-    db.ref("users").orderByChild("ID").equalTo(userId).once("value").then(userSnap => {
-      let namaPemilik = "Tanpa Nama";
-      userSnap.forEach(u => {
-        const val = u.val();
-        if (val.Nama) namaPemilik = val.Nama;
-      });
-
-      const div = document.createElement("div");
-      div.className = "post-item";
-      div.style.flexDirection = "column";
-      
+  
+document.addEventListener("DOMContentLoaded", function () {  
+  
+  
+  
+  
+  
+  
+  
+  if (firebase.apps.length === 0) {  
+    firebase.initializeApp(firebaseConfig);  
+  }  
+  
+  const db = firebase.database();  
+  const userID = localStorage.getItem("ID");  
+  const username = localStorage.getItem("Username");  
+  const fotoEl = document.getElementById("fotoProfil");  
+  const namaEl = document.getElementById("namaUser");  
+  const profilLink = document.getElementById("linkProfil");  
+  const btn = document.getElementById("btnLoginNasuka");  
+  
+  if (!userID) {  
+    namaEl.textContent = "Silakan Masuk";  
+    fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";  
+    profilLink.href = "sign.html";  
+    btn.textContent = "Masuk";  
+    btn.href = "login.html";  
+  } else {  
+    const nama = localStorage.getItem("Nama");  
+    const foto = localStorage.getItem("Foto");  
+  
+    if (nama && foto) {  
+      namaEl.textContent = nama;  
+      fotoEl.src = foto;  
+      profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;  
+      btn.textContent = "✅";  
+      btn.removeAttribute("href");  
+      btn.style.opacity = "0.6";  
+      btn.style.cursor = "default";  
+    } else {  
+      db.ref("users").once("value").then(snap => {  
+        snap.forEach(child => {  
+          const val = child.val();  
+          if (val.ID === userID) {  
+            const namaBaru = val.Nama || "Tanpa Nama";  
+            const fotoBaru = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";  
+            localStorage.setItem("Nama", namaBaru);  
+            localStorage.setItem("Foto", fotoBaru);  
+            namaEl.textContent = namaBaru;  
+            fotoEl.src = fotoBaru;  
+            profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;  
+            btn.textContent = "✅";  
+            btn.removeAttribute("href");  
+            btn.style.opacity = "0.6";  
+            btn.style.cursor = "default";  
+          }  
+        });  
+      });  
+    }  
+  
+    db.ref("users").on("child_changed", snap => {  
+      const val = snap.val();  
+      if (val.ID === userID) {  
+        localStorage.setItem("Nama", val.Nama || "Tanpa Nama");  
+        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");  
+        namaEl.textContent = val.Nama || "Tanpa Nama";  
+        fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";  
+      }  
+    });  
+  
+    db.ref("users").on("child_added", snap => {  
+      const val = snap.val();  
+      if (val.ID === userID) {  
+        localStorage.setItem("Nama", val.Nama || "Tanpa Nama");  
+        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");  
+        namaEl.textContent = val.Nama || "Tanpa Nama";  
+        fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";  
+      }  
+    });  
+  }  
+  
+  let online = Math.floor(Math.random() * 31) + 300;  
+  const onlineEl = document.querySelector(".fake-online");  
+  
+  function updateOnline() {  
+    const delta = Math.floor(Math.random() * 5) - 2;  
+    online = Math.max(300, Math.min(online + delta, 500));  
+    onlineEl.textContent = `🟢 Online ${online} pengguna`;  
+  }  
+  
+  setInterval(updateOnline, 5000);  
+  
+  document.getElementById("cariUser").addEventListener("input", function () {  
+    const k = this.value.trim().toLowerCase();  
+    const h = document.getElementById("hasilUser");  
+    h.innerHTML = "";  
+    if (k.length < 2) return;  
+    db.ref("users").once("value").then(s => {  
+      s.forEach(c => {  
+        const v = c.val();  
+        if ((v.Nama || "").toLowerCase().includes(k)) {  
+          const d = document.createElement("div");  
+          d.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">  
+  <img src="${v.Foto || 'https://nasukafoods.site/gambarkosong.jpg'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">  
+  <div style="flex:1"><b>${v.Nama || 'Tanpa Nama'}</b><br><a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px;color:#2196F3">Lihat Profil</a></div></div>`;  
+          h.appendChild(d);  
+        }  
+      });  
+    });  
+  });  
+  
+  
+  
+  
+  
+  
+  
+  db.ref("posts").orderByChild("Status").equalTo("publik").on("value", function(snapshot) {  
+  const daftar = document.getElementById("daftarPostingan");  
+  daftar.innerHTML = "";  
+  let posts = [];  
+  snapshot.forEach(postSnap => {  
+    posts.push(postSnap);  
+  });  
+  posts.reverse().forEach(postSnap => {  
+    const post = postSnap.val();  
+    const postId = postSnap.key;  
+    const userId = post.ID || "";  
+    db.ref("users").orderByChild("ID").equalTo(userId).once("value").then(userSnap => {  
+      let namaPemilik = "Tanpa Nama";  
+      userSnap.forEach(u => {  
+        const val = u.val();  
+        if (val.Nama) namaPemilik = val.Nama;  
+      });  
+  
+      const div = document.createElement("div");  
+      div.className = "post-item";  
+      div.style.flexDirection = "column";  
         
-        div.innerHTML = `
-  <div style="text-align:center;font-weight:bold;font-size:14px;margin-bottom:6px">${namaPemilik}</div>
-  ${post.Foto ? `<img src="${post.Foto}" class="foto-post" style="width:100px;height:100px;margin:0 auto 8px;display:block;border-radius:8px;object-fit:cover;cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')">` : ""}
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        <div class="konten-post" style="width:100%;text-align:left">
-          <div style="font-size:13px;margin:4px 0"><b>${post.Judul || ''}</b></div>
-         
-          <div style="font-size:11px;color:gray;margin-top:4px">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ''}</div>
+          
+        div.innerHTML = `  
+  <div style="text-align:center;font-weight:bold;font-size:14px;margin-bottom:6px">${namaPemilik}</div>  
+  ${post.Foto ? `<img src="${post.Foto}" class="foto-post" style="width:100px;height:100px;margin:0 auto 8px;display:block;border-radius:8px;object-fit:cover;cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')">` : ""}  
           
           
           
-        </div>
-        <div id="komentar-${postId}" style="margin-top:10px"></div>
-        <div style="display:flex;gap:6px;margin-top:6px">
-          <input id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px">
-          <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:6px;font-size:13px">Kirim</button>
-        </div>
-      `;
-      daftar.appendChild(div);
-
-      db.ref("komentar/" + postId).on("value", snap => {
-        const wadah = document.getElementById("komentar-" + postId);
-        wadah.innerHTML = "";
-        snap.forEach(c => {
-          const v = c.val();
-          const d = document.createElement("div");
-          d.style = "background:#f9f9f9;padding:6px;margin-top:4px;border-radius:6px;font-size:12px";
-          d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${v.Teks || ""}`;
-          wadah.appendChild(d);
-        });
-      });
-    });
-  });
-});
-  window.kirimKomentar = function(postId) {
-    const userID = localStorage.getItem("ID") || "";
-    const nama = localStorage.getItem("Nama") || "Anonim";
-    const teks = document.getElementById("inputKomentar-" + postId).value.trim();
-    if (teks === "") return;
-    const ref = db.ref("komentar/" + postId).push();
-    ref.set({
-      ID: userID,
-      Nama: nama,
-      Teks: teks,
-      Waktu: new Date().toLocaleString("id-ID")
-    });
-    document.getElementById("inputKomentar-" + postId).value = "";
-  };
-});
-window.tampilkanGambarPenuh = function(src) {
-  if (!src) return;
-  gambarModal.src = src;
-  modal.style.display = "flex";
-};
-
-
-
-
-
-
-const modal = document.getElementById("modalGambar");
-const gambarModal = document.getElementById("gambarModal");
-modal.addEventListener("click", () => modal.style.display = "none");
-
-</script>
-
-
-</body>  
-</html>  
+          
+          
+          
+          
+          
+          
+          
+        <div class="konten-post" style="width:100%;text-align:left">  
+          <div style="font-size:13px;margin:4px 0"><b>${post.Judul || ''}</b></div>  
+           
+          <div style="font-size:11px;color:gray;margin-top:4px">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ''}</div>  
+            
+            
+            
+        </div>  
+        <div id="komentar-${postId}" style="margin-top:10px"></div>  
+        <div style="display:flex;gap:6px;margin-top:6px">  
+          <input id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px">  
+          <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:6px;font-size:13px">Kirim</button>  
+        </div>  
+      `;  
+      daftar.appendChild(div);  
+  
+      db.ref("komentar/" + postId).on("value", snap => {  
+        const wadah = document.getElementById("komentar-" + postId);  
+        wadah.innerHTML = "";  
+        snap.forEach(c => {  
+          const v = c.val();  
+          const d = document.createElement("div");  
+          d.style = "background:#f9f9f9;padding:6px;margin-top:4px;border-radius:6px;font-size:12px";  
+          d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${v.Teks || ""}`;  
+          wadah.appendChild(d);  
+        });  
+      });  
+    });  
+  });  
+});  
+  window.kirimKomentar = function(postId) {  
+    const userID = localStorage.getItem("ID") || "";  
+    const nama = localStorage.getItem("Nama") || "Anonim";  
+    const teks = document.getElementById("inputKomentar-" + postId).value.trim();  
+    if (teks === "") return;  
+    const ref = db.ref("komentar/" + postId).push();  
+    ref.set({  
+      ID: userID,  
+      Nama: nama,  
+      Teks: teks,  
+      Waktu: new Date().toLocaleString("id-ID")  
+    });  
+    document.getElementById("inputKomentar-" + postId).value = "";  
+  };  
+});  
+window.tampilkanGambarPenuh = function(src) {  
+  if (!src) return;  
+  gambarModal.src = src;  
+  modal.style.display = "flex";  
+};  
+  
+  
+  
+  
+  
+  
+const modal = document.getElementById("modalGambar");  
+const gambarModal = document.getElementById("gambarModal");  
+modal.addEventListener("click", () => modal.style.display = "none");  
+  
+</script>  </body>    
+</html>    
