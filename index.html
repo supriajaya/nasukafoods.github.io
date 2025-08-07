@@ -152,10 +152,10 @@ iframe {
 
 .gambar-bawah {
 display: block;
-width: 8px;
-height: 80px;
-margin: 10px auto;
-border-radius: 10px;
+width: 1px;
+height: 8px;
+margin: 1px auto;
+border-radius: 1px;
 object-fit: cover;
 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
@@ -419,9 +419,21 @@ background-color: #388E3C;
   <div id="hasilUser" style="margin-top:10px"></div>
 </div>
     
+    
+    
+    
+    
+    
 <div class="container">  
   <div class="nasuka">  
-    <img src="https://nasukafoods.site/gambarkosong.jpg" alt="Loading" class="arya-item hanya-login" id="fotoProfil">   
+  
+    
+    <a id="linkProfil">
+  <img src="https://nasukafoods.site/gambarkosong.jpg" alt="Loading" class="arya-item hanya-login" id="fotoProfil">
+</a>
+    
+    
+    
     <span id="namaUser" class="blink-glow">Memuat....</span>
     <div class="nasuka-info centered">  
       <div class="fake-online">🟢 Online 327 pengguna</div>  
@@ -431,20 +443,8 @@ background-color: #388E3C;
   <div class="nasuka">  
     <div class="nasuka-info left">  
       
-      <h3><a id="linkProfil" href="profil.html" style="text-decoration: none; color: inherit;">🗂️ PROFIL</a></h3>
-      <p>.</p><p>.</p>
-      <h3><a href="edit-profil.html" style="text-decoration: none; color: inherit;">📁 Edit</a></h3>
-      <p>.</p>   
-      <h3><a href="rules.html" style="text-decoration: none; color: inherit;">📁 Rules</a></h3>
-      <p>.</p>     
-      <h3><a href="komunitas.html" style="text-decoration: none; color: inherit;">📁 Komunitas</a></h3>
-      <p>.</p>   
-      <h3><a href="refund-policy.html" style="text-decoration: none; color: inherit;">📁 Refund Policy</a></h3>
-      <p>.</p>   
-      <h3><a href="term-&-condition.html" style="text-decoration: none; color: inherit;">📁 Term & Condition</a></h3>
-      <p>.</p>   
-      <h3><a href="chat-list.html" style="text-decoration: none; color: inherit;">📁 Whatsapp KW</a></h3>
-      <h3>📁 </h3>
+      <h3>COMING SOON</h3>
+      
     </div>  
   </div>
 </div>   
@@ -459,7 +459,7 @@ background-color: #388E3C;
   <a href="penukaran-perak.html">
     <div class="profil-overlay">
       <img src="https://nasukafoods.site/tiktokfoll.gif" alt="Loading" class="arya-item hanya-login" id="fol">    
-      <span>TUKAR PERAK</span>
+      <span>Rp 0</span>
     </div>
   </a>
   <a href="penukaran-gold.html">
@@ -472,12 +472,12 @@ background-color: #388E3C;
   <div class="arya-scol">
     <div class="arya-overlay">        
       <a href="burung.html">
-        <img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1"> <span>Ambil Perak</span>
+        <img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1"> <span>Tap Burung</span>
       </a>
     </div>
     <div class="arya-overlay">        
       <a href="roll.html">
-        <img src="https://nasukafoods.site/roll.jpg" alt="scol1"> <span>Ambil Perak</span>
+        <img src="https://nasukafoods.site/roll.jpg" alt="scol1"> <span>Roll</span>
       </a>
     </div>
     <div class="arya-overlay">        
@@ -490,13 +490,22 @@ background-color: #388E3C;
         <img src="https://nasukafoods.site/onprogres.jpg" alt="scol1"> <span>Segera Rilis</span>
       </a>
     </div>
+    
+    
+    
     <div class="arya-overlay">        
-      <a href="">
-        <img src="https://nasukafoods.site/onprogres.jpg" alt="scol1"> <span>Segera Rilis</span>
+      <a href="https://nasukafoods site/nasuka.apk">
+        <img src="https://nasukafoods.site/winggame.gif" alt="scol1"> <span>Download</span>
       </a>
     </div>
   </div>
 </div>
+
+
+
+
+
+
 
 <div class="arya-grid hanya-login">  
   <div>
@@ -515,6 +524,16 @@ background-color: #388E3C;
       </a>
     </div>
   </div>
+</div>
+
+  <img src="https://nasukafoods.site/pitasebar.gif" class="gambar-bawah" alt="gambar bawah">
+</div>
+
+
+
+<div id="daftarPostingan" style="padding: 10px;"></div>
+<div id="modalGambar" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center">
+  <img id="gambarModal" src="" style="max-width:95%;max-height:95%;border-radius:8px">
 </div>
 
 <script>
@@ -542,7 +561,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("btnLoginNasuka");
 
   if (!userID) {
-    namaEl.textContent = "Silakan login";
+    namaEl.textContent = "Silakan Masuk";
     fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
     profilLink.href = "sign.html";
     btn.textContent = "Masuk";
@@ -611,30 +630,130 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   setInterval(updateOnline, 5000);
-});
+
+  document.getElementById("cariUser").addEventListener("input", function () {
+    const k = this.value.trim().toLowerCase();
+    const h = document.getElementById("hasilUser");
+    h.innerHTML = "";
+    if (k.length < 2) return;
+    db.ref("users").once("value").then(s => {
+      s.forEach(c => {
+        const v = c.val();
+        if ((v.Nama || "").toLowerCase().includes(k)) {
+          const d = document.createElement("div");
+          d.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">
+  <img src="${v.Foto || 'https://nasukafoods.site/gambarkosong.jpg'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
+  <div style="flex:1"><b>${v.Nama || 'Tanpa Nama'}</b><br><a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px;color:#2196F3">Lihat Profil</a></div></div>`;
+          h.appendChild(d);
+        }
+      });
+    });
+  });
 
 
 
 
-document.getElementById("cariUser").addEventListener("input", function () {
-  const k = this.value.trim().toLowerCase();
-  const h = document.getElementById("hasilUser");
-  h.innerHTML = "";
-  if (k.length < 2) return;
-  firebase.database().ref("users").once("value").then(s => {
-    s.forEach(c => {
-      const v = c.val();
-      if ((v.Nama || "").toLowerCase().includes(k)) {
-        const d = document.createElement("div");
-        d.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">
-<img src="${v.Foto || 'https://nasukafoods.site/gambarkosong.jpg'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
-<div style="flex:1"><b>${v.Nama || 'Tanpa Nama'}</b><br><a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px;color:#2196F3">Lihat Profil</a></div></div>`;
-        h.appendChild(d);
-      }
+
+
+
+  db.ref("posts").orderByChild("Status").equalTo("publik").on("value", function(snapshot) {
+  const daftar = document.getElementById("daftarPostingan");
+  daftar.innerHTML = "";
+  let posts = [];
+  snapshot.forEach(postSnap => {
+    posts.push(postSnap);
+  });
+  posts.reverse().forEach(postSnap => {
+    const post = postSnap.val();
+    const postId = postSnap.key;
+    const userId = post.ID || "";
+    db.ref("users").orderByChild("ID").equalTo(userId).once("value").then(userSnap => {
+      let namaPemilik = "Tanpa Nama";
+      userSnap.forEach(u => {
+        const val = u.val();
+        if (val.Nama) namaPemilik = val.Nama;
+      });
+
+      const div = document.createElement("div");
+      div.className = "post-item";
+      div.style.flexDirection = "column";
+      
+        
+        div.innerHTML = `
+  <div style="text-align:center;font-weight:bold;font-size:14px;margin-bottom:6px">${namaPemilik}</div>
+  ${post.Foto ? `<img src="${post.Foto}" class="foto-post" style="width:100px;height:100px;margin:0 auto 8px;display:block;border-radius:8px;object-fit:cover;cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')">` : ""}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <div class="konten-post" style="width:100%;text-align:left">
+          <div style="font-size:13px;margin:4px 0"><b>${post.Judul || ''}</b></div>
+         
+          <div style="font-size:11px;color:gray;margin-top:4px">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ''}</div>
+          
+          
+          
+        </div>
+        <div id="komentar-${postId}" style="margin-top:10px"></div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <input id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px">
+          <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:6px;font-size:13px">Kirim</button>
+        </div>
+      `;
+      daftar.appendChild(div);
+
+      db.ref("komentar/" + postId).on("value", snap => {
+        const wadah = document.getElementById("komentar-" + postId);
+        wadah.innerHTML = "";
+        snap.forEach(c => {
+          const v = c.val();
+          const d = document.createElement("div");
+          d.style = "background:#f9f9f9;padding:6px;margin-top:4px;border-radius:6px;font-size:12px";
+          d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${v.Teks || ""}`;
+          wadah.appendChild(d);
+        });
+      });
     });
   });
 });
+  window.kirimKomentar = function(postId) {
+    const userID = localStorage.getItem("ID") || "";
+    const nama = localStorage.getItem("Nama") || "Anonim";
+    const teks = document.getElementById("inputKomentar-" + postId).value.trim();
+    if (teks === "") return;
+    const ref = db.ref("komentar/" + postId).push();
+    ref.set({
+      ID: userID,
+      Nama: nama,
+      Teks: teks,
+      Waktu: new Date().toLocaleString("id-ID")
+    });
+    document.getElementById("inputKomentar-" + postId).value = "";
+  };
+});
+window.tampilkanGambarPenuh = function(src) {
+  if (!src) return;
+  gambarModal.src = src;
+  modal.style.display = "flex";
+};
+
+
+
+
+
+
+const modal = document.getElementById("modalGambar");
+const gambarModal = document.getElementById("gambarModal");
+modal.addEventListener("click", () => modal.style.display = "none");
 
 </script>
+
+
 </body>  
 </html>  
