@@ -49,13 +49,72 @@
       font-weight: bold;
       cursor: pointer;
     }
+    .form-post {
+      padding: 10px;
+    }
+    .form-post input, .form-post textarea, .form-post select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .postingan {
+      padding: 10px;
+    }
+    .card {
+      background: #fff;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+    }
+    .card-content {
+      padding: 10px;
+      text-align: left;
+    }
+    .hapus-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .komentar {
+      padding: 10px;
+    }
+    .komentar input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 5px;
+      margin-bottom: 5px;
+    }
+    .komentar-list {
+      max-height: 100px;
+      overflow-y: auto;
+      font-size: 14px;
+      color: #333;
+    }
+    .komentar-list div {
+      margin-bottom: 5px;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <div class="nasuka">
-    <img id="foto-profil" src="https://nasukafoods.site/gambarkosong.jpg" alt="FOTO PROFIL" />
+    <img id="foto-profil" src="https://nasukafoods.site/gambarkosong.jpg" alt="FOTO PROFIL" onclick="window.location.href='saya.html'" />
     <br/>
     <div id="tombolAksi"></div>
   </div>
@@ -65,14 +124,26 @@
       <p>🎇 Nama</p>
       <p>🎇 Perak</p>
       <p>🎇 Jenis</p>
-      <p>🎇 Platinum</p>
-      <p>🎇 Gold</p>
-      <p>🎇 Saldo</p>
-      <p>🎇 Username</p>
-      <h3 id="logoutBtn">🚪 Logout</h3>
     </div>
   </div>
 </div>
+
+<div class="nasuka" style="width:100%;margin:0;">
+  <div class="form-post">
+    <textarea id="judul" placeholder="Tulis postingan" autocomplete="off" style="height:80px;"></textarea>
+    <select id="status">
+      <option value="publik">Publik</option>
+      <option value="privat">Privat</option>
+    </select>
+    <label>
+      📍  📷 📍
+      <input type="file" id="fotoInput" accept="image/*" style="display:none;" />
+    </label>
+    <button onclick="kirimPostingan()">Kirim</button>
+  </div>
+</div>
+
+<div class="postingan" id="daftarPostingan"></div>
 
 <script>
 const firebaseConfig = {
@@ -94,6 +165,8 @@ const currentID = localStorage.getItem("ID");
 
 if (!currentID) location.href = "sign.html";
 
+const usersCache = {};
+
 db.ref("users").once("value").then(snap => {
   const users = snap.val();
   let ditemukan = false;
@@ -103,46 +176,11 @@ db.ref("users").once("value").then(snap => {
     if (user.ID === viewedID) {
       ditemukan = true;
       document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-
       document.getElementById("dataUser").innerHTML = `
         <p>🎇 ${user.Nama || '-'}</p>
         <p>🎇 ${user.Perak || 0}</p>
         <p>🎇 ${user.Jenis || '-'}</p>
-        <p>🎇 ${user.Platinum || 0}</p>
-        <p>🎇 ${user.Gold || 0}</p>
-        <p>🎇 ${user.Saldo || 0}</p>
-        <p>🎇 ${user.Username || '-'}</p>
-        <h3 id="logoutBtn">🚪 Logout</h3>
       `;
-
-      document.getElementById("logoutBtn").onclick = () => {
-        localStorage.clear();
-        location.href = "index.html";
-      };
-
-      if (viewedID !== currentID) {
-        db.ref("friends/" + currentID + "/" + viewedID).get().then(friendSnap => {
-          if (!friendSnap.exists()) {
-            const btn = document.createElement("button");
-            btn.innerText = "Teman";
-            btn.className = "teman-btn";
-            btn.onclick = () => {
-              db.ref("friends/" + currentID + "/" + viewedID).set(true);
-              db.ref("friends/" + viewedID + "/" + currentID).set(true);
-              btn.remove();
-            };
-            document.getElementById("tombolAksi").appendChild(btn);
-          }
-        });
-      } else {
-        const editBtn = document.createElement("button");
-        editBtn.className = "login-btn";
-        editBtn.innerText = "Ubah Profil";
-        editBtn.onclick = () => location.href = "edit-profil-fire.html";
-        document.getElementById("tombolAksi").appendChild(editBtn);
-      }
-
-      break;
     }
   }
 
@@ -150,9 +188,131 @@ db.ref("users").once("value").then(snap => {
     alert("Pengguna tidak ditemukan");
   }
 });
+
+function kirimPostingan() {
+  const judul = document.getElementById("judul").value.trim();
+  const status = document.getElementById("status").value;
+  const file = document.getElementById("fotoInput").files[0];
+
+  if (!judul) return;
+
+  const ID = localStorage.getItem("ID");
+  const Username = localStorage.getItem("Username");
+  if (!ID || !Username) return;
+
+  const postData = {
+    ID: ID,
+    Username: Username,
+    Judul: judul,
+    Status: status,
+    Waktu: Date.now()
+  };
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      postData.Foto = e.target.result;
+      db.ref("posts").push(postData);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    db.ref("posts").push(postData);
+  }
+
+  document.getElementById("judul").value = "";
+  document.getElementById("status").value = "publik";
+  document.getElementById("fotoInput").value = "";
+}
+
+function hapusPostingan(key, cardElement) {
+  const updates = {};
+  updates["/posts/" + key] = null;
+  updates["/komentar/" + key] = null;
+  updates["/like/" + key] = null;
+  db.ref().update(updates);
+  cardElement.remove();
+}
+
+function submitKomentar(e, key) {
+  if (e.key === "Enter" && e.target.value.trim()) {
+    const teks = e.target.value.trim();
+    const id = localStorage.getItem("ID") || "";
+    const nama = localStorage.getItem("Nama") || "Anonim";
+    const ref = db.ref("komentar/" + key).push();
+    ref.set({
+      ID: id,
+      Nama: nama,
+      Teks: teks,
+      Waktu: new Date().toLocaleString("id-ID")
+    });
+    e.target.value = "";
+  }
+}
+
+function muatKomentar(key) {
+  db.ref("komentar/" + key).on("child_added", snap => {
+    const data = snap.val();
+    const list = document.getElementById("list-" + key);
+    if (list) {
+      const userID = data.ID || "";
+      if (usersCache[userID]) {
+        tambahKomentar(list, usersCache[userID], data);
+      } else {
+        db.ref("users").orderByChild("ID").equalTo(userID).once("value", snapUser => {
+          const val = snapUser.val();
+          const user = val ? Object.values(val)[0] : {};
+          usersCache[userID] = user;
+          tambahKomentar(list, user, data);
+        });
+      }
+    }
+  });
+}
+
+function tambahKomentar(list, users, data) {
+  const div = document.createElement("div");
+  div.innerHTML = `<b>${users.Nama || "?"}:</b> ${data.Teks}`;
+  list.appendChild(div);
+}
+
+db.ref("posts").on("child_added", function(snapshot) {
+  const data = snapshot.val();
+  const key = snapshot.key;
+  if (data.ID === localStorage.getItem("ID")) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <button class="hapus-btn" onclick="hapusPostingan('${key}', this.parentElement)">Hapus</button>
+      ${data.Foto ? `<img src="${data.Foto}">` : ""}
+      <div class="card-content">
+        <h3>${data.Judul}</h3>
+        <small>Status: ${data.Status}</small>
+      </div>
+      <textarea id="input-${key}" placeholder="Tulis komentar" style="width:100%; padding:10px;"></textarea>
+      <button onclick="submitKomentarManual('${key}')">Kirim</button>
+      <div class="komentar-list" id="list-${key}"></div>
+    `;
+    document.getElementById("daftarPostingan").prepend(card);
+    muatKomentar(key);
+  }
+});
+
+function submitKomentarManual(key) {
+  const input = document.getElementById("input-" + key);
+  const teks = input.value.trim();
+  if (teks) {
+    const id = localStorage.getItem("ID") || "";
+    const nama = localStorage.getItem("Nama") || "Anonim";
+    db.ref("komentar/" + key).push({
+      ID: id,
+      Nama: nama,
+      Teks: teks,
+      Waktu: new Date().toLocaleString("id-ID")
+    });
+    input.value = "";
+  }
+}
 </script>
-
-
 
 </body>
 </html>
