@@ -14,3 +14,4 @@ document.addEventListener("DOMContentLoaded", function () {
     firebase.initializeApp(firebaseConfig);
   }
   const db = firebase.database();
+}
