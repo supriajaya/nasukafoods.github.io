@@ -4,171 +4,138 @@
   <meta charset="UTF-8" />
   <title>Nasuka Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://nasukafoods.site/chat.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://nasukafoods.site/realtime.js"></script>
   <style>
-    body { margin: 0; font-family: sans-serif; background: #ece5dd; }
-    #chatContainer { display: flex; flex-direction: column; height: 100vh; }
-    #topBar {
-      display: flex;
-      align-items: center;
-      padding: 10px 15px;
-      background: #075e54;
-      color: white;
-      cursor: pointer;
-    }
-    #topBar img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
-      background: #fff;
-    }
-    #topBar span {
-      font-weight: bold;
-      font-size: 16px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    #chatBox {
-      flex: 1;
-      overflow-y: auto;
-      padding: 15px 10px;
-      background-image: url('https://i.ibb.co/F35hbXt/bg-whatsapp.png');
-      background-size: cover;
-      display: flex;
-      flex-direction: column;
-    }
-    .messageContainer {
-      display: flex;
-      margin-bottom: 10px;
-      max-width: 90%;
-    }
-    .meContainer {
-      align-self: flex-end;
-      justify-content: flex-end;
-    }
-    .otherContainer {
-      align-self: flex-start;
-      justify-content: flex-start;
-    }
-    .message {
-      padding: 8px 12px;
-      border-radius: 7.5px;
-      max-width: 75%;
-      word-wrap: break-word;
-      font-size: 14px;
-      line-height: 1.4;
-      box-shadow: 0 1px 1px rgba(0,0,0,0.2);
-    }
-    .me {
-      background: #dcf8c6;
-      border-bottom-right-radius: 0;
-    }
-    .other {
-      background: white;
-      border-bottom-left-radius: 0;
-    }
-    #inputContainer {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      background: #f0f0f0;
-    }
-    #inputMessage {
-      flex: 1;
-      padding: 10px 15px;
-      border-radius: 25px;
-      border: none;
-      font-size: 14px;
-      outline: none;
-      background: white;
-      margin-right: 10px;
-    }
-    #sendBtn {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 50%;
-      background: #128c7e;
-      color: white;
-      font-size: 16px;
-    }
+  .msg {
+  max-width: 70%;
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  word-wrap: break-word;
+  display: inline-block;
+}
+
+/* Pesan dari kamu (diri sendiri) */
+.msg.me {
+  background-color: #dcf8c6; /* Hijau muda */
+  align-self: flex-end;
+  border-top-right-radius: 0;
+  text-align: right;
+}
+
+/* Pesan dari lawan bicara */
+.msg:not(.me) {
+  background-color: #ffffff; /* Putih */
+  align-self: flex-start;
+  border-top-left-radius: 0;
+  text-align: left;
+}
+  
   </style>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
 </head>
 <body>
   <div id="chatContainer">
-    <div id="topBar" onclick="window.location.href='akun.html?id=' + encodeURIComponent(targetID)">
+    <div id="topBar" onclick="window.location.href='inbox.html?id=' + encodeURIComponent(targetID)">
       <img id="targetFotoEl" src="" alt="Foto">
       <span id="roomTitle">Chat</span>
     </div>
     <div id="chatBox"></div>
     <div id="inputContainer">
-      <input type="text" id="inputMessage" placeholder="Ketik pesan..." />
+      <textarea id="inputMessage" rows="1" placeholder="Ketik pesan..."></textarea>
       <button id="sendBtn">&#9658;</button>
     </div>
   </div>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-      authDomain: "nasukachat.firebaseapp.com",
-      databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "nasukachat",
-      storageBucket: "nasukachat.firebasestorage.app",
-      messagingSenderId: "759589458121",
-      appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // Pastikan Firebase db sudah terdefinisi di realtime.js
+    const ID = localStorage.getItem('ID') || '';
+    const Username = localStorage.getItem('Username') || '';
+    const Nama = localStorage.getItem('Nama') || '';
+    const targetID = localStorage.getItem('targetID') || '';
+    const targetNama = localStorage.getItem('targetNama') || '';
+    const targetFoto = localStorage.getItem('targetFoto') || '';
 
-    const ID = localStorage.getItem('ID');
-    const Username = localStorage.getItem('Username');
-    const Nama = localStorage.getItem('Nama');
-    const targetID = localStorage.getItem('targetID');
-    const targetNama = localStorage.getItem('targetNama');
-    const targetFoto = localStorage.getItem('targetFoto');
+    if (!ID || !targetID) {
+      alert("Gagal memuat data pengguna atau target.");
+    }
 
     const room = [ID, targetID].sort().join('_');
-    const chatRef = db.ref('rooms/' + room);
+    const chatRef = db.ref('rooms/' + room + '/chats');
 
-    const topBar = document.getElementById('roomTitle');
-    const fotoEl = document.getElementById('targetFotoEl');
     const chatBox = document.getElementById('chatBox');
     const input = document.getElementById('inputMessage');
     const btn = document.getElementById('sendBtn');
+    const targetFotoEl = document.getElementById('targetFotoEl');
+    const roomTitle = document.getElementById('roomTitle');
 
-    topBar.textContent = targetNama;
-    fotoEl.src = targetFoto || '';
+    targetFotoEl.src = targetFoto || 'default.jpg';
+    roomTitle.textContent = targetNama;
 
-    btn.onclick = () => {
-      const pesan = input.value.trim();
-      if (pesan) {
-        chatRef.push({
-          ID,
-          Username,
-          Nama,
-          Pesan: pesan,
-          Waktu: Date.now()
-        });
-        input.value = '';
+    btn.onclick = kirim;
+    input.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        kirim();
       }
-    };
+    });
 
-    chatRef.on('child_added', snap => {
+    function kirim() {
+      const msg = input.value.trim();
+      if (msg) {
+        const waktu = Date.now();
+        const pesanData = {
+          ID: ID,
+          Username: Username,
+          Nama: Nama,
+          Pesan: msg,
+          Waktu: waktu
+        };
+
+        // Kirim ke node percakapan
+        chatRef.push(pesanData);
+
+        // Update summary chat untuk pengirim
+        db.ref('users/' + ID + '/chats/' + targetID).set({
+          room: room,
+          ID: targetID,
+          Username: targetNama,
+          Foto: targetFoto,
+          Terakhir: msg,
+          Waktu: waktu
+        });
+
+        // Update summary chat untuk penerima
+        db.ref('users/' + targetID + '/chats/' + ID).set({
+          room: room,
+          ID: ID,
+          Username: Nama,
+          Foto: '', // Foto kamu, jika ada
+          Terakhir: msg,
+          Waktu: waktu
+        });
+
+        input.value = '';
+        input.style.height = 'auto';
+      }
+    }
+
+    // Menampilkan pesan real-time
+    chatRef.on('child_added', function (snap) {
       const data = snap.val();
-      const isMe = data.ID === ID;
-      const container = document.createElement('div');
-      container.className = 'messageContainer ' + (isMe ? 'meContainer' : 'otherContainer');
-
-      const bubble = document.createElement('div');
-      bubble.className = 'message ' + (isMe ? 'me' : 'other');
-      bubble.textContent = data.Pesan;
-
-      container.appendChild(bubble);
-      chatBox.appendChild(container);
+      const msgEl = document.createElement('div');
+      msgEl.className = data.ID === ID ? 'msg me' : 'msg';
+      msgEl.textContent = data.Pesan;
+      chatBox.appendChild(msgEl);
       chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // Auto resize textarea
+    input.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
     });
   </script>
 </body>
