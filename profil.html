@@ -39,16 +39,6 @@
     .nasuka-info.left {
       text-align: left;
     }
-    .login-btn, .teman-btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
     .form-post {
       padding: 10px;
     }
@@ -124,6 +114,7 @@
       <p>🎇 Nama</p>
       <p>🎇 Perak</p>
       <p>🎇 Jenis</p>
+      <p>🎇 Kirim Pesan</p>
     </div>
   </div>
 </div>
@@ -139,7 +130,7 @@
       📍  📷 📍
       <input type="file" id="fotoInput" accept="image/*" style="display:none;" />
     </label>
-    <button onclick="kirimPostingan()">Kirim</button>
+    <button onclick="kirimPostingan()">Posting</button>
   </div>
 </div>
 
@@ -176,11 +167,23 @@ db.ref("users").once("value").then(snap => {
     if (user.ID === viewedID) {
       ditemukan = true;
       document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+
       document.getElementById("dataUser").innerHTML = `
         <p>🎇 ${user.Nama || '-'}</p>
         <p>🎇 ${user.Perak || 0}</p>
         <p>🎇 ${user.Jenis || '-'}</p>
+        <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">🎇 Kirim Pesan</button>
       `;
+
+      setTimeout(() => {
+        const tombol = document.getElementById("btnKirimPesan");
+        tombol?.addEventListener("click", () => {
+          localStorage.setItem("targetID", user.ID);
+          localStorage.setItem("targetNama", user.Nama);
+          localStorage.setItem("targetFoto", user.Foto || "");
+          window.location.href = "inbox.html";
+        });
+      }, 50);
     }
   }
 
@@ -233,19 +236,19 @@ function hapusPostingan(key, cardElement) {
   cardElement.remove();
 }
 
-function submitKomentar(e, key) {
-  if (e.key === "Enter" && e.target.value.trim()) {
-    const teks = e.target.value.trim();
+function submitKomentarManual(key) {
+  const input = document.getElementById("input-" + key);
+  const teks = input.value.trim();
+  if (teks) {
     const id = localStorage.getItem("ID") || "";
     const nama = localStorage.getItem("Nama") || "Anonim";
-    const ref = db.ref("komentar/" + key).push();
-    ref.set({
+    db.ref("komentar/" + key).push({
       ID: id,
       Nama: nama,
       Teks: teks,
       Waktu: new Date().toLocaleString("id-ID")
     });
-    e.target.value = "";
+    input.value = "";
   }
 }
 
@@ -296,23 +299,7 @@ db.ref("posts").on("child_added", function(snapshot) {
     muatKomentar(key);
   }
 });
-
-function submitKomentarManual(key) {
-  const input = document.getElementById("input-" + key);
-  const teks = input.value.trim();
-  if (teks) {
-    const id = localStorage.getItem("ID") || "";
-    const nama = localStorage.getItem("Nama") || "Anonim";
-    db.ref("komentar/" + key).push({
-      ID: id,
-      Nama: nama,
-      Teks: teks,
-      Waktu: new Date().toLocaleString("id-ID")
-    });
-    input.value = "";
-  }
-}
 </script>
-
 </body>
 </html>
+
