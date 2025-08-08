@@ -1,4 +1,5 @@
 
+
     const firebaseConfig = {
     apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
     authDomain: "nasukachat.firebaseapp.com",
@@ -238,3 +239,96 @@ modal.addEventListener("click", () => modal.style.display = "none");
   
     
     
+
+
+
+const ID = localStorage.getItem("ID");
+const notifInbox = document.querySelector("#notifInbox");
+
+if (ID) {
+  const daftarPengirim = {};
+
+  firebase.database().ref("rooms").on("value", snap => {
+    notifInbox.style.display = "none";
+    notifInbox.innerHTML = "";
+
+    const temp = {};
+
+    snap.forEach(room => {
+      const key = room.key;
+      if (!key.includes("_")) return;
+
+      const [a, b] = key.split("_");
+      if (a === b || (a !== ID && b !== ID)) return;
+
+      let lawan = a === ID ? b : a;
+      let pesanTerakhir = null;
+      let waktuTerakhir = 0;
+
+      room.child("chats").forEach(chat => {
+        const data = chat.val();
+        if (!data || !data.Pesan) return;
+        if (data.ID !== ID && data.Waktu > waktuTerakhir) {
+          waktuTerakhir = data.Waktu;
+          pesanTerakhir = data;
+        }
+      });
+
+      if (pesanTerakhir) {
+        temp[lawan] = pesanTerakhir;
+      }
+    });
+
+    const entries = Object.entries(temp).sort((a, b) => b[1].Waktu - a[1].Waktu);
+
+    if (entries.length > 0) {
+      notifInbox.style.display = "inline";
+      notifInbox.innerHTML = "📨 Chat";
+
+      
+      notifInbox.onclick = () => {
+  const popup = document.createElement("div");
+  popup.style.position = "fixed";
+  popup.style.top = "50px";
+  popup.style.left = "8px";
+  popup.style.background = "snow";
+  popup.style.padding = "10px";
+  popup.style.borderRadius = "6px";
+  popup.style.boxShadow = "0 0 10px rgba(0,0,0,0.4)";
+  popup.style.zIndex = "9999";
+
+  const btnClose = document.createElement("div");
+  btnClose.textContent = "Tutup";
+  btnClose.style.textAlign = "right";
+  btnClose.style.fontWeight = "bold";
+  btnClose.style.cursor = "pointer";
+  btnClose.style.marginBottom = "10px";
+  btnClose.onclick = () => {
+    popup.remove();
+    notifInbox.style.display = "inline";
+  };
+  popup.appendChild(btnClose);
+
+  entries.forEach(([pengirimID, data]) => {
+    const div = document.createElement("div");
+    div.textContent = `${data.Nama}: ${data.Pesan}`;
+    div.style.cursor = "pointer";
+    div.style.marginBottom = "6px";
+    div.onclick = () => {
+      localStorage.setItem("targetID", pengirimID);
+      localStorage.setItem("targetNama", data.Nama || "");
+      localStorage.setItem("targetFoto", "");
+      location.href = "inbox.html";
+    };
+    popup.appendChild(div);
+  });
+
+  document.body.appendChild(popup);
+  notifInbox.style.display = "none";
+};
+      
+    }
+  });
+}
+
+
