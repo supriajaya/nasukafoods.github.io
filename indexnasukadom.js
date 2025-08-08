@@ -1,4 +1,4 @@
- document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
   
   if (firebase.apps.length === 0) {  
     firebase.initializeApp(firebaseConfig);  
