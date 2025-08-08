@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>saya</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
+  <script src="https://nasukafoods.site/realtime.js"></script>
+  <script src="https://nasukafoods.site/saya.js"></script>
+  
+  <link rel="stylesheet" href="https://nasukafoods.site/saya.css">
+  
+  
+    
+</head>
+<body>
+  <div class="container">
+    <div class="profile-header">
+      <img src="" alt="Foto Profil" class="profile-pic" />
+      <div class="profile-info">
+        <h2></h2>
+        <div class="stats"></div>
+        <div class="bio"></div>
+      </div>
+    </div>
+    <div class="gallery"></div>
+    <div class="info-line"><span class="label">Tiktok</span><span class="value tiktok"></span></div>
+    <div class="info-line"><span class="label">Facebook</span><span class="value facebook"></span></div>
+    <div class="info-line"><span class="label">Pekerjaan</span><span class="value pekerjaan"></span></div>
+    <div class="info-line"><span class="label">Usia</span><span class="value usia"></span></div>
+    <div class="info-line"><span class="label">Alamat</span><span class="value alamat"></span></div>
+    <div class="info-line"><span class="label">Followers</span><span class="value followers"></span></div>
+    <div class="info-line"><span class="label">Rank</span><span class="value rank"></span></div>
+    <div class="info-line"><span class="label">Username</span><span class="value username"></span></div>
+    <div class="info-line"><span class="label">Password</span><span class="value password"></span></div>
+    <div class="info-line"><span class="label">Teman</span><span class="value teman"></span></div>
+    <div class="nav-bar">
+      <span onclick="showModal('topup')">Topup</span>
+      <span onclick="showModal('riwayat')">Riwayat</span>
+      <span onclick="showModal('logout')">Logout</span>
+    </div>
+  </div>
+
+  <div id="modal-topup" class="modal"><div class="modal-content">Topup</div></div>
+  <div id="modal-riwayat" class="modal"><div class="modal-content">Riwayat</div></div>
+  <div id="modal-logout" class="modal"><div class="modal-content">Logout</div></div>
+
+  
+</body>
+</html>
