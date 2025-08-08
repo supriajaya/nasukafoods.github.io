@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profil</title>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -10,14 +11,21 @@
       font-family: sans-serif;
       background: #f4f4f4;
       padding: 20px;
+      margin: 0;
     }
     .form-container {
       background: white;
-      max-width: 600px;
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
       margin: auto;
-      padding: 24px;
+      padding: 16px;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
     }
     input, textarea {
       width: 100%;
@@ -25,17 +33,23 @@
       margin: 8px 0 16px;
       border: 1px solid #ccc;
       border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
     }
     label {
       font-weight: bold;
+      display: block;
+      font-size: 0.9rem;
     }
     button {
       background-color: #1877f2;
       color: white;
-      padding: 10px 18px;
+      padding: 12px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
     }
     button:hover {
       background-color: #145dbf;
@@ -46,6 +60,23 @@
       object-fit: cover;
       display: block;
       margin-bottom: 12px;
+      border-radius: 4px;
+    }
+    #status {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #333;
+    }
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .form-container {
+        padding: 12px;
+      }
+      input, textarea, button {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
@@ -125,9 +156,6 @@
         Alamat: document.getElementById("Alamat").value,
         Foto: document.getElementById("Foto").value
       };
-    
-    
-    
       db.ref("users/" + username).update(data).then(() => {
         document.getElementById("status").innerText = "Profil berhasil diperbarui.";
       }).catch(() => {
