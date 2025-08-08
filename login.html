@@ -2,10 +2,11 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <title>Login & Signup Nasuka</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login Nasuka</title>
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
+  <script src="https://nasukafoods.site/realtime.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -16,8 +17,7 @@
       height: 100vh;
       margin: 0;
     }
-
-    .login-box {
+    .box {
       background: white;
       padding: 20px;
       border-radius: 8px;
@@ -25,15 +25,13 @@
       width: 100%;
       max-width: 320px;
       box-sizing: border-box;
-    }
-
-    .login-box h2 {
-      margin-top: 0;
-      margin-bottom: 16px;
       text-align: center;
     }
-
-    .login-box input {
+    .box h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+    .box input {
       width: 100%;
       padding: 10px;
       margin-bottom: 12px;
@@ -41,8 +39,7 @@
       border-radius: 6px;
       box-sizing: border-box;
     }
-
-    .login-box button {
+    .box button {
       width: 100%;
       padding: 10px;
       background-color: #2196F3;
@@ -52,86 +49,145 @@
       font-weight: bold;
       cursor: pointer;
     }
-
-    .login-box button:hover {
+    .box button:hover {
       background-color: #1976D2;
     }
-
+    .link {
+      display: block;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #2196F3;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
     .error-msg {
       color: red;
-      text-align: center;
       margin-bottom: 10px;
       font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="login-box">
+  <div class="box" id="loginBox">
     <h2>Login Nasuka</h2>
-    <div id="error" class="error-msg"></div>
-    <input type="text" id="Username" placeholder="Nama Pengguna" />
-    <input type="Password" id="Password" placeholder="Password" />
+    <div id="errorLogin" class="error-msg"></div>
+    <input type="text" id="loginUsername" placeholder="Nama Pengguna" />
+    <input type="password" id="loginPassword" placeholder="Password" />
     <button onclick="login()">Masuk</button>
+    <span class="link" onclick="showSignup()">Belum punya akun? Bikin akun disini</span>
   </div>
 
- <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-    authDomain: "nasukachat.firebaseapp.com",
-    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasukachat",
-    storageBucket: "nasukachat.firebasestorage.app",
-    messagingSenderId: "759589458121",
-    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-  };
+  <div class="box" id="signupBox" style="display:none">
+    <h2>Signup Nasuka</h2>
+    <div id="errorSignup" class="error-msg"></div>
+    <input type="text" id="signupNama" placeholder="Nama">
+    <input type="text" id="signupUsername" placeholder="Username">
+    <input type="password" id="signupPassword" placeholder="Password">
+    <button onclick="signup()">Buat Akun Sekarang</button>
+    <span class="link" onclick="showLogin()">Sudah punya akun? Login disini</span>
+  </div>
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-
-  function login() {
-    const username = document.getElementById("Username").value.trim();
-    const password = document.getElementById("Password").value.trim();
-    const errorDiv = document.getElementById("error");
-    const button = document.querySelector("button");
-
-    errorDiv.textContent = "";
-
-    if (!username || !password) {
-      errorDiv.textContent = "Nama pengguna dan password wajib diisi.";
-      return;
+  <script>
+    function showSignup(){
+      document.getElementById('loginBox').style.display='none';
+      document.getElementById('signupBox').style.display='block';
+    }
+    function showLogin(){
+      document.getElementById('signupBox').style.display='none';
+      document.getElementById('loginBox').style.display='block';
     }
 
-    button.disabled = true;
-    button.textContent = "Tunggu sebentar ...";
-
-    db.ref("users").once("value").then(snapshot => {
-      let found = false;
-      snapshot.forEach(child => {
-        const val = child.val();
-
-        if (val.Username === username && val.Password === password) {
-    
-    localStorage.setItem("ID", val.ID);
-    localStorage.setItem("Nama", val.Nama);
-    localStorage.setItem("Foto", val.Foto);
-    localStorage.setItem("Username", val.Username);     
-          
-          window.location.href = "index.html";
-          found = true;
+    function login() {
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      const errorDiv = document.getElementById("errorLogin");
+      const button = document.querySelector("#loginBox button");
+      errorDiv.textContent = "";
+      if (!username || !password) {
+        errorDiv.textContent = "Nama pengguna dan password wajib diisi.";
+        return;
+      }
+      button.disabled = true;
+      button.textContent = "Tunggu sebentar ...";
+      db.ref("users").once("value").then(snapshot => {
+        let found = false;
+        snapshot.forEach(child => {
+          const val = child.val();
+          if (val.Username === username && val.Password === password) {
+            localStorage.setItem("ID", val.ID);
+            localStorage.setItem("Nama", val.Nama);
+            localStorage.setItem("Foto", val.Foto);
+            localStorage.setItem("Username", val.Username);
+            window.location.href = "index.html";
+            found = true;
+          }
+        });
+        if (!found) {
+          errorDiv.textContent = "Akun tidak ditemukan atau password salah.";
+          button.disabled = false;
+          button.textContent = "Masuk";
         }
-      });
-
-      if (!found) {
-        errorDiv.textContent = "Akun tidak ditemukan atau password salah.";
+      }).catch(() => {
+        errorDiv.textContent = "Terjadi kesalahan, coba lagi.";
         button.disabled = false;
         button.textContent = "Masuk";
+      });
+    }
+
+    function signup() {
+      const n = document.getElementById('signupNama').value.trim();
+      const u = document.getElementById('signupUsername').value.trim();
+      const p = document.getElementById('signupPassword').value.trim();
+      const errorDiv = document.getElementById("errorSignup");
+      errorDiv.textContent = "";
+      if (!n || !u || !p) {
+        errorDiv.textContent = 'Isi semua kolom';
+        return;
       }
-    }).catch(() => {
-      errorDiv.textContent = "Terjadi kesalahan, coba lagi.";
-      button.disabled = false;
-      button.textContent = "Masuk";
-    });
-  }
-</script>
+      const ref = db.ref('users/' + u);
+      ref.get().then(snap => {
+        if (snap.exists()) {
+          errorDiv.textContent = 'Username sudah digunakan';
+          return;
+        }
+        const id = 'VIP-' + Date.now();
+        const ft = 'https://nasukafoods.site/pitasebar.gif';
+        const tp = '0859';
+        const al = 'Jl Nasuka No69 dst';
+        const qt = 'Belum Berkata';
+        const oo = '0';
+        const hh = 'https://';
+        const jn = 'Pria Wanita';
+        const pk = 'Belum Diupdate';
+        const st = 'VIP';
+        ref.set({
+          ID: id,
+          Username: u,
+          Password: p,
+          Nama: n,
+          Foto: ft,
+          Telepon: tp,
+          Alamat: al,
+          Jenis: jn,
+          Status: st,
+          Usia: oo,
+          Pekerjaan: pk,
+          Rank: oo,
+          Quetes: qt,
+          Saldo: oo,
+          Tiktok: hh,
+          Facebook: hh,
+          Gold: oo
+        });
+        localStorage.setItem('Nama', n);
+        localStorage.setItem('ID', id);
+        localStorage.setItem('Username', u);
+        window.location.href = 'index.html';
+      });
+    }
+  </script>
 </body>
 </html>
