@@ -1,5 +1,4 @@
-
-document.addEventListener("DOMContentLoaded", function () {
+ document.addEventListener("DOMContentLoaded", function () {
   
   if (firebase.apps.length === 0) {  
     firebase.initializeApp(firebaseConfig);  
@@ -66,37 +65,49 @@ db.ref("users").once("value").then(snap => {
   let online = Math.floor(Math.random() * 31) + 300;  
   const onlineEl = document.querySelector(".fake-online");  
   
-  function updateOnline() {  
-    const delta = Math.floor(Math.random() * 5) - 2;  
-    online = Math.max(300, Math.min(online + delta, 500));  
-    onlineEl.textContent = `🟢 Online ${online} pengguna`;  
-  }  
   
-  setInterval(updateOnline, 5000);  
-  
-  document.getElementById("cariUser").addEventListener("input", function () {  
-    const k = this.value.trim().toLowerCase();  
-    const h = document.getElementById("hasilUser");  
-    h.innerHTML = "";  
-    if (k.length < 2) return;     
-    db.ref("users").orderByChild("ID").equalTo(userID).once("value").then(snap => {
-  snap.forEach(child => {
-    const val = child.val();
-    
-    
+  function updateOnline() {
+  const now = new Date();
+  const hour = now.getHours();
 
-        
-        if ((v.Nama || "").toLowerCase().includes(k)) {  
-          const d = document.createElement("div");  
-          d.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">  
+  let base = 0;
+
+  if (hour >= 6 && hour < 9) base = 110 + Math.floor(Math.random() * 20);      
+  else if (hour >= 9 && hour < 12) base = 200 + Math.floor(Math.random() * 30);  
+  else if (hour >= 12 && hour < 14) base = 290 + Math.floor(Math.random() * 20);  // istirahat siang
+  else if (hour >= 14 && hour < 17) base = 310 + Math.floor(Math.random() * 40);  // sore kerja
+  else if (hour >= 17 && hour < 20) base = 470 + Math.floor(Math.random() * 50);  // prime time
+  else if (hour >= 20 && hour < 23) base = 650 + Math.floor(Math.random() * 50);  // malam ramai
+  else base = 200 + Math.floor(Math.random() * 30);                          
+
+  onlineEl.textContent = `🟢 Online ${base}`;
+}
+  
+ 
+  
+  setInterval(updateOnline, 10000);  
+  
+  
+document.getElementById("cariUser").addEventListener("input", function () {  
+  const k = this.value.trim().toLowerCase();  
+  const h = document.getElementById("hasilUser");  
+  h.innerHTML = "";  
+  if (k.length < 2) return;     
+  db.ref("users").once("value").then(snap => {
+    snap.forEach(child => {
+      const v = child.val();
+      if ((v.Nama || "").toLowerCase().includes(k)) {
+        const d = document.createElement("div");  
+        d.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">  
   <img src="${v.Foto || 'https://nasukafoods.site/gambarkosong.jpg'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">  
   <div style="flex:1"><b>${v.Nama || 'Tanpa Nama'}</b><br><a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px;color:#2196F3">Lihat Profil</a></div></div>`;  
-          h.appendChild(d);  
-        }  
-      });  
-    });  
-  });  
-  
+        h.appendChild(d);  
+      }
+    });
+  });
+});
+
+
 
   window.kirimKomentar = function(postId) {
     const userID = localStorage.getItem("ID") || "";
@@ -210,3 +221,5 @@ const modal = document.getElementById("modalGambar");
 const gambarModal = document.getElementById("gambarModal");  
 modal.addEventListener("click", () => modal.style.display = "none");  
   
+    
+    
