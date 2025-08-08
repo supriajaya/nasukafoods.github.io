@@ -6,6 +6,9 @@
   <title>Profil</title>
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
+   <script src="https://nasukafoods.site/realtime.js"></script> 
+  
+  
   <style>
     body {
       margin: 0;
@@ -137,23 +140,11 @@
 <div class="postingan" id="daftarPostingan"></div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-  authDomain: "nasukachat.firebaseapp.com",
-  databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "nasukachat",
-  storageBucket: "nasukachat.firebasestorage.app",
-  messagingSenderId: "759589458121",
-  appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-};
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
 
 const urlParams = new URLSearchParams(location.search);
 const viewedID = urlParams.get("id") || localStorage.getItem("ID");
 const currentID = localStorage.getItem("ID");
-
 if (!currentID) location.href = "sign.html";
 
 const usersCache = {};
@@ -168,24 +159,53 @@ db.ref("users").once("value").then(snap => {
       ditemukan = true;
       document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
 
-      document.getElementById("dataUser").innerHTML = `
-        <p>🎇 ${user.Nama || '-'}</p>
-        <p>🎇 ${user.Perak || 0}</p>
-        <p>🎇 ${user.Jenis || '-'}</p>
-        <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">🎇 Kirim Pesan</button>
-      `;
+      
+ 
+ 
+ 
+ const isOwner = user.ID === currentID;
+const buttonLabel = isOwner ? "🎇 Pesan Ku" : "🎇 Kirim Pesan";
 
+document.getElementById("dataUser").innerHTML = `
+  <p>🎇 ${user.Nama || '-'}</p>
+  <p>🎇 ${user.Perak || 0}</p>
+  <p>🎇 ${user.Jenis || '-'}</p>
+  <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">${buttonLabel}</button>
+`;
+ 
+ 
+ 
+ 
+    
+      
+      
       setTimeout(() => {
-        const tombol = document.getElementById("btnKirimPesan");
-        tombol?.addEventListener("click", () => {
-          localStorage.setItem("targetID", user.ID);
-          localStorage.setItem("targetNama", user.Nama);
-          localStorage.setItem("targetFoto", user.Foto || "");
-          window.location.href = "inbox.html";
-        });
-      }, 50);
+  const tombol = document.getElementById("btnKirimPesan");
+  tombol?.addEventListener("click", () => {
+    if (isOwner) {
+      window.location.href = "inbox.html";
+    } else {
+      localStorage.setItem("targetID", user.ID);
+      localStorage.setItem("targetNama", user.Nama);
+      localStorage.setItem("targetFoto", user.Foto || "");
+      window.location.href = "inbox.html";
+    }
+  });
+}, 50);
+      
+      
+      
+      
+      
     }
   }
+
+
+
+
+
+
+
 
   if (!ditemukan) {
     alert("Pengguna tidak ditemukan");
