@@ -163,27 +163,28 @@ db.ref("posts").on("child_added", function(snapshot) {
       ${data.ID === currentID ? `<button class="hapus-btn" onclick="hapusPostingan('${key}', this.parentElement)">Hapus</button>` : ""}
       ${data.Foto ? `<img src="${data.Foto}">` : ""}
       <div class="card-content">
-        <h3>${data.Judul}</h3>
+        <h3>${(data.Judul || "").replace(/\n/g, '<br>')}</h3>
         <small>${data.Status}</small><br/>
       </div>
       <textarea id="input-${key}" placeholder="Tulis komentar" style="width:100%; padding:10px;"></textarea>
-      
-      
       <button class="btnKirim" onclick="submitKomentarManual('${key}')">Kirim</button>
-      
-      
-      
-  <div class="komentar-list" id="list-${key}"></div>
-`;
-const likeSpan = document.createElement("span");
-likeSpan.style.cursor = "pointer";
-likeSpan.style.display = "inline-block";
-likeSpan.style.marginTop = "10px";
-likeSpan.style.fontWeight = "bold";
-likeSpan.onclick = () => toggleLike(key);
-card.querySelector(".card-content").appendChild(likeSpan);
-document.getElementById("daftarPostingan").prepend(card);
-updateLikeDisplay(key, likeSpan);
-muatKomentar(key);
+      <div class="komentar-list" id="list-${key}"></div>
+    `;
+    const likeSpan = document.createElement("span");
+    likeSpan.style.cursor = "pointer";
+    likeSpan.style.display = "inline-block";
+    likeSpan.style.marginTop = "10px";
+    likeSpan.style.fontWeight = "bold";
+    likeSpan.onclick = () => toggleLike(key);
+    card.querySelector(".card-content").appendChild(likeSpan);
+    document.getElementById("daftarPostingan").prepend(card);
+    updateLikeDisplay(key, likeSpan);
+    muatKomentar(key);
+  }
+});
 
-} });
+function tambahKomentar(list, users, data) {
+  const div = document.createElement("div");
+  div.innerHTML = `<b>${users.Nama || "?"}:</b> ${(data.Teks || "").replace(/\n/g, '<br>')}`;
+  list.appendChild(div);
+}
