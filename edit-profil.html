@@ -121,6 +121,9 @@
     document.getElementById("status").innerText = "Username tidak ditemukan.";
   } else {
     document.getElementById("ID").value = userID;
+    
+    
+    
     db.ref("users/" + username).once("value").then(snapshot => {
       const data = snapshot.val();
       if (data) {
@@ -156,11 +159,23 @@
         Alamat: document.getElementById("Alamat").value,
         Foto: document.getElementById("Foto").value
       };
-      db.ref("users/" + username).update(data).then(() => {
-        document.getElementById("status").innerText = "Profil berhasil diperbarui.";
-      }).catch(() => {
-        document.getElementById("status").innerText = "Gagal memperbarui profil.";
-      });
+      
+      
+      
+      
+    db.ref("users/" + username).update(data).then(() => {
+  document.getElementById("status").innerText = "Profil berhasil diperbarui.";
+  setTimeout(() => {
+    window.location.href = "index.html"; // redirect ke halaman utama
+  }, 1000); // jeda 1 detik biar user sempat lihat pesan sukses
+}).catch(() => {
+  document.getElementById("status").innerText = "Gagal memperbarui profil.";
+});  
+      
+      
+      
+      
+     
     });
   }
 </script>
