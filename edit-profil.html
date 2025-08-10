@@ -115,15 +115,15 @@
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+
   const userID = localStorage.getItem("ID");
   const username = localStorage.getItem("Username");
+
   if (!username) {
     document.getElementById("status").innerText = "Username tidak ditemukan.";
   } else {
     document.getElementById("ID").value = userID;
-    
-    
-    
+
     db.ref("users/" + username).once("value").then(snapshot => {
       const data = snapshot.val();
       if (data) {
@@ -136,6 +136,7 @@
         document.getElementById("fotoPreview").src = data.Foto || "";
       }
     });
+
     let selectedFile = null;
     document.getElementById("fotoProfilInput").addEventListener("change", function(e) {
       const file = e.target.files[0];
@@ -149,6 +150,7 @@
         reader.readAsDataURL(file);
       }
     });
+
     document.getElementById("editForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const data = {
@@ -159,23 +161,23 @@
         Alamat: document.getElementById("Alamat").value,
         Foto: document.getElementById("Foto").value
       };
-      
-      
-      
-      
-    db.ref("users/" + username).update(data).then(() => {
-  document.getElementById("status").innerText = "Profil berhasil diperbarui.";
-  setTimeout(() => {
-    window.location.href = "index.html"; // redirect ke halaman utama
-  }, 1000); // jeda 1 detik biar user sempat lihat pesan sukses
-}).catch(() => {
-  document.getElementById("status").innerText = "Gagal memperbarui profil.";
-});  
-      
-      
-      
-      
-     
+
+      db.ref("users/" + username).update(data).then(() => {
+        // ✅ Update localStorage langsung
+        localStorage.setItem("Username", data.Username);
+        localStorage.setItem("Password", data.Password);
+        localStorage.setItem("Nama", data.Nama);
+        localStorage.setItem("Telepon", data.Telepon);
+        localStorage.setItem("Alamat", data.Alamat);
+        localStorage.setItem("Foto", data.Foto);
+
+        document.getElementById("status").innerText = "Profil berhasil diperbarui.";
+        setTimeout(() => {
+          window.location.href = "index.html"; // redirect ke halaman utama
+        }, 1000);
+      }).catch(() => {
+        document.getElementById("status").innerText = "Gagal memperbarui profil.";
+      });
     });
   }
 </script>
