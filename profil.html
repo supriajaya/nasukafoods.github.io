@@ -31,7 +31,7 @@
       <option value="publik">Publik</option>  
       <option value="privat">Privat</option>  
     </select>  <label style="display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;width:100%;">  
-  📷 ......  
+  📷 
   <input type="file" id="fotoInput" accept="image/*" style="display:none;" />  
 </label>  
 
@@ -121,7 +121,7 @@ db.ref("users").once("value").then(snap => {
 function renderUser(user, isLocal) {
   document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
   const isOwner = user.ID === currentID;
-  const buttonLabel = isOwner ? "🎇 Interaksi Teranyar" : "🎇 Kirim Pesan";
+  const buttonLabel = isOwner ? "" : "🎇 Kirim Pesan";
   document.getElementById("dataUser").innerHTML = `
     <p>🎇 ${user.Nama || '-'}</p>
     <p>🎇 ${user.Perak || 0}</p>
