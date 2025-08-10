@@ -1,0 +1,63 @@
+.form-post {
+    padding:10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+   label {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+}
+   .form-post {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+   
+   
+   
+   #btnPosting {
+  background: #2196f3;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.btnKirim {
+  background: #ff9800;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+   
+   
+      
+    body {margin:0;font-family:'Segoe UI',sans-serif;background-color:#f5f5f5}
+    .container {display:flex;flex-wrap:wrap;justify-content:space-between;padding:10px}
+    .nasuka {flex:0 0 48%;background-color:#fff;margin-bottom:10px;border-radius:8px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,0.1);text-align:center;box-sizing:border-box}
+    .nasuka img {width:100%;height:auto;display:block}
+    .nasuka-info {padding:10px}
+    .nasuka-info.left {text-align:left}
+    .form-post {padding:10px}
+    .form-post input,.form-post textarea,.form-post select {width:100%;margin-bottom:10px;padding:8px;font-size:16px;box-sizing:border-box}
+    .postingan {padding:10px}
+    .card {background:#fff;margin-bottom:10px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.1);overflow:hidden;position:relative}
+    .card img {width:100%;height:auto}
+    .card-content {padding:10px;text-align:left}
+    .hapus-btn {position:absolute;top:10px;right:10px;background-color:red;color:white;border:none;padding:6px 10px;font-size:12px;border-radius:4px;cursor:pointer}
+    .komentar {padding:10px}
+    .komentar input {width:100%;box-sizing:border-box;padding:5px;margin-bottom:5px}
+    .komentar-list {max-height:100px;overflow-y:auto;font-size:14px;color:#333}
+    .komentar-list div {margin-bottom:5px}
+  
