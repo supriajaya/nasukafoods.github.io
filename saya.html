@@ -8,11 +8,68 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
   <script src="https://nasukafoods.site/realtime.js"></script>
   <script src="https://nasukafoods.site/saya.js"></script>
-  
   <link rel="stylesheet" href="https://nasukafoods.site/saya.css">
-  
-  
-    
+
+  <style>
+    /* Modal background */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      inset: 0;
+      background-color: rgba(0,0,0,0.6);
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    /* Kotak modal */
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      width: 90%;
+      max-width: 300px;
+      margin: 20% auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      text-align: center;
+      font-family: inherit;
+      animation: slideUp 0.25s ease-out;
+    }
+
+    /* Animasi */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes slideUp {
+      from {transform: translateY(20px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+
+    /* Tombol */
+    .modal-content button {
+      padding: 8px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .btn-yes {
+      background: #e74c3c;
+      color: white;
+    }
+    .btn-yes:hover {
+      background: #c0392b;
+    }
+    .btn-no {
+      background: #95a5a6;
+      color: white;
+    }
+    .btn-no:hover {
+      background: #7f8c8d;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -34,18 +91,13 @@
     <div class="info-line"><span class="label">Rank</span><span class="value rank"></span></div>
     <div class="info-line"><span class="label">Username</span><span class="value username"></span></div>
     <div class="info-line"><span class="label">Password</span><span class="value password"></span></div>
-    <div class="info-line"><span class="label">Teman</span><span class="value teman"></span>
-    
-    
-    </div>
-    
-     <a href="edit-profil.html" class="info-line">
-  <span class="label">Edit Profil</span>
-  <span class="value teman"></span>
-</a>
-    
-    
-    
+    <div class="info-line"><span class="label">Teman</span><span class="value teman"></span></div>
+
+    <a href="edit-profil.html" class="info-line">
+      <span class="label">Edit Profil</span>
+      <span class="value teman"></span>
+    </a>
+
     <div class="nav-bar">
       <span onclick="showModal('topup')">Topup</span>
       <span onclick="showModal('riwayat')">Riwayat</span>
@@ -55,8 +107,32 @@
 
   <div id="modal-topup" class="modal"><div class="modal-content">Topup</div></div>
   <div id="modal-riwayat" class="modal"><div class="modal-content">Riwayat</div></div>
-  <div id="modal-logout" class="modal"><div class="modal-content">Logout</div></div>
-
   
+  <!-- Modal Logout -->
+  <div id="modal-logout" class="modal">
+    <div class="modal-content">
+      <p style="margin-bottom: 15px; font-size: 16px;">Yakin mau logout?</p>
+      <button class="btn-yes" onclick="logout()">Ya</button>
+      <button class="btn-no" onclick="closeModal('logout')">Batal</button>
+    </div>
+  </div>
+
+  <script>
+    function showModal(type) {
+      document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+      document.getElementById('modal-' + type).style.display = 'block';
+    }
+
+    function closeModal(type) {
+      document.getElementById('modal-' + type).style.display = 'none';
+    }
+
+    function logout() {
+      // Hapus data login
+      localStorage.removeItem("userId");
+      // Arahkan ke halaman login
+      window.location.href = "index.html";
+    }
+  </script>
 </body>
 </html>
