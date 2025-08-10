@@ -9,31 +9,79 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script src="https://nasukafoods.site/realtime.js"></script>
   <style>
-  .msg {
-  max-width: 70%;
-  margin: 5px 0;
-  padding: 8px 12px;
-  border-radius: 10px;
-  word-wrap: break-word;
-  display: inline-block;
-}
-
-/* Pesan dari kamu (diri sendiri) */
-.msg.me {
-  background-color: #dcf8c6; /* Hijau muda */
-  align-self: flex-end;
-  border-top-right-radius: 0;
-  text-align: right;
-}
-
-/* Pesan dari lawan bicara */
-.msg:not(.me) {
-  background-color: #ffffff; /* Putih */
-  align-self: flex-start;
-  border-top-left-radius: 0;
-  text-align: left;
-}
-  
+    .msg {
+      max-width: 70%;
+      margin: 5px 0;
+      padding: 8px 12px;
+      border-radius: 10px;
+      word-wrap: break-word;
+      display: inline-block;
+    }
+    .msg.me {
+      background-color: #dcf8c6;
+      align-self: flex-end;
+      border-top-right-radius: 0;
+      text-align: right;
+    }
+    .msg:not(.me) {
+      background-color: #ffffff;
+      align-self: flex-start;
+      border-top-left-radius: 0;
+      text-align: left;
+    }
+    .time {
+      font-size: 10px;
+      color: #888;
+      margin-top: 2px;
+      display: block;
+    }
+    #inputMessage {
+      resize: none;
+      overflow: hidden;
+    }
+    #topBar {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background-color: green;
+      cursor: pointer;
+    }
+    #targetFotoEl {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+    #roomTitle {
+      font-weight: bold;
+    }
+    #chatBox {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    #inputContainer {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+    }
+    #inputMessage {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #sendBtn {
+      margin-left: 10px;
+      padding: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -45,12 +93,10 @@
     <div id="chatBox"></div>
     <div id="inputContainer">
       <textarea id="inputMessage" rows="1" placeholder="Ketik pesan..."></textarea>
-      <button id="sendBtn">&#9658;</button>
+      <button id="sendBtn" onclick="kirim()">&#9658;</button>
     </div>
   </div>
-
   <script>
-    // Pastikan Firebase db sudah terdefinisi di realtime.js
     const ID = localStorage.getItem('ID') || '';
     const Username = localStorage.getItem('Username') || '';
     const Nama = localStorage.getItem('Nama') || '';
@@ -67,20 +113,11 @@
 
     const chatBox = document.getElementById('chatBox');
     const input = document.getElementById('inputMessage');
-    const btn = document.getElementById('sendBtn');
     const targetFotoEl = document.getElementById('targetFotoEl');
     const roomTitle = document.getElementById('roomTitle');
 
     targetFotoEl.src = targetFoto || 'default.jpg';
     roomTitle.textContent = targetNama;
-
-    btn.onclick = kirim;
-    input.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        kirim();
-      }
-    });
 
     function kirim() {
       const msg = input.value.trim();
@@ -94,10 +131,8 @@
           Waktu: waktu
         };
 
-        // Kirim ke node percakapan
         chatRef.push(pesanData);
 
-        // Update summary chat untuk pengirim
         db.ref('users/' + ID + '/chats/' + targetID).set({
           room: room,
           ID: targetID,
@@ -107,12 +142,11 @@
           Waktu: waktu
         });
 
-        // Update summary chat untuk penerima
         db.ref('users/' + targetID + '/chats/' + ID).set({
           room: room,
           ID: ID,
           Username: Nama,
-          Foto: '', // Foto kamu, jika ada
+          Foto: '',
           Terakhir: msg,
           Waktu: waktu
         });
@@ -122,21 +156,60 @@
       }
     }
 
-    // Menampilkan pesan real-time
-    chatRef.on('child_added', function (snap) {
-      const data = snap.val();
-      const msgEl = document.createElement('div');
-      msgEl.className = data.ID === ID ? 'msg me' : 'msg';
-      msgEl.textContent = data.Pesan;
-      chatBox.appendChild(msgEl);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
+    let activeChatRef = null;
+    let activeChatListener = null;
 
-    // Auto resize textarea
-    input.addEventListener('input', function () {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
-    });
+    function formatWaktu(ms) {
+      const d = new Date(ms);
+      const jam = d.getHours().toString().padStart(2, '0');
+      const mnt = d.getMinutes().toString().padStart(2, '0');
+      return jam + ':' + mnt;
+    }
+
+    function loadChat() {
+      const newTargetID = localStorage.getItem('targetID') || '';
+      const newTargetNama = localStorage.getItem('targetNama') || '';
+      const newTargetFoto = localStorage.getItem('targetFoto') || '';
+
+      if (!newTargetID) return;
+
+      const newRoom = [ID, newTargetID].sort().join('_');
+      const newChatRef = db.ref('rooms/' + newRoom + '/chats');
+
+      targetFotoEl.src = newTargetFoto || 'default.jpg';
+      roomTitle.textContent = newTargetNama;
+      chatBox.innerHTML = '';
+
+      if (activeChatRef && activeChatListener) {
+        activeChatRef.off('child_added', activeChatListener);
+      }
+
+      chatBox.innerHTML = '';
+
+      activeChatListener = function (snap) {
+        const data = snap.val();
+        const msgEl = document.createElement('div');
+        msgEl.className = data.ID === ID ? 'msg me' : 'msg';
+
+        const text = document.createElement('div');
+        text.textContent = data.Pesan;
+
+        const time = document.createElement('span');
+        time.className = 'time';
+        time.textContent = formatWaktu(data.Waktu || 0);
+
+        msgEl.appendChild(text);
+        msgEl.appendChild(time);
+
+        chatBox.appendChild(msgEl);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      };
+
+      activeChatRef = newChatRef;
+      activeChatRef.on('child_added', activeChatListener);
+    }
+
+    window.onload = loadChat;
   </script>
 </body>
 </html>
