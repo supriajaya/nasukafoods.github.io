@@ -163,6 +163,7 @@
   </style>
 </head>
 <body>
+    
   <div class="container">
     <div class="profile-header">
       <img src="" alt="Foto Profil" class="profile-pic" />
@@ -172,13 +173,15 @@
         <div class="bio"></div>
       </div>
     </div>
+    
     <div class="gallery"></div>
-    <div class="info-line"><span class="label">Tiktok</span><span class="value tiktok"></span></div>
-    <div class="info-line"><span class="label">Facebook</span><span class="value facebook"></span></div>
+    
+   
     <div class="info-line"><span class="label">Pekerjaan</span><span class="value pekerjaan"></span></div>
     <div class="info-line"><span class="label">Usia</span><span class="value usia"></span></div>
     <div class="info-line"><span class="label">Alamat</span><span class="value alamat"></span></div>
-    <div class="info-line"><span class="label">Followers</span><span class="value followers"></span></div>
+    
+   
     <div class="info-line"><span class="label">Rank</span><span class="value rank"></span></div>
     <div class="info-line"><span class="label">Username</span><span class="value username"></span></div>
     <div class="info-line"><span class="label">Password</span><span class="value password"></span></div>
@@ -266,16 +269,17 @@
    
     
         
-        document.querySelector(".profile-pic").src = data.Foto || "";
-        document.querySelector("h2").textContent = data.Nama || "";
-        document.querySelector(".bio").innerHTML = `
+    document.querySelector(".profile-pic").src = data.Foto || "";
+    document.querySelector("h2").textContent = data.Nama || "";
+    document.querySelector(".bio").innerHTML = `
           <strong></strong><br/>
           ${data.Bio || ""}<br/>♀️/♂️ : ${data.Jenis || ""}
         `;
-        document.querySelector(".stats").innerHTML = `
+        
+    document.querySelector(".stats").innerHTML = `
           <span>Saldo : <strong>${data.Saldo || 0}</strong></span>
-          <span>Gold : <strong>${data.Gold || 0}</strong></span>
         `;
+        
         if (Array.isArray(data.Galeri)) {
           const galeri = document.querySelector(".gallery");
           galeri.innerHTML = "";
@@ -286,12 +290,11 @@
             galeri.appendChild(img);
           });
         }
-        document.querySelector(".tiktok").textContent = data.Tiktok || "";
-        document.querySelector(".facebook").textContent = data.Facebook || "";
-        document.querySelector(".pekerjaan").textContent = data.Pekerjaan || "";
+        
+         document.querySelector(".pekerjaan").textContent = data.Pekerjaan || "";
         document.querySelector(".usia").textContent = data.Usia || "";
         document.querySelector(".alamat").textContent = data.Alamat || "";
-        document.querySelector(".followers").textContent = data.Followers || 0;
+        
         document.querySelector(".username").textContent = data.Username || "";
         document.querySelector(".password").textContent = data.Password || "";
         document.querySelector(".teman").textContent = data.Teman || 0;
