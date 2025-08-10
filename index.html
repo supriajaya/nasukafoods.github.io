@@ -1,344 +1,404 @@
-<!DOCTYPE html><html lang="id"><head>      <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
-  
-<title>Nasuka Wireless</title>      
-<link rel="stylesheet" href="https://nasukafoods.site/indexnasuka.css">      
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>      
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>    <script src="https://nasukafoods.site/realtime.js"></script>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nasuka Wireless</title>
+  <link rel="stylesheet" href="https://nasukafoods.site/indexnasuka.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://nasukafoods.site/realtime.js"></script>
+</head>
+<body>
 
 
-    </head>        
-<body>     <span id="notifInbox" ...></span>  
-  
-<div class="nasuka-info centered">        
-<div class="fake-online">🟢 User Aktif</div>        
-<div style="padding:10px;text-align:center">    
-  <input id="cariUser" placeholder="" style=""/>      
-  <div id="hasilUser" style="margin-top:10px"></div>      
-</div>      
-<div class="arya-bar raya">       
-<div class="profil-overlay">      
-<a id="linkProfil">    
-  <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Loading" class="arya-item raya" id="fotoProfil">       
-</a>      
-<span id="namaUser" class="blink-glow">Memuat....</span>     
-</div>    
-<div class="profil-overlay">      
-  <img src="https://nasukafoods.site/tekn.jpg" alt="Loading" class="arya-item raya" id="fol">          
-  <span>Premium</span>      
-</div>     
-<div class="arya-scol">      
-  <div class="arya-overlay">              
-    <a href="burung.html">      
-      <img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1"> <span></span>      
-    </a>      
-  </div>      
-  <div class="arya-overlay">              
-    <a href="roll.html">      
-      <img src="https://nasukafoods.site/roll.jpg" alt="scol1"> <span></span>      
-    </a>      
-  </div>      
-  <div class="arya-overlay">              
-    <a href="puzzle.html">      
-      <img src="https://nasukafoods.site/puzzle.jpg" alt="scol1"> <span></span>      
-    </a>      
-  </div>      
-  <div class="arya-overlay">              
-    <a href="">      
-      <img src="https://nasukafoods.site/onprogres.jpg" alt="scol1"> <span></span>      
-    </a>      
-  </div>      
-  <div class="arya-overlay">              
-    <a href="https://nasukafoods.site/nasuka.apk">      
-      <img src="https://nasukafoods.site/nasukafoods.jpg" alt="scol1"> <span>Download</span>      
-    </a>      
-  </div>      
-</div>      
-</div>     
-</div>     
-<div id="daftarPostingan" style="padding: 10px;"></div>      
-<div id="modalGambar" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center">      
-  <img id="gambarModal" src="" style="max-width:95%;max-height:95%;border-radius:8px">      
-</div>  
-<script>    
+  <div class="nasuka-info centered"></div>
+  <div style="padding:10px;text-align:center">
+  <input id="cariUser" placeholder="" style="" />
+  <div id="hasilUser" style="margin-top:10px"></div>
+    </div>
+
+    <div class="arya-bar raya">
+    <div class="profil-overlay">
+    <a id="linkProfil">
+<img src="https://nasukafoods.site/nasukafoods.jpg"
+alt="Loading" class="arya-item raya" id="fotoProfil"
+/></a><span id="namaUser" class="blink-glow">Memuat....</span></div>
+
+<div class="profil-overlay" style="position: relative;">
+<img src="https://nasukafoods.site/tekn.jpg"
+alt="Loading" class="arya-item raya"
+    id="fol"/>
+  <span>Chat ✅</span>
+  <span id="notifInbox" style="position: absolute; top: 4px; right: 4px; px 6px; border-radius: 12px; cursor: pointer; display: none;"></span></div>
+
+
+     
+
+      <div class="arya-scol">
+          
+      <div class="arya-overlay">
+      <a href="burung.html">
+<img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1" /><span></span></a></div>            
         
-        
- 
-document.addEventListener("DOMContentLoaded", function () {
+      <div class="arya-overlay">
+      <a href="roll.html">
+<img src="https://nasukafoods.site/roll.jpg" alt="scol1" /><span></span> </a></div>
 
-  // Inisialisasi Firebase
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.database();
-  
-  // Ambil info user
-  const userID = localStorage.getItem("ID") || "";
-  const fotoEl = document.getElementById("fotoProfil");
-  const namaEl = document.getElementById("namaUser");
-  const profilLink = document.getElementById("linkProfil");
-  const notifInbox = document.querySelector("#notifInbox");
+      <div class="arya-overlay">
+      <a href="puzzle.html">
+<img src="https://nasukafoods.site/puzzle.jpg" alt="scol1" /> <span></span></a></div>
 
-  // ====================
-  // 1. TAMPILKAN PROFIL
-  // ====================
-  if (!userID) {
-    namaEl.textContent = "Silakan Masuk";
-    fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
-    profilLink.href = "login.html";
-  } else {
-    const nama = localStorage.getItem("Nama");
-    const foto = localStorage.getItem("Foto");
+      <div class="arya-overlay">
+      <a href="">
+<img src="https://nasukafoods.site/onprogres.jpg" alt="scol1" /><span></span></a></div>
 
-    if (nama && foto) {
-      namaEl.textContent = nama;
-      fotoEl.src = foto;
-      profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-    } else {
-      db.ref("users").once("value").then(snap => {
-        snap.forEach(child => {
-          const val = child.val();
-          if (val.ID === userID) {
+      <div class="arya-overlay">
+      <a href="https://nasukafoods.site/nasuka.apk">
+<img src="https://nasukafoods.site/nasukafoods.jpg" alt="scol1" /><span>Download</span></a></div>
+
+      </div></div></div>
+
+<div id="daftarPostingan" style="padding: 10px;"></div>
+
+  <div id="modalGambar"
+    style="
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      " >
+    <img
+      id="gambarModal"
+      src=""
+      style="max-width: 95%; max-height: 95%; border-radius: 8px"
+    /></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    
+      if (firebase.apps.length === 0) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const db = firebase.database();
+
+      // Ambil info user
+      const userID = localStorage.getItem("ID") || "";
+      const fotoEl = document.getElementById("fotoProfil");
+      const namaEl = document.getElementById("namaUser");
+      const profilLink = document.getElementById("linkProfil");
+      
+      const notifInbox = document.getElementById("notifInbox");
+      
+      
+      
+      // ====================
+      // 1. TAMPILKAN PROFIL
+      // ====================
+      if (!userID) {
+        namaEl.textContent = "Silakan Masuk";
+        fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
+        profilLink.href = "login.html";
+      } else {
+        const nama = localStorage.getItem("Nama");
+        const foto = localStorage.getItem("Foto");
+
+        if (nama && foto) {
+          namaEl.textContent = nama;
+          fotoEl.src = foto;
+          profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+        } else {
+          db.ref("users")
+            .once("value")
+            .then((snap) => {
+              snap.forEach((child) => {
+                const val = child.val();
+                if (val.ID === userID) {
+                  localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
+                  localStorage.setItem(
+                    "Foto",
+                    val.Foto || "https://nasukafoods.site/gambarkosong.jpg"
+                  );
+                  namaEl.textContent = val.Nama || "Tanpa Nama";
+                  fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+                  profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+                }
+              });
+            });
+        }
+
+        // Realtime update foto/nama
+        db.ref("users")
+          .orderByChild("ID")
+          .equalTo(userID)
+          .on("child_changed", (snap) => {
+            const val = snap.val();
             localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
-            localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+            localStorage.setItem(
+              "Foto",
+              val.Foto || "https://nasukafoods.site/gambarkosong.jpg"
+            );
             namaEl.textContent = val.Nama || "Tanpa Nama";
             fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-            profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-          }
+          });
+      }
+
+      // ==========================
+      // 2. FITUR PENCARIAN USER
+      // ==========================
+      document.getElementById("cariUser").addEventListener("input", function () {
+        const k = this.value.trim().toLowerCase();
+        const h = document.getElementById("hasilUser");
+        h.innerHTML = "";
+        if (k.length < 2) return;
+
+        db.ref("users")
+          .once("value")
+          .then((snap) => {
+            snap.forEach((child) => {
+              const v = child.val();
+              if ((v.Nama || "").toLowerCase().includes(k)) {
+                const d = document.createElement("div");
+                d.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">
+                  <img src="${
+                    v.Foto || "https://nasukafoods.site/gambarkosong.jpg"
+                  }" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
+                  <div style="flex:1">
+                    <b>${v.Nama || "Tanpa Nama"}</b><br>
+                    <a href="profil.html?id=${encodeURIComponent(
+                      v.ID
+                    )}" style="font-size:12px;color:#2196F3">Lihat Profil</a>
+                  </div>
+                </div>`;
+                h.appendChild(d);
+              }
+            });
+          });
+      });
+
+      // =======================
+      // 3. FITUR POST & KOMENTAR
+      // =======================
+      window.kirimKomentar = function (postId) {
+        if (!userID) return;
+        const nama = localStorage.getItem("Nama") || "Anonim";
+        const input = document.getElementById("inputKomentar-" + postId);
+        const teks = (input?.value || "").trim();
+        if (!teks) return;
+        db.ref("komentar/" + postId).push({
+          ID: userID,
+          Nama: nama,
+          Teks: teks,
+          Waktu: new Date().toISOString(),
         });
-      });
-    }
+        input.value = "";
+      };
 
-    // Realtime update foto/nama
-    db.ref("users").orderByChild("ID").equalTo(userID).on("child_changed", snap => {
-      const val = snap.val();
-      localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
-      localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
-      namaEl.textContent = val.Nama || "Tanpa Nama";
-      fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-    });
-  }
+      window.toggleLike = function (postId) {
+        if (!userID) return;
+        const ref = db.ref("likes/" + postId + "/" + userID);
+        ref.once("value").then((snap) => {
+          if (snap.exists()) ref.remove();
+          else ref.set(true);
+        });
+      };
 
-  // ==========================
-  // 2. FITUR PENCARIAN USER
-  // ==========================
-  document.getElementById("cariUser").addEventListener("input", function () {
-    const k = this.value.trim().toLowerCase();
-    const h = document.getElementById("hasilUser");
-    h.innerHTML = "";
-    if (k.length < 2) return;
+      db.ref("posts")
+        .orderByChild("Status")
+        .equalTo("publik")
+        .on("value", (snapshot) => {
+          const daftar = document.getElementById("daftarPostingan");
+          daftar.innerHTML = "";
+          let posts = [];
+          snapshot.forEach((p) => posts.push(p));
+          posts.reverse().forEach((postSnap) => {
+            const post = postSnap.val();
+            const postId = postSnap.key;
+            const pemilikID = post.ID || "";
 
-    db.ref("users").once("value").then(snap => {
-      snap.forEach(child => {
-        const v = child.val();
-        if ((v.Nama || "").toLowerCase().includes(k)) {
-          const d = document.createElement("div");
-          d.innerHTML = `
-            <div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">
-              <img src="${v.Foto || 'https://nasukafoods.site/gambarkosong.jpg'}" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
-              <div style="flex:1">
-                <b>${v.Nama || 'Tanpa Nama'}</b><br>
-                <a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px;color:#2196F3">Lihat Profil</a>
-              </div>
-            </div>`;
-          h.appendChild(d);
-        }
-      });
-    });
-  });
+            db.ref("users")
+              .orderByChild("ID")
+              .equalTo(pemilikID)
+              .once("value")
+              .then((userSnap) => {
+                let namaPemilik = "Tanpa Nama";
+                userSnap.forEach((u) => {
+                  if (u.val().Nama) namaPemilik = u.val().Nama;
+                });
 
-  // =======================
-  // 3. FITUR POST & KOMENTAR
-  // =======================
-  window.kirimKomentar = function (postId) {
-    if (!userID) return;
-    const nama = localStorage.getItem("Nama") || "Anonim";
-    const input = document.getElementById("inputKomentar-" + postId);
-    const teks = (input?.value || "").trim();
-    if (!teks) return;
-    db.ref("komentar/" + postId).push({
-      ID: userID,
-      Nama: nama,
-      Teks: teks,
-      Waktu: new Date().toISOString()
-    });
-    input.value = "";
-  };
+                const div = document.createElement("div");
+                div.className = "post-item";
+                div.style.flexDirection = "column";
 
-  window.toggleLike = function (postId) {
-    if (!userID) return;
-    const ref = db.ref("likes/" + postId + "/" + userID);
-    ref.once("value").then(snap => {
-      if (snap.exists()) ref.remove();
-      else ref.set(true);
-    });
-  };
+                div.innerHTML = `
+                <div style="text-align:center;font-weight:bold;font-size:14px;margin-bottom:6px">${namaPemilik}</div>
+                ${
+                  post.Foto
+                    ? `<img src="${post.Foto}" class="foto-post" style="width:100px;height:100px;margin:0 auto 8px;display:block;border-radius:8px;object-fit:cover;cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')">`
+                    : ""
+                }
+                <div style="font-size:13px;margin:4px 0"><b>${(post.Judul || "").replace(
+                  /\n/g,
+                  "<br>"
+                )}</b></div>
+                <div style="font-size:11px;color:gray">${
+                  post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ""
+                }</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+                  <button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px;border:none;border-radius:6px;cursor:pointer;font-size:13px">❤️</button>
+                  <span id="likeCount-${postId}" style="font-size:13px">0 suka</span>
+                </div>
+                <div id="komentar-${postId}" style="margin-top:10px; display:none;"></div>
+                <button id="lihatKomentarBtn-${postId}" style="margin-top:6px;padding:6px 10px;background:red;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">Lihat Komentar</button>
+                <div style="display:flex;gap:6px;margin-top:6px">
+                  <textarea id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px;resize:none" rows="1"></textarea>
+                  <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:6px;font-size:13px">Ok</button>
+                </div>`;
 
-  db.ref("posts").orderByChild("Status").equalTo("publik").on("value", snapshot => {
-    const daftar = document.getElementById("daftarPostingan");
-    daftar.innerHTML = "";
-    let posts = [];
-    snapshot.forEach(p => posts.push(p));
-    posts.reverse().forEach(postSnap => {
-      const post = postSnap.val();
-      const postId = postSnap.key;
-      const pemilikID = post.ID || "";
+                daftar.appendChild(div);
 
-      db.ref("users").orderByChild("ID").equalTo(pemilikID).once("value").then(userSnap => {
-        let namaPemilik = "Tanpa Nama";
-        userSnap.forEach(u => { if (u.val().Nama) namaPemilik = u.val().Nama; });
+                // Tombol lihat komentar
+                let komentarLoaded = false;
+                const btnLihat = div.querySelector(`#lihatKomentarBtn-${postId}`);
+                const wadahKomentar = div.querySelector(`#komentar-${postId}`);
+                btnLihat.onclick = () => {
+                  if (wadahKomentar.style.display === "none") {
+                    wadahKomentar.style.display = "block";
+                    btnLihat.textContent = "Sembunyikan Komentar";
+                    if (!komentarLoaded) {
+                      db.ref("komentar/" + postId).on("value", (snap) => {
+                        wadahKomentar.innerHTML = "";
+                        snap.forEach((c) => {
+                          const v = c.val();
+                          const d = document.createElement("div");
+                          d.style =
+                            "background:#f9f9f9;padding:6px;margin-top:4px;border-radius:6px;font-size:12px";
+                          d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(
+                            /\n/g,
+                            "<br>"
+                          )}`;
+                          wadahKomentar.appendChild(d);
+                        });
+                      });
+                      komentarLoaded = true;
+                    }
+                  } else {
+                    wadahKomentar.style.display = "none";
+                    btnLihat.textContent = "Lihat Komentar";
+                  }
+                };
 
-        const div = document.createElement("div");
-        div.className = "post-item";
-        div.style.flexDirection = "column";
-
-        div.innerHTML = `
-          <div style="text-align:center;font-weight:bold;font-size:14px;margin-bottom:6px">${namaPemilik}</div>
-          ${post.Foto ? `<img src="${post.Foto}" class="foto-post" style="width:100px;height:100px;margin:0 auto 8px;display:block;border-radius:8px;object-fit:cover;cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')">` : ""}
-          <div style="font-size:13px;margin:4px 0"><b>${(post.Judul || '').replace(/\n/g, '<br>')}</b></div>
-          <div style="font-size:11px;color:gray">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ''}</div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-            <button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px;border:none;border-radius:6px;cursor:pointer;font-size:13px">❤️</button>
-            <span id="likeCount-${postId}" style="font-size:13px">0 suka</span>
-          </div>
-          <div id="komentar-${postId}" style="margin-top:10px; display:none;"></div>
-          <button id="lihatKomentarBtn-${postId}" style="margin-top:6px;padding:6px 10px;background:red;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">Lihat Komentar</button>
-          <div style="display:flex;gap:6px;margin-top:6px">
-            <textarea id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px;resize:none" rows="1"></textarea>
-            <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:6px;font-size:13px">Ok</button>
-          </div>`;
-
-        daftar.appendChild(div);
-
-        // Tombol lihat komentar
-        let komentarLoaded = false;
-        const btnLihat = div.querySelector(`#lihatKomentarBtn-${postId}`);
-        const wadahKomentar = div.querySelector(`#komentar-${postId}`);
-        btnLihat.onclick = () => {
-          if (wadahKomentar.style.display === "none") {
-            wadahKomentar.style.display = "block";
-            btnLihat.textContent = "Sembunyikan Komentar";
-            if (!komentarLoaded) {
-              db.ref("komentar/" + postId).on("value", snap => {
-                wadahKomentar.innerHTML = "";
-                snap.forEach(c => {
-                  const v = c.val();
-                  const d = document.createElement("div");
-                  d.style = "background:#f9f9f9;padding:6px;margin-top:4px;border-radius:6px;font-size:12px";
-                  d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(/\n/g, "<br>")}`;
-                  wadahKomentar.appendChild(d);
+                // Like realtime
+                db.ref("likes/" + postId).on("value", (snap) => {
+                  document.getElementById("likeCount-" + postId).textContent = `${snap.numChildren()} suka`;
+                  const likeBtn = document.getElementById("likeBtn-" + postId);
+                  if (likeBtn) {
+                    if (snap.hasChild(userID)) {
+                      likeBtn.textContent = "❤️";
+                      likeBtn.style.background = "#f8d7da";
+                    } else {
+                      likeBtn.textContent = "💔";
+                      likeBtn.style.background = "#eee";
+                    }
+                  }
                 });
               });
-              komentarLoaded = true;
-            }
-          } else {
-            wadahKomentar.style.display = "none";
-            btnLihat.textContent = "Lihat Komentar";
-          }
-        };
-
-        // Like realtime
-        db.ref("likes/" + postId).on("value", snap => {
-          document.getElementById("likeCount-" + postId).textContent = `${snap.numChildren()} suka`;
-          const likeBtn = document.getElementById("likeBtn-" + postId);
-          if (likeBtn) {
-            if (snap.hasChild(userID)) {
-              likeBtn.textContent = "❤️";
-              likeBtn.style.background = "#f8d7da";
-            } else {
-              likeBtn.textContent = "💔";
-              likeBtn.style.background = "#eee";
-            }
-          }
-        });
-      });
-    });
-  });
-
-  // ======================
-  // 4. NOTIF CHAT REALTIME
-  // ======================
-  if (userID) {
-    firebase.database().ref("rooms").on("value", snap => {
-      notifInbox.style.display = "none";
-      notifInbox.innerHTML = "";
-      const temp = {};
-
-      snap.forEach(room => {
-        const key = room.key;
-        if (!key.includes("_")) return;
-        const [a, b] = key.split("_");
-        if (a === b || (a !== userID && b !== userID)) return;
-
-        let lawan = a === userID ? b : a;
-        let pesanTerakhir = null;
-        let waktuTerakhir = 0;
-
-        room.child("chats").forEach(chat => {
-          const data = chat.val();
-          if (!data?.Pesan) return;
-          if (data.ID !== userID && data.Waktu > waktuTerakhir) {
-            waktuTerakhir = data.Waktu;
-            pesanTerakhir = data;
-          }
+          });
         });
 
-        if (pesanTerakhir) {
-          temp[lawan] = pesanTerakhir;
-        }
-      });
+      // ======================
+      // 4. NOTIF CHAT REALTIME
+      // ======================
+      
+      
+      
+      
+      if (userID) {
+        firebase.database().ref("rooms").on("value", (snap) => {
+          notifInbox.style.display = "none";
+          notifInbox.innerHTML = "";
+          const temp = {};
 
-      const entries = Object.entries(temp).sort((a, b) => b[1].Waktu - a[1].Waktu);
-      if (entries.length > 0) {
-        notifInbox.style.display = "inline";
-        notifInbox.innerHTML = "📨 Chat";
-        notifInbox.onclick = () => {
-          const popup = document.createElement("div");
-          popup.style = `
-            position: fixed; top: 50px; left: 8px; background: snow;
-            padding: 10px; border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.4);
-            z-index: 9999;
-          `;
-          const btnClose = document.createElement("div");
-          btnClose.textContent = "Tutup";
-          btnClose.style.cssText = "text-align:right;font-weight:bold;cursor:pointer;margin-bottom:10px";
-          btnClose.onclick = () => popup.remove();
-          popup.appendChild(btnClose);
+          snap.forEach((room) => {
+            const key = room.key;
+            if (!key.includes("_")) return;
+            const [a, b] = key.split("_");
+            if (a === b || (a !== userID && b !== userID)) return;
 
-          entries.forEach(([pengirimID, data]) => {
-            const div = document.createElement("div");
-            div.textContent = `${data.Nama}: ${data.Pesan}`;
-            div.style = "cursor:pointer;margin-bottom:6px";
-            div.onclick = () => {
-              localStorage.setItem("targetID", pengirimID);
-              localStorage.setItem("targetNama", data.Nama || "");
-              localStorage.setItem("targetFoto", "");
-              location.href = "inbox.html";
-            };
-            popup.appendChild(div);
+            let lawan = a === userID ? b : a;
+            let pesanTerakhir = null;
+            let waktuTerakhir = 0;
+
+            room.child("chats").forEach((chat) => {
+              const data = chat.val();
+              if (!data?.Pesan) return;
+              if (data.ID !== userID && data.Waktu > waktuTerakhir) {
+                waktuTerakhir = data.Waktu;
+                pesanTerakhir = data;
+              }
+            });
+
+            if (pesanTerakhir) {
+              temp[lawan] = pesanTerakhir;
+            }
           });
 
-          document.body.appendChild(popup);
-        };
+          const entries = Object.entries(temp).sort((a, b) => b[1].Waktu - a[1].Waktu);
+          if (entries.length > 0) {
+            notifInbox.style.display = "inline";
+            notifInbox.innerHTML = "📨 Chat";
+            notifInbox.onclick = () => {
+              const popup = document.createElement("div");
+              popup.style = `
+                position: fixed; top: 50px; left: 8px; background: snow;
+                padding: 10px; border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.4);
+                z-index: 9999;
+              `;
+              const btnClose = document.createElement("div");
+              btnClose.textContent = "❌";
+              btnClose.style.cssText =
+                "text-align:right;font-weight:bold;cursor:pointer;margin-bottom:10px";
+              btnClose.onclick = () => popup.remove();
+              popup.appendChild(btnClose);
+
+              entries.forEach(([pengirimID, data]) => {
+                const div = document.createElement("div");
+                div.textContent = `${data.Nama}: ${data.Pesan}`;
+                div.style = "cursor:pointer;margin-bottom:6px";
+                div.onclick = () => {
+                  localStorage.setItem("targetID", pengirimID);
+                  localStorage.setItem("targetNama", data.Nama || "");
+                  localStorage.setItem("targetFoto", "");
+                  location.href = "inbox.html";
+                };
+                popup.appendChild(div);
+              });
+
+              document.body.appendChild(popup);
+            };
+          }
+        });
       }
+
+      // =====================
+      // 5. MODAL FOTO POST
+      // =====================
+      window.tampilkanGambarPenuh = function (src) {
+        if (!src) return;
+        document.getElementById("gambarModal").src = src;
+        document.getElementById("modalGambar").style.display = "flex";
+      };
+      document.getElementById("modalGambar").addEventListener("click", () => {
+        document.getElementById("modalGambar").style.display = "none";
+      });
     });
-  }
-
-  // =====================
-  // 5. MODAL FOTO POST
-  // =====================
-  window.tampilkanGambarPenuh = function (src) {
-    if (!src) return;
-    document.getElementById("gambarModal").src = src;
-    document.getElementById("modalGambar").style.display = "flex";
-  };
-  document.getElementById("modalGambar").addEventListener("click", () => {
-    document.getElementById("modalGambar").style.display = "none";
-  });
-
-});
-
-        
-        
-</script>  
-  
-</body></html>
+  </script>
+</body>
+</html>
