@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <title>Login & Signup Nasuka</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
-  <script src="https://nasukafoods.site/realtime.js"></script>
+  
+  <!-- Firebase SDK compat version -->
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -83,14 +85,34 @@
   <div class="box" id="signupBox" style="display:none">
     <h2>Signup Nasuka</h2>
     <div id="errorSignup" class="error-msg"></div>
-    <input type="text" id="signupNama" placeholder="Nama">
-    <input type="text" id="signupUsername" placeholder="Username">
-    <input type="password" id="signupPassword" placeholder="Password">
+    <input type="text" id="signupNama" placeholder="Nama" />
+    <input type="text" id="signupUsername" placeholder="Username" />
+    <input type="password" id="signupPassword" placeholder="Password" />
     <button onclick="signup()">Buat Akun Sekarang</button>
     <span class="link" onclick="showLogin()">Sudah punya akun? Login disini</span>
   </div>
 
   <script>
+    
+    
+   
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+      authDomain: "nasuka-fc780.firebaseapp.com",
+      databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "nasuka-fc780",
+      storageBucket: "nasuka-fc780.firebasestorage.app",
+      messagingSenderId: "860641747257",
+      appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    
+    
+    
+    
     function showSignup(){
       document.getElementById('loginBox').style.display='none';
       document.getElementById('signupBox').style.display='block';
@@ -106,30 +128,53 @@
       const errorDiv = document.getElementById("errorLogin");
       const button = document.querySelector("#loginBox button");
       errorDiv.textContent = "";
+
       if (!username || !password) {
         errorDiv.textContent = "Nama pengguna dan password wajib diisi.";
         return;
       }
+
       button.disabled = true;
       button.textContent = "Tunggu sebentar ...";
-      db.ref("users").once("value").then(snapshot => {
-        let found = false;
-        snapshot.forEach(child => {
-          const val = child.val();
-          if (val.Username === username && val.Password === password) {
-            localStorage.setItem("ID", val.ID);
-            localStorage.setItem("Nama", val.Nama);
-            localStorage.setItem("Foto", val.Foto);
-            localStorage.setItem("Username", val.Username);
-            window.location.href = "index.html";
-            found = true;
-          }
-        });
-        if (!found) {
-          errorDiv.textContent = "Akun tidak ditemukan atau password salah.";
+
+      // Ambil data user berdasarkan username
+      db.ref("users/" + username).once("value").then(snap => {
+        if (!snap.exists()) {
+          errorDiv.textContent = "Akun tidak ditemukan.";
           button.disabled = false;
           button.textContent = "Masuk";
+          return;
         }
+
+        const val = snap.val();
+        if (val.Password !== password) {
+          errorDiv.textContent = "Password salah.";
+          button.disabled = false;
+          button.textContent = "Masuk";
+          return;
+        }
+
+        // Simpan ke localStorage
+        localStorage.setItem("ID", val.ID);
+        
+        localStorage.setItem("Nama", val.Nama);
+        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+        localStorage.setItem("Username", val.Username);
+
+        // Ambil 20 postingan terbaru dari 'posts' (sesuai db index)
+        db.ref('posts')
+          .orderByChild('Waktu')
+          .limitToLast(20)
+          .once('value')
+          .then(snapshot => {
+            const posts = [];
+            snapshot.forEach(child => {
+              posts.push(child.val());
+            });
+            posts.sort((a, b) => b.Waktu - a.Waktu);
+            localStorage.setItem('latestPosts', JSON.stringify(posts));
+            window.location.href = "index.html";
+          });
       }).catch(() => {
         errorDiv.textContent = "Terjadi kesalahan, coba lagi.";
         button.disabled = false;
@@ -143,10 +188,12 @@
       const p = document.getElementById('signupPassword').value.trim();
       const errorDiv = document.getElementById("errorSignup");
       errorDiv.textContent = "";
+
       if (!n || !u || !p) {
         errorDiv.textContent = 'Isi semua kolom';
         return;
       }
+
       const ref = db.ref('users/' + u);
       ref.get().then(snap => {
         if (snap.exists()) {
@@ -154,7 +201,7 @@
           return;
         }
         const id = 'VIP-' + Date.now();
-        const ft = 'https://nasukafoods.site/pitasebar.gif';
+        const ft = 'https://nasukafoods.site/gambarkosong.jpg';
         const tp = '0859';
         const al = 'Jl Nasuka No69 dst';
         const qt = 'Belum Berkata';
@@ -163,11 +210,13 @@
         const jn = 'Pria Wanita';
         const pk = 'Belum Diupdate';
         const st = 'VIP';
+
         ref.set({
           ID: id,
           Username: u,
           Password: p,
           Nama: n,
+          NamaLower: n.toLowerCase(),   // penting untuk search
           Foto: ft,
           Telepon: tp,
           Alamat: al,
@@ -181,11 +230,16 @@
           Tiktok: hh,
           Facebook: hh,
           Gold: oo
+        }).then(() => {
+          localStorage.setItem('Nama', n);
+          localStorage.setItem('ID', id);
+          localStorage.setItem('Username', u);
+          window.location.href = 'index.html';
+        }).catch(() => {
+          errorDiv.textContent = "Gagal membuat akun, coba lagi.";
         });
-        localStorage.setItem('Nama', n);
-        localStorage.setItem('ID', id);
-        localStorage.setItem('Username', u);
-        window.location.href = 'index.html';
+      }).catch(() => {
+        errorDiv.textContent = "Terjadi kesalahan jaringan, coba lagi.";
       });
     }
   </script>
