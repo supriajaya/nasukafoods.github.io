@@ -2,16 +2,15 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>saya</title>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
 
-  
+  <!-- Firebase 12 compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
 
   <style>
-      
-       body {
+    body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #fafafa;
@@ -32,6 +31,7 @@
       border-radius: 50%;
       object-fit: cover;
       margin-right: 30px;
+      background: #ccc;
     }
     .profile-info h2 {
       margin: 0;
@@ -43,17 +43,6 @@
     }
     .bio {
       margin-top: 10px;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-      margin-top: 20px;
-    }
-    .gallery img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
     }
     .info-line {
       display: flex;
@@ -69,7 +58,7 @@
       color: #000;
       text-align: right;
       max-width: 60%;
-      word-break: break-all;
+      word-break: break-word;
     }
     .nav-bar {
       display: flex;
@@ -80,53 +69,26 @@
       cursor: pointer;
     }
     .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    .modal-content {
-      background-color: white;
-      padding: 20px;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 8px;
-    }
-      
-      
-      
-      
-    /* Modal background */
-    .modal {
       display: none;
       position: fixed;
-      z-index: 999;
       inset: 0;
       background-color: rgba(0,0,0,0.6);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
       animation: fadeIn 0.2s ease-in-out;
     }
-
-    /* Kotak modal */
     .modal-content {
       background: #fff;
       padding: 20px;
       width: 90%;
       max-width: 300px;
-      margin: 20% auto;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       text-align: center;
       font-family: inherit;
       animation: slideUp 0.25s ease-out;
     }
-
-    /* Animasi */
     @keyframes fadeIn {
       from {opacity: 0;}
       to {opacity: 1;}
@@ -135,8 +97,6 @@
       from {transform: translateY(20px); opacity: 0;}
       to {transform: translateY(0); opacity: 1;}
     }
-
-    /* Tombol */
     .modal-content button {
       padding: 8px 15px;
       margin: 5px;
@@ -160,10 +120,19 @@
     .btn-no:hover {
       background: #7f8c8d;
     }
+    a.info-line {
+      display: flex;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-    
+
   <div class="container">
     <div class="profile-header">
       <img src="" alt="Foto Profil" class="profile-pic" />
@@ -173,15 +142,11 @@
         <div class="bio"></div>
       </div>
     </div>
-    
-    <div class="gallery"></div>
-    
-   
+
     <div class="info-line"><span class="label">Pekerjaan</span><span class="value pekerjaan"></span></div>
     <div class="info-line"><span class="label">Usia</span><span class="value usia"></span></div>
     <div class="info-line"><span class="label">Alamat</span><span class="value alamat"></span></div>
-    
-   
+
     <div class="info-line"><span class="label">Rank</span><span class="value rank"></span></div>
     <div class="info-line"><span class="label">Username</span><span class="value username"></span></div>
     <div class="info-line"><span class="label">Password</span><span class="value password"></span></div>
@@ -189,7 +154,6 @@
 
     <a href="edit-profil.html" class="info-line">
       <span class="label">Edit Profil</span>
-      <span class="value teman"></span>
     </a>
 
     <div class="nav-bar">
@@ -201,8 +165,7 @@
 
   <div id="modal-topup" class="modal"><div class="modal-content">Topup</div></div>
   <div id="modal-riwayat" class="modal"><div class="modal-content">Riwayat</div></div>
-  
-  <!-- Modal Logout -->
+
   <div id="modal-logout" class="modal">
     <div class="modal-content">
       <p style="margin-bottom: 15px; font-size: 16px;">Yakin mau logout?</p>
@@ -211,113 +174,80 @@
     </div>
   </div>
 
-  <script>
-      
-      
-      
+<script>
+    
     const firebaseConfig = {
-    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-    authDomain: "nasukachat.firebaseapp.com",
-    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasukachat",
-    storageBucket: "nasukachat.firebasestorage.app",
-    messagingSenderId: "759589458121",
-    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-  };
+  apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+  authDomain: "nasuka-fc780.firebaseapp.com",
+  databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nasuka-fc780",
+  messagingSenderId: "860641747257",
+  appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+};
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-      
-      
-    function showModal(type) {
-      document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-      document.getElementById('modal-' + type).style.display = 'block';
-    }
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-    function closeModal(type) {
-      document.getElementById('modal-' + type).style.display = 'none';
-    }
+// Fungsi modal
+function showModal(type) {
+  document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+  document.getElementById('modal-' + type).style.display = 'flex';
+}
+function closeModal(type) {
+  document.getElementById('modal-' + type).style.display = 'none';
+}
 
-    
-    
-    function logout() {
+// Logout fungsi
+function logout() {
   localStorage.clear();
   window.location.href = "index.html";
+}
+
+// Klik di luar modal untuk close
+window.addEventListener("click", e => {
+  if (e.target.classList.contains("modal")) closeModal(e.target.id?.replace("modal-", ""));
+});
+
+// Ambil ID user dari localStorage
+const ID = localStorage.getItem("ID");
+if (!ID) {
+  window.location.href = "index.html";
+} else {
+  db.ref("users").orderByChild("ID").equalTo(ID).once("value")
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        const data = Object.values(snapshot.val())[0];
+        
+        document.querySelector(".profile-pic").src = data.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+        document.querySelector("h2").textContent = data.Nama || "-";
+        document.querySelector(".bio").innerHTML = `
+          <strong></strong><br/>
+          ${data.Bio || ""}<br/>♀️/♂️ : ${data.Jenis || ""}
+        `;
+        document.querySelector(".stats").innerHTML = `
+          <span>Saldo : <strong>${data.Saldo || 0}</strong></span>
+        `;
+
+        document.querySelector(".pekerjaan").textContent = data.Pekerjaan || "-";
+        document.querySelector(".usia").textContent = data.Usia || "-";
+        document.querySelector(".alamat").textContent = data.Alamat || "-";
+
+        document.querySelector(".username").textContent = data.Username || "-";
+        document.querySelector(".password").textContent = data.Password || "-";
+        document.querySelector(".teman").textContent = data.Teman || 0;
+        document.querySelector(".rank").textContent = data.Rank || "-";
+      } else {
+        alert("Data pengguna tidak ditemukan.");
+      }
+    })
+    .catch(error => {
+      console.error("Error mengambil data:", error);
+      alert("Gagal mengambil data pengguna.");
+    });
 }
     
     
     
-    
-      function showModal(id) {
-      document.querySelectorAll(".modal").forEach(m => m.style.display = "none");
-      document.getElementById("modal-" + id).style.display = "flex";
-    }
-
-    window.addEventListener("click", e => {
-      if (e.target.classList.contains("modal")) e.target.style.display = "none";
-    });
-
-    const ID = localStorage.getItem("ID");
-   
-   
-   firebase.database().ref("users").orderByChild("ID").equalTo(ID).on("value", snap => {
-  if (snap.exists()) {
-    const data = Object.values(snap.val())[0];
-    
-   
-   
-   
-    
-        
-    document.querySelector(".profile-pic").src = data.Foto || "";
-    document.querySelector("h2").textContent = data.Nama || "";
-    document.querySelector(".bio").innerHTML = `
-          <strong></strong><br/>
-          ${data.Bio || ""}<br/>♀️/♂️ : ${data.Jenis || ""}
-        `;
-        
-    document.querySelector(".stats").innerHTML = `
-          <span>Saldo : <strong>${data.Saldo || 0}</strong></span>
-        `;
-        
-        if (Array.isArray(data.Galeri)) {
-          const galeri = document.querySelector(".gallery");
-          galeri.innerHTML = "";
-          data.Galeri.forEach((src) => {
-            const img = document.createElement("img");
-            img.src = src;
-            img.alt = "foto";
-            galeri.appendChild(img);
-          });
-        }
-        
-         document.querySelector(".pekerjaan").textContent = data.Pekerjaan || "";
-        document.querySelector(".usia").textContent = data.Usia || "";
-        document.querySelector(".alamat").textContent = data.Alamat || "";
-        
-        document.querySelector(".username").textContent = data.Username || "";
-        document.querySelector(".password").textContent = data.Password || "";
-        document.querySelector(".teman").textContent = data.Teman || 0;
-        document.querySelector(".rank").textContent = data.Rank || "";
-      }
-    });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-  </script>
+</script>
 </body>
 </html>
-
-
-
-
