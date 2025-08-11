@@ -1,4 +1,5 @@
-<!DOCTYPE html>  <html lang="id">  
+<!DOCTYPE html>  
+<html lang="id">  
 <head>  
   <meta charset="UTF-8" />  
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
@@ -37,7 +38,8 @@
       <button id="btnPosting" onclick="kirimPostingan()">Posting</button>
     </div>  
   </div>  
-  <div class="postingan" id="daftarPostingan"></div>  <script>
+  <div class="postingan" id="daftarPostingan"></div>  
+  <script>
   const firebaseConfig = {
     apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
     authDomain: "nasuka-fc780.firebaseapp.com",
@@ -77,13 +79,19 @@
       <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">🎇 Kirim Pesan</button>
     `;
 
+    
+    
     setTimeout(() => {
-      const tombol = document.getElementById("btnKirimPesan");
-      tombol?.addEventListener("click", () => {
-        localStorage.setItem("targetID", viewedID);
-        window.location.href = "inbox.html";
-      });
-    }, 50);
+  const tombol = document.getElementById("btnKirimPesan");
+  tombol?.addEventListener("click", () => {
+    if (!isOwner) {
+      window.location.href = "inbox.html?id=" + encodeURIComponent(user.ID);
+    }
+  });
+}, 50);
+    
+    
+    
   }
 
   db.ref("users").once("value").then(snap => {
@@ -112,21 +120,20 @@
       <p>🎇 ${user.Jenis || '-'}</p>
       <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">${buttonLabel}</button>
     `;
+    
+    
     setTimeout(() => {
-      const tombol = document.getElementById("btnKirimPesan");
-      tombol?.addEventListener("click", () => {
-        if (isOwner) {
-          window.location.href = "inbox.html";
-        } else {
-          localStorage.setItem("targetID", user.ID);
-          localStorage.setItem("targetNama", user.Nama);
-          localStorage.setItem("targetFoto", user.Foto || "");
-          window.location.href = "inbox.html";
-        }
-      });
-    }, 50);
-
-    // Hapus bagian yang mengubah localStorage ID agar tidak mengganti user aktif
+  const tombol = document.getElementById("btnKirimPesan");
+  tombol?.addEventListener("click", () => {
+    localStorage.setItem("targetID", viewedID);
+    window.location.href = "inbox.html?id=" + encodeURIComponent(viewedID);
+  });
+}, 50);
+    
+    
+    
+    
+    
   }
 
   let isPosting = false;
@@ -239,21 +246,21 @@
           <small>${data.Status}</small><br/>
         </div>
         <textarea id="input-${key}" placeholder="Tulis komentar" style="width:100%; padding:10px;"></textarea><button class="btnKirim" onclick="submitKomentarManual('${key}')">Kirim</button>
-    <div class="komentar-list" id="list-${key}"></div>
-  `;
-  const likeSpan = document.createElement("span");
-  likeSpan.style.cursor = "pointer";
-  likeSpan.style.display = "inline-block";
-  likeSpan.style.marginTop = "10px";
-  likeSpan.style.fontWeight = "bold";
-  likeSpan.onclick = () => toggleLike(key);
-  card.querySelector(".card-content").appendChild(likeSpan);
-  document.getElementById("daftarPostingan").prepend(card);
-  updateLikeDisplay(key, likeSpan);
-  muatKomentar(key);
-}
-
-}); </script>
+        <div class="komentar-list" id="list-${key}"></div>
+      `;
+      const likeSpan = document.createElement("span");
+      likeSpan.style.cursor = "pointer";
+      likeSpan.style.display = "inline-block";
+      likeSpan.style.marginTop = "10px";
+      likeSpan.style.fontWeight = "bold";
+      likeSpan.onclick = () => toggleLike(key);
+      card.querySelector(".card-content").appendChild(likeSpan);
+      document.getElementById("daftarPostingan").prepend(card);
+      updateLikeDisplay(key, likeSpan);
+      muatKomentar(key);
+    }
+  }); 
+  </script>
 
 </body>  
 </html>
