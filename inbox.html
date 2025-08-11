@@ -1,215 +1,283 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <title>Nasuka Chat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="https://nasukafoods.site/chat.css">
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <script src="https://nasukafoods.site/realtime.js"></script>
-  <style>
-    .msg {
-      max-width: 70%;
-      margin: 5px 0;
-      padding: 8px 12px;
-      border-radius: 10px;
-      word-wrap: break-word;
-      display: inline-block;
-    }
-    .msg.me {
-      background-color: #dcf8c6;
-      align-self: flex-end;
-      border-top-right-radius: 0;
-      text-align: right;
-    }
-    .msg:not(.me) {
-      background-color: #ffffff;
-      align-self: flex-start;
-      border-top-left-radius: 0;
-      text-align: left;
-    }
-    .time {
-      font-size: 10px;
-      color: #888;
-      margin-top: 2px;
-      display: block;
-    }
-    #inputMessage {
-      resize: none;
-      overflow: hidden;
-    }
-    #topBar {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      background-color: green;
-      cursor: pointer;
-    }
-    #targetFotoEl {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-    #roomTitle {
-      font-weight: bold;
-    }
-    #chatBox {
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
-      height: calc(100vh - 120px);
-      overflow-y: auto;
-    }
-    #inputContainer {
-      display: flex;
-      padding: 10px;
-      border-top: 1px solid #ccc;
-    }
-    #inputMessage {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    #sendBtn {
-      margin-left: 10px;
-      padding: 10px;
-      background: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
-</head>
-<body>
-  <div id="chatContainer">
-    <div id="topBar" onclick="window.location.href='inbox.html?id=' + encodeURIComponent(targetID)">
-      <img id="targetFotoEl" src="" alt="Foto">
-      <span id="roomTitle">Chat</span>
-    </div>
-    <div id="chatBox"></div>
-    <div id="inputContainer">
-      <textarea id="inputMessage" rows="1" placeholder="Ketik pesan..."></textarea>
-      <button id="sendBtn" onclick="kirim()">&#9658;</button>
-    </div>
-  </div>
-  <script>
-    const ID = localStorage.getItem('ID') || '';
-    const Username = localStorage.getItem('Username') || '';
-    const Nama = localStorage.getItem('Nama') || '';
-    const targetID = localStorage.getItem('targetID') || '';
-    const targetNama = localStorage.getItem('targetNama') || '';
-    const targetFoto = localStorage.getItem('targetFoto') || '';
-
-    if (!ID || !targetID) {
-      alert("Gagal memuat data pengguna atau target.");
-    }
-
-    const room = [ID, targetID].sort().join('_');
-    const chatRef = db.ref('rooms/' + room + '/chats');
-
-    const chatBox = document.getElementById('chatBox');
-    const input = document.getElementById('inputMessage');
-    const targetFotoEl = document.getElementById('targetFotoEl');
-    const roomTitle = document.getElementById('roomTitle');
-
-    targetFotoEl.src = targetFoto || 'default.jpg';
-    roomTitle.textContent = targetNama;
-
-    function kirim() {
-      const msg = input.value.trim();
-      if (msg) {
-        const waktu = Date.now();
-        const pesanData = {
-          ID: ID,
-          Username: Username,
-          Nama: Nama,
-          Pesan: msg,
-          Waktu: waktu
-        };
-
-        chatRef.push(pesanData);
-
-        db.ref('users/' + ID + '/chats/' + targetID).set({
-          room: room,
-          ID: targetID,
-          Username: targetNama,
-          Foto: targetFoto,
-          Terakhir: msg,
-          Waktu: waktu
-        });
-
-        db.ref('users/' + targetID + '/chats/' + ID).set({
-          room: room,
-          ID: ID,
-          Username: Nama,
-          Foto: '',
-          Terakhir: msg,
-          Waktu: waktu
-        });
-
-        input.value = '';
-        input.style.height = 'auto';
-      }
-    }
-
-    let activeChatRef = null;
-    let activeChatListener = null;
-
-    function formatWaktu(ms) {
-      const d = new Date(ms);
-      const jam = d.getHours().toString().padStart(2, '0');
-      const mnt = d.getMinutes().toString().padStart(2, '0');
-      return jam + ':' + mnt;
-    }
-
-    function loadChat() {
-      const newTargetID = localStorage.getItem('targetID') || '';
-      const newTargetNama = localStorage.getItem('targetNama') || '';
-      const newTargetFoto = localStorage.getItem('targetFoto') || '';
-
-      if (!newTargetID) return;
-
-      const newRoom = [ID, newTargetID].sort().join('_');
-      const newChatRef = db.ref('rooms/' + newRoom + '/chats');
-
-      targetFotoEl.src = newTargetFoto || 'default.jpg';
-      roomTitle.textContent = newTargetNama;
-      chatBox.innerHTML = '';
-
-      if (activeChatRef && activeChatListener) {
-        activeChatRef.off('child_added', activeChatListener);
-      }
-
-      chatBox.innerHTML = '';
-
-      activeChatListener = function (snap) {
-        const data = snap.val();
-        const msgEl = document.createElement('div');
-        msgEl.className = data.ID === ID ? 'msg me' : 'msg';
-
-        const text = document.createElement('div');
-        text.textContent = data.Pesan;
-
-        const time = document.createElement('span');
-        time.className = 'time';
-        time.textContent = formatWaktu(data.Waktu || 0);
-
-        msgEl.appendChild(text);
-        msgEl.appendChild(time);
-
-        chatBox.appendChild(msgEl);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      };
-
-      activeChatRef = newChatRef;
-      activeChatRef.on('child_added', activeChatListener);
-    }
-
-    window.onload = loadChat;
-  </script>
-</body>
+<!DOCTYPE html>  <html lang="id">  
+<head>  
+  <meta charset="UTF-8" />  
+  <title>Nasuka Chat</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>  
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>  
+  <link rel="stylesheet" href="https://nasukafoods.site/chat.css" />  
+  <style>  
+    .msg {  
+      max-width: 70%;  
+      margin: 5px 0;  
+      padding: 8px 12px;  
+      border-radius: 10px;  
+      word-wrap: break-word;  
+      display: inline-block;  
+    }  
+    .msg.me {  
+      background-color: #dcf8c6;  
+      align-self: flex-end;  
+      border-top-right-radius: 0;  
+      text-align: right;  
+    }  
+    .msg:not(.me) {  
+      background-color: #ffffff;  
+      align-self: flex-start;  
+      border-top-left-radius: 0;  
+      text-align: left;  
+    }  
+    .time {  
+      font-size: 10px;  
+      color: #888;  
+      margin-top: 2px;  
+      display: block;  
+    }  
+    #inputMessage {  
+      resize: none;  
+      overflow: hidden;  
+    }  
+    #topBar {  
+      display: flex;  
+      align-items: center;  
+      padding: 10px;  
+      background-color: green;  
+      cursor: pointer;  
+    }  
+    #targetFotoEl {  
+      width: 40px;  
+      height: 40px;  
+      border-radius: 50%;  
+      object-fit: cover;  
+      margin-right: 10px;  
+    }  
+    #roomTitle {  
+      font-weight: bold;  
+      color: white;  
+    }  
+    #chatBox {  
+      display: flex;  
+      flex-direction: column;  
+      padding: 10px;  
+      height: calc(100vh - 120px);  
+      overflow-y: auto;  
+      background: #e5ddd5;  
+    }  
+    #inputContainer {  
+      display: flex;  
+      padding: 10px;  
+      border-top: 1px solid #ccc;  
+      background: #f0f0f0;  
+    }  
+    #inputMessage {  
+      flex: 1;  
+      padding: 10px;  
+      border: 1px solid #ccc;  
+      border-radius: 5px;  
+      font-size: 1rem;  
+      min-height: 40px;  
+    }  
+    #cusBtn {  
+      margin-left: 10px;  
+      padding: 10px 16px;  
+      background: #4caf50;  
+      color: white;  
+      border: none;  
+      border-radius: 5px;  
+      font-size: 1.2rem;  
+      cursor: pointer;  
+      user-select: none;  
+    }  
+    #cusBtn:active {  
+      background: #388e3c;  
+    }  
+  </style>  
+</head>  
+<body>  
+  <div id="chatContainer">  
+    <div id="topBar" onclick="window.location.href='inbox.html?id=' + encodeURIComponent(currentTargetID)">  
+      <img id="targetFotoEl" src="" alt="Foto" />  
+      <span id="roomTitle">Chat</span>  
+    </div>  
+    <div id="chatBox"></div>  
+    <div id="inputContainer">  
+      <textarea id="inputMessage" rows="1" placeholder="Ketik pesan..."></textarea>  
+      <button id="cusBtn" onclick="kirim()">&#9658;</button>  
+    </div>  
+  </div>    
+  <script>  
+    const firebaseConfig = {  
+      apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",  
+      authDomain: "nasuka-fc780.firebaseapp.com",  
+      databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",  
+      projectId: "nasuka-fc780",  
+      storageBucket: "nasuka-fc780.firebasestorage.app",  
+      messagingSenderId: "860641747257",  
+      appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"  
+    };  
+      
+    firebase.initializeApp(firebaseConfig);  
+    const db = firebase.database();  
+        
+    const ID = localStorage.getItem('ID') || '';  
+    const Username = localStorage.getItem('Username') || '';  
+    const Nama = localStorage.getItem('Nama') || '';  
+  
+    let currentTargetID = '';  
+    let currentTargetNama = '';  
+    let currentTargetFoto = '';  
+  
+    const urlParams = new URLSearchParams(window.location.search);  
+    const paramID = urlParams.get('id');  
+  
+    if (!ID) {  
+      alert("Gagal memuat data pengguna.");  
+      throw new Error("Missing user data.");  
+    }  
+  
+    const chatBox = document.getElementById('chatBox');  
+    const input = document.getElementById('inputMessage');  
+    const targetFotoEl = document.getElementById('targetFotoEl');  
+    const roomTitle = document.getElementById('roomTitle');  
+  
+    function loadTargetInfo(targetID) {  
+      return db.ref('users').orderByChild('ID').equalTo(targetID).once('value').then(snap => {  
+        let found = false;  
+        snap.forEach(userSnap => {  
+          const val = userSnap.val();  
+          currentTargetID = val.ID;  
+          currentTargetNama = val.Nama || 'Pengguna';  
+          currentTargetFoto = val.Foto || 'default.jpg';  
+          found = true;  
+        });  
+        if (!found) {  
+          currentTargetID = targetID;  
+          currentTargetNama = 'Pengguna';  
+          currentTargetFoto = 'default.jpg';  
+        }  
+      });  
+    }  
+  
+    function formatWaktu(ms) {  
+      const d = new Date(ms);  
+      const jam = d.getHours().toString().padStart(2, '0');  
+      const mnt = d.getMinutes().toString().padStart(2, '0');  
+      return jam + ':' + mnt;  
+    }  
+  
+    function tambahPesan(data) {  
+      const msgEl = document.createElement('div');  
+      msgEl.className = data.ID === ID ? 'msg me' : 'msg';  
+  
+      const text = document.createElement('div');  
+      text.textContent = data.Pesan;  
+  
+      const time = document.createElement('span');  
+      time.className = 'time';  
+      time.textContent = formatWaktu(data.Waktu || 0);  
+  
+      msgEl.appendChild(text);  
+      msgEl.appendChild(time);  
+      chatBox.appendChild(msgEl);  
+  
+      chatBox.scrollTop = chatBox.scrollHeight;  
+    }  
+  
+    let activeChatListener = null;  
+  
+    function loadChat(room) {  
+      chatBox.innerHTML = '';  
+  
+      if (activeChatListener) {  
+        db.ref(room).off('child_added', activeChatListener);  
+      }  
+  
+      activeChatListener = snap => {  
+        const data = snap.val();  
+        tambahPesan(data);  
+      };  
+  
+      db.ref(room).on('child_added', activeChatListener);  
+    }  
+  
+    async function init() {  
+      if (paramID) {  
+        await loadTargetInfo(paramID);  
+        targetFotoEl.src = currentTargetFoto;  
+        roomTitle.textContent = currentTargetNama;  
+        currentTargetID = paramID;  
+  
+        const room = [ID, currentTargetID].sort().join('_');  
+        loadChat('rooms/' + room + '/chats');  
+      } else {  
+        alert('ID target tidak ditemukan di URL');  
+        throw new Error('Missing target ID');  
+      }  
+    }  
+  
+    function kirim() {  
+      const msg = input.value.trim();  
+      if (!msg) return;  
+  
+      const waktu = Date.now();  
+      const pesanData = {  
+        ID,  
+        Username,  
+        Nama,  
+        Pesan: msg,  
+        Waktu: waktu  
+      };  
+  
+      const room = [ID, currentTargetID].sort().join('_');  
+      const chatRef = db.ref('rooms/' + room + '/chats');  
+  
+      chatRef.push(pesanData).then(() => {  
+        const lastChatDataForMe = {  
+          room: room,  
+          ID: currentTargetID,  
+          Username: currentTargetNama,  
+          Foto: currentTargetFoto,  
+          Terakhir: msg,  
+          Waktu: waktu  
+        };  
+  
+        const lastChatDataForTarget = {  
+          room: room,  
+          ID: ID,  
+          Username: Nama,  
+          Foto: '',  
+          Terakhir: msg,  
+          Waktu: waktu  
+        };  
+  
+        const updates = {};  
+        updates[`users/${ID}/chats/${currentTargetID}`] = lastChatDataForMe;  
+        updates[`users/${currentTargetID}/chats/${ID}`] = lastChatDataForTarget;  
+        updates[`rooms/${room}/lastChat`] = {  
+          ID: ID,  
+          Nama: Nama,  
+          Pesan: msg,  
+          Waktu: waktu,  
+          readBy: {  
+            [ID]: true  
+          }  
+        };  
+  
+        db.ref().update(updates);  
+  
+        input.value = '';  
+        input.style.height = 'auto';  
+      }).catch(err => {  
+        alert("Gagal mengirim pesan: " + err.message);  
+      });  
+    }  
+  
+    input.addEventListener('input', () => {  
+      input.style.height = 'auto';  
+      input.style.height = input.scrollHeight + 'px';  
+    });  
+  
+    window.onload = init;  
+  </script>  
+</body>  
 </html>
