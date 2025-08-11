@@ -2,192 +2,384 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nasuka Wireless</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="https://nasukafoods.site/indexnasuka.css" />
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <script src="https://nasukafoods.site/realtime.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  <style>
+    #notifInbox {
+      position: absolute;
+      top: 20px;
+      right: 12px;
+      
+      
+      padding: 2px 6px;
+      
+      
+      cursor: pointer;
+      min-width: 20px;
+      text-align: center;
+      user-select: none;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-
-
   <div class="nasuka-info centered"></div>
-  <div style="padding:10px;text-align:center">
-  <input id="cariUser" placeholder="" style="" />
-  <div id="hasilUser" style="margin-top:10px"></div>
-    </div>
 
-    <div class="arya-bar raya">
+  <div style="padding:10px; text-align:center;">
+    <input id="cariUser" placeholder="Cari user..." />
+    <div id="hasilUser" style="margin-top:10px"></div>
+  </div>
+
+  <div class="arya-bar raya" style="position: relative;">
     <div class="profil-overlay">
-    <a id="linkProfil">
-<img src="https://nasukafoods.site/nasukafoods.jpg"
-alt="Loading" class="arya-item raya" id="fotoProfil"
-/></a><span id="namaUser" class="blink-glow">Memuat....</span></div>
-
-<div class="profil-overlay" style="position: relative;">
-<img src="https://nasukafoods.site/tekn.jpg"
-alt="Loading" class="arya-item raya"
-    id="fol"/>
-  <span>Chat ✅</span>
-  <span id="notifInbox" style="position: absolute; top: 4px; right: 4px; px 6px; border-radius: 12px; cursor: pointer; display: none;"></span></div>
-
-
-     
-
-      <div class="arya-scol">
-          
+      <a id="linkProfil" href="#">
+        <img src="https://nasukafoods.site/gambarkosong.jpg" class="arya-item raya" id="fotoProfil" />
+      </a>
+      <span id="namaUser" class="blink-glow">Memuat....</span>
+    </div>
+    <div class="profil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
+      <img src="https://nasukafoods.site/tekn.jpg" class="arya-item raya" id="fol" />
+      <span>Chat ✅</span>
+      <span id="notifInbox"></span>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     <div class="arya-scol">
       <div class="arya-overlay">
-      <a href="burung.html">
-<img src="https://nasukafoods.site/nasukabird.jpg" alt="scol1" /><span></span></a></div>            
-        
+        <a href="burung.html"><img src="https://nasukafoods.site/nasukabird.jpg" /></a>
+      </div>
       <div class="arya-overlay">
-      <a href="roll.html">
-<img src="https://nasukafoods.site/roll.jpg" alt="scol1" /><span></span> </a></div>
-
+        <a href="roll.html"><img src="https://nasukafoods.site/roll.jpg" /></a>
+      </div>
       <div class="arya-overlay">
-      <a href="puzzle.html">
-<img src="https://nasukafoods.site/puzzle.jpg" alt="scol1" /> <span></span></a></div>
-
+        <a href="puzzle.html"><img src="https://nasukafoods.site/puzzle.jpg" /></a>
+      </div>
       <div class="arya-overlay">
-      <a href="">
-<img src="https://nasukafoods.site/onprogres.jpg" alt="scol1" /><span></span></a></div>
-
+        <a href="#"><img src="https://nasukafoods.site/onprogres.jpg" /></a>
+      </div>
       <div class="arya-overlay">
-      <a href="https://nasukafoods.site/nasuka.apk">
-<img src="https://nasukafoods.site/nasukafoods.jpg" alt="scol1" /><span>Download</span></a></div>
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/nasukafoods.jpg" /><span>Download</span></a>
+      </div>
+    </div>
+  </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-      </div></div></div>
+  
+  </div>
 
-<div id="daftarPostingan" style="padding: 10px;"></div>
-
-  <div id="modalGambar"
-    style="
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      justify-content: center;
-      align-items: center;
-      " >
-    <img
-      id="gambarModal"
-      src=""
-      style="max-width: 95%; max-height: 95%; border-radius: 8px"
-    /></div>
+  <div id="daftarPostingan" style="padding: 10px;"></div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    
-      if (firebase.apps.length === 0) {
-        firebase.initializeApp(firebaseConfig);
-      }
-      const db = firebase.database();
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+      authDomain: "nasuka-fc780.firebaseapp.com",
+      databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "nasuka-fc780",
+      messagingSenderId: "860641747257",
+      appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+    };
 
-      // Ambil info user
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const userCache = {};
+
+    document.addEventListener("DOMContentLoaded", () => {
       const userID = localStorage.getItem("ID") || "";
       const fotoEl = document.getElementById("fotoProfil");
       const namaEl = document.getElementById("namaUser");
       const profilLink = document.getElementById("linkProfil");
-      
       const notifInbox = document.getElementById("notifInbox");
-      
-      
-      
-      // ====================
-      // 1. TAMPILKAN PROFIL
-      // ====================
+      const hasilUserEl = document.getElementById("hasilUser");
+      const daftar = document.getElementById("daftarPostingan");
+
       if (!userID) {
         namaEl.textContent = "Silakan Masuk";
         fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
         profilLink.href = "login.html";
-      } else {
-        const nama = localStorage.getItem("Nama");
-        const foto = localStorage.getItem("Foto");
-
-        if (nama && foto) {
-          namaEl.textContent = nama;
-          fotoEl.src = foto;
-          profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-        } else {
-          db.ref("users")
-            .once("value")
-            .then((snap) => {
-              snap.forEach((child) => {
-                const val = child.val();
-                if (val.ID === userID) {
-                  localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
-                  localStorage.setItem(
-                    "Foto",
-                    val.Foto || "https://nasukafoods.site/gambarkosong.jpg"
-                  );
-                  namaEl.textContent = val.Nama || "Tanpa Nama";
-                  fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-                  profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-                }
-              });
-            });
-        }
-
-        // Realtime update foto/nama
-        db.ref("users")
-          .orderByChild("ID")
-          .equalTo(userID)
-          .on("child_changed", (snap) => {
-            const val = snap.val();
-            localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
-            localStorage.setItem(
-              "Foto",
-              val.Foto || "https://nasukafoods.site/gambarkosong.jpg"
-            );
-            namaEl.textContent = val.Nama || "Tanpa Nama";
-            fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-          });
+        return;
       }
 
-      // ==========================
-      // 2. FITUR PENCARIAN USER
-      // ==========================
-      document.getElementById("cariUser").addEventListener("input", function () {
+      const nama = localStorage.getItem("Nama");
+      const foto = localStorage.getItem("Foto");
+      if (nama && foto) {
+        namaEl.textContent = nama;
+        fotoEl.src = foto;
+        profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+      } else {
+        db.ref("users").orderByChild("ID").equalTo(userID).once("value").then(snap => {
+          snap.forEach(child => {
+            const val = child.val();
+            localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
+            localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+            namaEl.textContent = val.Nama || "Tanpa Nama";
+            fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+            profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+          });
+        });
+      }
+
+      // Pencarian user (tetap seperti semula)
+      document.getElementById("cariUser").addEventListener("input", function() {
         const k = this.value.trim().toLowerCase();
-        const h = document.getElementById("hasilUser");
-        h.innerHTML = "";
+        hasilUserEl.innerHTML = "";
         if (k.length < 2) return;
 
         db.ref("users")
+          .orderByChild("NamaLower")
+          .startAt(k)
+          .endAt(k + "\uf8ff")
+          .limitToFirst(20)
           .once("value")
-          .then((snap) => {
-            snap.forEach((child) => {
+          .then(snap => {
+            snap.forEach(child => {
               const v = child.val();
-              if ((v.Nama || "").toLowerCase().includes(k)) {
-                const d = document.createElement("div");
-                d.innerHTML = `
-                <div style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.1)">
-                  <img src="${
-                    v.Foto || "https://nasukafoods.site/gambarkosong.jpg"
-                  }" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
+              const d = document.createElement("div");
+              d.innerHTML = `
+                <div style="display:flex; align-items:center; gap:8px; background:#fff; padding:8px; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.1)">
+                  <img src="${v.Foto || "https://nasukafoods.site/gambarkosong.jpg"}" style="width:40px; height:40px; border-radius:50%; object-fit:cover" />
                   <div style="flex:1">
-                    <b>${v.Nama || "Tanpa Nama"}</b><br>
-                    <a href="profil.html?id=${encodeURIComponent(
-                      v.ID
-                    )}" style="font-size:12px;color:#2196F3">Lihat Profil</a>
+                    <b>${v.Nama || "Tanpa Nama"}</b><br />
+                    <a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px; color:#2196F3">Lihat Profil</a>
                   </div>
                 </div>`;
-                h.appendChild(d);
-              }
+              hasilUserEl.appendChild(d);
             });
           });
       });
 
-      // =======================
-      // 3. FITUR POST & KOMENTAR
-      // =======================
-      window.kirimKomentar = function (postId) {
-        if (!userID) return;
+      // Fungsi untuk mendapatkan nama user cache
+      function getUserData(uid) {
+        return new Promise(resolve => {
+          if (userCache[uid]) return resolve(userCache[uid]);
+          db.ref("users").orderByChild("ID").equalTo(uid).once("value").then(snap => {
+            let nama = "Tanpa Nama";
+            snap.forEach(u => {
+              if (u.val().Nama) nama = u.val().Nama;
+            });
+            userCache[uid] = nama;
+            resolve(nama);
+          });
+        });
+      }
+
+      // Memantau pesan baru di chats user
+      const userChatsRef = db.ref(`users/${userID}/chats`);
+      userChatsRef.on('value', snapshot => {
+        const chats = snapshot.val() || {};
+        let unreadCount = 0;
+        for (const key in chats) {
+          if (chats[key].read === false || chats[key].read === undefined) {
+            if (chats[key].ID !== userID) {
+              unreadCount++;
+            }
+          }
+        }
+        if (unreadCount > 0) {
+          notifInbox.style.display = 'inline-block';
+          notifInbox.textContent = unreadCount > 99 ? '99+' : unreadCount;
+        } else {
+          notifInbox.style.display = 'none';
+          notifInbox.textContent = '';
+        }
+      });
+
+      
+      
+      
+     
+     
+     
+     
+     notifInbox.onclick = () => {
+  db.ref(`users/${userID}/chats`).once('value').then(async snapshot => {
+    const chats = snapshot.val() || {};
+    if (Object.keys(chats).length === 0) {
+      alert('Tidak ada pengirim pesan');
+      return;
+    }
+
+    const pengirimData = [];
+    for (const chatID of Object.keys(chats)) {
+      const userSnap = await db.ref('users').orderByChild('ID').equalTo(chatID).once('value');
+      userSnap.forEach(u => {
+        const nama = u.val().Nama || 'Pengguna';
+        pengirimData.push({ id: chatID, nama });
+      });
+    }
+
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.top = '50%';
+    container.style.left = '50%';
+    container.style.transform = 'translate(-50%, -50%)';
+    container.style.background = '#fff';
+    container.style.border = '1px solid #ccc';
+    container.style.borderRadius = '8px';
+    container.style.padding = '12px';
+    container.style.zIndex = '9999';
+    container.style.maxHeight = '300px';
+    container.style.overflowY = 'auto';
+    container.style.minWidth = '200px';
+    container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+
+    // Tombol close
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '❌';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.top = '6px';
+    closeBtn.style.right = '6px';
+    closeBtn.style.background = 'transparent';
+    closeBtn.style.border = 'none';
+    closeBtn.style.fontSize = '18px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.onclick = () => {
+      document.body.removeChild(container);
+    };
+    container.appendChild(closeBtn);
+
+    pengirimData.forEach(({ id, nama }) => {
+      const btn = document.createElement('button');
+      btn.textContent = nama;
+      btn.style.display = 'block';
+      btn.style.width = '100%';
+      btn.style.margin = '6px 0';
+      btn.style.padding = '8px';
+      btn.style.border = 'none';
+      btn.style.borderRadius = '4px';
+      btn.style.background = '#2196F3';
+      btn.style.color = '#fff';
+      btn.style.cursor = 'pointer';
+      btn.onclick = () => {
+        document.body.removeChild(container);
+        window.location.href = `inbox.html?id=${encodeURIComponent(id)}`;
+      };
+      container.appendChild(btn);
+    });
+
+    document.body.appendChild(container);
+  });
+};
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+      
+      
+      
+      
+      
+
+      // Tampilkan postingan publik terakhir tetap seperti semula
+      db.ref("posts")
+        .orderByChild("Status")
+        .equalTo("publik")
+        .limitToLast(20)
+        .on("child_added", async postSnap => {
+          const post = postSnap.val();
+          const postId = postSnap.key;
+          const namaPemilik = await getUserData(post.ID);
+
+          const div = document.createElement("div");
+          div.className = "post-item";
+          div.style.flexDirection = "column";
+
+          div.innerHTML = `
+            <div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:6px">${namaPemilik}</div>
+            ${post.Foto ? `<img src="${post.Foto}" class="foto-post" style="width:100px; height:100px; margin:0 auto 8px; display:block; border-radius:8px; object-fit:cover; cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')" />` : ``}
+            <div style="font-size:13px; margin:4px 0"><b>${(post.Judul || "").replace(/\n/g, "<br>")}</b></div>
+            <div style="font-size:11px; color:gray">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ""}</div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:8px">
+              <button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px; border:none; border-radius:6px; cursor:pointer; font-size:13px">❤️</button>
+              <span id="likeCount-${postId}" style="font-size:13px">0 suka</span>
+            </div>
+            <div id="komentar-${postId}" style="margin-top:10px; display:none;"></div>
+            <button id="lihatKomentarBtn-${postId}" style="margin-top:6px; padding:6px 10px; background:red; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px">Lihat Komentar</button>
+            <div style="display:flex; gap:6px; margin-top:6px">
+              <textarea id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1; padding:6px; border:1px solid #ccc; border-radius:6px; font-size:13px; resize:none" rows="1"></textarea>
+              <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px; background:#2196F3; color:white; border:none; border-radius:6px; font-size:13px">Ok</button>
+            </div>
+          `;
+
+          daftar.prepend(div);
+
+          db.ref("likes/" + postId).on("value", snap => {
+            document.getElementById("likeCount-" + postId).textContent = `${snap.numChildren()} suka`;
+            const likeBtn = document.getElementById("likeBtn-" + postId);
+            if (likeBtn) {
+              if (snap.hasChild(userID)) {
+                likeBtn.textContent = "❤️";
+                likeBtn.style.background = "#f8d7da";
+              } else {
+                likeBtn.textContent = "💔";
+                likeBtn.style.background = "#eee";
+              }
+            }
+          });
+
+          let komentarLoaded = false;
+          const btnLihat = div.querySelector(`#lihatKomentarBtn-${postId}`);
+          const wadahKomentar = div.querySelector(`#komentar-${postId}`);
+
+          btnLihat.onclick = () => {
+            if (wadahKomentar.style.display === "none") {
+              wadahKomentar.style.display = "block";
+              btnLihat.textContent = "Sembunyikan Komentar";
+              if (!komentarLoaded) {
+                db.ref("komentar/" + postId).on("value", snap => {
+                  wadahKomentar.innerHTML = "";
+                  snap.forEach(c => {
+                    const v = c.val();
+                    const d = document.createElement("div");
+                    d.style = "background:#f9f9f9; padding:6px; margin-top:4px; border-radius:6px; font-size:12px";
+                    d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(/\n/g, "<br>")}`;
+                    wadahKomentar.appendChild(d);
+                  });
+                });
+                komentarLoaded = true;
+              }
+            } else {
+              wadahKomentar.style.display = "none";
+              btnLihat.textContent = "Lihat Komentar";
+            }
+          };
+        });
+
+      window.kirimKomentar = function(postId) {
+        if (!userID) return alert("Silakan login dulu untuk komentar");
         const nama = localStorage.getItem("Nama") || "Anonim";
         const input = document.getElementById("inputKomentar-" + postId);
         const teks = (input?.value || "").trim();
@@ -196,209 +388,52 @@ alt="Loading" class="arya-item raya"
           ID: userID,
           Nama: nama,
           Teks: teks,
-          Waktu: new Date().toISOString(),
+          Waktu: new Date().toISOString()
         });
         input.value = "";
       };
 
-      window.toggleLike = function (postId) {
-        if (!userID) return;
-        const ref = db.ref("likes/" + postId + "/" + userID);
-        ref.once("value").then((snap) => {
-          if (snap.exists()) ref.remove();
-          else ref.set(true);
-        });
-      };
-
-      db.ref("posts")
-        .orderByChild("Status")
-        .equalTo("publik")
-        .on("value", (snapshot) => {
-          const daftar = document.getElementById("daftarPostingan");
-          daftar.innerHTML = "";
-          let posts = [];
-          snapshot.forEach((p) => posts.push(p));
-          posts.reverse().forEach((postSnap) => {
-            const post = postSnap.val();
-            const postId = postSnap.key;
-            const pemilikID = post.ID || "";
-
-            db.ref("users")
-              .orderByChild("ID")
-              .equalTo(pemilikID)
-              .once("value")
-              .then((userSnap) => {
-                let namaPemilik = "Tanpa Nama";
-                userSnap.forEach((u) => {
-                  if (u.val().Nama) namaPemilik = u.val().Nama;
-                });
-
-                const div = document.createElement("div");
-                div.className = "post-item";
-                div.style.flexDirection = "column";
-
-                div.innerHTML = `
-                <div style="text-align:center;font-weight:bold;font-size:14px;margin-bottom:6px">${namaPemilik}</div>
-                ${
-                  post.Foto
-                    ? `<img src="${post.Foto}" class="foto-post" style="width:100px;height:100px;margin:0 auto 8px;display:block;border-radius:8px;object-fit:cover;cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')">`
-                    : ""
-                }
-                <div style="font-size:13px;margin:4px 0"><b>${(post.Judul || "").replace(
-                  /\n/g,
-                  "<br>"
-                )}</b></div>
-                <div style="font-size:11px;color:gray">${
-                  post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ""
-                }</div>
-                <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-                  <button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px;border:none;border-radius:6px;cursor:pointer;font-size:13px">❤️</button>
-                  <span id="likeCount-${postId}" style="font-size:13px">0 suka</span>
-                </div>
-                <div id="komentar-${postId}" style="margin-top:10px; display:none;"></div>
-                <button id="lihatKomentarBtn-${postId}" style="margin-top:6px;padding:6px 10px;background:red;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">Lihat Komentar</button>
-                <div style="display:flex;gap:6px;margin-top:6px">
-                  <textarea id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:13px;resize:none" rows="1"></textarea>
-                  <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px;background:#2196F3;color:white;border:none;border-radius:6px;font-size:13px">Ok</button>
-                </div>`;
-
-                daftar.appendChild(div);
-
-                // Tombol lihat komentar
-                let komentarLoaded = false;
-                const btnLihat = div.querySelector(`#lihatKomentarBtn-${postId}`);
-                const wadahKomentar = div.querySelector(`#komentar-${postId}`);
-                btnLihat.onclick = () => {
-                  if (wadahKomentar.style.display === "none") {
-                    wadahKomentar.style.display = "block";
-                    btnLihat.textContent = "Sembunyikan Komentar";
-                    if (!komentarLoaded) {
-                      db.ref("komentar/" + postId).on("value", (snap) => {
-                        wadahKomentar.innerHTML = "";
-                        snap.forEach((c) => {
-                          const v = c.val();
-                          const d = document.createElement("div");
-                          d.style =
-                            "background:#f9f9f9;padding:6px;margin-top:4px;border-radius:6px;font-size:12px";
-                          d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(
-                            /\n/g,
-                            "<br>"
-                          )}`;
-                          wadahKomentar.appendChild(d);
-                        });
-                      });
-                      komentarLoaded = true;
-                    }
-                  } else {
-                    wadahKomentar.style.display = "none";
-                    btnLihat.textContent = "Lihat Komentar";
-                  }
-                };
-
-                // Like realtime
-                db.ref("likes/" + postId).on("value", (snap) => {
-                  document.getElementById("likeCount-" + postId).textContent = `${snap.numChildren()} suka`;
-                  const likeBtn = document.getElementById("likeBtn-" + postId);
-                  if (likeBtn) {
-                    if (snap.hasChild(userID)) {
-                      likeBtn.textContent = "❤️";
-                      likeBtn.style.background = "#f8d7da";
-                    } else {
-                      likeBtn.textContent = "💔";
-                      likeBtn.style.background = "#eee";
-                    }
-                  }
-                });
-              });
-          });
-        });
-
-      // ======================
-      // 4. NOTIF CHAT REALTIME
-      // ======================
-      
-      
-      
-      
-      if (userID) {
-        firebase.database().ref("rooms").on("value", (snap) => {
-          notifInbox.style.display = "none";
-          notifInbox.innerHTML = "";
-          const temp = {};
-
-          snap.forEach((room) => {
-            const key = room.key;
-            if (!key.includes("_")) return;
-            const [a, b] = key.split("_");
-            if (a === b || (a !== userID && b !== userID)) return;
-
-            let lawan = a === userID ? b : a;
-            let pesanTerakhir = null;
-            let waktuTerakhir = 0;
-
-            room.child("chats").forEach((chat) => {
-              const data = chat.val();
-              if (!data?.Pesan) return;
-              if (data.ID !== userID && data.Waktu > waktuTerakhir) {
-                waktuTerakhir = data.Waktu;
-                pesanTerakhir = data;
-              }
-            });
-
-            if (pesanTerakhir) {
-              temp[lawan] = pesanTerakhir;
-            }
-          });
-
-          const entries = Object.entries(temp).sort((a, b) => b[1].Waktu - a[1].Waktu);
-          if (entries.length > 0) {
-            notifInbox.style.display = "inline";
-            notifInbox.innerHTML = "📨 Chat";
-            notifInbox.onclick = () => {
-              const popup = document.createElement("div");
-              popup.style = `
-                position: fixed; top: 50px; left: 8px; background: snow;
-                padding: 10px; border-radius: 6px; box-shadow: 0 0 10px rgba(0,0,0,0.4);
-                z-index: 9999;
-              `;
-              const btnClose = document.createElement("div");
-              btnClose.textContent = "❌";
-              btnClose.style.cssText =
-                "text-align:right;font-weight:bold;cursor:pointer;margin-bottom:10px";
-              btnClose.onclick = () => popup.remove();
-              popup.appendChild(btnClose);
-
-              entries.forEach(([pengirimID, data]) => {
-                const div = document.createElement("div");
-                div.textContent = `${data.Nama}: ${data.Pesan}`;
-                div.style = "cursor:pointer;margin-bottom:6px";
-                div.onclick = () => {
-                  localStorage.setItem("targetID", pengirimID);
-                  localStorage.setItem("targetNama", data.Nama || "");
-                  localStorage.setItem("targetFoto", "");
-                  location.href = "inbox.html";
-                };
-                popup.appendChild(div);
-              });
-
-              document.body.appendChild(popup);
-            };
+      window.toggleLike = function(postId) {
+        if (!userID) return alert("Silakan login dulu untuk like");
+        const refLike = db.ref("likes/" + postId + "/" + userID);
+        refLike.once("value").then(snap => {
+          if (snap.exists()) {
+            refLike.remove();
+          } else {
+            refLike.set(true);
           }
         });
-      }
-
-      // =====================
-      // 5. MODAL FOTO POST
-      // =====================
-      window.tampilkanGambarPenuh = function (src) {
-        if (!src) return;
-        document.getElementById("gambarModal").src = src;
-        document.getElementById("modalGambar").style.display = "flex";
       };
+
+      window.tampilkanGambarPenuh = function(src) {
+        if (!src) return;
+        const modal = document.getElementById("modalGambar");
+        const gambar = document.getElementById("gambarModal");
+        gambar.src = src;
+        modal.style.display = "flex";
+      };
+
       document.getElementById("modalGambar").addEventListener("click", () => {
         document.getElementById("modalGambar").style.display = "none";
       });
     });
   </script>
+
+  <div id="modalGambar" style="
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+  ">
+    <img id="gambarModal" src="" style="max-width: 95%; max-height: 95%; border-radius: 8px" />
+  </div>
 </body>
 </html>
+
+
