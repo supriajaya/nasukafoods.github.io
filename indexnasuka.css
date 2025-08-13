@@ -397,4 +397,18 @@ background-color: #388E3C;
   border-radius: 6px;  
   cursor: pointer;  
 }  
-  
+   #notifInbox {
+      position: absolute;
+      top: 20px;
+      right: 12px;
+      
+      
+      padding: 2px 6px;
+      
+      
+      cursor: pointer;
+      min-width: 20px;
+      text-align: center;
+      user-select: none;
+      display: none;
+    }
