@@ -1,5 +1,5 @@
 fetch('cari-user.html')
   .then(res => res.text())
   .then(html => {
-    document.getElementById('tempat-cari-user').innerHTML = html;
+    document.getElementById('load-cari-user').innerHTML = html;
   });
