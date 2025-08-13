@@ -1,4 +1,161 @@
-// Tampilkan postingan publik terakhir tetap seperti semula
+// Pencarian user (tetap seperti semula)
+      document.getElementById("cariUser").addEventListener("input", function() {
+        const k = this.value.trim().toLowerCase();
+        hasilUserEl.innerHTML = "";
+        if (k.length < 2) return;
+
+        db.ref("users")
+          .orderByChild("NamaLower")
+          .startAt(k)
+          .endAt(k + "\uf8ff")
+          .limitToFirst(20)
+          .once("value")
+          .then(snap => {
+            snap.forEach(child => {
+              const v = child.val();
+              const d = document.createElement("div");
+              d.innerHTML = `
+                <div style="display:flex; align-items:center; gap:8px; background:#fff; padding:8px; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.1)">
+                  <img src="${v.Foto || "https://nasukafoods.site/gambarkosong.jpg"}" style="width:40px; height:40px; border-radius:50%; object-fit:cover" />
+                  <div style="flex:1">
+                    <b>${v.Nama || "Tanpa Nama"}</b><br />
+                    <a href="profil.html?id=${encodeURIComponent(v.ID)}" style="font-size:12px; color:#2196F3">Lihat Profil</a>
+                  </div>
+                </div>`;
+              hasilUserEl.appendChild(d);
+            });
+          });
+      });
+
+      // Fungsi untuk mendapatkan nama user cache
+      function getUserData(uid) {
+        return new Promise(resolve => {
+          if (userCache[uid]) return resolve(userCache[uid]);
+          db.ref("users").orderByChild("ID").equalTo(uid).once("value").then(snap => {
+            let nama = "Tanpa Nama";
+            snap.forEach(u => {
+              if (u.val().Nama) nama = u.val().Nama;
+            });
+            userCache[uid] = nama;
+            resolve(nama);
+          });
+        });
+      }
+
+      // Memantau pesan baru di chats user
+      const userChatsRef = db.ref(`users/${userID}/chats`);
+      userChatsRef.on('value', snapshot => {
+        const chats = snapshot.val() || {};
+        let unreadCount = 0;
+        for (const key in chats) {
+          if (chats[key].read === false || chats[key].read === undefined) {
+            if (chats[key].ID !== userID) {
+              unreadCount++;
+            }
+          }
+        }
+        if (unreadCount > 0) {
+          notifInbox.style.display = 'inline-block';
+          notifInbox.textContent = unreadCount > 99 ? '99+' : unreadCount;
+        } else {
+          notifInbox.style.display = 'none';
+          notifInbox.textContent = '';
+        }
+      });
+
+      
+      
+      
+     
+     
+     
+     
+     notifInbox.onclick = () => {
+  db.ref(`users/${userID}/chats`).once('value').then(async snapshot => {
+    const chats = snapshot.val() || {};
+    if (Object.keys(chats).length === 0) {
+      alert('Tidak ada pengirim pesan');
+      return;
+    }
+
+    const pengirimData = [];
+    for (const chatID of Object.keys(chats)) {
+      const userSnap = await db.ref('users').orderByChild('ID').equalTo(chatID).once('value');
+      userSnap.forEach(u => {
+        const nama = u.val().Nama || 'Pengguna';
+        pengirimData.push({ id: chatID, nama });
+      });
+    }
+
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.top = '50%';
+    container.style.left = '50%';
+    container.style.transform = 'translate(-50%, -50%)';
+    container.style.background = '#fff';
+    container.style.border = '1px solid #ccc';
+    container.style.borderRadius = '8px';
+    container.style.padding = '12px';
+    container.style.zIndex = '9999';
+    container.style.maxHeight = '300px';
+    container.style.overflowY = 'auto';
+    container.style.minWidth = '200px';
+    container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+
+    // Tombol close
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '❌';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.top = '6px';
+    closeBtn.style.right = '6px';
+    closeBtn.style.background = 'transparent';
+    closeBtn.style.border = 'none';
+    closeBtn.style.fontSize = '18px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.onclick = () => {
+      document.body.removeChild(container);
+    };
+    container.appendChild(closeBtn);
+
+    pengirimData.forEach(({ id, nama }) => {
+      const btn = document.createElement('button');
+      btn.textContent = nama;
+      btn.style.display = 'block';
+      btn.style.width = '100%';
+      btn.style.margin = '6px 0';
+      btn.style.padding = '8px';
+      btn.style.border = 'none';
+      btn.style.borderRadius = '4px';
+      btn.style.background = '#2196F3';
+      btn.style.color = '#fff';
+      btn.style.cursor = 'pointer';
+      btn.onclick = () => {
+        document.body.removeChild(container);
+        window.location.href = `inbox.html?id=${encodeURIComponent(id)}`;
+      };
+      container.appendChild(btn);
+    });
+
+    document.body.appendChild(container);
+  });
+};
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+      
+      
+      
+      
+      
+
+      // Tampilkan postingan publik terakhir tetap seperti semula
       db.ref("posts")
         .orderByChild("Status")
         .equalTo("publik")
@@ -112,5 +269,7 @@
         document.getElementById("modalGambar").style.display = "none";
       });
     });
+    
+    
     
     
