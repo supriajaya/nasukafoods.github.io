@@ -412,3 +412,27 @@ background-color: #388E3C;
       user-select: none;
       display: none;
     }
+
+
+.menu-links {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.menu-links span {
+  margin: 0 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 8px; /* perkecil ukuran teks */
+}
+
+.menu-links span:hover {
+  text-decoration: underline;
+}
+
+.produk-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+
