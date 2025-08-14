@@ -1,5 +1,5 @@
-
-// Firebase Configuration
+<script>
+// Script 1 - Social Media Features
 const firebaseConfig = {
   apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
   authDomain: "nasuka-fc780.firebaseapp.com",
@@ -9,21 +9,10 @@ const firebaseConfig = {
   appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const userCache = {};
 
-// Global variables for e-commerce functionality
-let userSaldo = parseInt(localStorage.getItem("Saldo") || "0");
-let userData = {
-  Nama: localStorage.getItem("Nama") || "-",
-  Telepon: localStorage.getItem("Telepon") || "-",
-  Alamat: localStorage.getItem("Alamat") || "-",
-  Tiktok: localStorage.getItem("Tiktok") || "-"
-};
-
-// DOM Content Loaded Event
 document.addEventListener("DOMContentLoaded", () => {
   initializeUserProfile();
   setupSearchFunctionality();
@@ -31,14 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPosts();
   setupProductModals();
   setupPolicyModals();
-  
-  // Initialize e-commerce elements if they exist on the page
-  if (document.getElementById("produkContainer")) {
-    initializeEcommerce();
-  }
 });
 
-// Initialize User Profile
 function initializeUserProfile() {
   const userID = localStorage.getItem("ID") || "";
   const fotoEl = document.getElementById("fotoProfil");
@@ -66,12 +49,6 @@ function updateProfileDisplay(nama, foto, userID) {
   document.getElementById("namaUser").textContent = nama;
   document.getElementById("fotoProfil").src = foto;
   document.getElementById("linkProfil").href = `profil.html?id=${encodeURIComponent(userID)}`;
-  
-  // Also update e-commerce user data if needed
-  if (document.getElementById("nama")) {
-    document.getElementById("nama").textContent = nama;
-    userData.Nama = nama;
-  }
 }
 
 function fetchUserProfileFromDB(userID) {
@@ -80,34 +57,13 @@ function fetchUserProfileFromDB(userID) {
       const val = child.val();
       localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
       localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
-      localStorage.setItem("Telepon", val.Telepon || "-");
-      localStorage.setItem("Alamat", val.Alamat || "-");
-      localStorage.setItem("Tiktok", val.Tiktok || "-");
-      
       updateProfileDisplay(val.Nama || "Tanpa Nama", val.Foto || "https://nasukafoods.site/gambarkosong.jpg", userID);
-      
-      // Update e-commerce user data
-      userData = {
-        Nama: val.Nama || "-",
-        Telepon: val.Telepon || "-",
-        Alamat: val.Alamat || "-",
-        Tiktok: val.Tiktok || "-"
-      };
-      
-      if (document.getElementById("telepon")) {
-        document.getElementById("telepon").textContent = userData.Telepon;
-        document.getElementById("alamat").textContent = userData.Alamat;
-        document.getElementById("tiktok").textContent = userData.Tiktok;
-      }
     });
   });
 }
 
-// Search Functionality
 function setupSearchFunctionality() {
   const hasilUserEl = document.getElementById("hasilUser");
-  if (!hasilUserEl) return;
-  
   document.getElementById("cariUser").addEventListener("input", function() {
     const k = this.value.trim().toLowerCase();
     hasilUserEl.innerHTML = "";
@@ -124,14 +80,11 @@ function setupSearchFunctionality() {
   });
 }
 
-// Chat Notifications
 function setupChatNotifications() {
   const userID = localStorage.getItem("ID") || "";
   if (!userID) return;
 
   const notifInbox = document.getElementById("notifInbox");
-  if (!notifInbox) return;
-
   const userChatsRef = db.ref(`users/${userID}/chats`);
 
   userChatsRef.on('value', snapshot => {
@@ -225,11 +178,8 @@ async function showChatSendersList(userID) {
   document.body.appendChild(container);
 }
 
-// Post Functionality
 function loadPosts() {
   const daftar = document.getElementById("daftarPostingan");
-  if (!daftar) return;
-  
   db.ref("posts").orderByChild("Status").equalTo("publik").limitToLast(20).on("child_added", async postSnap => {
     const post = postSnap.val();
     const postId = postSnap.key;
@@ -301,56 +251,107 @@ function setupPostInteractions(postId) {
   const btnLihat = document.getElementById(`lihatKomentarBtn-${postId}`);
   const wadahKomentar = document.getElementById(`komentar-${postId}`);
   
-  if (btnLihat && wadahKomentar) {
-    btnLihat.onclick = () => {
-      if (wadahKomentar.style.display === "none") {
-        wadahKomentar.style.display = "block";
-        btnLihat.textContent = "Sembunyikan Komentar";
-        
-        if (!komentarLoaded) {
-          db.ref("komentar/" + postId).on("value", snap => {
-            wadahKomentar.innerHTML = "";
-            snap.forEach(c => {
-              const v = c.val();
-              const d = document.createElement("div");
-              d.style = "background:#f9f9f9; padding:6px; margin-top:4px; border-radius:6px; font-size:12px";
-              d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(/\n/g, "<br>")}`;
-              wadahKomentar.appendChild(d);
-            });
+  btnLihat.onclick = () => {
+    if (wadahKomentar.style.display === "none") {
+      wadahKomentar.style.display = "block";
+      btnLihat.textContent = "Sembunyikan Komentar";
+      
+      if (!komentarLoaded) {
+        db.ref("komentar/" + postId).on("value", snap => {
+          wadahKomentar.innerHTML = "";
+          snap.forEach(c => {
+            const v = c.val();
+            const d = document.createElement("div");
+            d.style = "background:#f9f9f9; padding:6px; margin-top:4px; border-radius:6px; font-size:12px";
+            d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(/\n/g, "<br>")}`;
+            wadahKomentar.appendChild(d);
           });
-          komentarLoaded = true;
-        }
-      } else {
-        wadahKomentar.style.display = "none";
-        btnLihat.textContent = "Lihat Komentar";
+        });
+        komentarLoaded = true;
       }
-    };
-  }
+    } else {
+      wadahKomentar.style.display = "none";
+      btnLihat.textContent = "Lihat Komentar";
+    }
+  };
 }
 
-// E-commerce Functionality
-function initializeEcommerce() {
-  document.getElementById("nama").textContent = userData.Nama;
-  document.getElementById("telepon").textContent = userData.Telepon;
-  document.getElementById("alamat").textContent = userData.Alamat;
-  document.getElementById("tiktok").textContent = userData.Tiktok;
-  document.getElementById("Saldo").textContent = formatRupiah(userSaldo);
-
-  const produkList = [
-    { name: "1 Butir Cilok", price: 1000, desc: "Bonus 1 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-    { name: "10 Butir Cilok", price: 4900, desc: "Bonus 10 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-    { name: "100 Butir", price: 99000, desc: "Bonus 100 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-  ];
-
-  const produkContainer = document.getElementById("produkContainer");
-  produkList.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "produk-card";
-    div.innerHTML = `<img src="${p.img}" alt="${p.name}"><p>${p.name}</p><p class="deskripsi">${p.desc}</p>`;
-    div.onclick = () => pilihProduk(p);
-    produkContainer.appendChild(div);
+window.kirimKomentar = function(postId) {
+  const userID = localStorage.getItem("ID") || "";
+  if (!userID) return alert("Silakan login dulu untuk komentar");
+  
+  const nama = localStorage.getItem("Nama") || "Anonim";
+  const input = document.getElementById("inputKomentar-" + postId);
+  const teks = (input?.value || "").trim();
+  
+  if (!teks) return;
+  
+  db.ref("komentar/" + postId).push({
+    ID: userID,
+    Nama: nama,
+    Teks: teks,
+    Waktu: new Date().toISOString()
   });
-}
+  
+  input.value = "";
+};
+
+window.toggleLike = function(postId) {
+  const userID = localStorage.getItem("ID") || "";
+  if (!userID) return alert("Silakan login dulu untuk like");
+  
+  const refLike = db.ref("likes/" + postId + "/" + userID);
+  refLike.once("value").then(snap => {
+    if (snap.exists()) {
+      refLike.remove();
+    } else {
+      refLike.set(true);
+    }
+  });
+};
+
+window.tampilkanGambarPenuh = function(src) {
+  if (!src) return;  
+  const modal = document.getElementById("modalGambar");
+  const gambar = document.getElementById("gambarModal");
+  gambar.src = src;
+  modal.style.display = "flex";
+};
+
+document.getElementById("modalGambar").addEventListener("click", () => {  
+  document.getElementById("modalGambar").style.display = "none";
+});
+
+// Script 2 - E-commerce Features
+const username = localStorage.getItem("userID");
+let userSaldo = parseInt(localStorage.getItem("Saldo") || "0");
+let userData = {
+  Nama: localStorage.getItem("Nama") || "-",
+  Telepon: localStorage.getItem("Telepon") || "-",
+  Alamat: localStorage.getItem("Alamat") || "-",
+  Tiktok: localStorage.getItem("Tiktok") || "-"
+};
+
+document.getElementById("nama").textContent = userData.Nama;
+document.getElementById("telepon").textContent = userData.Telepon;
+document.getElementById("alamat").textContent = userData.Alamat;
+document.getElementById("tiktok").textContent = userData.Tiktok;
+document.getElementById("Saldo").textContent = formatRupiah(userSaldo);
+
+const produkList = [
+  { name: "1 Butir Cilok", price: 1000, desc: "Bonus 1 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+  { name: "10 Butir Cilok", price: 4900, desc: "Bonus 10 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+  { name: "100 Butir", price: 99000, desc: "Bonus 100 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+];
+
+const produkContainer = document.getElementById("produkContainer");
+produkList.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "produk-card";
+  div.innerHTML = `<img src="${p.img}" alt="${p.name}"><p>${p.name}</p><p class="deskripsi">${p.desc}</p>`;
+  div.onclick = () => pilihProduk(p);
+  produkContainer.appendChild(div);
+});
 
 function pilihProduk(p) {
   const order = { name: p.name, price: p.price, desc: p.desc };
@@ -417,67 +418,17 @@ function closeQris() {
   document.getElementById("qrisModal").style.display = "none";
 }
 
-// Utility Functions
 function formatRupiah(angka) {
   if (!angka || isNaN(angka)) return "";
   return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-window.kirimKomentar = function(postId) {
-  const userID = localStorage.getItem("ID") || "";
-  if (!userID) return alert("Silakan login dulu untuk komentar");
-  
-  const nama = localStorage.getItem("Nama") || "Anonim";
-  const input = document.getElementById("inputKomentar-" + postId);
-  const teks = (input?.value || "").trim();
-  
-  if (!teks) return;
-  
-  db.ref("komentar/" + postId).push({
-    ID: userID,
-    Nama: nama,
-    Teks: teks,
-    Waktu: new Date().toISOString()
-  });
-  
-  input.value = "";
-};
-
-window.toggleLike = function(postId) {
-  const userID = localStorage.getItem("ID") || "";
-  if (!userID) return alert("Silakan login dulu untuk like");
-  
-  const refLike = db.ref("likes/" + postId + "/" + userID);
-  refLike.once("value").then(snap => {
-    if (snap.exists()) {
-      refLike.remove();
-    } else {
-      refLike.set(true);
-    }
-  });
-};
-
-window.tampilkanGambarPenuh = function(src) {
-  if (!src) return;  
-  const modal = document.getElementById("modalGambar");
-  const gambar = document.getElementById("gambarModal");
-  gambar.src = src;
-  modal.style.display = "flex";
-};
-
-// Modal close event
-if (document.getElementById("modalGambar")) {
-  document.getElementById("modalGambar").addEventListener("click", () => {  
-    document.getElementById("modalGambar").style.display = "none";
-  });
-}
-
-// Product and Policy Modals (placeholder functions)
+// Placeholder functions
 function setupProductModals() {
-  // Implementation for product modals
+  // Implementation as in original script
 }
 
 function setupPolicyModals() {
-  // Implementation for policy modals
+  // Implementation as in original script
 }
-
+</script>
