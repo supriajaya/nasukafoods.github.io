@@ -1,4 +1,4 @@
-<script>
+
 // Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
@@ -480,4 +480,4 @@ function setupProductModals() {
 function setupPolicyModals() {
   // Implementation for policy modals
 }
-</script>
+
