@@ -1,4 +1,4 @@
-<script>
+
 // Script 1 - Social Media Features
 const firebaseConfig = {
   apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
@@ -431,4 +431,3 @@ function setupProductModals() {
 function setupPolicyModals() {
   // Implementation as in original script
 }
-</script>
