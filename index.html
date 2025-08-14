@@ -6,18 +6,374 @@
   <link rel="stylesheet" href="https://nasukafoods.site/indexnasuka.css" />
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+ 
+  
   <style>
+      
+      
+      
+       body {    
+      margin: 0;    
+      font-family: 'Segoe UI', sans-serif;    
+      background-color: snow;    
+    } 
+    
+     header {    
+  background-color: gray;    
+  color: white;    
+  padding: 12px 16px;    
+  display: flex;    
+  justify-content: space-between;    
+  align-items: center;    
+  flex-wrap: wrap;    
+}  
+  
+.arya-scol {  
+display: flex;  
+overflow-x: auto;  
+white-space: nowrap;  
+padding: 2px;  
+gap: 2px;  
+margin-top: -1px;  
+}  
+  
+.arya-scol::-webkit-scrollbar {  
+display: none;  
+}  
+  
+.arya-scol img {  
+width: 45px;  
+aspect-ratio: 1 / 1;  
+border-radius: 3px;  
+object-fit: cover;  
+flex: 0 0 auto;  
+  
+}  
+  
+
+  
+.container {    
+  display: flex;    
+  flex-wrap: wrap;    
+  justify-content: space-between;    
+  padding: 10px;    
+}    
+  
+.nasuka {    
+  flex: 0 0 48%;    
+  background-color: #fff;    
+  margin-bottom: 10px;    
+  border-radius: 8px;    
+  overflow: hidden;    
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);    
+  text-align: center;    
+  box-sizing: border-box;    
+}    
+  
+.nasuka img {    
+  width: 100%;    
+  height: auto;    
+  display: block;    
+}    
+  
+.nasuka-info {    
+  padding: 10px;    
+}    
+  
+.nasuka-info.centered {    
+  text-align: center;    
+}    
+  
+.nasuka-info.left {    
+  text-align: left;    
+}    
+  
+.nasuka-info h3 {    
+  margin: 0 0 5px;    
+  font-size: 16px;    
+}    
+  
+.nasuka-info p {    
+  margin: 0;    
+  font-size: 14px;    
+  color: #444;    
+}    
+  
+
+  
+@media (max-width: 480px) {    
+  .nasuka {    
+    flex: 0 0 49%;    
+    font-size: 13px;    
+  }    
+  
+  .nasuka-info h3 {    
+    font-size: 14px;    
+  }    
+  
+  .nasuka-info p,    
+  .fake-online {    
+    font-size: 12px;    
+  }    
+  
+
+  
+.arya-bar {  
+display: flex;  
+align-items: center;  
+gap: 2px;  
+padding: 2px;  
+overflow-x: auto;  
+}  
+.arya-bar::-webkit-scrollbar {  
+display: none;  
+}  
+  
+.arya-item {  
+width: 50px;  
+aspect-ratio: 1 / 1;  
+border-radius: 2px;  
+object-fit: cover;  
+flex-shrink: 0;  
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  
+}  
+  
+.arya-item {  
+border: 1px solid red;  
+padding: 2px;  
+}  
+  
+
+  
+.arya-overlay {  
+  position: relative;  
+  display: inline-block;  
+}  
+  
+.arya-overlay img {  
+  display: block;  
+}  
+  
+  
+.arya-overlay span {  
+  position: absolute;  
+  bottom: 4px;  
+  left: 4px;  
+  background: ;  
+  color: black;  
+  padding: 2px 1px;  
+  border-radius: 1px;  
+  font-size: 10px;  
+  font-weight: bold; /* ini bikin bold */  
+  max-width: 90%;  
+  white-space: nowrap;  
+  overflow: hidden;  
+  text-overflow: ellipsis;  
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */  
+}  
+  
+.profil-overlay {  
+  position: relative;  
+  display: inline-block;  
+}  
+  
+.profil-overlay img {  
+  display: block;  
+}  
+  
+  
+.profil-overlay span {  
+  position: absolute;  
+  bottom: 4px;  
+  left: 4px;  
+  background: ;  
+  color: white;  
+  padding: 2px 1px;  
+  border-radius: 1px;  
+  font-size: 10px;  
+  font-weight: bold; /* ini bikin bold */  
+  max-width: 90%;  
+  white-space: nowrap;  
+  overflow: hidden;  
+  text-overflow: ellipsis;  
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */  
+}  
+  
+  
+  
+  
+
+  
+.post-item {  
+  display: flex;  
+  gap: 10px;  
+  background: #fff;  
+  border-radius: 8px;  
+  padding: 10px;  
+  margin-bottom: 12px;  
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);  
+}  
+  
+.foto-post {  
+  width: 40px;  
+  height: 40px;  
+  border-radius: 50%;  
+  object-fit: cover;  
+}  
+  
+.konten-post {  
+  flex: 1;  
+}  
+  
+.aksi-post button {  
+  margin-right: 8px;  
+  background: #eee;  
+  border: none;  
+  padding: 4px 8px;  
+  border-radius: 6px;  
+  cursor: pointer;  
+}  
+   #notifInbox {
+      position: absolute;
+      top: 20px;
+      right: 12px;
+      
+      
+      padding: 2px 6px;
+      
+      
+      cursor: pointer;
+      min-width: 20px;
+      text-align: center;
+      user-select: none;
+      display: none;
+    }
+
+
+
+      
+      
+      
+      
+      .arya-scil {  
+display: flex;  
+overflow-x: auto;  
+white-space: nowrap;  
+padding: 2px;  
+gap: 2px;  
+margin-top: -1px;  
+}  
+  
+.arya-scil::-webkit-scrollbar {  
+display: none;  
+}  
+  
+.arya-scil img {  
+width: 40px;  
+aspect-ratio: 1 / 1;  
+border-radius: 3px;  
+object-fit: cover;  
+flex: 0 0 auto;  
+  
+}  
+      
+     .arya-bir {  
+display: flex;  
+align-itims: center;  
+gap: 2px;  
+padding: 2px;  
+overflow-x: auto;  
+}  
+.arya-bar::-webkit-scrollbar {  
+display: none;  
+}  
+  
+.arya-itim {  
+width: 40px;  
+aspect-ratio: 1 / 1;  
+border-radius: 2px;  
+object-fit: cover;  
+flex-shrink: 0;  
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  
+}  
+  
+.arya-itim {  
+border: 1px solid black;  
+padding: 2px;  
+}   
+      
+      
+      .aryi-overlay {  
+  position: relative;  
+  display: inline-block;  
+}  
+  
+.aryi-overlay img {  
+  display: block;  
+}  
+  
+  
+.aryi-overlay span {  
+  position: absolute;  
+  bottom: 4px;  
+  left: 4px;  
+  background: ;  
+  color: black;  
+  padding: 2px 1px;  
+  border-radius: 10px;  
+  font-size: 10px;  
+  font-weight: bold; /* ini bikin bold */  
+  max-width: 70%;  
+  white-space: nowrap;  
+  overflow: hidden;  
+  text-overflow: ellipsis;  
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */  
+}  
+  
+.prifil-overlay {  
+  position: relative;  
+  display: inline-block;  
+}  
+  
+.prifil-overlay img {  
+  display: block;  
+}  
+  
+  
+.prifil-overlay span {  
+  position: absolute;  
+  bottom: 4px;  
+  left: 4px;  
+  background: ;  
+  color: red;  
+  padding: 2px 1px;  
+  border-radius: 10px;  
+  font-size: 10px;  
+  font-weight: bold; /* ini bikin bold */  
+  max-width: 90%;  
+  white-space: nowrap;  
+  overflow: hidden;  
+  text-overflow: ellipsis;  
+  text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; /* glow effect */  
+}  
+      
+      
+      
+      
+      
+      
+      
       
      .menu-links {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .menu-links span {
   margin: 0 10px;
   cursor: pointer;
   font-weight: 500;
-  font-size: 12px; /* perkecil ukuran teks */
+  font-size: 5px;
 }
 
 .menu-links span:hover {
@@ -40,66 +396,23 @@
   
 </head>
 <body>
-  <div class="nasuka-info centered"></div>
-  <div style="padding:10px; text-align:center;">
-    <input id="cariUser" placeholder="Cari user..." />
-    <div id="hasilUser" style="margin-top:10px"></div>
- 
+    
   
  
 <div class="menu-links">
-  <span id="faqBtn">Faq</span>
-  <span id="refundBtn">Refund Policy</span>
-  <span id="privacyBtn">Privacy Policy</span>
-  <span id="termBtn">Term & Condition</span>
+  <span>Pertanyaan Umum</span>
+  <span>Pengembalian Dana</span>
+  <span>Keamanan Privasi</span>
+  <span>Syarat & Ketentuan</span>
 </div>
   
   
-  <div id="faqModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
-  <div style="background-color:#fff; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:600px;">
-    <span id="closeFaq" style="float:right; font-size:28px; cursor:pointer;">&times;</span>
-    <h2>FAQ</h2>
-    <p><strong>Pertanyaan 1:</strong> Bagaimana cara memesan?</p> --> -->
-    <p>Anda dapat memesan langsung melalui website dengan memilih produk yang diinginkan.</p>
-    <p><strong>Pertanyaan 2:</strong> Metode pembayaran apa saja yang tersedia?</p>
-    <p>Kami menerima pembayaran melalui transfer bank, e-wallet, dan QRIS.</p>
-    <p><strong>Pertanyaan 3:</strong> Apakah pengiriman tersedia ke seluruh Indonesia?</p>
-    <p>Ya, kami melayani pengiriman ke seluruh wilayah Indonesia.</p>
-  </div>
-</div>
+  
+  <div style="padding:2px; text-align:center;">
+    <input id="cariUser" placeholder="Cari akun....." />
+    <div id="hasilUser" style="margin-top:8px"></div>
+ 
 
-  
-  
-  <!-- Refund Policy Modal -->
-<div id="refundModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
-  <div style="background-color:#fff; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:600px;">
-    <span id="closeRefund" style="float:right; font-size:28px; cursor:pointer;">&times;</span>
-    <h2>Refund Policy</h2>
-    <p>Kami menerima permintaan refund maksimal 3x24 jam setelah pembelian, dengan syarat produk belum digunakan atau rusak bukan karena kesalahan pembeli.</p>
-  </div>
-</div>
-
-<!-- Privacy Policy Modal -->
-<div id="privacyModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
-  <div style="background-color:#fff; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:600px;">
-    <span id="closePrivacy" style="float:right; font-size:28px; cursor:pointer;">&times;</span>
-    <h2>Privacy Policy</h2>
-    <p>Kami menjaga kerahasiaan data pribadi Anda dan tidak akan membagikannya kepada pihak ketiga tanpa izin.</p>
-  </div>
-</div>
-
-<!-- Term & Condition Modal -->
-<div id="termModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.6);">
-  <div style="background-color:#fff; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:600px;">
-    <span id="closeTerm" style="float:right; font-size:28px; cursor:pointer;">&times;</span>
-    <h2>Terms & Condition</h2>
-    <p>Dengan menggunakan layanan kami, Anda dianggap telah menyetujui semua syarat dan ketentuan yang berlaku.</p>
-  </div>
-</div>
-  
-  
-  
-  
   
   <div class="arya-bar raya" style="position: relative;">
     <div class="profil-overlay">
@@ -123,369 +436,80 @@
       <div class="arya-overlay">
         <a href="puzzle.html"><img src="https://nasukafoods.site/puzzle.jpg" /></a>
       </div>
-      <div class="arya-overlay">
-        <a href="#"><img src="https://nasukafoods.site/onprogres.jpg" /></a>
-      </div>
+      
       <div class="arya-overlay">
         <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/nasukafoods.jpg" /><span>Download</span></a>
       </div>
     </div>
   </div>
-  <div class="produk-title">PRODUK</div>
   
   
-  <div class="arya-bar raya" style="position: relative;">
-    <div class="profil-overlay">
-      <a id="produk1" href="#">
-        <img src="https://nasukafoods.site/paketcilok.jpg" class="arya-item raya" id="produk1" />
-      </a>
-    </div>
-    <div class="profil-overlay">
-      <a id="produk2" href="#">
-        <img src="https://nasukafoods.site/isiangajih.png" class="arya-item raya" id="produk2" />
-      </a>
-    </div>
-    <div class="profil-overlay">
-      <a id="produk3" href="#">
-        <img src="https://nasukafoods.site/paket-cilok-pedas.jpg" class="arya-item raya" id="produk3" />
-      </a>
-    </div>
-    <div class="profil-overlay">
-      <a id="produk4" href="#">
-        <img src="https://nasukafoods.site/paket-cilok-keju.jpg" class="arya-item raya" id="produk4" />
-      </a>
-    </div>
-  </div>
   
-  <div id="modalPembayaran1" style="display:none;position:fixed;z-index:10000;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupPembayaran1" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <p><strong>Silahkan Pilih Metode Pembayaran:</strong></p>
-    <div style="margin-top:12px;">
-      <p>Manual:</p>
-      <button id="btnQris1" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">QRIS : Semua Aplikasi</button>
+
+  
+   <div class="arya-bir raya" style="position: relative;">
       
+    
+    <a href="pembayaran.html" style="text-decoration: none; color: inherit;">
+  <div class="prifil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
+    <img src="https://nasukafoods.site/isiangajih.png" class="arya-itim raya" />
+    <span>CILOK 1</span>
+  </div>
+</a>
+
+ 
+    <a href="pembayaran.html" style="text-decoration: none; color: inherit;">
+  <div class="prifil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
+    <img src="https://nasukafoods.site/isiangajih.png" class="arya-itim raya" />
+    <span>CILOK 1</span>
+  </div>
+</a>
+    
+     
+    <a href="pembayaran.html" style="text-decoration: none; color: inherit;">
+  <div class="prifil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
+    <img src="https://nasukafoods.site/isiangajih.png" class="arya-itim raya" />
+    <span>CILOK 1</span>
+  </div>
+</a>
+    
+     
+    <a href="pembayaran.html" style="text-decoration: none; color: inherit;">
+  <div class="prifil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
+    <img src="https://nasukafoods.site/isiangajih.png" class="arya-itim raya" />
+    <span>CILOK 1</span>
+  </div>
+</a>  
+    
+    
+ 
+    
+      <div class="arya-scil">
+          
+      <div class="aryi-overlay"><a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
       
-      <p>Push notif tagihan otomatis</p>
-      <button id="btnDana1" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">DANA</button>
-      <button id="btnOvo1" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">OVO</button>
-      <button id="btnGopay1" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Gopay</button>
-      <button id="btnShopeepay1" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Shopeepay</button>
-    </div>
-  </div>
-</div>
-
-
-
-
-<div id="modalQris1" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupQris1" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <h2>Detail Pesanan QRIS</h2>
-    <p>CILOK</p>
-    <p>Harga: Rp 950</p>
-    <img src="https://nasukafoods.site/qris.jpg" style="max-width:200px;margin-top:10px;">
-  </div>
-</div>
-
-<div id="modalDana1" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupDana1" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-   
-   
-    <h2>Detail Pesanan DANA</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 950</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-   
-  </div>
-</div><div id="modalOvo1" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupOvo1" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-     <h2>Detail Pesanan OVO</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 950</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
+       <div class="aryi-overlay"><a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
+       
+       <div class="aryi-overlay"><a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
+       <div class="aryi-overlay">
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
+       <div class="aryi-overlay">
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
+       <div class="aryi-overlay">
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
+        <div class="aryi-overlay">
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
+       <div class="aryi-overlay">
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div>
+       <div class="aryi-overlay">
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/onprogres.jpg" /><span>Nama</span></a> </div> </div></div>
+    
     
     
    
-    
-    
-  </div>
-</div><div id="modalGopay1" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupGopay1" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    
-    
-    
-    <h2>Detail Pesanan GOPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 950</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-    
-    
-    
-    
-    
-    
-  </div>
-</div><div id="modalShopeepay1" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupShopeepay1" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <h2>Detail Pesanan SHOPEEPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 950</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-   
-  </div>
-</div><div id="modalPembayaran2" style="display:none;position:fixed;z-index:10000;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupPembayaran2" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <p><strong>Silahkan Pilih Metode Pembayaran:</strong></p>
-    <div style="margin-top:12px;">
-      <p>Manual:</p>
-      <button id="btnQris2" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">QRIS : Semua Aplikasi</button>
-      <p>Push notif tagihan otomatis</p>
-      <button id="btnDana2" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">DANA</button>
-      <button id="btnOvo2" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">OVO</button>
-      <button id="btnGopay2" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Gopay</button>
-      <button id="btnShopeepay2" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Shopeepay</button>
-    </div>
-  </div>
-</div><div id="modalQris2" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupQris2" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    <h2>Detail Pesanan QRIS</h2>
-    <p>Produk: Contoh Produk</p>
-    <p>Harga: Rp 1.000</p>
-    <img src="https://nasukafoods.site/qris.jpg" style="max-width:200px;margin-top:10px;">
-  </div>
-</div>
-
-
-<div id="modalDana2" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupDana2" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-   
-    <h2>Detail Pesanan DANA</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-   
-   
-  </div>
-</div>
-
-
-<div id="modalOvo2" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupOvo2" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-   
- 
-  <h2>Detail Pesanan OVO</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
- 
- 
- 
- 
-  </div>
-</div><div id="modalGopay2" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupGopay2" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-
- <h2>Detail Pesanan GOPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-
-
-
-  </div>
-</div><div id="modalShopeepay2" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupShopeepay2" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    
-    
-     <h2>Detail Pesanan SHOPEEPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-    
-  </div>
-</div>
-
-
-
-<div id="modalPembayaran3" style="display:none;position:fixed;z-index:10000;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupPembayaran3" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <p><strong>Silahkan Pilih Metode Pembayaran:</strong></p>
-    <div style="margin-top:12px;">
-      <p>Manual:</p>
-      <button id="btnQris3" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">QRIS : Semua Aplikasi</button>
-      <p>Push notif tagihan otomatis</p>
-      <button id="btnDana3" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">DANA</button>
-      <button id="btnOvo3" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">OVO</button>
-      <button id="btnGopay3" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Gopay</button>
-      <button id="btnShopeepay3" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Shopeepay</button>
-    </div>
-  </div>
-</div><div id="modalQris3" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupQris3" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <h2>Detail Pesanan QRIS</h2>
-    <p>Produk: Contoh Produk</p>
-    <p>Harga: Rp 1.500</p>
-    <img src="https://nasukafoods.site/qris.jpg" style="max-width:200px;margin-top:10px;">
-  </div>
-</div><div id="modalDana3" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupDana3" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-   
-  <h2>Detail Pesanan DANA</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.500</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
- 
- 
- 
- 
-  </div>
-</div><div id="modalOvo3" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupOvo3" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-<h2>Detail Pesanan OVO</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.500</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
- 
-
-
-
-
-  </div>
-</div><div id="modalGopay3" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupGopay3" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    
-    
-<h2>Detail Pesanan GOPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.500</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
- 
-
-
-
-  </div>
-</div><div id="modalShopeepay3" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupShopeepay3" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    
-   
- <h2>Detail Pesanan SHOPEEPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 1.500</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
- 
- 
- 
- 
- 
- 
-  </div>
-</div>
-
-
-
-
-<div id="modalPembayaran4" style="display:none;position:fixed;z-index:10000;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupPembayaran4" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <p><strong>Silahkan Pilih Metode Pembayaran:</strong></p>
-    <div style="margin-top:12px;">
-      <p>Manual:</p>
-      <button id="btnQris4" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">QRIS : Semua Aplikasi</button>
-      <p>Push notif tagihan otomatis</p>
-      <button id="btnDana4" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">DANA</button>
-      <button id="btnOvo4" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">OVO</button>
-      <button id="btnGopay4" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Gopay</button>
-      <button id="btnShopeepay4" style="padding:8px 14px;margin:4px;background:red;color:#fff;border:none;border-radius:6px;">Shopeepay</button>
-    </div>
-  </div>
-</div><div id="modalQris4" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupQris4" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    <h2>Detail Pesanan QRIS</h2>
-    <p>Produk: Contoh Produk</p>
-    <p>Harga: Rp 2.000</p>
-    <img src="https://nasukafoods.site/qris.jpg" style="max-width:200px;margin-top:10px;">
-  </div>
-</div><div id="modalDana4" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupDana4" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-  
-  <h2>Detail Pesanan DANA</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 2.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
- 
-  
-  
-  
-  </div>
-</div><div id="modalOvo4" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupOvo4" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    
-    
-  <h2>Detail Pesanan OVO</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 2.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-
-
-
-  </div>
-</div><div id="modalGopay4" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupGopay4" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    
-   
-  <h2>Detail Pesanan GOPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 2.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
-
-
-  </div>
-</div><div id="modalShopeepay4" style="display:none;position:fixed;z-index:10001;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:16px;border-radius:8px;max-width:90%;text-align:center;position:relative;">
-    <button id="tutupShopeepay4" style="position:absolute;top:6px;right:6px;background:none;border:none;font-size:18px;cursor:pointer;">❌</button>
-    
-    
-    
-   <h2>Detail Pesanan SHOPEEPAY</h2>
-    <p>Produk: CILOK</p>
-    <p>Harga: Rp 2.000</p>
-     <p>Push Notif Tagihan Payment Gateway Belum Tersedia</p>
- 
- 
- 
- 
-  </div>
-</div>  <div id="daftarPostingan" style="padding: 10px;"></div>
+     
+     
+     <div id="daftarPostingan" style="padding: 10px;"></div>
   <div id="modalGambar" style="display: none;position: fixed;z-index: 9999;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.8);justify-content: center;align-items: center;">
     <img id="gambarModal" src="" style="max-width: 95%; max-height: 95%; border-radius: 8px" />
   </div>
@@ -495,9 +519,8 @@
   
   
   
-  
-  
   <script>
+
 const firebaseConfig = {
   apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
   authDomain: "nasuka-fc780.firebaseapp.com",
@@ -506,45 +529,71 @@ const firebaseConfig = {
   messagingSenderId: "860641747257",
   appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
 };
+
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const userCache = {};
+
+// DOM Content Loaded Event
 document.addEventListener("DOMContentLoaded", () => {
+  initializeUserProfile();
+  setupSearchFunctionality();
+  setupChatNotifications();
+  loadPosts();
+  setupProductModals();
+  setupPolicyModals();
+});
+
+// Initialize User Profile
+function initializeUserProfile() {
   const userID = localStorage.getItem("ID") || "";
   const fotoEl = document.getElementById("fotoProfil");
   const namaEl = document.getElementById("namaUser");
   const profilLink = document.getElementById("linkProfil");
-  const notifInbox = document.getElementById("notifInbox");
-  const hasilUserEl = document.getElementById("hasilUser");
-  const daftar = document.getElementById("daftarPostingan");
+
   if (!userID) {
     namaEl.textContent = "Silakan Masuk";
     fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
     profilLink.href = "login.html";
-    
+    return;
   }
+
   const nama = localStorage.getItem("Nama");
   const foto = localStorage.getItem("Foto");
+
   if (nama && foto) {
-    namaEl.textContent = nama;
-    fotoEl.src = foto;
-    profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
+    updateProfileDisplay(nama, foto, userID);
   } else {
-    db.ref("users").orderByChild("ID").equalTo(userID).once("value").then(snap => {
-      snap.forEach(child => {
-        const val = child.val();
-        localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
-        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
-        namaEl.textContent = val.Nama || "Tanpa Nama";
-        fotoEl.src = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-        profilLink.href = `profil.html?id=${encodeURIComponent(userID)}`;
-      });
-    });
+    fetchUserProfileFromDB(userID);
   }
+}
+
+function updateProfileDisplay(nama, foto, userID) {
+  document.getElementById("namaUser").textContent = nama;
+  document.getElementById("fotoProfil").src = foto;
+  document.getElementById("linkProfil").href = `profil.html?id=${encodeURIComponent(userID)}`;
+}
+
+function fetchUserProfileFromDB(userID) {
+  db.ref("users").orderByChild("ID").equalTo(userID).once("value").then(snap => {
+    snap.forEach(child => {
+      const val = child.val();
+      localStorage.setItem("Nama", val.Nama || "Tanpa Nama");
+      localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+      updateProfileDisplay(val.Nama || "Tanpa Nama", val.Foto || "https://nasukafoods.site/gambarkosong.jpg", userID);
+    });
+  });
+}
+
+// Search Functionality
+function setupSearchFunctionality() {
+  const hasilUserEl = document.getElementById("hasilUser");
   document.getElementById("cariUser").addEventListener("input", function() {
     const k = this.value.trim().toLowerCase();
     hasilUserEl.innerHTML = "";
     if (k.length < 2) return;
+    
     db.ref("users").orderByChild("NamaLower").startAt(k).endAt(k + "\uf8ff").limitToFirst(20).once("value").then(snap => {
       snap.forEach(child => {
         const v = child.val();
@@ -554,30 +603,26 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
-  function getUserData(uid) {
-    return new Promise(resolve => {
-      if (userCache[uid]) return resolve(userCache[uid]);
-      db.ref("users").orderByChild("ID").equalTo(uid).once("value").then(snap => {
-        let nama = "Tanpa Nama";
-        snap.forEach(u => {
-          if (u.val().Nama) nama = u.val().Nama;
-        });
-        userCache[uid] = nama;
-        resolve(nama);
-      });
-    });
-  }
+}
+
+// Chat Notifications
+function setupChatNotifications() {
+  const userID = localStorage.getItem("ID") || "";
+  if (!userID) return;
+
+  const notifInbox = document.getElementById("notifInbox");
   const userChatsRef = db.ref(`users/${userID}/chats`);
+
   userChatsRef.on('value', snapshot => {
     const chats = snapshot.val() || {};
     let unreadCount = 0;
+    
     for (const key in chats) {
-      if (chats[key].read === false || chats[key].read === undefined) {
-        if (chats[key].ID !== userID) {
-          unreadCount++;
-        }
+      if ((chats[key].read === false || chats[key].read === undefined) && chats[key].ID !== userID) {
+        unreadCount++;
       }
     }
+
     if (unreadCount > 0) {
       notifInbox.style.display = 'inline-block';
       notifInbox.textContent = unreadCount > 99 ? '99+' : unreadCount;
@@ -586,184 +631,234 @@ document.addEventListener("DOMContentLoaded", () => {
       notifInbox.textContent = '';
     }
   });
+
   notifInbox.onclick = () => {
-    db.ref(`users/${userID}/chats`).once('value').then(async snapshot => {
-      const chats = snapshot.val() || {};
-      if (Object.keys(chats).length === 0) {
-        alert('Tidak ada pengirim pesan');
-        return;
-      }
-      const pengirimData = [];
-      for (const chatID of Object.keys(chats)) {
-        const userSnap = await db.ref('users').orderByChild('ID').equalTo(chatID).once('value');
-        userSnap.forEach(u => {
-          const nama = u.val().Nama || 'Pengguna';
-          pengirimData.push({ id: chatID, nama });
-        });
-      }
-      const container = document.createElement('div');
-      container.style.position = 'fixed';
-      container.style.top = '50%';
-      container.style.left = '50%';
-      container.style.transform = 'translate(-50%, -50%)';
-      container.style.background = '#fff';
-      container.style.border = '1px solid #ccc';
-      container.style.borderRadius = '8px';
-      container.style.padding = '12px';
-      container.style.zIndex = '9999';
-      container.style.maxHeight = '300px';
-      container.style.overflowY = 'auto';
-      container.style.minWidth = '200px';
-      container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-      const closeBtn = document.createElement('button');
-      closeBtn.textContent = '❌';
-      closeBtn.style.position = 'absolute';
-      closeBtn.style.top = '6px';
-      closeBtn.style.right = '6px';
-      closeBtn.style.background = 'transparent';
-      closeBtn.style.border = 'none';
-      closeBtn.style.fontSize = '18px';
-      closeBtn.style.cursor = 'pointer';
-      closeBtn.onclick = () => {
-        document.body.removeChild(container);
-      };
-      container.appendChild(closeBtn);
-      pengirimData.forEach(({ id, nama }) => {
-        const btn = document.createElement('button');
-        btn.textContent = nama;
-        btn.style.display = 'block';
-        btn.style.width = '100%';
-        btn.style.margin = '6px 0';
-        btn.style.padding = '8px';
-        btn.style.border = 'none';
-        btn.style.borderRadius = '4px';
-        btn.style.background = '#2196F3';
-        btn.style.color = '#fff';
-        btn.style.cursor = 'pointer';
-        btn.onclick = () => {
-          document.body.removeChild(container);
-          window.location.href = `inbox.html?id=${encodeURIComponent(id)}`;
-        };
-        container.appendChild(btn);
-      });
-      document.body.appendChild(container);
-    });
+    showChatSendersList(userID);
   };
+}
+
+async function showChatSendersList(userID) {
+  const snapshot = await db.ref(`users/${userID}/chats`).once('value');
+  const chats = snapshot.val() || {};
+
+  if (Object.keys(chats).length === 0) {
+    alert('Tidak ada pengirim pesan');
+    return;
+  }
+
+  const pengirimData = [];
+  for (const chatID of Object.keys(chats)) {
+    const userSnap = await db.ref('users').orderByChild('ID').equalTo(chatID).once('value');
+    userSnap.forEach(u => {
+      const nama = u.val().Nama || 'Pengguna';
+      pengirimData.push({ id: chatID, nama });
+    });
+  }
+
+  const container = document.createElement('div');
+  container.style.position = 'fixed';
+  container.style.top = '50%';
+  container.style.left = '50%';
+  container.style.transform = 'translate(-50%, -50%)';
+  container.style.background = '#fff';
+  container.style.border = '1px solid #ccc';
+  container.style.borderRadius = '8px';
+  container.style.padding = '12px';
+  container.style.zIndex = '9999';
+  container.style.maxHeight = '300px';
+  container.style.overflowY = 'auto';
+  container.style.minWidth = '200px';
+  container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = 'x';
+  closeBtn.style.position = 'absolute';
+  closeBtn.style.top = '6px';
+  closeBtn.style.right = '6px';
+  closeBtn.style.background = 'transparent';
+  closeBtn.style.border = 'none';
+  closeBtn.style.fontSize = '18px';
+  closeBtn.style.cursor = 'pointer';
+  closeBtn.onclick = () => document.body.removeChild(container);
+  container.appendChild(closeBtn);
+
+  pengirimData.forEach(({ id, nama }) => {
+    const btn = document.createElement('button');
+    btn.textContent = nama;
+    btn.style.display = 'block';
+    btn.style.width = '100%';
+    btn.style.margin = '6px 0';
+    btn.style.padding = '8px';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '4px';
+    btn.style.background = '#2196F3';
+    btn.style.color = '#fff';
+    btn.style.cursor = 'pointer';
+    btn.onclick = () => {
+      document.body.removeChild(container);
+      window.location.href = `inbox.html?id=${encodeURIComponent(id)}`;
+    };
+    container.appendChild(btn);
+  });
+
+  document.body.appendChild(container);
+}
+
+
+function loadPosts() {
+  const daftar = document.getElementById("daftarPostingan");
   db.ref("posts").orderByChild("Status").equalTo("publik").limitToLast(20).on("child_added", async postSnap => {
     const post = postSnap.val();
     const postId = postSnap.key;
     const namaPemilik = await getUserData(post.ID);
+    
     const div = document.createElement("div");
     div.className = "post-item";
     div.style.flexDirection = "column";
-    div.innerHTML = `<div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:6px">${namaPemilik}</div>${post.Foto ? `<img src="${post.Foto}" class="foto-post" style="width:100px; height:100px; margin:0 auto 8px; display:block; border-radius:8px; object-fit:cover; cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')" />` : ``}<div style="font-size:13px; margin:4px 0"><b>${(post.Judul || "").replace(/\n/g, "<br>")}</b></div><div style="font-size:11px; color:gray">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ""}</div><div style="display:flex; align-items:center; gap:8px; margin-top:8px"><button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px; border:none; border-radius:6px; cursor:pointer; font-size:13px">❤️</button><span id="likeCount-${postId}" style="font-size:13px">0 suka</span></div><div id="komentar-${postId}" style="margin-top:10px; display:none;"></div><button id="lihatKomentarBtn-${postId}" style="margin-top:6px; padding:6px 10px; background:red; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px">Lihat Komentar</button><div style="display:flex; gap:6px; margin-top:6px"><textarea id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1; padding:6px; border:1px solid #ccc; border-radius:6px; font-size:13px; resize:none" rows="1"></textarea><button onclick="kirimKomentar('${postId}')" style="padding:6px 10px; background:#2196F3; color:white; border:none; border-radius:6px; font-size:13px">Ok</button></div>`;daftar.prepend(div);
-db.ref("likes/" + postId).on("value", snap => {
-  document.getElementById("likeCount-" + postId).textContent = `${snap.numChildren()} suka`;
-  const likeBtn = document.getElementById("likeBtn-" + postId);
-  if (likeBtn) {
-    if (snap.hasChild(userID)) {
-      likeBtn.textContent = "❤️";
-      likeBtn.style.background = "#f8d7da";
-    } else {
-      likeBtn.textContent = "💔";
-      likeBtn.style.background = "#eee";
-    }
-  }
-});
-let komentarLoaded = false;
-const btnLihat = div.querySelector(`#lihatKomentarBtn-${postId}`);
-const wadahKomentar = div.querySelector(`#komentar-${postId}`);
-btnLihat.onclick = () => {
-  if (wadahKomentar.style.display === "none") {
-    wadahKomentar.style.display = "block";
-    btnLihat.textContent = "Sembunyikan Komentar";
-    if (!komentarLoaded) {
-      db.ref("komentar/" + postId).on("value", snap => {
-        wadahKomentar.innerHTML = "";
-        snap.forEach(c => {
-          const v = c.val();
-          const d = document.createElement("div");
-          d.style = "background:#f9f9f9; padding:6px; margin-top:4px; border-radius:6px; font-size:12px";
-          d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(/\n/g, "<br>")}`;
-          wadahKomentar.appendChild(d);
-        });
+    div.innerHTML = createPostHTML(namaPemilik, post, postId);
+    
+    daftar.prepend(div);
+    setupPostInteractions(postId);
+  });
+}
+
+async function getUserData(uid) {
+  return new Promise(resolve => {
+    if (userCache[uid]) return resolve(userCache[uid]);
+    
+    db.ref("users").orderByChild("ID").equalTo(uid).once("value").then(snap => {
+      let nama = "Tanpa Nama";
+      snap.forEach(u => {
+        if (u.val().Nama) nama = u.val().Nama;
       });
-      komentarLoaded = true;
+      userCache[uid] = nama;
+      resolve(nama);
+    });
+  });
+}
+
+function createPostHTML(namaPemilik, post, postId) {
+  return `
+    <div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:6px">${namaPemilik}</div>
+    ${post.Foto ? `<img src="${post.Foto}" class="foto-post" style="width:100px; height:100px; margin:0 auto 8px; display:block; border-radius:8px; object-fit:cover; cursor:pointer" onclick="tampilkanGambarPenuh('${post.Foto}')" />` : ``}
+    <div style="font-size:13px; margin:4px 0"><b>${(post.Judul || "").replace(/\n/g, "<br>")}</b></div>
+    <div style="font-size:11px; color:gray">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ""}</div>
+    <div style="display:flex; align-items:center; gap:8px; margin-top:8px">
+      <button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px; border:none; border-radius:6px; cursor:pointer; font-size:13px">❤️</button>
+      <span id="likeCount-${postId}" style="font-size:13px">0 suka</span>
+    </div>
+    <div id="komentar-${postId}" style="margin-top:10px; display:none;"></div>
+    <button id="lihatKomentarBtn-${postId}" style="margin-top:6px; padding:6px 10px; background:red; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px">Lihat Komentar</button>
+    <div style="display:flex; gap:6px; margin-top:6px">
+      <textarea id="inputKomentar-${postId}" placeholder="Tulis komentar..." style="flex:1; padding:6px; border:1px solid #ccc; border-radius:6px; font-size:13px; resize:none" rows="1"></textarea>
+      <button onclick="kirimKomentar('${postId}')" style="padding:6px 10px; background:#2196F3; color:white; border:none; border-radius:6px; font-size:13px">Ok</button>
+    </div>
+  `;
+}
+
+function setupPostInteractions(postId) {
+  const userID = localStorage.getItem("ID") || "";
+  
+ 
+  db.ref("likes/" + postId).on("value", snap => {
+    document.getElementById("likeCount-" + postId).textContent = `${snap.numChildren()} suka`;
+    const likeBtn = document.getElementById("likeBtn-" + postId);
+    
+    if (likeBtn) {
+      if (snap.hasChild(userID)) {
+        likeBtn.textContent = "❤️";
+        likeBtn.style.background = "#f8d7da";
+      } else {
+        likeBtn.textContent = "💔";
+        likeBtn.style.background = "#eee";
+      }
     }
-  } else {
-    wadahKomentar.style.display = "none";
-    btnLihat.textContent = "Lihat Komentar";
-  }
+  });
+
+ 
+  let komentarLoaded = false;
+  const btnLihat = document.getElementById(`lihatKomentarBtn-${postId}`);
+  const wadahKomentar = document.getElementById(`komentar-${postId}`);
+  
+  btnLihat.onclick = () => {
+    if (wadahKomentar.style.display === "none") {
+      wadahKomentar.style.display = "block";
+      btnLihat.textContent = "Sembunyikan Komentar";
+      
+      if (!komentarLoaded) {
+        db.ref("komentar/" + postId).on("value", snap => {
+          wadahKomentar.innerHTML = "";
+          snap.forEach(c => {
+            const v = c.val();
+            const d = document.createElement("div");
+            d.style = "background:#f9f9f9; padding:6px; margin-top:4px; border-radius:6px; font-size:12px";
+            d.innerHTML = `<b>${v.Nama || "Anonim"}</b>: ${(v.Teks || "").replace(/\n/g, "<br>")}`;
+            wadahKomentar.appendChild(d);
+          });
+        });
+        komentarLoaded = true;
+      }
+    } else {
+      wadahKomentar.style.display = "none";
+      btnLihat.textContent = "Lihat Komentar";
+    }
+  };
+}
+
+
+window.kirimKomentar = function(postId) {
+  const userID = localStorage.getItem("ID") || "";
+  if (!userID) return alert("Silakan login dulu untuk komentar");
+  
+  const nama = localStorage.getItem("Nama") || "Anonim";
+  const input = document.getElementById("inputKomentar-" + postId);
+  const teks = (input?.value || "").trim();
+  
+  if (!teks) return;
+  
+  db.ref("komentar/" + postId).push({
+    ID: userID,
+    Nama: nama,
+    Teks: teks,
+    Waktu: new Date().toISOString()
+  });
+  
+  input.value = "";
 };
 
-}); window.kirimKomentar = function(postId) { if (!userID) return alert("Silakan login dulu untuk komentar"); const nama = localStorage.getItem("Nama") || "Anonim"; const input = document.getElementById("inputKomentar-" + postId); const teks = (input?.value || "").trim(); if (!teks) return; db.ref("komentar/" + postId).push({ ID: userID, Nama: nama, Teks: teks, Waktu: new Date().toISOString() }); input.value = ""; }; window.toggleLike = function(postId) { if (!userID) return alert("Silakan login dulu untuk like"); const refLike = db.ref("likes/" + postId + "/" + userID); refLike.once("value").then(snap => { if (snap.exists()) { refLike.remove(); } else { refLike.set(true); } }); }; window.tampilkanGambarPenuh = function(src) { if (!src) return; const modal = document.getElementById("modalGambar"); const gambar = document.getElementById("gambarModal"); gambar.src = src; modal.style.display = "flex"; }; document.getElementById("modalGambar").addEventListener("click", () => { document.getElementById("modalGambar").style.display = "none"; }); }); function setupModalSet(idx) { const modalPembayaran = document.getElementById("modalPembayaran" + idx); const tutupPembayaran = document.getElementById("tutupPembayaran" + idx); const produkEl = document.getElementById("produk" + idx); if (produkEl) { produkEl.addEventListener("click", e => { e.preventDefault(); modalPembayaran.style.display = "flex"; }); } tutupPembayaran.addEventListener("click", () => { modalPembayaran.style.display = "none"; }); modalPembayaran.addEventListener("click", e => { if (e.target === modalPembayaran) { modalPembayaran.style.display = "none"; } }); document.getElementById('btnQris' + idx).onclick = () => document.getElementById('modalQris' + idx).style.display = 'flex'; document.getElementById('btnDana' + idx).onclick = () => document.getElementById('modalDana' + idx).style.display = 'flex'; document.getElementById('btnOvo' + idx).onclick = () => document.getElementById('modalOvo' + idx).style.display = 'flex'; document.getElementById('btnGopay' + idx).onclick = () => document.getElementById('modalGopay' + idx).style.display = 'flex'; document.getElementById('btnShopeepay' + idx).onclick = () => document.getElementById('modalShopeepay' + idx).style.display = 'flex'; document.getElementById('tutupQris' + idx).onclick = () => document.getElementById('modalQris' + idx).style.display = 'none'; document.getElementById('tutupDana' + idx).onclick = () => document.getElementById('modalDana' + idx).style.display = 'none'; document.getElementById('tutupOvo' + idx).onclick = () => document.getElementById('modalOvo' + idx).style.display = 'none'; document.getElementById('tutupGopay' + idx).onclick = () => document.getElementById('modalGopay' + idx).style.display = 'none'; document.getElementById('tutupShopeepay' + idx).onclick = () => document.getElementById('modalShopeepay' + idx).style.display = 'none'; } setupModalSet(1); setupModalSet(2); setupModalSet(3); setupModalSet(4); 
-
-
-document.getElementById('faqBtn').addEventListener('click', function() {
-  document.getElementById('faqModal').style.display = 'block';
-});
-document.getElementById('closeFaq').addEventListener('click', function() {
-  document.getElementById('faqModal').style.display = 'none';
-});
-window.addEventListener('click', function(e) {
-  if (e.target == document.getElementById('faqModal')) {
-    document.getElementById('faqModal').style.display = 'none';
-  }
-});
-
-
-
-
-
-// FAQ
-document.getElementById('faqBtn').onclick = function() {
-  document.getElementById('faqModal').style.display = 'block';
-};
-document.getElementById('closeFaq').onclick = function() {
-  document.getElementById('faqModal').style.display = 'none';
-};
-
-// Refund Policy
-document.getElementById('refundBtn').onclick = function() {
-  document.getElementById('refundModal').style.display = 'block';
-};
-document.getElementById('closeRefund').onclick = function() {
-  document.getElementById('refundModal').style.display = 'none';
-};
-
-// Privacy Policy
-document.getElementById('privacyBtn').onclick = function() {
-  document.getElementById('privacyModal').style.display = 'block';
-};
-document.getElementById('closePrivacy').onclick = function() {
-  document.getElementById('privacyModal').style.display = 'none';
-};
-
-// Term & Condition
-document.getElementById('termBtn').onclick = function() {
-  document.getElementById('termModal').style.display = 'block';
-};
-document.getElementById('closeTerm').onclick = function() {
-  document.getElementById('termModal').style.display = 'none';
-};
-
-// Close when clicking outside
-window.onclick = function(e) {
-  const modals = ['faqModal','refundModal','privacyModal','termModal'];
-  modals.forEach(id => {
-    if (e.target == document.getElementById(id)) {
-      document.getElementById(id).style.display = 'none';
+window.toggleLike = function(postId) {
+  const userID = localStorage.getItem("ID") || "";
+  if (!userID) return alert("Silakan login dulu untuk like");
+  
+  const refLike = db.ref("likes/" + postId + "/" + userID);
+  refLike.once("value").then(snap => {
+    if (snap.exists()) {
+      refLike.remove();
+    } else {
+      refLike.set(true);
     }
   });
 };
 
 
+window.tampilkanGambarPenuh = function(src) {
+  if (!src) return;  
+  const modal = document.getElementById("modalGambar");
+  const gambar = document.getElementById("gambarModal");
+  gambar.src = src;
+  modal.style.display = "flex";
+};
 
 
+document.getElementById("modalGambar").addEventListener("click", () => {  
+document.getElementById("modalGambar").style.display = "none";
+});
 
 
+  </script>
+  
 
-</script>
 
 </body>
 </html>
+
