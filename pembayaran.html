@@ -3,265 +3,238 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Struk Pembayaran</title>
+  <title>Pembayaran</title>
+  <link rel="manifest" href="/manifest.json" />
   <style>
     * { box-sizing: border-box; }
-    body {
-      font-family: 'Courier New', Courier, monospace;
-      background: #f4f4f4;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-    .struk {
-      background: #fff;
-      width: 380px;
-      padding: 20px;
-      border: 1px dashed #333;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    .struk h1 {
-      text-align: center;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-    .struk p {
-      margin: 3px 0;
-      font-size: 14px;
-    }
-    .line {
-      border-top: 1px dashed #000;
-      margin: 10px 0;
-    }
-    .label {
-      display: inline-block;
-      width: 130px;
-    }
+    body { font-family: 'Courier New', Courier, monospace; background: #f4f4f4; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+    .produk-container { width: 100%; overflow-x: auto; white-space: nowrap; margin-bottom: 20px; padding-bottom: 10px; scroll-snap-type: x mandatory; }
+    .produk-card { display: inline-block; width: 140px; background: white; margin-right: 10px; padding: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); scroll-snap-align: start; vertical-align: top; cursor: pointer; }
+    .produk-card img { width: 100%; height: 80px; object-fit: cover; border-radius: 1px; }
+    .produk-card p { font-size: 16px; margin: 5px 0 0; }
+    .produk-card .deskripsi { font-size: 13px; color: #555; margin-top: 3px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .struk { background: #fff; width: 100%; max-width: 400px; padding: 20px; border: 1px dashed #333; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .struk h1 { text-align: center; font-size: 14px; margin-bottom: 10px; }
+    .struk p { margin: 3px 0; font-size: 16px; }
+    .line { border-top: 1px dashed #000; margin: 15px 0; }
+    .label { display: inline-block; width: 130px; }
     .bold { font-weight: bold; }
-    input[type="file"] {
-      width: 100%;
-      margin-top: 5px;
-    }
-    label {
-      font-size: 14px;
-      display: block;
-      margin: 8px 0 3px;
-    }
-    .metode label {
-      margin: 4px 0;
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px;
-      width: 100%;
-      background: #000;
-      color: #fff;
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
-    }
+    input[type="text"], input[type="url"], select { width: 100%; margin-top: 5px; margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 14px; }
+    label { font-size: 14px; display: block; margin: 8px 0 3px; }
+    button { margin-top: 15px; padding: 10px; width: 100%; background: #000; color: #fff; border: none; font-size: 15px; cursor: pointer; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    #kwitansi { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; z-index: 999; border-radius: 10px; padding: 20px; width: 90%; max-width: 320px; text-align: left; box-shadow: 0 0 10px rgba(0,0,0,0.3); border: 2px dashed #4CAF50; }
+    #kwitansi p { font-size: 14px; margin: 5px 0; }
+    #deskripsiOrder { font-size: 15px; color: #444; font-style: italic; margin-top: 5px; }
 
-    #kwitansi, #customAlert {
+    /* Tambahan untuk modal QRIS */
+    #qrisModal {
       display: none;
       position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
+      z-index: 1000;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+    #qrisModal .modal-content {
       background: #fff;
-      z-index: 999;
-      border-radius: 10px;
       padding: 20px;
-      width: 300px;
+      border-radius: 10px;
       text-align: center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      border: 2px dashed #4CAF50;
+      max-width: 300px;
+      width: 90%;
     }
-
-    #kwitansi p, #customAlert p {
-      font-size: 14px;
-      margin: 5px 0;
+    #qrisModal img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
     }
-
-    #customAlert button {
-      margin-top: 10px;
-      padding: 8px 16px;
+    #qrisModal button {
       background: #4CAF50;
-      border: none;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="struk">
-    <h1>NASUKA MART</h1>
-    <p class="bold">=== STRUK PEMBAYARAN ===</p>
 
-    <p><span class="label">Produk</span><span id="namaProduk">-</span></p>
-    <p><span class="label">Harga</span><span id="hargaProduk">-</span></p>
-    <p><span class="label">Jumlah</span><span id="jumlahProduk">-</span></p>
-    <p><span class="label bold">Total</span><span id="totalHarga">-</span></p>
+<div class="produk-container" id="produkContainer"></div>
 
-    <div class="line"></div>
+<div class="struk">
+  <h1>PEMBAYARAN</h1>
+  <p><span class="label">Produk</span><span id="layanan">-</span></p>
+  <p><span class="label">Harga</span><span id="harga">-</span></p>
+  <div id="inputManualBox" style="margin-top:10px;"></div>
+  <div id="deskripsiOrder"></div>
+  <div class="line"></div>
+  <p><span class="label">Nama</span><span id="nama">-</span></p>
+  <p><span class="label">Telepon</span><span id="telepon">-</span></p>
+  <p><span class="label">Alamat</span><span id="alamat">-</span></p>
+  <p><span class="label">TikTok</span><span id="tiktok">-</span></p>
+  <p><span class="label">Saldo</span><span id="Saldo">-</span></p>
+  <div class="line"></div>
+  <button id="btnBayar" style="display: none;" onclick="submitDigital()">Beli Sekarang</button>
+  <button id="btnBayarQris" style="display: none; background: #4CAF50;" onclick="showQris()">Bayar via QRIS</button>
+</div>
 
-    <p><span class="label">Nama</span><span id="namaUser">-</span></p>
-    <p><span class="label">Telepon</span><span id="teleponUser">-</span></p>
-    <p><span class="label">Alamat</span><span id="alamatUser">-</span></p>
-    <p><span class="label">Saldo</span><span id="saldoUser">-</span></p>
+<div id="kwitansi">
+  <p class="bold">✅ PEMBAYARAN BERHASIL</p>
+  <p>Layanan: <span id="kLayanan"></span></p>
+  <p>Dibayar: <span id="kTotal"></span></p>
+  <p>Nama: <span id="kNama"></span></p>
+  <p>Telepon: <span id="kTelepon"></span></p>
+  <p>Alamat: <span id="kAlamat"></span></p>
+  <p>TikTok: <span id="kTiktok"></span></p>
+  <p id="kSaldo">Sisa saldo: <span id="kSaldoValue"></span></p>
+  <p style="margin-top:10px; font-weight: bold;">Pesanan akan segera kami proses</p>
+  <button onclick="location.href='pembayaran.html'">Oke</button>
+</div>
 
-    <div class="line"></div>
-
-    <div class="metode">
-      <label><input type="radio" name="metode" value="SALDO" checked> SALDO</label>
-      <label><input type="radio" name="metode" value="TRANSFER_BANK"> TRANSFER BANK</label>
-      <label><input type="radio" name="metode" value="QRIS"> QRIS</label>
-      <label><input type="radio" name="metode" value="TUNAI"> TUNAI</label>
-    </div>
-
-    <div id="buktiLabel">
-      <label>Upload Bukti:</label>
-      <input type="file" id="bukti" accept="image/*">
-    </div>
-
-    <button onclick="submitOrder()">Bayar Sekarang</button>
+<!-- Modal QRIS -->
+<div id="qrisModal">
+  <div class="modal-content">
+    <h3>Scan QRIS untuk membayar</h3>
+    <img src="https://nasukafoods.site/image/qris.jpg" alt="QRIS">
+    <p>Total: <span id="qrisTotal"></span></p>
+    <button onclick="closeQris()">Tutup</button>
   </div>
+</div>
 
-  <!-- KWITANSI -->
-  <div id="kwitansi">
-    <p class="bold">✅ PEMBAYARAN BERHASIL</p>
-    <p>Produk: <span id="kwitansiProduk"></span></p>
-    <p>Total Bayar: <span id="kwitansiTotal"></span></p>
-    <p>Nama: <span id="kwitansiNama"></span></p>
-    <p>Telepon: <span id="kwitansiTelepon"></span></p>
-    <p>Alamat: <span id="kwitansiAlamat"></span></p>
-    <p id="kwitansiSaldoBox">Sisa Saldo: <span id="kwitansiSaldo"></span></p>
-    <p style="margin-top:10px; font-weight: bold;">Terimakasih, Pesanan akan segera kami proses</p>
-    <button onclick="location.href='index.html'">🏠 Kembali</button>
-  </div>
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
 
-  <!-- CUSTOM ALERT -->
-  <div id="customAlert">
-    <p id="customAlertMsg"></p>
-    <button onclick="closeCustomAlert()">OK</button>
-  </div>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+  authDomain: "nasuka-fc780.firebaseapp.com",
+  databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nasuka-fc780",
+  messagingSenderId: "860641747257",
+  appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-  <script>
-    const URL_GAS = "https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec";
-    const order = JSON.parse(localStorage.getItem("currentOrder") || "{}");
-    const username = localStorage.getItem("username");
 
-    let userSaldo = 0;
-    let userData = {};
 
-    document.getElementById("namaProduk").textContent = order.name || "-";
-    document.getElementById("hargaProduk").textContent = formatRupiah(order.price || 0);
-    document.getElementById("jumlahProduk").textContent = order.quantity || 1;
-    document.getElementById("totalHarga").textContent = formatRupiah(order.price * order.quantity);
+const username = localStorage.getItem("userID");
+let userSaldo = parseInt(localStorage.getItem("Saldo") || "0");
+let userData = {
+  Nama: localStorage.getItem("Nama") || "-",
+  Telepon: localStorage.getItem("Telepon") || "-",
+  Alamat: localStorage.getItem("Alamat") || "-",
+  Tiktok: localStorage.getItem("Tiktok") || "-"
+};
 
-    if (username) {
-      fetch(`${URL_GAS}?action=getProfileByUsername&username=${encodeURIComponent(username)}`)
-        .then(res => res.json())
-        .then(data => {
-          userData = data;
-          userSaldo = parseInt((data.Saldo || "0").toString().replace(/[^0-9]/g, ""));
-          if (isNaN(userSaldo)) userSaldo = 0;
+document.getElementById("nama").textContent = userData.Nama;
+document.getElementById("telepon").textContent = userData.Telepon;
+document.getElementById("alamat").textContent = userData.Alamat;
+document.getElementById("tiktok").textContent = userData.Tiktok;
+document.getElementById("Saldo").textContent = formatRupiah(userSaldo);
 
-          document.getElementById("namaUser").textContent = data.Nama || "-";
-          document.getElementById("teleponUser").textContent = data.Telepon || "-";
-          document.getElementById("alamatUser").textContent = data.Alamat || "-";
-          document.getElementById("saldoUser").textContent = formatRupiah(userSaldo);
-        });
-    }
 
-    document.querySelectorAll('input[name="metode"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        const metode = document.querySelector('input[name="metode"]:checked').value;
-        document.getElementById("buktiLabel").style.display =
-          (metode === "SALDO" || metode === "TUNAI") ? "none" : "block";
-      });
-    });
 
-    function showCustomAlert(msg) {
-      document.getElementById("customAlertMsg").textContent = msg;
-      document.getElementById("customAlert").style.display = "block";
-    }
 
-    function closeCustomAlert() {
-      document.getElementById("customAlert").style.display = "none";
-    }
 
-    async function submitOrder() {
-      const metode = document.querySelector('input[name="metode"]:checked').value;
-      const price = parseInt(order.price || 0);
-      const qty = parseInt(order.quantity || 1);
-      const totalBayar = price * qty;
 
-      if (isNaN(userSaldo)) userSaldo = 0;
 
-      if (metode === "SALDO" && userSaldo < totalBayar) {
-        showCustomAlert("Saldo tidak mencukupi, silahkan gunakan opsi pembayaran via Transfer Bank / Qris");
-        return;
-      }
 
-      const file = document.getElementById("bukti").files[0];
-      const formData = new FormData();
 
-      formData.append("action", "submitOrder");
-      formData.append("product_name", order.name || "");
-      formData.append("product_price", price);
-      formData.append("product_quantity", qty);
-      formData.append("total_pembayaran", totalBayar);
-      formData.append("metode_pembayaran", metode);
-      if (username) formData.append("username", username);
 
-      if (file && metode !== "SALDO" && metode !== "TUNAI") {
-        const base64 = await fileToBase64(file);
-        formData.append("bukti_pembayaran_base64", base64);
-      }
 
-      try {
-        const res = await fetch(URL_GAS, { method: "POST", body: formData });
-        const result = await res.json();
 
-        if (result.status === "Success") {
-          localStorage.removeItem("currentOrder");
 
-          document.getElementById("kwitansiProduk").textContent = order.name;
-          document.getElementById("kwitansiTotal").textContent = formatRupiah(totalBayar);
-          document.getElementById("kwitansiNama").textContent = userData.Nama || "-";
-          document.getElementById("kwitansiTelepon").textContent = userData.Telepon || "-";
-          document.getElementById("kwitansiAlamat").textContent = userData.Alamat || "-";
 
-          if (metode === "SALDO") {
-            document.getElementById("kwitansiSaldoBox").style.display = "block";
-            document.getElementById("kwitansiSaldo").textContent = formatRupiah(result.saldo_terbaru || 0);
-          } else {
-            document.getElementById("kwitansiSaldoBox").style.display = "none";
-          }
 
-          document.getElementById("kwitansi").style.display = "block";
-        } else {
-          showCustomAlert("Gagal: " + (result.message || "Tidak diketahui"));
-        }
-      } catch (e) {
-        showCustomAlert("Koneksi gagal");
-        console.error(e);
-      }
-    }
 
-    function formatRupiah(angka) {
-      if (!angka || isNaN(angka)) return "Rp 0";
-      return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
 
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-  </script>
+
+
+const produkList = [
+  { name: "1 Butir Cilok", price: 1000, desc: "Bonus 1 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+  { name: "10 Butir Cilok", price: 4900, desc: "Bonus 10 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+  { name: "100 Butir", price: 99000, desc: "Bonus 100 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+];
+
+const produkContainer = document.getElementById("produkContainer");
+produkList.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "produk-card";
+  div.innerHTML = `<img src="${p.img}" alt="${p.name}"><p>${p.name}</p><p class="deskripsi">${p.desc}</p>`;
+  div.onclick = () => pilihProduk(p);
+  produkContainer.appendChild(div);
+});
+
+function pilihProduk(p) {
+  const order = { name: p.name, price: p.price, desc: p.desc };
+  localStorage.setItem("currentOrders", JSON.stringify(order));
+  document.getElementById("layanan").textContent = order.name;
+  document.getElementById("harga").textContent = formatRupiah(order.price);
+  document.getElementById("deskripsiOrder").textContent = order.desc || "";
+  const inputBox = document.getElementById("inputManualBox");
+
+  if (order.name.toLowerCase().includes("viewer") || order.name.toLowerCase().includes("like")) {
+    inputBox.innerHTML = '<label for="target">Link Video TikTok</label><input type="url" id="target" placeholder="https://www.tiktok.com/...">';
+  } else {
+    inputBox.innerHTML = "";
+  }
+
+  document.getElementById("btnBayar").style.display = "block";
+  document.getElementById("btnBayarQris").style.display = "block";
+}
+
+async function submitDigital() {
+  const btn = document.getElementById("btnBayar");
+  btn.disabled = true;
+  btn.textContent = "Loading...";
+
+  const order = JSON.parse(localStorage.getItem("currentOrders") || "{}");
+  const price = parseInt(order.price || 0);
+
+  const snapshot = await db.ref(`users/pencipta/Saldo`).get();
+  const saldoTerbaru = snapshot.exists() ? snapshot.val() : 0;
+
+  if (saldoTerbaru < price) {
+    alert("Saldo tidak cukup!");
+    btn.disabled = false;
+    btn.textContent = "Beli Sekarang";
+    return;
+  }
+
+  const newSaldo = saldoTerbaru - price;
+
+  await db.ref(`users/pencipta/Saldo`).set(newSaldo);
+  localStorage.setItem("Saldo", newSaldo);
+  document.getElementById("Saldo").textContent = formatRupiah(newSaldo);
+
+  document.getElementById("kLayanan").textContent = order.name || "-";
+  document.getElementById("kTotal").textContent = formatRupiah(price);
+  document.getElementById("kNama").textContent = userData.Nama;
+  document.getElementById("kTelepon").textContent = userData.Telepon;
+  document.getElementById("kAlamat").textContent = userData.Alamat;
+  document.getElementById("kTiktok").textContent = userData.Tiktok;
+  document.getElementById("kSaldoValue").textContent = formatRupiah(newSaldo);
+
+  document.getElementById("kwitansi").style.display = "block";
+  btn.style.display = "none";
+  document.getElementById("btnBayarQris").style.display = "none";
+}
+
+function showQris() {
+  const order = JSON.parse(localStorage.getItem("currentOrders") || "{}");
+  document.getElementById("qrisTotal").textContent = formatRupiah(order.price || 0);
+  document.getElementById("qrisModal").style.display = "flex";
+}
+
+function closeQris() {
+  document.getElementById("qrisModal").style.display = "none";
+}
+
+function formatRupiah(angka) {
+  if (!angka || isNaN(angka)) return "";
+  return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+</script>
+
 </body>
 </html>
