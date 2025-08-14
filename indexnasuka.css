@@ -204,8 +204,8 @@ object-fit: cover;
 .arya-bar {  
 display: flex;  
 align-items: center;  
-gap: 8px;  
-padding: 10px;  
+gap: 4px;  
+padding: 5px;  
 overflow-x: auto;  
 }  
 .arya-bar::-webkit-scrollbar {  
@@ -215,14 +215,14 @@ display: none;
 .arya-item {  
 width: 60px;  
 aspect-ratio: 1 / 1;  
-border-radius: 8px;  
+border-radius: 4px;  
 object-fit: cover;  
 flex-shrink: 0;  
 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  
 }  
   
 .arya-item {  
-border: 2px solid #2196F3;  
+border: 2px solid red;  
 padding: 2px;  
 }  
   
