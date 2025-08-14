@@ -213,7 +213,7 @@ display: none;
 }  
   
 .arya-item {  
-width: 60px;  
+width: 40px;  
 aspect-ratio: 1 / 1;  
 border-radius: 2px;  
 object-fit: cover;  
@@ -265,7 +265,7 @@ background-color: #388E3C;
   border-radius: 1px;  
   font-size: 10px;  
   font-weight: bold; /* ini bikin bold */  
-  max-width: 90%;  
+  max-width: 70%;  
   white-space: nowrap;  
   overflow: hidden;  
   text-overflow: ellipsis;  
@@ -292,7 +292,7 @@ background-color: #388E3C;
   border-radius: 1px;  
   font-size: 10px;  
   font-weight: bold; /* ini bikin bold */  
-  max-width: 90%;  
+  max-width: 70%;  
   white-space: nowrap;  
   overflow: hidden;  
   text-overflow: ellipsis;  
