@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pembayaran</title>
-  <link rel="manifest" href="/manifest.json" />
+  
   <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Courier New', Courier, monospace; background: #f4f4f4; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+    body {  background: #f4f4f4; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
     .produk-container { width: 100%; overflow-x: auto; white-space: nowrap; margin-bottom: 20px; padding-bottom: 10px; scroll-snap-type: x mandatory; }
     .produk-card { display: inline-block; width: 140px; background: white; margin-right: 10px; padding: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); scroll-snap-align: start; vertical-align: top; cursor: pointer; }
     .produk-card img { width: 100%; height: 80px; object-fit: cover; border-radius: 1px; }
@@ -21,8 +21,13 @@
     .bold { font-weight: bold; }
     input[type="text"], input[type="url"], select { width: 100%; margin-top: 5px; margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 14px; }
     label { font-size: 14px; display: block; margin: 8px 0 3px; }
-    button { margin-top: 15px; padding: 10px; width: 100%; background: #000; color: #fff; border: none; font-size: 15px; cursor: pointer; }
+    
+    
+    button { margin-top: 15px; padding: 10px; width: 100%; background: red; color: #fff; border: none; font-size: 15px; cursor: pointer; }
+   
     button:disabled { background: #aaa; cursor: not-allowed; }
+    
+    
     #kwitansi { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; z-index: 999; border-radius: 10px; padding: 20px; width: 90%; max-width: 320px; text-align: left; box-shadow: 0 0 10px rgba(0,0,0,0.3); border: 2px dashed #4CAF50; }
     #kwitansi p { font-size: 14px; margin: 5px 0; }
     #deskripsiOrder { font-size: 15px; color: #444; font-style: italic; margin-top: 5px; }
@@ -46,14 +51,8 @@
       max-width: 300px;
       width: 90%;
     }
-    #qrisModal img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 10px;
-    }
-    #qrisModal button {
-      background: #4CAF50;
-    }
+    #qrisModal img { max-width: 100%; height: auto; margin-bottom: 10px; }
+    #qrisModal button { background: #4CAF50; }
   </style>
 </head>
 <body>
@@ -62,8 +61,8 @@
 
 <div class="struk">
   <h1>PEMBAYARAN</h1>
-  <p><span class="label">Produk</span><span id="layanan">-</span></p>
-  <p><span class="label">Harga</span><span id="harga">-</span></p>
+  <p><span class="label">Layanan</span><span id="layanan">-</span></p>
+  <p><span class="label">HARGA</span><span id="harga">-</span></p>
   <div id="inputManualBox" style="margin-top:10px;"></div>
   <div id="deskripsiOrder"></div>
   <div class="line"></div>
@@ -73,8 +72,9 @@
   <p><span class="label">TikTok</span><span id="tiktok">-</span></p>
   <p><span class="label">Saldo</span><span id="Saldo">-</span></p>
   <div class="line"></div>
-  <button id="btnBayar" style="display: none;" onclick="submitDigital()">Beli Sekarang</button>
-  <button id="btnBayarQris" style="display: none; background: #4CAF50;" onclick="showQris()">Bayar via QRIS</button>
+
+  <button type="button" id="btnBayar" style="display: none;" onclick="submitDigital()">Beli Sekarang</button>
+  <button type="button" id="btnBayarQris" style="display: none;" onclick="showQris()">Bayar via QRIS</button>
 </div>
 
 <div id="kwitansi">
@@ -87,7 +87,7 @@
   <p>TikTok: <span id="kTiktok"></span></p>
   <p id="kSaldo">Sisa saldo: <span id="kSaldoValue"></span></p>
   <p style="margin-top:10px; font-weight: bold;">Pesanan akan segera kami proses</p>
-  <button onclick="location.href='pembayaran.html'">Oke</button>
+  <button type="button" onclick="location.href='pembayaran.html'">Oke</button>
 </div>
 
 <!-- Modal QRIS -->
@@ -96,7 +96,7 @@
     <h3>Scan QRIS untuk membayar</h3>
     <img src="https://nasukafoods.site/image/qris.jpg" alt="QRIS">
     <p>Total: <span id="qrisTotal"></span></p>
-    <button onclick="closeQris()">Tutup</button>
+    <button type="button" onclick="closeQris()">Tutup</button>
   </div>
 </div>
 
@@ -132,28 +132,10 @@ document.getElementById("alamat").textContent = userData.Alamat;
 document.getElementById("tiktok").textContent = userData.Tiktok;
 document.getElementById("Saldo").textContent = formatRupiah(userSaldo);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const produkList = [
   { name: "1 Butir Cilok", price: 1000, desc: "Bonus 1 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
   { name: "10 Butir Cilok", price: 4900, desc: "Bonus 10 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-  { name: "100 Butir", price: 99000, desc: "Bonus 100 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+  { name: "100 ", price: 99000, desc: "Tambah viewers.", img: "https://nasukafoods.site/isiangajih.png" },
 ];
 
 const produkContainer = document.getElementById("produkContainer");
