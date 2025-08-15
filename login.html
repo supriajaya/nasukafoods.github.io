@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Login & Signup Nasuka</title>
+  <title>Masuk</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
   <!-- Firebase SDK compat version -->
@@ -74,7 +74,7 @@
 </head>
 <body>
   <div class="box" id="loginBox">
-    <h2>Login Nasuka</h2>
+    <h2>Masuk</h2>
     <div id="errorLogin" class="error-msg"></div>
     <input type="text" id="loginUsername" placeholder="Nama Pengguna" />
     <input type="password" id="loginPassword" placeholder="Password" />
@@ -83,7 +83,7 @@
   </div>
 
   <div class="box" id="signupBox" style="display:none">
-    <h2>Signup Nasuka</h2>
+    <h2>Bikin Akun</h2>
     <div id="errorSignup" class="error-msg"></div>
     <input type="text" id="signupNama" placeholder="Nama" />
     <input type="text" id="signupUsername" placeholder="Username" />
@@ -155,10 +155,15 @@
         }
 
         // Simpan ke localStorage
-        localStorage.setItem("ID", val.ID);
-        
+        localStorage.setItem("ID", val.ID);        
         localStorage.setItem("Nama", val.Nama);
         localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+        
+        localStorage.setItem("Saldo", val.Saldo);    
+        localStorage.setItem("Telepon", val.Telepon);    
+        localStorage.setItem("Alamat", val.Alamat);    
+        
+        
         localStorage.setItem("Username", val.Username);
 
         // Ambil 20 postingan terbaru dari 'posts' (sesuai db index)
