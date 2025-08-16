@@ -1,126 +1,82 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Profil</title>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  
+    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  
+  
+  <title>Edit Profil dengan Upload Foto</title>
+ 
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-      margin: 0;
-    }
-    .form-container {
-      background: white;
-      max-width: 100%;
-      width: 100%;
-      box-sizing: border-box;
-      margin: auto;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 1.2rem;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      font-size: 0.9rem;
-    }
-    button {
-      background-color: #1877f2;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 1rem;
-    }
-    button:hover {
-      background-color: #145dbf;
-    }
-    img.preview {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      display: block;
-      margin-bottom: 12px;
-      border-radius: 4px;
-    }
-    #status {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #333;
-    }
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-      .form-container {
-        padding: 12px;
-      }
-      input, textarea, button {
-        font-size: 0.95rem;
-      }
-    }
+    body{font-family:sans-serif;background:#f4f4f4;padding:20px;margin:0}
+    .form-container{background:white;max-width:100%;width:100%;box-sizing:border-box;margin:auto;padding:16px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    h2{margin-top:0;font-size:1.2rem}
+    input,textarea{width:100%;padding:10px;margin:8px 0 16px;border:1px solid #ccc;border-radius:4px;font-size:1rem;box-sizing:border-box}
+    label{font-weight:bold;display:block;font-size:0.9rem}
+    button{background-color:#1877f2;color:white;padding:12px;border:none;border-radius:4px;cursor:pointer;width:100%;font-size:1rem}
+    button:hover{background-color:#145dbf}
+    img.preview{width:100px;height:100px;object-fit:cover;display:block;margin-bottom:12px;border-radius:4px}
+    #status{margin-top:10px;font-size:0.9rem;color:#333}
   </style>
-</head>
+
 <body>
 <div class="form-container">
   <h2>Edit Profil</h2>
   <form id="editForm">
-    <input type="hidden" id="ID">
+    <input type="hidden" id="ID" />
     <label>Username</label>
-    <input type="text" id="Username">
+    <input type="text" id="Username" />
     <label>Password</label>
-    <input type="password" id="Password">
+    <input type="password" id="Password" />
     <label>Nama</label>
-    <input type="text" id="Nama">
+    <input type="text" id="Nama" />
+     <label>Tiktok</label>
+    <input type="text" id="Tiktok" />
+    
+    
+    
     <label>Telepon</label>
-    <input type="text" id="Telepon">
+    <input type="text" id="Telepon" />
     <label>Alamat</label>
     <textarea id="Alamat"></textarea>
     <label>Foto Profil</label>
-    <img id="fotoPreview" class="preview" src="">
-    <input type="file" id="fotoProfilInput" accept="image/*">
-    <input type="hidden" id="Foto">
+    <img id="fotoPreview" class="preview" src="" alt="Preview Foto" />
+    <input type="file" id="fotoProfilInput" accept="image/*" />
+    <input type="hidden" id="Foto" />
     <button type="submit">Simpan Perubahan</button>
   </form>
   <div id="status"></div>
 </div>
+
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDE17I5nEIdrfQhfRP5ewloydX18Sw47ws",
-    authDomain: "nasukachat.firebaseapp.com",
-    databaseURL: "https://nasukachat-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasukachat",
-    storageBucket: "nasukachat.appspot.com",
-    messagingSenderId: "759589458121",
-    appId: "1:759589458121:web:d5670da0d080017e2ffd18"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+ 
+ 
+ const firebaseConfig = {
+      apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+      authDomain: "nasuka-fc780.firebaseapp.com",
+      databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "nasuka-fc780",
+      storageBucket: "nasuka-fc780.firebasestorage.app",
+      messagingSenderId: "860641747257",
+      appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+ 
+ 
 
   const userID = localStorage.getItem("ID");
   const username = localStorage.getItem("Username");
+  const statusEl = document.getElementById("status");
 
   if (!username) {
-    document.getElementById("status").innerText = "Username tidak ditemukan.";
+    statusEl.innerText = "Username tidak ditemukan. Silakan login ulang.";
   } else {
     document.getElementById("ID").value = userID;
 
@@ -130,56 +86,83 @@
         document.getElementById("Username").value = data.Username || "";
         document.getElementById("Password").value = data.Password || "";
         document.getElementById("Nama").value = data.Nama || "";
+        document.getElementById("Tiktok").value = data.Tiktok || "";
+        
+        
         document.getElementById("Telepon").value = data.Telepon || "";
         document.getElementById("Alamat").value = data.Alamat || "";
         document.getElementById("Foto").value = data.Foto || "";
         document.getElementById("fotoPreview").src = data.Foto || "";
+      } else {
+        statusEl.innerText = "Data pengguna tidak ditemukan di database.";
       }
+    }).catch(err => {
+      statusEl.innerText = "Gagal mengambil data: " + err.message;
     });
+  }
 
-    let selectedFile = null;
-    document.getElementById("fotoProfilInput").addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (file && file.type.startsWith("image/")) {
-        selectedFile = file;
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          document.getElementById("fotoPreview").src = evt.target.result;
-          document.getElementById("Foto").value = evt.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+  let selectedFile = null;
 
-    document.getElementById("editForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+  document.getElementById("fotoProfilInput").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById("fotoPreview").src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  document.getElementById("editForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const namaBaru = document.getElementById("Nama").value.trim();
+
+    function saveProfile(fotoData) {
       const data = {
         Username: document.getElementById("Username").value,
+         Tiktok: document.getElementById("Tiktok").value,
+        
+        
         Password: document.getElementById("Password").value,
-        Nama: document.getElementById("Nama").value,
+        Nama: namaBaru,
+        NamaLower: namaBaru.toLowerCase(),
         Telepon: document.getElementById("Telepon").value,
         Alamat: document.getElementById("Alamat").value,
-        Foto: document.getElementById("Foto").value
+        Foto: fotoData
       };
 
       db.ref("users/" + username).update(data).then(() => {
-        // ✅ Update localStorage langsung
         localStorage.setItem("Username", data.Username);
         localStorage.setItem("Password", data.Password);
         localStorage.setItem("Nama", data.Nama);
+        localStorage.setItem("Tiktok", data.Tiktok);
+        
+        
         localStorage.setItem("Telepon", data.Telepon);
         localStorage.setItem("Alamat", data.Alamat);
         localStorage.setItem("Foto", data.Foto);
-
-        document.getElementById("status").innerText = "Profil berhasil diperbarui.";
+        statusEl.innerText = "Profil berhasil diperbarui.";
         setTimeout(() => {
-          window.location.href = "index.html"; // redirect ke halaman utama
+          window.location.href = "index.html";
         }, 1000);
       }).catch(() => {
-        document.getElementById("status").innerText = "Gagal memperbarui profil.";
+        statusEl.innerText = "Gagal memperbarui profil.";
       });
-    });
-  }
+    }
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        saveProfile(evt.target.result); // Base64 langsung ke DB
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      saveProfile(document.getElementById("Foto").value);
+    }
+  });
 </script>
 </body>
 </html>
