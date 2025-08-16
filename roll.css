@@ -151,3 +151,26 @@
       font-size: 24px;
       z-index: 100000;
     }
+
+
+.bottom-links {
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .nomor-saya {
+      left: 20px;
+      color: black;
+    }
+    .beli-nomor {
+      right: 20px;
+      cursor: pointer;
+      color: black;
+    }
+
+
+
