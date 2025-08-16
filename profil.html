@@ -18,7 +18,7 @@
     <div class="nasuka">  
       <div class="nasuka-info left" id="dataUser">  
         <p>🎇 Nama</p>  
-        <p>🎇 Perak</p>  
+        <p>🎇 Rank</p>  
         <p>🎇 Jenis</p>  
         <p>🎇 Kirim Pesan</p>  
       </div>  
@@ -64,7 +64,7 @@
     ID: localStorage.getItem("ID"),
     Foto: localStorage.getItem("Foto"),
     Nama: localStorage.getItem("Nama"),
-    Perak: localStorage.getItem("Perak"),
+    Region: localStorage.getItem("Region"),
     Jenis: localStorage.getItem("Jenis"),
   };
 
@@ -74,7 +74,7 @@
     document.getElementById("foto-profil").src = "https://nasukafoods.site/gambarkosong.jpg";
     document.getElementById("dataUser").innerHTML = `
       <p>🎇 -</p>
-      <p>🎇 0</p>
+      <p>🎇 -</p>
       <p>🎇 -</p>
       <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">🎇 Kirim Pesan</button>
     `;
@@ -116,7 +116,7 @@
     const buttonLabel = isOwner ? "" : "🎇 Kirim Pesan";
     document.getElementById("dataUser").innerHTML = `
       <p>🎇 ${user.Nama || '-'}</p>
-      <p>🎇 ${user.Perak || 0}</p>
+      <p>🎇 ${user.Region || '_'}</p>
       <p>🎇 ${user.Jenis || '-'}</p>
       <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">${buttonLabel}</button>
     `;
