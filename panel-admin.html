@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - NasukaFoods</title>
+
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+
+<style>
+body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+.navbar { background-color: #333; overflow: hidden; }
+.navbar a { float: left; display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none; }
+.navbar a:hover { background-color: #ddd; color: black; }
+.container { background: white; max-width: 400px; width: 100%; margin: auto; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.page { display: none; padding: 20px; }
+.page.active { display: block; }
+input, button { width: 100%; padding: 10px; margin: 8px 0 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
+button { background-color: #1877f2; color: white; border: none; cursor: pointer; }
+button.delete-button { background-color: #e74c3c; color: white; border: none; cursor: pointer; margin-top: 10px; }
+button.delete-button:hover { background-color: #c0392b; }
+button:hover { background-color: #145dbf; }
+#msg { font-size: 0.9rem; color: #333; }
+.success { color: green; }
+.error { color: red; }
+.card-product { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+.product-image { max-width: 100%; height: auto; border-radius: 4px; margin-bottom: 10px; }
+.balance-info { text-align: center; margin-top: 10px; font-size: 1.2rem; font-weight: bold; }
+</style>
+
+</head>
+<body>
+
+<div class="navbar">
+  <a href="#" onclick="showPage('addPerakPage')">Tambah Perak</a>
+  <a href="#" onclick="showPage('listUsersPage')">Daftar Pengguna</a>
+  <a href="#" onclick="showPage('addProductPage')">Tambah Produk</a>
+  <a href="#" onclick="showPage('listProductsPage')">Daftar Produk</a>
+  <a href="#" onclick="showPage('addSaldoPage')">Tambah Saldo</a>
+</div>
+
+<div id="addPerakPage" class="page">
+  <div class="container">
+    <h2>Tambah Perak User</h2>
+    <input type="text" id="username" placeholder="Username user" />
+    <input type="number" id="amount" placeholder="Jumlah Perak" />
+    <button onclick="addPerak()">Tambah Perak</button>
+    <p id="msg"></p>
+  </div>
+</div>
+
+<div id="listUsersPage" class="page">
+  <div class="container">
+    <h2>Daftar Pengguna</h2>
+    <div id="userList"></div>
+  </div>
+</div>
+
+<div id="addProductPage" class="page">
+  <div class="container">
+    <h2>Tambah Produk</h2>
+    <input type="text" id="productName" placeholder="Nama Produk" />
+    <input type="number" id="productPrice" placeholder="Harga Produk" />
+    <input type="text" id="productImage" placeholder="URL Gambar Produk" value="https://nasukafoods.site/wireless.jpg" />
+    <button onclick="addProduct()">Tambah Produk</button>
+    <p id="productMsg"></p>
+  </div>
+</div>
+
+<div id="listProductsPage" class="page">
+  <div class="container">
+    <h2>Daftar Produk</h2>
+    <div id="productList"></div>
+  </div>
+</div>
+
+<div id="addSaldoPage" class="page active">
+  <div class="container">
+    <h2>Tambah Saldo User</h2>
+    <input type="text" id="saldoUsername" placeholder="Username user" />
+    <input type="number" id="saldoAmount" placeholder="Jumlah Saldo" />
+    <button onclick="addSaldo()">Tambah Saldo</button>
+    <p id="saldoMsg"></p>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+  authDomain: "nasuka-fc780.firebaseapp.com",
+  databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nasuka-fc780",
+  storageBucket: "nasuka-fc780.firebasestorage.app",
+  messagingSenderId: "860641747257",
+  appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+function showPage(pageId) {
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(page => {
+    page.classList.remove('active');
+  });
+  document.getElementById(pageId).classList.add('active');
+  if (pageId === 'listUsersPage') {
+    loadUsers();
+  }
+  if (pageId === 'listProductsPage') {
+    loadProducts();
+  }
+}
+
+function addPerak() {
+  const username = document.getElementById('username').value.trim();
+  const amount = parseFloat(document.getElementById('amount').value);
+  const msg = document.getElementById('msg');
+  if (!username || isNaN(amount)) {
+    msg.textContent = "Isi semua field dengan benar!";
+    msg.className = "error";
+    return;
+  }
+  db.ref("users/" + username).once("value").then(snapshot => {
+    if (snapshot.exists()) {
+      const currentPerak = snapshot.val().Perak || 0;
+      const newPerak = currentPerak + amount;
+      db.ref("users/" + username + "/Perak").set(newPerak).then(() => {
+        msg.textContent = `Perak ${username} berhasil ditambah menjadi ${newPerak}`;
+        msg.className = "success";
+      }).catch(err => {
+        msg.textContent = "Gagal menambah Perak: " + err.message;
+        msg.className = "error";
+      });
+    } else {
+      msg.textContent = "Username tidak ditemukan!";
+      msg.className = "error";
+    }
+  }).catch(err => {
+    msg.textContent = "Gagal mengambil data: " + err.message;
+    msg.className = "error";
+  });
+}
+
+function loadUsers() {
+  const userList = document.getElementById('userList');
+  userList.innerHTML = '<p>Memuat...</p>';
+  db.ref("users").on("value", (snapshot) => {
+    userList.innerHTML = '';
+    if (snapshot.exists()) {
+      snapshot.forEach(childSnapshot => {
+        const user = childSnapshot.val();
+        const username = childSnapshot.key;
+        // Tangkap waktu terakhir akses jika ada, atau gunakan pesan default
+        const lastAccessTime = user.lastAccess ? new Date(user.lastAccess).toLocaleString() : 'Tidak ada data';
+        const userCard = document.createElement('div');
+        userCard.innerHTML = `
+          <strong>${username}</strong><br>
+          Perak: ${user.Perak || 0}<br>
+          Saldo: ${user.Saldo || 0}<br>
+          Terakhir Akses: ${lastAccessTime}
+          <button class="delete-button" onclick="deleteUser('${username}')">Hapus</button>
+        `;
+        userList.appendChild(userCard);
+      });
+    } else {
+      userList.innerHTML = '<p>Tidak ada pengguna.</p>';
+    }
+  }, (error) => {
+    userList.innerHTML = `<p class="error">Gagal memuat pengguna: ${error.message}</p>`;
+  });
+}
+
+function deleteUser(username) {
+  if (confirm(`Apakah Anda yakin ingin menghapus pengguna '${username}'?`)) {
+    db.ref("users/" + username).remove().then(() => {
+      alert("Pengguna berhasil dihapus!");
+    }).catch(err => {
+      alert("Gagal menghapus pengguna: " + err.message);
+    });
+  }
+}
+
+function addProduct() {
+  const productName = document.getElementById('productName').value.trim();
+  const productPrice = parseFloat(document.getElementById('productPrice').value);
+  const productImage = document.getElementById('productImage').value.trim();
+  const productMsg = document.getElementById('productMsg');
+  if (!productName || isNaN(productPrice) || !productImage) {
+    productMsg.textContent = "Isi semua field produk dengan benar!";
+    productMsg.className = "error";
+    return;
+  }
+  const newProductRef = db.ref("products").push();
+  newProductRef.set({
+    name: productName,
+    price: productPrice,
+    image: productImage
+  }).then(() => {
+    productMsg.textContent = "Produk berhasil ditambahkan!";
+    productMsg.className = "success";
+    document.getElementById('productName').value = '';
+    document.getElementById('productPrice').value = '';
+    document.getElementById('productImage').value = "https://nasukafoods.site/wireless.jpg";
+  }).catch(err => {
+    productMsg.textContent = "Gagal menambah produk: " + err.message;
+    productMsg.className = "error";
+  });
+}
+
+function loadProducts() {
+  const productList = document.getElementById('productList');
+  productList.innerHTML = '<p>Memuat...</p>';
+  db.ref("products").on("value", (snapshot) => {
+    productList.innerHTML = '';
+    if (snapshot.exists()) {
+      snapshot.forEach(childSnapshot => {
+        const product = childSnapshot.val();
+        const productId = childSnapshot.key;
+        const productCard = document.createElement('div');
+        productCard.className = "card-product";
+        productCard.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" class="product-image">
+          <strong>${product.name}</strong><br>
+          Harga: ${product.price} Perak
+          <button onclick="deleteProduct('${productId}')">Hapus</button>
+        `;
+        productList.appendChild(productCard);
+      });
+    } else {
+      productList.innerHTML = '<p>Tidak ada produk.</p>';
+    }
+  }, (error) => {
+    productList.innerHTML = `<p class="error">Gagal memuat produk: ${error.message}</p>`;
+  });
+}
+
+function deleteProduct(productId) {
+  if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
+    db.ref("products/" + productId).remove().then(() => {
+      alert("Produk berhasil dihapus!");
+    }).catch(err => {
+      alert("Gagal menghapus produk: " + err.message);
+    });
+  }
+}
+
+function addSaldo() {
+  const username = document.getElementById('saldoUsername').value.trim();
+  const amount = parseFloat(document.getElementById('saldoAmount').value);
+  const msg = document.getElementById('saldoMsg');
+  if (!username || isNaN(amount)) {
+    msg.textContent = "Isi semua field dengan benar!";
+    msg.className = "error";
+    return;
+  }
+  db.ref("users/" + username).once("value").then(snapshot => {
+    if (snapshot.exists()) {
+      const currentSaldo = snapshot.val().Saldo || 0;
+      const newSaldo = currentSaldo + amount;
+      db.ref("users/" + username + "/Saldo").set(newSaldo).then(() => {
+        msg.textContent = `Saldo ${username} berhasil ditambah menjadi ${newSaldo}`;
+        msg.className = "success";
+      }).catch(err => {
+        msg.textContent = "Gagal menambah saldo: " + err.message;
+        msg.className = "error";
+      });
+    } else {
+      msg.textContent = "Username tidak ditemukan!";
+      msg.className = "error";
+    }
+  }).catch(err => {
+    msg.textContent = "Gagal mengambil data: " + err.message;
+    msg.className = "error";
+  });
+}
+
+// Tambahkan kode ini untuk melacak waktu akses
+function logLastAccess(username) {
+  if (username) {
+    const userRef = db.ref('users/' + username);
+    userRef.update({
+      lastAccess: firebase.database.ServerValue.TIMESTAMP
+    }).catch(error => {
+      console.error("Gagal mencatat waktu akses:", error);
+    });
+  }
+}
+
+// Contoh: Panggil fungsi ini saat pengguna login atau melakukan tindakan penting
+// Anda dapat memanggilnya di halaman login, atau setiap kali halaman dimuat
+// Dalam contoh ini, kita akan memanggilnya saat halaman dimuat
+document.addEventListener('DOMContentLoaded', () => {
+  showPage('addSaldoPage');
+  // Contoh log untuk user 'admin'
+  const loggedInUser = 'admin'; // Ganti dengan username yang sedang login
+  logLastAccess(loggedInUser);
+});
+</script>
+
+</body>
+</html>
