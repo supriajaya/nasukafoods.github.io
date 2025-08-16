@@ -114,8 +114,8 @@
     
     
     function showSignup(){
-      document.getElementById('loginBox').style.display='none';
-      document.getElementById('signupBox').style.display='block';
+     document.getElementById('loginBox').style.display='none';
+          document.getElementById('signupBox').style.display='block';
     }
     function showLogin(){
       document.getElementById('signupBox').style.display='none';
@@ -157,19 +157,20 @@
         // Simpan ke localStorage
         localStorage.setItem("ID", val.ID);        
         localStorage.setItem("Nama", val.Nama);
-        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+        localStorage.setItem("Foto", val.Foto || "https://nasukafoods.site/nasukafoods.jpg");
         
-        localStorage.setItem("Saldo", val.Saldo);    
+        localStorage.setItem("Saldo", val.Saldo);  
+        localStorage.setItem("Perak", val.Perak);   
         localStorage.setItem("Telepon", val.Telepon);    
         localStorage.setItem("Alamat", val.Alamat);    
         
         
         localStorage.setItem("Username", val.Username);
 
-        // Ambil 20 postingan terbaru dari 'posts' (sesuai db index)
+      
         db.ref('posts')
           .orderByChild('Waktu')
-          .limitToLast(20)
+          .limitToLast(10)
           .once('value')
           .then(snapshot => {
             const posts = [];
@@ -206,14 +207,12 @@
           return;
         }
         const id = 'VIP-' + Date.now();
-        const ft = 'https://nasukafoods.site/gambarkosong.jpg';
+        const ft = 'https://nasukafoods.site/nasukafoods.jpg';
         const tp = '0859';
-        const al = 'Jl Nasuka No69 dst';
-        const qt = 'Belum Berkata';
+        const al = 'Jl Nasuka No69';       
         const oo = '0';
-        const hh = 'https://';
-        const jn = 'Pria Wanita';
-        const pk = 'Belum Diupdate';
+        const hh = '@contohusername';
+        const jn = 'Pria';       
         const st = 'VIP';
 
         ref.set({
@@ -221,20 +220,16 @@
           Username: u,
           Password: p,
           Nama: n,
-          NamaLower: n.toLowerCase(),   // penting untuk search
+          NamaLower: n.toLowerCase(), 
           Foto: ft,
           Telepon: tp,
           Alamat: al,
           Jenis: jn,
-          Status: st,
-          Usia: oo,
-          Pekerjaan: pk,
-          Rank: oo,
-          Quetes: qt,
+          Status: st,       
+          Rank: oo,          
           Saldo: oo,
-          Tiktok: hh,
-          Facebook: hh,
-          Gold: oo
+          Tiktok: hh,         
+          Perak: oo
         }).then(() => {
           localStorage.setItem('Nama', n);
           localStorage.setItem('ID', id);
