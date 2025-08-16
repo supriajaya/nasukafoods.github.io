@@ -4,392 +4,461 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Burung</title>
-  <style>
-    body {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      overflow: hidden;
-    }
-
-    input { position: fixed; left: -10px; top: -10px; }
-    h1 { margin: 0; text-align: center; }
-    h2 { position: fixed; right: 20px; bottom: 0; font-size: 18px; color: red; }
-
-    .wrapper {
-      height: 500px;
-      background: -webkit-linear-gradient(top, hsla(210,70%,80%,1) 0%, hsla(210,50%,100%,1) 100%);
-      position: relative;
-      cursor: crosshair;
-    }
-
-    .sum {
-      position: fixed;
-      left: 5%;
-      top: 10px;
-      font-size: 15px;
-      font-weight: bold;
-    }
-    
-    
-    .sim {
-      position: fixed;
-      right: 5%;
-      top: 10px;
-      font-size: 15px;
-      font-weight: bold;
-    }
-    
-    
-    
-
-    .input-circle ~ .pajaro { opacity: 0; transition: 0.3s cubic-bezier(0,.43,1,0); animation: move 8s infinite alternate; }
-    .input-circle1:not(:checked) ~ .pajaro1,
-    .input-circle2:not(:checked) ~ .pajaro2,
-    .input-circle3:not(:checked) ~ .pajaro3,
-    .input-circle4:not(:checked) ~ .pajaro4,
-    .input-circle5:not(:checked) ~ .pajaro5,
-    .input-circle6:not(:checked) ~ .pajaro6,
-    .input-circle7:not(:checked) ~ .pajaro7,
-    .input-circle8:not(:checked) ~ .pajaro8,
-    .input-circle9:not(:checked) ~ .pajaro9,
-    .input-circle10:not(:checked) ~ .pajaro10,
-    .input-circle11:not(:checked) ~ .pajaro11,
-    .input-circle12:not(:checked) ~ .pajaro12,
-    .input-circle13:not(:checked) ~ .pajaro13,
-    .input-circle14:not(:checked) ~ .pajaro14,
-    .input-circle15:not(:checked) ~ .pajaro15,
-    .input-circle16:not(:checked) ~ .pajaro16,
-    .input-circle17:not(:checked) ~ .pajaro17,
-    .input-circle18:not(:checked) ~ .pajaro18,
-    .input-circle19:not(:checked) ~ .pajaro19,
-    .input-circle20:not(:checked) ~ .pajaro20,
-    .input-circle21:not(:checked) ~ .pajaro21,
-    .input-circle22:not(:checked) ~ .pajaro22,
-    .input-circle23:not(:checked) ~ .pajaro23,
-    .input-circle24:not(:checked) ~ .pajaro24,
-    .input-circle25:not(:checked) ~ .pajaro25,
-    .input-circle26:not(:checked) ~ .pajaro26,
-    .input-circle27:not(:checked) ~ .pajaro27 { opacity: 1; }
-
-    .input-circle1:checked ~ .pajaro1 span,
-    .input-circle2:checked ~ .pajaro2 span,
-    .input-circle3:checked ~ .pajaro3 span,
-    .input-circle4:checked ~ .pajaro4 span,
-    .input-circle5:checked ~ .pajaro5 span,
-    .input-circle6:checked ~ .pajaro6 span,
-    .input-circle7:checked ~ .pajaro7 span,
-    .input-circle8:checked ~ .pajaro8 span,
-    .input-circle9:checked ~ .pajaro9 span,
-    .input-circle10:checked ~ .pajaro10 span,
-    .input-circle11:checked ~ .pajaro11 span,
-    .input-circle12:checked ~ .pajaro12 span,
-    .input-circle13:checked ~ .pajaro13 span,
-    .input-circle14:checked ~ .pajaro14 span,
-    .input-circle15:checked ~ .pajaro15 span,
-    .input-circle16:checked ~ .pajaro16 span,
-    .input-circle17:checked ~ .pajaro17 span,
-    .input-circle18:checked ~ .pajaro18 span,
-    .input-circle19:checked ~ .pajaro19 span,
-    .input-circle20:checked ~ .pajaro20 span,
-    .input-circle21:checked ~ .pajaro21 span,
-    .input-circle22:checked ~ .pajaro22 span,
-    .input-circle23:checked ~ .pajaro23 span,
-    .input-circle24:checked ~ .pajaro24 span,
-    .input-circle25:checked ~ .pajaro25 span,
-    .input-circle26:checked ~ .pajaro26 span,
-    .input-circle27:checked ~ .pajaro27 span { display: block; }
-
-    .pajaro7  { top: 150px; animation-delay: -4s !important; transform: scale(1.0); }
-    .pajaro8  { top: 250px; animation-delay: -5s !important; transform: scale(0.7); }
-    .pajaro9  { top: 300px; animation-delay: -6s !important; transform: scale(1.1); }
-    .pajaro10 { top: 150px; animation-delay: -7s !important; transform: scale(0.9); }
-    .pajaro11 { top: 250px; animation-delay: -8s !important; transform: scale(1.2); }
-    .pajaro12 { top: 300px; animation-delay: -9s !important; transform: scale(0.6); }
-    .pajaro13 { top: 70px; animation-delay: -10s !important; transform: scale(1.3); }
-    .pajaro14 { top: 120px; animation-delay: -11s !important; transform: scale(0.85); }
-    .pajaro15 { top: 180px; animation-delay: -12s !important; transform: scale(1.15); }
-    .pajaro16 { top: 220px; animation-delay: -13s !important; transform: scale(0.95); }
-    .pajaro17 { top: 280px; animation-delay: -14s !important; transform: scale(1.05); }
-    .pajaro18 { top: 320px; animation-delay: -15s !important; transform: scale(0.75); }
-    .pajaro19 { top: 90px; animation-delay: -16s !important; transform: scale(1.25); }
-    .pajaro20 { top: 140px; animation-delay: -17s !important; transform: scale(0.65); }
-    .pajaro21 { top: 190px; animation-delay: -18s !important; transform: scale(1.0); }
-    .pajaro22 { top: 240px; animation-delay: -19s !important; transform: scale(0.8); }
-    .pajaro23 { top: 290px; animation-delay: -20s !important; transform: scale(1.1); }
-    .pajaro24 { top: 340px; animation-delay: -21s !important; transform: scale(0.7); }
-    .pajaro25 { top: 60px; animation-delay: -22s !important; transform: scale(1.0); }
-    .pajaro26 { top: 110px; animation-delay: -23s !important; transform: scale(0.9); }
-    .pajaro27 { top: 160px; animation-delay: -24s !important; transform: scale(1.2); }
-
-    .pajaro {
-      position: absolute;
-      left: 0;
-      cursor: crosshair;
-      background: black;
-      border-radius: 50% 50% 20% 20%;
-      color: white;
-      line-height: 20px;
-      letter-spacing: 2px;
-      font-size: 0.8em;
-      text-align: center;
-      margin-top: -20px;
-      margin-left: -10px;
-      width: 15px;
-      height: 15px;
-      animation: planeo 0.8s linear infinite;
-      z-index: 999;
-    }
-
-    .pajaro > span {
-      display: none;
-      position: absolute;
-      z-index: 2;
-      left: -250%;
-      bottom: -50%;
-      background-color: white;
-      border: solid 2px #000;
-      width: 80px;
-      height: 30px;
-      padding: 10px;
-      border-radius: 50%;
-    }
-
-    .pajaro > span:before {
-      content: "10 Perak";
-      color: red;
-      font-weight: bold;
-    }
-
-    .pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }
-    .pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }
-    .pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }
-    .pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }
-    .pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }
-    .pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }
-
-    @keyframes move {
-      0% { left: 0%; }
-      20% { left: 20%; top: 50%; }
-      40% { top: 30%; left: 60%; }
-      60% { top: 80%; left: 80%; }
-      80% { top: 10%; left: 20%; }
-      100% { top: 30%; left: 20%; }
-    }
-
-   
-
-    .pajaro:after,
-    .pajaro:before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-    }
-
-    .pajaro:after {
-      border-radius: 100% 100% 0 0;
-      box-shadow: inset 0px 5px 0 black;
-      width: 100px;
-      height: 100px;
-      margin-top: -7px;
-      margin-left: -50px;
-      transform-origin: 100% 0%;
-      animation: alas 3s linear infinite;
-    }
-
-    .pajaro:before {
-      background: #FFC37F;
-      border-radius: 100% 0% 20% 0%;
-      margin-top: 3px;
-      margin-left: -4px;
-      width: 6px;
-      height: 6px;
-      transform: rotateZ(45deg);
-    }
-
-    @keyframes alas {
-      50% { transform: rotateX(-1440deg); }
-    }
-
-    
-      
-    
-  </style>
+  
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  
 </head>
 <body>
     
+<div class="wrapper">
+<h2 id="judul" style="display:none;">Mulai Lagi</h2>
     
- <div class="wrapper">
- <h2 id="judul" style="display:none;">Mulai Lagi</h2>
-    
- 
-   
-    
-<button id="selesaiBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 20px;">SELESAI</button>
-
-
-    <input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">
-    <input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">
-    <input class="input-circle input-circle3" type="radio" id="circle3" name="burung_group">
-    <input class="input-circle input-circle4" type="radio" id="circle4" name="burung_group">
-    <input class="input-circle input-circle5" type="radio" id="circle5" name="burung_group">
-    <input class="input-circle input-circle6" type="radio" id="circle6" name="burung_group">
-    <input class="input-circle input-circle7" type="radio" id="circle7" name="burung_group">
-    <input class="input-circle input-circle8" type="radio" id="circle8" name="burung_group">
-    <input class="input-circle input-circle9" type="radio" id="circle9" name="burung_group">
-    <input class="input-circle input-circle10" type="radio" id="circle10" name="burung_group">
-    <input class="input-circle input-circle11" type="radio" id="circle11" name="burung_group">
-    <input class="input-circle input-circle12" type="radio" id="circle12" name="burung_group">
-    <input class="input-circle input-circle13" type="radio" id="circle13" name="burung_group">
-    <input class="input-circle input-circle14" type="radio" id="circle14" name="burung_group">
-    <input class="input-circle input-circle15" type="radio" id="circle15" name="burung_group">
-    <input class="input-circle input-circle16" type="radio" id="circle16" name="burung_group">
-    <input class="input-circle input-circle17" type="radio" id="circle17" name="burung_group">
-    <input class="input-circle input-circle18" type="radio" id="circle18" name="burung_group">
-    <input class="input-circle input-circle19" type="radio" id="circle19" name="burung_group">
-    <input class="input-circle input-circle20" type="radio" id="circle20" name="burung_group">
-    <input class="input-circle input-circle21" type="radio" id="circle21" name="burung_group">
-    <input class="input-circle input-circle22" type="radio" id="circle22" name="burung_group">
-    <input class="input-circle input-circle23" type="radio" id="circle23" name="burung_group">
-    <input class="input-circle input-circle24" type="radio" id="circle24" name="burung_group">
-    <input class="input-circle input-circle25" type="radio" id="circle25" name="burung_group">
-    <input class="input-circle input-circle26" type="radio" id="circle26" name="burung_group">
-    <input class="input-circle input-circle27" type="radio" id="circle27" name="burung_group">
-
-
-    <label for="circle1" class="pajaro pajaro1"><span></span></label>
-    <label for="circle2" class="pajaro pajaro2"><span></span></label>
-    <label for="circle3" class="pajaro pajaro3"><span></span></label>
-    <label for="circle4" class="pajaro pajaro4"><span></span></label>
-    <label for="circle5" class="pajaro pajaro5"><span></span></label>
-    <label for="circle6" class="pajaro pajaro6"><span></span></label>
-    <label for="circle7" class="pajaro pajaro7"><span></span></label>
-    <label for="circle8" class="pajaro pajaro8"><span></span></label>
-    <label for="circle9" class="pajaro pajaro9"><span></span></label>
-    <label for="circle10" class="pajaro pajaro10"><span></span></label>
-    <label for="circle11" class="pajaro pajaro11"><span></span></label>
-    <label for="circle12" class="pajaro pajaro12"><span></span></label>
-    <label for="circle13" class="pajaro pajaro13"><span></span></label>
-    <label for="circle14" class="pajaro pajaro14"><span></span></label>
-    <label for="circle15" class="pajaro pajaro15"><span></span></label>
-    <label for="circle16" class="pajaro pajaro16"><span></span></label>
-    <label for="circle17" class="pajaro pajaro17"><span></span></label>
-    <label for="circle18" class="pajaro pajaro18"><span></span></label>
-    <label for="circle19" class="pajaro pajaro19"><span></span></label>
-    <label for="circle20" class="pajaro pajaro20"><span></span></label>
-    <label for="circle21" class="pajaro pajaro21"><span></span></label>
-    <label for="circle22" class="pajaro pajaro22"><span></span></label>
-    <label for="circle23" class="pajaro pajaro23"><span></span></label>
-    <label for="circle24" class="pajaro pajaro24"><span></span></label>
-    <label for="circle25" class="pajaro pajaro25"><span></span></label>
-    <label for="circle26" class="pajaro pajaro26"><span></span></label>
-    <label for="circle27" class="pajaro pajaro27"><span></span></label>
-
-
-    <div class="sum">Reward Perak : </div>
-      <div class="sim">Profil</div>
-  
-  
-  
-  <div id="alertBox" style="display:none;position:fixed;top:30%;left:50%;transform:translate(-50%,-50%);
-background:white;padding:20px;border-radius:10px;box-shadow:0 0 10px black;z-index:9999;">
-  <div id="alertMsg" style="margin-bottom:10px;font-weight:bold;"></div>
-  <button onclick="alertBoxClose()">OK</button>
+<button id="selesaiBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 20px;">Klaim Perak</button>
+<div id="limitReached" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid red; border-radius: 10px; text-align: center; z-index: 1000;">
+    Sepertinya burung burung menjauh dari radar, coba lagi besok
 </div>
-  
-  
-  <script>    
-     
-  let totalPerak = 0;
-  const sumDisplay = document.querySelector('.sum');
-  const burungInputs = document.querySelectorAll('.input-circle');
 
-  burungInputs.forEach((input) => {
-    input.addEventListener('change', function () {
-      if (input.checked) {
-        totalPerak += 100;
-        sumDisplay.textContent = 'Reward Perak : ' + totalPerak;
-      }
-    });
-  });
+<!-- Tambahan untuk custom alert -->
+<div id="customAlert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 1001; text-align: center; max-width: 80%;">
+    <div id="alertIcon" style="font-size: 50px; margin-bottom: 15px;">🎉</div>
+    <div id="alertMessage" style="font-size: 18px; margin-bottom: 20px;"></div>
+    <button id="alertOkBtn" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">OK</button>
+</div>
 
-  function kirimPerakKeSheet(id, jumlahPerak) {
-    const url = 'https://script.google.com/macros/s/AKfycbwL9L9lI4GViVClRwcGN4dg2iyqhN_bPGnuwFL5v1Q_UMp5uZqdbQJmy9LIYwG81Dqy/exec';
-    const formData = new FormData();
-    formData.append('action', 'updatePerak');
-    formData.append('id', id);
-    formData.append('changeAmount', jumlahPerak);
-
-    fetch(url, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.text())
-    .then(result => {
+<input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">
+<input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">
+<input class="input-circle input-circle3" type="radio" id="circle3" name="burung_group">
+<input class="input-circle input-circle4" type="radio" id="circle4" name="burung_group">
+<input class="input-circle input-circle5" type="radio" id="circle5" name="burung_group">
+<input class="input-circle input-circle6" type="radio" id="circle6" name="burung_group">
+<input class="input-circle input-circle7" type="radio" id="circle7" name="burung_group">
+<input class="input-circle input-circle8" type="radio" id="circle8" name="burung_group">
+<input class="input-circle input-circle9" type="radio" id="circle9" name="burung_group">
+<input class="input-circle input-circle10" type="radio" id="circle10" name="burung_group">
+<input class="input-circle input-circle11" type="radio" id="circle11" name="burung_group">
+<input class="input-circle input-circle12" type="radio" id="circle12" name="burung_group">
+<input class="input-circle input-circle13" type="radio" id="circle13" name="burung_group">
+<input class="input-circle input-circle14" type="radio" id="circle14" name="burung_group">
+<input class="input-circle input-circle15" type="radio" id="circle15" name="burung_group">
+<input class="input-circle input-circle16" type="radio" id="circle16" name="burung_group">
+<input class="input-circle input-circle17" type="radio" id="circle17" name="burung_group">
+<input class="input-circle input-circle18" type="radio" id="circle18" name="burung_group">
+<input class="input-circle input-circle19" type="radio" id="circle19" name="burung_group">
+<input class="input-circle input-circle20" type="radio" id="circle20" name="burung_group">
     
-    alertBox(`Hadiah ${jumlahPerak} perak berhasil dikirim ke akun Anda`);
-      
-      console.log('Server response:', result);
-    })
-    .catch(error => {
-      console.error('Error saat mengirim:', error);
-      alert("Gagal mengirim perak.");
-    });
-  }
+    
+<label for="circle1" class="pajaro pajaro1"><span></span></label>
+<label for="circle2" class="pajaro pajaro2"><span></span></label>
+<label for="circle3" class="pajaro pajaro3"><span></span></label>
+<label for="circle4" class="pajaro pajaro4"><span></span></label>
+<label for="circle5" class="pajaro pajaro5"><span></span></label>
+<label for="circle6" class="pajaro pajaro6"><span></span></label>
+<label for="circle7" class="pajaro pajaro7"><span></span></label>
+<label for="circle8" class="pajaro pajaro8"><span></span></label>
+<label for="circle9" class="pajaro pajaro9"><span></span></label>
+<label for="circle10" class="pajaro pajaro10"><span></span></label>
+<label for="circle11" class="pajaro pajaro11"><span></span></label>
+<label for="circle12" class="pajaro pajaro12"><span></span></label>
+<label for="circle13" class="pajaro pajaro13"><span></span></label>
+<label for="circle14" class="pajaro pajaro14"><span></span></label>
+<label for="circle15" class="pajaro pajaro15"><span></span></label>
+<label for="circle16" class="pajaro pajaro16"><span></span></label>
+<label for="circle17" class="pajaro pajaro17"><span></span></label>
+<label for="circle18" class="pajaro pajaro18"><span></span></label>
+<label for="circle19" class="pajaro pajaro19"><span></span></label>
+<label for="circle20" class="pajaro pajaro20"><span></span></label>
 
- 
-  let selesaiClicked = false;
-document.getElementById('selesaiBtn').addEventListener('click', function () {
-  if (selesaiClicked) return;
-  selesaiClicked = true;
-  this.disabled = true;   
-  burungInputs.forEach(input => input.disabled = true);
-  const userID = localStorage.getItem('userID');
-  if (userID && totalPerak > 0) {
-    kirimPerakKeSheet(userID, totalPerak);
-  } else {
-    console.log("ID kosong atau belum dapat perak.");
-  }
+<div class="sum">Reward: <span id="total-perak">0</span> Perak</div>
+<div class="sim">Nama: <span id="nama"></span></div>
 
-  const gameoverDiv = document.querySelector('.gameover');
-  if (gameoverDiv) gameoverDiv.style.left = '0';
-});
-  
-function alertBox(msg) {
-  document.getElementById('alertMsg').innerText = msg;
-  document.getElementById('alertBox').style.display = 'block';  
-  document.getElementById('judul').style.display = 'block';
+
+<style>
+body {
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+overflow: hidden;
 }
-function alertBoxClose() {
-  document.getElementById('alertBox').style.display = 'none';
-}  
-  document.getElementById('judul').addEventListener('click', function () { 
-  totalPerak = 0;
-  sumDisplay.textContent = 'Reward Perak : ' + totalPerak; 
-  burungInputs.forEach((input) => {
-    input.checked = false;
-    input.disabled = false;
-  });
-  
-  const selesaiBtn = document.getElementById('selesaiBtn');
-  selesaiBtn.disabled = false;
-  selesaiClicked = false;
-  alertBoxClose(); 
-  this.style.display = 'none'; 
-  console.log('Game diulang');
+
+input { position: fixed; left: -10px; top: -10px; }
+h1 { margin: 0; text-align: center; }
+h2 { position: fixed; right: 20px; bottom: 0; font-size: 18px; color: red; }
+
+.wrapper {
+height: 500px;
+background: -webkit-linear-gradient(top, hsla(210,70%,80%,1) 0%, hsla(210,50%,100%,1) 100%);
+position: relative;
+cursor: crosshair;
+}
+
+.sum {
+position: fixed;
+left: 5%;
+top: 10px;
+font-size: 15px;
+font-weight: bold;
+}
+    
+.sim {
+position: fixed;
+right: 5%;
+top: 10px;
+font-size: 15px;
+font-weight: bold;
+}
+    
+.input-circle ~ .pajaro { opacity: 0; transition: 0.3s cubic-bezier(0,.43,1,0); animation: move 8s infinite alternate; }
+.pajaro.hidden { opacity: 0 !important; }
+.pajaro.hide-all { display: none !important; }
+
+.input-circle1:not(:checked) ~ .pajaro1,
+.input-circle2:not(:checked) ~ .pajaro2,
+.input-circle3:not(:checked) ~ .pajaro3,
+.input-circle4:not(:checked) ~ .pajaro4,
+.input-circle5:not(:checked) ~ .pajaro5,
+.input-circle6:not(:checked) ~ .pajaro6,
+.input-circle7:not(:checked) ~ .pajaro7,
+.input-circle8:not(:checked) ~ .pajaro8,
+.input-circle9:not(:checked) ~ .pajaro9,
+.input-circle10:not(:checked) ~ .pajaro10,
+.input-circle11:not(:checked) ~ .pajaro11,
+.input-circle12:not(:checked) ~ .pajaro12,
+.input-circle13:not(:checked) ~ .pajaro13,
+.input-circle14:not(:checked) ~ .pajaro14,
+.input-circle15:not(:checked) ~ .pajaro15,
+.input-circle16:not(:checked) ~ .pajaro16,
+.input-circle17:not(:checked) ~ .pajaro17,
+.input-circle18:not(:checked) ~ .pajaro18,
+.input-circle19:not(:checked) ~ .pajaro19,
+.input-circle20:not(:checked) ~ .pajaro20,
+.input-circle21:not(:checked) ~ .pajaro21,
+.input-circle22:not(:checked) ~ .pajaro22,
+.input-circle23:not(:checked) ~ .pajaro23,
+.input-circle24:not(:checked) ~ .pajaro24,
+.input-circle25:not(:checked) ~ .pajaro25,
+.input-circle26:not(:checked) ~ .pajaro26,
+.input-circle27:not(:checked) ~ .pajaro27 { opacity: 1; }
+
+.input-circle1:checked ~ .pajaro1 span,
+.input-circle2:checked ~ .pajaro2 span,
+.input-circle3:checked ~ .pajaro3 span,
+.input-circle4:checked ~ .pajaro4 span,
+.input-circle5:checked ~ .pajaro5 span,
+.input-circle6:checked ~ .pajaro6 span,
+.input-circle7:checked ~ .pajaro7 span,
+.input-circle8:checked ~ .pajaro8 span,
+.input-circle9:checked ~ .pajaro9 span,
+.input-circle10:checked ~ .pajaro10 span,
+.input-circle11:checked:checked ~ .pajaro11 span,
+.input-circle12:checked ~ .pajaro12 span,
+.input-circle13:checked ~ .pajaro13 span,
+.input-circle14:checked ~ .pajaro14 span,
+.input-circle15:checked ~ .pajaro15 span,
+.input-circle16:checked ~ .pajaro16 span,
+.input-circle17:checked ~ .pajaro17 span,
+.input-circle18:checked ~ .pajaro18 span,
+.input-circle19:checked ~ .pajaro19 span,
+.input-circle20:checked ~ .pajaro20 span,
+{ display: block; }
+
+.pajaro7  { top: 150px; animation-delay: -4s !important; transform: scale(1.0); }
+.pajaro8  { top: 250px; animation-delay: -5s !important; transform: scale(0.7); }
+.pajaro9  { top: 300px; animation-delay: -6s !important; transform: scale(1.1); }
+.pajaro10 { top: 150px; animation-delay: -7s !important; transform: scale(0.9); }
+.pajaro11 { top: 250px; animation-delay: -8s !important; transform: scale(1.2); }
+.pajaro12 { top: 300px; animation-delay: -9s !important; transform: scale(0.6); }
+.pajaro13 { top: 70px; animation-delay: -10s !important; transform: scale(1.3); }
+.pajaro14 { top: 120px; animation-delay: -11s !important; transform: scale(0.85); }
+.pajaro15 { top: 180px; animation-delay: -12s !important; transform: scale(1.15); }
+.pajaro16 { top: 220px; animation-delay: -13s !important; transform: scale(0.95); }
+.pajaro17 { top: 280px; animation-delay: -14s !important; transform: scale(1.05); }
+.pajaro18 { top: 320px; animation-delay: -15s !important; transform: scale(0.75); }
+.pajaro19 { top: 90px; animation-delay: -16s !important; transform: scale(1.25); }
+.pajaro20 { top: 140px; animation-delay: -17s !important; transform: scale(0.65); }
+
+.pajaro {
+position: absolute;
+left: 0;
+cursor: crosshair;
+background: black;
+border-radius: 50% 50% 20% 20%;
+color: white;
+line-height: 20px;
+letter-spacing: 2px;
+font-size: 0.8em;
+text-align: center;
+margin-top: -20px;
+margin-left: -10px;
+width: 15px;
+height: 15px;
+animation: planeo 0.8s linear infinite;
+z-index: 999;
+}
+
+.pajaro > span {
+display: none;
+position: absolute;
+z-index: 2;
+left: -250%;
+bottom: -50%;
+background-color: white;
+border: solid 2px #000;
+width: 80px;
+height: 30px;
+padding: 10px;
+border-radius: 50%;
+}
+
+.pajaro > span:before {
+content: "1 Perak";
+color: red;
+font-weight: bold;
+}
+
+.pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }
+.pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }
+.pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }
+.pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }
+.pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }
+.pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }
+
+@keyframes move {
+0% { left: 0%; }
+20% { left: 20%; top: 50%; }
+40% { top: 30%; left: 60%; }
+60% { top: 80%; left: 80%; }
+80% { top: 10%; left: 20%; }
+100% { top: 30%; left: 20%; }
+}
+
+.pajaro:after,
+.pajaro:before {
+content: "";
+position: absolute;
+top: 50%;
+left: 50%;
+}
+
+.pajaro:after {
+border-radius: 100% 100% 0 0;
+box-shadow: inset 0px 5px 0 black;
+width: 100px;
+height: 100px;
+margin-top: -7px;
+margin-left: -50px;
+transform-origin: 100% 0%;
+animation: alas 3s linear infinite;
+}
+
+.pajaro:before {
+background: #FFC37F;
+border-radius: 100% 0% 20% 0%;
+margin-top: 3px;
+margin-left: -4px;
+width: 6px;
+height: 6px;
+transform: rotateZ(45deg);
+}
+
+@keyframes alas {
+50% { transform: rotateX(-1440deg); }
+}
+</style>
+
+
+<script>
+const firebaseConfig = {
+apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+authDomain: "nasuka-fc780.firebaseapp.com",
+databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId: "nasuka-fc780",
+messagingSenderId: "860641747257",
+appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const localUser = {
+    Username: localStorage.getItem("Username"),
+    Nama: localStorage.getItem("Nama"),
+};
+
+// Function to get today's date in YYYY-MM-DD format
+function getTodayDate() {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+}
+
+// Function to check if user has reached daily limit
+function checkDailyLimit(userId) {
+    const today = getTodayDate();
+    const dailyLimitRef = db.ref(`dailyLimits/${userId}/${today}`);
+    
+    return dailyLimitRef.once('value').then(snapshot => {
+        const todayEarnings = snapshot.val() || 0;
+        return todayEarnings >= 1000;
+    });
+}
+
+// Function to update daily earnings
+function updateDailyEarnings(userId, amount) {
+    const today = getTodayDate();
+    const dailyLimitRef = db.ref(`dailyLimits/${userId}/${today}`);
+    
+    return dailyLimitRef.transaction(current => {
+        return (current || 0) + amount;
+    });
+}
+
+// Custom alert function
+function showCustomAlert(message, type = 'info') {
+    const alertDiv = document.getElementById('customAlert');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = document.getElementById('alertIcon');
+    
+    // Set message
+    alertMessage.textContent = message;
+    
+    // Set icon and color based on type
+    switch(type) {
+        case 'success':
+            alertIcon.textContent = '';
+            alertDiv.style.border = '2px solid #4CAF50';
+            break;
+        case 'error':
+            alertIcon.textContent = '❌';
+            alertDiv.style.border = '2px solid #f44336';
+            break;
+        case 'warning':
+            alertIcon.textContent = '⚠️';
+            alertDiv.style.border = '2px solid #FFC107';
+            break;
+        default:
+            alertIcon.textContent = 'ℹ️';
+            alertDiv.style.border = '2px solid #2196F3';
+    }
+    
+    // Show alert
+    alertDiv.style.display = 'block';
+    
+    // Add overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.background = 'rgba(0,0,0,0.5)';
+    overlay.style.zIndex = '1000';
+    overlay.id = 'alertOverlay';
+    document.body.appendChild(overlay);
+    
+    // Close alert when OK button is clicked
+    document.getElementById('alertOkBtn').onclick = function() {
+        alertDiv.style.display = 'none';
+        document.getElementById('alertOverlay').remove();
+    };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const namaSpan = document.getElementById("nama");
+    const limitReachedDiv = document.getElementById("limitReached");
+    const wrapper = document.querySelector('.wrapper');
+    const selesaiBtn = document.getElementById("selesaiBtn");
+    
+    if (localUser.Nama) {
+        namaSpan.textContent = localUser.Nama;
+    } else {
+        namaSpan.textContent = "Guest";
+    }
+
+    const totalPerakSpan = document.getElementById("total-perak");
+    let totalPerak = 0;
+    
+    // Check if user is logged in and has reached daily limit
+    if (localUser.Username) {
+        checkDailyLimit(localUser.Username).then(hasReachedLimit => {
+            if (hasReachedLimit) {
+                limitReachedDiv.style.display = 'block';
+                wrapper.style.pointerEvents = 'none';
+                selesaiBtn.style.display = 'none';
+            }
+        });
+    }
+
+    const inputs = document.querySelectorAll('.input-circle');
+    inputs.forEach(input => {
+        input.addEventListener('change', () => {
+            if (input.checked) {
+                totalPerak++;
+                totalPerakSpan.textContent = totalPerak;
+            }
+        });
+    });
+
+    selesaiBtn.addEventListener("click", () => {
+        if (localUser.Username && totalPerak > 0) {
+            const usersRef = db.ref('users');
+            usersRef.orderByChild('Username').equalTo(localUser.Username).once('value')
+            .then(snapshot => {
+                if (snapshot.exists()) {
+                    snapshot.forEach(childSnapshot => {
+                        const userId = childSnapshot.key;
+                        
+                        // First check if user has reached daily limit
+                        checkDailyLimit(userId).then(hasReachedLimit => {
+                            if (hasReachedLimit) {
+                                showCustomAlert("Anda sudah mencapai batas harian 1.000 Perak. Coba lagi besok!", "warning");
+                                limitReachedDiv.style.display = 'block';
+                                wrapper.style.pointerEvents = 'none';
+                                selesaiBtn.style.display = 'none';
+                                return;
+                            }
+                            
+                            // Check if adding new coins would exceed the limit
+                            updateDailyEarnings(userId, totalPerak).then(() => {
+                                return checkDailyLimit(userId);
+                            }).then(newLimitStatus => {
+                                if (newLimitStatus) {
+                                    // If after adding we reached the limit
+                                    showCustomAlert("Anda telah mencapai batas harian 1.000 Perak. Coba lagi besok!", "warning");
+                                    limitReachedDiv.style.display = 'block';
+                                    wrapper.style.pointerEvents = 'none';
+                                    selesaiBtn.style.display = 'none';
+                                }
+                                
+                                // Update user's total silver coins
+                                let currentPerak = childSnapshot.val().Perak ? parseInt(childSnapshot.val().Perak) : 0;
+                                let newPerak = currentPerak + totalPerak;
+                                
+                                return db.ref('users/' + userId).update({ Perak: newPerak });
+                            }).then(() => {
+                                showCustomAlert(` ${totalPerak} Perak berhasil ditambahkan ke akun Anda!`, "success");
+                                totalPerak = 0;
+                                totalPerakSpan.textContent = totalPerak;
+                                inputs.forEach(input => input.checked = false);
+                            });
+                        });
+                    });
+                } else {
+                    showCustomAlert("Pengguna tidak ditemukan.", "error");
+                }
+            })
+            .catch(error => {
+                console.error("Gagal mengirim perak:", error);
+                showCustomAlert("Gagal mengirim perak. Silakan coba lagi.", "error");
+            });
+        } else {
+            showCustomAlert("Tidak ada perak yang di klaim", "info");
+        }
+    });
 });
-  
-  document.querySelector('.sim').addEventListener('click', function () {
-  window.location.href = 'profil.html';
-});
-  
-  
 </script>
-  
-  
+
 </body>
 </html>
