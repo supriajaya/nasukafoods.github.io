@@ -1,0 +1,359 @@
+.perspective-on { perspective: 1000px; }
+    .perspective-off { perspective: 0; }
+    
+    .tilted { transform: rotateY(45deg); }
+    .spin-0  { transform: rotateX(-3600deg); }
+    .spin-1  { transform: rotateX(-3636deg); }
+    .spin-2  { transform: rotateX(-3672deg); }
+    .spin-3  { transform: rotateX(-3708deg); }
+    .spin-4  { transform: rotateX(-3744deg); }
+    .spin-5  { transform: rotateX(-3780deg); }
+    .spin-6  { transform: rotateX(-3816deg); }
+    .spin-7  { transform: rotateX(-3852deg); }
+    .spin-8  { transform: rotateX(-3888deg); }
+    .spin-9  { transform: rotateX(-3924deg); }
+    
+    @keyframes back-spin { 100% { transform: rotateX(36deg); } }
+    @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} }
+    @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} }
+    @keyframes spin-0  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } }
+    @keyframes spin-1  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } }
+    @keyframes spin-2  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } }
+    @keyframes spin-3  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } }
+    @keyframes spin-4  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } }
+    @keyframes spin-5  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } }
+    @keyframes spin-6  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } }
+    @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }
+    @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }
+    @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }
+    
+    #resultDisplay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    
+    #numbersDisplay {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 36px;
+      font-weight: bold;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 10000;
+      display: flex;
+      gap: 15px;
+    }
+    
+    #timeDisplay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 18px;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 10000;
+      text-align: left;
+    }
+    
+    #countdownDisplay {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 18px;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 10000;
+      text-align: right;
+    }
+    
+    .countdown {
+      font-weight: bold;
+      color: #d9534f;
+    }
+    
+    .time-warning {
+      color: #d9534f;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    body {
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    
+    #rotate {
+      margin: 0 auto;
+      width: 600px;
+      height: 600px;
+      padding-top: 700px;
+      transform-style: preserve-3d;
+      transform: rotateY(45deg);
+    }
+    
+    .ring {
+      margin: 0 auto;
+      height: 115px;
+      width: 115px;
+      float: left;
+      transform-style: preserve-3d;
+    }
+    
+    .roll {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      box-sizing: border-box;
+      opacity: 0.9;
+      color: black;
+      background: white;
+      border: solid 5px #ccc;
+      backface-visibility: visible;
+    }
+    
+    .roll p {
+      font-size: 100px;
+      font-weight: bold;
+      line-height: 130px;
+      margin: 0;
+      text-align: center;
+    }
+    
+    .backface-on { backface-visibility: visible; }
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      z-index: 100000;
+    }
+
+
+.bottom-links {
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .nomor-saya {
+      left: 20px;
+      color: black;
+    }
+    .beli-nomor {
+      right: 20px;
+      cursor: pointer;
+      color: black;
+    }
+    
+      #spinButton {
+      position: absolute;
+      bottom: 0.100px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 100;
+    }
+    #spinButton:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .betting-panel {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.7);
+      padding: 15px;
+      font-size: 30px;
+      border-radius: 10px;
+      color: white;
+      width: 500px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    
+    .bet-input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+      background-color: #333;
+      color: white;
+    }
+    
+    .bet-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 25px;
+      padding: 8px 15px;
+      margin: 5px 2px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .bet-button:hover {
+      background-color: #45a049;
+    }
+    
+    .bet-button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .result-message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    .win {
+      background-color: rgba(0,255,0,0.3);
+      color: #00ff00;
+    }
+    
+    .lose {
+      background-color: rgba(255,0,0,0.3);
+      color: #ff0000;
+    }
+    
+    #perakBalance {
+      font-weight: bold;
+      color: #FFD700;
+    }
+    
+    .win-types {
+      margin-top: 15px;
+      font-size: 30px;
+    }
+    
+    .win-type {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+    }
+    
+    #numbersDisplay {
+      position: absolute;
+      top: 20px;
+      left: 80%;
+      transform: translateX(-50%);
+      font-size: 50px;
+      font-weight: bold;
+      background: snow;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    #numbersDisplay span {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+    }
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .auto-bet-options {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #444;
+    }
+    
+    .auto-bet-options h4 {
+      margin-bottom: 10px;
+    }
+    
+    #autoBetButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    
+    #autoBetButtons button {
+      flex: 1;
+      min-width: 50px;
+      padding: 5px;
+      background-color: #333;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+    }
+    
+    #autoBetButtons button.active {
+      background-color: #4CAF50;
+      font-weight: bold;
+    }
+    
+    #autoBetButtons button:last-child {
+      background-color: #f44336;
+    }
+    
+    .result-hidden {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .rolling-text {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: black;
+      font-size: 30px;
+      opacity: 0.7;
+      z-index: 100;
+    }
