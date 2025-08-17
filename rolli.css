@@ -1,4 +1,4 @@
-.perspective-on { perspective: 1000px; }
+  .perspective-on { perspective: 1000px; }
     .perspective-off { perspective: 0; }
     
     .tilted { transform: rotateY(45deg); }
@@ -415,9 +415,66 @@ body {
       bottom: 20px;
       left: 20px;
     }
+      
+      
+    body {
+      position: relative;
+      min-height: 100vh;
+    }
+    
+    .error-message {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .bling-bling {
+      animation: glowing 1.5s infinite alternate;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+    }
 
+    @keyframes glowing {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+      }
+      to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
+      }
+    }
+    
+   
+    .link-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .menu-link {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: black;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 28px; 
+    }
+      
+    .menu-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
 
-
-
-
-
+    .history-link-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    
+    
+    
+    
