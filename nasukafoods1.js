@@ -37,7 +37,7 @@ const firebaseConfig = {
           updatePerakDisplay();
           console.log("Saldo dan total kekalahan berhasil disinkronkan.");
       }
-  });
+  });h
 
   operatorCapitalRef.on('value', (snapshot) => {
     const capitalData = snapshot.val();
@@ -50,3 +50,8 @@ const firebaseConfig = {
     }
     updateOperatorCapitalDisplay();
   });
+const ROLL_PER_REEL = 10;
+  const REEL_RADIUS = 300;
+  const TIME_TOLERANCE = 5 * 60 * 1000;
+  const SPIN_DURATION = 5;
+  const MANUAL_SPIN_COOLDOWN = 4 * 400;
