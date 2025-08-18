@@ -1,7 +1,17 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
+
+  <!DOCTYPE html><html lang="id">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1024">
+
+  
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  
+  
+  
+  
+  
+  
   
   
   
@@ -9,10 +19,26 @@
   
   
   <title>Nasuka Wireless</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  
+  
+  
+  
+  
+  
+  
   <style>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -629,7 +655,7 @@ padding: 2px;
       <span id="namaUser" class="blink-glow">Memuat....</span>
     </div>
     <div class="profil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
-      <img src="https://nasukafoods.site/tekn.jpg" class="arya-item raya" id="fol" />
+      <img src="https://nasukafoods.site/nasukachat.png" class="arya-item raya" id="fol" />
       <span>✅</span>
       <span id="notifInbox"></span>
     </div>
@@ -651,7 +677,7 @@ padding: 2px;
       
       
       <div class="arya-overlay">
-        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/nasukafoods.jpg" /><span>Download</span></a>
+        <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/download.png" /><span></span></a>
       </div>
     </div>
   </div>
@@ -721,7 +747,8 @@ padding: 2px;
   </div>
   <script>
   
-  const firebaseConfig = {
+  // Consolidate Firebase configuration and initialization
+const firebaseConfig = {
   apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
   authDomain: "nasuka-fc780.firebaseapp.com",
   databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -730,29 +757,71 @@ padding: 2px;
   appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase only once
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 const db = firebase.database();
+
+// --- Global variables and constants ---
 const userCache = {};
+const localUser = {
+  ID: localStorage.getItem("ID"),
+  Nama: localStorage.getItem("Nama"),
+  Perak: parseInt(localStorage.getItem("Perak")) || 0,
+  TotalLoss: parseInt(localStorage.getItem("TotalLoss")) || 0,
+  operatorCapital: 1000
+};
+
+const ROLL_PER_REEL = 10;
+const REEL_RADIUS = 400;
+const SPIN_DURATION = 5;
+const MANUAL_SPIN_COOLDOWN = 4 * 400;
+const WIN_MULTIPLIERS = {
+  'dua': 2,
+  'tiga': 2.5,
+  'empat': 2.75,
+  'lima': 3,
+  'jackpot': 5
+};
+const WIN_PROBABILITIES = {
+  'dua': 0.9,
+  'tiga': 0.7,
+  'empat': 0.5,
+  'lima': 0.000000000000000000000000000000001,
+  'jackpot': 0.0000000000000000000000000000000001
+};
+const MIN_OPERATOR_CAPITAL = 100;
+const HOUSE_EDGE = 0;
+
+let isSpinning = false;
+let lastManualSpinTime = 0;
+let currentmain = 0;
+let hasPlacedmain = false;
+let automainAmount = 0;
+let isAutomainEnabled = false;
+let playerWinStreak = 0;
+let playerLoseStreak = 0;
+let userInteracted = false;
+
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeUserProfile();
   setupSearchFunctionality();
   setupChatNotifications();
   loadPosts();
-  setupProductModals();
-  setupPolicyModals();
   initializeDigitalStore();
-  
+  setupGameListeners();
+
+  // Kwitansi listener
+  const kwitansi = document.getElementById('kwitansi');
   document.addEventListener('click', function(event) {
-    const kwitansi = document.getElementById('kwitansi');
-    const isClickInsideKwitansi = kwitansi.contains(event.target);
-    const isKwitansiVisible = window.getComputedStyle(kwitansi).display !== 'none';
-    if (isKwitansiVisible && !isClickInsideKwitansi) {
+    if (kwitansi && window.getComputedStyle(kwitansi).display !== 'none' && !kwitansi.contains(event.target)) {
       kwitansi.style.display = 'none';
     }
   });
 
-  const kwitansi = document.getElementById('kwitansi');
   if (kwitansi) {
     kwitansi.addEventListener('click', function() {
       this.style.display = 'none';
@@ -760,14 +829,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
 function initializeUserProfile() {
-  const userID = localStorage.getItem("ID") || "";
+  const userID = localUser.ID;
   const fotoEl = document.getElementById("fotoProfil");
   const namaEl = document.getElementById("namaUser");
   const profilLink = document.getElementById("linkProfil");
 
   if (!userID) {
-    if (namaEl) namaEl.textContent = "Silahkan Masuk";
+    if (namaEl) namaEl.textContent = "Masuk";
     if (fotoEl) fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
     if (profilLink) profilLink.href = "login.html";
     return;
@@ -803,6 +873,7 @@ function fetchUserProfileFromDB(userID) {
   });
 }
 
+// --- Search Functionality ---
 function setupSearchFunctionality() {
   const hasilUserEl = document.getElementById("hasilUser");
   const cariUserInput = document.getElementById("cariUser");
@@ -812,7 +883,7 @@ function setupSearchFunctionality() {
     const k = this.value.trim().toLowerCase();
     hasilUserEl.innerHTML = "";
     if (k.length < 2) return;
-    
+
     db.ref("users").orderByChild("NamaLower").startAt(k).endAt(k + "\uf8ff").limitToFirst(20).once("value").then(snap => {
       snap.forEach(child => {
         const v = child.val();
@@ -824,105 +895,63 @@ function setupSearchFunctionality() {
   });
 }
 
+// --- Chat Notifications ---
 function setupChatNotifications() {
-  const userID = localStorage.getItem("ID") || "";
+  const userID = localUser.ID;
   const notifInbox = document.getElementById("notifInbox");
   if (!userID || !notifInbox) return;
 
   const userChatsRef = db.ref(`users/${userID}/chats`);
-
   userChatsRef.on('value', snapshot => {
     const chats = snapshot.val() || {};
     let unreadCount = 0;
-    
     for (const key in chats) {
-      if ((chats[key].read === false || chats[key].read === undefined) && chats[key].ID !== userID) {
+      if (chats[key].read === false && chats[key].ID !== userID) {
         unreadCount++;
       }
     }
-
-    if (unreadCount > 0) {
-      notifInbox.style.display = 'inline-block';
-      notifInbox.textContent = unreadCount > 99 ? '99+' : unreadCount;
-    } else {
-      notifInbox.style.display = 'none';
-      notifInbox.textContent = '';
-    }
+    notifInbox.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    notifInbox.textContent = unreadCount > 99 ? '99+' : unreadCount;
   });
 
-  notifInbox.onclick = () => {
-    showChatSendersList(userID);
-  };
+  notifInbox.onclick = () => showChatSendersList(userID);
 }
 
 async function showChatSendersList(userID) {
   const snapshot = await db.ref(`users/${userID}/chats`).once('value');
   const chats = snapshot.val() || {};
-
   if (Object.keys(chats).length === 0) {
     alert('Tidak ada pengirim pesan');
     return;
   }
+  const container = document.createElement('div');
+  container.className = 'modal-container';
+  container.innerHTML = `<div class="modal-content"><button class="close-button">x</button><div id="sender-list"></div></div>`;
+  document.body.appendChild(container);
 
+  const senderListEl = container.querySelector('#sender-list');
   const pengirimData = [];
   for (const chatID of Object.keys(chats)) {
     const userSnap = await db.ref('users').orderByChild('ID').equalTo(chatID).once('value');
     userSnap.forEach(u => {
-      const nama = u.val().Nama || 'Pengguna';
-      pengirimData.push({ id: chatID, nama });
+      pengirimData.push({ id: chatID, nama: u.val().Nama || 'Pengguna' });
     });
   }
-
-  const container = document.createElement('div');
-  container.style.position = 'fixed';
-  container.style.top = '50%';
-  container.style.left = '50%';
-  container.style.transform = 'translate(-50%, -50%)';
-  container.style.background = '#fff';
-  container.style.border = '1px solid #ccc';
-  container.style.borderRadius = '8px';
-  container.style.padding = '12px';
-  container.style.zIndex = '9999';
-  container.style.maxHeight = '300px';
-  container.style.overflowY = 'auto';
-  container.style.minWidth = '200px';
-  container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = 'x';
-  closeBtn.style.position = 'absolute';
-  closeBtn.style.top = '6px';
-  closeBtn.style.right = '6px';
-  closeBtn.style.background = 'transparent';
-  closeBtn.style.border = 'none';
-  closeBtn.style.fontSize = '18px';
-  closeBtn.style.cursor = 'pointer';
-  closeBtn.onclick = () => document.body.removeChild(container);
-  container.appendChild(closeBtn);
 
   pengirimData.forEach(({ id, nama }) => {
     const btn = document.createElement('button');
     btn.textContent = nama;
-    btn.style.display = 'block';
-    btn.style.width = '100%';
-    btn.style.margin = '6px 0';
-    btn.style.padding = '8px';
-    btn.style.border = 'none';
-    btn.style.borderRadius = '4px';
-    btn.style.background = '#2196F3';
-    btn.style.color = '#fff';
-    btn.style.cursor = 'pointer';
     btn.onclick = () => {
       document.body.removeChild(container);
       window.location.href = `inbox.html?id=${encodeURIComponent(id)}`;
     };
-    container.appendChild(btn);
+    senderListEl.appendChild(btn);
   });
 
-  document.body.appendChild(container);
+  container.querySelector('.close-button').onclick = () => document.body.removeChild(container);
 }
 
-
+// --- Post & Interaction Functions ---
 function loadPosts() {
   const daftar = document.getElementById("daftarPostingan");
   if (!daftar) return;
@@ -931,30 +960,22 @@ function loadPosts() {
     const post = postSnap.val();
     const postId = postSnap.key;
     const namaPemilik = await getUserData(post.ID);
-    
     const div = document.createElement("div");
     div.className = "post-item";
     div.style.flexDirection = "column";
     div.innerHTML = createPostHTML(namaPemilik, post, postId);
-    
     daftar.prepend(div);
     setupPostInteractions(postId);
   });
 }
 
 async function getUserData(uid) {
-  return new Promise(resolve => {
-    if (userCache[uid]) return resolve(userCache[uid]);
-    
-    db.ref("users").orderByChild("ID").equalTo(uid).once("value").then(snap => {
-      let nama = "Tanpa Nama";
-      snap.forEach(u => {
-        if (u.val().Nama) nama = u.val().Nama;
-      });
-      userCache[uid] = nama;
-      resolve(nama);
-    });
-  });
+  if (userCache[uid]) return userCache[uid];
+  const snap = await db.ref("users").orderByChild("ID").equalTo(uid).once("value");
+  let nama = "Tanpa Nama";
+  snap.forEach(u => nama = u.val().Nama || nama);
+  userCache[uid] = nama;
+  return nama;
 }
 
 function createPostHTML(namaPemilik, post, postId) {
@@ -964,7 +985,7 @@ function createPostHTML(namaPemilik, post, postId) {
     <div style="font-size:13px; margin:4px 0"><b>${(post.Judul || "").replace(/\n/g, "<br>")}</b></div>
     <div style="font-size:11px; color:gray">${post.Waktu ? new Date(post.Waktu).toLocaleString("id-ID") : ""}</div>
     <div style="display:flex; align-items:center; gap:8px; margin-top:8px">
-      <button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px; border:none; border-radius:6px; cursor:pointer; font-size:13px">❤️</button>
+      <button onclick="toggleLike('${postId}')" id="likeBtn-${postId}" style="padding:6px 10px; border:none; border-radius:6px; cursor:pointer; font-size:13px">💔</button>
       <span id="likeCount-${postId}" style="font-size:13px">0 suka</span>
     </div>
     <div id="komentar-${postId}" style="margin-top:10px; display:none;"></div>
@@ -977,14 +998,15 @@ function createPostHTML(namaPemilik, post, postId) {
 }
 
 function setupPostInteractions(postId) {
-  const userID = localStorage.getItem("ID") || "";
-  
-  db.ref("likes/" + postId).on("value", snap => {
-    const likeCountEl = document.getElementById("likeCount-" + postId);
-    if(likeCountEl) likeCountEl.textContent = `${snap.numChildren()} suka`;
-    const likeBtn = document.getElementById("likeBtn-" + postId);
-    
-    if (likeBtn) {
+  const userID = localUser.ID;
+  const likeCountEl = document.getElementById("likeCount-" + postId);
+  const likeBtn = document.getElementById("likeBtn-" + postId);
+  const btnLihat = document.getElementById(`lihatKomentarBtn-${postId}`);
+  const wadahKomentar = document.getElementById(`komentar-${postId}`);
+
+  if (likeCountEl && likeBtn) {
+    db.ref("likes/" + postId).on("value", snap => {
+      likeCountEl.textContent = `${snap.numChildren()} suka`;
       if (snap.hasChild(userID)) {
         likeBtn.textContent = "❤️";
         likeBtn.style.background = "#f8d7da";
@@ -992,19 +1014,15 @@ function setupPostInteractions(postId) {
         likeBtn.textContent = "💔";
         likeBtn.style.background = "#eee";
       }
-    }
-  });
+    });
+  }
 
   let komentarLoaded = false;
-  const btnLihat = document.getElementById(`lihatKomentarBtn-${postId}`);
-  const wadahKomentar = document.getElementById(`komentar-${postId}`);
-  
   if (btnLihat && wadahKomentar) {
     btnLihat.onclick = () => {
       if (wadahKomentar.style.display === "none") {
         wadahKomentar.style.display = "block";
         btnLihat.textContent = "Sembunyikan Komentar";
-        
         if (!komentarLoaded) {
           db.ref("komentar/" + postId).on("value", snap => {
             wadahKomentar.innerHTML = "";
@@ -1027,29 +1045,24 @@ function setupPostInteractions(postId) {
 }
 
 window.kirimKomentar = function(postId) {
-  const userID = localStorage.getItem("ID") || "";
+  const userID = localUser.ID;
   if (!userID) return alert("Silakan login dulu untuk komentar");
-  
   const nama = localStorage.getItem("Nama") || "Anonim";
   const input = document.getElementById("inputKomentar-" + postId);
   const teks = (input?.value || "").trim();
-  
   if (!teks) return;
-  
   db.ref("komentar/" + postId).push({
     ID: userID,
     Nama: nama,
     Teks: teks,
     Waktu: new Date().toISOString()
   });
-  
   if (input) input.value = "";
 };
 
 window.toggleLike = function(postId) {
-  const userID = localStorage.getItem("ID") || "";
+  const userID = localUser.ID;
   if (!userID) return alert("Silakan login dulu untuk like");
-  
   const refLike = db.ref("likes/" + postId + "/" + userID);
   refLike.once("value").then(snap => {
     if (snap.exists()) {
@@ -1061,7 +1074,7 @@ window.toggleLike = function(postId) {
 };
 
 window.tampilkanGambarPenuh = function(src) {
-  if (!src) return;  
+  if (!src) return;
   const modal = document.getElementById("modalGambar");
   const gambar = document.getElementById("gambarModal");
   if (modal && gambar) {
@@ -1072,11 +1085,10 @@ window.tampilkanGambarPenuh = function(src) {
 
 const modalGambar = document.getElementById("modalGambar");
 if (modalGambar) {
-  modalGambar.addEventListener("click", () => {  
-    modalGambar.style.display = "none";
-  });
+  modalGambar.addEventListener("click", () => modalGambar.style.display = "none");
 }
 
+// --- Digital Store Functions ---
 function initializeDigitalStore() {
   const namaEl = document.getElementById("nama");
   const teleponEl = document.getElementById("telepon");
@@ -1084,35 +1096,23 @@ function initializeDigitalStore() {
   const saldoEl = document.getElementById("Saldo");
 
   if (!namaEl || !teleponEl || !alamatEl || !saldoEl) return;
-  
-  const username = localStorage.getItem("ID");
-  let userSaldo = parseInt(localStorage.getItem("Saldo") || "0");
-  let userData = {
+
+  const userData = {
     Nama: localStorage.getItem("Nama") || "-",
     Telepon: localStorage.getItem("Telepon") || "-",
-    Alamat: localStorage.getItem("Alamat") || "-",
-    
+    Alamat: localStorage.getItem("Alamat") || "-"
   };
 
   namaEl.textContent = userData.Nama;
   teleponEl.textContent = userData.Telepon;
   alamatEl.textContent = userData.Alamat;
-  
-  saldoEl.textContent = formatRupiah(userSaldo);
+  saldoEl.textContent = formatRupiah(localUser.Perak);
 
   const produkList = [
     { name: "1 Butir", price: 950, desc: "Bonus 1 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-     { name: "10 Butir", price: 9000, desc: "Bonus 10 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-     { name: "100 Butir", price: 85000, desc: "Bonus 100 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-     { name: "1000 Butir Cilok", price: 800000, desc: "Bonus 1000 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
-   
-    
-    
-    
-    
-    
-    
-    
+    { name: "10 Butir", price: 9000, desc: "Bonus 10 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+    { name: "100 Butir", price: 85000, desc: "Bonus 100 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
+    { name: "1000 Butir Cilok", price: 800000, desc: "Bonus 1000 Followers.", img: "https://nasukafoods.site/isiangajih.png" },
   ];
 
   const produkContainer = document.getElementById("produkContainer");
@@ -1129,39 +1129,25 @@ function initializeDigitalStore() {
   window.pilihProduk = function(p) {
     const order = { name: p.name, price: p.price, desc: p.desc };
     localStorage.setItem("currentOrders", JSON.stringify(order));
-    
-    const layananEl = document.getElementById("layanan");
-    const hargaEl = document.getElementById("harga");
-    const deskripsiOrderEl = document.getElementById("deskripsiOrder");
-   
-    const btnBayar = document.getElementById("btnBayar");
-    const btnBayarQris = document.getElementById("btnBayarQris");
-    const struk = document.getElementById("strukPembayaran");
-    
-    if (layananEl) layananEl.textContent = order.name;
-    if (hargaEl) hargaEl.textContent = formatRupiah(order.price);
-    if (deskripsiOrderEl) deskripsiOrderEl.textContent = order.desc || "";
-    
-   
 
+    document.getElementById("layanan").textContent = order.name;
+    document.getElementById("harga").textContent = formatRupiah(order.price);
+    document.getElementById("deskripsiOrder").textContent = order.desc || "";
 
-    if (btnBayar) btnBayar.style.display = "block";
-    if (btnBayarQris) btnBayarQris.style.display = "block";
-    if (struk) struk.style.display = "block";
-  }
-  
+    document.getElementById("btnBayar").style.display = "block";
+    document.getElementById("btnBayarQris").style.display = "block";
+    document.getElementById("strukPembayaran").style.display = "block";
+  };
+
   window.closeStruk = function() {
-    const struk = document.getElementById("strukPembayaran");
-    if (struk) struk.style.display = "none";
-  }
-
+    document.getElementById("strukPembayaran").style.display = "none";
+  };
 
   window.submitDigital = async function() {
     const btn = document.getElementById("btnBayar");
     if (!btn) return;
-    
     btn.disabled = true;
-    
+
     const order = JSON.parse(localStorage.getItem("currentOrders") || "{}");
     const price = parseInt(order.price || 0);
 
@@ -1178,58 +1164,400 @@ function initializeDigitalStore() {
 
     await db.ref(`users/pencipta/Saldo`).set(newSaldo);
     localStorage.setItem("Saldo", newSaldo);
-    const saldoEl = document.getElementById("Saldo");
-    if(saldoEl) saldoEl.textContent = formatRupiah(newSaldo);
 
-    const kLayanan = document.getElementById("kLayanan");
-    const kTotal = document.getElementById("kTotal");
-    const kNama = document.getElementById("kNama");
-    const kTelepon = document.getElementById("kTelepon");
-    const kAlamat = document.getElementById("kAlamat");
-    
-    const kSaldoValue = document.getElementById("kSaldoValue");
-    const kwitansi = document.getElementById("kwitansi");
-    const btnBayarQris = document.getElementById("btnBayarQris");
-    const struk = document.getElementById("strukPembayaran");
+    document.getElementById("Saldo").textContent = formatRupiah(newSaldo);
+    document.getElementById("kLayanan").textContent = order.name || "-";
+    document.getElementById("kTotal").textContent = formatRupiah(price);
+    document.getElementById("kNama").textContent = userData.Nama;
+    document.getElementById("kTelepon").textContent = userData.Telepon;
+    document.getElementById("kAlamat").textContent = userData.Alamat;
+    document.getElementById("kSaldoValue").textContent = formatRupiah(newSaldo);
 
-
-    if (kLayanan) kLayanan.textContent = order.name || "-";
-    if (kTotal) kTotal.textContent = formatRupiah(price);
-    if (kNama) kNama.textContent = userData.Nama;
-    if (kTelepon) kTelepon.textContent = userData.Telepon;
-    if (kAlamat) kAlamat.textContent = userData.Alamat;
-    
-    if (kSaldoValue) kSaldoValue.textContent = formatRupiah(newSaldo);
-
-    if (kwitansi) kwitansi.style.display = "block";
-    if (btn) btn.style.display = "none";
-    if (btnBayarQris) btnBayarQris.style.display = "none";
-    if (struk) struk.style.display = "none";
-  }
+    document.getElementById("kwitansi").style.display = "block";
+    document.getElementById("btnBayar").style.display = "none";
+    document.getElementById("btnBayarQris").style.display = "none";
+    document.getElementById("strukPembayaran").style.display = "none";
+  };
 
   window.showQris = function() {
     const order = JSON.parse(localStorage.getItem("currentOrders") || "{}");
-    const qrisTotalEl = document.getElementById("qrisTotal");
-    const qrisModalEl = document.getElementById("qrisModal");
-    if (qrisTotalEl) qrisTotalEl.textContent = formatRupiah(order.price || 0);
-    if (qrisModalEl) qrisModalEl.style.display = "flex";
-  }
+    document.getElementById("qrisTotal").textContent = formatRupiah(order.price || 0);
+    document.getElementById("qrisModal").style.display = "flex";
+  };
 
   window.closeQris = function() {
-    const qrisModalEl = document.getElementById("qrisModal");
-    if (qrisModalEl) qrisModalEl.style.display = "none";
-  }
+    document.getElementById("qrisModal").style.display = "none";
+  };
 }
 
 function formatRupiah(angka) {
-  if (!angka || isNaN(angka)) return "";
+  if (!angka || isNaN(angka)) return "0";
   return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-function setupProductModals() {}
-function setupPolicyModals() {}
-  
-  
+// --- Game Logic Functions ---
+function updatePerakDisplay() {
+  $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));
+  $('#lossCounter').text(localUser.TotalLoss.toLocaleString('id-ID'));
+}
+
+function updateOperatorCapitalDisplay() {
+  $('#operatorCapitalDisplay').text(localUser.operatorCapital.toLocaleString('id-ID'));
+}
+
+function showErrorMessage(message) {
+  $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut();
+}
+
+function createROLL(ring) {
+  const rollAngle = 360 / ROLL_PER_REEL;
+  for (let i = 0; i < ROLL_PER_REEL; i++) {
+    const roll = document.createElement('div');
+    roll.className = 'roll backface-on';
+    roll.style.transform = `rotateX(${rollAngle * i}deg) translateZ(${REEL_RADIUS}px)`;
+    const p = document.createElement('p');
+    p.textContent = i;
+    roll.appendChild(p);
+    ring.append(roll);
+  }
+}
+
+function saveRollToDatabase(result, isManual = false) {
+  const now = new Date();
+  const rollData = {
+    numbers: result.join(''),
+    timestamp: now.getTime(),
+    date: now.toISOString(),
+    username: localUser.ID || 'system',
+    type: isManual ? 'manual' : 'auto',
+    main: hasPlacedmain ? currentmain : 0
+  };
+  db.ref('rolls').push(rollData).catch(error => console.error('Error saving roll:', error));
+}
+
+function generateDua() {
+  const num = Math.floor(Math.random() * 10);
+  const result = [num, num];
+  while (result.length < 5) {
+    const uniqueNum = Math.floor(Math.random() * 10);
+    if (!result.includes(uniqueNum)) result.push(uniqueNum);
+  }
+  return shuffleArray(result);
+}
+
+function generateTiga() {
+  const num = Math.floor(Math.random() * 10);
+  const result = [num, num, num];
+  while (result.length < 5) {
+    const uniqueNum = Math.floor(Math.random() * 10);
+    if (!result.includes(uniqueNum)) result.push(uniqueNum);
+  }
+  return shuffleArray(result);
+}
+
+function generateEmpat() {
+  const num = Math.floor(Math.random() * 10);
+  const result = [num, num, num, num];
+  while (result.length < 5) {
+    const uniqueNum = Math.floor(Math.random() * 10);
+    if (!result.includes(uniqueNum)) result.push(uniqueNum);
+  }
+  return shuffleArray(result);
+}
+
+function generateLima() {
+  const num = Math.floor(Math.random() * 10);
+  return [num, num, num, num, num];
+}
+
+function generateJackpot() {
+  return shuffleArray([1, 2, 3, 4, 5]);
+}
+
+function generateRandomResult() {
+  const result = [];
+  while (result.length < 5) {
+    const num = Math.floor(Math.random() * 10);
+    if (!result.includes(num)) result.push(num);
+  }
+  return result;
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function generateControlledResult() {
+  if (localUser.operatorCapital < MIN_OPERATOR_CAPITAL) {
+    return generateRandomResult();
+  }
+
+  const rand = Math.random();
+  let cumulativeProb = 0;
+  for (const type in WIN_PROBABILITIES) {
+    cumulativeProb += WIN_PROBABILITIES[type];
+    if (rand < cumulativeProb) {
+      switch (type) {
+        case 'dua': return generateDua();
+        case 'tiga': return generateTiga();
+        case 'empat': return generateEmpat();
+        case 'lima': return generateLima();
+        case 'jackpot': return generateJackpot();
+      }
+    }
+  }
+  return generateRandomResult();
+}
+
+function checkWin(result) {
+  if (!hasPlacedmain || currentmain <= 0) return null;
+  const sortedResult = [...result].sort((a, b) => a - b).join('');
+  if (sortedResult === '12345') return 'jackpot';
+  const frequency = {};
+  result.forEach(num => frequency[num] = (frequency[num] || 0) + 1);
+  const counts = Object.values(frequency);
+  if (counts.some(count => count >= 5)) return 'lima';
+  if (counts.some(count => count >= 4)) return 'empat';
+  if (counts.some(count => count >= 3)) return 'tiga';
+  if (counts.some(count => count >= 2)) return 'dua';
+  return null;
+}
+
+function toggleAutomain(amount) {
+  automainAmount = amount;
+  isAutomainEnabled = amount > 0;
+  if (isAutomainEnabled) {
+    $('#automainButtons button').removeClass('active');
+    $(`#automain${amount}`).addClass('active');
+    $('#mainAmount').val(amount);
+    placemain(amount);
+  } else {
+    $('#automainButtons button').removeClass('active');
+    cancelmain();
+  }
+}
+
+function placemain(amount) {
+  if (amount > localUser.Perak) {
+    showErrorMessage('Saldo Perak tidak mencukupi');
+    return false;
+  }
+  currentmain = amount;
+  hasPlacedmain = true;
+  $('#placemainButton').prop('disabled', true);
+  $('#cancelmainButton').prop('disabled', false);
+  return true;
+}
+
+function cancelmain() {
+  currentmain = 0;
+  hasPlacedmain = false;
+  $('#mainAmount').val('');
+  $('#placemainButton').prop('disabled', false);
+  $('#cancelmainButton').prop('disabled', true);
+  $('#mainResult').addClass('result-hidden').removeClass('win lose');
+}
+
+function processmainResult(result) {
+  if (!hasPlacedmain) {
+    if (isAutomainEnabled) placemain(automainAmount);
+    return;
+  }
+  const winType = checkWin(result);
+  let message = "";
+  let messageClass = "";
+  let mainAmount = currentmain;
+
+  db.ref(`users/${localUser.ID}`).transaction((currentData) => {
+    if (currentData) {
+      let finalPerak = currentData.Perak || 0;
+      let finalLoss = currentData.TotalLoss || 0;
+      let finalOperatorCapital = currentData.operatorCapital || 1000;
+      if (winType) {
+        playerWinStreak++;
+        playerLoseStreak = 0;
+        const baseMultiplier = WIN_MULTIPLIERS[winType];
+        const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
+        const winAmount = Math.round(mainAmount * totalMultiplier);
+        finalPerak += winAmount;
+        finalLoss -= winAmount;
+        finalOperatorCapital -= winAmount;
+        message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
+        messageClass = "win";
+        triggerConfetti();
+        document.getElementById('winAudio').play();
+        saveWinToDatabase(winAmount, winType, result.join(''), mainAmount);
+      } else {
+        playerWinStreak = 0;
+        playerLoseStreak++;
+        finalPerak -= mainAmount;
+        finalLoss += mainAmount;
+        finalOperatorCapital += mainAmount;
+        message = `Anda Kalah. -${mainAmount.toLocaleString('id-ID')}`;
+        messageClass = "lose";
+      }
+      return {
+        ...currentData,
+        Perak: finalPerak,
+        TotalLoss: finalLoss,
+        operatorCapital: finalOperatorCapital
+      };
+    } else {
+      return;
+    }
+  }).then(() => {
+    $('#mainResult').text(message).removeClass('result-hidden').addClass(messageClass);
+    if (isAutomainEnabled) {
+      setTimeout(() => placemain(automainAmount), 3000);
+    } else {
+      currentmain = 0;
+      hasPlacedmain = false;
+      $('#placemainButton').prop('disabled', false);
+      $('#cancelmainButton').prop('disabled', true);
+    }
+  }).catch(error => console.error("Transaksi gagal:", error));
+}
+
+function saveWinToDatabase(amount, winType, numbers, mainAmount) {
+  const now = new Date();
+  const winData = {
+    username: localUser.ID,
+    amount: amount,
+    type: winType,
+    numbers: numbers,
+    timestamp: now.getTime(),
+    date: now.toISOString(),
+    main: mainAmount
+  };
+  db.ref('wins').push(winData).catch(error => console.error('Error saving win:', error));
+}
+
+function spin(isManual = false) {
+  if (isSpinning) return;
+  const winAudio = document.getElementById('winAudio');
+  if (!winAudio.paused) {
+    winAudio.pause();
+    winAudio.currentTime = 0;
+  }
+  isSpinning = true;
+  $('#mainResult').addClass('result-hidden');
+  if (isManual) {
+    lastManualSpinTime = Date.now();
+    $('#spinButton').prop('disabled', true);
+    updateManualSpinButton();
+  }
+  $('#stage .roll p').removeClass('bling-bling');
+  for (let i = 1; i <= 5; i++) {
+    $(`#ring${i}`).css('animation', `back-spin 1s`);
+  }
+  setTimeout(() => {
+    const result = generateControlledResult();
+    for (let i = 1; i <= 5; i++) {
+      const seed = result[i - 1];
+      $(`#ring${i}`).css('animation', `spin-${seed} ${SPIN_DURATION}s cubic-bezier(0.1, 0.7, 0.1, 1)`).attr('class', `ring spin-${seed}`);
+    }
+    setTimeout(() => {
+      for (let i = 0; i < result.length; i++) {
+        $(`#ring${i + 1} .roll`).eq(result[i]).find('p').addClass('bling-bling');
+      }
+      saveRollToDatabase(result, isManual);
+      processmainResult(result);
+      isSpinning = false;
+    }, SPIN_DURATION * 1000);
+  }, 1000);
+}
+
+function updateManualSpinButton() {
+  const now = Date.now();
+  const remainingCooldown = Math.max(0, MANUAL_SPIN_COOLDOWN - (now - lastManualSpinTime));
+  if (remainingCooldown <= 0) {
+    $('#spinButton').prop('disabled', false).text('Putar');
+  } else {
+    setTimeout(updateManualSpinButton, 1000);
+  }
+}
+
+function triggerConfetti() {
+  const defaults = {
+    spread: 360,
+    ticks: 400,
+    gravity: 0.5,
+    decay: 0.94,
+    startVelocity: 30,
+    colors: ['#FFC107', '#E91E63', '#4CAF50', '#2196F3']
+  };
+  function shoot() {
+    confetti({ ...defaults, particleCount: 400, scalar: 1.2, shapes: ['star'] });
+    confetti({ ...defaults, particleCount: 50, scalar: 0.8, shapes: ['circle'] });
+  }
+  setTimeout(shoot, 0);
+  setTimeout(shoot, 150);
+  setTimeout(shoot, 300);
+}
+
+function setupGameListeners() {
+  for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));
+  $('#rotate').addClass('tilted');
+  $('.roll').addClass('backface-on');
+  setTimeout(() => $('#loading').fadeOut(), 2000);
+
+  const userRef = db.ref(`users/${localUser.ID}`);
+  const operatorCapitalRef = db.ref(`users/${localUser.ID}/operatorCapital`);
+
+  userRef.on('value', (snapshot) => {
+    const userData = snapshot.val();
+    if (userData) {
+      localUser.Perak = userData.Perak || 0;
+      localUser.TotalLoss = userData.TotalLoss || 0;
+      localStorage.setItem("Perak", localUser.Perak);
+      localStorage.setItem("TotalLoss", localUser.TotalLoss);
+      updatePerakDisplay();
+    }
+  });
+
+  operatorCapitalRef.on('value', (snapshot) => {
+    const capitalData = snapshot.val();
+    if (capitalData !== null) {
+      localUser.operatorCapital = capitalData;
+    } else {
+      localUser.operatorCapital = 1000;
+      operatorCapitalRef.set(1000);
+    }
+    updateOperatorCapitalDisplay();
+  });
+
+  const winAudio = document.getElementById('winAudio');
+  $('#spinButton').click(function() {
+    if (!userInteracted) {
+      winAudio.muted = true;
+      winAudio.play().then(() => {
+        winAudio.pause();
+        winAudio.currentTime = 0;
+        winAudio.muted = false;
+        userInteracted = true;
+      }).catch(error => console.error("Audio play blocked:", error));
+    }
+    if (!$(this).prop('disabled')) spin(true);
+  });
+
+  $('#placemainButton').click(function() {
+    const mainAmount = parseInt($('#mainAmount').val());
+    if (isNaN(mainAmount) || mainAmount <= 0) {
+      showErrorMessage('Masukkan jumlah pasangan yang valid');
+      return;
+    }
+    placemain(mainAmount);
+  });
+
+  $('#cancelmainButton').click(function() {
+    cancelmain();
+  });
+}
+
 </script>
 
 </body>
