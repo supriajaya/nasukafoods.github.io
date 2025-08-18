@@ -85,7 +85,7 @@
     body {
       font-family: Arial, sans-serif;
       overflow: hidden;
-      background-image: url('https://nasukafoods.site/.gif'); 
+      background-image: url('https://nasukafoods.site/gol.jpg'); 
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -413,17 +413,22 @@
       }
     }
     
+   
+    
     .link-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
+  position: relative;
+  z-index: 200000;
+}
+    
+    
+    
+    
+    
     
     .menu-link {
       background-color: rgba(255, 255, 255, 0.1);
       border: 2px solid red;
-      color: black;
+      color: snow;
       padding: 10px 20px;
       text-decoration: none;
       font-weight: bold;
@@ -431,6 +436,7 @@
       transition: background-color 0.3s;
       text-align: center;
       font-size: 28px; 
+      background: rgba(0,0,0,0.7);
     }
       
     .menu-link:hover {
@@ -445,11 +451,12 @@
   </style>
 </head>
 <body>
+    
   <div class="link-container">
-    <a href="rule.html" class="menu-link">Aturan Main</a>
-    <a href="leaderboard.html" class="menu-link">Leaderboard</a>
-
-    <a href="burung.html" class="menu-link">Perak Gratis</a>
+<a href="war.html" class="menu-link">war</a>
+<a href="rule.html" class="menu-link">Aturan</a>
+<a href="leaderboard.html" class="menu-link">Leaderboard</a>
+<a href="burung.html" class="menu-link">Perak Gratis</a>
   </div>
 
   <div id="loading">Memuat Game...</div>
@@ -485,7 +492,7 @@
   </div>
   
   <div class="history-link-container">
-    <a href="" class="menu-link">Riwayat</a>
+    <a href="index.html" class="menu-link">Beranda</a>
   </div>
 
 <script>
