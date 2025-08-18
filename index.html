@@ -2,6 +2,12 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  
+  
+  
+  
+  
+  
   <title>Nasuka Wireless</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
@@ -10,11 +16,18 @@
       
       
       
-       body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: snow;
-    }
+      
+    
+    body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: snow;
+  padding-top: 50px; /* Sesuaikan nilai ini */
+}
+
+    
+    
+    
     
      header {
   background-color: gray;
@@ -185,7 +198,7 @@ padding: 2px;
   bottom: 4px;
   left: 4px;
   background: ;
-  color: white;
+  color: blue;
   padding: 2px 1px;
   border-radius: 1px;
   font-size: 10px;
@@ -362,21 +375,8 @@ padding: 2px;
       
       
       
-     .menu-links {
-  text-align: center;
-  margin-top: 5px;
-}
+    
 
-.menu-links span {
-  margin: 0 10px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 5px;
-}
-
-.menu-links span:hover {
-  text-decoration: underline;
-}
 
 .produk-title {
   text-align: center;
@@ -549,24 +549,76 @@ padding: 2px;
   border: none;
   color: #888;
 }
+
+
+.teratas {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; 
+  padding: 10px 0; 
+  z-index: 1000;
+}
+
+
+.terbawah {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 0; 
+  z-index: 1000; 
+}
+
+.variasia {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1.5px solid red;
+      color: black;
+      padding: 1px 2px;
+      text-decoration: none;
+      
+      border-radius: 2px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 15px; 
+    }     
+
+
 </style>
 </head>
 <body>
     
   
  
-<div class="menu-links">
-  <span>Pertanyaan Umum</span>
-  <span>Pengembalian Dana</span>
-  <span>Keamanan Privasi</span>
-  <span>Syarat & Ketentuan</span>
+<div class="teratas">    
+<a class="variasia"><span>Leaderboard</span></a>
+<a class="variasia"><span>Event</span></a>
+<a class="variasia"><span>Fitur </span></a>
+<a class="variasia"><span>Pengembangan</span></a> 
+<a class="variasia"><span>Kirim Ide</span></a> 
 </div>
+  
+<div class="terbawah">
+<a  class="variasia">Faq</a>
+<a  class="variasia">Privacy Policy</a>
+<a  class="variasia">Return Policy</a>
+<a href="profil.html" class="variasia">Term & Condition</a>
+     </div>
+  
+  
   
   
   
   <div style="padding:2px; text-align:center;">
     <input id="cariUser" placeholder="Cari akun....." />
-    <div id="hasilUser" style="margin-top:8px"></div>
+    
+    <div id="hasilUser" style="margin-top:8px"></div></div>
  
 
   
@@ -579,7 +631,7 @@ padding: 2px;
     </div>
     <div class="profil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
       <img src="https://nasukafoods.site/tekn.jpg" class="arya-item raya" id="fol" />
-      <span>Notif Chat  ✅</span>
+      <span>✅</span>
       <span id="notifInbox"></span>
     </div>
     
@@ -596,9 +648,8 @@ padding: 2px;
       <div class="arya-overlay">
         <a href="roll.html"><img src="https://nasukafoods.site/roll.jpg" /></a>
       </div>
-      <div class="arya-overlay">
-        <a href="puzzle.html"><img src="https://nasukafoods.site/puzzle.jpg" /></a>
-      </div>
+     
+      
       
       <div class="arya-overlay">
         <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/nasukafoods.jpg" /><span>Download</span></a>
@@ -717,7 +768,7 @@ function initializeUserProfile() {
   const profilLink = document.getElementById("linkProfil");
 
   if (!userID) {
-    if (namaEl) namaEl.textContent = "Silakan Masuk";
+    if (namaEl) namaEl.textContent = "Silahkan Masuk";
     if (fotoEl) fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
     if (profilLink) profilLink.href = "login.html";
     return;
@@ -1184,4 +1235,3 @@ function setupPolicyModals() {}
 
 </body>
 </html>
-
