@@ -8,11 +8,449 @@
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="https://nasukafoods.site/rolli.css">
+ <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+
   
+  <style>
+      
+      .perspective-on { perspective: 1000px; }
+    .perspective-off { perspective: 0; }
+    
+    .tilted { transform: rotateY(45deg); }
+    .spin-0  { transform: rotateX(-3600deg); }
+    .spin-1  { transform: rotateX(-3636deg); }
+    .spin-2  { transform: rotateX(-3672deg); }
+    .spin-3  { transform: rotateX(-3708deg); }
+    .spin-4  { transform: rotateX(-3744deg); }
+    .spin-5  { transform: rotateX(-3780deg); }
+    .spin-6  { transform: rotateX(-3816deg); }
+    .spin-7  { transform: rotateX(-3852deg); }
+    .spin-8  { transform: rotateX(-3888deg); }
+    .spin-9  { transform: rotateX(-3924deg); }
+    
+    @keyframes back-spin { 100% { transform: rotateX(36deg); } }
+    @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} }
+    @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} }
+    @keyframes spin-0  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } }
+    @keyframes spin-1  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } }
+    @keyframes spin-2  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } }
+    @keyframes spin-3  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } }
+    @keyframes spin-4  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } }
+    @keyframes spin-5  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } }
+    @keyframes spin-6  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } }
+    @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }
+    @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }
+    @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }
+    
+    #resultDisplay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    
+    #numbersDisplay {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 40px;
+      font-weight: bold;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 10000;
+      display: flex;
+      gap: 10px;
+    }
+    
+    #timeDisplay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 18px;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 10000;
+      text-align: left;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      background-image: url('https://nasukafoods.site/.gif'); 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    
+    #rotate {
+      margin: 0 auto;
+      width: 700px;
+      height: 700px;
+      padding-top: 700px;
+      transform-style: preserve-3d;
+      transform: rotateY(45deg);
+    }
+    
+    .ring {
+      margin: 0 auto;
+      height: 115px;
+      width: 115px;
+      float: left;
+      transform-style: preserve-3d;
+    }
+    
+    .roll {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      box-sizing: border-box;
+      opacity: 0.9;
+      color: black;
+      background: white;
+      border: solid 5px #ccc;
+      backface-visibility: visible;
+    }
+    
+    .roll p {
+      font-size: 100px;
+      font-weight: bold;
+      line-height: 130px;
+      margin: 0;
+      text-align: center;
+    }
+    
+    .backface-on { backface-visibility: visible; }
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      z-index: 100000;
+    }
+
+
+.bottom-links {
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-mainween;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+  
+   #spinButton:disabled {
+      
+      ;
+    }
+  
+  
+    
+   #spinButton {
+      position: absolute;    
+      top: 1500px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 30px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 30px;
+    width: 950px;
+      
+      
+    }
+  
+    
+    .mainting-panel {
+      position: absolute;
+      top: 1600px;
+      left: 20px;
+      background: rgba(0,0,0,0.7);
+      padding: 15px;
+      font-size: 30px;
+      border-radius: 10px;
+      color: white;
+      width: 950px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    
+    .main-input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+      background-color: #333;
+      color: white;
+      font-size: 30px;
+    }
+    
+    .main-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 2px;
+      padding: 8px 15px;
+      margin: 5px 2px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .main-button:hover {
+      background-color: #45a049;
+    }
+    
+    .main-button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .result-message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+   #perakBalance {
+      font-weight: bold;
+      color: snow;
+    }
+    
+   .win {
+  background-color: rgba(255, 215, 0, 0.7) !important;
+  color: black !important;
+}
+
+.win-types {
+  margin-top: 15px;
+  font-size: 30px;
+  background-color: rgba(255, 215, 0, 0.7) !important;
+  color: black !important;
+}
+
+.win-type {
+  display: flex;
+  justify-content: space-mainween;
+  margin: 5px 0;
+  background-color: rgba(255, 215, 0, 0.7) !important;
+  color: black !important;
+}
+
+    #numbersDisplay {
+      position: absolute;
+      top: 20px;
+      left: 80%;
+      transform: translateX(-50%);
+      font-size: 50px;
+      font-weight: bold;
+      background: snow;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    #numbersDisplay span {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+      font-size: 30px;
+          
+    }
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .auto-main-options {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #444;
+      font-size: 30px;
+      
+    }
+    
+    .auto-main-options h4 {
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+    
+    #automainButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      font-size: 30px;
+      
+    }
+    
+    #automainButtons button {
+      flex: 1;
+      min-width: 50px;
+      padding: 5px;
+      background-color: #333;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-size: 30px;
+    }
+    
+    #automainButtons button.active {
+      background-color: #4CAF50;
+      font-weight: bold;
+      font-size: 30px;
+    }
+    
+    #automainButtons button:last-child {
+      background-color: #f44336;
+      font-size: 30px;
+      
+    }
+    
+    .result-hidden {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .rolling-text {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: black;
+      font-size: 30px;
+      opacity: 0.7;
+      z-index: 100;
+      font-size: 30px;
+    }
+
+    .link-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .menu-link {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: black;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 28px; 
+    }
+      
+    .menu-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .history-link-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+      
+    
+    .error-message {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .bling-bling {
+      animation: glowing 1.5s infinite alternate;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+    }
+
+    @keyframes glowing {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+      }
+      to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
+      }
+    }
+    
+    .link-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .menu-link {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: black;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 28px; 
+    }
+      
+    .menu-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .history-link-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+  </style>
 </head>
 <body>
-   Rolanges
+  <div class="link-container">
+    <a class="menu-link">Rule</a>
+    <a class="menu-link">Permohonan Konpensasi</a>
+    <a href="https://nasukafoods.site/burung.html" class="menu-link">Perak Gratis</a>
+  </div>
+
   <div id="loading">Memuat Game...</div>
   <div id="stage" class="perspective-on">
     <div id="rotate" class="tilted">
@@ -23,42 +461,31 @@
       <div id="ring5" class="ring"></div>
     </div>
     
-    <div id="numbersDisplay"></div>
+    <audio id="winAudio" src="https://nasukafoods.site/slavafunk.mp3" preload="auto"></audio>
+    
     <button id="spinButton">Putar</button>
     
-    <div class="betting-panel">
-      <div>Rp: <span id="perakBalance">0</span></div>
+    <div class="mainting-panel">
+      <div>Perak Saya: <span id="perakBalance">0</span></div>
+      <input type="number" id="mainAmount" class="main-input" placeholder="Mode Netral" min="1" readonly>
+      <div id="errorMessage" class="error-message"></div>
       
-      
-      <input type="number" id="betAmount" class="bet-input" placeholder="Jumlah" min="1">
-      <button id="placeBetButton" class="bet-button">Pasang</button>
-      <button id="cancelBetButton" class="bet-button" disabled>Batalkan</button>
-      
-      <div class="auto-bet-options">
-        <div id="autoBetButtons">
-          <button onclick="toggleAutoBet(100)" id="autoBet100">100</button>
-         
-          <button onclick="toggleAutoBet(1000)" id="autoBet1000">1K</button>
-          <button onclick="toggleAutoBet(10000)" id="autoBet10000">10K</button>
-          <button onclick="toggleAutoBet(0)">OFF</button>
+      <div class="auto-main-options">
+        <div id="automainButtons">
+          <button onclick="toggleAutomain(1)" id="automain1">1</button>
+          <button onclick="toggleAutomain(10)" id="automain10">10</button>          
+          <button onclick="toggleAutomain(100)" id="automain100">100</button>
+          <button onclick="toggleAutomain(1000)" id="automain1000">1.000</button>
+          <button onclick="toggleAutomain(0)">Netral</button>
         </div>
       </div>
-      
-      <div id="betResult" class="result-message result-hidden"></div>
-      
-      <div class="win-types">
-        <div class="win-type"><span>1 Pasang (2 angka sama)</span><span>x2</span></div>
-        <div class="win-type"><span>2 Pasang (2x2 angka sama)</span><span>x3</span></div>
-        <div class="win-type"><span>3 Angka Sama</span><span>x4</span></div>
-        <div class="win-type"><span>Full House (3+2)</span><span>x5</span></div>
-        <div class="win-type"><span>4 Angka Sama</span><span>6</span></div>
-        <div class="win-type"><span>5 Angka Sama</span><span>x10</span></div>
-      </div>
+      <div id="mainResult" class="result-message result-hidden"></div>
     </div>
   </div>
   
-  <div class="rolling-text"><strong>Nasuka Roll, </strong></div>
-  
+  <div class="history-link-container">
+    <a href="" class="menu-link">Riwayat</a>
+  </div>
 
 <script>
     
@@ -78,52 +505,91 @@
     Username: localStorage.getItem("Username"),
     Nama: localStorage.getItem("Nama"),
     Perak: parseInt(localStorage.getItem("Perak")) || 0,
+    TotalLoss: parseInt(localStorage.getItem("TotalLoss")) || 0,
+    operatorCapital: 1000
   };
-      
+
+  if (!localUser.Username) {
+    console.log("Username tidak ditemukan di localStorage. Silakan login.");
+  }
+
+  const userRef = db.ref(`users/${localUser.Username}`);
+  const operatorCapitalRef = db.ref(`users/${localUser.Username}/operatorCapital`);
+
+  userRef.on('value', (snapshot) => {
+      const userData = snapshot.val();
+      if (userData !== null) {
+          localUser.Perak = userData.Perak || 0;
+          localUser.TotalLoss = userData.TotalLoss || 0;
+          
+          localStorage.setItem("Perak", localUser.Perak);
+          localStorage.setItem("TotalLoss", localUser.TotalLoss);
+          
+          updatePerakDisplay();
+          console.log("Saldo dan total kekalahan berhasil disinkronkan.");
+      }
+  });
+
+  operatorCapitalRef.on('value', (snapshot) => {
+    const capitalData = snapshot.val();
+    if (capitalData !== null) {
+      localUser.operatorCapital = capitalData;
+    } else {
+      localUser.operatorCapital = 1000;
+      operatorCapitalRef.set(1000); 
+      console.log("Modal operator baru diinisialisasi.");
+    }
+    updateOperatorCapitalDisplay();
+  });
+
   const ROLL_PER_REEL = 10;
-  const REEL_RADIUS = 300;
+  const REEL_RADIUS = 400;
   const TIME_TOLERANCE = 5 * 60 * 1000;
   const SPIN_DURATION = 5;
   const MANUAL_SPIN_COOLDOWN = 4 * 400;
   
   const WIN_MULTIPLIERS = {
-    'pair': 2,
-    'two_pairs': 3,
-    'three': 4,
-    'full_house': 5,
-    'four': 6,
-    'five': 10
+    'dua': 2,
+    'tiga': 2.5,
+    'empat': 2.75,
+    'lima': 3,
+    'jackpot': 5
   };
   
   const WIN_PROBABILITIES = {
-    'pair': 0.0000001,
-    'two_pairs': 0.00000001,
-    'three': 0.0000000001,
-    'full_house': 0.000000001,
-    'four': 0.0000000000001,
-    'five': 0.0000000000000000001
+    'dua': 0.9,
+    'tiga': 0.7,
+    'empat': 0.5,
+    'lima': 0.000000000000000000000000000000001,
+    'jackpot': 0.0000000000000000000000000000000001
   };
+  
+  const MIN_OPERATOR_CAPITAL = 100;
   
   let currentSeeds = [0, 0, 0, 0, 0];
   let timeOffset = 0;
   let timeValidated = false;
   let isSpinning = false;
   let lastManualSpinTime = 0;
-  let currentBet = 0;
-  let hasPlacedBet = false;
-  let autoBetAmount = 0;
-  let isAutoBetEnabled = false;
+  let currentmain = 0;
+  let hasPlacedmain = false;
+  let automainAmount = 0;
+  let isAutomainEnabled = false;
   let playerWinStreak = 0;
   let playerLoseStreak = 0;
-  let totalPlayerLoss = 0;
-  let lossStreakForCompensation = 0;
-  const COMPENSATION_THRESHOLD = 8;
-  const COMPENSATION_MULTIPLIER = 1.2;
   const HOUSE_EDGE = 0;
 
   function updatePerakDisplay() {
     $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));
-    $('#lossStreakCounter').text(lossStreakForCompensation);
+    $('#lossCounter').text(localUser.TotalLoss.toLocaleString('id-ID'));
+  }
+
+  function updateOperatorCapitalDisplay() {
+    $('#operatorCapitalDisplay').text(localUser.operatorCapital.toLocaleString('id-ID'));
+  }
+  
+  function showErrorMessage(message) {
+    $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut();
   }
 
   function createROLL(ring) {
@@ -147,138 +613,69 @@
       date: now.toISOString(),
       username: localUser.Username || 'system',
       type: isManual ? 'manual' : 'auto',
-      bet: hasPlacedBet ? currentBet : 0,
-      lossStreak: lossStreakForCompensation,
-      totalLoss: totalPlayerLoss
+      main: hasPlacedmain ? currentmain : 0
     };
-    
-    
-    
     db.ref('rolls').push(rollData)
       .then(() => console.log('Roll saved to database'))
       .catch(error => console.error('Error saving roll:', error));
   }
   
-  
-  
-  function generatePair() {
-  if (Math.random() < 0.9) return generateRandomResult();
-  
-  const num = Math.floor(Math.random() * 10);
-  return shuffleArray([num, num, 
-    Math.floor(Math.random() * 10),
-    Math.floor(Math.random() * 10), 
-    Math.floor(Math.random() * 10)
-  ]);
-}
-
-
-  function generateTwoPairs() {
-    const num1 = Math.floor(Math.random() * 10);
-    let num2;
-    do {
-      num2 = Math.floor(Math.random() * 10);
-    } while (num2 === num1);
-    
-    const result = [num1, num1, num2, num2];
-    
+  function generateDua() {
+    const num = Math.floor(Math.random() * 10);
+    const result = [num, num];
     while (result.length < 5) {
-      let randNum;
-      do {
-        randNum = Math.floor(Math.random() * 10);
-      } while (randNum === num1 || randNum === num2);
-      result.push(randNum);
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
     }
-    
     return shuffleArray(result);
   }
-
-
-
-
-
-
-  function generateThreeOfAKind() {
+  
+  function generateTiga() {
     const num = Math.floor(Math.random() * 10);
     const result = [num, num, num];
-    
     while (result.length < 5) {
-      let randNum;
-      do {
-        randNum = Math.floor(Math.random() * 10);
-      } while (randNum === num);
-      result.push(randNum);
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
     }
-    
     return shuffleArray(result);
   }
-
-
-
-
-
-
-  function generateFullHouse() {
-    const num1 = Math.floor(Math.random() * 10);
-    let num2;
-    do {
-      num2 = Math.floor(Math.random() * 10);
-    } while (num2 === num1);
-    
-    return shuffleArray([num1, num1, num1, num2, num2]);
-  }
-
-
-
-
-
-  function generateFourOfAKind() {
+  
+  function generateEmpat() {
     const num = Math.floor(Math.random() * 10);
     const result = [num, num, num, num];
-    
     while (result.length < 5) {
-      let randNum;
-      do {
-        randNum = Math.floor(Math.random() * 10);
-      } while (randNum === num);
-      result.push(randNum);
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
     }
-    
     return shuffleArray(result);
   }
   
-  
-  
-  
-
-  function generateFiveOfAKind() {
+  function generateLima() {
     const num = Math.floor(Math.random() * 10);
     return [num, num, num, num, num];
   }
-
   
-
-function generateRandomResult() {
-  const result = [];
-  for (let i = 0; i < 5; i++) {
-    let num;
-    do {
-      num = Math.floor(Math.random() * 10);
-    } while (i < 5 && result.includes(num));
-    result.push(num);
+  function generateJackpot() {
+    const result = [1, 2, 3, 4, 5];
+    return shuffleArray(result);
   }
-  return result;
-}
 
-
-
-
-
-
-
-
-
-
+  function generateRandomResult() {
+    const result = [];
+    while (result.length < 5) {
+      const num = Math.floor(Math.random() * 10);
+      if (!result.includes(num)) {
+        result.push(num);
+      }
+    }
+    return result;
+  }
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -288,79 +685,49 @@ function generateRandomResult() {
     return array;
   }
   
-  
-  
-  
-
-  function generateCompensationWin() {
-    if (lossStreakForCompensation >= COMPENSATION_THRESHOLD) {
-      if (Math.random() < 0.001) return generatePair();
-      if (Math.random() < 0.009) return generateTwoPairs();
-      return generateThreeOfAKind();
-    }
-    return generateRandomResult();
-  }
-  
-  
-  
-
   function generateControlledResult() {
-    if (lossStreakForCompensation >= COMPENSATION_THRESHOLD) {
-      return generateCompensationWin();
+    let currentProbabilities = WIN_PROBABILITIES;
+
+    if (localUser.operatorCapital < MIN_OPERATOR_CAPITAL) {
+        console.log("Modal operator di bawah ambang batas. Memaksa pemain kalah.");
+        return generateRandomResult();
     }
     
-    if (Math.random() > 0.0001) {
-      return generateRandomResult();
-    }
-    
-    const totalWinProb = Object.values(WIN_PROBABILITIES).reduce((a, b) => a + b, 0);
-    const adjustedWinProb = adjustWinProbability(totalWinProb);
-    const shouldForceWin = Math.random() < adjustedWinProb;
-    
-    if (shouldForceWin) {
-      const rand = Math.random() * totalWinProb;
-      let cumulativeProb = 0;
-      let selectedType = null;
-      
-      for (const type in WIN_PROBABILITIES) {
-        cumulativeProb += WIN_PROBABILITIES[type];
-        if (rand <= cumulativeProb) {
-          selectedType = type;
-          break;
+    const rand = Math.random();
+    let cumulativeProb = 0;
+
+    for (const type in currentProbabilities) {
+        cumulativeProb += currentProbabilities[type];
+        if (rand < cumulativeProb) {
+            switch(type) {
+                case 'dua': return generateDua();
+                case 'tiga': return generateTiga();
+                case 'empat': return generateEmpat();
+                case 'lima': return generateLima();
+                case 'jackpot': return generateJackpot();
+            }
         }
-      }
-      
-      switch(selectedType) {
-        case 'pair': return generatePair();
-        case 'two_pairs': return generateTwoPairs();
-        case 'three': return generateThreeOfAKind();
-        case 'full_house': return generateFullHouse();
-        case 'four': return generateFourOfAKind();
-        case 'five': return generateFiveOfAKind();
-      }
     }
-    
     return generateRandomResult();
   }
 
   function adjustWinProbability(baseProbability) {
-    if (lossStreakForCompensation >= COMPENSATION_THRESHOLD) {
-      return 1;
-    }
-    
     if (playerWinStreak > 0) {
-      return baseProbability * 0.0001;
+      return baseProbability * 0.00000001;
     }
-    
     if (playerLoseStreak > 0) {
-      return Math.min(baseProbability * (1 + (playerLoseStreak * 0.0005)), 0.0001);
+      return Math.min(baseProbability * (1 + (playerLoseStreak * 0.0001)), 0.0001);
     }
-    
     return baseProbability;
   }
-
+  
   function checkWin(result) {
-    if (!hasPlacedBet || currentBet <= 0) return null;
+    if (!hasPlacedmain || currentmain <= 0) return null;
+    
+    const sortedResult = [...result].sort((a, b) => a - b).join('');
+    if (sortedResult === '12345') {
+      return 'jackpot';
+    }
     
     const frequency = {};
     result.forEach(num => {
@@ -368,176 +735,146 @@ function generateRandomResult() {
     });
     
     const counts = Object.values(frequency);
-    const maxCount = Math.max(...counts);
-    const pairsCount = counts.filter(count => count >= 2).length;
+    const hasLima = counts.some(count => count >= 5);
+    const hasEmpat = counts.some(count => count >= 4);
+    const hasTiga = counts.some(count => count >= 3);
+    const hasDua = counts.some(count => count >= 2);
     
-    let winType = null;
-    
-    if (maxCount >= 5) {
-      winType = 'five';
-    } else if (maxCount >= 4) {
-      winType = 'four';
-    } else if (maxCount >= 3) {
-      const hasPair = counts.some(count => count >= 2 && count < 3);
-      if (hasPair && pairsCount >= 2) {
-        winType = 'full_house';
-      } else {
-        winType = 'three';
-      }
-    } else if (maxCount >= 2) {
-      if (pairsCount >= 2) {
-        winType = 'two_pairs';
-      } else {
-        winType = 'pair';
-      }
+    if (hasLima) {
+      return 'lima';
+    } else if (hasEmpat) {
+      return 'empat';
+    } else if (hasTiga) {
+      return 'tiga';
+    } else if (hasDua) {
+      return 'dua';
     }
-    
-    return winType;
+    return null;
   }
 
-  function toggleAutoBet(amount) {
-    if (amount > 0 && !isAutoBetEnabled && amount <= localUser.Perak) {
-      const fee = Math.max(10, Math.floor(amount * 0.00,));
-      localUser.Perak -= fee;
-      localStorage.setItem("Perak", localUser.Perak);
-      updatePerakDisplay();
+  function toggleAutomain(amount) {
+    if (amount > 0 && !isAutomainEnabled && amount <= localUser.Perak) {
     }
     
-    autoBetAmount = amount;
-    isAutoBetEnabled = amount > 0;
+    automainAmount = amount;
+    isAutomainEnabled = amount > 0;
     
-    if (isAutoBetEnabled) {
-      $('#autoBetButtons button').removeClass('active');
-      $(`#autoBet${amount}`).addClass('active');
-      $('#betAmount').val(amount);
-      placeBet(amount);
+    if (isAutomainEnabled) {
+      $('#automainButtons button').removeClass('active');
+      $(`#automain${amount}`).addClass('active');
+      $('#mainAmount').val(amount);
+      placemain(amount);
     } else {
-      $('#autoBetButtons button').removeClass('active');
-      cancelBet();
+      $('#automainButtons button').removeClass('active');
+      cancelmain();
     }
   }
 
-  function placeBet(amount) {
+  function placemain(amount) {
     if (amount > localUser.Perak) {
-      alert('Saldo Perak tidak mencukupi');
+      showErrorMessage('Saldo Perak tidak mencukupi');
       return false;
     }
-    
-    currentBet = amount;
-    hasPlacedBet = true;
-    $('#placeBetButton').prop('disabled', true);
-    $('#cancelBetButton').prop('disabled', false);
-   
+    currentmain = amount;
+    hasPlacedmain = true;
+    $('#placemainButton').prop('disabled', true);
+    $('#cancelmainButton').prop('disabled', false);
     return true;
   }
 
-  function cancelBet() {
-    currentBet = 0;
-    hasPlacedBet = false;
-    $('#betAmount').val('');
-    $('#placeBetButton').prop('disabled', false);
-    $('#cancelBetButton').prop('disabled', true);
-    $('#betResult').addClass('result-hidden').removeClass('win lose');
+  function cancelmain() {
+    currentmain = 0;
+    hasPlacedmain = false;
+    $('#mainAmount').val('');
+    $('#placemainButton').prop('disabled', false);
+    $('#cancelmainButton').prop('disabled', true);
+    $('#mainResult').addClass('result-hidden').removeClass('win lose');
   }
 
-  function processBetResult(result) {
-    if (!hasPlacedBet) {
-      if (isAutoBetEnabled) {
-        placeBet(autoBetAmount);
+  function processmainResult(result) {
+    if (!hasPlacedmain) {
+      if (isAutomainEnabled) {
+        placemain(automainAmount);
       }
       return;
     }
     
     const winType = checkWin(result);
-    let winAmount = 0;
     let message = "";
-    let messageClass = "lose";
-    
-    if (winType) {
-      let bonusMultiplier = 1;
-      if (lossStreakForCompensation >= COMPENSATION_THRESHOLD) {
-        bonusMultiplier = COMPENSATION_MULTIPLIER;
-        message += " (Bonus Kompensasi)";
-      }
-      
-      playerWinStreak++;
-      playerLoseStreak = 0;
-      const baseMultiplier = WIN_MULTIPLIERS[winType];
-      const totalMultiplier = baseMultiplier * bonusMultiplier * (1 - HOUSE_EDGE);
-      
-      
-      
-      
-      winAmount = Math.round(currentBet * totalMultiplier);
-      
-      localUser.Perak += winAmount;
-      localStorage.setItem("Perak", localUser.Perak);
-      
-      if (lossStreakForCompensation >= COMPENSATION_THRESHOLD) {
-        totalPlayerLoss = 0;
-        lossStreakForCompensation = 0;
-      }
-      
-      const winTypes = {
-        'pair': '1 Pasang Angka Kembar',
-        'two_pairs': '2 Pasang Angka Kembar',
-        'three': '3 Angka Sama',
-        'full_house': 'Full House (3+2)',
-        'four': '4 Angka Sama',
-        'five': '5 Angka Sama'
-      };
-      
-      message = `MENANG! ${winTypes[winType]} (x${(totalMultiplier).toFixed(1)}): +${winAmount.toLocaleString('id-ID')} Perak`;
-      messageClass = "win";
-      
-      saveWinToDatabase(winAmount, winType, result.join(''));
-      
-      
+    let messageClass = "";
+    let mainAmount = currentmain;
+
+    userRef.transaction((currentData) => {
+      if (currentData) {
+        let finalPerak = currentData.Perak || 0;
+        let finalLoss = currentData.TotalLoss || 0;
+        let finalOperatorCapital = currentData.operatorCapital || 1000;
+        
+        if (winType) {
+          playerWinStreak++;
+          playerLoseStreak = 0;
+          
+          const baseMultiplier = WIN_MULTIPLIERS[winType];
+          const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
+          const winAmount = Math.round(mainAmount * totalMultiplier);
+
+          finalPerak += winAmount;
+          finalLoss -= winAmount;
+          finalOperatorCapital -= winAmount;
+          
+          const winTypes = {
+            'dua': 'Dua Angka Sama',
+            'tiga': 'Tiga Angka Sama',
+            'empat': 'Empat Angka Sama',
+            'lima': 'Lima Angka Sama',
+            'jackpot': 'Jackpot 12345'
+          };
+          
+          message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
+          messageClass = "win";           
+          triggerConfetti(); 
+          document.getElementById('winAudio').play();
+          
+          saveWinToDatabase(winAmount, winType, result.join(''), mainAmount);
+        } else {
+          playerWinStreak = 0;
+          playerLoseStreak++;
+          finalPerak -= mainAmount;
+          finalLoss += mainAmount;
+          finalOperatorCapital += mainAmount;
+        }
+        
+        return {
+          ...currentData,
+          Perak: finalPerak,
+          TotalLoss: finalLoss,
+          operatorCapital: finalOperatorCapital
+        };
       } else {
-    playerWinStreak = 0;
-    playerLoseStreak++;
-    lossStreakForCompensation++;
-    totalPlayerLoss += currentBet;
-    localUser.Perak -= currentBet;
-    localStorage.setItem("Perak", localUser.Perak);
-    
-    // Tidak perlu menampilkan pesan saat kalah
-    $('#betResult').addClass('result-hidden');
-}
-      
-      
-      
-      
-    
-       
-    
-    $('#betResult')
-      .text(message)
-      .removeClass('win lose')
-      .addClass(messageClass)
-      .removeClass('result-hidden');
-    
-    updatePerakDisplay();
-    
-    if (isAutoBetEnabled) {
-      setTimeout(() => {
-        placeBet(autoBetAmount);
-      }, 3000);
-    } else {
-      currentBet = 0;
-      hasPlacedBet = false;
-      $('#placeBetButton').prop('disabled', false);
-      $('#cancelBetButton').prop('disabled', true);
-    }
+        return;
+      }
+    }).then(() => {
+      $('#mainResult')
+        .text(message)
+        .removeClass('result-hidden')
+        .addClass(messageClass);
+        
+      if (isAutomainEnabled) {
+        setTimeout(() => {
+          placemain(automainAmount);
+        }, 3000);
+      } else {
+        currentmain = 0;
+        hasPlacedmain = false;
+        $('#placemainButton').prop('disabled', false);
+        $('#cancelmainButton').prop('disabled', true);
+      }
+    }).catch(error => {
+      console.error("Transaksi gagal:", error);
+    });
   }
 
-
-
-
-
-
-
-  function saveWinToDatabase(amount, winType, numbers) {
+  function saveWinToDatabase(amount, winType, numbers, mainAmount) {
     const now = new Date();
     const winData = {
       username: localUser.Username,
@@ -546,30 +883,43 @@ function generateRandomResult() {
       numbers: numbers,
       timestamp: now.getTime(),
       date: now.toISOString(),
-      bet: currentBet,
-      lossStreak: lossStreakForCompensation,
-      totalLoss: totalPlayerLoss,
-      wasCompensation: lossStreakForCompensation >= COMPENSATION_THRESHOLD
+      main: mainAmount
     };
     
     db.ref('wins').push(winData)
       .then(() => console.log('Win saved to database'))
       .catch(error => console.error('Error saving win:', error));
   }
-
+  
+  
+  
+  
+  
+  
+  
   function spin(isManual = false) {
     if (isSpinning) return;
+    
+    
+    const winAudio = document.getElementById('winAudio');
+    
+    
+    if (!winAudio.paused) {
+        winAudio.pause();
+        winAudio.currentTime = 0; 
+    }
+    
     isSpinning = true;
     
-    $('#betResult').addClass('result-hidden');
+    $('#mainResult').addClass('result-hidden');
     
     if (isManual) {
       lastManualSpinTime = Date.now();
       $('#spinButton').prop('disabled', true);
       updateManualSpinButton();
     }
-      
-    $('#numbersDisplay').empty();
+    
+    $('#stage .roll p').removeClass('bling-bling');
       
     for (let i = 1; i <= 5; i++) {
       $(`#ring${i}`).css('animation', `back-spin 1s`);
@@ -587,27 +937,28 @@ function generateRandomResult() {
       }
         
       setTimeout(() => {
-        $('#numbersDisplay').html(
-          result.map(num => `<span>${num}</span>`).join('')
-        );
+        for (let i = 0; i < result.length; i++) {
+          const numberElement = $(`#ring${i+1} .roll`).eq(result[i]).find('p');
+          numberElement.addClass('bling-bling');
+        }
         
         saveRollToDatabase(result, isManual);
-        processBetResult(result);
+        processmainResult(result);
         
         isSpinning = false;
       }, SPIN_DURATION * 1000);
     }, 1000);
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
+}
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
   function updateManualSpinButton() {
     const now = Date.now();
     const timeSinceLastSpin = now - lastManualSpinTime;
@@ -617,9 +968,36 @@ function generateRandomResult() {
       $('#spinButton').prop('disabled', false).text('Putar');
     } else {
       const seconds = Math.ceil(remainingCooldown / 1000);
-      $('#spinButton').text(`roll selanjutnya: ${seconds}s`);
       setTimeout(updateManualSpinButton, 1000);
     }
+  }
+
+  function triggerConfetti() {
+    const defaults = {
+        spread: 360,
+        ticks: 400,
+        gravity: 0.5,
+        decay: 0.94,
+        startVelocity: 30,
+        colors: ['#FFC107', '#E91E63', '#4CAF50', '#2196F3']
+    };
+    function shoot() {
+        confetti({
+            ...defaults,
+            particleCount: 400,
+            scalar: 1.2,
+            shapes: ['star']
+        });
+        confetti({
+            ...defaults,
+            particleCount: 50,
+            scalar: 0.8,
+            shapes: ['circle']
+        });
+    }
+    setTimeout(shoot, 0);
+    setTimeout(shoot, 150);
+    setTimeout(shoot, 300);
   }
 
   $(document).ready(function() {
@@ -632,30 +1010,46 @@ function generateRandomResult() {
       $('#loading').fadeOut();
     }, 2000);
     
-    updatePerakDisplay();
+  
+    let winAudio = document.getElementById('winAudio');
+    
+  
+    let userInteracted = false;
     
     $('#spinButton').click(function() {
+    
+      if (!userInteracted) {
+        winAudio.muted = true;
+        winAudio.play().then(() => {
+          winAudio.pause();
+          winAudio.currentTime = 0;
+          winAudio.muted = false;
+          userInteracted = true;
+        }).catch(error => {
+          console.error("Audio play blocked:", error);
+        });
+      }
+
       if (!$(this).prop('disabled')) {
         spin(true);
       }
     });
     
-    $('#placeBetButton').click(function() {
-      const betAmount = parseInt($('#betAmount').val());
+    $('#placemainButton').click(function() {
+      const mainAmount = parseInt($('#mainAmount').val());
       
-      if (isNaN(betAmount) || betAmount <= 0) {
-        alert('Masukkan jumlah taruhan yang valid');
+      if (isNaN(mainAmount) || mainAmount <= 0) {
+        showErrorMessage('Masukkan jumlah pasangan yang valid');
         return;
       }
       
-      placeBet(betAmount);
+      placemain(mainAmount);
     });
     
-    $('#cancelBetButton').click(function() {
-      cancelBet();
+    $('#cancelmainButton').click(function() {
+      cancelmain();
     });
   });
-
 </script>
 
 </body>
