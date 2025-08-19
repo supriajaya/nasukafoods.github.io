@@ -2,12 +2,6 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  
-  
-  
-  
-  
-  
   <title>Nasuka Wireless</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
@@ -16,28 +10,13 @@
       
       
       
-      
-    
-    body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: snow;
-  padding-top: 50px; /* Sesuaikan nilai ini */
-}
-
+       body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: snow;
+    }
     
     
-    
-    
-     header {
-  background-color: gray;
-  color: white;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
   
 .arya-scol {
 display: flex;
@@ -198,7 +177,7 @@ padding: 2px;
   bottom: 4px;
   left: 4px;
   background: ;
-  color: blue;
+  color: white;
   padding: 2px 1px;
   border-radius: 1px;
   font-size: 10px;
@@ -375,8 +354,21 @@ padding: 2px;
       
       
       
-    
+     .menu-links {
+  text-align: center;
+  margin-top: 5px;
+}
 
+.menu-links span {
+  margin: 0 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 5px;
+}
+
+.menu-links span:hover {
+  text-decoration: underline;
+}
 
 .produk-title {
   text-align: center;
@@ -551,20 +543,23 @@ padding: 2px;
 }
 
 
-.teratas {
+.terutus {
   display: flex;
   justify-content: center;
-  gap: 5px;
-  position: fixed;
+  gap: 10px;
+  position: fixed; /* Ganti dari 'absolute' atau 'relative' jika ada */
   top: 0;
   left: 0;
-  width: 100%; 
-  padding: 10px 0; 
+  width: 100%;
+  padding: 10px 0;
+  background-color: white; /* Tambahkan latar belakang agar konten di bawahnya tidak terlihat */
   z-index: 1000;
 }
 
 
-.terbawah {
+
+
+.terbiwih {
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -572,56 +567,55 @@ padding: 2px;
   bottom: 0;
   left: 0;
   width: 100%;
+  background-color: white; 
   padding: 10px 0; 
+  
   z-index: 1000; 
 }
 
-.variasia {
+.varis {
       background-color: rgba(255, 255, 255, 0.1);
-      border: 1.5px solid red;
+      border: 1px solid red;
       color: black;
-      padding: 1px 2px;
+      padding: 5px 20px;
       text-decoration: none;
-      
-      border-radius: 2px;
+      font-weight: bold;
+      border-radius: 5px;
       transition: background-color 0.3s;
       text-align: center;
-      font-size: 10px; 
+      font-size: 5px; 
     }     
+        
+
+
+
+
 
 
 </style>
 </head>
 <body>
     
+<div class="terutus">
+  <a href="leaderboard.html" class="varis">Leaderboard</a>   
+  <a href="topup.html" class="varis">Topup</a>   
+  <a  class="varis">Fitur Mendatang</a>   
+  <a  class="varis">Event</a>   
   
- 
-<div class="teratas">    
-<a href="leaderboard.html"class="variasia"><span>Leaderboard</span></a>
-
-<a href="topup.html"class="variasia"><span>Dukungan</span></a>
-
-<a class="variasia"><span>Fitur Lainnya </span></a>
-
-<a class="variasia"><span>Pengembangan</span></a> 
 </div>
+
+<div style="padding:2px; text-align:center; margin-top: 50px;">
+  <input id="cariUser" placeholder="Cari akun....." />
+  <div id="hasilUser" style="margin-top:8px"></div>
+</div>
+
+<div class="terbiwih">
+  <a class="varis">Faq</a>   
+    <a class="varis">Privacy Policy</a>   
+    <a class="varis">Return Policy</a>   
+    <a class="varis">Term & Condition</a>   
   
-<div class="terbawah">
-<a  class="variasia">Faq</a>
-<a  class="variasia">Privacy Policy</a>
-<a  class="variasia">Return Policy</a>
-<a  class="variasia">Term & Condition</a>
-     </div>
-  
-  
-  
-  
-  
-  <div style="padding:2px; text-align:center;">
-    <input id="cariUser" placeholder="Cari akun....." />
-    
-    <div id="hasilUser" style="margin-top:8px"></div></div>
- 
+</div>
 
   
   <div class="arya-bar raya" style="position: relative;">
@@ -633,7 +627,7 @@ padding: 2px;
     </div>
     <div class="profil-overlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
       <img src="https://nasukafoods.site/nasukachat.png" class="arya-item raya" id="fol" />
-      <span>✅</span>
+      <span></span>
       <span id="notifInbox"></span>
     </div>
     
@@ -650,8 +644,9 @@ padding: 2px;
       <div class="arya-overlay">
         <a href="roll.html"><img src="https://nasukafoods.site/roll.jpg" /></a>
       </div>
-     
-      
+      <div class="arya-overlay">
+        <a href="puzzle.html"><img src="https://nasukafoods.site/puzzle.jpg" /></a>
+      </div>
       
       <div class="arya-overlay">
         <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/download.png" /><span></span></a>
@@ -770,7 +765,7 @@ function initializeUserProfile() {
   const profilLink = document.getElementById("linkProfil");
 
   if (!userID) {
-    if (namaEl) namaEl.textContent = "Silahkan Masuk";
+    if (namaEl) namaEl.textContent = "Silakan Masuk";
     if (fotoEl) fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
     if (profilLink) profilLink.href = "login.html";
     return;
