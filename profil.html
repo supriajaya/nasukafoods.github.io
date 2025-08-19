@@ -1,266 +1,391 @@
-<!DOCTYPE html>  
-<html lang="id">  
-<head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
-  <title>Profil</title>  
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil</title>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
-  <link rel="stylesheet" href="https://nasukafoods.site/profil.css">
-</head>  
-<body>    
-  <div class="container">  
-    <div class="nasuka">  
-      <img id="foto-profil" src="https://nasukafoods.site/gambarkosong.jpg" alt="FOTO PROFIL" onclick="window.location.href='saya.html'" />  
-      <br/>  
-      <div id="tombolAksi"></div>  
-    </div>  
-    <div class="nasuka">  
-      <div class="nasuka-info left" id="dataUser">  
-        <p>🎇 Nama</p>  
-        <p>🎇 Perak</p>  
-        <p>🎇 Jenis</p>  
-        <p>🎇 Kirim Pesan</p>  
-      </div>  
-    </div>  
-  </div>  
-  <div class="nasuka" style="width:100%;margin:0;">  
-    <div class="form-post">  
-      <textarea id="judul" placeholder="Tulis postingan" autocomplete="off" style="height:80px;"></textarea>  
-      <select id="status">  
-        <option value="publik">Publik</option>  
-        <option value="privat">Privat</option>  
-      </select>  
-      <label style="display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;width:100%;">  
-        📷 
-        <input type="file" id="fotoInput" accept="image/*" style="display:none;" />  
-      </label>  
+ 
+  <style>
+      .form-post {
+        padding:10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      label {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:6px;
+        cursor:pointer;
+      }
+      .form-post {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #btnPosting {
+        background: #2196f3;
+        color: white;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .btnKirim {
+        background: #ff9800;
+        color: white;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      body {
+        margin:0;
+        font-family:'Segoe UI',sans-serif;
+        background-color:#f5f5f5
+      }
+      .container {
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:space-between;
+        padding:10px
+      }
+      .nasuka {
+        flex:0 0 48%;
+        background-color:#fff;
+        margin-bottom:10px;
+        border-radius:8px;
+        overflow:hidden;
+        box-shadow:0 2px 5px rgba(0,0,0,0.1);
+        text-align:center;
+        box-sizing:border-box
+      }
+      /* Menambahkan aturan CSS yang lebih tegas */
+      .nasuka img {
+        width:100%;
+        height:auto;
+        display:block
+      }
+      .card img:not([src]) {
+        display: none;
+        height: 0;
+        width: 0;
+        padding: 0;
+        margin: 0;
+      }
+      .nasuka-info {
+        padding:10px
+      }
+      .nasuka-info.left {
+        text-align:left
+      }
+      .form-post {
+        padding:10px
+      }
+      .form-post input,.form-post textarea,.form-post select {
+        width:100%;
+        margin-bottom:10px;
+        padding:8px;
+        font-size:16px;
+        box-sizing:border-box
+      }
+      .postingan {
+        padding:10px
+      }
+      .card {
+        background:#fff;
+        margin-bottom:10px;
+        border-radius:6px;
+        box-shadow:0 1px 3px rgba(0,0,0,0.1);
+        overflow:hidden;
+        position:relative
+      }
+      .card img {
+        width:100%;
+        height:auto
+      }
+      .card-content {
+        padding:10px;
+        text-align:left
+      }
+      .hapus-btn {
+        position:absolute;
+        top:10px;
+        right:10px;
+        background-color:red;
+        color:white;
+        border:none;
+        padding:6px 10px;
+        font-size:12px;
+        border-radius:4px;
+        cursor:pointer
+      }
+      .komentar {
+        padding:10px
+      }
+      .komentar input {
+        width:100%;
+        box-sizing:border-box;
+        padding:5px;
+        margin-bottom:5px
+      }
+      .komentar-list {
+        max-height:100px;
+        overflow-y:auto;
+        font-size:14px;
+        color:#333
+      }
+      .komentar-list div {
+        margin-bottom:5px
+      }
+      .card-content h3 {
+          margin-top: 0;
+          margin-bottom: 5px;
+      }
+      .card-content small {
+          margin: 0;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nasuka">
+      <img id="foto-profil" src="https://nasukafoods.site/gambarkosong.jpg" alt="FOTO PROFIL" onclick="window.location.href='saya.html'" />
+      <br/>
+      <div id="tombolAksi"></div>
+    </div>
+    <div class="nasuka">
+      <div class="nasuka-info left" id="dataUser">
+        <p>🎇 Nama</p>
+        <p>🎇 Perak</p>
+        <p>🎇 Jenis</p>
+        <p>🎇 Kirim Pesan</p>
+      </div>
+    </div>
+  </div>
+  <div class="nasuka" style="width:100%;margin:0;">
+    <div class="form-post">
+      <textarea id="judul" placeholder="Tulis postingan" autocomplete="off" style="height:80px;"></textarea>
+      <select id="status">
+        <option value="publik">Publik</option>
+        <option value="privat">Privat</option>
+      </select>
+      <label style="display:flex;justify-content:center;align-items:center;gap:6px;cursor:pointer;width:100%;">
+        📷
+        <input type="file" id="fotoInput" accept="image/*" style="display:none;" />
+      </label>
       <button id="btnPosting" onclick="kirimPostingan()">Posting</button>
-    </div>  
-  </div>  
-  <div class="postingan" id="daftarPostingan"></div>  
+    </div>
+  </div>
+  <div class="postingan" id="daftarPostingan"></div>
   <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
-    authDomain: "nasuka-fc780.firebaseapp.com",
-    databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasuka-fc780",
-    storageBucket: "nasuka-fc780.firebasestorage.app",
-    messagingSenderId: "860641747257",
-    appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+      authDomain: "nasuka-fc780.firebaseapp.com",
+      databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "nasuka-fc780",
+      storageBucket: "nasuka-fc780.firebasestorage.app",
+      messagingSenderId: "860641747257",
+      appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+    };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-  const urlParams = new URLSearchParams(location.search);
-  const viewedID = urlParams.get("id") || localStorage.getItem("ID");
-  const currentID = localStorage.getItem("ID");
-  if (!currentID) location.href = "login.html";
+    const urlParams = new URLSearchParams(location.search);
+    const viewedID = urlParams.get("id") || localStorage.getItem("ID");
+    const currentID = localStorage.getItem("ID");
 
-  const usersCache = {};
-
-  const localUser = {
-    ID: localStorage.getItem("ID"),
-    Foto: localStorage.getItem("Foto"),
-    Nama: localStorage.getItem("Nama"),
-    Perak: localStorage.getItem("Perak"),
-    Jenis: localStorage.getItem("Jenis"),
-  };
-
-  if (localUser.ID === viewedID) {
-    renderUser(localUser, true);
-  } else {
-    document.getElementById("foto-profil").src = "https://nasukafoods.site/gambarkosong.jpg";
-    document.getElementById("dataUser").innerHTML = `
-      <p>🎇 -</p>
-      <p>🎇 0</p>
-      <p>🎇 -</p>
-      <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">🎇 Kirim Pesan</button>
-    `;
-
-    
-    
-    setTimeout(() => {
-  const tombol = document.getElementById("btnKirimPesan");
-  tombol?.addEventListener("click", () => {
-    if (!isOwner) {
-      window.location.href = "inbox.html?id=" + encodeURIComponent(user.ID);
+    if (!currentID) {
+      location.href = "login.html";
     }
-  });
-}, 50);
-    
-    
-    
-  }
 
-  db.ref("users").once("value").then(snap => {
-    const users = snap.val();
-    let ditemukan = false;
-    for (let key in users) {
-      const user = users[key];
-      if (user.ID === viewedID) {
-        ditemukan = true;
-        renderUser(user, false);
-        break;
-      }
-    }
-    if (!ditemukan) {
-      alert("Pengguna tidak ditemukan");
-    }
-  });
+    const usersCache = {};
+    let isPosting = false;
 
-  function renderUser(user, isLocal) {
-    document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-    const isOwner = user.ID === currentID;
-    const buttonLabel = isOwner ? "" : "🎇 Kirim Pesan";
-    document.getElementById("dataUser").innerHTML = `
-      <p>🎇 ${user.Nama || '-'}</p>
-      <p>🎇 ${user.Perak || 0}</p>
-      <p>🎇 ${user.Jenis || '-'}</p>
-      <button id="btnKirimPesan" style="padding: 8px 16px; margin-top: 10px; cursor: pointer;">${buttonLabel}</button>
-    `;
-    
-    
-    setTimeout(() => {
-  const tombol = document.getElementById("btnKirimPesan");
-  tombol?.addEventListener("click", () => {
-    localStorage.setItem("targetID", viewedID);
-    window.location.href = "inbox.html?id=" + encodeURIComponent(viewedID);
-  });
-}, 50);
-    
-    
-    
-    
-    
-  }
-
-  let isPosting = false;
-  function kirimPostingan() {
-    if (isPosting) return;
-    isPosting = true;
-    const judul = document.getElementById("judul").value.trim();
-    const status = document.getElementById("status").value;
-    const file = document.getElementById("fotoInput").files[0];
-    if (!judul) {isPosting = false;return;}
-    const ID = localStorage.getItem("ID");
-    const Username = localStorage.getItem("Username");
-    if (!ID || !Username) {isPosting = false;return;}
-    const postData = {ID, Username, Judul: judul, Status: status, Waktu: Date.now()};
-    function resetForm() {
-      document.getElementById("judul").value = "";
-      document.getElementById("status").value = "publik";
-      document.getElementById("fotoInput").value = "";
-      isPosting = false;
-    }
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        postData.Foto = e.target.result;
-        db.ref("posts").push(postData).then(resetForm).catch(()=>{isPosting=false;});
-      };
-      reader.readAsDataURL(file);
-    } else {
-      db.ref("posts").push(postData).then(resetForm).catch(()=>{isPosting=false;});
-    }
-  }
-
-  function hapusPostingan(key, cardElement) {
-    const updates = {};
-    updates["/posts/" + key] = null;
-    updates["/komentar/" + key] = null;
-    updates["/likes/" + key] = null;
-    db.ref().update(updates);
-    cardElement.remove();
-  }
-
-  function submitKomentarManual(key) {
-    const input = document.getElementById("input-" + key);
-    const teks = input.value.trim();
-    if (teks) {
-      const id = localStorage.getItem("ID") || "";
-      const nama = localStorage.getItem("Nama") || "Anonim";
-      db.ref("komentar/" + key).push({ID:id,Nama:nama,Teks:teks,Waktu:new Date().toLocaleString("id-ID")});
-      input.value = "";
-    }
-  }
-
-  function muatKomentar(key) {
-    db.ref("komentar/" + key).on("child_added", snap => {
-      const data = snap.val();
-      const list = document.getElementById("list-" + key);
-      if (list) {
-        const userID = data.ID || "";
-        if (usersCache[userID]) {
-          tambahKomentar(list, usersCache[userID], data);
-        } else {
-          db.ref("users").orderByChild("ID").equalTo(userID).once("value", snapUser => {
-            const val = snapUser.val();
-            const user = val ? Object.values(val)[0] : {};
-            usersCache[userID] = user;
-            tambahKomentar(list, user, data);
-          });
-        }
-      }
-    });
-  }
-
-  function tambahKomentar(list, users, data) {
-    const div = document.createElement("div");
-    div.innerHTML = `<b>${users.Nama || "?"}:</b> ${(data.Teks || "").replace(/\n/g, '<br>')}`;
-    list.appendChild(div);
-  }
-
-  function toggleLike(postId) {
-    const userID = localStorage.getItem("ID") || "";
-    if (!userID) return;
-    const ref = db.ref("likes/" + postId + "/" + userID);
-    ref.once("value").then(snap => {
-      if (snap.exists()) {
-        ref.remove();
+    db.ref("users").orderByChild("ID").equalTo(viewedID).once("value").then(snap => {
+      const user = Object.values(snap.val() || {})[0];
+      if (user) {
+        renderUser(user);
+        muatPostingan();
       } else {
-        ref.set(true);
+        alert("Pengguna tidak ditemukan");
       }
+    }).catch(error => {
+      console.error("Gagal memuat profil:", error);
+      alert("Terjadi kesalahan saat memuat profil.");
     });
-  }
 
-  function updateLikeDisplay(postId, elemen) {
-    db.ref("likes/" + postId).on("value", snap => {
-      const likeCount = snap.numChildren();
-      elemen.innerText = "👍 " + likeCount;
-    });
-  }
-
-  db.ref("posts").on("child_added", function(snapshot) {
-    const data = snapshot.val();
-    const key = snapshot.key;
-    if (data.ID === viewedID) {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        ${data.ID === currentID ? `<button class="hapus-btn" onclick="hapusPostingan('${key}', this.parentElement)">Hapus</button>` : ""}
-        ${data.Foto ? `<img src="${data.Foto}">` : ""}
-        <div class="card-content">
-          <h3>${(data.Judul || "").replace(/\n/g, '<br>')}</h3>
-          <small>${data.Status}</small><br/>
-        </div>
-        <textarea id="input-${key}" placeholder="Tulis komentar" style="width:100%; padding:10px;"></textarea><button class="btnKirim" onclick="submitKomentarManual('${key}')">Kirim</button>
-        <div class="komentar-list" id="list-${key}"></div>
+    function renderUser(user) {
+      const isOwner = user.ID === currentID;
+      document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+      document.querySelector('.form-post').style.display = isOwner ? 'block' : 'none';
+      const dataUserDiv = document.getElementById("dataUser");
+      dataUserDiv.innerHTML = `
+        <p>🎇 Nama: ${user.Nama || '-'}</p>
+        <p>🎇 Perak: ${user.Perak || 0}</p>
+        <p>🎇 Jenis: ${user.Jenis || '-'}</p>
       `;
-      const likeSpan = document.createElement("span");
-      likeSpan.style.cursor = "pointer";
-      likeSpan.style.display = "inline-block";
-      likeSpan.style.marginTop = "10px";
-      likeSpan.style.fontWeight = "bold";
-      likeSpan.onclick = () => toggleLike(key);
-      card.querySelector(".card-content").appendChild(likeSpan);
-      document.getElementById("daftarPostingan").prepend(card);
-      updateLikeDisplay(key, likeSpan);
-      muatKomentar(key);
+      if (!isOwner) {
+        const btnPesan = document.createElement("button");
+        btnPesan.innerHTML = '🎇 Kirim Pesan';
+        btnPesan.style.cssText = 'padding: 8px 16px; margin-top: 10px; cursor: pointer;';
+        btnPesan.onclick = () => {
+          localStorage.setItem("targetID", viewedID);
+          window.location.href = "inbox.html?id=" + encodeURIComponent(viewedID);
+        };
+        dataUserDiv.appendChild(btnPesan);
+      }
     }
-  }); 
-  </script>
+    
+    function muatPostingan() {
+      db.ref("posts").orderByChild("ID").equalTo(viewedID).on("child_added", function(snapshot) {
+        const data = snapshot.val();
+        const key = snapshot.key;
+        const isOwner = data.ID === currentID;
+        const formattedDate = new Date(data.Waktu).toLocaleString('id-ID', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        const imageHtml = data.Foto ? `<img src="${data.Foto}" alt="Postingan Foto">` : '';
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          ${isOwner ? `<button class="hapus-btn" onclick="hapusPostingan('${key}', this.parentElement)">Hapus</button>` : ""}
+          ${imageHtml}
+          <div class="card-content">
+            <h3>${(data.Judul || "").replace(/\n/g, '<br>')}</h3>
+            <p style="margin: 5px 0;"><b>Oleh:</b> ${data.Nama}</p>
+            <p style="margin: 5px 0;"><small>${formattedDate}</small></p>
+            <small>${data.Status}</small><br/>
+          </div>
+          <textarea id="input-${key}" placeholder="Tulis komentar" style="width:100%; padding:10px;"></textarea><button class="btnKirim" onclick="submitKomentarManual('${key}')">Kirim</button>
+          <div class="komentar-list" id="list-${key}"></div>
+        `;
+        const likeSpan = document.createElement("span");
+        likeSpan.style.cssText = "cursor:pointer; display:inline-block; margin-top:10px; font-weight:bold;";
+        likeSpan.onclick = () => toggleLike(key);
+        card.querySelector(".card-content").appendChild(likeSpan);
+        document.getElementById("daftarPostingan").prepend(card);
+        updateLikeDisplay(key, likeSpan);
+        muatKomentar(key);
+      });
+    }
 
-</body>  
+
+
+
+
+
+    window.kirimPostingan = function() {
+      if (isPosting) return;
+      isPosting = true;
+      const judul = document.getElementById("judul").value.trim();
+      const status = document.getElementById("status").value;
+      const file = document.getElementById("fotoInput").files[0];
+      if (!judul && !file) {
+        isPosting = false;
+        return;
+      }
+      const ID = localStorage.getItem("ID");
+      const Nama = localStorage.getItem("Nama");
+
+      if (!ID || !Nama) {
+        isPosting = false;
+        return;
+      }
+      
+      // Langkah 1: Buat objek postData dasar tanpa properti Foto
+      const postData = { ID, Nama, Judul: judul, Status: status, Waktu: Date.now() };
+
+      function resetForm() {
+        document.getElementById("judul").value = "";
+        document.getElementById("status").value = "publik";
+        document.getElementById("fotoInput").value = "";
+        isPosting = false;
+      }
+      
+      // Langkah 2: Tambahkan properti Foto HANYA jika file diunggah
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          postData.Foto = e.target.result; // Tambahkan properti Foto di sini
+          db.ref("posts").push(postData).then(resetForm).catch(() => { isPosting = false; });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Jika tidak ada file, properti Foto tidak akan ada
+        db.ref("posts").push(postData).then(resetForm).catch(() => { isPosting = false; });
+      }
+    }
+
+    
+
+
+
+
+
+
+    window.hapusPostingan = function(key, cardElement) {
+      const updates = {};
+      updates["/posts/" + key] = null;
+      updates["/komentar/" + key] = null;
+      updates["/likes/" + key] = null;
+      db.ref().update(updates);
+      cardElement.remove();
+    }
+
+    window.submitKomentarManual = function(key) {
+      const input = document.getElementById("input-" + key);
+      const teks = input.value.trim();
+      if (teks) {
+        const id = localStorage.getItem("ID") || "";
+        const nama = localStorage.getItem("Nama") || "Anonim";
+        db.ref("komentar/" + key).push({ID:id,Nama:nama,Teks:teks,Waktu:new Date().toLocaleString("id-ID")});
+        input.value = "";
+      }
+    }
+
+    function muatKomentar(key) {
+      db.ref("komentar/" + key).on("child_added", snap => {
+        const data = snap.val();
+        const list = document.getElementById("list-" + key);
+        if (list) {
+          const div = document.createElement("div");
+          div.innerHTML = `<b>${data.Nama || "?"}:</b> ${(data.Teks || "").replace(/\n/g, '<br>')}`;
+          list.appendChild(div);
+        }
+      });
+    }
+
+    window.toggleLike = function(postId) {
+      const userID = localStorage.getItem("ID") || "";
+      if (!userID) return;
+      const ref = db.ref("likes/" + postId + "/" + userID);
+      ref.once("value").then(snap => {
+        if (snap.exists()) {
+          ref.remove();
+        } else {
+          ref.set(true);
+        }
+      });
+    }
+
+    function updateLikeDisplay(postId, elemen) {
+      db.ref("likes/" + postId).on("value", snap => {
+        const likeCount = snap.numChildren();
+        elemen.innerText = `👍 ${likeCount}`;
+      });
+    }
+  </script>
+</body>
 </html>
