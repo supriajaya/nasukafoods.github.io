@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: snow;
+}
+
+.terutus {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 0;
+  background-color: white;
+  z-index: 1000;
+}
+
+.terbiwih {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; 
+  padding: 10px 0; 
+  z-index: 1000; 
+}
+
+.varis {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid red;
+  color: black;
+  padding: 5px 20px;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  text-align: center;
+  font-size: 5px; 
+}
