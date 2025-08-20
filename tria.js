@@ -1,0 +1,557 @@
+
+      const firebaseConfig = {
+    apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+    authDomain: "nasuka-fc780.firebaseapp.com",
+    databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasuka-fc780",
+    messagingSenderId: "860641747257",
+    appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const localUser = {
+    Username: localStorage.getItem("Username"),
+    Perak: parseInt(localStorage.getItem("Perak")) || 0,
+  };
+
+
+  if (!localUser.Username) {
+    console.log("Username tidak ditemukan di localStorage. Silakan login.");
+  }
+
+  const userRef = db.ref(`users/${localUser.Username}`);
+
+  userRef.on('value', (snapshot) => {
+      const userData = snapshot.val();
+      if (userData !== null) {
+          localUser.Perak = userData.Perak || 0;
+          
+          localStorage.setItem("Perak", localUser.Perak);
+          
+          updatePerakDisplay();
+          console.log("");
+      }
+  });
+  
+  const ROLL_PER_REEL = 10;
+  const REEL_RADIUS = 400;
+  const TIME_TOLERANCE = 5 * 60 * 1000;
+  const SPIN_DURATION = 5;
+  const MANUAL_SPIN_COOLDOWN = 4 * 400;
+
+  const WIN_MULTIPLIERS = {
+    'dua': 2,
+    'tiga': 3,
+    'empat': 4,
+    'lima': 5,
+    'jackpot': 10
+  };
+
+  const WIN_PROBABILITIES = {
+    'dua': 0.1,
+    'tiga': 0.03,
+    'empat': 0.02,
+    'lima': 0.0000000000000000000000000000000000000001,
+    'jackpot': 0.00000000000000000000000000000000000000000000000000001
+  };
+
+  let currentSeeds = [0, 0, 0, 0, 0];
+  let timeOffset = 0;
+  let timeValidated = false;
+  let isSpinning = false;
+  let lastManualSpinTime = 0;
+  let currentmain = 0;
+  let isAutomainEnabled = false;
+  let playerWinStreak = 0;
+  let playerLoseStreak = 0;
+  const HOUSE_EDGE = 0;
+  let totalPerakBurung = 0; // Variabel untuk Burung Game
+  function updatePerakDisplay() {
+    $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));
+  }
+
+  
+  function showErrorMessage(message) {
+    $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut();
+  }
+
+  function createROLL(ring) {
+    const rollAngle = 360 / ROLL_PER_REEL;
+    for (let i = 0; i < ROLL_PER_REEL; i++) {
+      const roll = document.createElement('div');
+      roll.className = 'roll backface-on';
+      roll.style.transform = `rotateX(${rollAngle * i}deg) translateZ(${REEL_RADIUS}px)`;
+      const p = document.createElement('p');
+      p.textContent = i;
+      roll.appendChild(p);
+      ring.append(roll);
+    }
+  }
+
+  function saveRollToDatabase(result, isManual = false) {
+    console.log("Logging roll data has been disabled.");
+  }
+  
+  function generateDua() {
+    const num = Math.floor(Math.random() * 10);
+    const result = [num, num];
+    while (result.length < 5) {
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
+    }
+    return shuffleArray(result);
+  }
+  
+  function generateTiga() {
+    const num = Math.floor(Math.random() * 10);
+    const result = [num, num, num];
+    while (result.length < 5) {
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
+    }
+    return shuffleArray(result);
+  }
+  
+  function generateEmpat() {
+    const num = Math.floor(Math.random() * 10);
+    const result = [num, num, num, num];
+    while (result.length < 5) {
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
+    }
+    return shuffleArray(result);
+  }
+  
+  function generateLima() {
+    const num = Math.floor(Math.random() * 10);
+    return [num, num, num, num, num];
+  }
+  
+  function generateJackpot() {
+    const result = [1, 2, 3, 4, 5];
+    return shuffleArray(result);
+  }
+
+  function generateRandomResult() {
+    const result = [];
+    while (result.length < 5) {
+      const num = Math.floor(Math.random() * 10);
+      if (!result.includes(num)) {
+        result.push(num);
+      }
+    }
+    return result;
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+  
+  function generateControlledResult() {
+    let currentProbabilities = WIN_PROBABILITIES;
+    
+    const rand = Math.random();
+    let cumulativeProb = 0;
+
+    for (const type in currentProbabilities) {
+        cumulativeProb += currentProbabilities[type];
+        if (rand < cumulativeProb) {
+            switch(type) {
+                case 'dua': return generateDua();
+                case 'tiga': return generateTiga();
+                case 'empat': return generateEmpat();
+                case 'lima': return generateLima();
+                case 'jackpot': return generateJackpot();
+            }
+        }
+    }
+    return generateRandomResult();
+  }
+
+  function adjustWinProbability(baseProbability) {
+    if (playerWinStreak > 0) {
+      return baseProbability * 0.00000001;
+    }
+    if (playerLoseStreak > 0) {
+      return Math.min(baseProbability * (1 + (playerLoseStreak * 0.0001)), 0.0001);
+    }
+    return baseProbability;
+  }
+  
+  function checkWin(result) {
+    const sortedResult = [...result].sort((a, b) => a - b).join('');
+    if (sortedResult === '12345') {
+      return 'jackpot';
+    }
+    
+    const frequency = {};
+    result.forEach(num => {
+      frequency[num] = (frequency[num] || 0) + 1;
+    });
+    
+    const counts = Object.values(frequency);
+    const hasLima = counts.some(count => count >= 5);
+    const hasEmpat = counts.some(count => count >= 4);
+    const hasTiga = counts.some(count => count >= 3);
+    const hasDua = counts.some(count => count >= 2);
+    
+    if (hasLima) {
+      return 'lima';
+    } else if (hasEmpat) {
+      return 'empat';
+    } else if (hasTiga) {
+      return 'tiga';
+    } else if (hasDua) {
+      return 'dua';
+    }
+    return null;
+  }
+
+  function selectmain(amount) {
+    if (amount > 0 && amount <= localUser.Perak) {
+      currentmain = amount;
+      $('#mainAmount').val(amount);
+      $('#automainButtons button').removeClass('active');
+      $(`#main${amount}`).addClass('active');
+      
+    } else if (amount === 0) {
+      currentmain = 0;
+      $('#mainAmount').val('');
+      $('#automainButtons button').removeClass('active');
+      
+    } else {
+      showErrorMessage('');
+    }
+  }
+
+  function startAutoSpin() {
+    if (currentmain <= 0) {
+      showErrorMessage('');
+      return;
+    }
+    isAutomainEnabled = true;
+    $('#startAutoSpinButton').hide();
+    $('#stopAutoSpinButton').show();
+    $('#spinButton').prop('disabled', true);
+    spin(false);
+  }
+
+  function stopAutoSpin() {
+    isAutomainEnabled = false;
+    $('#stopAutoSpinButton').hide();
+    $('#startAutoSpinButton').show();
+    $('#spinButton').prop('disabled', false);
+    
+  }
+
+  function spin(isManual) {
+    if (isSpinning) return;
+    
+    const slotAudio = document.getElementById('slotAudio');
+slotAudio.currentTime = 0;
+slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
+    
+    if (currentmain <= 0) {
+      showErrorMessage('');
+      return;
+    }
+    if (currentmain > localUser.Perak) {
+      showErrorMessage('');
+      return;
+    }
+    
+    localUser.Perak -= currentmain;
+    updatePerakDisplay(); 
+    userRef.child('Perak').set(localUser.Perak); 
+    const winAudio = document.getElementById('winAudio');
+    if (!winAudio.paused) {
+      winAudio.pause();
+      winAudio.currentTime = 0; 
+    }
+    
+    isSpinning = true;
+    
+    $('#mainResult').addClass('result-hidden');
+    
+    if (isManual) {
+      lastManualSpinTime = Date.now();
+      $('#spinButton').prop('disabled', true);
+      updateManualSpinButton();
+    }
+    
+    $('#stage .roll p').removeClass('bling-bling');
+      
+    for (let i = 1; i <= 5; i++) {
+      $(`#ring${i}`).css('animation', `back-spin 1s`);
+    }
+      
+    setTimeout(() => {
+      const result = generateControlledResult();
+      currentSeeds = result;
+      
+      for (let i = 1; i <= 5; i++) {
+        const seed = result[i-1];
+        $(`#ring${i}`)
+          .css('animation', `spin-${seed} ${SPIN_DURATION}s cubic-bezier(0.1, 0.7, 0.1, 1)`)
+          .attr('class', `ring spin-${seed}`);
+      }
+        
+      setTimeout(() => {
+        for (let i = 0; i < result.length; i++) {
+          const numberElement = $(`#ring${i+1} .roll`).eq(result[i]).find('p');
+          numberElement.addClass('bling-bling');
+        }
+        
+        saveRollToDatabase(result, isManual);
+        processmainResult(result, isManual);
+        
+        isSpinning = false;
+        
+        if (isAutomainEnabled) {
+          setTimeout(() => {
+            if (isAutomainEnabled) {
+              spin(false);
+            }
+          }, 3000);
+        }
+      }, SPIN_DURATION * 1000);
+    }, 1000);
+  }
+
+  function processmainResult(result, isManual) {
+    const winType = checkWin(result);
+    let message = "coba lagi";
+    let messageClass = "lose";
+    let winAmount = 0;
+
+    if (winType) {
+      playerWinStreak++;
+      playerLoseStreak = 0;
+      
+      const baseMultiplier = WIN_MULTIPLIERS[winType];
+      const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
+      winAmount = Math.round(currentmain * totalMultiplier);
+
+      message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
+      messageClass = "win";           
+      triggerConfetti(); 
+      document.getElementById('winAudio').play();
+      
+     
+    } else {
+      playerWinStreak = 0;
+      playerLoseStreak++;
+    }
+
+    localUser.Perak += winAmount;
+    
+    userRef.transaction((currentData) => {
+      if (currentData) {
+        let finalPerak = (currentData.Perak || 0) + winAmount;
+        
+        return {
+          ...currentData,
+          Perak: finalPerak,
+        };
+      } else {
+        return;
+      }
+    }).then(() => {
+      updatePerakDisplay();
+      
+      $('#mainResult')
+        .text(message)
+        .removeClass('result-hidden')
+        .addClass(messageClass);
+    }).catch(error => {
+      console.error("Transaksi gagal:", error);
+    });
+  }
+
+  
+  function updateManualSpinButton() {
+    const now = Date.now();
+    const timeSinceLastSpin = now - lastManualSpinTime;
+    const remainingCooldown = Math.max(0, MANUAL_SPIN_COOLDOWN - timeSinceLastSpin);
+    
+    if (remainingCooldown <= 0) {
+      $('#spinButton').prop('disabled', false).text('Putar');
+    } else {
+      const seconds = Math.ceil(remainingCooldown / 1000);
+      setTimeout(updateManualSpinButton, 1000);
+    }
+  }
+
+  function triggerConfetti() {
+    const defaults = {
+        spread: 360,
+        ticks: 200,
+        gravity: 0.4,
+        decay: 0.94,
+        startVelocity: 90,
+        colors: ['#FFC107', '#E91E63', '#4CAF50', '#2196F3']
+    };
+    function shoot() {
+        confetti({
+            ...defaults,
+            particleCount: 2000,
+            scalar: 1.2,
+            shapes: ['star']
+        });
+        confetti({
+            ...defaults,
+            particleCount: 300,
+            scalar: 0.8,
+            shapes: ['circle']
+        });
+    }
+    setTimeout(shoot, 0);
+    setTimeout(shoot, 150);
+    setTimeout(shoot, 300);
+  }
+
+  $(document).ready(function() {
+    for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));
+      
+    $('#rotate').addClass('tilted');
+    $('.roll').addClass('backface-on');
+    
+    setTimeout(() => {
+      $('#loading').fadeOut();
+    }, 2000);
+    
+    let winAudio = document.getElementById('winAudio');
+    let userInteracted = false;
+    
+    $('#spinButton').click(function() {
+      if (!userInteracted) {
+        winAudio.muted = true;
+        winAudio.play().then(() => {
+          winAudio.pause();
+          winAudio.currentTime = 0;
+          winAudio.muted = false;
+          userInteracted = true;
+        }).catch(error => {
+          console.error("Audio play blocked:", error);
+        });
+      }
+
+      if (!$(this).prop('disabled')) {
+        spin(true);
+      }
+    });
+
+    $('#startAutoSpinButton').click(startAutoSpin);
+    $('#stopAutoSpinButton').click(stopAutoSpin);
+  });
+  
+  
+  
+  function showCustomAlert(message, type = 'info') {
+    const alertDiv = document.getElementById('customAlert');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = document.getElementById('alertIcon');
+      
+    alertMessage.textContent = message;
+    switch(type) {
+        case 'success':
+            alertIcon.textContent = '';
+            alertDiv.style.border = '2px solid #4CAF50';
+            break;
+        case 'error':
+            alertIcon.textContent = '❌';
+            alertDiv.style.border = '2px solid #f44336';
+            break;
+        case 'warning':
+            alertIcon.textContent = '⚠️';
+            alertDiv.style.border = '2px solid #FFC107';
+            break;
+        default:
+            alertIcon.textContent = 'ℹ️';
+            alertDiv.style.border = '2px solid #2196F3';
+    }
+       
+    alertDiv.style.display = 'block';  
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.background = 'rgba(0,0,0,0.5)';
+    overlay.style.zIndex = '1000';
+    overlay.id = 'alertOverlay';
+    document.body.appendChild(overlay);
+    document.getElementById('alertOkBtn').onclick = function() {
+        alertDiv.style.display = 'none';
+        document.getElementById('alertOverlay').remove();
+    };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const limitReachedDiv = document.getElementById("limitReached");
+    const wrapper = document.querySelector('.wrapper');
+    const selesaiBtn = document.getElementById("selesaiBtn");
+    
+    const totalPerakSpan = document.getElementById("total-perak");
+    let totalPerak = 0;
+    
+    const inputs = document.querySelectorAll('.input-circle');
+    inputs.forEach(input => {
+        input.addEventListener('change', () => {
+            if (input.checked) {
+                totalPerak++;
+                totalPerakSpan.textContent = totalPerak;
+            }
+        });
+    });
+
+    selesaiBtn.addEventListener("click", () => {
+        if (localUser.Username && totalPerak > 0) {
+            const usersRef = db.ref('users');
+            usersRef.orderByChild('Username').equalTo(localUser.Username).once('value')
+            .then(snapshot => {
+                if (snapshot.exists()) {
+                    snapshot.forEach(childSnapshot => {
+                        const userId = childSnapshot.key;                      
+                        
+                        let currentPerak = childSnapshot.val().Perak ? parseInt(childSnapshot.val().Perak) : 0;
+                        let newPerak = currentPerak + totalPerak;
+                        
+                        return db.ref('users/' + userId).update({ Perak: newPerak })
+                        .then(() => {
+                            showCustomAlert(` ${totalPerak} Perak berhasil diklaim!`, "success");
+                            totalPerak = 0;
+                            totalPerakSpan.textContent = totalPerak;
+                            inputs.forEach(input => input.checked = false);
+                        });
+                    });
+                } else {
+                    showCustomAlert("Pengguna tidak ditemukan.", "error");
+                }
+            })
+            .catch(error => {
+                console.error("Gagal mengirim perak:", error);
+                showCustomAlert("Gagal mengirim perak. Silakan coba lagi.", "error");
+            });
+        } else {
+            showCustomAlert("Tidak ada perak yang di klaim", "info");
+        }
+    });
+});
+  
+  
+  
+  
