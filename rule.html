@@ -1,102 +1,205 @@
-<!DOCTYPE html><html lang="id">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=1024">
-
-              <title>Rule</title>
-      
-<head><style>
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.atasan {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: white; 
-  padding: 10px 0; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-  z-index: 1000;
-}
-
-
-.bawahan {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: white; 
-  padding: 10px 0; 
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1000; 
-}
-
-.variasi {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 2px solid red;
-      color: black;
-      padding: 10px 20px;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-      text-align: center;
-      font-size: 38px; 
-    }     
-    
-
-
-
-.judul-aturan {
-  font-size: 40px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.aturan {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 100px;
-  margin-bottom: 20px;
-}
-
-.aturan p {
-  margin-top: 10px;
-  font-size: 30px;
-  font-weight: bold;
-  text-align: left;
-  width: 95%;
-  box-sizing: border-box;
-  margin-bottom: 1px;
-}
-
-
-
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1024">
+  <title>Roll & Burung</title>
   
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+   <script src="https://nasukafoods.site/tria.js"></script>
+    <script src="https://nasukafoods.site/trihalaman.js"></script>  
+       <link rel="stylesheet" href="https://nasukafoods.site/rollburungrulle.css">
+   
+   
+ <style>
+     
+     
+     
+
+ 
+  
+ #roll-container {
+      display: none;
+    }   
+ #burung-container {
+      display: none;
+    }
+ 
+ 
+ 
+ 
+ 
+  .roll-bg {
+    background-color: #f0f0f0;
+    background-image: url('http://0.0.0.0:8080/langit.jpg');
+    background-size: cover;
+    background-position: center;
+ 
+  }
+
+  .burung-bg {
+    background-color: #e6e6fa;
+    background-image: url('http://0.0.0.0:8080/langitjingga.jpeg');
+    background-size: cover;
+    background-position: center;
+  
+  }
+  
+   .rulle-bg {
+    background-color: #e6e6fa;
+    background-image: url('http://0.0.0.0:8080/langit.jpg');
+    background-size: cover;
+    background-position: center;
+  
+  }
+  
+  
+  
+  
+  
+  
+</style>
+
+</head>
+<body>
     
-</style></head><body>
     
-<div class="atasan">
-<a href="rule.html" class="variasi">Rule</a>
+    
+    <body id="gameBody" class="roll-bg"> 
+
+
+
+
+  <div id="roll-container">      
+  <div class="link-container">
+        
+<a href="#" class="menu-link" onclick="showRulle()">Aturan Main</a>      
+      
+<a href="#" class="menu-link" onclick="showBurung()">game burung</a>
+    </div>
+
+
+
+
+
+
+
+    <div id="loading">Memuat Game...</div>
+    <div id="stage" class="perspective-on">
+      <div id="rotate" class="tilted">
+        <div id="ring1" class="ring"></div>
+        <div id="ring2" class="ring"></div>
+        <div id="ring3" class="ring"></div>
+        <div id="ring4" class="ring"></div>
+        <div id="ring5" class="ring"></div>
+      </div>
+
+      <audio id="winAudio" src="https://nasukafoods.site/slavafunk.mp3" preload="auto"></audio>
+      <audio id="slotAudio" src="https://nasukafoods.site/mesinslot.mp3" preload="auto"></audio>
+
+      <button id="spinButton">Putar</button>
+      <div class="mainting-panel">
+        <div>Perak Saya: <span id="perakBalance">0</span></div>
+        <div id="errorMessage" class="error-message"></div>
+        <div class="auto-main-options">
+          <div id="automainButtons">
+            <button onclick="selectmain(1)" id="main1">1</button>
+            <button onclick="selectmain(100)" id="main100">100</button>
+            <button onclick="selectmain(1000)" id="main1000">1.000</button>
+            <button onclick="selectmain(10000)" id="main10000">10.000</button>
+            <button onclick="selectmain(0)">off</button>
+          </div>
+        </div>
+        <div class="auto-spin-buttons">
+          <button id="startAutoSpinButton"> Otomatis</button>
+          <button id="stopAutoSpinButton">Hentikan</button>
+        </div>
+        <div id="mainResult" class="result-message result-hidden"></div>
+      </div>
+    </div>
+    
+    <div class="history-link-container">
+      <a href="index.html" class="menu-link">Beranda</a>
+    </div>
+  </div>
+  
+  
+  
+
+  <div id="burung-container">
+    <div class="wrapper">
+      <button id="selesaiBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 50px;">Klaim Perak</button>
+      
+      <button id="rollBtn" style="position: fixed; bottom: 10px; right: 10px; font-size: 50px;" onclick="showRoll()">Roll Game</button>
+
+      <div id="customAlert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 1001; text-align: center; max-width: 80%;">
+          <div id="alertIcon" style="font-size: 50px; margin-bottom: 15px;"></div>
+          <div id="alertMessage" style="font-size: 18px; margin-bottom: 20px;"></div>
+          <button id="alertOkBtn" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">OK</button>
+      </div>
+
+      <input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">
+      <input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">
+      <input class="input-circle input-circle3" type="radio" id="circle3" name="burung_group">
+      <input class="input-circle input-circle4" type="radio" id="circle4" name="burung_group">
+      <input class="input-circle input-circle5" type="radio" id="circle5" name="burung_group">
+      <input class="input-circle input-circle6" type="radio" id="circle6" name="burung_group">
+      <input class="input-circle input-circle7" type="radio" id="circle7" name="burung_group">
+      <input class="input-circle input-circle8" type="radio" id="circle8" name="burung_group">
+      <input class="input-circle input-circle9" type="radio" id="circle9" name="burung_group">
+      <input class="input-circle input-circle10" type="radio" id="circle10" name="burung_group">
+      <input class="input-circle input-circle11" type="radio" id="circle11" name="burung_group">
+      <input class="input-circle input-circle12" type="radio" id="circle12" name="burung_group">
+      <input class="input-circle input-circle13" type="radio" id="circle13" name="burung_group">
+      <input class="input-circle input-circle14" type="radio" id="circle14" name="burung_group">
+      <input class="input-circle input-circle15" type="radio" id="circle15" name="burung_group">
+      <input class="input-circle input-circle16" type="radio" id="circle16" name="burung_group">
+      <input class="input-circle input-circle17" type="radio" id="circle17" name="burung_group">
+      <input class="input-circle input-circle18" type="radio" id="circle18" name="burung_group">
+      <input class="input-circle input-circle19" type="radio" id="circle19" name="burung_group">
+      <input class="input-circle input-circle20" type="radio" id="circle20" name="burung_group">
+      <label for="circle1" class="pajaro pajaro1"><span></span></label>
+      <label for="circle2" class="pajaro pajaro2"><span></span></label>
+      <label for="circle3" class="pajaro pajaro3"><span></span></label>
+      <label for="circle4" class="pajaro pajaro4"><span></span></label>
+      <label for="circle5" class="pajaro pajaro5"><span></span></label>
+      <label for="circle6" class="pajaro pajaro6"><span></span></label>
+      <label for="circle7" class="pajaro pajaro7"><span></span></label>
+      <label for="circle8" class="pajaro pajaro8"><span></span></label>
+      <label for="circle9" class="pajaro pajaro9"><span></span></label>
+      <label for="circle10" class="pajaro pajaro10"><span></span></label>
+      <label for="circle11" class="pajaro pajaro11"><span></span></label>
+      <label for="circle12" class="pajaro pajaro12"><span></span></label>
+      <label for="circle13" class="pajaro pajaro13"><span></span></label>
+      <label for="circle14" class="pajaro pajaro14"><span></span></label>
+      <label for="circle15" class="pajaro pajaro15"><span></span></label>
+      <label for="circle16" class="pajaro pajaro16"><span></span></label>
+      <label for="circle17" class="pajaro pajaro17"><span></span></label>
+      <label for="circle18" class="pajaro pajaro18"><span></span></label>
+      <label for="circle19" class="pajaro pajaro19"><span></span></label>
+      <label for="circle20" class="pajaro pajaro20"><span></span></label>
+      <div class="sum">🎁<span id="total-perak">0</span> Perak Gratis</div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+<div id="rulle-container">    
+<div class="atasanaturan">
+<a class="variansiaturan">Rule</a>
 </div>
 
 
 <div class="aturan">     
       <h1 class="judul-aturan">Aturan Main</h1>
-    <p>Saat anda mendapatkan angka kembar, Anda mendapatkan PERAK kemenangan bervariasi, x2 x3 x4 x5 x50 ( Jackpot )</p>
+    <p>Saat anda mendapatkan angka kembar, Anda mendapatkan PERAK kemenangan bervariansiaturan, x2 x3 x4 x5 x50 ( Jackpot )</p>
     <p>Saat anda tidak mendapatkan angka kembar, Perak anda berkurang sebesar nominal yang anda pasang</p>
    
        <h1 class="judul-aturan">Permainan Adil</h1>
@@ -115,20 +218,14 @@ body {
    
     
      </div>
-
-
-
   
+<div class="bawahanaturan">
   
-  
-  
-  
-  
-  
-<div class="bawahan">
-<a href="index.html" class="variasi">Beranda</a>
-<a href="roll.html" class="variasi">Game Roll</a>
-<a href="burung.html" class="variasi">Game Burung</a>
-<a href="profil.html" class="variasi">Profil</a>
+ <a href="#" class="variansiaturan"
+ onclick="showBurung()">Main Burung</a>      
+ <a href="#" class="variansiaturan"
+ onclick="showRoll()">Main Roll</a> 
      </div>
-                 </body></html>
+       
+</body>
+</html>
