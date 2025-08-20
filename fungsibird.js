@@ -1,0 +1,101 @@
+function showCustomAlert(message, type = 'info') {
+    const alertDiv = document.getElementById('customAlert');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = document.getElementById('alertIcon');
+      
+    alertMessage.textContent = message;
+    switch(type) {
+        case 'success':
+            alertIcon.textContent = '';
+            alertDiv.style.border = '2px solid #4CAF50';
+            break;
+        case 'error':
+            alertIcon.textContent = '❌';
+            alertDiv.style.border = '2px solid #f44336';
+            break;
+        case 'warning':
+            alertIcon.textContent = '⚠️';
+            alertDiv.style.border = '2px solid #FFC107';
+            break;
+        default:
+            alertIcon.textContent = 'ℹ️';
+            alertDiv.style.border = '2px solid #2196F3';
+    }
+       
+    alertDiv.style.display = 'block';  
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.background = 'rgba(0,0,0,0.5)';
+    overlay.style.zIndex = '1000';
+    overlay.id = 'alertOverlay';
+    document.body.appendChild(overlay);
+    document.getElementById('alertOkBtn').onclick = function() {
+        alertDiv.style.display = 'none';
+        document.getElementById('alertOverlay').remove();
+    };
+}
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const limitReachedDiv = document.getElementById("limitReached");
+    const wrapper = document.querySelector('.wrapper');
+    const selesaiBtn = document.getElementById("selesaiBtn");
+    
+    const totalPerakSpan = document.getElementById("total-perak");
+    let totalPerak = 0;
+    
+    const inputs = document.querySelectorAll('.input-circle');
+    inputs.forEach(input => {
+        input.addEventListener('change', () => {
+            if (input.checked) {
+                totalPerak++;
+                totalPerakSpan.textContent = totalPerak;
+            }
+        });
+    });
+
+    selesaiBtn.addEventListener("click", () => {
+        if (localUser.Username && totalPerak > 0) {
+            const usersRef = db.ref('users');
+            usersRef.orderByChild('Username').equalTo(localUser.Username).once('value')
+            .then(snapshot => {
+                if (snapshot.exists()) {
+                    snapshot.forEach(childSnapshot => {
+                        const userId = childSnapshot.key;                      
+                        
+                        let currentPerak = childSnapshot.val().Perak ? parseInt(childSnapshot.val().Perak) : 0;
+                        let newPerak = currentPerak + totalPerak;
+                        
+                        return db.ref('users/' + userId).update({ Perak: newPerak })
+                        .then(() => {
+                            showCustomAlert(` ${totalPerak} Perak berhasil diklaim!`, "success");
+                            totalPerak = 0;
+                            totalPerakSpan.textContent = totalPerak;
+                            inputs.forEach(input => input.checked = false);
+                        });
+                    });
+                } else {
+                    showCustomAlert("Pengguna tidak ditemukan.", "error");
+                }
+            })
+            .catch(error => {
+                console.error("Gagal mengirim perak:", error);
+                showCustomAlert("Gagal mengirim perak. Silakan coba lagi.", "error");
+            });
+        } else {
+            showCustomAlert("Tidak ada perak yang di klaim", "info");
+        }
+    });
+});
+  
+  
