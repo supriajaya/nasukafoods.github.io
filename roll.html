@@ -3,1062 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1024">
-  <title>Roll Game</title>
+  <title>Roll & Burung</title>
   
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>   
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+   <script src="https://nasukafoods.site/tria.js"></script>
+    <script src="https://nasukafoods.site/trihalaman.js"></script>  
+       <link rel="stylesheet" href="https://nasukafoods.site/rollburungrulle.css">
+   
+   
+ <style>
+     
+     
+     
 
+ 
   
-  <style>
-      
-      .perspective-on { perspective: 1000px; }
-    .perspective-off { perspective: 0; }
-    
-    .tilted { transform: rotateY(45deg); }
-    .spin-0  { transform: rotateX(-3600deg); }
-    .spin-1  { transform: rotateX(-3636deg); }
-    .spin-2  { transform: rotateX(-3672deg); }
-    .spin-3  { transform: rotateX(-3708deg); }
-    .spin-4  { transform: rotateX(-3744deg); }
-    .spin-5  { transform: rotateX(-3780deg); }
-    .spin-6  { transform: rotateX(-3816deg); }
-    .spin-7  { transform: rotateX(-3852deg); }
-    .spin-8  { transform: rotateX(-3888deg); }
-    .spin-9  { transform: rotateX(-3924deg); }
-    
-    @keyframes back-spin { 100% { transform: rotateX(36deg); } }
-    @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} }
-    @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} }
-    @keyframes spin-0  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } }
-    @keyframes spin-1  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } }
-    @keyframes spin-2  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } }
-    @keyframes spin-3  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } }
-    @keyframes spin-4  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } }
-    @keyframes spin-5  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } }
-    @keyframes spin-6  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } }
-    @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }
-    @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }
-    @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }
-    
-    #resultDisplay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      z-index: 9999;
-      pointer-events: none;
-    }
-    
-    #numbersDisplay {
-      position: absolute;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 40px;
-      font-weight: bold;
-      color: #000;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px 20px;
-      border-radius: 10px;
-      z-index: 10000;
-      display: flex;
-      gap: 10px;
-    }
-    
-    #timeDisplay {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 18px;
-      color: #000;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px 20px;
-      border-radius: 10px;
-      z-index: 10000;
-      text-align: left;
-    }
-    
-    body {
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-      background-image: url('https://nasukafoods.site/gol.jpg'); 
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
-    
-    #rotate {
-      margin: 0 auto;
-      width: 700px;
-      height: 700px;
-      padding-top: 700px;
-      transform-style: preserve-3d;
-      transform: rotateY(45deg);
-    }
-    
-    .ring {
-      margin: 0 auto;
-      height: 115px;
-      width: 115px;
-      float: left;
-      transform-style: preserve-3d;
-    }
-    
-    .roll {
-      position: absolute;
-      width: 120px;
-      height: 120px;
-      box-sizing: border-box;
-      opacity: 0.9;
-      color: black;
-      background: white;
-      border: solid 5px #ccc;
-      backface-visibility: visible;
-    }
-    
-    .roll p {
-      font-size: 100px;
-      font-weight: bold;
-      line-height: 130px;
-      margin: 0;
-      text-align: center;
-    }
-    
-    .backface-on { backface-visibility: visible; }
-    
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 24px;
-      z-index: 100000;
-    }
-
-
-.bottom-links {
-      position: fixed;
-      bottom: 20px;
-      width: 100%;
-      display: flex;
-      justify-content: space-mainween;
-      padding: 0 20px;
-      box-sizing: border-box;
-    }
-  
-   #spinButton:disabled {
-      
-      ;
-    }
-  
-  
-    
-   #spinButton {
-      position: absolute;    
-      top: 1500px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 30px;
-      background-color: blue;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 30px;
-    width: 950px;
-      
-      
-    }
-  
-    
-    .mainting-panel {
-      position: absolute;
-      top: 1600px;
-      left: 20px;
-      background: rgba(0,0,0,0.7);
-      padding: 15px;
-      font-size: 30px;
-      border-radius: 10px;
-      color: white;
-      width: 950px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    
-    .main-input {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0;
-      border-radius: 5px;
-      border: none;
-      background-color: #333;
-      color: white;
-      font-size: 30px;
-    }
-    
-    .main-button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      font-size: 2px;
-      padding: 8px 15px;
-      margin: 5px 2px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .main-button:hover {
-      background-color: #45a049;
-    }
-    
-    .main-button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-    }
-    
-    .result-message {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 5px;
-      text-align: center;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    
-   #perakBalance {
-      font-weight: bold;
-      color: snow;
-    }
-    
-   .win {
-  background-color: rgba(255, 215, 0, 0.7) !important;
-  color: black !important;
-}
-
-.win-types {
-  margin-top: 15px;
-  font-size: 30px;
-  background-color: rgba(255, 215, 0, 0.7) !important;
-  color: black !important;
-}
-
-.win-type {
-  display: flex;
-  justify-content: space-mainween;
-  margin: 5px 0;
-  background-color: rgba(255, 215, 0, 0.7) !important;
-  color: black !important;
-}
-
-    #numbersDisplay {
-      position: absolute;
-      top: 20px;
-      left: 80%;
-      transform: translateX(-50%);
-      font-size: 50px;
-      font-weight: bold;
-      background: snow;
-      padding: 10px 20px;
-      border-radius: 5px;
-      display: flex;
-      gap: 10px;
-    }
-    
-    #numbersDisplay span {
-      display: inline-block;
-      width: 30px;
-      text-align: center;
-      font-size: 30px;
-          
-    }
-    
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #121212;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    
-    .auto-main-options {
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #444;
-      font-size: 30px;
-      
-    }
-    
-    .auto-main-options h4 {
-      margin-bottom: 10px;
-      font-size: 30px;
-    }
-    
-    #automainButtons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      font-size: 30px;
-      
-    }
-    
-    #automainButtons button {
-      flex: 1;
-      min-width: 50px;
-      padding: 5px;
-      background-color: #333;
-      border: none;
-      border-radius: 4px;
-      color: white;
-      cursor: pointer;
-      font-size: 30px;
-    }
-    
-    #automainButtons button.active {
-      background-color: #4CAF50;
-      font-weight: bold;
-      font-size: 30px;
-    }
-    
-    #automainButtons button:last-child {
-      background-color: #f44336;
-      font-size: 30px;
-      
-    }
-    
-    .result-hidden {
-      opacity: 0;
-      height: 0;
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-      transition: all 0.3s ease;
-    }
-    
-    .rolling-text {
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      color: black;
-      font-size: 30px;
-      opacity: 0.7;
-      z-index: 100;
-      font-size: 30px;
-    }
-
-    .link-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    
-    .menu-link {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 2px solid red;
-      color: black;
-      padding: 10px 20px;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-      text-align: center;
-      font-size: 28px; 
-    }
-      
-    .menu-link:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .history-link-container {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-    }
-      
-    
-    .error-message {
-      color: red;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 10px;
+ #burung-container {
+      display: none;
+    }   
+ #rulle-container {
       display: none;
     }
-    
-    .bling-bling {
-      animation: glowing 1.5s infinite alternate;
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
-    }
+ 
+ 
+ 
+ 
+ 
+  .roll-bg {
+    background-color: #f0f0f0;
+    background-image: url('http://0.0.0.0:8080/langit.jpg');
+    background-size: cover;
+    background-position: center;
+ 
+  }
 
-    @keyframes glowing {
-      from {
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
-      }
-      to {
-        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
-      }
-    }
-    
-   
-    
-    .link-container {
-  position: relative;
-  z-index: 200000;
-}
-    
-    
-    
-    
-    
-    
-    .menu-link {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 2px solid red;
-      color: snow;
-      padding: 10px 20px;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-      text-align: center;
-      font-size: 28px; 
-      background: rgba(0,0,0,0.7);
-    }
-      
-    .menu-link:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
+  .burung-bg {
+    background-color: #e6e6fa;
+    background-image: url('http://0.0.0.0:8080/langitjingga.jpeg');
+    background-size: cover;
+    background-position: center;
+  
+  }
+  
+   .rulle-bg {
+    background-color: #e6e6fa;
+    background-image: url('http://0.0.0.0:8080/langit.jpg');
+    background-size: cover;
+    background-position: center;
+  
+  }
+  
+  
+  
+  
+  
+  
+</style>
 
-    .history-link-container {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-    }
-  </style>
 </head>
 <body>
     
+    
+    
+    <body id="gameBody" class="roll-bg"> 
+
+
+
+
+  <div id="roll-container">      
   <div class="link-container">
-<a href="war.html" class="menu-link">war</a>
-<a href="rule.html" class="menu-link">Aturan</a>
-<a href="leaderboard.html" class="menu-link">Leaderboard</a>
-<a href="burung.html" class="menu-link">Perak Gratis</a>
-  </div>
-
-  <div id="loading">Memuat Game...</div>
-  <div id="stage" class="perspective-on">
-    <div id="rotate" class="tilted">
-      <div id="ring1" class="ring"></div>
-      <div id="ring2" class="ring"></div>
-      <div id="ring3" class="ring"></div>
-      <div id="ring4" class="ring"></div>
-      <div id="ring5" class="ring"></div>
-    </div>
-    
-    <audio id="winAudio" src="https://nasukafoods.site/slavafunk.mp3" preload="auto"></audio>
-    
-    <button id="spinButton">Putar</button>
-    
-    <div class="mainting-panel">
-      <div>Perak Saya: <span id="perakBalance">0</span></div>
-      <input type="number" id="mainAmount" class="main-input" placeholder="Mode Netral" min="1" readonly>
-      <div id="errorMessage" class="error-message"></div>
+        
+<a href="#" class="menu-link" onclick="showRulle()">Aturan Main</a>      
       
-      <div class="auto-main-options">
-        <div id="automainButtons">
-          <button onclick="toggleAutomain(1)" id="automain1">1</button>
-          <button onclick="toggleAutomain(10)" id="automain10">10</button>          
-          <button onclick="toggleAutomain(100)" id="automain100">100</button>
-          <button onclick="toggleAutomain(1000)" id="automain1000">1.000</button>
-          <button onclick="toggleAutomain(0)">Netral</button>
-        </div>
+<a href="#" class="menu-link" onclick="showBurung()">game burung</a>
+    </div>
+
+
+
+
+
+
+
+    <div id="loading">Memuat Game...</div>
+    <div id="stage" class="perspective-on">
+      <div id="rotate" class="tilted">
+        <div id="ring1" class="ring"></div>
+        <div id="ring2" class="ring"></div>
+        <div id="ring3" class="ring"></div>
+        <div id="ring4" class="ring"></div>
+        <div id="ring5" class="ring"></div>
       </div>
-      <div id="mainResult" class="result-message result-hidden"></div>
+
+      <audio id="winAudio" src="https://nasukafoods.site/slavafunk.mp3" preload="auto"></audio>
+      <audio id="slotAudio" src="https://nasukafoods.site/mesinslot.mp3" preload="auto"></audio>
+
+      <button id="spinButton">Putar</button>
+      <div class="mainting-panel">
+        <div>Perak Saya: <span id="perakBalance">0</span></div>
+        <div id="errorMessage" class="error-message"></div>
+        <div class="auto-main-options">
+          <div id="automainButtons">
+            <button onclick="selectmain(1)" id="main1">1</button>
+            <button onclick="selectmain(100)" id="main100">100</button>
+            <button onclick="selectmain(1000)" id="main1000">1.000</button>
+            <button onclick="selectmain(10000)" id="main10000">10.000</button>
+            <button onclick="selectmain(0)">off</button>
+          </div>
+        </div>
+        <div class="auto-spin-buttons">
+          <button id="startAutoSpinButton"> Otomatis</button>
+          <button id="stopAutoSpinButton">Hentikan</button>
+        </div>
+        <div id="mainResult" class="result-message result-hidden"></div>
+      </div>
+    </div>
+    
+    <div class="history-link-container">
+      <a href="index.html" class="menu-link">Beranda</a>
     </div>
   </div>
   
-  <div class="history-link-container">
-    <a href="index.html" class="menu-link">Beranda</a>
+  
+  
+
+  <div id="burung-container">
+    <div class="wrapper">
+      <button id="selesaiBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 50px;">Klaim Perak</button>
+      
+      <button id="rollBtn" style="position: fixed; bottom: 10px; right: 10px; font-size: 50px;" onclick="showRoll()">Roll Game</button>
+
+      <div id="customAlert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 1001; text-align: center; max-width: 80%;">
+          <div id="alertIcon" style="font-size: 50px; margin-bottom: 15px;"></div>
+          <div id="alertMessage" style="font-size: 18px; margin-bottom: 20px;"></div>
+          <button id="alertOkBtn" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">OK</button>
+      </div>
+
+      <input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">
+      <input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">
+      <input class="input-circle input-circle3" type="radio" id="circle3" name="burung_group">
+      <input class="input-circle input-circle4" type="radio" id="circle4" name="burung_group">
+      <input class="input-circle input-circle5" type="radio" id="circle5" name="burung_group">
+      <input class="input-circle input-circle6" type="radio" id="circle6" name="burung_group">
+      <input class="input-circle input-circle7" type="radio" id="circle7" name="burung_group">
+      <input class="input-circle input-circle8" type="radio" id="circle8" name="burung_group">
+      <input class="input-circle input-circle9" type="radio" id="circle9" name="burung_group">
+      <input class="input-circle input-circle10" type="radio" id="circle10" name="burung_group">
+      <input class="input-circle input-circle11" type="radio" id="circle11" name="burung_group">
+      <input class="input-circle input-circle12" type="radio" id="circle12" name="burung_group">
+      <input class="input-circle input-circle13" type="radio" id="circle13" name="burung_group">
+      <input class="input-circle input-circle14" type="radio" id="circle14" name="burung_group">
+      <input class="input-circle input-circle15" type="radio" id="circle15" name="burung_group">
+      <input class="input-circle input-circle16" type="radio" id="circle16" name="burung_group">
+      <input class="input-circle input-circle17" type="radio" id="circle17" name="burung_group">
+      <input class="input-circle input-circle18" type="radio" id="circle18" name="burung_group">
+      <input class="input-circle input-circle19" type="radio" id="circle19" name="burung_group">
+      <input class="input-circle input-circle20" type="radio" id="circle20" name="burung_group">
+      <label for="circle1" class="pajaro pajaro1"><span></span></label>
+      <label for="circle2" class="pajaro pajaro2"><span></span></label>
+      <label for="circle3" class="pajaro pajaro3"><span></span></label>
+      <label for="circle4" class="pajaro pajaro4"><span></span></label>
+      <label for="circle5" class="pajaro pajaro5"><span></span></label>
+      <label for="circle6" class="pajaro pajaro6"><span></span></label>
+      <label for="circle7" class="pajaro pajaro7"><span></span></label>
+      <label for="circle8" class="pajaro pajaro8"><span></span></label>
+      <label for="circle9" class="pajaro pajaro9"><span></span></label>
+      <label for="circle10" class="pajaro pajaro10"><span></span></label>
+      <label for="circle11" class="pajaro pajaro11"><span></span></label>
+      <label for="circle12" class="pajaro pajaro12"><span></span></label>
+      <label for="circle13" class="pajaro pajaro13"><span></span></label>
+      <label for="circle14" class="pajaro pajaro14"><span></span></label>
+      <label for="circle15" class="pajaro pajaro15"><span></span></label>
+      <label for="circle16" class="pajaro pajaro16"><span></span></label>
+      <label for="circle17" class="pajaro pajaro17"><span></span></label>
+      <label for="circle18" class="pajaro pajaro18"><span></span></label>
+      <label for="circle19" class="pajaro pajaro19"><span></span></label>
+      <label for="circle20" class="pajaro pajaro20"><span></span></label>
+      <div class="sum">🎁<span id="total-perak">0</span> Perak Gratis</div>
+    </div>
   </div>
 
-<script>
+
+
+
+
+
+
+<div id="rulle-container">    
+<div class="atasanaturan">
+<a class="variansiaturan">Rule</a>
+</div>
+
+
+<div class="aturan">     
+      <h1 class="judul-aturan">Aturan Main</h1>
+    <p>Saat anda mendapatkan angka kembar, Anda mendapatkan PERAK kemenangan bervariansiaturan, x2 x3 x4 x5 x50 ( Jackpot )</p>
+    <p>Saat anda tidak mendapatkan angka kembar, Perak anda berkurang sebesar nominal yang anda pasang</p>
+   
+       <h1 class="judul-aturan">Permainan Adil</h1>
+    <p>Mesin roll bekerja mandiri, jadi, Pemain dan kami dalam hal ini disebut "kita" sama sama tidak tau angka apa yang akan keluar</p>
+  
     
-  const firebaseConfig = {
-    apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
-    authDomain: "nasuka-fc780.firebaseapp.com",
-    databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasuka-fc780",
-    messagingSenderId: "860641747257",
-    appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-
-  const localUser = {
-    Username: localStorage.getItem("Username"),
-    Nama: localStorage.getItem("Nama"),
-    Perak: parseInt(localStorage.getItem("Perak")) || 0,
-    TotalLoss: parseInt(localStorage.getItem("TotalLoss")) || 0,
-    operatorCapital: 1000
-  };
-
-  if (!localUser.Username) {
-    console.log("Username tidak ditemukan di localStorage. Silakan login.");
-  }
-
-  const userRef = db.ref(`users/${localUser.Username}`);
-  const operatorCapitalRef = db.ref(`users/${localUser.Username}/operatorCapital`);
-
-  userRef.on('value', (snapshot) => {
-      const userData = snapshot.val();
-      if (userData !== null) {
-          localUser.Perak = userData.Perak || 0;
-          localUser.TotalLoss = userData.TotalLoss || 0;
-          
-          localStorage.setItem("Perak", localUser.Perak);
-          localStorage.setItem("TotalLoss", localUser.TotalLoss);
-          
-          updatePerakDisplay();
-          console.log("Saldo dan total kekalahan berhasil disinkronkan.");
-      }
-  });
-
-  operatorCapitalRef.on('value', (snapshot) => {
-    const capitalData = snapshot.val();
-    if (capitalData !== null) {
-      localUser.operatorCapital = capitalData;
-    } else {
-      localUser.operatorCapital = 1000;
-      operatorCapitalRef.set(1000); 
-      console.log("Modal operator baru diinisialisasi.");
-    }
-    updateOperatorCapitalDisplay();
-  });
-
-  const ROLL_PER_REEL = 10;
-  const REEL_RADIUS = 400;
-  const TIME_TOLERANCE = 5 * 60 * 1000;
-  const SPIN_DURATION = 5;
-  const MANUAL_SPIN_COOLDOWN = 4 * 400;
-  
-  const WIN_MULTIPLIERS = {
-    'dua': 2,
-    'tiga': 2.5,
-    'empat': 2.75,
-    'lima': 3,
-    'jackpot': 5
-  };
-  
-  const WIN_PROBABILITIES = {
-    'dua': 0.9,
-    'tiga': 0.7,
-    'empat': 0.5,
-    'lima': 0.000000000000000000000000000000001,
-    'jackpot': 0.0000000000000000000000000000000001
-  };
-  
-  const MIN_OPERATOR_CAPITAL = 100;
-  
-  let currentSeeds = [0, 0, 0, 0, 0];
-  let timeOffset = 0;
-  let timeValidated = false;
-  let isSpinning = false;
-  let lastManualSpinTime = 0;
-  let currentmain = 0;
-  let hasPlacedmain = false;
-  let automainAmount = 0;
-  let isAutomainEnabled = false;
-  let playerWinStreak = 0;
-  let playerLoseStreak = 0;
-  const HOUSE_EDGE = 0;
-
-  function updatePerakDisplay() {
-    $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));
-    $('#lossCounter').text(localUser.TotalLoss.toLocaleString('id-ID'));
-  }
-
-  function updateOperatorCapitalDisplay() {
-    $('#operatorCapitalDisplay').text(localUser.operatorCapital.toLocaleString('id-ID'));
-  }
-  
-  function showErrorMessage(message) {
-    $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut();
-  }
-
-  function createROLL(ring) {
-    const rollAngle = 360 / ROLL_PER_REEL;
-    for (let i = 0; i < ROLL_PER_REEL; i++) {
-      const roll = document.createElement('div');
-      roll.className = 'roll backface-on';
-      roll.style.transform = `rotateX(${rollAngle * i}deg) translateZ(${REEL_RADIUS}px)`;
-      const p = document.createElement('p');
-      p.textContent = i;
-      roll.appendChild(p);
-      ring.append(roll);
-    }
-  }
-
-  function saveRollToDatabase(result, isManual = false) {
-    const now = new Date();
-    const rollData = {
-      numbers: result.join(''),
-      timestamp: now.getTime(),
-      date: now.toISOString(),
-      username: localUser.Username || 'system',
-      type: isManual ? 'manual' : 'auto',
-      main: hasPlacedmain ? currentmain : 0
-    };
-    db.ref('rolls').push(rollData)
-      .then(() => console.log('Roll saved to database'))
-      .catch(error => console.error('Error saving roll:', error));
-  }
-  
-  function generateDua() {
-    const num = Math.floor(Math.random() * 10);
-    const result = [num, num];
-    while (result.length < 5) {
-      const uniqueNum = Math.floor(Math.random() * 10);
-      if (!result.includes(uniqueNum)) {
-        result.push(uniqueNum);
-      }
-    }
-    return shuffleArray(result);
-  }
-  
-  function generateTiga() {
-    const num = Math.floor(Math.random() * 10);
-    const result = [num, num, num];
-    while (result.length < 5) {
-      const uniqueNum = Math.floor(Math.random() * 10);
-      if (!result.includes(uniqueNum)) {
-        result.push(uniqueNum);
-      }
-    }
-    return shuffleArray(result);
-  }
-  
-  function generateEmpat() {
-    const num = Math.floor(Math.random() * 10);
-    const result = [num, num, num, num];
-    while (result.length < 5) {
-      const uniqueNum = Math.floor(Math.random() * 10);
-      if (!result.includes(uniqueNum)) {
-        result.push(uniqueNum);
-      }
-    }
-    return shuffleArray(result);
-  }
-  
-  function generateLima() {
-    const num = Math.floor(Math.random() * 10);
-    return [num, num, num, num, num];
-  }
-  
-  function generateJackpot() {
-    const result = [1, 2, 3, 4, 5];
-    return shuffleArray(result);
-  }
-
-  function generateRandomResult() {
-    const result = [];
-    while (result.length < 5) {
-      const num = Math.floor(Math.random() * 10);
-      if (!result.includes(num)) {
-        result.push(num);
-      }
-    }
-    return result;
-  }
-
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-  
-  function generateControlledResult() {
-    let currentProbabilities = WIN_PROBABILITIES;
-
-    if (localUser.operatorCapital < MIN_OPERATOR_CAPITAL) {
-        console.log("Modal operator di bawah ambang batas. Memaksa pemain kalah.");
-        return generateRandomResult();
-    }
+     <h1 class="judul-aturan">Hak & Konpensasi</h1>
+    <p>Anda berhak menukar perak dengan produk digital kami, berapapun kemenangan yang anda dapat </p>
+    <p>Kami menjamin konpensasi 100% apabila anda ingin berhenti bermain, berapa kekalahan anda berikan kami data nya, dan kami kembalikan sebesar nominal yang anda klaim</p>
     
-    const rand = Math.random();
-    let cumulativeProb = 0;
-
-    for (const type in currentProbabilities) {
-        cumulativeProb += currentProbabilities[type];
-        if (rand < cumulativeProb) {
-            switch(type) {
-                case 'dua': return generateDua();
-                case 'tiga': return generateTiga();
-                case 'empat': return generateEmpat();
-                case 'lima': return generateLima();
-                case 'jackpot': return generateJackpot();
-            }
-        }
-    }
-    return generateRandomResult();
-  }
-
-  function adjustWinProbability(baseProbability) {
-    if (playerWinStreak > 0) {
-      return baseProbability * 0.00000001;
-    }
-    if (playerLoseStreak > 0) {
-      return Math.min(baseProbability * (1 + (playerLoseStreak * 0.0001)), 0.0001);
-    }
-    return baseProbability;
-  }
+     <h1 class="judul-aturan">Penghargaan</h1>
+    <p>Kami menyediakan souvenir menarik untuk 30 pemain dengan jumlah perak terbanyak, </p>
+    
+     <h1 class="judul-aturan">Banned</h1>
+    <p>Kita semua tentu menginginkan permainan yang adil, segala bentuk kecurangan sebaiknya dihindari, </p>
+   
+    
+     </div>
   
-  function checkWin(result) {
-    if (!hasPlacedmain || currentmain <= 0) return null;
-    
-    const sortedResult = [...result].sort((a, b) => a - b).join('');
-    if (sortedResult === '12345') {
-      return 'jackpot';
-    }
-    
-    const frequency = {};
-    result.forEach(num => {
-      frequency[num] = (frequency[num] || 0) + 1;
-    });
-    
-    const counts = Object.values(frequency);
-    const hasLima = counts.some(count => count >= 5);
-    const hasEmpat = counts.some(count => count >= 4);
-    const hasTiga = counts.some(count => count >= 3);
-    const hasDua = counts.some(count => count >= 2);
-    
-    if (hasLima) {
-      return 'lima';
-    } else if (hasEmpat) {
-      return 'empat';
-    } else if (hasTiga) {
-      return 'tiga';
-    } else if (hasDua) {
-      return 'dua';
-    }
-    return null;
-  }
-
-  function toggleAutomain(amount) {
-    if (amount > 0 && !isAutomainEnabled && amount <= localUser.Perak) {
-    }
-    
-    automainAmount = amount;
-    isAutomainEnabled = amount > 0;
-    
-    if (isAutomainEnabled) {
-      $('#automainButtons button').removeClass('active');
-      $(`#automain${amount}`).addClass('active');
-      $('#mainAmount').val(amount);
-      placemain(amount);
-    } else {
-      $('#automainButtons button').removeClass('active');
-      cancelmain();
-    }
-  }
-
-  function placemain(amount) {
-    if (amount > localUser.Perak) {
-      showErrorMessage('Saldo Perak tidak mencukupi');
-      return false;
-    }
-    currentmain = amount;
-    hasPlacedmain = true;
-    $('#placemainButton').prop('disabled', true);
-    $('#cancelmainButton').prop('disabled', false);
-    return true;
-  }
-
-  function cancelmain() {
-    currentmain = 0;
-    hasPlacedmain = false;
-    $('#mainAmount').val('');
-    $('#placemainButton').prop('disabled', false);
-    $('#cancelmainButton').prop('disabled', true);
-    $('#mainResult').addClass('result-hidden').removeClass('win lose');
-  }
-
-  function processmainResult(result) {
-    if (!hasPlacedmain) {
-      if (isAutomainEnabled) {
-        placemain(automainAmount);
-      }
-      return;
-    }
-    
-    const winType = checkWin(result);
-    let message = "";
-    let messageClass = "";
-    let mainAmount = currentmain;
-
-    userRef.transaction((currentData) => {
-      if (currentData) {
-        let finalPerak = currentData.Perak || 0;
-        let finalLoss = currentData.TotalLoss || 0;
-        let finalOperatorCapital = currentData.operatorCapital || 1000;
-        
-        if (winType) {
-          playerWinStreak++;
-          playerLoseStreak = 0;
-          
-          const baseMultiplier = WIN_MULTIPLIERS[winType];
-          const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
-          const winAmount = Math.round(mainAmount * totalMultiplier);
-
-          finalPerak += winAmount;
-          finalLoss -= winAmount;
-          finalOperatorCapital -= winAmount;
-          
-          const winTypes = {
-            'dua': 'Dua Angka Sama',
-            'tiga': 'Tiga Angka Sama',
-            'empat': 'Empat Angka Sama',
-            'lima': 'Lima Angka Sama',
-            'jackpot': 'Jackpot 12345'
-          };
-          
-          message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
-          messageClass = "win";           
-          triggerConfetti(); 
-          document.getElementById('winAudio').play();
-          
-          saveWinToDatabase(winAmount, winType, result.join(''), mainAmount);
-        } else {
-          playerWinStreak = 0;
-          playerLoseStreak++;
-          finalPerak -= mainAmount;
-          finalLoss += mainAmount;
-          finalOperatorCapital += mainAmount;
-        }
-        
-        return {
-          ...currentData,
-          Perak: finalPerak,
-          TotalLoss: finalLoss,
-          operatorCapital: finalOperatorCapital
-        };
-      } else {
-        return;
-      }
-    }).then(() => {
-      $('#mainResult')
-        .text(message)
-        .removeClass('result-hidden')
-        .addClass(messageClass);
-        
-      if (isAutomainEnabled) {
-        setTimeout(() => {
-          placemain(automainAmount);
-        }, 3000);
-      } else {
-        currentmain = 0;
-        hasPlacedmain = false;
-        $('#placemainButton').prop('disabled', false);
-        $('#cancelmainButton').prop('disabled', true);
-      }
-    }).catch(error => {
-      console.error("Transaksi gagal:", error);
-    });
-  }
-
-  function saveWinToDatabase(amount, winType, numbers, mainAmount) {
-    const now = new Date();
-    const winData = {
-      username: localUser.Username,
-      amount: amount,
-      type: winType,
-      numbers: numbers,
-      timestamp: now.getTime(),
-      date: now.toISOString(),
-      main: mainAmount
-    };
-    
-    db.ref('wins').push(winData)
-      .then(() => console.log('Win saved to database'))
-      .catch(error => console.error('Error saving win:', error));
-  }
+<div class="bawahanaturan">
   
-  
-  
-  
-  
-  
-  
-  function spin(isManual = false) {
-    if (isSpinning) return;
-    
-    
-    const winAudio = document.getElementById('winAudio');
-    
-    
-    if (!winAudio.paused) {
-        winAudio.pause();
-        winAudio.currentTime = 0; 
-    }
-    
-    isSpinning = true;
-    
-    $('#mainResult').addClass('result-hidden');
-    
-    if (isManual) {
-      lastManualSpinTime = Date.now();
-      $('#spinButton').prop('disabled', true);
-      updateManualSpinButton();
-    }
-    
-    $('#stage .roll p').removeClass('bling-bling');
-      
-    for (let i = 1; i <= 5; i++) {
-      $(`#ring${i}`).css('animation', `back-spin 1s`);
-    }
-      
-    setTimeout(() => {
-      const result = generateControlledResult();
-      currentSeeds = result;
-      
-      for (let i = 1; i <= 5; i++) {
-        const seed = result[i-1];
-        $(`#ring${i}`)
-          .css('animation', `spin-${seed} ${SPIN_DURATION}s cubic-bezier(0.1, 0.7, 0.1, 1)`)
-          .attr('class', `ring spin-${seed}`);
-      }
-        
-      setTimeout(() => {
-        for (let i = 0; i < result.length; i++) {
-          const numberElement = $(`#ring${i+1} .roll`).eq(result[i]).find('p');
-          numberElement.addClass('bling-bling');
-        }
-        
-        saveRollToDatabase(result, isManual);
-        processmainResult(result);
-        
-        isSpinning = false;
-      }, SPIN_DURATION * 1000);
-    }, 1000);
-}
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  function updateManualSpinButton() {
-    const now = Date.now();
-    const timeSinceLastSpin = now - lastManualSpinTime;
-    const remainingCooldown = Math.max(0, MANUAL_SPIN_COOLDOWN - timeSinceLastSpin);
-    
-    if (remainingCooldown <= 0) {
-      $('#spinButton').prop('disabled', false).text('Putar');
-    } else {
-      const seconds = Math.ceil(remainingCooldown / 1000);
-      setTimeout(updateManualSpinButton, 1000);
-    }
-  }
-
-  function triggerConfetti() {
-    const defaults = {
-        spread: 360,
-        ticks: 400,
-        gravity: 0.5,
-        decay: 0.94,
-        startVelocity: 30,
-        colors: ['#FFC107', '#E91E63', '#4CAF50', '#2196F3']
-    };
-    function shoot() {
-        confetti({
-            ...defaults,
-            particleCount: 400,
-            scalar: 1.2,
-            shapes: ['star']
-        });
-        confetti({
-            ...defaults,
-            particleCount: 50,
-            scalar: 0.8,
-            shapes: ['circle']
-        });
-    }
-    setTimeout(shoot, 0);
-    setTimeout(shoot, 150);
-    setTimeout(shoot, 300);
-  }
-
-  $(document).ready(function() {
-    for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));
-      
-    $('#rotate').addClass('tilted');
-    $('.roll').addClass('backface-on');
-    
-    setTimeout(() => {
-      $('#loading').fadeOut();
-    }, 2000);
-    
-  
-    let winAudio = document.getElementById('winAudio');
-    
-  
-    let userInteracted = false;
-    
-    $('#spinButton').click(function() {
-    
-      if (!userInteracted) {
-        winAudio.muted = true;
-        winAudio.play().then(() => {
-          winAudio.pause();
-          winAudio.currentTime = 0;
-          winAudio.muted = false;
-          userInteracted = true;
-        }).catch(error => {
-          console.error("Audio play blocked:", error);
-        });
-      }
-
-      if (!$(this).prop('disabled')) {
-        spin(true);
-      }
-    });
-    
-    $('#placemainButton').click(function() {
-      const mainAmount = parseInt($('#mainAmount').val());
-      
-      if (isNaN(mainAmount) || mainAmount <= 0) {
-        showErrorMessage('Masukkan jumlah pasangan yang valid');
-        return;
-      }
-      
-      placemain(mainAmount);
-    });
-    
-    $('#cancelmainButton').click(function() {
-      cancelmain();
-    });
-  });
-</script>
-
+ <a href="#" class="variansiaturan"
+ onclick="showBurung()">Main Burung</a>      
+ <a href="#" class="variansiaturan"
+ onclick="showRoll()">Main Roll</a> 
+     </div>
+       
 </body>
 </html>
