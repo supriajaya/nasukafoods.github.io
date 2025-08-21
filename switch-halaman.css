@@ -1,3 +1,6 @@
+ #home-container {
+    display: none;
+}   
 #saya-container {
     display: none;
 }
@@ -7,9 +10,7 @@
 #burung-container {
     display: none;
 }
-#roll-container {
-    display: none;
-}
+
 #payment-container {
     display: none;
 }
@@ -63,97 +64,97 @@
 }
   
 .profil-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .burung-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .roll-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .payment-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .belanja-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .editprofil-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .investor-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .inbox-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .leaderboard-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .faq-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .term-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .return-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .privacy-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .rulle-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .disclaimer-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
 
 .bos-bg {    
-    background-image: url('https://nasukafoods.site/paketcilok.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
