@@ -598,7 +598,7 @@ padding: 2px;
     
 <div class="terutus">
   <a href="leaderboard.html" class="varis">Leaderboard</a>   
-  <a href="topup.html" class="varis">Topup</a>   
+  <a  class="varis">Topup</a>   
   <a  class="varis">Fitur Mendatang</a>   
   <a  class="varis">Event</a>   
   
@@ -974,10 +974,12 @@ function createPostHTML(namaPemilik, post, postId) {
   `;
 }
 
+
+
 function setupPostInteractions(postId) {
   const userID = localStorage.getItem("ID") || "";
   
-  db.ref("likes/" + postId).on("value", snap => {
+  db.ref("posts/" + postId + "/likes").on("value", snap => { // ⬅️ Referensi baru
     const likeCountEl = document.getElementById("likeCount-" + postId);
     if(likeCountEl) likeCountEl.textContent = `${snap.numChildren()} suka`;
     const likeBtn = document.getElementById("likeBtn-" + postId);
@@ -992,6 +994,14 @@ function setupPostInteractions(postId) {
       }
     }
   });
+  
+
+
+
+
+
+
+
 
   let komentarLoaded = false;
   const btnLihat = document.getElementById(`lihatKomentarBtn-${postId}`);
@@ -1044,11 +1054,13 @@ window.kirimKomentar = function(postId) {
   if (input) input.value = "";
 };
 
+
+
 window.toggleLike = function(postId) {
   const userID = localStorage.getItem("ID") || "";
   if (!userID) return alert("Silakan login dulu untuk like");
   
-  const refLike = db.ref("likes/" + postId + "/" + userID);
+  const refLike = db.ref("posts/" + postId + "/likes/" + userID); // ⬅️ Referensi baru
   refLike.once("value").then(snap => {
     if (snap.exists()) {
       refLike.remove();
@@ -1057,6 +1069,11 @@ window.toggleLike = function(postId) {
     }
   });
 };
+
+
+
+
+
 
 window.tampilkanGambarPenuh = function(src) {
   if (!src) return;  
