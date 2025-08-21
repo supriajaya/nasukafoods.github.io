@@ -4,88 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1024">
   <title>Roll & Burung</title>
-  
+    
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
    <script src="https://nasukafoods.site/tria.js"></script>
-    <script src="https://nasukafoods.site/trihalaman.js"></script>  
+    <script src="https://nasukafoods.site/fungsi-switch-halaman.js"></script>
+    
+
        <link rel="stylesheet" href="https://nasukafoods.site/rollburungrulle.css">
-   
-   
- <style>
+     <link rel="stylesheet" href="https://nasukafoods.site/switch-halaman.css">   
+<link rel="stylesheet" href="https://nasukafoods.site/perak.css">          
+     <link rel="stylesheet" href="https://nasukafoods.site/global.css">          
      
-     
-     
-
- 
-  
- #roll-container {
-      display: none;
-    }   
- #rulle-container {
-      display: none;
-    }
- 
- 
- 
- 
- 
-  .roll-bg {
-    background-color: #f0f0f0;
-    background-image: url('http://0.0.0.0:8080/langit.jpg');
-    background-size: cover;
-    background-position: center;
- 
-  }
-
-  .burung-bg {
-    background-color: #e6e6fa;
-    background-image: url('http://0.0.0.0:8080/langitjingga.jpeg');
-    background-size: cover;
-    background-position: center;
-  
-  }
-  
-   .rulle-bg {
-    background-color: #e6e6fa;
-    background-image: url('http://0.0.0.0:8080/langit.jpg');
-    background-size: cover;
-    background-position: center;
-  
-  }
-  
-  
-  
-  
-  
-  
-</style>
-
-</head>
-<body>
-    
-    
-    
-    <body id="gameBody" class="roll-bg"> 
-
-
-
-
-  <div id="roll-container">      
-  <div class="link-container">
+</head><body id="gameBody" class="roll-bg"> 
+  <div id="burung-container">      
+    <div class="link-container">
         
-<a href="#" class="menu-link" onclick="showRulle()">Aturan Main</a>      
+      <a href="#" class="menu-link" onclick="showContainer('rulle')">Rulle</a>   
+       <a href="#" class="menu-link" onclick="showContainer('investor')">Beli Perak</a>   
       
-<a href="#" class="menu-link" onclick="showBurung()">game burung</a>
+      <a href="#" class="menu-link" onclick="showContainer('burung')">game burung</a>
     </div>
-
-
-
-
-
-
 
     <div id="loading">Memuat Game...</div>
     <div id="stage" class="perspective-on">
@@ -128,19 +69,18 @@
   
   
   
-
-  <div id="burung-container">
+  
+  <div id="roll-container">
     <div class="wrapper">
       <button id="selesaiBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 50px;">Klaim Perak</button>
       
-      <button id="rollBtn" style="position: fixed; bottom: 10px; right: 10px; font-size: 50px;" onclick="showRoll()">Roll Game</button>
+      <button id="rollBtn" style="position: fixed; bottom: 10px; right: 10px; font-size: 50px;" onclick="showContainer('roll')">Roll Game</button>
 
       <div id="customAlert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 1001; text-align: center; max-width: 80%;">
           <div id="alertIcon" style="font-size: 50px; margin-bottom: 15px;"></div>
           <div id="alertMessage" style="font-size: 18px; margin-bottom: 20px;"></div>
           <button id="alertOkBtn" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">OK</button>
       </div>
-
       <input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">
       <input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">
       <input class="input-circle input-circle3" type="radio" id="circle3" name="burung_group">
@@ -185,47 +125,202 @@
     </div>
   </div>
 
+  <div id="rulle-container">    
+    <div class="atasanaturan">
+      <a class="variansiaturan">Rule</a>
+    </div>
+    <div class="aturan">     
+      <h1 class="judul-aturan">Aturan Main</h1>
+      <p>Saat anda mendapatkan angka kembar, Anda mendapatkan PERAK kemenangan bervariansiaturan, x2 x3 x4 x5 x50 ( Jackpot )</p>
+    </div>
+    <div class="bawahanaturan">
+      <a href="#" class="variansiaturan" onclick="showContainer('burung')">Main Burung</a>      
+      <a href="#" class="variansiaturan" onclick="showContainer('roll')">Main Roll</a> 
+    </div>
+  </div> 
+  
 
 
+  
+  
+     <div id="investor-container">    
+  <div class="container">
+  <div class="header-receipt">
+    <h2>NASUKA WIRELESS</h2>
+    <p>Jl. Eretan Wetan — Kandanghaur</p>
+    <p>Indramayu - Jawabarat</p>
+  </div>
+  
+  <div class="receipt-line"></div>
+  
+  <form id="topupForm">
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" required>
 
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" name="nama" required>
 
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
 
+    <label for="deposit">Jumlah:</label>
+    <input type="number" id="deposit" name="deposit" required>
 
-<div id="rulle-container">    
-<div class="atasanaturan">
-<a class="variansiaturan">Rule</a>
+    <label for="bukti">Bukti Tf:</label>
+    <div class="file-upload-wrapper">
+      <label class="custom-file-upload" for="bukti">PILIH FOTO</label>
+      <span class="file-name" id="file-name"></span>
+      <input type="file" id="bukti" name="bukti" accept="image/jpeg,image/png" required>
+    </div>
+    
+    <button type="submit">BELI PERAK</button>
+  </form>
+
+  <div id="statusMessage"></div>
+
+  <div id="transactionReceipt">
+    <div class="header-receipt">
+      <h2>STRUK TRANSAKSI</h2>
+    </div>
+    <div class="receipt-line"></div>
+    <div class="receipt-details" id="receiptDetails">
+    </div>
+    <div class="receipt-line"></div>
+    <div class="header-receipt">
+      <p>Terima kasih atas kepercayaan Anda.</p>
+      <p>NASUKA WIRELESS</p>
+    </div>
+  </div>
+  
+   <div class="bawahanaturan">    
+      <a href="#" class="variansiaturan" onclick="showContainer('roll')">Ke Roll</a> 
+    </div>
+  </div> 
+  
 </div>
 
+<script>
+  const form = document.getElementById('topupForm');
+  const statusMessage = document.getElementById('statusMessage');
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpOktAYKx2f4hOLaTcwynZO8EghJYKpwGgMO39dr10tYZzgoUsdaLsWbjyi6AvOYiR_A/exec';
 
-<div class="aturan">     
-      <h1 class="judul-aturan">Aturan Main</h1>
-    <p>Saat anda mendapatkan angka kembar, Anda mendapatkan PERAK kemenangan bervariansiaturan, x2 x3 x4 x5 x50 ( Jackpot )</p>
-    <p>Saat anda tidak mendapatkan angka kembar, Perak anda berkurang sebesar nominal yang anda pasang</p>
+  const fileInput = document.getElementById('bukti');
+  const fileNameSpan = document.getElementById('file-name');
+  const transactionReceipt = document.getElementById('transactionReceipt');
+  const receiptDetails = document.getElementById('receiptDetails');
+  const backButton = document.getElementById('backButton');
+  const printButton = document.getElementById('printButton');
+
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      fileNameSpan.textContent = fileInput.files[0].name;
+      fileNameSpan.style.display = 'inline';
+    } else {
+      fileNameSpan.textContent = '';
+      fileNameSpan.style.display = 'none';
+    }
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    statusMessage.textContent = 'Loading...';
+    statusMessage.className = '';
+
+    const formData = new FormData(form);
+    const buktiFile = formData.get('bukti');
+
+    if (!buktiFile || buktiFile.size === 0) {
+      statusMessage.textContent = 'Harap lampirkan bukti foto.';
+      statusMessage.className = 'error';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(buktiFile);
+    
+    reader.onload = async () => {
+      const base64Image = reader.result.split(',')[1];
+      
+      const payload = {
+        action: 'handleTopup',
+        id: formData.get('id'),
+        nama: formData.get('nama'),
+        username: formData.get('username'),
+        deposit: formData.get('deposit'),
+        bukti: base64Image
+      };
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload) 
+        });
+
+        const result = await response.json();
+        statusMessage.textContent = result.message;
+        statusMessage.className = result.status === 'success' ? 'success' : 'error';
+        
+        if (result.status === 'success') {
    
-       <h1 class="judul-aturan">Permainan Adil</h1>
-    <p>Mesin roll bekerja mandiri, jadi, Pemain dan kami dalam hal ini disebut "kita" sama sama tidak tau angka apa yang akan keluar</p>
-  
+          const id = formData.get('id');
+          const nama = formData.get('nama');
+          const username = formData.get('username');
+          const deposit = formData.get('deposit');
+
+      
+          const now = new Date();
+          const formattedDate = now.toLocaleDateString('id-ID', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+
     
-     <h1 class="judul-aturan">Hak & Konpensasi</h1>
-    <p>Anda berhak menukar perak dengan produk digital kami, berapapun kemenangan yang anda dapat </p>
-    <p>Kami menjamin konpensasi 100% apabila anda ingin berhenti bermain, berapa kekalahan anda berikan kami data nya, dan kami kembalikan sebesar nominal yang anda klaim</p>
-    
-     <h1 class="judul-aturan">Penghargaan</h1>
-    <p>Kami menyediakan souvenir menarik untuk 30 pemain dengan jumlah perak terbanyak, </p>
-    
-     <h1 class="judul-aturan">Banned</h1>
-    <p>Kita semua tentu menginginkan permainan yang adil, segala bentuk kecurangan sebaiknya dihindari, </p>
-   
-    
-     </div>
-  
-<div class="bawahanaturan">
-  
- <a href="#" class="variansiaturan"
- onclick="showBurung()">Main Burung</a>      
- <a href="#" class="variansiaturan"
- onclick="showRoll()">Main Roll</a> 
-     </div>
+          receiptDetails.innerHTML = `
+            <p><strong>ID:</strong> ${id}</p>
+            <p><strong>Nama:</strong> ${nama}</p>
+            <p><strong>Username:</strong> ${username}</p>
+            <p><strong>Jumlah:</strong> Rp. ${Number(deposit).toLocaleString('id-ID')}</p>
+            <p><strong>Tanggal:</strong> ${formattedDate}</p>
+          `;
+          
        
+          form.style.display = 'none';
+          transactionReceipt.style.display = 'block';
+        }
+      } catch (error) {
+        statusMessage.textContent = 'Terjadi kesalahan saat mengirim permintaan.';
+        statusMessage.className = 'error';
+        console.error('Error:', error);
+      }
+    };
+    reader.onerror = () => {
+      statusMessage.textContent = 'Gagal membaca file bukti transfer.';
+      statusMessage.className = 'error';
+    };
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const userId = localStorage.getItem('ID');
+    const userName = localStorage.getItem('Nama');
+    const userUsername = localStorage.getItem('Username');
+    
+    if (userId) {
+      document.getElementById('id').value = userId;
+    }
+    if (userName) {
+      document.getElementById('nama').value = userName;
+    }
+    if (userUsername) {
+      document.getElementById('username').value = userUsername;
+    }
+  
+  });
+</script>
+
+
 </body>
 </html>
