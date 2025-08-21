@@ -281,11 +281,6 @@
       });
     }
 
-
-
-
-
-
     window.kirimPostingan = function() {
       if (isPosting) return;
       isPosting = true;
@@ -304,7 +299,6 @@
         return;
       }
       
-      // Langkah 1: Buat objek postData dasar tanpa properti Foto
       const postData = { ID, Nama, Judul: judul, Status: status, Waktu: Date.now() };
 
       function resetForm() {
@@ -314,32 +308,23 @@
         isPosting = false;
       }
       
-      // Langkah 2: Tambahkan properti Foto HANYA jika file diunggah
       if (file) {
         const reader = new FileReader();
         reader.onload = e => {
-          postData.Foto = e.target.result; // Tambahkan properti Foto di sini
+          postData.Foto = e.target.result;
           db.ref("posts").push(postData).then(resetForm).catch(() => { isPosting = false; });
         };
         reader.readAsDataURL(file);
       } else {
-        // Jika tidak ada file, properti Foto tidak akan ada
         db.ref("posts").push(postData).then(resetForm).catch(() => { isPosting = false; });
       }
     }
-
-    
-
-
-
-
-
 
     window.hapusPostingan = function(key, cardElement) {
       const updates = {};
       updates["/posts/" + key] = null;
       updates["/komentar/" + key] = null;
-      updates["/likes/" + key] = null;
+      // updates["/likes/" + key] = null; Hapus baris ini karena likes sudah di dalam node posts
       db.ref().update(updates);
       cardElement.remove();
     }
@@ -369,19 +354,20 @@
 
     window.toggleLike = function(postId) {
       const userID = localStorage.getItem("ID") || "";
-      if (!userID) return;
-      const ref = db.ref("likes/" + postId + "/" + userID);
-      ref.once("value").then(snap => {
+      if (!userID) return alert("Silakan login dulu untuk like");
+      
+      const refLike = db.ref("posts/" + postId + "/likes/" + userID);
+      refLike.once("value").then(snap => {
         if (snap.exists()) {
-          ref.remove();
+          refLike.remove();
         } else {
-          ref.set(true);
+          refLike.set(true);
         }
       });
     }
 
     function updateLikeDisplay(postId, elemen) {
-      db.ref("likes/" + postId).on("value", snap => {
+      db.ref("posts/" + postId + "/likes").on("value", snap => {
         const likeCount = snap.numChildren();
         elemen.innerText = `👍 ${likeCount}`;
       });
