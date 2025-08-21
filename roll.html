@@ -9,22 +9,720 @@
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
-   <script src="https://nasukafoods.site/tria.js"></script>
+   
     <script src="https://nasukafoods.site/fungsi-switch-halaman.js"></script>
+       <style>
+           
+                    
+  
+ 
+.atasanaturan {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; 
+  padding: 10px 0; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+  z-index: 1000;
+}
+
+
+.bawahanaturan {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; 
+  padding: 10px 0; 
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000; 
+}
+
+.variansiaturan {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: black;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 38px; 
+    }     
     
 
-       <link rel="stylesheet" href="https://nasukafoods.site/rollburungrulle.css">
+
+
+.judul-aturan {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.aturan {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+
+.aturan p {
+  margin-top: 10px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: left;
+  width: 95%;
+  box-sizing: border-box;
+  margin-bottom: 1px;
+}
+
+
+
+ 
+ 
+
+ 
+ 
+ 
+ 
+      
+      .perspective-on { perspective: 1000px; }
+    .perspective-off { perspective: 0; }
+    
+    .tilted { transform: rotateY(45deg); }
+    .spin-0  { transform: rotateX(-3600deg); }
+    .spin-1  { transform: rotateX(-3636deg); }
+    .spin-2  { transform: rotateX(-3672deg); }
+    .spin-3  { transform: rotateX(-3708deg); }
+    .spin-4  { transform: rotateX(-3744deg); }
+    .spin-5  { transform: rotateX(-3780deg); }
+    .spin-6  { transform: rotateX(-3816deg); }
+    .spin-7  { transform: rotateX(-3852deg); }
+    .spin-8  { transform: rotateX(-3888deg); }
+    .spin-9  { transform: rotateX(-3924deg); }
+    
+    @keyframes back-spin { 100% { transform: rotateX(36deg); } }
+    @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} }
+    @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} }
+    @keyframes spin-0  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } }
+    @keyframes spin-1  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } }
+    @keyframes spin-2  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } }
+    @keyframes spin-3  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } }
+    @keyframes spin-4  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } }
+    @keyframes spin-5  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } }
+    @keyframes spin-6  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } }
+    @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }
+    @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }
+    @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }
+    
+    #resultDisplay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    
+    #numbersDisplay {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 40px;
+      font-weight: bold;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 10000;
+      display: flex;
+      gap: 10px;
+    }
+    
+    #timeDisplay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 18px;
+      color: #000;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 10000;
+      text-align: left;
+    }
+    
+        
+    
+  
+    #rotate {
+      margin: 0 auto;
+      width: 700px;
+      height: 700px;
+      padding-top: 700px;
+      transform-style: preserve-3d;
+      transform: rotateY(45deg);
+    }
+    
+    .ring {
+      margin: 0 auto;
+      height: 115px;
+      width: 115px;
+      float: left;
+      transform-style: preserve-3d;
+    }
+    
+    .roll {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      box-sizing: border-box;
+      opacity: 0.9;
+      color: black;
+      background: white;
+      border: solid 5px #ccc;
+      backface-visibility: visible;
+    }
+    
+    .roll p {
+      font-size: 100px;
+      font-weight: bold;
+      line-height: 130px;
+      margin: 0;
+      text-align: center;
+    }
+    
+    .backface-on { backface-visibility: visible; }
+    
+  
+
+    .bottom-links {
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+  
+    #spinButton:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  
+    #spinButton {
+      position: absolute;    
+      top: 1500px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 30px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 30px;
+      width: 950px;
+    }
+    
+    .mainting-panel {
+      position: absolute;
+      top: 1600px;
+      left: 20px;
+      background: rgba(0,0,0,0.7);
+      padding: 15px;
+      font-size: 30px;
+      border-radius: 10px;
+      color: white;
+      width: 950px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    
+    .main-input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+      background-color: #333;
+      color: white;
+      font-size: 30px;
+    }
+    
+    .main-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 2px;
+      padding: 8px 15px;
+      margin: 5px 2px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .main-button:hover {
+      background-color: #45a049;
+    }
+    
+    .main-button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .result-message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+   #perakBalance {
+      font-weight: bold;
+      color: snow;
+    }
+    
+   .win {
+      background-color: rgba(255, 215, 0, 0.7) !important;
+      color: black !important;
+    }
+
+    .win-types {
+      margin-top: 15px;
+      font-size: 30px;
+      background-color: rgba(255, 215, 0, 0.7) !important;
+      color: black !important;
+    }
+
+    .win-type {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      background-color: rgba(255, 215, 0, 0.7) !important;
+      color: black !important;
+    }
+
+    #numbersDisplay {
+      position: absolute;
+      top: 20px;
+      left: 80%;
+      transform: translateX(-50%);
+      font-size: 50px;
+      font-weight: bold;
+      background: snow;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    #numbersDisplay span {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+      font-size: 30px;
+    }
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: grey;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .auto-main-options {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #444;
+      font-size: 30px;
+    }
+    
+    .auto-main-options h4 {
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+    
+    #automainButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      font-size: 30px;
+    }
+    
+    #automainButtons button {
+      flex: 1;
+      min-width: 50px;
+      padding: 5px;
+      background-color: #333;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-size: 30px;
+    }
+    
+    #automainButtons button.active {
+      background-color: #4CAF50;
+      font-weight: bold;
+      font-size: 30px;
+    }
+    
+    #automainButtons button:last-child {
+      background-color: #f44336;
+      font-size: 30px;
+    }
+    
+    .result-hidden {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .rolling-text {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: black;
+      font-size: 30px;
+      opacity: 0.7;
+      z-index: 100;
+      font-size: 30px;
+    }
+
+    .link-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .menu-link {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: black;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 28px; 
+    }
+    
+    
+     
+    
+    
+      
+    .menu-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .history-link-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }     
+    
+    .error-message {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .bling-bling {
+      animation: glowing 1.5s infinite alternate;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+    }
+
+    @keyframes glowing {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+      }
+      to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
+      }
+    }
+    
+    .link-container {
+      position: relative;
+      z-index: 200000;
+    }
+    
+    .menu-link {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: snow;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 28px; 
+      background: rgba(0,0,0,0.7);
+    }
+      
+    .menu-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .history-link-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    
+    .auto-spin-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        gap: 10px;
+    }
+    .auto-spin-buttons button {
+        padding: 15px 30px;
+        font-size: 24px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        width: 45%;
+        color: white;
+    }
+    #startAutoSpinButton {
+        background-color: #4CAF50;
+    }
+    #stopAutoSpinButton {
+        background-color: #f44336;
+        display: none; 
+    }
+  
+  
+  
+  
+ 
+.input-circle ~ .pajaro { opacity: 0; transition: 0.3s cubic-bezier(0,.43,1,0); animation: move 8s infinite alternate; }
+.pajaro.hidden { opacity: 0 !important; }
+.pajaro.hide-all { display: none !important; }
+
+.input-circle1:not(:checked) ~ .pajaro1,
+.input-circle2:not(:checked) ~ .pajaro2,
+.input-circle3:not(:checked) ~ .pajaro3,
+.input-circle4:not(:checked) ~ .pajaro4,
+.input-circle5:not(:checked) ~ .pajaro5,
+.input-circle6:not(:checked) ~ .pajaro6,
+.input-circle7:not(:checked) ~ .pajaro7,
+.input-circle8:not(:checked) ~ .pajaro8,
+.input-circle9:not(:checked) ~ .pajaro9,
+.input-circle10:not(:checked) ~ .pajaro10,
+
+.input-circle12:not(:checked) ~ .pajaro12,
+.input-circle13:not(:checked) ~ .pajaro13,
+.input-circle14:not(:checked) ~ .pajaro14,
+.input-circle15:not(:checked) ~ .pajaro15,
+.input-circle16:not(:checked) ~ .pajaro16,
+.input-circle17:not(:checked) ~ .pajaro17,
+.input-circle18:not(:checked) ~ .pajaro18,
+.input-circle19:not(:checked) ~ .pajaro19,
+.input-circle20:not(:checked) ~ .pajaro20,
+.input-circle21:not(:checked) ~ .pajaro21,
+.input-circle22:not(:checked) ~ .pajaro22,
+.input-circle23:not(:checked) ~ .pajaro23,
+.input-circle24:not(:checked) ~ .pajaro24,
+.input-circle25:not(:checked) ~ .pajaro25,
+.input-circle26:not(:checked) ~ .pajaro26,
+.input-circle27:not(:checked) ~ .pajaro27
+ { opacity: 1; }
+
+.input-circle1:checked ~ .pajaro1 span,
+.input-circle2:checked ~ .pajaro2 span,
+.input-circle3:checked ~ .pajaro3 span,
+.input-circle4:checked ~ .pajaro4 span,
+.input-circle5:checked ~ .pajaro5 span,
+.input-circle6:checked ~ .pajaro6 span,
+.input-circle7:checked ~ .pajaro7 span,
+.input-circle8:checked ~ .pajaro8 span,
+.input-circle9:checked ~ .pajaro9 span,
+.input-circle10:checked ~ .pajaro10 span,
+
+.input-circle12:checked ~ .pajaro12 span,
+.input-circle13:checked ~ .pajaro13 span,
+.input-circle14:checked ~ .pajaro14 span,
+.input-circle15:checked ~ .pajaro15 span,
+.input-circle16:checked ~ .pajaro16 span,
+.input-circle17:checked ~ .pajaro17 span,
+.input-circle18:checked ~ .pajaro18 span,
+.input-circle19:checked ~ .pajaro19 span,
+.input-circle20:checked ~ .pajaro20 span,
+{ display: block; }
+
+.pajaro7  { top: 150px; animation-delay: -4s !important; transform: scale(1.0); }
+.pajaro8  { top: 250px; animation-delay: -5s !important; transform: scale(0.7); }
+.pajaro9  { top: 300px; animation-delay: -6s !important; transform: scale(1.1); }
+.pajaro10 { top: 150px; animation-delay: -7s !important; transform: scale(0.9); }
+.pajaro11 { top: 250px; animation-delay: -8s !important; transform: scale(1.2); }
+.pajaro12 { top: 300px; animation-delay: -9s !important; transform: scale(0.6); }
+.pajaro13 { top: 70px; animation-delay: -10s !important; transform: scale(1.3); }
+.pajaro14 { top: 120px; animation-delay: -11s !important; transform: scale(0.85); }
+.pajaro15 { top: 180px; animation-delay: -12s !important; transform: scale(1.15); }
+.pajaro16 { top: 220px; animation-delay: -13s !important; transform: scale(0.95); }
+.pajaro17 { top: 280px; animation-delay: -14s !important; transform: scale(1.05); }
+.pajaro18 { top: 320px; animation-delay: -15s !important; transform: scale(0.75); }
+.pajaro19 { top: 90px; animation-delay: -16s !important; transform: scale(1.25); }
+.pajaro20 { top: 140px; animation-delay: -17s !important; transform: scale(0.65); }
+
+
+
+.pajaro > span {
+display: none;
+position: absolute;
+z-index: 2;
+left: -250%;
+bottom: -50%;
+background-color: blue;
+border: solid 2px #000;
+width: 80px;
+height: 30px;
+padding: 10px;
+border-radius: 50%;
+}
+
+.pajaro > span:before {
+content: "1 Perak";
+color: yellow;
+font-weight: bold;
+}
+
+.pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }
+.pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }
+.pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }
+.pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }
+.pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }
+.pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }
+
+@keyframes move {
+10% { left: 10%; }
+20% { left: 20%; top: 50%; }
+
+40% { top: 30%; left: 60%; }
+60% { top: 80%; left: 80%; }
+80% { top: 10%; left: 20%; }
+100% { top: 30%; left: 20%; }
+
+}
+
+.pajaro:after,
+.pajaro:before {
+content: "";
+position: absolute;
+top: 50%;
+left: 50%;
+}
+
+.pajaro:after {
+box-shadow: inset 0px 11px 0 black;    
+border-radius: 100% 100% 0 0;
+width: 200px;
+height: 200px;
+margin-top: -5px;
+margin-left: -90px;
+transform-origin: 100% 0%;
+animation: alas 3s linear infinite;
+}
+
+
+.pajaro {
+background: gray;
+
+position: absolute;
+left: 0;
+cursor: crosshair;
+border-radius: 50% 50% 20% 20%;
+color: white;
+line-height: 20px;
+letter-spacing: 2px;
+font-size: 0.8em;
+text-align: center;
+margin-top: -10px;
+margin-left: 0px;
+width: 30px;
+height: 30px;
+animation: planeo 0.8s linear infinite;
+z-index: 999;
+}
+
+.pajaro:before {
+background: black;
+border-radius: 100% 0% 20% 0%;
+margin-top: 12px;
+margin-left: -5px;
+width: 12px;
+height: 12px;
+transform: rotateZ(45deg);
+}
+
+@keyframes alas {
+50% { transform: rotateX(-1440deg); }
+}
+
+.sum {
+position: fixed;
+left: 1%;
+top: 20px;
+font-size: 50px;
+font-weight: bold;
+}       
+         
+
+.button-container-flex {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  position: fixed;
+  bottom: 10px;
+  width: 99%;
+}
+
+
+      
+       </style>
      <link rel="stylesheet" href="https://nasukafoods.site/switch-halaman.css">   
 <link rel="stylesheet" href="https://nasukafoods.site/perak.css">          
+     <link rel="stylesheet" href="https://nasukafoods.site/game.css">          
      
 </head><body id="gameBody" class="roll-bg"> 
   <div id="roll-container">      
     <div class="link-container">
         
-      <a href="#" class="menu-link" onclick="showContainer('rulle')">Rulle</a>   
+      <a href="#" class="menu-link" onclick="showContainer('rulle')">Aturan Main</a>   
        <a href="#" class="menu-link" onclick="showContainer('investor')">Beli Perak</a>   
       
-      <a href="#" class="menu-link" onclick="showContainer('burung')">game burung</a>
+      <a href="#" class="menu-link" onclick="showContainer('burung')">Perak Gratis</a>
     </div>
 
     <div id="loading">Memuat Game...</div>
@@ -70,11 +768,28 @@
   
   
   <div id="burung-container">
-    <div class="wrapper">
-      <button id="selesaiBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 50px;">Klaim Perak</button>
       
-      <button id="rollBtn" style="position: fixed; bottom: 10px; right: 10px; font-size: 50px;" onclick="showContainer('roll')">Roll Game</button>
+      
+      <div class="burungan">
+    <div class="button-container-flex">
+        <button id="selesai">AMBIL</button>
+        <button id="rollBtn" onclick="showContainer('roll')">Main Roll</button>
+        
+        
+        
+        
+        
+        
+        
+        
+    </div>
+    </div>
 
+      
+      
+      
+   
+     
       <div id="customAlert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 1001; text-align: center; max-width: 80%;">
           <div id="alertIcon" style="font-size: 50px; margin-bottom: 15px;"></div>
           <div id="alertMessage" style="font-size: 18px; margin-bottom: 20px;"></div>
@@ -166,7 +881,7 @@
     <input type="number" id="deposit" name="deposit" required>
 
     <label for="bukti">Bukti Tf:</label>
-    <div class="file-upload-wrapper">
+    <div class="file-upload-burungan">
       <label class="custom-file-upload" for="bukti">PILIH FOTO</label>
       <span class="file-name" id="file-name"></span>
       <input type="file" id="bukti" name="bukti" accept="image/jpeg,image/png" required>
@@ -199,6 +914,577 @@
 </div>
 
 <script>
+    
+    
+    
+    
+      const firebaseConfig = {
+    apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
+    authDomain: "nasuka-fc780.firebaseapp.com",
+    databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasuka-fc780",
+    messagingSenderId: "860641747257",
+    appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const localUser = {
+    Username: localStorage.getItem("Username"),
+    Perak: parseInt(localStorage.getItem("Perak")) || 0,
+  };
+
+
+  if (!localUser.Username) {
+    console.log("Username tidak ditemukan di localStorage. Silakan login.");
+  }
+
+  const userRef = db.ref(`users/${localUser.Username}`);
+
+  userRef.on('value', (snapshot) => {
+      const userData = snapshot.val();
+      if (userData !== null) {
+          localUser.Perak = userData.Perak || 0;
+          
+          localStorage.setItem("Perak", localUser.Perak);
+          
+          updatePerakDisplay();
+          console.log("");
+      }
+  });
+  
+  const ROLL_PER_REEL = 10;
+  const REEL_RADIUS = 400;
+  const TIME_TOLERANCE = 5 * 60 * 1000;
+  const SPIN_DURATION = 5;
+  const MANUAL_SPIN_COOLDOWN = 4 * 400;
+
+  const WIN_MULTIPLIERS = {
+    'dua': 2,
+    'tiga': 3,
+    'empat': 4,
+    'lima': 5,
+    'jackpot': 10
+  };
+
+  const WIN_PROBABILITIES = {
+    'dua': 0.1,
+    'tiga': 0.03,
+    'empat': 0.02,
+    'lima': 0.0000000000000000000000000000000000000001,
+    'jackpot': 0.00000000000000000000000000000000000000000000000000001
+  };
+
+  let currentSeeds = [0, 0, 0, 0, 0];
+  let timeOffset = 0;
+  let timeValidated = false;
+  let isSpinning = false;
+  let lastManualSpinTime = 0;
+  let currentmain = 0;
+  let isAutomainEnabled = false;
+  let playerWinStreak = 0;
+  let playerLoseStreak = 0;
+  const HOUSE_EDGE = 0;
+  let totalPerakBurung = 0; // Variabel untuk Burung Game
+  function updatePerakDisplay() {
+    $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));
+  }
+
+  
+  function showErrorMessage(message) {
+    $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut();
+  }
+
+  function createROLL(ring) {
+    const rollAngle = 360 / ROLL_PER_REEL;
+    for (let i = 0; i < ROLL_PER_REEL; i++) {
+      const roll = document.createElement('div');
+      roll.className = 'roll backface-on';
+      roll.style.transform = `rotateX(${rollAngle * i}deg) translateZ(${REEL_RADIUS}px)`;
+      const p = document.createElement('p');
+      p.textContent = i;
+      roll.appendChild(p);
+      ring.append(roll);
+    }
+  }
+
+  function saveRollToDatabase(result, isManual = false) {
+    console.log("Logging roll data has been disabled.");
+  }
+  
+  function generateDua() {
+    const num = Math.floor(Math.random() * 10);
+    const result = [num, num];
+    while (result.length < 5) {
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
+    }
+    return shuffleArray(result);
+  }
+  
+  function generateTiga() {
+    const num = Math.floor(Math.random() * 10);
+    const result = [num, num, num];
+    while (result.length < 5) {
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
+    }
+    return shuffleArray(result);
+  }
+  
+  function generateEmpat() {
+    const num = Math.floor(Math.random() * 10);
+    const result = [num, num, num, num];
+    while (result.length < 5) {
+      const uniqueNum = Math.floor(Math.random() * 10);
+      if (!result.includes(uniqueNum)) {
+        result.push(uniqueNum);
+      }
+    }
+    return shuffleArray(result);
+  }
+  
+  function generateLima() {
+    const num = Math.floor(Math.random() * 10);
+    return [num, num, num, num, num];
+  }
+  
+  function generateJackpot() {
+    const result = [1, 2, 3, 4, 5];
+    return shuffleArray(result);
+  }
+
+  function generateRandomResult() {
+    const result = [];
+    while (result.length < 5) {
+      const num = Math.floor(Math.random() * 10);
+      if (!result.includes(num)) {
+        result.push(num);
+      }
+    }
+    return result;
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+  
+  function generateControlledResult() {
+    let currentProbabilities = WIN_PROBABILITIES;
+    
+    const rand = Math.random();
+    let cumulativeProb = 0;
+
+    for (const type in currentProbabilities) {
+        cumulativeProb += currentProbabilities[type];
+        if (rand < cumulativeProb) {
+            switch(type) {
+                case 'dua': return generateDua();
+                case 'tiga': return generateTiga();
+                case 'empat': return generateEmpat();
+                case 'lima': return generateLima();
+                case 'jackpot': return generateJackpot();
+            }
+        }
+    }
+    return generateRandomResult();
+  }
+
+  function adjustWinProbability(baseProbability) {
+    if (playerWinStreak > 0) {
+      return baseProbability * 0.00000001;
+    }
+    if (playerLoseStreak > 0) {
+      return Math.min(baseProbability * (1 + (playerLoseStreak * 0.0001)), 0.0001);
+    }
+    return baseProbability;
+  }
+  
+  function checkWin(result) {
+    const sortedResult = [...result].sort((a, b) => a - b).join('');
+    if (sortedResult === '12345') {
+      return 'jackpot';
+    }
+    
+    const frequency = {};
+    result.forEach(num => {
+      frequency[num] = (frequency[num] || 0) + 1;
+    });
+    
+    const counts = Object.values(frequency);
+    const hasLima = counts.some(count => count >= 5);
+    const hasEmpat = counts.some(count => count >= 4);
+    const hasTiga = counts.some(count => count >= 3);
+    const hasDua = counts.some(count => count >= 2);
+    
+    if (hasLima) {
+      return 'lima';
+    } else if (hasEmpat) {
+      return 'empat';
+    } else if (hasTiga) {
+      return 'tiga';
+    } else if (hasDua) {
+      return 'dua';
+    }
+    return null;
+  }
+
+  function selectmain(amount) {
+    if (amount > 0 && amount <= localUser.Perak) {
+      currentmain = amount;
+      $('#mainAmount').val(amount);
+      $('#automainButtons button').removeClass('active');
+      $(`#main${amount}`).addClass('active');
+      
+    } else if (amount === 0) {
+      currentmain = 0;
+      $('#mainAmount').val('');
+      $('#automainButtons button').removeClass('active');
+      
+    } else {
+      showErrorMessage('');
+    }
+  }
+
+  function startAutoSpin() {
+    if (currentmain <= 0) {
+      showErrorMessage('');
+      return;
+    }
+    isAutomainEnabled = true;
+    $('#startAutoSpinButton').hide();
+    $('#stopAutoSpinButton').show();
+    $('#spinButton').prop('disabled', true);
+    spin(false);
+  }
+
+  function stopAutoSpin() {
+    isAutomainEnabled = false;
+    $('#stopAutoSpinButton').hide();
+    $('#startAutoSpinButton').show();
+    $('#spinButton').prop('disabled', false);
+    
+  }
+
+  function spin(isManual) {
+    if (isSpinning) return;
+    
+    const slotAudio = document.getElementById('slotAudio');
+slotAudio.currentTime = 0;
+slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
+    
+    if (currentmain <= 0) {
+      showErrorMessage('');
+      return;
+    }
+    if (currentmain > localUser.Perak) {
+      showErrorMessage('');
+      return;
+    }
+    
+    localUser.Perak -= currentmain;
+    updatePerakDisplay(); 
+    userRef.child('Perak').set(localUser.Perak); 
+    const winAudio = document.getElementById('winAudio');
+    if (!winAudio.paused) {
+      winAudio.pause();
+      winAudio.currentTime = 0; 
+    }
+    
+    isSpinning = true;
+    
+    $('#mainResult').addClass('result-hidden');
+    
+    if (isManual) {
+      lastManualSpinTime = Date.now();
+      $('#spinButton').prop('disabled', true);
+      updateManualSpinButton();
+    }
+    
+    $('#stage .roll p').removeClass('bling-bling');
+      
+    for (let i = 1; i <= 5; i++) {
+      $(`#ring${i}`).css('animation', `back-spin 1s`);
+    }
+      
+    setTimeout(() => {
+      const result = generateControlledResult();
+      currentSeeds = result;
+      
+      for (let i = 1; i <= 5; i++) {
+        const seed = result[i-1];
+        $(`#ring${i}`)
+          .css('animation', `spin-${seed} ${SPIN_DURATION}s cubic-bezier(0.1, 0.7, 0.1, 1)`)
+          .attr('class', `ring spin-${seed}`);
+      }
+        
+      setTimeout(() => {
+        for (let i = 0; i < result.length; i++) {
+          const numberElement = $(`#ring${i+1} .roll`).eq(result[i]).find('p');
+          numberElement.addClass('bling-bling');
+        }
+        
+        saveRollToDatabase(result, isManual);
+        processmainResult(result, isManual);
+        
+        isSpinning = false;
+        
+        if (isAutomainEnabled) {
+          setTimeout(() => {
+            if (isAutomainEnabled) {
+              spin(false);
+            }
+          }, 3000);
+        }
+      }, SPIN_DURATION * 1000);
+    }, 1000);
+  }
+
+  function processmainResult(result, isManual) {
+    const winType = checkWin(result);
+    let message = "coba lagi";
+    let messageClass = "lose";
+    let winAmount = 0;
+
+    if (winType) {
+      playerWinStreak++;
+      playerLoseStreak = 0;
+      
+      const baseMultiplier = WIN_MULTIPLIERS[winType];
+      const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
+      winAmount = Math.round(currentmain * totalMultiplier);
+
+      message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
+      messageClass = "win";           
+      triggerConfetti(); 
+      document.getElementById('winAudio').play();
+      
+     
+    } else {
+      playerWinStreak = 0;
+      playerLoseStreak++;
+    }
+
+    localUser.Perak += winAmount;
+    
+    userRef.transaction((currentData) => {
+      if (currentData) {
+        let finalPerak = (currentData.Perak || 0) + winAmount;
+        
+        return {
+          ...currentData,
+          Perak: finalPerak,
+        };
+      } else {
+        return;
+      }
+    }).then(() => {
+      updatePerakDisplay();
+      
+      $('#mainResult')
+        .text(message)
+        .removeClass('result-hidden')
+        .addClass(messageClass);
+    }).catch(error => {
+      console.error("Transaksi gagal:", error);
+    });
+  }
+
+  
+  function updateManualSpinButton() {
+    const now = Date.now();
+    const timeSinceLastSpin = now - lastManualSpinTime;
+    const remainingCooldown = Math.max(0, MANUAL_SPIN_COOLDOWN - timeSinceLastSpin);
+    
+    if (remainingCooldown <= 0) {
+      $('#spinButton').prop('disabled', false).text('Putar');
+    } else {
+      const seconds = Math.ceil(remainingCooldown / 1000);
+      setTimeout(updateManualSpinButton, 1000);
+    }
+  }
+
+  function triggerConfetti() {
+    const defaults = {
+        spread: 360,
+        ticks: 200,
+        gravity: 0.4,
+        decay: 0.94,
+        startVelocity: 90,
+        colors: ['#FFC107', '#E91E63', '#4CAF50', '#2196F3']
+    };
+    function shoot() {
+        confetti({
+            ...defaults,
+            particleCount: 2000,
+            scalar: 1.2,
+            shapes: ['star']
+        });
+        confetti({
+            ...defaults,
+            particleCount: 300,
+            scalar: 0.8,
+            shapes: ['circle']
+        });
+    }
+    setTimeout(shoot, 0);
+    setTimeout(shoot, 150);
+    setTimeout(shoot, 300);
+  }
+
+  $(document).ready(function() {
+    for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));
+      
+    $('#rotate').addClass('tilted');
+    $('.roll').addClass('backface-on');
+    
+    setTimeout(() => {
+      $('#loading').fadeOut();
+    }, 2000);
+    
+    let winAudio = document.getElementById('winAudio');
+    let userInteracted = false;
+    
+    $('#spinButton').click(function() {
+      if (!userInteracted) {
+        winAudio.muted = true;
+        winAudio.play().then(() => {
+          winAudio.pause();
+          winAudio.currentTime = 0;
+          winAudio.muted = false;
+          userInteracted = true;
+        }).catch(error => {
+          console.error("Audio play blocked:", error);
+        });
+      }
+
+      if (!$(this).prop('disabled')) {
+        spin(true);
+      }
+    });
+
+    $('#startAutoSpinButton').click(startAutoSpin);
+    $('#stopAutoSpinButton').click(stopAutoSpin);
+  });
+  
+  
+  
+  function showCustomAlert(message, type = 'info') {
+    const alertDiv = document.getElementById('customAlert');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = document.getElementById('alertIcon');
+      
+    alertMessage.textContent = message;
+    switch(type) {
+        case 'success':
+            alertIcon.textContent = '';
+            alertDiv.style.border = '2px solid #4CAF50';
+            break;
+        case 'error':
+            alertIcon.textContent = '❌';
+            alertDiv.style.border = '2px solid #f44336';
+            break;
+        case 'warning':
+            alertIcon.textContent = '⚠️';
+            alertDiv.style.border = '2px solid #FFC107';
+            break;
+        default:
+            alertIcon.textContent = 'ℹ️';
+            alertDiv.style.border = '2px solid #2196F3';
+    }
+       
+    alertDiv.style.display = 'block';  
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.background = 'rgba(0,0,0,0.5)';
+    overlay.style.zIndex = '1000';
+    overlay.id = 'alertOverlay';
+    document.body.appendChild(overlay);
+    document.getElementById('alertOkBtn').onclick = function() {
+        alertDiv.style.display = 'none';
+        document.getElementById('alertOverlay').remove();
+    };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const limitReachedDiv = document.getElementById("limitReached");
+    const burungan = document.querySelector('.burungan');
+    const selesai = document.getElementById("selesai");
+    
+    const totalPerakSpan = document.getElementById("total-perak");
+    let totalPerak = 0;
+    
+    const inputs = document.querySelectorAll('.input-circle');
+    inputs.forEach(input => {
+        input.addEventListener('change', () => {
+            if (input.checked) {
+                totalPerak++;
+                totalPerakSpan.textContent = totalPerak;
+            }
+        });
+    });
+
+    selesai.addEventListener("click", () => {
+        if (localUser.Username && totalPerak > 0) {
+            const usersRef = db.ref('users');
+            usersRef.orderByChild('Username').equalTo(localUser.Username).once('value')
+            .then(snapshot => {
+                if (snapshot.exists()) {
+                    snapshot.forEach(childSnapshot => {
+                        const userId = childSnapshot.key;                      
+                        
+                        let currentPerak = childSnapshot.val().Perak ? parseInt(childSnapshot.val().Perak) : 0;
+                        let newPerak = currentPerak + totalPerak;
+                        
+                        return db.ref('users/' + userId).update({ Perak: newPerak })
+                        .then(() => {
+                            showCustomAlert(` ${totalPerak} Perak berhasil diklaim!`, "success");
+                            totalPerak = 0;
+                            totalPerakSpan.textContent = totalPerak;
+                            inputs.forEach(input => input.checked = false);
+                        });
+                    });
+                } else {
+                    showCustomAlert("Pengguna tidak ditemukan.", "error");
+                }
+            })
+            .catch(error => {
+                console.error("Gagal mengirim perak:", error);
+                showCustomAlert("Gagal mengirim perak. Silakan coba lagi.", "error");
+            });
+        } else {
+            showCustomAlert("Tidak ada perak yang di klaim", "info");
+        }
+    });
+});
+  
+  
+  
+  
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   const form = document.getElementById('topupForm');
   const statusMessage = document.getElementById('statusMessage');
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpOktAYKx2f4hOLaTcwynZO8EghJYKpwGgMO39dr10tYZzgoUsdaLsWbjyi6AvOYiR_A/exec';
