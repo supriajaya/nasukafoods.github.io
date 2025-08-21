@@ -13,7 +13,7 @@
     <script src="https://nasukafoods.site/fungsi-switch-halaman.js"></script>
     
 
-       <link rel="stylesheet" href="https://nasukafoods.site/global.css">
+       <link rel="stylesheet" href="https://nasukafoods.site/rollburungrulle.css">
      <link rel="stylesheet" href="https://nasukafoods.site/switch-halaman.css">   
 <link rel="stylesheet" href="https://nasukafoods.site/perak.css">          
      
@@ -23,19 +23,9 @@
         
       <a href="#" class="menu-link" onclick="showContainer('rulle')">Rulle</a>   
        <a href="#" class="menu-link" onclick="showContainer('investor')">Beli Perak</a>   
-      <a href="#" class="menu-link" onclick="showContainer('privacy')">Privacy</a> 
-       <a href="#" class="menu-link" onclick="showContainer('saya')">return</a> 
-      
-      
-      
       
       <a href="#" class="menu-link" onclick="showContainer('burung')">game burung</a>
     </div>
-
-
-
-
-
 
     <div id="loading">Memuat Game...</div>
     <div id="stage" class="perspective-on">
@@ -72,7 +62,7 @@
     </div>
     
     <div class="history-link-container">
-      <a class="menu-link">tomb</a>
+      <a href="index.html" class="menu-link">Beranda</a>
     </div>
   </div>
   
@@ -208,256 +198,128 @@
   
 </div>
 
-
-
-
-
-
- <div id="privacy-container">    
-
-
-<div class="arya-bar" style="position: relative;">
-  <div class="orlay">
-    <a id="linkProfil" href="#">
-      <img src="https://nasukafoods.site/gambarkosong.jpg" class="arya-item" id="fotoProfil" />
-    </a>
-    <span id="namaUser" class="blink-glow">Memuat....</span>
-  </div>
-  <div class="orlay" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
-    <img src="https://nasukafoods.site/nasukachat.png" class="arya-item"  />
-    <span></span>
-    
-  </div>
-  
-  <div class="ascroll">
-    <div class="arlay">
-      <a href="burung.html"><img src="https://nasukafoods.site/nasukabird.jpg" /></a>
-    </div>
-    <div class="arlay">
-      <a href="roll.html"><img src="https://nasukafoods.site/roll.jpg" /></a>
-    </div>
-    
-    <div class="arlay">
-      <a href="https://nasukafoods.site/nasuka.apk"><img src="https://nasukafoods.site/download.png" /><span></span></a>
-    </div>
-  </div>
-</div>
-  <div class="bawahanaturan">    
-      <a href="#" class="variansiaturan" onclick="showContainer('roll')">Ke Roll</a> 
-    </div>
-    </div>
-  </div>
-
-
-
- <div id="saya-container">    
-<div class="kantan">
-    <div class="prodee">
-      <img src="" alt="Foto Profil" class="propic" />
-      <div class="prival">
-        <h2></h2>
-        <div class="stats"></div>
-        <div class="bio"></div>
-      </div>
-    </div>
-
-    <div class="bergaris"><span class="labil">Pekerjaan</span><span class="nilai pekerjaan"></span></div>
-    <div class="bergaris"><span class="labil">Usia</span><span class="nilai usia"></span></div>
-    <div class="bergaris"><span class="labil">Alamat</span><span class="nilai alamat"></span></div>
-
-    <div class="bergaris"><span class="labil">Rank</span><span class="nilai rank"></span></div>
-    <div class="bergaris"><span class="labil">Username</span><span class="nilai username"></span></div>
-    <div class="bergaris"><span class="labil">Password</span><span class="nilai password"></span></div>
-    <a href="edit-profil.html" class="bergaris">
-      <span class="labil">Edit Profil</span>
-    </a> 
-      <button class="btn-no" onclick="location.reload()">Refresh</button>
-  <div class="history-link-container">
-   <a href="#" class="variansiaturan" onclick="showContainer('roll')">Ke Roll</a>  
-    </div>
-  </div>
-  </div>
-  </div>
-  
-  
-  
-  
 <script>
+  const form = document.getElementById('topupForm');
+  const statusMessage = document.getElementById('statusMessage');
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpOktAYKx2f4hOLaTcwynZO8EghJYKpwGgMO39dr10tYZzgoUsdaLsWbjyi6AvOYiR_A/exec';
+
+  const fileInput = document.getElementById('bukti');
+  const fileNameSpan = document.getElementById('file-name');
+  const transactionReceipt = document.getElementById('transactionReceipt');
+  const receiptDetails = document.getElementById('receiptDetails');
+  const backButton = document.getElementById('backButton');
+  const printButton = document.getElementById('printButton');
+
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+      fileNameSpan.textContent = fileInput.files[0].name;
+      fileNameSpan.style.display = 'inline';
+    } else {
+      fileNameSpan.textContent = '';
+      fileNameSpan.style.display = 'none';
+    }
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    statusMessage.textContent = 'Loading...';
+    statusMessage.className = '';
+
+    const formData = new FormData(form);
+    const buktiFile = formData.get('bukti');
+
+    if (!buktiFile || buktiFile.size === 0) {
+      statusMessage.textContent = 'Harap lampirkan bukti foto.';
+      statusMessage.className = 'error';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(buktiFile);
     
-    
-    document.addEventListener("DOMContentLoaded", () => {
-    if (!firebase.apps.length) {
-        firebase.initializeApp({
-  
+    reader.onload = async () => {
+      const base64Image = reader.result.split(',')[1];
+      
+      const payload = {
+        action: 'handleTopup',
+        id: formData.get('id'),
+        nama: formData.get('nama'),
+        username: formData.get('username'),
+        deposit: formData.get('deposit'),
+        bukti: base64Image
+      };
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload) 
         });
-    }
-    const db = firebase.database();
-    
-    function showStatusMessage(message, isSuccess = false) {
-        const statusMessage = document.getElementById('statusMessage');
-        if (statusMessage) {
-            statusMessage.textContent = message;
-            statusMessage.className = isSuccess ? 'success' : 'error';
-        }
-    }
 
-    const fetchAndDisplayUserProfile = async (userID) => {
-        const fotoEl = document.getElementById("fotoProfil");
-        const namaEl = document.getElementById("namaUser");
-        const profilLink = document.getElementById("linkProfil");
-
-        if (!userID) {
-            namaEl.textContent = "Silakan Masuk";
-            fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";
-            profilLink.href = "login.html";
-            return;
-        }
-
-        let userData = JSON.parse(localStorage.getItem("userData"));
-
-        if (userData && userData.ID === userID) {
-            updateProfileDisplay(userData);
-            displayUserProfileDetails(userData);
-        } else {
-            try {
-                const snapshot = await db.ref("users").orderByChild("ID").equalTo(userID).once("value");
-                if (snapshot.exists()) {
-                    userData = Object.values(snapshot.val())[0];
-                    localStorage.setItem("userData", JSON.stringify(userData));
-                    updateProfileDisplay(userData);
-                    displayUserProfileDetails(userData);
-                } else {
-                    localStorage.removeItem("userData");
-                    window.location.href = "index.html";
-                }
-            } catch (error) {
-                console.error("Gagal mengambil data dari Firebase:", error);
-            }
-        }
-    };
-
-    const updateProfileDisplay = (data) => {
-        const fotoEl = document.getElementById("fotoProfil");
-        const namaEl = document.getElementById("namaUser");
-        const profilLink = document.getElementById("linkProfil");
+        const result = await response.json();
+        statusMessage.textContent = result.message;
+        statusMessage.className = result.status === 'success' ? 'success' : 'error';
         
-        namaEl.textContent = data.Nama || "Tanpa Nama";
-        fotoEl.src = data.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-        profilLink.href = `profil.html?id=${encodeURIComponent(data.ID)}`;
-    };
+        if (result.status === 'success') {
+   
+          const id = formData.get('id');
+          const nama = formData.get('nama');
+          const username = formData.get('username');
+          const deposit = formData.get('deposit');
 
-    const displayUserProfileDetails = (data) => {
-        if (!data) return;
-
-        document.querySelector(".propic").src = data.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-        document.querySelector("h2").textContent = data.Nama || "-";
-        document.querySelector(".bio").innerHTML = `<strong></strong><br/>${data.Bio || ""}<br/>♀️/♂️ : ${data.Jenis || ""}`;
-        document.querySelector(".stats").innerHTML = `<span>Perak : <strong>${data.Perak || 0}</strong></span>`;
-        document.querySelector(".pekerjaan").textContent = data.Pekerjaan || "-";
-        document.querySelector(".usia").textContent = data.Usia || "-";
-        document.querySelector(".alamat").textContent = data.Alamat || "-";
-        document.querySelector(".username").textContent = data.Username || "-";
-        document.querySelector(".password").textContent = data.Password || "-";
-        document.querySelector(".rank").textContent = data.Rank || "-";
-    };
-
-    const userID = localStorage.getItem("ID");
-    fetchAndDisplayUserProfile(userID);
-
-    const form = document.getElementById('topupForm');
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpOktAYKx2f4hOLaTcwynZO8EghJYKpwGgMO39dr10tYZzgoUsdaLsWbjyi6AvOYiR_A/exec';
-    const fileInput = document.getElementById('bukti');
-    const fileNameSpan = document.getElementById('file-name');
-    const transactionReceipt = document.getElementById('transactionReceipt');
-    const receiptDetails = document.getElementById('receiptDetails');
-
-    if (fileInput) {
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length > 0) {
-                fileNameSpan.textContent = fileInput.files[0].name;
-                fileNameSpan.style.display = 'inline';
-            } else {
-                fileNameSpan.textContent = '';
-                fileNameSpan.style.display = 'none';
-            }
-        });
-    }
-
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showStatusMessage('Mengirim data...', false);
-
-            const formData = new FormData(form);
-            const buktiFile = formData.get('bukti');
-
-            if (!buktiFile || buktiFile.size === 0) {
-                showStatusMessage('Harap lampirkan bukti foto.', false);
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.readAsDataURL(buktiFile);
-
-            reader.onload = async () => {
-                const base64Image = reader.result.split(',')[1];
-                const payload = {
-                    action: 'handleTopup',
-                    id: formData.get('id'),
-                    nama: formData.get('nama'),
-                    username: formData.get('username'),
-                    deposit: formData.get('deposit'),
-                    bukti: base64Image
-                };
-
-                try {
-                    const response = await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        body: JSON.stringify(payload)
-                    });
-
-                    const result = await response.json();
-                    showStatusMessage(result.message, result.status === 'success');
-
-                    if (result.status === 'success') {
-                        const now = new Date();
-                        const formattedDate = now.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-                        receiptDetails.innerHTML = `
-                            <p><strong>ID:</strong> ${payload.id}</p>
-                            <p><strong>Nama:</strong> ${payload.nama}</p>
-                            <p><strong>Username:</strong> ${payload.username}</p>
-                            <p><strong>Jumlah:</strong> Rp. ${Number(payload.deposit).toLocaleString('id-ID')}</p>
-                            <p><strong>Tanggal:</strong> ${formattedDate}</p>
-                        `;
-
-                        form.style.display = 'none';
-                        if (transactionReceipt) transactionReceipt.style.display = 'block';
-                    }
-                } catch (error) {
-                    showStatusMessage('Terjadi kesalahan saat mengirim permintaan.', false);
-                    console.error('Error:', error);
-                }
-            };
-            reader.onerror = () => {
-                showStatusMessage('Gagal membaca file bukti transfer.', false);
-            };
-        });
-
-        const userDataFromStorage = JSON.parse(localStorage.getItem('userData'));
-        if (userDataFromStorage) {
-            document.getElementById('id').value = userDataFromStorage.ID || '';
-            document.getElementById('nama').value = userDataFromStorage.Nama || '';
-            document.getElementById('username').value = userDataFromStorage.Username || '';
-        }
-    }
-});
+      
+          const now = new Date();
+          const formattedDate = now.toLocaleDateString('id-ID', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
 
     
-</script>
+          receiptDetails.innerHTML = `
+            <p><strong>ID:</strong> ${id}</p>
+            <p><strong>Nama:</strong> ${nama}</p>
+            <p><strong>Username:</strong> ${username}</p>
+            <p><strong>Jumlah:</strong> Rp. ${Number(deposit).toLocaleString('id-ID')}</p>
+            <p><strong>Tanggal:</strong> ${formattedDate}</p>
+          `;
+          
+       
+          form.style.display = 'none';
+          transactionReceipt.style.display = 'block';
+        }
+      } catch (error) {
+        statusMessage.textContent = 'Terjadi kesalahan saat mengirim permintaan.';
+        statusMessage.className = 'error';
+        console.error('Error:', error);
+      }
+    };
+    reader.onerror = () => {
+      statusMessage.textContent = 'Gagal membaca file bukti transfer.';
+      statusMessage.className = 'error';
+    };
+  });
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const userId = localStorage.getItem('ID');
+    const userName = localStorage.getItem('Nama');
+    const userUsername = localStorage.getItem('Username');
+    
+    if (userId) {
+      document.getElementById('id').value = userId;
+    }
+    if (userName) {
+      document.getElementById('nama').value = userName;
+    }
+    if (userUsername) {
+      document.getElementById('username').value = userUsername;
+    }
+  
+  });
+</script>
 
 
 </body>
 </html>
-
