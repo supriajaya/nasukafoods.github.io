@@ -30,6 +30,11 @@
     background-size: cover;
     background-position: center;
 }
+.login-bg {    
+    background-image: url('https://nasukafoods.site/isiangajih.jpg');
+    background-size: cover;
+    background-position: center;
+}
 
 .saya-bg {    
     background-image: url('https://nasukafoods.site/memeprogramer.jpg');
