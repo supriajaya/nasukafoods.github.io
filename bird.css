@@ -12,7 +12,7 @@
 .input-circle8:not(:checked) ~ .pajaro8,
 .input-circle9:not(:checked) ~ .pajaro9,
 .input-circle10:not(:checked) ~ .pajaro10,
-.input-circle11:not(:checked) ~ .pajaro11,
+
 .input-circle12:not(:checked) ~ .pajaro12,
 .input-circle13:not(:checked) ~ .pajaro13,
 .input-circle14:not(:checked) ~ .pajaro14,
@@ -22,7 +22,13 @@
 .input-circle18:not(:checked) ~ .pajaro18,
 .input-circle19:not(:checked) ~ .pajaro19,
 .input-circle20:not(:checked) ~ .pajaro20,
-
+.input-circle21:not(:checked) ~ .pajaro21,
+.input-circle22:not(:checked) ~ .pajaro22,
+.input-circle23:not(:checked) ~ .pajaro23,
+.input-circle24:not(:checked) ~ .pajaro24,
+.input-circle25:not(:checked) ~ .pajaro25,
+.input-circle26:not(:checked) ~ .pajaro26,
+.input-circle27:not(:checked) ~ .pajaro27
  { opacity: 1; }
 
 .input-circle1:checked ~ .pajaro1 span,
@@ -35,7 +41,7 @@
 .input-circle8:checked ~ .pajaro8 span,
 .input-circle9:checked ~ .pajaro9 span,
 .input-circle10:checked ~ .pajaro10 span,
-.input-circle11:checked ~ .pajaro11 span,
+
 .input-circle12:checked ~ .pajaro12 span,
 .input-circle13:checked ~ .pajaro13 span,
 .input-circle14:checked ~ .pajaro14 span,
@@ -47,12 +53,6 @@
 .input-circle20:checked ~ .pajaro20 span,
 { display: block; }
 
-.pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }
-.pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }
-.pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }
-.pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }
-.pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }
-.pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }
 .pajaro7  { top: 150px; animation-delay: -4s !important; transform: scale(1.0); }
 .pajaro8  { top: 250px; animation-delay: -5s !important; transform: scale(0.7); }
 .pajaro9  { top: 300px; animation-delay: -6s !important; transform: scale(1.1); }
@@ -68,6 +68,112 @@
 .pajaro19 { top: 90px; animation-delay: -16s !important; transform: scale(1.25); }
 .pajaro20 { top: 140px; animation-delay: -17s !important; transform: scale(0.65); }
 
+
+
+.pajaro > span {
+display: none;
+position: absolute;
+z-index: 2;
+left: -250%;
+bottom: -50%;
+background-color: blue;
+border: solid 2px #000;
+width: 80px;
+height: 30px;
+padding: 10px;
+border-radius: 50%;
+}
+
+.pajaro > span:before {
+content: "1 Perak";
+color: yellow;
+font-weight: bold;
+}
+
+.pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }
+.pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }
+.pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }
+.pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }
+.pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }
+.pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }
+
+@keyframes move {
+10% { left: 10%; }
+20% { left: 20%; top: 50%; }
+
+40% { top: 30%; left: 60%; }
+60% { top: 80%; left: 80%; }
+80% { top: 10%; left: 20%; }
+100% { top: 30%; left: 20%; }
+
+}
+
+.pajaro:after,
+.pajaro:before {
+content: "";
+position: absolute;
+top: 50%;
+left: 50%;
+}
+
+.pajaro:after {
+box-shadow: inset 0px 11px 0 black;    
+border-radius: 100% 100% 0 0;
+width: 200px;
+height: 200px;
+margin-top: -5px;
+margin-left: -90px;
+transform-origin: 100% 0%;
+animation: alas 3s linear infinite;
+}
+
+
+.pajaro {
+background: gray;
+
+position: absolute;
+left: 0;
+cursor: crosshair;
+border-radius: 50% 50% 20% 20%;
+color: white;
+line-height: 20px;
+letter-spacing: 2px;
+font-size: 0.8em;
+text-align: center;
+margin-top: -10px;
+margin-left: 0px;
+width: 30px;
+height: 30px;
+animation: planeo 0.8s linear infinite;
+z-index: 999;
+}
+
+.pajaro:before {
+background: black;
+border-radius: 100% 0% 20% 0%;
+margin-top: 12px;
+margin-left: -5px;
+width: 12px;
+height: 12px;
+transform: rotateZ(45deg);
+}
+
+@keyframes alas {
+50% { transform: rotateX(-1440deg); }
+}
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
 
 
@@ -122,3 +228,5 @@ top: 20px;
 font-size: 20px;
 font-weight: bold;
 }
+
+
