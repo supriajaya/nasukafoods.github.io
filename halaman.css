@@ -1,4 +1,4 @@
-#home-halaman        
+#home-halaman,        
 #roll-halaman,
 #signup-halaman,
 #saya-halaman,
@@ -27,7 +27,7 @@
 }
 
 .home-bg {    
-    background-image: url('https://nasukafoods.site/isiangajih.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
