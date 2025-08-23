@@ -1,5 +1,5 @@
 function showHalaman(halamanId) {
-  const halamans = ['home','profil','editprofil','saya','belanja','payment','burung','roll','labirin','puzzle','rule','disclaimer','leaderboard','faq','return','privacy','term','pasar','login','zona1','zona2']; 
+  const halamans = ['home','profil','editprofil','saya','belanja','signup','payment','burung','roll','labirin','puzzle','rule','disclaimer','leaderboard','faq','return','privacy','term','pasar','login','zona1','zona2']; 
 
   halamans.forEach(id => {
     const element = document.getElementById(id + '-halaman');
