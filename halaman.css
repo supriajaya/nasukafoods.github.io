@@ -1,0 +1,165 @@
+/* ================== SEMUA HALAMAN DISEMBUNYIKAN DULU ================== */
+#home-halaman,
+#saya-halaman,
+#profil-halaman,
+#burung-halaman,
+#roll-halaman,
+#labirin-halaman,
+#puzzle-halaman,
+#payment-halaman,
+#belanja-halaman,
+#editprofil-halaman,
+#investor-halaman,
+#inbox-halaman,
+#leaderboard-halaman,
+#faq-halaman,
+#term-halaman,
+#return-halaman,
+#privacy-halaman,
+#rule-halaman,
+#disclaimer-halaman,
+#bos-halaman,
+#pasar-halaman,
+#zona1-halaman,
+#zona2-halaman {
+    display: none;
+}
+
+/* ================== BACKGROUND TIAP HALAMAN ================== */
+.home-bg {    
+    background-image: url('https://nasukafoods.site/isiangajih.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.saya-bg {    
+    background-image: url('https://nasukafoods.site/memeprogramer.jpg');
+    background-size: cover;
+    background-position: center;  
+}
+
+.profil-bg {    
+    background-image: url('https://nasukafoods.site/langit.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.burung-bg {    
+    background-image: url('https://nasukafoods.site/burung.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.roll-bg {    
+    background-image: url('https://nasukafoods.site/roll.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.labirin-bg {    
+    background-image: url('https://nasukafoods.site/labirin.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.puzzle-bg {    
+    background-image: url('https://nasukafoods.site/puzzle.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.payment-bg {    
+    background-image: url('https://nasukafoods.site/payment.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.belanja-bg {    
+    background-image: url('https://nasukafoods.site/belanja.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.editprofil-bg {    
+    background-image: url('https://nasukafoods.site/editprofil.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.investor-bg {    
+    background-image: url('https://nasukafoods.site/investor.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.inbox-bg {    
+    background-image: url('https://nasukafoods.site/inbox.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.leaderboard-bg {    
+    background-image: url('https://nasukafoods.site/leaderboard.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.faq-bg {    
+    background-image: url('https://nasukafoods.site/faq.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.term-bg {    
+    background-image: url('https://nasukafoods.site/term.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.return-bg {    
+    background-image: url('https://nasukafoods.site/return.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.privacy-bg {    
+    background-image: url('https://nasukafoods.site/privacy.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.rule-bg {    
+    background-image: url('https://nasukafoods.site/rule.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.disclaimer-bg {    
+    background-image: url('https://nasukafoods.site/disclaimer.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bos-bg {    
+    background-image: url('https://nasukafoods.site/bos.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.pasar-bg {    
+    background-image: url('https://nasukafoods.site/pasar.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.zona1-bg {    
+    background-image: url('https://nasukafoods.site/zona1.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.zona2-bg {    
+    background-image: url('https://nasukafoods.site/zona2.jpg');
+    background-size: cover;
+    background-position: center;
+}
