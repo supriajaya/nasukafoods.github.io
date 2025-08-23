@@ -1,0 +1,54 @@
+ <div id="beliperak-halaman">    
+  <div class="kontenpembelian">
+  <div class="header-receipt">
+    <h2>NASUKA WIRELESS</h2>
+    <p>Jl. Eretan Wetan — Kandanghaur</p>
+    <p>Indramayu - Jawabarat</p>
+  </div>
+  
+  <div class="receipt-line"></div>
+  
+  <form id="topupForm">
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" required>
+
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" name="nama" required>
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="deposit">Jumlah:</label>
+    <input type="number" id="deposit" name="deposit" required>
+
+    <label for="bukti">Bukti Tf:</label>
+    <div class="file-upload-wrapper">
+      <label class="custom-file-upload" for="bukti">PILIH FOTO</label>
+      <span class="file-name" id="file-name"></span>
+      <input type="file" id="bukti" name="bukti" accept="image/jpeg,image/png" required>
+    </div>
+    
+    <button type="submit">KLAIM PERAK</button>
+  </form>
+
+  <div id="statusMessage"></div>
+
+  <div id="transactionReceipt">
+    <div class="header-receipt">
+      <h2>STRUK TRANSAKSI</h2>
+    </div>
+    <div class="receipt-line"></div>
+    <div class="receipt-details" id="receiptDetails">
+    </div>
+    <div class="receipt-line"></div>
+    <div class="header-receipt">
+      <p>Terima kasih atas kepercayaan Anda.</p>
+      <p>NASUKA WIRELESS</p>
+    </div>
+  </div>
+  
+  
+    </div>
+  </div> 
+  
+</div>
