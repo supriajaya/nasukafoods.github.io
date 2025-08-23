@@ -1,9 +1,9 @@
-/* ================== SEMUA HALAMAN DISEMBUNYIKAN DULU ================== */
+        
 #home-halaman,
 #saya-halaman,
 #profil-halaman,
 #burung-halaman,
-#roll-halaman,
+
 #labirin-halaman,
 #puzzle-halaman,
 #payment-halaman,
@@ -25,7 +25,6 @@
     display: none;
 }
 
-/* ================== BACKGROUND TIAP HALAMAN ================== */
 .home-bg {    
     background-image: url('https://nasukafoods.site/isiangajih.jpg');
     background-size: cover;
@@ -51,7 +50,7 @@
 }
 
 .roll-bg {    
-    background-image: url('https://nasukafoods.site/roll.jpg');
+    background-image: url('https://nasukafoods.site/langit.jpg');
     background-size: cover;
     background-position: center;
 }
