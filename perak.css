@@ -1,16 +1,16 @@
-  .container {    
-      max-width: 80%;
+.kontenpembelian {    
+      max-width: 90%;
       margin: auto;
       background: white;
       padding: 5%;
       border-radius: 0;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      font-size: 100px;
+      font-size: 20px;
       
     }
     .header-receipt {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       font-size: 30px;
       line-height: 1.2;
       
@@ -20,16 +20,16 @@
     .header-receipt h2 {
       color: black;
       margin: 0;
-      font-size: 70px;
+      
       text-transform: uppercase;
-      font-size: 60px;
+      font-size: 30px;
       
     }
   
     .receipt-line {
       border-bottom: 1px dashed black;
       margin: 15px 0;
-      font-size: 60px;
+      font-size: 30px;
       
     }
 
@@ -37,37 +37,30 @@
       display: block;
       margin-bottom: 5px;
       color: black;
-      font-size: 50px;
+      font-size: 20px;
       
     }
 
     input[type="text"], input[type="number"] {
   
       width: 100%;
-      padding: 8px 10px;
-      margin-bottom: 15px;
+      padding: 4px 5px;
+      margin-bottom: 8px;
       border: 1px solid black;
       border-radius: 0;
       color: black;
       font-family: 'Courier New', monospace;
       box-sizing: border-box; 
-      font-size: 60px;
+      font-size: 20px;
       
     }
     
     input[type="text"]:focus, input[type="number"]:focus {
         outline: none;
         border-color: red;
-        font-size: 60px;
+        font-size: 20px;
         
     }
-
-
-
-
-
-
-
 
 
     .file-upload-wrapper {
@@ -76,7 +69,7 @@
       margin-bottom: 15px;
       display: flex;
       align-items: center;
-      font-size: 60px;
+      font-size: 30px;
       
     }
     .custom-file-upload {
@@ -88,11 +81,11 @@
       border-radius: 0;
       color: #ddd;
       transition: background-color 0.3s;
-      font-size: 50px;
+      font-size: 30px;
     }
     .custom-file-upload:hover {
       background-color: #444;
-      font-size: 60px;
+      font-size: 30px;
       
       
     }
@@ -100,12 +93,12 @@
       margin-left: 10px;
       color: blue;
       display: none;
-      font-size: 50px;
+      font-size: 15px;
      
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 60%; 
+      max-width: 10%; 
     }
     #bukti {
       position: absolute;
@@ -115,7 +108,7 @@
       cursor: pointer;
       width: 100%;
       height: 100%;
-      font-size: 60px;
+      font-size: 30px;
       
       
     }
@@ -131,17 +124,17 @@
       font-size: 16px;
       text-transform: uppercase;
       font-family: 'Courier New', monospace;
-      font-size: 60px;
+      font-size: 30px;
       
     }
     button:hover {
       background-color: #777;
-      font-size: 60px;
+      font-size: 30px;
       
     }
     #backButton, #printButton {
         margin-top: 10px;
-        font-size: 60px;
+        font-size: 30px;
         
     }
 
@@ -161,14 +154,12 @@
     .receipt-details p {
         margin: 5px 0;
         line-height: 1.5;
-        font-size: 60px;
+        font-size: 20px;
     }
     .receipt-details strong {
         display: inline-block;
         min-width: 120px;
-        font-size: 60px;
-        
-        
+        font-size: 10px;
     }
     
 
@@ -176,26 +167,15 @@
       body {
         background-color: transparent !important;
         color: black !important;
-        font-size: 60px;
+        font-size: 10px;
       }
       
-      
-      
-      .container {
+      .kontenpembelian {
         box-shadow: none !important;
         border: none !important;
         max-width: none !important;
       }
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+  
       #topupForm, #backButton, #printButton, #statusMessage {
         display: none !important;
       }
@@ -203,6 +183,3 @@
         display: block !important;
       }
     }
-    
-   
-    
