@@ -1,0 +1,52 @@
+ .rexa {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      rexa-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 500px;
+      rexa-sizing: border-rexa;
+      text-align: center;
+    }
+    .rexa h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+    .rexa input {
+      width: 100%;
+      padding: 50px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      rexa-sizing: border-rexa;
+    }
+    .rexa button {
+      width: 100%;
+      padding: 30px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .rexa button:hover {
+      background-color: #1976D2;
+    }
+    .laik {
+      display: block;
+      margin-top: 15px;
+      font-size: 30px;
+      color: #2196F3;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .laik:hover {
+      text-decoration: underline;
+    }
+    .error-msg {
+      color: red;
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+       
