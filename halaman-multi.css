@@ -1,0 +1,175 @@
+
+#profile-konten {
+    display: none;
+}
+
+#payment-konten {
+    display: none;
+}
+
+#edit-profile-konten {
+    display: none;
+}
+
+#leaderboard-konten {
+    display: none;
+}
+
+#belanja-konten {
+    display: none;
+}
+
+#labirin-konten {
+    display: none;
+}
+
+#login-konten {
+    display: none;
+}
+
+#signup-konten {
+    display: none;
+}
+
+#saya-konten {
+    display: none;
+}
+
+#pasar-konten {
+    display: none;
+}
+
+#disclaimer-konten {
+    display: none;
+}
+
+#faq-konten {
+    display: none;
+}
+
+#return-policy-konten {
+    display: none;
+}
+
+#privacy-policy-konten {
+    display: none;
+}
+
+#term-konten {
+    display: none;
+}
+
+.home-bg {
+    background-color: #f0f0f0; /* Contoh warna abu-abu muda */
+    background-image: url('https://nasukafoods.site/home-bg.jpg'); /* Ganti dengan URL gambar Anda */
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-bg {
+    background-color: #e0f2f1; /* Contoh warna hijau mint */
+    background-image: url('https://nasukafoods.site/profile-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.payment-bg {
+    background-color: #e3f2fd; /* Contoh warna biru muda */
+    background-image: url('https://nasukafoods.site/payment-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.edit-profile-bg {
+    background-color: #fce4ec; /* Contoh warna merah muda */
+    background-image: url('https://nasukafoods.site/edit-profile-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.leaderboard-bg {
+    background-color: #fffde7; /* Contoh warna kuning muda */
+    background-image: url('https://nasukafoods.site/leaderboard-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.belanja-bg {
+    background-color: #e8f5e9; /* Contoh warna hijau */
+    background-image: url('https://nasukafoods.site/belanja-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.labirin-bg {
+    background-color: #f3e5f5; /* Contoh warna ungu muda */
+    background-image: url('https://nasukafoods.site/labirin-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-bg {
+    background-color: #e1f5fe; /* Contoh warna biru langit */
+    background-image: url('https://nasukafoods.site/login-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.signup-bg {
+    background-color: #fbe9e7; /* Contoh warna oranye */
+    background-image: url('https://nasukafoods.site/signup-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.saya-bg {
+    background-color: #fff8e1; /* Contoh warna krem */
+    background-image: url('https://nasukafoods.site/saya-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.pasar-bg {
+    background-color: #e8eaf6; /* Contoh warna ungu pucat */
+    background-image: url('https://nasukafoods.site/pasar-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.disclaimer-bg {
+    background-color: #e0e0e0; /* Contoh warna abu-abu */
+    background-image: url('https://nasukafoods.site/disclaimer-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.faq-bg {
+    background-color: #c8e6c9; /* Contoh warna hijau pucat */
+    background-image: url('https://nasukafoods.site/faq-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.return-policy-bg {
+    background-color: #b3e5fc; /* Contoh warna biru terang */
+    background-image: url('https://nasukafoods.site/return-policy-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.privacy-policy-bg {
+    background-color: #cfd8dc; /* Contoh warna abu-abu kebiruan */
+    background-image: url('https://nasukafoods.site/privacy-policy-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.term-bg {
+    background-color: #d1c4e9; /* Contoh warna ungu lavender */
+    background-image: url('https://nasukafoods.site/term-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+
+
