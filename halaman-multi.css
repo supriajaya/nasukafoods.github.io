@@ -1,63 +1,79 @@
-
-#profile-konten {
+#profile-container {
     display: none;
 }
 
-#payment-konten {
+#payment-container {
     display: none;
 }
 
-#edit-profile-konten {
+#edit-profile-container {
     display: none;
 }
 
-#leaderboard-konten {
+#leaderboard-container {
     display: none;
 }
 
-#belanja-konten {
+#belanja-container {
     display: none;
 }
 
-#labirin-konten {
+#labirin-container {
     display: none;
 }
 
-#login-konten {
+#login-container {
     display: none;
 }
 
-#signup-konten {
+#signup-container {
     display: none;
 }
 
-#saya-konten {
+#saya-container {
     display: none;
 }
 
-#pasar-konten {
+#pasar-container {
     display: none;
 }
 
-#disclaimer-konten {
+#disclaimer-container {
     display: none;
 }
 
-#faq-konten {
+#faq-container {
     display: none;
 }
 
-#return-policy-konten {
+#return-policy-container {
     display: none;
 }
 
-#privacy-policy-konten {
+#privacy-policy-container {
     display: none;
 }
 
-#term-konten {
+#term-container {
     display: none;
 }
+
+
+#roll-container {
+    display: none;
+}
+#burung-container {
+    display: none;
+}
+
+#zona1-container {
+    display: none;
+}
+
+#cross-container {
+    display: none;
+}
+
 
 .home-bg {
     background-color: #f0f0f0; /* Contoh warna abu-abu muda */
@@ -172,4 +188,33 @@
 }
 
 
+
+
+.roll-bg {
+    background-color: #c8e6c9; /* Contoh warna hijau pucat */
+    background-image: url('https://nasukafoods.site/faq-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.burung-bg {
+    background-color: #b3e5fc; /* Contoh warna biru terang */
+    background-image: url('https://nasukafoods.site/return-policy-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.zona1-bg {
+    background-color: #cfd8dc; /* Contoh warna abu-abu kebiruan */
+    background-image: url('https://nasukafoods.site/privacy-policy-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.cross-bg {
+    background-color: #d1c4e9; /* Contoh warna ungu lavender */
+    background-image: url('https://nasukafoods.site/term-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
 
