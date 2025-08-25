@@ -1,6 +1,9 @@
 #profile-container {
     display: none;
 }
+#rule-container {
+    display: none;
+}
 
 #payment-container {
     display: none;
@@ -73,6 +76,19 @@
 #cross-container {
     display: none;
 }
+
+
+
+
+
+
+.rule-bg {
+    background-color: #f0f0f0; /* Contoh warna abu-abu muda */
+    background-image: url('https://nasukafoods.site/home-bg.jpg'); /* Ganti dengan URL gambar Anda */
+    background-size: cover;
+    background-position: center;
+}
+
 
 
 .home-bg {
