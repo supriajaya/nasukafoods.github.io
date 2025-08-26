@@ -1,51 +1,40 @@
-  .box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 320px;
-      box-sizing: border-box;
-      text-align: center;
-    }
-    .box h2 {
-      margin-top: 0;
-      margin-bottom: 16px;
-    }
-    .box input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-    .box button {
-      width: 100%;
-      padding: 10px;
-      background-color: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .box button:hover {
-      background-color: #1976D2;
-    }
-    .link {
-      display: block;
-      margin-top: 15px;
-      font-size: 14px;
-      color: #2196F3;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .link:hover {
-      text-decoration: underline;
-    }
-    .error-msg {
-      color: red;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
+#login-container input,
+#signup-container input {
+  width: 90%;
+  font-size: 40px;
+  padding: 30px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+#login-container button,
+#signup-container button {
+  width: 90%;
+  font-size: 40px;
+  padding: 30px;
+  border: none;
+  border-radius: 10px;
+  background: #2196F3;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#login-container .laik,
+#signup-container .laik {
+  display: block;
+  margin-top: 20px;
+  font-size: 50px;
+  color: #000;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+}
+
+#login-container .laik:hover,
+#signup-container .laik:hover {
+  color: #2196F3;
+  text-decoration: underline;
+}
+    
