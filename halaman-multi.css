@@ -5,6 +5,9 @@
 #rule-container {
     display: none;
 }
+#inbox-container {
+    display: none;
+}
 
 
 #payment-container {
@@ -186,6 +189,13 @@
     background-size: cover;
     background-position: center;
 }
+
+.inbox-bg {
+    background-image: url('https://nasukafoods.site/langit.jpg');
+    background-size: cover;
+    background-position: center;
+}
+        
 
 .zona1-bg {
     background-image: url('https://nasukafoods.site/langit.jpg');
