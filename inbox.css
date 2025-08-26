@@ -1,0 +1,84 @@
+ .msg {  
+      max-width: 70%;  
+      margin: 5px 0;  
+      padding: 8px 12px;  
+      border-radius: 10px;  
+      word-wrap: break-word;  
+      display: inline-block;  
+    }  
+    .msg.me {  
+      background-color: #dcf8c6;  
+      align-self: flex-end;  
+      border-top-right-radius: 0;  
+      text-align: right;  
+    }  
+    .msg:not(.me) {  
+      background-color: #ffffff;  
+      align-self: flex-start;  
+      border-top-left-radius: 0;  
+      text-align: left;  
+    }  
+    .time {  
+      font-size: 10px;  
+      color: #888;  
+      margin-top: 2px;  
+      display: block;  
+    }  
+    #inputMessage {  
+      resize: none;  
+      overflow: hidden;  
+    }  
+    #topBar {  
+      display: flex;  
+      align-items: center;  
+      padding: 10px;  
+      background-color: green;  
+      cursor: pointer;  
+    }  
+    #targetFotoEl {  
+      width: 40px;  
+      height: 40px;  
+      border-radius: 50%;  
+      object-fit: cover;  
+      margin-right: 10px;  
+    }  
+    #roomTitle {  
+      font-weight: bold;  
+      color: white;  
+    }  
+    #chatBox {  
+      display: flex;  
+      flex-direction: column;  
+      padding: 10px;  
+      height: calc(100vh - 120px);  
+      overflow-y: auto;  
+      background: #e5ddd5;  
+    }  
+    #inputContainer {  
+      display: flex;  
+      padding: 10px;  
+      border-top: 1px solid #ccc;  
+      background: #f0f0f0;  
+    }  
+    #inputMessage {  
+      flex: 1;  
+      padding: 10px;  
+      border: 1px solid #ccc;  
+      border-radius: 5px;  
+      font-size: 1rem;  
+      min-height: 40px;  
+    }  
+    #cusBtn {  
+      margin-left: 10px;  
+      padding: 10px 16px;  
+      background: #4caf50;  
+      color: white;  
+      border: none;  
+      border-radius: 5px;  
+      font-size: 1.2rem;  
+      cursor: pointer;  
+      user-select: none;  
+    }  
+    #cusBtn:active {  
+      background: #388e3c;  
+    }  
