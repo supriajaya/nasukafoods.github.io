@@ -1,0 +1,24 @@
+.judul-aturan {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.aturan {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+
+.aturan p {
+  margin-top: 10px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: left;
+  width: 95%;
+  box-sizing: border-box;
+  margin-bottom: 1px;
+}
