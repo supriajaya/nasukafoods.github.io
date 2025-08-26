@@ -1,3 +1,48 @@
+.atasanaturan {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; 
+  padding: 10px 0; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+  z-index: 1000;
+}
+
+
+.bawahanaturan {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; 
+  padding: 10px 0; 
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000; 
+}
+
+.variansiaturan {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: black;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 38px; 
+    }     
+    
+
+
+
 .judul-aturan {
   font-size: 40px;
   font-weight: bold;
@@ -22,3 +67,4 @@
   box-sizing: border-box;
   margin-bottom: 1px;
 }
+
