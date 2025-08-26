@@ -1,4 +1,4 @@
-.perspective-on { perspective: 1000px; }
+  .perspective-on { perspective: 1000px; }
     .perspective-off { perspective: 0; }
     
     .tilted { transform: rotateY(45deg); }
@@ -32,18 +32,18 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 700px;
-      height: 700px;
+      width: 600px;
+      height: 600px;
       z-index: 9999;
       pointer-events: none;
     }
     
     #numbersDisplay {
       position: absolute;
-      top: 80px;
+      top: 50px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 36px;
+      font-size: 40px;
       font-weight: bold;
       color: #000;
       background: rgba(255, 255, 255, 0.9);
@@ -51,7 +51,7 @@
       border-radius: 10px;
       z-index: 10000;
       display: flex;
-      gap: 15px;
+      gap: 10px;
     }
     
     #timeDisplay {
@@ -67,41 +67,13 @@
       text-align: left;
     }
     
-    #countdownDisplay {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 18px;
-      color: #000;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 10px 20px;
-      border-radius: 10px;
-      z-index: 10000;
-      text-align: right;
-    }
+        
     
-    .countdown {
-      font-weight: bold;
-      color: #d9534f;
-    }
-    
-    .time-warning {
-      color: #d9534f;
-      font-size: 14px;
-      margin-top: 5px;
-      display: none;
-    }
-    
-    body {
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-    
+  
     #rotate {
       margin: 0 auto;
-      width: 600px;
-      height: 600px;
+      width: 700px;
+      height: 700px;
       padding-top: 700px;
       transform-style: preserve-3d;
       transform: rotateY(45deg);
@@ -137,23 +109,9 @@
     
     .backface-on { backface-visibility: visible; }
     
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 24px;
-      z-index: 100000;
-    }
+  
 
-
-.bottom-links {
+    .bottom-links {
       position: fixed;
       bottom: 20px;
       width: 100%;
@@ -162,15 +120,303 @@
       padding: 0 20px;
       box-sizing: border-box;
     }
-    .nomor-saya {
+  
+    #spinButton:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  
+    #spinButton {
+      position: absolute;    
+      top: 1500px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 30px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 30px;
+      width: 950px;
+    }
+    
+    .mainting-panel {
+      position: absolute;
+      top: 1600px;
       left: 20px;
-      color: black;
+      background: rgba(0,0,0,0.7);
+      padding: 15px;
+      font-size: 30px;
+      border-radius: 10px;
+      color: white;
+      width: 950px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    .beli-nomor {
-      right: 20px;
+    
+    .main-input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+      background-color: #333;
+      color: white;
+      font-size: 30px;
+    }
+    
+    .main-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 2px;
+      padding: 8px 15px;
+      margin: 5px 2px;
+      border-radius: 5px;
       cursor: pointer;
-      color: black;
+      transition: background-color 0.3s;
+    }
+    
+    .main-button:hover {
+      background-color: #45a049;
+    }
+    
+    .main-button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .result-message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+   #perakBalance {
+      font-weight: bold;
+      color: snow;
+    }
+    
+   .win {
+      background-color: rgba(255, 215, 0, 0.7) !important;
+      color: black !important;
     }
 
+    .win-types {
+      margin-top: 15px;
+      font-size: 30px;
+      background-color: rgba(255, 215, 0, 0.7) !important;
+      color: black !important;
+    }
 
+    .win-type {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      background-color: rgba(255, 215, 0, 0.7) !important;
+      color: black !important;
+    }
 
+    #numbersDisplay {
+      position: absolute;
+      top: 20px;
+      left: 80%;
+      transform: translateX(-50%);
+      font-size: 50px;
+      font-weight: bold;
+      background: snow;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    #numbersDisplay span {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+      font-size: 30px;
+    }
+    
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: grey;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .auto-main-options {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #444;
+      font-size: 30px;
+    }
+    
+    .auto-main-options h4 {
+      margin-bottom: 10px;
+      font-size: 30px;
+    }
+    
+    #automainButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      font-size: 30px;
+    }
+    
+    #automainButtons button {
+      flex: 1;
+      min-width: 50px;
+      padding: 5px;
+      background-color: #333;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-size: 30px;
+    }
+    
+    #automainButtons button.active {
+      background-color: #4CAF50;
+      font-weight: bold;
+      font-size: 30px;
+    }
+    
+    #automainButtons button:last-child {
+      background-color: #f44336;
+      font-size: 30px;
+    }
+    
+    .result-hidden {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .rolling-text {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: black;
+      font-size: 30px;
+      opacity: 0.7;
+      z-index: 100;
+      font-size: 30px;
+    }
+
+    .link-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .menu-link {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: black;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 28px; 
+    }
+      
+    .menu-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .history-link-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }     
+    
+    .error-message {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .bling-bling {
+      animation: glowing 1.5s infinite alternate;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+    }
+
+    @keyframes glowing {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+      }
+      to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
+      }
+    }
+    
+    .link-container {
+      position: relative;
+      z-index: 200000;
+    }
+    
+    .menu-link {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid red;
+      color: snow;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+      text-align: center;
+      font-size: 28px; 
+      background: rgba(0,0,0,0.7);
+    }
+      
+    .menu-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .history-link-container {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    
+    .auto-spin-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        gap: 10px;
+    }
+    .auto-spin-buttons button {
+        padding: 15px 30px;
+        font-size: 24px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        width: 45%;
+        color: white;
+    }
+    #startAutoSpinButton {
+        background-color: #4CAF50;
+    }
+    #stopAutoSpinButton {
+        background-color: #f44336;
+        display: none; 
+    }
+  
+ 
