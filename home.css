@@ -1,3 +1,41 @@
+
+.user-search-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  padding: 8px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 8px; /* Optional: adds space between results */
+}
+
+.user-profile-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.profile-link {
+  font-size: 30px;
+  color: #2196f3;
+}
+
+
+#cariUser {
+  width: 90%; /* Mengatur lebar menjadi 90% dari container */
+  padding: 30px 32px; /* Menambah ruang di dalam kolom */
+  font-size: 32px; /* Memperbesar ukuran teks */
+}
+
+
+
+
 body {
       margin: 0;
       padding: 0;
