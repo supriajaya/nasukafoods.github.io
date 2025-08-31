@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirim Lokasi Saya</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .button {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            width: 100%;
+            margin: 20px 0;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #3367D6;
+        }
+        .button:disabled {
+            background-color: #a8a8a8;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+        .loading {
+            background-color: #FFF8E1;
+            color: #FFA000;
+        }
+        .success {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        .error {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+        .location-data {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        .location-data h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .info {
+            background-color: #E3F2FD;
+            color: #1565C0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .timestamp {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            text-align: right;
+        }
+        .auto-update {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kirim Lokasi Saya</h1>
+        
+        <div class="info">
+            <p>Aplikasi ini akan mengirimkan lokasi Anda ke database. Pastikan Anda mengizinkan akses lokasi ketika diminta.</p>
+        </div>
+        
+        <button id="sendLocationBtn" class="button">Kirim Lokasi Saya Sekarang</button>
+        
+        <div class="auto-update">
+            <input type="checkbox" id="autoUpdate">
+            <label for="autoUpdate">Update lokasi otomatis setiap 30 detik</label>
+        </div>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <div id="locationData" class="location-data" style="display: none;">
+            <h3>Data Lokasi Terakhir:</h3>
+            <p>Latitude: <span id="latitude">-</span></p>
+            <p>Longitude: <span id="longitude">-</span></p>
+            <p>Akurasi: <span id="accuracy">-</span> meter</p>
+            <p class="timestamp">Waktu: <span id="timestamp">-</span></p>
+        </div>
+        
+        <div class="info">
+            <p>Bagikan link ini dengan customer untuk melacak lokasi Anda: 
+                <input type="text" id="trackingLink" readonly style="width: 100%; padding: 8px; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            </p>
+            <button id="copyLinkBtn" class="button" style="background-color: #0F9D58;">Salin Link</button>
+        </div>
+    </div>
+
+    <script>
+       
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
+  authDomain: "nasukafoods1.firebaseapp.com",
+  databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nasukafoods1",
+  storageBucket: "nasukafoods1.firebasestorage.app",
+  messagingSenderId: "84287800896",
+  appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+
+
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Elemen UI
+        const sendLocationBtn = document.getElementById('sendLocationBtn');
+        const statusDiv = document.getElementById('status');
+        const locationDataDiv = document.getElementById('locationData');
+        const latitudeSpan = document.getElementById('latitude');
+        const longitudeSpan = document.getElementById('longitude');
+        const accuracySpan = document.getElementById('accuracy');
+        const timestampSpan = document.getElementById('timestamp');
+        const autoUpdateCheckbox = document.getElementById('autoUpdate');
+        const trackingLinkInput = document.getElementById('trackingLink');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+
+        // Variabel untuk auto update
+        let autoUpdateInterval = null;
+        const TRACKING_ID = generateTrackingId(); // ID unik untuk tracking
+
+        // Generate tracking link
+        trackingLinkInput.value = window.location.origin + window.location.pathname.replace('sender.html', '') + 'viewer.html?id=' + TRACKING_ID;
+
+        // Fungsi untuk generate ID unik
+        function generateTrackingId() {
+            // Coba gunakan ID dari URL jika ada
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('id')) {
+                return urlParams.get('id');
+            }
+            
+            // Jika tidak, generate ID baru
+            return 'tracking_' + Math.random().toString(36).substring(2, 10);
+        }
+
+        // Fungsi untuk mengirim lokasi ke Firebase
+        function sendLocationToFirebase(latitude, longitude, accuracy) {
+            // Tampilkan status loading
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'status loading';
+            statusDiv.textContent = 'Mengirim lokasi...';
+            
+            // Buat timestamp
+            const now = new Date();
+            const timestamp = now.toISOString();
+            const readableTime = now.toLocaleString('id-ID');
+            
+            // Buat data yang akan dikirim
+            const locationData = {
+                latitude: latitude,
+                longitude: longitude,
+                accuracy: accuracy,
+                timestamp: timestamp
+            };
+            
+            // Kirim data ke Firebase
+            database.ref('locations/' + TRACKING_ID).set(locationData)
+                .then(() => {
+                    // Berhasil
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = 'Lokasi berhasil dikirim!';
+                    
+                    // Tampilkan data lokasi terakhir
+                    latitudeSpan.textContent = latitude;
+                    longitudeSpan.textContent = longitude;
+                    accuracySpan.textContent = accuracy;
+                    timestampSpan.textContent = readableTime;
+                    locationDataDiv.style.display = 'block';
+                })
+                .catch((error) => {
+                    // Error
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = 'Error: ' + error.message;
+                });
+        }
+
+        // Fungsi untuk mendapatkan lokasi
+        function getLocation() {
+            if (navigator.geolocation) {
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status loading';
+                statusDiv.textContent = 'Mendapatkan lokasi...';
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        const accuracy = position.coords.accuracy;
+                        
+                        sendLocationToFirebase(latitude, longitude, accuracy);
+                    },
+                    (error) => {
+                        statusDiv.className = 'status error';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                statusDiv.textContent = 'Izin akses lokasi ditolak.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                statusDiv.textContent = 'Informasi lokasi tidak tersedia.';
+                                break;
+                            case error.TIMEOUT:
+                                statusDiv.textContent = 'Permintaan lokasi timeout.';
+                                break;
+                            default:
+                                statusDiv.textContent = 'Error tidak diketahui.';
+                                break;
+                        }
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            } else {
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'status error';
+                statusDiv.textContent = 'Geolocation tidak didukung oleh browser Anda.';
+            }
+        }
+
+        // Fungsi untuk memulai update otomatis
+        function startAutoUpdate() {
+            if (autoUpdateInterval) {
+                clearInterval(autoUpdateInterval);
+            }
+            getLocation(); // Kirim segera
+            autoUpdateInterval = setInterval(getLocation, 30000); // Kirim setiap 30 detik
+        }
+
+        // Fungsi untuk menghentikan update otomatis
+        function stopAutoUpdate() {
+            if (autoUpdateInterval) {
+                clearInterval(autoUpdateInterval);
+                autoUpdateInterval = null;
+            }
+        }
+
+        // Event listener untuk tombol
+        sendLocationBtn.addEventListener('click', getLocation);
+
+        // Event listener untuk checkbox auto update
+        autoUpdateCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                startAutoUpdate();
+            } else {
+                stopAutoUpdate();
+            }
+        });
+
+        // Event listener untuk tombol salin link
+        copyLinkBtn.addEventListener('click', function() {
+            trackingLinkInput.select();
+            document.execCommand('copy');
+            alert('Link berhasil disalin!');
+        });
+    </script>
+</body>
+</html>
