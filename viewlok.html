@@ -1,305 +1,98 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Lokasi - Lacak Posisi</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Lokasi di Google Maps</title>
     <style>
-        * {
-            box-sizing: border-box;
+        /* Mengatur ukuran map container agar peta tampil penuh */
+        #map {
+            height: 100vh;
+            width: 100vw;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .header {
-            text-align: center;
-            color: white;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        .panel {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-            padding: 25px;
-        }
-        .map-container {
-            height: 500px;
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #ddd;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-        .location-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .info-box {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #4285F4;
-        }
-        .info-box h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 1rem;
-        }
-        .info-box p {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #4285F4;
-        }
-        .status {
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
-            text-align: center;
-            font-weight: 500;
-        }
-        .loading {
-            background-color: #FFF8E1;
-            color: #FFA000;
-        }
-        .error {
-            background-color: #FFEBEE;
-            color: #C62828;
-        }
-        .instructions {
-            background-color: #E3F2FD;
-            color: #1565C0;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .instructions h3 {
-            margin-bottom: 15px;
-        }
-        .instructions ul {
-            margin-left: 20px;
-        }
-        .instructions li {
-            margin-bottom: 8px;
-        }
-        .url-example {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: monospace;
-            word-break: break-all;
-            margin: 15px 0;
-            border: 1px dashed #ccc;
-        }
-        @media (max-width: 768px) {
-            .location-info {
-                grid-template-columns: 1fr;
-            }
-            .map-container {
-                height: 350px;
-            }
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🛰️ Lacak Lokasi Real-time</h1>
-            <p>Pantau pergerakan lokasi yang dikirim melalui Firebase</p>
-        </div>
+    <div id="map"></div>
 
-        <div class="panel">
-            <h2>Peta Lokasi</h2>
-            <div id="status" class="status loading">
-                Memeriksa ID tracking...
-            </div>
-            <div class="map-container">
-                <div id="map"></div>
-            </div>
-            
-            <div class="location-info">
-                <div class="info-box">
-                    <h3>Latitude</h3>
-                    <p id="latitude">-</p>
-                </div>
-                <div class="info-box">
-                    <h3>Longitude</h3>
-                    <p id="longitude">-</p>
-                </div>
-                <div class="info-box">
-                    <h3>Akurasi</h3>
-                    <p id="accuracy">-</p>
-                </div>
-                <div class="info-box">
-                    <h3>Terakhir Diperbarui</h3>
-                    <p id="timestamp">-</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h2>Cara Melacak Lokasi</h2>
-            <div class="instructions">
-                <h3>📋 Instruksi Penggunaan</h3>
-                <ul>
-                    <li>Pastikan Anda memiliki ID tracking yang valid</li>
-                    <li>ID tracking harus ditambahkan sebagai parameter URL: <code>?id=TRACKING_ID</code></li>
-                    <li>Contoh URL: <span class="url-example" id="urlExample"></span></li>
-                    <li>Halaman ini akan otomatis memperbarui lokasi setiap ada perubahan data</li>
-                </ul>
-            </div>
-
-            <div id="errorContainer" class="status error" style="display: none;">
-                <h3>❌ Error: Tidak ada ID tracking yang ditemukan</h3>
-                <p>Pastikan Anda mengakses melalui link yang benar dengan format:</p>
-                <p class="url-example">https://websiteanda.com/viewlok.html?id=tracking_123</p>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-       
-  
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
-  authDomain: "nasukafoods1.firebaseapp.com",
-  databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "nasukafoods1",
-  storageBucket: "nasukafoods1.firebasestorage.app",
-  messagingSenderId: "84287800896",
-  appId: "1:84287800896:web:83189d6766997b00f701a5"
-};
+     
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
+            authDomain: "nasukafoods1.firebaseapp.com",
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nasukafoods1",
+            messagingSenderId: "84287800896",
+            appId: "1:84287800896:web:83189d6766997b00f701a5"
+        };
 
         // Inisialisasi Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const nasukafoodsRef = database.ref('locations/nasukafoods');
 
-        // Elemen UI
-        const statusDiv = document.getElementById('status');
-        const errorContainer = document.getElementById('errorContainer');
-        const latitudeElem = document.getElementById('latitude');
-        const longitudeElem = document.getElementById('longitude');
-        const accuracyElem = document.getElementById('accuracy');
-        const timestampElem = document.getElementById('timestamp');
-        const urlExampleElem = document.getElementById('urlExample');
+        let map;
+        let marker;
 
-        // Variabel untuk peta dan marker
-        let map = null;
-        let marker = null;
-        let watchId = null;
+        // Fungsi untuk menginisialisasi peta
+        function initMap(latitude, longitude) {
+            const location = { lat: latitude, lng: longitude };
 
-        // Tampilkan contoh URL
-        urlExampleElem.textContent = window.location.origin + window.location.pathname + '?id=tracking_123';
-
-        // Dapatkan ID tracking dari URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const trackingId = urlParams.get('id');
-
-        // Periksa apakah ada ID tracking
-        if (!trackingId) {
-            statusDiv.style.display = 'none';
-            errorContainer.style.display = 'block';
-        } else {
-            // Inisialisasi peta
-            initMap();
-            
-            // Listen untuk perubahan data di Firebase
-            database.ref('locations/' + trackingId).on('value', (snapshot) => {
-                const locationData = snapshot.val();
-                
-                if (locationData) {
-                    // Update UI dengan data terbaru
-                    latitudeElem.textContent = locationData.latitude.toFixed(6);
-                    longitudeElem.textContent = locationData.longitude.toFixed(6);
-                    accuracyElem.textContent = locationData.accuracy + ' meter';
-                    
-                    const updatedTime = new Date(locationData.timestamp);
-                    timestampElem.textContent = updatedTime.toLocaleString('id-ID');
-                    
-                    // Update peta
-                    updateMap(locationData.latitude, locationData.longitude);
-                    
-                    // Sembunyikan status
-                    statusDiv.style.display = 'none';
-                } else {
-                    statusDiv.textContent = 'Menunggu data lokasi...';
-                    statusDiv.style.display = 'block';
-                }
-            }, (error) => {
-                statusDiv.className = 'status error';
-                statusDiv.innerHTML = 'Error: ' + error.message;
-            });
-        }
-
-        // Fungsi inisialisasi peta
-        function initMap() {
-            // Default ke Jakarta jika belum ada data
-            map = L.map('map').setView([-6.2, 106.8], 13);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            
-            // Tambahkan custom marker
-            const customIcon = L.icon({
-                iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34]
-            });
-            
-            marker = L.marker([-6.2, 106.8], {icon: customIcon}).addTo(map);
-            marker.bindPopup("<b>Lokasi</b><br>Lokasi akan muncul di sini").openPopup();
-        }
-
-        // Fungsi untuk memperbarui peta
-        function updateMap(lat, lng) {
-            const newLatLng = L.latLng(lat, lng);
-            
-            if (marker) {
-                marker.setLatLng(newLatLng);
-                marker.bindPopup("<b>Lokasi Terkini</b><br>" + new Date().toLocaleString('id-ID')).openPopup();
+            // Buat peta baru jika belum ada
+            if (!map) {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 15, // Tingkat zoom awal
+                    center: location,
+                });
             } else {
-                marker = L.marker(newLatLng).addTo(map);
+                // Perbarui posisi tengah peta jika peta sudah ada
+                map.setCenter(location);
             }
             
-            map.setView(newLatLng, 15);
+            // Hapus marker lama jika ada
+            if (marker) {
+                marker.setMap(null);
+            }
+
+            // Tambahkan marker baru pada lokasi
+            marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: 'Lokasi Terkini'
+            });
+
+            // Tambahkan event listener untuk zoom
+            map.addListener("zoom_changed", () => {
+                console.log("Zoom changed to: " + map.getZoom());
+            });
         }
+
+        // Mendengarkan perubahan data di Firebase secara real-time
+        nasukafoodsRef.on('value', (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                console.log('Lokasi baru diterima:', data);
+                if (window.google && window.google.maps) {
+                    initMap(data.latitude, data.longitude);
+                } else {
+                    // Jika Google Maps API belum dimuat, muat skripnya
+                    const script = document.createElement('script');
+                    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}`;
+                    script.onload = () => {
+                        initMap(data.latitude, data.longitude);
+                    };
+                    document.head.appendChild(script);
+                }
+            } else {
+                console.log('Data lokasi tidak ditemukan.');
+            }
+        }, (error) => {
+            console.error('Gagal memuat data dari Firebase:', error);
+        });
+
     </script>
+
 </body>
 </html>
