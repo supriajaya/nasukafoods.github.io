@@ -1,14 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Lokasi di Google Maps</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokasi Nasuka Foods</title>
     <style>
-        /* Mengatur ukuran map container agar peta tampil penuh */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
         #map {
             height: 100vh;
             width: 100vw;
-            margin: 0;
-            padding: 0;
+        }
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn {
+            padding: 8px 12px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: #4285F4;
+            color: white;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #3367D6;
+        }
+        .info-window {
+            padding: 10px;
+            text-align: center;
+        }
+        .timestamp {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -16,9 +55,14 @@
 </head>
 <body>
     <div id="map"></div>
+    <div class="controls">
+        <button id="satellite-btn" class="btn">Tampilan Satelit</button>
+        <button id="map-btn" class="btn">Tampilan Peta</button>
+        <button id="center-btn" class="btn">Pusatkan Ulang</button>
+    </div>
 
     <script>
-     
+        // Konfigurasi Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
             authDomain: "nasukafoods1.firebaseapp.com",
@@ -35,20 +79,27 @@
 
         let map;
         let marker;
+        let infoWindow;
+        let currentLocation = { lat: 0, lng: 0 };
+        let watchId;
 
-        // Fungsi untuk menginisialisasi peta
+        // Fungsi untuk inisialisasi peta
         function initMap(latitude, longitude) {
-            const location = { lat: latitude, lng: longitude };
-
-            // Buat peta baru jika belum ada
+            currentLocation = { lat: latitude, lng: longitude };
+            
             if (!map) {
                 map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 15, // Tingkat zoom awal
-                    center: location,
+                    zoom: 18, // Zoom lebih dekat untuk akurasi lebih baik
+                    center: currentLocation,
+                    mapTypeId: 'satellite',
+                    streetViewControl: true,
+                    mapTypeControl: true,
+                    fullscreenControl: true,
+                    zoomControl: true,
+                    gestureHandling: 'greedy'
                 });
             } else {
-                // Perbarui posisi tengah peta jika peta sudah ada
-                map.setCenter(location);
+                map.setCenter(currentLocation);
             }
             
             // Hapus marker lama jika ada
@@ -56,43 +107,144 @@
                 marker.setMap(null);
             }
 
-            // Tambahkan marker baru pada lokasi
+            // Buat marker baru dengan akurasi tinggi
             marker = new google.maps.Marker({
-                position: location,
+                position: currentLocation,
                 map: map,
-                title: 'Lokasi Terkini'
+                title: 'Lokasi Terkini Nasuka Foods',
+                icon: {
+                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                    scaledSize: new google.maps.Size(40, 40),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(20, 40)
+                },
+                animation: google.maps.Animation.DROP,
+                optimized: true
             });
 
-            // Tambahkan event listener untuk zoom
-            map.addListener("zoom_changed", () => {
-                console.log("Zoom changed to: " + map.getZoom());
+            // Hapus infoWindow lama jika ada
+            if (infoWindow) {
+                infoWindow.close();
+            }
+
+            // Buat infoWindow baru
+            infoWindow = new google.maps.InfoWindow({
+                content: `
+                    <div class="info-window">
+                        <strong>Nasuka Foods</strong><br>
+                        Lokasi terkini<br>
+                        <div class="timestamp">Diperbarui: ${new Date().toLocaleTimeString('id-ID')}</div>
+                    </div>
+                `
+            });
+
+            // Buka infoWindow
+            infoWindow.open(map, marker);
+
+            // Tambahkan event listener untuk marker
+            marker.addListener('click', () => {
+                infoWindow.open(map, marker);
+            });
+
+            // Tambahkan circle untuk menunjukkan area akurasi (jika data akurasi tersedia)
+            const accuracyCircle = new google.maps.Circle({
+                strokeColor: '#4285F4',
+                strokeOpacity: 0.4,
+                strokeWeight: 1,
+                fillColor: '#4285F4',
+                fillOpacity: 0.15,
+                map: map,
+                center: currentLocation,
+                radius: 20 // Radius dalam meter (contoh)
             });
         }
 
-        // Mendengarkan perubahan data di Firebase secara real-time
-        nasukafoodsRef.on('value', (snapshot) => {
+        // Fungsi untuk mendapatkan lokasi dengan GPS perangkat (jika diizinkan)
+        function getDeviceLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const deviceLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        // Tambahkan marker untuk lokasi perangkat
+                        new google.maps.Marker({
+                            position: deviceLocation,
+                            map: map,
+                            title: 'Lokasi Perangkat Anda',
+                            icon: {
+                                url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                            }
+                        });
+                    },
+                    (error) => {
+                        console.error('Error getting device location:', error);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            }
+        }
+
+        // Fungsi untuk memuat API Google Maps
+        function loadGoogleMapsAPI() {
+            return new Promise((resolve, reject) => {
+                if (window.google && window.google.maps) {
+                    resolve();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_ACTUAL_API_KEY&libraries=geometry`; // Ganti dengan API key yang valid
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Event listener untuk Firebase
+        nasukafoodsRef.on('value', async (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                console.log('Lokasi baru diterima:', data);
-                if (window.google && window.google.maps) {
+                
+                try {
+                    await loadGoogleMapsAPI();
                     initMap(data.latitude, data.longitude);
-                } else {
-                    // Jika Google Maps API belum dimuat, muat skripnya
-                    const script = document.createElement('script');
-                    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}`;
-                    script.onload = () => {
-                        initMap(data.latitude, data.longitude);
-                    };
-                    document.head.appendChild(script);
+                    
+                    // Dapatkan lokasi perangkat jika diizinkan
+                    getDeviceLocation();
+                } catch (error) {
+                    console.error('Error loading Google Maps API:', error);
                 }
             } else {
-                console.log('Data lokasi tidak ditemukan.');
+                console.error('No data available from Firebase');
             }
-        }, (error) => {
-            console.error('Gagal memuat data dari Firebase:', error);
         });
 
-    </script>
+        // Event listener untuk tombol kontrol
+        document.getElementById('map-btn').addEventListener('click', () => {
+            map.setMapTypeId('roadmap');
+        });
 
+        document.getElementById('satellite-btn').addEventListener('click', () => {
+            map.setMapTypeId('satellite');
+        });
+
+        document.getElementById('center-btn').addEventListener('click', () => {
+            map.setCenter(currentLocation);
+            map.setZoom(18);
+        });
+
+        // Handle error jika Firebase gagal
+        nasukafoodsRef.on('error', (error) => {
+            console.error('Firebase error:', error);
+            alert('Terjadi kesalahan saat mengambil data lokasi.');
+        });
+    </script>
 </body>
 </html>
