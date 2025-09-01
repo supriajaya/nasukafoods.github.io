@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Lokasi Pelanggan</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .info-box {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .location-list {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        }
+        .location-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .location-card h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .data-item:last-child {
+            border-bottom: none;
+        }
+        .data-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .data-value {
+            text-align: right;
+        }
+        #loading-message {
+            text-align: center;
+            color: #7f8c8d;
+        }
+        #error-message {
+            color: #e74c3c;
+            text-align: center;
+        }
+        .map-link {
+            display: block;
+            margin-top: 10px;
+            text-align: right;
+            color: #2980b9;
+            text-decoration: none;
+        }
+        .map-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Monitor Lokasi Semua Pelanggan</h1>
+    
+    <div class="info-box">
+        <p>Halaman ini menampilkan lokasi terakhir dari semua pengirim secara real-time. Data akan diperbarui secara otomatis saat ada lokasi baru yang dikirim.</p>
+    </div>
+
+    <div id="loading-message">Memuat data lokasi...</div>
+    <div id="location-list" class="location-list"></div>
+    <div id="error-message" style="display: none;"></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
+            authDomain: "nasukafoods1.firebaseapp.com",
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nasukafoods1",
+            messagingSenderId: "84287800896",
+            appId: "1:84287800896:web:83189d6766997b00f701a5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const locationsRef = database.ref('locations');
+
+        const loadingMessageEl = document.getElementById('loading-message');
+        const locationListEl = document.getElementById('location-list');
+        const errorMessageEl = document.getElementById('error-message');
+
+        locationsRef.on('value', (snapshot) => {
+            loadingMessageEl.style.display = 'none';
+            const locations = snapshot.val();
+            
+            if (!locations) {
+                errorMessageEl.textContent = 'Belum ada data lokasi yang tersedia.';
+                errorMessageEl.style.display = 'block';
+                locationListEl.innerHTML = '';
+                return;
+            }
+
+            locationListEl.innerHTML = ''; // Bersihkan daftar sebelumnya
+
+            Object.keys(locations).forEach(userId => {
+                const data = locations[userId];
+                const card = document.createElement('div');
+                card.className = 'location-card';
+
+                const cardTitle = document.createElement('h3');
+                cardTitle.textContent = `ID Pengirim: ${userId.substring(0, 8)}...`;
+                
+                const cardContent = `
+                    <div class="data-item">
+                        <span class="data-label">Nama Foto:</span>
+                        <span class="data-value">${userId}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Latitude:</span>
+                        <span class="data-value">${data.latitude}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Longitude:</span>
+                        <span class="data-value">${data.longitude}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Akurasi:</span>
+                        <span class="data-value">${Math.round(data.accuracy)} m</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Waktu:</span>
+                        <span class="data-value">${data.timestamp}</span>
+                    </div>
+                    <a href="https://www.google.com/maps?q=$${data.latitude},${data.longitude}" target="_blank" class="map-link">Lihat di Google Maps</a>
+                `;
+
+                card.appendChild(cardTitle);
+                card.innerHTML += cardContent;
+                locationListEl.appendChild(card);
+            });
+        }, (error) => {
+            loadingMessageEl.style.display = 'none';
+            errorMessageEl.textContent = 'Gagal memuat data lokasi. Periksa koneksi atau konfigurasi Firebase.';
+            errorMessageEl.style.display = 'block';
+            console.error("Error membaca data: ", error);
+        });
+    </script>
+</body>
+</html>
