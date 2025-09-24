@@ -1,0 +1,215 @@
+.video-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 10000; justify-content: center; align-items: center; } .video-popup-content { position: relative; width: 80%; max-width: 800px; background: #000; } .video-popup video { width: 100%; height: auto; display: block; } .close-video { position: absolute; top: -30px; right: 0; color: white; font-size: 24px; cursor: pointer; background: rgba(0,0,0,0.5); border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; } .user-search-result { display: flex; align-items: center; gap: 8px; background: #fff; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); margin-bottom: 8px; /* Optional: adds space between results */ } .user-profile-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; } .user-info { flex: 1; } .profile-link { font-size: 30px; color: #2196f3; } #cariUser { width: 90%; /* Mengatur lebar menjadi 90% dari container */ padding: 30px 32px; /* Menambah ruang di dalam kolom */ font-size: 32px; /* Memperbesar ukuran teks */ } body { margin: 0; padding: 0; height: 100vh; width: 100vw; background-image: url('gambar.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; } /* --- Bagian Tata Letak (Layout) --- */ /* Scrollable Container (arya-scol) */ .arya-scol { display: flex; overflow-x: auto; white-space: nowrap; padding: 2px; gap: 10px; margin-top: -1px; } .arya-scol::-webkit-scrollbar { display: none; } /* Scrollable Bar (arya-bar) */ .arya-bar { display: flex; align-items: center; gap: 10px; padding: 2px; overflow-x: auto; } .arya-bar::-webkit-scrollbar { display: none; } /* --- Bagian Gambar dan Overlay --- */ .arya-scol img, .arya-bar img { width: 180px; aspect-ratio: 1 / 1; border-radius: 3px; object-fit: cover; flex: 0 0 auto; } .arya-overlay, .profil-overlay { position: relative; display: inline-block; } .arya-overlay img, .profil-overlay img { display: block; } .arya-overlay span, .profil-overlay span { position: absolute; bottom: 4px; left: 4px; padding: 2px 1px; border-radius: 1px; font-size: 20px; font-weight: bold; max-width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 6px white, 0 0 8px green, 0 0 10px red; } .arya-overlay span { color: black; } .profil-overlay span { color: white; } .error-msg { color: red; margin-bottom: 10px; font-size: 14px; } #notifInbox { position: absolute; top: 20px; right: 12px; padding: 2px 6px; cursor: pointer; min-width: 20px; text-align: center; user-select: none; display: none; }
+      
+      
+    .product-grid, .product-grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+      margin-top: 20px;
+       font-size: 48px;
+    }
+    .product-card, .product-card2 {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+       font-size: 48px;
+    }
+    .product-card:hover, .product-card2:hover {
+      transform: translateY(-5px);
+    }
+    .product-card img, .product-card2 img {
+      width: 100%;
+      height: auto;
+      display: block;
+       font-size: 48px;
+    }
+    .product-card h3, .product-card2 h3 {
+       font-size: 48px;
+      margin: 10px 0 5px;
+      color: #333;
+    }
+    .product-card p, .product-card2 p {
+       font-size: 48px;
+      color: #777;
+      padding: 0 10px 10px;
+    }
+    .product-card button, .product-card2 button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+         font-size: 48px;
+    }
+    .product-card button:hover, .product-card2 button:hover {
+        background-color: #45a049;
+    }
+    #payment-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        min-height: 100vh;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.9);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+    .payment-card {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        max-width: 100%;
+        width: 100%;
+        text-align: left;
+         font-size: 48px;
+    }
+    .payment-options button {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 48px;
+    }
+    .payment-options button:hover {
+        background-color: #f0f0f0;
+    }
+    .btn-kembali {
+        background-color: #f44336 !important;
+        margin-top: 15px;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+         font-size: 48px;
+    }
+    .qris-image {
+      width: 100%;
+      max-width: 250px;
+      height: auto;
+      display: block;
+      margin: 15px auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .product-image-slider {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 20px;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .slider-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .slider-item {
+      min-width: 100%;
+      flex-shrink: 0;
+    }
+    .slider-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+    .slider-nav button {
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 20px;
+      line-height: 1;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slider-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      background-color: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.3);
+    }
+    .slider-dot.active {
+      background-color: white;
+    }
+    
+    
+    
+    .scrolling-text {
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: scroll-left 10s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+    
+.layanancenter {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: black;
+    animation: bling-blink 1s infinite alternate;
+}
+
+@keyframes bling-blink {
+    from {
+        opacity: 1;
+        text-shadow: 0 0 5px #ff0, 0 0 10px #ff0, 0 0 15px #ff0;
+    }
+    to {
+        opacity: 0.5;
+        text-shadow: none;
+    }
+}
