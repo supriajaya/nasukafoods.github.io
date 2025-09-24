@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1024">
+  <title>Nasuka Foods</title>
+  
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+  
+  <script src="https://nasukafoods.site/fungsi-show.js"></script>     
+  <script src="https://nasukafoods.site/fungsi-sync.js"></script>    
+  <script src="https://nasukafoods.site/fungsi-signup-login.js"></script>    
+  <script src="https://nasukafoods.site/fungsi-burung.js"></script>    
+  <script src="https://nasukafoods.site/fungsi-system-roll.js"></script>    
+      
+  <link rel="stylesheet" href="https://nasukafoods.site/login.css">  
+  <link rel="stylesheet" href="https://nasukafoods.site/signup.css">   
+  <link rel="stylesheet" href="https://nasukafoods.site/roll.css">  
+  <link rel="stylesheet" href="https://nasukafoods.site/show.css">    
+  <link rel="stylesheet" href="https://nasukafoods.site/home.css">    
+  <link rel="stylesheet" href="https://nasukafoods.site/profil.css">    
+  <link rel="stylesheet" href="https://nasukafoods.site/burung.css">   
+      
+  <style>    
+    .product-grid, .product-grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+      margin-top: 20px;
+       font-size: 48px;
+    }
+    .product-card, .product-card2 {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+       font-size: 48px;
+    }
+    .product-card:hover, .product-card2:hover {
+      transform: translateY(-5px);
+    }
+    .product-card img, .product-card2 img {
+      width: 100%;
+      height: auto;
+      display: block;
+       font-size: 48px;
+    }
+    .product-card h3, .product-card2 h3 {
+       font-size: 48px;
+      margin: 10px 0 5px;
+      color: #333;
+    }
+    .product-card p, .product-card2 p {
+       font-size: 48px;
+      color: #777;
+      padding: 0 10px 10px;
+    }
+    .product-card button, .product-card2 button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+         font-size: 48px;
+    }
+    .product-card button:hover, .product-card2 button:hover {
+        background-color: #45a049;
+    }
+    #payment-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        min-height: 100vh;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.9);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+    .payment-card {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        max-width: 100%;
+        width: 100%;
+        text-align: left;
+         font-size: 48px;
+    }
+    .payment-options button {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 48px;
+    }
+    .payment-options button:hover {
+        background-color: #f0f0f0;
+    }
+    .btn-kembali {
+        background-color: #f44336 !important;
+        margin-top: 15px;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+         font-size: 48px;
+    }
+    .qris-image {
+      width: 100%;
+      max-width: 250px;
+      height: auto;
+      display: block;
+      margin: 15px auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .product-image-slider {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 20px;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .slider-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .slider-item {
+      min-width: 100%;
+      flex-shrink: 0;
+    }
+    .slider-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+    .slider-nav button {
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 20px;
+      line-height: 1;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slider-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      background-color: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.3);
+    }
+    .slider-dot.active {
+      background-color: white;
+    }
+    
+    
+    
+    .scrolling-text {
+    font-size: 30px;
+    font-weight: bold;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: scroll-left 10s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+    
+.layanancenter {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: black;
+    animation: bling-blink 1s infinite alternate;
+}
+
+@keyframes bling-blink {
+    from {
+        opacity: 1;
+        text-shadow: 0 0 5px #ff0, 0 0 10px #ff0, 0 0 15px #ff0;
+    }
+    to {
+        opacity: 0.5;
+        text-shadow: none;
+    }
+}
+
+  </style>
+</head>    
+
+<body id="gameBody" class="home-bg">  
+  
+<div id="home-container">    
+  <div class="layanancenter">LAYANAN KHUSUS PELANGGAN</div>
+  
+  <div class="arya-bar raya" style="position: relative;">    
+    <div class="profil-overlay">    
+      <a id="Profil" href="#">    
+        <img src="https://nasukafoods.site/gambarkosong.jpg" class="arya-item raya" id="Foto" />    
+      </a>    
+      <span id="Nama" class="blink-glow">Memuat....</span>    
+    </div>    
+    
+    
+    
+
+      
+      
+      <div class="arya-overlay">  
+        <a href="#" onclick="showRoll()">  
+          <img src="https://nasukafoods.site/rolls.jpg" />  
+        </a> 
+      </div>  
+      
+       <div class="arya-overlay">    
+        <a href="#" onclick="">    
+          <img src="https://nasukafoods.site/500.png" />  
+        </a> 
+      </div>  
+      
+      
+         <div class="arya-overlay">    
+        <a href="#" onclick="">    
+          <img src="https://nasukafoods.site/1.000.png" />  
+        </a> 
+      </div>  
+      
+    <div class="arya-overlay">    
+        <a href="#" onclick="">    
+          <img src="https://nasukafoods.site/5.000.png" />  
+        </a> 
+      </div>  
+      <div class="arya-overlay">    
+        <a href="#" onclick="">    
+          <img src="https://nasukafoods.site/10.000.png" />  
+        </a> 
+      </div>  
+    
+      <div class="arya-overlay">    
+        <a href="#" onclick="">    
+          <img src="https://nasukafoods.site/20.000.png" />  
+        </a> 
+      </div>  
+    
+      <div class="arya-overlay">    
+        <a href="#" onclick="">    
+          <img src="https://nasukafoods.site/40.000.png" />  
+        </a> 
+      </div>  
+    
+    </div>
+  
+  
+
+  <div class="arya-bar raya" style="position: relative;">
+  <div class="scrolling-text">Website sedang dalam perbaikan </div>
+  <div class="arya-scol">
+    </div>
+</div>
+
+  
+  
+  
+  
+  
+  <div class="arya-bar raya" style="position: relative;">    
+    <div class="arya-scol">    
+      <div class="arya-overlay">    
+        <a href="#" onclick="">    
+          <img src="https://nasukafoods.site/gopay.png" />  
+        </a> 
+      </div>  
+      <div class="arya-overlay">  
+        <a href="#" onclick="">  
+          <img src="https://nasukafoods.site/dana.png" />  
+        </a>
+      </div>  
+      <div class="arya-overlay">  
+        <a href="#" onclick="">  
+          <img src="https://nasukafoods.site/ovo.jpg" />  
+        </a> 
+      </div>  
+      <div class="arya-overlay">  
+        <a href="#" onclick="">  
+          <img src="https://nasukafoods.site/shopeepay.jpeg" />  
+        </a> 
+      </div>  
+      <div class="arya-overlay">  
+        <a href="#" onclick="">  
+          <img src="https://nasukafoods.site/brizzi.jpg" />  
+        </a> 
+      </div>  
+      <div class="arya-overlay">  
+        <a href="#" onclick="">  
+          <img src="https://nasukafoods.site/nasukachat.png" />  
+        </a> 
+      </div>     
+      <div class="arya-overlay">  
+        <a href="#" onclick="">  
+          <img src="https://nasukafoods.site/nasukachat.png" />  
+        </a> 
+      </div>   
+    </div>   
+  </div>   
+  
+<h2 style="text-align: center; font-size: 48px;">NASUKA FOODS</h2>
+
+
+  
+  
+  <div class="product-grid">
+      
+    <div class="product-card">
+      <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
+      <h3>Rp 975</h3>
+      <p>1 Pcs</p>
+      <button onclick="showPayment('Cilok Isian Gajih', ' Cilok premium dengan isian gajih pilihan .', 975, ['https://nasukafoods.site/paketcilok.jpg'], 'pesanan bisa.')">Detail</button>
+    </div>
+    
+    
+    <div class="product-card">
+      <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
+      <h3>Rp 47.500</h3>
+      <p>50 pcs</p>
+      <button onclick="showPayment('Cilok Isian Enak', 'Cilok istimewa', 47500, ['https://nasukafoods.site/cilokisian.jpg'], 'Pesanan akan dikirim ke alamat sesuai data di ak.')">Detail</button>
+    </div>
+    
+       
+    <div class="product-card">
+      <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
+      <h3>Rp 94.500</h3>
+      <p>100 pcs</p>
+      <button onclick="showPayment('Cilok ekslusif', 'Terbaik', 94500, ['https://nasukafoods.site/cilokisian.jpg'], 'Keterangan tambahan untuk 100 pcs.')">Detail</button>
+    </div>
+    
+    
+    
+  </div>
+  
+  <div class="product-grid">
+      
+    <div class="product-card">
+      <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
+      <h3>Rp 460.000</h3>
+      <p>500 pcs</p>
+      <button onclick="showPayment('Cilok Wow', 'yang paling hard .', 460000, ['https://nasukafoods.site/paketcilok.jpg'], 'Keterangan tambahan untuk 500 pcs.')">Detail</button>
+    </div>
+    
+    
+    <div class="product-card">
+      <a href="#" onclick="showBurung()">
+        <img src="https://nasukafoods.site/nasukabird.jpg" alt="Nasuka Bird">
+      </a>
+    </div>
+    
+       
+    <div class="product-card">
+      <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
+      <h3>Rp 900.000</h3>
+      <p>1.000 Pcs</p>
+      <button onclick="showPayment('Cilok hayhay', 'Varian khusus', 900000, ['https://nasukafoods.site/cilokisian.jpg', ' https://nasukafoods.site/paketcilok.jpg'], 'Harga normal untuk 1.000 pcs adalah rp 1.000.000 tapi kita kasih diskon 10% cukup bayar Rp 900.000 dan dapatkan poin golds.')">Detail</button>
+    </div>
+    
+    
+    
+  </div>
+  
+  <div style="text-align: center; margin-top: 20px;">
+  <span style="margin: 0 10px; font-size: 30px;">Privacy</span>
+  <span style="margin: 0 10px; font-size: 30px;">Return Policy</span>
+  <span style="margin: 0 10px; font-size: 38px;">Term & Condition</span>
+  <span style="margin: 0 10px; font-size: 30px;">Tentang</span>
+  
+   <span style="margin: 0 10px; font-size: 30px;">Posisi</span>
+</div>
+</div>
+  
+<div id="login-container">          
+  <input type="text" id="loginUsername" placeholder="Username" />    
+  <input type="password" id="loginPassword" placeholder="Password" />    
+  <div id="errorLogin" class="error-msg"></div>    
+  <button onclick="login()">Masuk</button>      
+  <span class="laik" onclick="showSignup()">Belum punya akun? Daftar disini</span>      
+</div>    
+  
+<div id="signup-container">        
+  <input type="text" id="signupNama" placeholder="Nama" />    
+  <input type="text" id="signupUsername" placeholder="Username" />    
+  <input type="password" id="signupPassword" placeholder="Password" />    
+  <button onclick="signup()">Buat Akun Sekarang</button>    
+  <span class="laik" onclick="showLogin()">Sudah punya akun? Masuk disini</span>  
+</div>     
+    
+<div id="roll-container">          
+  <div class="link-container">  
+    <a href="#" class="menu-link" onclick="showRule()">Aturan Main</a>  
+    <a href="#" class="menu-link" onclick="showBurung()">game burung</a>  
+    <a href="#" class="menu-link" onclick="showCross()">Beranda</a>  
+    <a href="#" class="menu-link" onclick="showLogin()">Login</a>  
+    <a href="#" class="menu-link" onclick="showSignup()">Signup</a>  
+  </div>    
+  <div id="loading">Memuat Game...</div>    
+  <div id="stage" class="perspective-on">    
+    <div id="rotate" class="tilted">    
+      <div id="ring1" class="ring"></div>    
+      <div id="ring2" class="ring"></div>    
+      <div id="ring3" class="ring"></div>    
+      <div id="ring4" class="ring"></div>    
+      <div id="ring5" class="ring"></div>    
+    </div>    
+    <audio id="winAudio" src="https://nasukafoods.site/slavafunk.mp3" preload="auto"></audio>    
+    <audio id="slotAudio" src="https://nasukafoods.site/mesinslot.mp3" preload="auto"></audio>    
+    <button id="spinButton">Putar</button>    
+    <div class="mainting-panel">    
+      <div>Perak Saya: <span id="perakBalance">0</span></div>    
+      <div id="errorMessage" class="error-message"></div>    
+      <div class="auto-main-options">    
+        <div id="automainButtons">    
+          <button onclick="selectmain(1)" id="main1">1</button>    
+          <button onclick="selectmain(100)" id="main100">100</button>    
+          <button onclick="selectmain(1000)" id="main1000">1.000</button>    
+          <button onclick="selectmain(10000)" id="main10000">10.000</button>    
+          <button onclick="selectmain(0)">off</button>    
+        </div>    
+      </div>    
+      <div class="auto-spin-buttons">    
+        <button id="startAutoSpinButton"> Otomatis</button>    
+        <button id="stopAutoSpinButton">Hentikan</button>    
+      </div>    
+      <div id="mainResult" class="result-message result-hidden"></div>    
+    </div>    
+  </div>    
+  <div class="history-link-container">    
+    <a href="#" class="variansiaturan" onclick="showHome()">Beranda.</a>  
+  </div>  
+</div>
+    
+<div id="burung-container">    
+  <div class="wrapper">       
+    <button id="selesaiBtn">Klaim Perak</button>  
+    <button id="rollBtn" onclick="showRoll()">Roll Game</button>
+    <div id="customAlert" class="custom-alert">
+      <div id="alertIcon"></div>    
+      <div id="alertMessage"></div>
+      <button id="alertOkBtn" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">OK</button>    
+    </div>    
+    <input class="input-circle input-circle1" type="radio" id="circle1" name="burung_group">    
+    <input class="input-circle input-circle2" type="radio" id="circle2" name="burung_group">    
+    <input class="input-circle input-circle3" type="radio" id="circle3" name="burung_group">    
+    <input class="input-circle input-circle4" type="radio" id="circle4" name="burung_group">    
+    <input class="input-circle input-circle5" type="radio" id="circle5" name="burung_group">    
+    <input class="input-circle input-circle6" type="radio" id="circle6" name="burung_group">    
+    <input class="input-circle input-circle7" type="radio" id="circle7" name="burung_group">    
+    <input class="input-circle input-circle8" type="radio" id="circle8" name="burung_group">    
+    <input class="input-circle input-circle9" type="radio" id="circle9" name="burung_group">    
+    <input class="input-circle input-circle10" type="radio" id="circle10" name="burung_group">    
+    <input class="input-circle input-circle11" type="radio" id="circle11" name="burung_group">    
+    <input class="input-circle input-circle12" type="radio" id="circle12" name="burung_group">    
+    <input class="input-circle input-circle13" type="radio" id="circle13" name="burung_group">    
+    <input class="input-circle input-circle14" type="radio" id="circle14" name="burung_group">    
+    <input class="input-circle input-circle15" type="radio" id="circle15" name="burung_group">    
+    <input class="input-circle input-circle16" type="radio" id="circle16" name="burung_group">    
+    <input class="input-circle input-circle17" type="radio" id="circle17" name="burung_group">    
+    <input class="input-circle input-circle18" type="radio" id="circle18" name="burung_group">    
+    <input class="input-circle input-circle19" type="radio" id="circle19" name="burung_group">    
+    <input class="input-circle input-circle20" type="radio" id="circle20" name="burung_group">    
+    <label for="circle1" class="pajaro pajaro1"><span></span></label>    
+    <label for="circle2" class="pajaro pajaro2"><span></span></label>    
+    <label for="circle3" class="pajaro pajaro3"><span></span></label>    
+    <label for="circle4" class="pajaro pajaro4"><span></span></label>    
+    <label for="circle5" class="pajaro pajaro5"><span></span></label>    
+    <label for="circle6" class="pajaro pajaro6"><span></span></label>    
+    <label for="circle7" class="pajaro pajaro7"><span></span></label>    
+    <label for="circle8" class="pajaro pajaro8"><span></span></label>    
+    <label for="circle9" class="pajaro pajaro9"><span></span></label>    
+    <label for="circle10" class="pajaro pajaro10"><span></span></label>    
+    <label for="circle11" class="pajaro pajaro11"><span></span></label>    
+    <label for="circle12" class="pajaro pajaro12"><span></span></label>    
+    <label for="circle13" class="pajaro pajaro13"><span></span></label>    
+    <label for="circle14" class="pajaro pajaro14"><span></span></label>    
+    <label for="circle15" class="pajaro pajaro15"><span></span></label>    
+    <label for="circle16" class="pajaro pajaro16"><span></span></label>    
+    <label for="circle17" class="pajaro pajaro17"><span></span></label>    
+    <label for="circle18" class="pajaro pajaro18"><span></span></label>    
+    <label for="circle19" class="pajaro pajaro19"><span></span></label>    
+    <label for="circle20" class="pajaro pajaro20"><span></span></label>    
+    <div class="sum">🎁<span id="total-perak">0</span> Perak Gratis</div>    
+  </div>  
+</div>
+
+<div id="profil-container">           
+  <div class="container">
+    <div class="nasuka">
+      <img id="foto-profil" src="https://nasukafoods.site/gambarkosong.jpg" alt="FOTO PROFIL" />
+    </div>
+    <div class="nasuka">
+      <div class="nasuka-info left" id="dataUser"></div>
+    </div>
+  </div>
+</div>
+
+
+
+  
+<div id="payment-container"></div>
+<div id="rule-container"></div>
+<div id="editprofil-container"></div>        
+<div id="leaderboard-container"></div>                    
+<div id="belanja-container"></div>           
+<div id="labirin-container"></div>             
+<div id="saya-container"></div>              
+<div id="inbox-container"></div>            
+<div id="pasar-container"></div>            
+<div id="disclaimer-container"></div>           
+<div id="faq-container"></div>              
+<div id="returnpolicy-container"></div>      
+<div id="privacypolicy-container"></div>           
+<div id="zona1-container"></div>         
+<div id="cross-container"></div> 
+          
+<script>    
+ const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
+    authDomain: "nasukafoods1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+
+const localUser = {    
+  Username: localStorage.getItem("Username"),    
+  Nama: localStorage.getItem("Nama"),    
+  ID: localStorage.getItem("ID"),    
+  Perak: parseInt(localStorage.getItem("Perak")) || 0,    
+};    
+  
+if (!localUser.ID) {    
+  console.log("User ID not found in localStorage. Please log in.");    
+}    
+  
+const userRef = db.ref(`users/${localUser.ID}`);    
+userRef.on('value', (snapshot) => {    
+  const userData = snapshot.val();    
+  if (userData !== null) {    
+    localUser.Perak = userData.Perak || 0;    
+    localStorage.setItem("Perak", localUser.Perak);    
+    updatePerakDisplay();    
+  }    
+});    
+  
+function updatePerakDisplay() {    
+  $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));    
+}    
+  
+function initializeHome() {    
+  console.log('Home page successfully loaded and initialized.');    
+  initializeUserProfile();    
+  setupChatNotifications();    
+}    
+  
+function initializeUserProfile() {    
+  const userID = localStorage.getItem("ID") || "";    
+  const fotoEl = document.getElementById("Profil");    
+  const namaEl = document.getElementById("Nama");    
+  const profilLink = document.getElementById("Profil");    
+      
+  if (!userID) {  
+    if (namaEl) namaEl.textContent = "Silahkan Masuk";  
+    if (fotoEl) fotoEl.src = "https://nasukafoods.site/gambarkosong.jpg";  
+    if (profilLink) {  
+      profilLink.href = "#";  
+      profilLink.onclick = showLogin;  
+    }  
+    return;  
+  }  
+  
+  fetchUserProfileFromDB(userID);    
+}    
+  
+function updateProfileDisplay(nama, foto, userID) {    
+  const namaEl = document.getElementById("Nama");    
+  const fotoEl = document.getElementById("Foto");    
+  const profilLink = document.getElementById("Profil");    
+  if (namaEl) namaEl.textContent = nama;    
+  if (fotoEl) fotoEl.src = foto;    
+  
+  if (profilLink) {
+    profilLink.href = "#";
+    profilLink.onclick = showProfil;
+  }
+}  
+  
+function fetchUserProfileFromDB(userID) {    
+  db.ref("users").orderByChild("ID").equalTo(userID).once("value").then(snap => {    
+    let userFound = false;    
+    snap.forEach(child => {    
+      const val = child.val();    
+      const nama = val.Nama || "Tanpa Nama";    
+      const foto = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";    
+      localStorage.setItem("Nama", nama);    
+      localStorage.setItem("Foto", foto);    
+      updateProfileDisplay(nama, foto, userID);    
+      userFound = true;    
+    });    
+  
+    if (!userFound) {    
+      updateProfileDisplay("Tanpa Nama", "https://nasukafoods.site/gambarkosong.jpg", userID);    
+    }    
+  });    
+}  
+  
+function setupChatNotifications() {    
+  const userID = localStorage.getItem("ID") || "";    
+  const notifInbox = document.getElementById("notifInbox");    
+  if (!userID || !notifInbox) return;    
+  
+  const userChatsRef = db.ref(`users/${userID}/chats`);    
+  
+  userChatsRef.on('value', snapshot => {    
+    const chats = snapshot.val() || {};    
+    let unreadCount = 0;    
+    for (const key in chats) {    
+      if ((chats[key].read === false || chats[key].read === undefined) && chats[key].ID !== userID) {    
+        unreadCount++;    
+      }
+    }    
+  
+    if (unreadCount > 0) {    
+      notifInbox.style.display = 'inline-block';    
+      notifInbox.textContent = unreadCount > 99 ? '99+' : unreadCount;    
+    } else {    
+      notifInbox.style.display = 'none';    
+      notifInbox.textContent = '';    
+    }    
+  });    
+  
+  notifInbox.onclick = () => {    
+    showChatSendersList(userID);    
+  };    
+}    
+  
+async function showChatSendersList(userID) {    
+  const snapshot = await db.ref(`users/${userID}/chats`).once('value');    
+  const chats = snapshot.val() || {};    
+  
+  if (Object.keys(chats).length === 0) {    
+    alert('No message senders');    
+    return;    
+  }    
+  
+  const pengirimData = [];    
+  for (const chatID of Object.keys(chats)) {    
+    const userSnap = await db.ref('users').orderByChild('ID').equalTo(chatID).once('value');    
+    userSnap.forEach(u => {    
+      const nama = u.val().Nama || 'User';    
+      pengirimData.push({ id: chatID, nama });    
+    });    
+  }    
+  
+  const container = document.createElement('div');    
+  container.style.position = 'fixed';    
+  container.style.top = '50%';    
+  container.style.left = '50%';    
+  container.style.transform = 'translate(-50%, -50%)';    
+  container.style.background = '#fff';    
+  container.style.border = '1px solid #ccc';    
+  container.style.borderRadius = '8px';    
+  container.style.padding = '12px';    
+  container.style.zIndex = '9999';    
+  container.style.maxHeight = '300px';    
+  container.style.overflowY = 'auto';    
+  container.style.minWidth = '200px';    
+  container.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';    
+  
+  const closeBtn = document.createElement('button');    
+  closeBtn.textContent = 'x';    
+  closeBtn.style.position = 'absolute';    
+  closeBtn.style.top = '6px';    
+  closeBtn.style.right = '6px';    
+  closeBtn.style.background = 'transparent';    
+  closeBtn.style.border = 'none';    
+  closeBtn.style.fontSize = '18px';    
+  closeBtn.style.cursor = 'pointer';    
+  closeBtn.onclick = () => document.body.removeChild(container);    
+  container.appendChild(closeBtn);    
+  
+  pengirimData.forEach(({ id, nama }) => {    
+    const btn = document.createElement('button');    
+    btn.textContent = nama;    
+    btn.style.display = 'block';    
+    btn.style.width = '100%';    
+    btn.style.margin = '6px 0';    
+    btn.style.padding = '8px';    
+    btn.style.border = 'none';    
+    btn.style.borderRadius = '4px';    
+    btn.style.background = '#2196F3';    
+    btn.style.color = '#fff';    
+    btn.style.cursor = 'pointer';    
+    btn.onclick = () => {  
+      document.body.removeChild(container);  
+      showInbox(id);  
+    };
+    container.appendChild(btn);    
+  });    
+  document.body.appendChild(container);    
+}    
+
+const urlParams = new URLSearchParams(location.search);
+const viewedID = urlParams.get("id");
+const currentID = localStorage.getItem("ID");
+
+const isOwner = currentID && viewedID === currentID;
+const isLoggedIn = !!currentID;
+const isVisitor = !currentID;
+
+
+function loadUserProfile(userID) {
+    db.ref("users").orderByChild("ID").equalTo(userID).once("value").then(snap => {
+        const user = Object.values(snap.val() || {})[0];
+        if (user) {
+            renderUser(user);
+            mopost();
+        } else {
+            alert("Pengguna tidak ditemukan");
+        }
+    }).catch(error => {
+        console.error("Gagal memuat Profile:", error);
+        alert("Terjadi kesalahan saat memuat Profile.");
+    });
+}
+
+
+function renderUser(user) {
+  document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+  document.querySelector('.form-post').style.display = isOwner ? 'flex' : 'none';
+  const dataUserDiv = document.getElementById("dataUser");
+  dataUserDiv.innerHTML = `
+    <p>${user.Nama || '-'}</p>
+    <p>${user.Perak || 0}</p>
+    <p>${user.Jenis || '-'}</p>
+  `;
+  if (isLoggedIn && !isOwner) {
+    const btnPesan = document.createElement("button");
+    btnPesan.innerHTML = '🎇 Kirim Pesan';
+    btnPesan.style.cssText = 'padding: 8px 16px; margin-top: 10px; cursor: pointer;';
+    btnPesan.onclick = () => {
+      localStorage.setItem("targetID", viewedID);
+     
+      showInbox(viewedID); 
+    };
+    dataUserDiv.appendChild(btnPesan);
+  }
+}
+   
+function hideAllContainers() {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #burung-container, #profil-container, #payment-container').forEach(el => {
+        if (el) el.style.display = 'none';
+    });
+}
+
+
+// Fungsi showPayment yang telah diperbarui
+function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
+    hideAllContainers(); 
+    
+    const userName = localStorage.getItem("Nama") || "Pengguna";
+    const userAddress = "Alamat pengantaran belum di seting"; 
+    
+    const paymentContainer = document.getElementById('payment-container');
+    paymentContainer.style.display = 'flex';
+    
+    let sliderHtml = '';
+    if (productImageUrls && productImageUrls.length > 0) {
+        sliderHtml = `
+            <div class="product-image-slider">
+                <div class="slider-wrapper" id="productImageSliderWrapper">
+                    ${productImageUrls.map(url => `<div class="slider-item"><img src="${url}" alt="${productName}"></div>`).join('')}
+                </div>
+                <div class="slider-nav">
+                    <button onclick="prevSlide()">&lt;</button>
+                    <button onclick="nextSlide()">&gt;</button>
+                </div>
+                <div class="slider-dots" id="sliderDots">
+                    ${productImageUrls.map((_, index) => `<span class="slider-dot" onclick="currentSlide(${index})"></span>`).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    paymentContainer.innerHTML = `
+        <div class="payment-card">
+          
+            ${sliderHtml}
+            <p><strong>Produk:</strong> ${productName}</p>
+            
+            <p><strong>Deskripsi:</strong> ${productDescription}</p>
+            
+            <p><strong>Harga:</strong> ${Math.round(productPrice).toLocaleString('id-ID')}</p>
+            
+            <p><strong>Keterangan:</strong> ${manualDescription}</p>
+            
+            <hr>
+            <h3>Informasi Pengguna</h3>
+            <p><strong>Nama:</strong> ${userName}</p>
+            <p><strong>Alamat:</strong> ${userAddress}</p>
+            <hr>
+          
+            <div class="payment-options">
+                <button onclick="processPayment('qris', ${productPrice})">Bayar dengan QRIS</button>
+                <button onclick="processPayment('dana', ${productPrice})">Bayar dengan DANA</button>
+            </div>
+            <button onclick="showHome()" class="btn-kembali">Kembali ke Beranda</button>
+            <div id="payment-status" style="margin-top: 15px;"></div>
+        </div>
+    `;
+
+    if (productImageUrls && productImageUrls.length > 0) {
+        initializeSlider(productImageUrls.length);
+    }
+}
+
+let currentSlideIndex = 0;
+let totalSlides = 0;
+
+function initializeSlider(numSlides) {
+    totalSlides = numSlides;
+    currentSlideIndex = 0;
+    updateSlider();
+}
+
+function updateSlider() {
+    const sliderWrapper = document.getElementById('productImageSliderWrapper');
+    const sliderDotsContainer = document.getElementById('sliderDots');
+
+    if (sliderWrapper && sliderDotsContainer) {
+        sliderWrapper.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+
+        const dots = sliderDotsContainer.children;
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].classList.remove('active');
+        }
+        if (dots[currentSlideIndex]) {
+            dots[currentSlideIndex].classList.add('active');
+        }
+    }
+}
+
+function nextSlide() {
+    currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+    updateSlider();
+}
+
+function prevSlide() {
+    currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
+    updateSlider();
+}
+
+function currentSlide(index) {
+    currentSlideIndex = index;
+    updateSlider();
+}
+
+
+// Fungsi processPayment yang telah diperbarui untuk mendukung DANA
+function processPayment(method, amount) {
+    const statusDiv = document.getElementById('payment-status');
+    statusDiv.innerHTML = ''; // Hapus pesan status sebelumnya
+    
+    if (method === 'qris') {
+        statusDiv.innerHTML = '<span style="color: blue; display: block; text-align: center;">Silahkan scan kode QRIS berikut untuk melanjutkan pembayaran.</span><img src="https://nasukafoods.site/qrisbri.jpg" alt="Kode QRIS" class="qris-image">';
+    } else if (method === 'dana') {
+        // Logika untuk pembayaran DANA
+        statusDiv.innerHTML = `<span style="color: green; display: block; text-align: center;">Payment Gateway sedang dalam proses</span>`;
+        
+        // **PERHATIAN:** Ini adalah contoh simulasi.
+        // Dalam aplikasi nyata, Anda harus melakukan panggilan API yang aman dari server.
+        const danaApiKey = "MASUKKAN_API_KEY_DANA_ANDA"; 
+        
+        // Simulasikan pengalihan ke payment gateway DANA
+        setTimeout(() => {
+            // Contoh URL gateway DANA. Anda harus menggantinya dengan URL yang benar
+            // dari penyedia payment gateway DANA Anda.
+            window.location.href = `https://api.dana.id/checkout?amount=${amount}&apiKey=${danaApiKey}&productName=${encodeURIComponent(productName)}`;
+            // Ganti URL dan parameter di atas sesuai dengan dokumentasi API DANA yang Anda gunakan.
+        }, 2000); // Tunda 2 detik sebelum mengalihkan
+    }
+}
+
+function showBurung() {
+    hideAllContainers();
+    document.getElementById('burung-container').style.display = 'block';
+}
+
+function showHome() {
+    hideAllContainers();
+    document.getElementById('home-container').style.display = 'block';
+    initializeHome();
+}
+</script>  
+</body>    
+</html>
