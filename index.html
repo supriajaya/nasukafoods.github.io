@@ -367,7 +367,7 @@
       <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
       <h3>Rp 975</h3>
       <p>1 Pcs</p>
-      <button onclick="showPayment('Cilok Reguler', ' sings .', 20000, ['https://nasukafoods.site/paketcilok.jpg'])">Detail</button>
+      <button onclick="showPayment('Cilok Isian Gajih', ' Cilok premium dengan isian gajih pilihan .', 975, ['https://nasukafoods.site/paketcilok.jpg'], 'Keterangan tambahan untuk cilok 1 pcs.')">Detail</button>
     </div>
     
     
@@ -375,7 +375,7 @@
       <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
       <h3>Rp 47.500</h3>
       <p>50 pcs</p>
-      <button onclick="showPayment('Produk B', 'Varian telor gulung', 75000, ['https://nasukafoods.site/cilokisian.jpg'])">Detail</button>
+      <button onclick="showPayment('Produk B', 'Varian telor gulung', 47500, ['https://nasukafoods.site/cilokisian.jpg'], 'Keterangan tambahan untuk 50 pcs.')">Detail</button>
     </div>
     
        
@@ -383,7 +383,7 @@
       <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
       <h3>Rp 94.500</h3>
       <p>100 pcs</p>
-      <button onclick="showPayment('Produk B', 'Varian telor gulung', 75000, ['https://nasukafoods.site/cilokisian.jpg'])">Detail</button>
+      <button onclick="showPayment('Produk B', 'Varian telor gulung', 94500, ['https://nasukafoods.site/cilokisian.jpg'], 'Keterangan tambahan untuk 100 pcs.')">Detail</button>
     </div>
     
     
@@ -396,7 +396,7 @@
       <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
       <h3>Rp 460.000</h3>
       <p>500 pcs</p>
-      <button onclick="showPayment('Cilok Reguler', ' sings .', 20000, ['https://nasukafoods.site/paketcilok.jpg'])">Detail</button>
+      <button onclick="showPayment('Cilok Reguler', ' sings .', 460000, ['https://nasukafoods.site/paketcilok.jpg'], 'Keterangan tambahan untuk 500 pcs.')">Detail</button>
     </div>
     
     
@@ -411,7 +411,7 @@
       <img src="https://nasukafoods.site/cilokisian.jpg" alt="">
       <h3>Rp 900.000</h3>
       <p>1.000 Pcs</p>
-      <button onclick="showPayment('Produk B', 'Varian telor gulung', 75000, ['https://nasukafoods.site/cilokisian.jpg', ' https://nasukafoods.site/paketcilok.jpg'])">Detail</button>
+      <button onclick="showPayment('Produk B', 'Varian telor gulung', 900000, ['https://nasukafoods.site/cilokisian.jpg', ' https://nasukafoods.site/paketcilok.jpg'], 'Keterangan tambahan untuk 1.000 pcs.')">Detail</button>
     </div>
     
     
@@ -812,7 +812,9 @@ function hideAllContainers() {
     });
 }
 
-function showPayment(productName, productDescription, productPrice, productImageUrls) {
+
+// Fungsi showPayment yang telah diperbarui
+function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
     hideAllContainers(); 
     
     const userName = localStorage.getItem("Nama") || "Pengguna";
@@ -844,8 +846,13 @@ function showPayment(productName, productDescription, productPrice, productImage
           
             ${sliderHtml}
             <p><strong>Produk:</strong> ${productName}</p>
+            
             <p><strong>Deskripsi:</strong> ${productDescription}</p>
-            <p><strong>Harga:</strong> ${productPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+            
+            <p><strong>Harga:</strong> ${Math.round(productPrice).toLocaleString('id-ID')}</p>
+            
+            <p><strong>Keterangan:</strong> ${manualDescription}</p>
+            
             <hr>
             <h3>Informasi Pengguna</h3>
             <p><strong>Nama:</strong> ${userName}</p>
@@ -854,6 +861,7 @@ function showPayment(productName, productDescription, productPrice, productImage
           
             <div class="payment-options">
                 <button onclick="processPayment('qris', ${productPrice})">Bayar dengan QRIS</button>
+                <button onclick="processPayment('dana', ${productPrice})">Bayar dengan DANA</button>
             </div>
             <button onclick="showHome()" class="btn-kembali">Kembali ke Beranda</button>
             <div id="payment-status" style="margin-top: 15px;"></div>
@@ -907,11 +915,28 @@ function currentSlide(index) {
 }
 
 
+// Fungsi processPayment yang telah diperbarui untuk mendukung DANA
 function processPayment(method, amount) {
     const statusDiv = document.getElementById('payment-status');
+    statusDiv.innerHTML = ''; // Hapus pesan status sebelumnya
     
     if (method === 'qris') {
-        statusDiv.innerHTML = '<span style="color: blue; display: block; text-align: center;"></span><img src="https://nasukafoods.site/qris.jpg" alt="Kode QRIS" class="qris-image">';
+        statusDiv.innerHTML = '<span style="color: blue; display: block; text-align: center;">Silahkan scan kode QRIS berikut untuk melanjutkan pembayaran.</span><img src="https://nasukafoods.site/qris.jpg" alt="Kode QRIS" class="qris-image">';
+    } else if (method === 'dana') {
+        // Logika untuk pembayaran DANA
+        statusDiv.innerHTML = `<span style="color: green; display: block; text-align: center;">Payment Gateway sedang dalam proses</span>`;
+        
+        // **PERHATIAN:** Ini adalah contoh simulasi.
+        // Dalam aplikasi nyata, Anda harus melakukan panggilan API yang aman dari server.
+        const danaApiKey = "MASUKKAN_API_KEY_DANA_ANDA"; 
+        
+        // Simulasikan pengalihan ke payment gateway DANA
+        setTimeout(() => {
+            // Contoh URL gateway DANA. Anda harus menggantinya dengan URL yang benar
+            // dari penyedia payment gateway DANA Anda.
+            window.location.href = `https://api.dana.id/checkout?amount=${amount}&apiKey=${danaApiKey}&productName=${encodeURIComponent(productName)}`;
+            // Ganti URL dan parameter di atas sesuai dengan dokumentasi API DANA yang Anda gunakan.
+        }, 2000); // Tunda 2 detik sebelum mengalihkan
     }
 }
 
