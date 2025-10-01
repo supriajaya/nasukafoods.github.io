@@ -264,11 +264,7 @@
           <img src="https://nasukafoods.site/20.000.png" />
         </a>
       </div>
-      <div class="arya-overlay">
-        <a href="#" onclick="">
-          <img src="https://nasukafoods.site/40.000.png" />
-        </a>
-      </div>
+  
     </div>
   <div class="arya-bar raya" style="position: relative;">
   <div class="scrolling-text">Website sedang dalam perbaikan</div>
@@ -279,13 +275,13 @@
   <div class="product-grid">
     <div class="product-card">
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
-      <h3>Rp 1.000</h3>
+      <h3>Rp 975</h3>
       <p>1 Pcs</p>
       <button onclick="showPayment('Cilok Isian Gajih', ' Cilok premium dengan isian gajih pilihan .', 975, ['https://nasukafoods.site/paketcilok.jpg'], 'No detail')">Detail</button>
     </div>
     <div class="product-card">
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
-      <h3>Rp 47.500</h3>
+      <h3>Rp 48.000</h3>
       <p>50 pcs</p>
       <button onclick="showPayment('Cilok Lemak Sapi Premium', '50 pcs + 100 gram bumbu kacang ekslusif', 47500, ['https://nasukafoods.site/cilokisian.jpg'], 'Pesanan akan dikirim ke alamat sesuai data di akun profil anda, Atau bisa fleksibel juga sesuai intruksi anda, gratis ongkos kirim hanya berlaku di area cibaduyut')">Detail</button>
     </div>
@@ -330,7 +326,7 @@
     
     
     
-    <p>BANDUNG</p>
+  
   </div>
   </div>
 <div id="editprofil-container"></div>
@@ -385,10 +381,6 @@
 <div id="saya-container"></div>
 <div id="inbox-container"></div>
 <div id="pasar-container"></div>
-<div id="disclaimer-container"></div>
-<div id="faq-container"></div>
-<div id="returnpolicy-container"></div>
-<div id="privacypolicy-container"></div>
 <div id="zona1-container"></div>
 <div id="cross-container"></div>
 <div id="login-container" class="auth-container">
@@ -449,41 +441,8 @@
 </div>
 
 
-<div id="tentang-container" class="auth-container">
-    <div class="auth-card" style="max-width: 800px; text-align: left;">
-        <h2>Tentang Bisnis Nasuka Foods</h2>
-        <div class="article-content" style="max-height: 70vh; overflow-y: auto; padding: 10px;">
-            <h3>Cilok: Jajanan Rakyat, Potensi Bisnis Miliar Rupiah</h3>
-            <p><strong>Cilok</strong>, singkatan dari 'Aci dicolok', adalah jajanan khas Sunda yang terbuat dari tepung tapioka (aci) yang dibentuk bulat, direbus, dan disajikan dengan berbagai saus, paling umum adalah saus kacang atau sambal. Meskipun terlihat sederhana, cilok telah bertransformasi menjadi bisnis kuliner yang memiliki potensi pasar yang sangat luas, mulai dari gerobak kaki lima hingga kemasan *frozen food* modern.</p>
-            <p><strong>Nasuka Foods</strong> hadir untuk mengangkat derajat cilok ke tingkat premium. Kami percaya bahwa kualitas bahan baku dan inovasi rasa adalah kunci keberhasilan. Dengan fokus pada **Cilok Isian Lemak Sapi Premium**, kami menargetkan pasar yang menghargai cita rasa autentik dan kebersihan produk.</p>
-
-            <h4>Inovasi Produk dan Pemasaran</h4>
-            <ul>
-                <li><strong>Kualitas Premium:</strong> Menggunakan lemak sapi pilihan dan bumbu eksklusif untuk isian yang gurih dan kenyal.</li>
-                <li><strong>Kemasan Modern:</strong> Menjual dalam kemasan vakum (*frozen food*) untuk menjangkau pelanggan di luar area lokal (Bandung) melalui pengiriman kargo.</li>
-                <li><strong>Digitalisasi:</strong> Mengintegrasikan sistem pemesanan online, termasuk *gamification* (seperti fitur 'Spin' yang Anda lihat), untuk meningkatkan *customer engagement* dan loyalitas merek.</li>
-                <li><strong>Fokus Area:</strong> Menawarkan **GRATIS ONGKOS KIRIM SE CIBADUYUT RAYA** sebagai strategi awal untuk menguasai pasar lokal dengan layanan superior.</li>
-            </ul>
-
-            <h4>Visi Nasuka Foods</h4>
-            <p>Visi kami adalah menjadikan Nasuka Foods sebagai merek cilok premium terkemuka di Indonesia, yang tidak hanya dikenal karena rasa, tetapi juga karena inovasi dalam model bisnis dan pelayanan pelanggan. Kami ingin membuktikan bahwa jajanan tradisional dapat menjadi komoditas bisnis modern yang menguntungkan dan berkelanjutan.</p>
-            <p style="text-align: right; margin-top: 20px; font-style: italic;">"Dari Bandung, untuk lidah Nusantara."</p>
-        </div>
-        <button onclick="showHome()" class="btn-kembali" style="margin-top: 20px;">Kembali ke Beranda</button>
-    </div>
-</div>
-
-
-
-
-
-
 <div id="fixedFooter">
-    <a href="#" onclick="showPrivacyPolicy()">Privacy</a>
-    <a href="#" onclick="showReturnPolicy()">Return</a>
-    <a href="#" onclick="showDisclaimer()">Term</a>
-    <a href="#" onclick="showTentang()">Tentang</a> <— SUDAH DIUBAH
-</div>
+    </div>
 
 
 
@@ -711,9 +670,10 @@ function renderUser(user) {
   }
 }
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #disclaimer-container, #faq-container, #returnpolicy-container, #privacypolicy-container, #zona1-container, #cross-container').forEach(el => {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #zona1-container, #cross-container').forEach(el => {
         if (el) el.style.display = 'none';
     });
+    // Menghapus kontainer yang tidak lagi ada: #disclaimer-container, #faq-container, #returnpolicy-container, #privacypolicy-container, #tentang-container
 }
 function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
     hideAllContainers();
@@ -1100,17 +1060,7 @@ function signupUser() {
 
 
 
-// ... (Keep the other placeholder functions: showPrivacyPolicy, showReturnPolicy, showDisclaimer)
-function showTentang() {
-    hideAllContainers();
-    document.getElementById('tentang-container').style.display = 'flex';
-}
-// End placeholder functions
-
-
-
-
-
+// Placeholder functions yang telah dihapus implementasinya:
 function showReturnPolicy() {
     alert("Halaman Kebijakan Pengembalian (returnpolicy-container) akan ditampilkan di sini.");
 }
@@ -1120,6 +1070,8 @@ function showDisclaimer() {
 function showFaq() {
     alert("Halaman Tentang / FAQ (faq-container) akan ditampilkan di sini.");
 }
+// Fungsi showTentang juga dihapus karena sudah tidak relevan
+
 // End placeholder functions
 
 $(document).ready(function() {
