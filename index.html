@@ -475,7 +475,7 @@
                 <span id="profilAlamat">-</span>
             </div>
         </div>
-        <button onclick="showHome()" class="btn-kembali">Kembali</button>
+        <button onclick="showHome()" class="btn-kembali" style="display: none;">Kembali</button>
     </div>
 </div>
 
@@ -855,6 +855,8 @@ function logoutUser() {
         showHome();
     }
 }
+
+// --- FUNGSI showProfil() YANG DIMODIFIKASI ---
 function showProfil() {
     hideAllContainers();
     const userID = localStorage.getItem("ID");
@@ -864,6 +866,10 @@ function showProfil() {
         return;
     }
     document.getElementById('profil-container').style.display = 'flex';
+    
+    const profilCard = document.querySelector('#profil-container .profil-card');
+    
+    // Fungsi untuk merender data di kartu profil
     const renderProfil = () => {
         document.getElementById('profilFoto').src = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
         document.getElementById('profilNama').textContent = localUser.Nama || 'Nama belum diatur';
@@ -872,12 +878,15 @@ function showProfil() {
         document.getElementById('profilNomorHP').textContent = localUser.NomorHP || 'No. HP belum diatur';
         document.getElementById('profilAlamat').textContent = localUser.Alamat || 'Alamat belum diatur';
     };
+
+    // Load data jika belum ada di localUser
     if (localUser.Nama) {
         renderProfil();
     } else {
-        db.ref("users").child(userID).once("value").then(snapshot => {
+        db.ref(`users/${userID}`).once("value").then(snapshot => {
             const user = snapshot.val();
             if (user) {
+                // Update localUser dan localStorage
                 localUser.Nama = user.Nama || 'Nama belum diatur';
                 localUser.Username = user.Username || 'Username tidak tersedia';
                 localUser.Poin = user.Poin || 0;
@@ -900,62 +909,77 @@ function showProfil() {
             showHome();
         });
     }
-    const profilCard = document.querySelector('#profil-container .profil-card');
-    
+
+    // 1. Hapus tombol Kembali statis jika ada (hanya untuk memastikan kerapian)
+    let existingKembaliButton = profilCard.querySelector('.btn-kembali');
+    if (existingKembaliButton) {
+        existingKembaliButton.remove();
+    }
+
+    // 2. Buat/Update Tombol Edit Profil
     let editButton = profilCard.querySelector('#btnEditProfil');
     if (!editButton) {
         editButton = document.createElement('button');
         editButton.id = 'btnEditProfil';
         editButton.textContent = 'Edit Profil';
-        editButton.className = 'btn-kembali';
+        // Atur gaya agar full-width dan seragam
+        editButton.style.padding = '15px 30px';
         editButton.style.backgroundColor = '#2196F3';
-        editButton.style.marginTop = '15px';
+        editButton.style.color = 'white';
+        editButton.style.border = 'none';
+        editButton.style.borderRadius = '8px';
+        editButton.style.cursor = 'pointer';
+        editButton.style.fontSize = '24px';
+        editButton.style.transition = 'background-color 0.3s';
+        editButton.style.marginTop = '30px';
+        editButton.style.width = '100%';
         editButton.onclick = showEditProfil;
-        const kembaliButton = profilCard.querySelector('.btn-kembali');
-        profilCard.insertBefore(editButton, kembaliButton);
+        profilCard.appendChild(editButton); 
+    } else {
+         // Pindahkan ke bagian bawah sebelum button-group-bottom
+         editButton.style.display = 'block';
     }
 
-    let logoutButton = profilCard.querySelector('#btnLogout');
-    if (!logoutButton) {
-        logoutButton = document.createElement('button');
-        logoutButton.id = 'btnLogout';
-        logoutButton.textContent = 'Logout';
-        logoutButton.className = 'btn-kembali';
-        logoutButton.style.backgroundColor = '#f44336';
-        logoutButton.onclick = logoutUser;
-
-        const existingKembaliButton = profilCard.querySelector('.btn-kembali');
-        if(existingKembaliButton) {
-            existingKembaliButton.remove();
-        }
-
-        let buttonGroupBottom = profilCard.querySelector('.button-group-bottom');
-        if (!buttonGroupBottom) {
-            buttonGroupBottom = document.createElement('div');
-            buttonGroupBottom.className = 'button-group-bottom';
-            buttonGroupBottom.style.display = 'flex';
-            buttonGroupBottom.style.justifyContent = 'space-between';
-            buttonGroupBottom.style.marginTop = '30px';
-            buttonGroupBottom.style.gap = '20px';
-
-            const newKembaliButton = document.createElement('button');
-            newKembaliButton.textContent = 'Kembali';
-            newKembaliButton.className = 'btn-kembali';
-            newKembaliButton.onclick = showHome;
-            newKembaliButton.style.width = '50%';
-            newKembaliButton.style.margin = '0';
-
-            logoutButton.style.width = '50%';
-            logoutButton.style.margin = '0';
-            logoutButton.style.backgroundColor = '#f44336';
-
-            buttonGroupBottom.appendChild(logoutButton);
-            buttonGroupBottom.appendChild(newKembaliButton);
-            
-            profilCard.appendChild(buttonGroupBottom);
-        }
+    // 3. Buat/Update Grup Tombol Bawah (Kembali dan Logout)
+    let buttonGroupBottom = profilCard.querySelector('.button-group-bottom');
+    if (!buttonGroupBottom) {
+        buttonGroupBottom = document.createElement('div');
+        buttonGroupBottom.className = 'button-group-bottom';
+        profilCard.appendChild(buttonGroupBottom);
+    } else {
+        buttonGroupBottom.innerHTML = ''; // Bersihkan konten lama
     }
+
+    // Buat Tombol Kembali (Home)
+    let newKembaliButton = document.createElement('button');
+    newKembaliButton.textContent = 'Kembali';
+    newKembaliButton.className = 'btn-kembali'; 
+    newKembaliButton.onclick = showHome;
+    newKembaliButton.style.width = '50%';
+    newKembaliButton.style.margin = '0';
+    newKembaliButton.style.backgroundColor = '#4CAF50'; // Warna Hijau
+
+    // Buat Tombol Logout
+    let logoutButton = document.createElement('button');
+    logoutButton.id = 'btnLogout';
+    logoutButton.textContent = 'Logout';
+    logoutButton.className = 'btn-kembali'; 
+    logoutButton.style.backgroundColor = '#f44336'; // Warna Merah
+    logoutButton.onclick = logoutUser;
+    logoutButton.style.width = '50%';
+    logoutButton.style.margin = '0';
+
+    // Tambahkan kedua tombol ke grup
+    buttonGroupBottom.appendChild(newKembaliButton);
+    buttonGroupBottom.appendChild(logoutButton);
+
+    // Pastikan urutan di profilCard adalah: Info -> Edit -> Grup Bawah
+    // Pindahkan Edit Button agar berada tepat sebelum Group Bottom (jika sudah ada sebelumnya)
+    profilCard.insertBefore(editButton, buttonGroupBottom);
 }
+// --- AKHIR FUNGSI showProfil() YANG DIMODIFIKASI ---
+
+// --- FUNGSI showEditProfil() YANG DIMODIFIKASI ---
 function showEditProfil() {
     hideAllContainers();
     const editContainer = document.getElementById('editprofil-container');
@@ -970,18 +994,26 @@ function showEditProfil() {
     editContainer.style.justifyContent = 'center';
     editContainer.style.alignItems = 'center';
     editContainer.style.padding = '20px';
+    
+    // Pastikan data terbaru dari localUser digunakan
+    const currentUsername = localUser.Username || '';
+    const currentNama = localUser.Nama || '';
+    const currentNomorHP = localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP;
+    const currentAlamat = localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat;
+
     editContainer.innerHTML = `
         <div class="auth-card">
             <h2>Edit Profil</h2>
             <form id="editProfilForm">
-                <input type="text" id="editNama" placeholder="Nama Lengkap" value="${localUser.Nama || ''}" required>
-                <input type="text" id="editNomorHP" placeholder="Nomor HP" value="${localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP}" required>
-                <textarea id="editAlamat" placeholder="Alamat Pengiriman" rows="3" required>${localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat}</textarea>
+                <input type="text" id="editUsername" placeholder="Username" value="${currentUsername}" required>
+                <input type="text" id="editNama" placeholder="Nama Lengkap" value="${currentNama}" required>
+                <input type="text" id="editNomorHP" placeholder="Nomor HP" value="${currentNomorHP}" required>
+                <textarea id="editAlamat" placeholder="Alamat Pengiriman" rows="3" required>${currentAlamat}</textarea>
                 <input type="password" id="editPassword" placeholder="Password Baru (kosongkan jika tidak ingin ganti)">
                 <button type="submit">Simpan Perubahan</button>
                 <div id="editStatus" class="auth-status"></div>
             </form>
-            <button onclick="showProfil()" class="btn-kembali" style="margin-top: 10px;">Batal</button>
+            <button onclick="showProfil()" class="btn-kembali" style="margin-top: 10px; background-color: #f44336;">Batal</button>
         </div>
     `;
     document.getElementById('editProfilForm').addEventListener('submit', function(e) {
@@ -989,52 +1021,107 @@ function showEditProfil() {
         updateProfile();
     });
 }
+
+// --- FUNGSI updateProfile() YANG DIMODIFIKASI ---
 function updateProfile() {
     const userID = localUser.ID;
+    const newUsername = document.getElementById('editUsername').value.trim();
     const nama = document.getElementById('editNama').value.trim();
     const nomorHP = document.getElementById('editNomorHP').value.trim();
     const alamat = document.getElementById('editAlamat').value.trim();
     const password = document.getElementById('editPassword').value.trim();
     const statusDiv = document.getElementById('editStatus');
+    
     statusDiv.className = 'auth-status';
     statusDiv.innerHTML = 'Menyimpan...';
-    if (!nama || !nomorHP || !alamat) {
-        statusDiv.innerHTML = 'Nama, Nomor HP, dan Alamat wajib diisi.';
+
+    if (!newUsername || !nama || !nomorHP || !alamat) {
+        statusDiv.innerHTML = 'Username, Nama, Nomor HP, dan Alamat wajib diisi.';
         statusDiv.classList.add('error');
         return;
     }
+
+    if (newUsername.length < 5) {
+        statusDiv.innerHTML = 'Username minimal 5 karakter.';
+        statusDiv.classList.add('error');
+        return;
+    }
+
+    if (password && password.length < 5) {
+        statusDiv.innerHTML = 'Password minimal 5 karakter.';
+        statusDiv.classList.add('error');
+        return;
+    }
+
     const updates = {
         Nama: nama,
         NomorHP: nomorHP,
         Alamat: alamat
     };
     if (password) {
-        if (password.length < 5) {
-            statusDiv.innerHTML = 'Password minimal 5 karakter.';
-            statusDiv.classList.add('error');
-            return;
-        }
         updates.Password = password;
     }
-    db.ref(`users/${userID}`).update(updates)
-        .then(() => {
-            localUser.Nama = nama;
-            localUser.NomorHP = nomorHP;
-            localUser.Alamat = alamat;
-            localStorage.setItem("Nama", nama);
-            localStorage.setItem("NomorHP", nomorHP);
-            localStorage.setItem("Alamat", alamat);
-            statusDiv.innerHTML = 'Profil berhasil diperbarui!';
-            statusDiv.classList.add('success');
-            updateProfileDisplay(localUser.Nama, localUser.Foto, localUser.ID);
-            setTimeout(showProfil, 1500);
-        })
-        .catch(error => {
-            console.error("Update Profil Error:", error);
-            statusDiv.innerHTML = 'Gagal memperbarui profil. Silakan coba lagi.';
-            statusDiv.classList.add('error');
-        });
+
+    const processUpdate = () => {
+        db.ref(`users/${userID}`).update(updates)
+            .then(() => {
+                // Update local storage and local user object
+                localUser.Username = newUsername;
+                localUser.Nama = nama;
+                localUser.NomorHP = nomorHP;
+                localUser.Alamat = alamat;
+
+                localStorage.setItem("Username", newUsername);
+                localStorage.setItem("Nama", nama);
+                localStorage.setItem("NomorHP", nomorHP);
+                localStorage.setItem("Alamat", alamat);
+                
+                // Jika password diubah, Firebase sudah menanganinya, tidak perlu disimpan di localStorage
+
+                statusDiv.innerHTML = 'Profil berhasil diperbarui!';
+                statusDiv.classList.add('success');
+                updateProfileDisplay(localUser.Nama, localUser.Foto, localUser.ID);
+                setTimeout(showProfil, 1500);
+            })
+            .catch(error => {
+                console.error("Update Profil Error:", error);
+                statusDiv.innerHTML = 'Gagal memperbarui profil. Silakan coba lagi.';
+                statusDiv.classList.add('error');
+            });
+    };
+
+    // Check if Username has changed and if the new one is available
+    if (newUsername !== localUser.Username) {
+        db.ref("users").orderByChild("Username").equalTo(newUsername).once("value")
+            .then(snapshot => {
+                // Check if the new username exists AND belongs to another user
+                let isTaken = false;
+                snapshot.forEach(child => {
+                    if (child.val().ID !== userID) {
+                        isTaken = true;
+                    }
+                });
+
+                if (isTaken) {
+                    statusDiv.innerHTML = 'Username sudah digunakan oleh pengguna lain. Silakan pilih yang lain.';
+                    statusDiv.classList.add('error');
+                } else {
+                    updates.Username = newUsername; // Add new username to updates object
+                    processUpdate();
+                }
+            })
+            .catch(error => {
+                console.error("Check Username Error:", error);
+                statusDiv.innerHTML = 'Terjadi kesalahan saat memeriksa username.';
+                statusDiv.classList.add('error');
+            });
+    } else {
+        // Username is the same, just update other fields
+        processUpdate();
+    }
 }
+// --- AKHIR FUNGSI YANG DIMODIFIKASI ---
+
 function showLogin() {
     hideAllContainers();
     document.getElementById('login-container').style.display = 'flex';
