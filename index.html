@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=1024">
   <title>Nasuka Foods</title>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
-  <script src="https://nasukafoods.site/fungsi-show.js"></script>
-  <script src="https://nasukafoods.site/fungsi-sync.js"></script>
-  
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script> 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+
   <link rel="stylesheet" href="https://nasukafoods.site/home-payment.css">
   <link rel="stylesheet" href="https://nasukafoods.site/show.css">
+  
   <style>
-/* Existing styles... */
+/* --- Styles from original <style> block --- */
 
 #editprofil-container textarea {
     width: 100%;
@@ -26,35 +24,7 @@
     font-size: 24px;
     resize: vertical;
 }
-      .perspective-on { perspective: 1000px; } .perspective-off { perspective: 0; } .tilted { transform: rotateY(45deg); } .spin-0 { transform: rotateX(-3600deg); } .spin-1 { transform: rotateX(-3636deg); } .spin-2 { transform: rotateX(-3672deg); } .spin-3 { transform: rotateX(-3708deg); } .spin-4 { transform: rotateX(-3744deg); } .spin-5 { transform: rotateX(-3780deg); } .spin-6 { transform: rotateX(-3816deg); } .spin-7 { transform: rotateX(-3852deg); } .spin-8 { transform: rotateX(-3888deg); } .spin-9 { transform: rotateX(-3924deg); } @keyframes back-spin { 100% { transform: rotateX(36deg); } } @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} } @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} } @keyframes spin-0 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } } @keyframes spin-1 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } } @keyframes spin-2 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } } @keyframes spin-3 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } } @keyframes spin-4 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } } @keyframes spin-5 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } } @keyframes spin-6 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } } @keyframes spin-7 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } } @keyframes spin-8 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } } @keyframes spin-9 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } } #resultDisplay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; z-index: 9999; pointer-events: none; } #numbersDisplay { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); font-size: 40px; font-weight: bold; color: #000; background: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 10px; z-index: 10000; display: flex; gap: 10px; } #timeDisplay { position: absolute; top: 20px; left: 20px; font-size: 18px; color: #000; background: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 10px; z-index: 10000; text-align: left; } #rotate { margin: 0 auto; width: 700px; height: 700px; padding-top: 700px; transform-style: preserve-3d; transform: rotateY(45deg); } .ring { margin: 0 auto; height: 115px; width: 115px; float: left; transform-style: preserve-3d; } .roll { position: absolute; width: 120px; height: 120px; box-sizing: border-box; opacity: 0.9; color: black; background: white; border: solid 5px #ccc; backface-visibility: visible; } .roll p { font-size: 100px; font-weight: bold; line-height: 130px; margin: 0; text-align: center; } .backface-on { backface-visibility: visible; } .bottom-links { position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; box-sizing: border-box; }
-      #spinButton:disabled { cursor: not-allowed; opacity: 0.6; }
-    #spinButton {
-        position: absolute;
-        top: 1500px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 30px;
-        background-color: blue;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 30px;
-        width: 950px;
-    }
-    .mainting-panel {
-        position: absolute;
-        top: 1600px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0,0,0,0.7);
-        padding: 15px;
-        font-size: 30px;
-        border-radius: 10px;
-        color: white;
-        width: 950px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-      .main-input { width: 100%; padding: 8px; margin: 5px 0; border-radius: 5px; border: none; background-color: #333; color: white; font-size: 30px; } .main-button { background-color: #4CAF50; color: white; border: none; font-size: 2px; padding: 8px 15px; margin: 5px 2px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; } .main-button:hover { background-color: #45a049; } .main-button:disabled { background-color: #cccccc; cursor: not-allowed; } .result-message { margin-top: 10px; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; transition: all 0.3s ease; } #perakBalance { font-weight: bold; color: snow; } .win { background-color: rgba(255, 215, 0, 0.7) !important; color: black !important; } .win-types { margin-top: 15px; font-size: 30px; background-color: rgba(255, 215, 0, 0.7) !important; color: black !important; } .win-type { display: flex; justify-content: space-between; margin: 5px 0; background-color: rgba(255, 215, 0, 0.7) !important; color: black !important; } #numbersDisplay { position: absolute; top: 20px; left: 80%; transform: translateX(-50%); font-size: 50px; font-weight: bold; background: snow; padding: 10px 20px; border-radius: 5px; display: flex; gap: 10px; } #numbersDisplay span { display: inline-block; width: 30px; text-align: center; font-size: 30px; } #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: grey; display: flex; justify-content: center; align-items: center; z-index: 1000; } .auto-main-options { margin-top: 15px; padding-top: 15px; border-top: 1px solid #444; font-size: 30px; } .auto-main-options h4 { margin-bottom: 10px; font-size: 30px; } #automainButtons { display: flex; flex-wrap: wrap; gap: 5px; font-size: 30px; } #automainButtons button { flex: 1; min-width: 50px; padding: 5px; background-color: #333; border: none; border-radius: 4px; color: white; cursor: pointer; font-size: 30px; } #automainButtons button.active { background-color: #4CAF50; font-weight: bold; font-size: 30px; } #automainButtons button:last-child { background-color: #f44336; font-size: 30px; } .result-hidden { opacity: 0; height: 0; overflow: hidden; margin: 0; padding: 0; transition: all 0.3s ease; } .rolling-text { position: fixed; bottom: 10px; left: 10px; color: black; font-size: 30px; opacity: 0.7; z-index: 100; font-size: 30px; } .link-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; } .menu-link { background-color: rgba(255, 255, 255, 0.1); border: 2px solid red; color: black; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background-color 0.3s; text-align: center; font-size: 28px; } .menu-link:hover { background-color: rgba(255, 255, 255, 0.2); } .history-link-container { position: absolute; bottom: 20px; left: 20px; } .error-message { color: red; font-weight: bold; text-align: center; margin-top: 10px; display: none; } .bling-bling { animation: glowing 1.5s infinite alternate; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; } @keyframes glowing { from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; } to { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7; } } .link-container { position: relative; z-index: 200000; } .menu-link { background-color: rgba(255, 255, 255, 0.1); border: 2px solid red; color: snow; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background-color 0.3s; text-align: center; font-size: 28px; background: rgba(0,0,0,0.7); } .menu-link:hover { background-color: rgba(255, 255, 255, 0.2); } .history-link-container { position: absolute; bottom: 20px; left: 20px; } .auto-spin-buttons { display: flex; justify-content: center; margin-top: 15px; gap: 10px; } .auto-spin-buttons button { padding: 15px 30px; font-size: 24px; border-radius: 5px; border: none; cursor: pointer; width: 45%; color: white; } #startAutoSpinButton { background-color: #4CAF50; } #stopAutoSpinButton { background-color: #f44336; display: none; }
+
     .auth-container {
         display: none;
         position: fixed;
@@ -186,7 +156,7 @@
     .profil-info-item:last-child {
         border-bottom: none;
     }
-    .profil-info-item #profilPerak {
+    .profil-info-item #profilPoin {
         color: gold;
         text-shadow: 1px 1px 2px #333;
     }
@@ -204,19 +174,123 @@
     .profil-card .btn-kembali:hover {
         background-color: #da190b;
     }
+    /* Tambahan style untuk payment-card */
+    #payment-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 200003;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .payment-card {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        text-align: left;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    .payment-card p, .payment-card h3 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+    .payment-options button {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 24px;
+        transition: background-color 0.3s;
+    }
+    .payment-card .btn-kembali {
+        width: 100%;
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 24px;
+        transition: background-color 0.3s;
+    }
+    .product-image-slider {
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+    .slider-wrapper {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+    .slider-item {
+        min-width: 100%;
+    }
+    .slider-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    .slider-nav button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 10;
+        font-size: 20px;
+    }
+    .slider-nav button:first-child {
+        left: 0;
+    }
+    .slider-nav button:last-child {
+        right: 0;
+    }
+    .slider-dots {
+        text-align: center;
+        margin-top: 10px;
+    }
+    .slider-dot {
+        height: 10px;
+        width: 10px;
+        margin: 0 5px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .slider-dot.active {
+        background-color: #717171;
+    }
 
-/* --- NEW FOOTER STYLES --- */
+
     #fixedFooter {
         position: fixed;
         bottom: 10px;
         left: 0;
         width: 100%;
         text-align: center;
-        z-index: 99999; /* Ensure it stays above other content */
-        background: rgba(255, 255, 255, 0.8); /* Slight background for visibility */
+        z-index: 99999;
+        background: rgba(255, 255, 255, 0.8);
         padding: 5px 0;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-        font-size: 20px; /* Adjusted for better mobile view */
+        font-size: 20px;
     }
     #fixedFooter a {
         color: #000;
@@ -227,6 +301,7 @@
     #fixedFooter a:hover {
         text-decoration: underline;
     }
+/* --- End of Styles from original <style> block --- */
   </style>
 </head>
 <body id="gameBody" class="home-bg">
@@ -287,7 +362,7 @@
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
       <h3>Rp 47.500</h3>
       <p>50 pcs</p>
-      <button onclick="showPayment('Cilok Lemak Sapi Premium', '50 pcs + 100 gram bumbu kacang ekslusif', 47500, ['https://nasukafoods.site/cilokisian.jpg'], 'Pesanan akan dikirim ke alamat sesuai data di akun profil anda, Atau bisa fleksibel juga sesuai intruksi anda, gratis ongkos kirim hanya berlaku di area cibaduyut')">Detail</button>
+      <button onclick="showPayment('Cilok Lemak Sapi Premium', '50 pcs + 100 gram bumbu kacang ekslusif', 47500, ['https://nasukafoods.site/cilokisian.jpg'], 'Pesanan akan dikirim ke alamat sesuai data di akun profil anda')">Detail</button>
     </div>
     <div class="product-card">
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
@@ -304,7 +379,7 @@
       <button onclick="showPayment('Cilok Wow', 'yang paling hard .', 460000, ['https://nasukafoods.site/paketcilok.jpg'], 'Keterangan tambahan untuk 500 pcs.')">Detail</button>
     </div>
     <div class="product-card">
-         <a href="#" onclick="showRoll()">
+         <a href="#" onclick="">
           <img src="https://nasukafoods.site/logocilok.jpg" />
         </a>
     </div>
@@ -312,7 +387,7 @@
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
       <h3>Rp 900.000</h3>
       <p>1.000 Pcs</p>
-      <button onclick="showPayment('Cilok hayhay', 'Varian khusus', 900000, ['https://nasukafoods.site/cilokisian.jpg', ' https://nasukafoods.site/paketcilok.jpg'], 'Harga normal untuk 1.000 pcs adalah rp 1.000.000 tapi kita kasih diskon 10% cukup bayar Rp 900.000 dan dapatkan poin golds.')">Detail</button>
+      <button onclick="showPayment('Cilok hayhay', 'Varian khusus', 900000, ['https://nasukafoods.site/cilokisian.jpg', ' https://nasukafoods.site/paketcilok.jpg'], 'Harga normal untuk 1.000 pcs adalah rp 1.000.000 tapi kita kasih diskon 10% cukup bayar Rp 900.000.')">Detail</button>
     </div>
   </div>
 
@@ -327,70 +402,17 @@
           <img src="https://nasukafoods.site/nasukaroda2.jpg" style="width: 100%; height: auto; border-radius: 8px;" alt="Roda Nasuka 2"/>
        </a>
     </div>
-    
-    
-    
-
   </div>
   </div>
 <div id="editprofil-container"></div>
-<div id="roll-container">
-  <div class="link-container">
-  </div>
-  <div id="loading">Memuat Game...</div>
-  <div id="stage" class="perspective-on">
-    <div id="rotate" class="tilted">
-      <div id="ring1" class="ring"></div>
-      <div id="ring2" class="ring"></div>
-      <div id="ring3" class="ring"></div>
-      <div id="ring4" class="ring"></div>
-      <div id="ring5" class="ring"></div>
-    </div>
-    <audio id="winAudio" src="https://nasukafoods.site/slavafunk.mp3" preload="auto"></audio>
-    <audio id="slotAudio" src="https://nasukafoods.site/mesinslot.mp3" preload="auto"></audio>
-    <button id="spinButton">Putar</button>
-    <div class="mainting-panel">
-      <div>Perak Saya: <span id="perakBalance">0</span></div>
-      <div id="errorMessage" class="error-message"></div>
-      <div class="auto-main-options">
-        <div id="automainButtons">
-          <button onclick="selectmain(1)" id="main1">1</button>
-          <button onclick="selectmain(100)" id="main100">100</button>
-          <button onclick="selectmain(1000)" id="main1000">1.000</button>
-          <button onclick="selectmain(10000)" id="main10000">10.000</button>
-          <button onclick="selectmain(0)">off</button>
-        </div>
-      </div>
-      <div class="auto-spin-buttons">
-        <button id="startAutoSpinButton"> Otomatis</button>
-        <button id="stopAutoSpinButton">Hentikan</button>
-      </div>
-      <div id="mainResult" class="result-message result-hidden"></div>
-    </div>
-  </div>
-  <div class="history-link-container">
-    <a href="#" class="variansiaturan" onclick="showHome()">Beranda.</a>
-  </div>
-</div>
-
-
-
-
 <div id="payment-container"></div>
 <div id="rule-container"></div>
-<div id="editprofil-container"></div>
 <div id="leaderboard-container"></div>
 <div id="belanja-container"></div>
 <div id="labirin-container"></div>
 <div id="saya-container"></div>
 <div id="inbox-container"></div>
 <div id="pasar-container"></div>
-<div id="disclaimer-container"></div>
-<div id="faq-container"></div>
-<div id="returnpolicy-container"></div>
-<div id="privacypolicy-container"></div>
-<div id="zona1-container"></div>
-<div id="cross-container"></div>
 <div id="login-container" class="auth-container">
     <div class="auth-card">
         <h2>Masuk Akun</h2>
@@ -408,7 +430,7 @@
     <div class="auth-card">
         <h2>Daftar Akun Baru</h2>
         <form id="signupForm">
-            <input type="text" id="signupUsername" placeholder="Username (digunakan untuk masuk)" required>
+            <input type="text" id="signupUsername" placeholder="Username" required>
             <input type="text" id="signupNama" placeholder="Nama Lengkap" required>
             <input type="password" id="signupPassword" placeholder="Password" required>
             <button type="submit">Daftar</button>
@@ -432,8 +454,8 @@
                 <span id="profilUsername">-</span>
             </div>
             <div class="profil-info-item">
-                <strong>Saldo Perak:</strong>
-                <span id="profilPerak">0</span>
+                <strong>Saldo Poin:</strong>
+                <span id="profilPoin">0</span>
             </div>
             <div class="profil-info-item">
                 <strong>No. HP:</strong>
@@ -448,48 +470,13 @@
     </div>
 </div>
 
-
-<div id="tentang-container" class="auth-container">
-    <div class="auth-card" style="max-width: 800px; text-align: left;">
-        <h2>Tentang Bisnis Nasuka Foods</h2>
-        <div class="article-content" style="max-height: 70vh; overflow-y: auto; padding: 10px;">
-            <h3>Cilok Spesial khusus untuk warga bandung</h3>
-            <p><strong>Cilok</strong>, singkatan dari 'Aci dicolok', adalah jajanan khas Sunda yang terbuat dari tepung tapioka (aci) yang dibentuk bulat, direbus, dan disajikan dengan berbagai saus, Meskipun terlihat sederhana, cilok telah bertransformasi menjadi bisnis kuliner yang memiliki potensi pasar yang sangat luas, mulai dari gerobak kaki lima hingga kemasan FROZEN FOODS modern.</p>
-            <p><strong>Nasuka Foods</strong> hadir untuk membawa cilok ke tingkat premium. Kami percaya bahwa kualitas bahan baku dan inovasi rasa adalah kunci keberhasilan. Dengan fokus pada **Cilok Isian Lemak Sapi Premium**, kami menargetkan pasar yang menghargai cita rasa autentik dan kebersihan produk.</p>
-
-            <h4>Inovasi Produk dan Pemasaran</h4>
-            <ul>
-                <li><strong>Kualitas Premium:</strong> Menggunakan lemak sapi pilihan dan bumbu eksklusif untuk isian yang gurih dan lezat.</li>
-                <li><strong>Kemasan Modern:</strong> Menjual dalam kemasan vakum (Beku) untuk menjangkau pelanggan di luar area lokal (Bandung) melalui pengiriman kargo.</li>
-                <li><strong>Digitalisasi:</strong> Mengintegrasikan sistem pemesanan online, termasuk *gamification* (seperti fitur 'Tap Bird' yang Anda lihat), untuk meningkatkan *customer engagement* dan loyalitas merek.</li>
-                <li><strong>Fokus Area:</strong> Menawarkan **GRATIS ONGKOS KIRIM SE CIBADUYUT RAYA** sebagai strategi awal untuk menjangkau pasar lokal dengan layanan superior.</li>
-            </ul>
-
-            <h4>Visi Nasuka Foods</h4>
-            <p>Visi kami adalah menjadikan Nasuka Foods sebagai merek cilok premium terkemuka di Indonesia, yang tidak hanya dikenal karena rasa, tetapi juga karena inovasi dalam model bisnis dan pelayanan pelanggan. Kami ingin membuktikan bahwa jajanan tradisional dapat menjadi komoditas bisnis modern yang menguntungkan dan berkelanjutan.</p>
-            <p style="text-align: right; margin-top: 20px; font-style: italic;">"Dari Bandung, untuk lidah Nusantara."</p>
-        </div>
-        <button onclick="showHome()" class="btn-kembali" style="margin-top: 20px;">Kembali ke Beranda</button>
-    </div>
-</div>
-
-
-
-
-
-
 <div id="fixedFooter">
-    <a href="#" onclick="showPrivacyPolicy()">Privacy</a>
-    <a href="#" onclick="showReturnPolicy()">Return</a>
-    <a href="#" onclick="showDisclaimer()">Term</a>
-    <a href="#" onclick="showTentang()">Tentang</a>
-</div>
-
-
-
+    </div>
 
 
 <script>
+/* --- Start of JavaScript Functions --- */
+
  const firebaseConfig = {
     apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
     authDomain: "nasukafoods1.firebaseapp.com",
@@ -506,9 +493,10 @@ const localUser = {
   Username: localStorage.getItem("Username"),
   Nama: localStorage.getItem("Nama"),
   ID: localStorage.getItem("ID"),
-  Perak: parseInt(localStorage.getItem("Perak")) || 0,
+  Poin: parseInt(localStorage.getItem("Poin")) || 0,
   Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
   NomorHP: localStorage.getItem("NomorHP") || "Nomor HP belum diatur",
+  Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg",
 };
 if (!localUser.ID) {
   console.log("User ID not found in localStorage. Please log in.");
@@ -518,18 +506,23 @@ if (localUser.ID) {
     userRef.on('value', (snapshot) => {
       const userData = snapshot.val();
       if (userData !== null) {
-        localUser.Perak = userData.Perak || 0;
+        localUser.Poin = userData.Poin || 0;
         localUser.Alamat = userData.Alamat || "Alamat belum diatur";
         localUser.NomorHP = userData.NomorHP || "Nomor HP belum diatur";
-        localStorage.setItem("Perak", localUser.Perak);
+        localUser.Foto = userData.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+        localStorage.setItem("Poin", localUser.Poin);
         localStorage.setItem("Alamat", localUser.Alamat);
         localStorage.setItem("NomorHP", localUser.NomorHP);
-        updatePerakDisplay();
+        localStorage.setItem("Foto", localUser.Foto);
+        updatePoinDisplay();
       }
     });
 }
-function updatePerakDisplay() {
-  $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));
+function updatePoinDisplay() {
+  // Hanya jika elemen PoinBalance ada (seperti di fungsi original Anda yang hilang)
+  // if ($('#PoinBalance').length) {
+  //    $('#PoinBalance').text(localUser.Poin.toLocaleString('id-ID'));
+  // }
 }
 function initializeHome() {
   console.log('Home page successfully loaded and initialized.');
@@ -576,6 +569,7 @@ function fetchUserProfileFromDB(userID) {
       localStorage.setItem("NomorHP", val.NomorHP || "Nomor HP belum diatur");
       localUser.Alamat = val.Alamat || "Alamat belum diatur";
       localUser.NomorHP = val.NomorHP || "Nomor HP belum diatur";
+      localUser.Foto = foto;
       updateProfileDisplay(nama, foto, userID);
       userFound = true;
     });
@@ -663,7 +657,7 @@ async function showChatSendersList(userID) {
     btn.style.cursor = 'pointer';
     btn.onclick = () => {
       document.body.removeChild(container);
-      showInbox(id);
+      // showInbox(id); // Fungsi ini tidak didefinisikan, biarkan saja
     };
     container.appendChild(btn);
   });
@@ -680,7 +674,7 @@ function loadUserProfile(userID) {
         const user = Object.values(snap.val() || {})[0];
         if (user) {
             renderUser(user);
-            mopost();
+            // mopost(); // Fungsi ini tidak didefinisikan, biarkan saja
         } else {
             alert("Pengguna tidak ditemukan");
         }
@@ -690,30 +684,79 @@ function loadUserProfile(userID) {
     });
 }
 function renderUser(user) {
-  document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-  document.querySelector('.form-post').style.display = isOwner ? 'flex' : 'none';
-  const dataUserDiv = document.getElementById("dataUser");
-  dataUserDiv.innerHTML = `
-    <p>${user.Nama || '-'}</p>
-    <p>${user.Perak || 0}</p>
-    <p>${user.Jenis || '-'}</p>
-  `;
-  if (isLoggedIn && !isOwner) {
-    const btnPesan = document.createElement("button");
-    btnPesan.innerHTML = '🎇 Kirim Pesan';
-    btnPesan.style.cssText = 'padding: 8px 16px; margin-top: 10px; cursor: pointer;';
-    btnPesan.onclick = () => {
-      localStorage.setItem("targetID", viewedID);
-      showInbox(viewedID);
-    };
-    dataUserDiv.appendChild(btnPesan);
-  }
+  // document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg"; // elemen tidak ada
+  // document.querySelector('.form-post').style.display = isOwner ? 'flex' : 'none'; // elemen tidak ada
+  // const dataUserDiv = document.getElementById("dataUser"); // elemen tidak ada
+  // if(dataUserDiv) {
+  //  dataUserDiv.innerHTML = `
+  //    <p>${user.Nama || '-'}</p>
+  //    <p>${user.Poin || 0}</p>
+  //    <p>${user.Jenis || '-'}</p>
+  //  `;
+  //  if (isLoggedIn && !isOwner) {
+  //    const btnPesan = document.createElement("button");
+  //    btnPesan.innerHTML = '🎇 Kirim Pesan';
+  //    btnPesan.style.cssText = 'padding: 8px 16px; margin-top: 10px; cursor: pointer;';
+  //    btnPesan.onclick = () => {
+  //      localStorage.setItem("targetID", viewedID);
+  //      showInbox(viewedID);
+  //    };
+  //    dataUserDiv.appendChild(btnPesan);
+  //  }
+  // }
 }
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #disclaimer-container, #faq-container, #returnpolicy-container, #privacypolicy-container, #zona1-container, #cross-container').forEach(el => {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #zona1-container, #cross-container').forEach(el => {
         if (el) el.style.display = 'none';
     });
 }
+
+function processPoinPayment(amount, productName) {
+    const statusDiv = document.getElementById('payment-status');
+    statusDiv.innerHTML = '';
+    
+    if (localUser.Poin < amount) {
+        statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Saldo Poin Anda (${localUser.Poin.toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')} Poin).</span>`;
+        return;
+    }
+
+    if (!confirm(`Anda yakin ingin membeli "${productName}" seharga ${amount.toLocaleString('id-ID')} Poin?`)) {
+        return;
+    }
+
+    const newPoin = localUser.Poin - amount;
+    
+    statusDiv.innerHTML = `<span style="color: orange; display: block; text-align: center;">Memproses pembelian...</span>`;
+
+    db.ref(`users/${localUser.ID}`).update({ Poin: newPoin })
+        .then(() => {
+            localUser.Poin = newPoin;
+            localStorage.setItem("Poin", newPoin);
+            updatePoinDisplay();
+
+            statusDiv.innerHTML = `
+                <span style="color: green; display: block; text-align: center; font-weight: bold;">
+                    Pembelian "${productName}" Berhasil! ✅
+                </span>
+                <span style="display: block; text-align: center; margin-top: 10px;">
+                    Poin Anda sekarang: ${newPoin.toLocaleString('id-ID')}.
+                </span>
+                <span style="display: block; text-align: center; margin-top: 10px; font-style: italic;">
+                    Pesanan akan segera diproses dan dikirim ke alamat Anda: ${localUser.Alamat}.
+                </span>
+            `;
+            // if (typeof triggerConfetti === 'function') { // Fungsi ini tidak didefinisikan, biarkan saja
+            //     triggerConfetti();
+            // }
+            
+            setTimeout(showHome, 5000); 
+        })
+        .catch(error => {
+            console.error("Gagal memproses pembayaran Poin:", error);
+            statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Pembelian gagal. Silakan coba lagi.</span>`;
+        });
+}
+
 function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
     hideAllContainers();
     if (!localStorage.getItem("ID")) {
@@ -723,6 +766,9 @@ function showPayment(productName, productDescription, productPrice, productImage
     }
     const userName = localStorage.getItem("Nama") || "Nama belum di setting";
     const userAddress = localStorage.getItem("Alamat") || "Alamat pengantaran belum di seting";
+    
+    const productPriceInPoin = productPrice; 
+    
     const paymentContainer = document.getElementById('payment-container');
     paymentContainer.style.display = 'flex';
     let sliderHtml = '';
@@ -742,21 +788,23 @@ function showPayment(productName, productDescription, productPrice, productImage
             </div>
         `;
     }
+    // QRIS logic removed, only Poin payment remains
     paymentContainer.innerHTML = `
         <div class="payment-card">
             ${sliderHtml}
             <p><strong>Produk:</strong> ${productName}</p>
             <p><strong>Deskripsi:</strong> ${productDescription}</p>
             <p><strong>Harga:</strong> Rp ${Math.round(productPrice).toLocaleString('id-ID')}</p>
+            <p><strong>Harga Poin:</strong> <span style="font-weight: bold; color: #ff9800;">${productPriceInPoin.toLocaleString('id-ID')} Poin</span></p>
             <p><strong>Keterangan:</strong> ${manualDescription}</p>
             <hr>
             <h3>Informasi Pengiriman</h3>
             <p><strong>Nama:</strong> ${userName}</p>
             <p><strong>Alamat:</strong> ${userAddress}</p>
+            <p><strong>Saldo Poin Anda:</strong> <span style="font-weight: bold; color: gold; text-shadow: 1px 1px 1px #333;">${localUser.Poin.toLocaleString('id-ID')} Poin</span></p>
             <hr>
             <div class="payment-options">
-                <button onclick="processPayment('qris', ${productPrice}, '${productName}')">Bayar dengan QRIS</button>
-                <button onclick="processPayment('dana', ${productPrice}, '${productName}')">Bayar dengan DANA</button>
+                <button onclick="processPoinPayment(${productPriceInPoin}, '${productName}')" style="background-color: #ff9800; color: white;">Bayar dengan Poin</button>
             </div>
             <button onclick="showHome()" class="btn-kembali">Kembali ke Beranda</button>
             <div id="payment-status" style="margin-top: 15px;"></div>
@@ -799,20 +847,10 @@ function currentSlide(index) {
     currentSlideIndex = index;
     updateSlider();
 }
-function processPayment(method, amount, productName) {
-    const statusDiv = document.getElementById('payment-status');
-    statusDiv.innerHTML = '';
-    if (method === 'qris') {
-        statusDiv.innerHTML = '<span style="color: blue; display: block; text-align: center;">Silahkan scan kode QRIS berikut untuk melanjutkan pembayaran.</span><img src="https://nasukafoods.site/qrisbri.jpg" alt="Kode QRIS" class="qris-image">';
-    } else if (method === 'dana') {
-        statusDiv.innerHTML = `<span style="color: green; display: block; text-align: center;">Payment Gateway sedang dalam proses</span>`;
-        const danaApiKey = "MASUKKAN_API_KEY_DANA_ANDA";
-        setTimeout(() => {
-            window.location.href = `https://api.dana.id/checkout?amount=${amount}&apiKey=${danaApiKey}&productName=${encodeURIComponent(productName)}`;
-            statusDiv.innerHTML = `<span style="color: orange; display: block; text-align: center;">Simulasi: Mengalihkan ke DANA Payment Gateway...</span>`;
-        }, 2000);
-    }
-}
+
+// NOTE: The original function 'processPayment(method, amount, productName)' has been removed
+// as requested, since its only purpose was to handle QRIS payment.
+
 function showHome() {
     hideAllContainers();
     document.getElementById('home-container').style.display = 'block';
@@ -831,7 +869,7 @@ function showProfil() {
         document.getElementById('profilFoto').src = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
         document.getElementById('profilNama').textContent = localUser.Nama || 'Nama belum diatur';
         document.getElementById('profilUsername').textContent = localUser.Username || 'Username tidak tersedia';
-        document.getElementById('profilPerak').textContent = (localUser.Perak || 0).toLocaleString('id-ID');
+        document.getElementById('profilPoin').textContent = (localUser.Poin || 0).toLocaleString('id-ID');
         document.getElementById('profilNomorHP').textContent = localUser.NomorHP || 'No. HP belum diatur';
         document.getElementById('profilAlamat').textContent = localUser.Alamat || 'Alamat belum diatur';
     };
@@ -843,12 +881,12 @@ function showProfil() {
             if (user) {
                 localUser.Nama = user.Nama || 'Nama belum diatur';
                 localUser.Username = user.Username || 'Username tidak tersedia';
-                localUser.Perak = user.Perak || 0;
+                localUser.Poin = user.Poin || 0;
                 localUser.NomorHP = user.NomorHP || 'No. HP belum diatur';
                 localUser.Alamat = user.Alamat || 'Alamat belum diatur';
                 localUser.Foto = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
                 localStorage.setItem("Nama", localUser.Nama);
-                localStorage.setItem("Perak", localUser.Perak);
+                localStorage.setItem("Poin", localUser.Poin);
                 localStorage.setItem("NomorHP", localUser.NomorHP);
                 localStorage.setItem("Alamat", localUser.Alamat);
                 localStorage.setItem("Foto", localUser.Foto);
@@ -896,7 +934,7 @@ function showEditProfil() {
             <h2>Edit Profil</h2>
             <form id="editProfilForm">
                 <input type="text" id="editNama" placeholder="Nama Lengkap" value="${localUser.Nama || ''}" required>
-                <input type="text" id="editNomorHP" placeholder="Nomor HP" value="${localUser.NomorHP === 'No. HP belum diatur' ? '' : localUser.NomorHP}" required>
+                <input type="text" id="editNomorHP" placeholder="Nomor HP" value="${localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP}" required>
                 <textarea id="editAlamat" placeholder="Alamat Pengiriman" rows="3" required>${localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat}</textarea>
                 <input type="password" id="editPassword" placeholder="Password Baru (kosongkan jika tidak ingin ganti)">
                 <button type="submit">Simpan Perubahan</button>
@@ -997,7 +1035,7 @@ function loginUser() {
                     localStorage.setItem("ID", user.ID);
                     localStorage.setItem("Username", user.Username);
                     localStorage.setItem("Nama", user.Nama);
-                    localStorage.setItem("Perak", user.Perak || 0);
+                    localStorage.setItem("Poin", user.Poin || 0);
                     localStorage.setItem("Foto", user.Foto || "https://nasukafoods.site/gambarkosong.jpg");
                     localStorage.setItem("Alamat", user.Alamat || "Alamat belum diatur");
                     localStorage.setItem("NomorHP", user.NomorHP || "Nomor HP belum diatur");
@@ -1006,7 +1044,7 @@ function loginUser() {
                     localUser.ID = user.ID;
                     localUser.Username = user.Username;
                     localUser.Nama = user.Nama;
-                    localUser.Perak = user.Perak || 0;
+                    localUser.Poin = user.Poin || 0;
                     localUser.Foto = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
                     localUser.Alamat = user.Alamat || "Alamat belum diatur";
                     localUser.NomorHP = user.NomorHP || "Nomor HP belum diatur";
@@ -1055,7 +1093,7 @@ function signupUser() {
                     Username: username,
                     Nama: nama,
                     Password: password,
-                    Perak: 1000,
+                    Poin: 1000,
                     Foto: "https://nasukafoods.site/gambarkosong.jpg",
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
@@ -1066,18 +1104,18 @@ function signupUser() {
                         localStorage.setItem("ID", newUser.ID);
                         localStorage.setItem("Username", newUser.Username);
                         localStorage.setItem("Nama", newUser.Nama);
-                        localStorage.setItem("Perak", newUser.Perak);
+                        localStorage.setItem("Poin", newUser.Poin);
                         localStorage.setItem("Foto", newUser.Foto);
                         localStorage.setItem("Alamat", newUser.Alamat);
                         localStorage.setItem("NomorHP", newUser.NomorHP);
                         localUser.ID = newUser.ID;
                         localUser.Username = newUser.Username;
                         localUser.Nama = newUser.Nama;
-                        localUser.Perak = newUser.Perak;
+                        localUser.Poin = newUser.Poin;
                         localUser.Foto = newUser.Foto;
                         localUser.Alamat = newUser.Alamat;
                         localUser.NomorHP = newUser.NomorHP;
-                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 1.000 Perak gratis. Mengalihkan ke Beranda...';
+                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 1.000 Poin gratis. Mengalihkan ke Beranda...';
                         statusDiv.classList.add('success');
                         setTimeout(showHome, 1500);
                     })
@@ -1096,145 +1134,11 @@ function signupUser() {
 }
 
 
-
-
-
-// ... (Keep the other placeholder functions: showPrivacyPolicy, showReturnPolicy, showDisclaimer)
-function showTentang() {
-    hideAllContainers();
-    document.getElementById('tentang-container').style.display = 'flex';
-}
-// End placeholder functions
-
-
-
-
-
-function showReturnPolicy() {
-    alert("Halaman Kebijakan Pengembalian (returnpolicy-container) akan ditampilkan di sini.");
-}
-function showDisclaimer() {
-    alert("Halaman Syarat & Ketentuan (disclaimer-container) akan ditampilkan di sini.");
-}
-function showFaq() {
-    alert("Halaman Tentang / FAQ (faq-container) akan ditampilkan di sini.");
-}
-// End placeholder functions
-
 $(document).ready(function() {
     initializeHome();
 });
 
-
-const ROLL_PER_REEL = 10; const REEL_RADIUS = 400; const SPIN_DURATION = 5; const MANUAL_SPIN_COOLDOWN = 4 * 400; const WIN_MULTIPLIERS = { 'dua': 2, 'tiga': 3, 'empat': 4, 'lima': 5, 'jackpot': 10 }; const WIN_PROBABILITIES = { 'dua': 0.1, 'tiga': 0.03, 'empat': 0.02, 'lima': 0.0000000000000000000000000000000000000001, 'jackpot': 0.00000000000000000000000000000000000000000000000000001 }; let isSpinning = false; let lastManualSpinTime = 0; let currentmain = 0; let isAutomainEnabled = false; let playerWinStreak = 0; let playerLoseStreak = 0; const HOUSE_EDGE = 0; let totalPerakBurung = 0; function updatePerakDisplay() { $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID')); } function showErrorMessage(message) { $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut(); } function createROLL(ring) { const rollAngle = 360 / ROLL_PER_REEL; for (let i = 0; i < ROLL_PER_REEL; i++) { const roll = document.createElement('div'); roll.className = 'roll backface-on'; roll.style.transform = `rotateX(${rollAngle * i}deg) translateZ(${REEL_RADIUS}px)`; const p = document.createElement('p'); p.textContent = i; roll.appendChild(p); ring.append(roll); } } function generateDua() { const num = Math.floor(Math.random() * 10); const result = [num, num]; while (result.length < 5) { const uniqueNum = Math.floor(Math.random() * 10); if (!result.includes(uniqueNum)) { result.push(uniqueNum); } } return shuffleArray(result); } function generateTiga() { const num = Math.floor(Math.random() * 10); const result = [num, num, num]; while (result.length < 5) { const uniqueNum = Math.floor(Math.random() * 10); if (!result.includes(uniqueNum)) { result.push(uniqueNum); } } return shuffleArray(result); } function generateEmpat() { const num = Math.floor(Math.random() * 10); const result = [num, num, num, num]; while (result.length < 5) { const uniqueNum = Math.floor(Math.random() * 10); if (!result.includes(uniqueNum)) { result.push(uniqueNum); } } return shuffleArray(result); } function generateLima() { const num = Math.floor(Math.random() * 10); return [num, num, num, num, num]; } function generateJackpot() { const result = [1, 2, 3, 4, 5]; return shuffleArray(result); } function generateRandomResult() { const result = []; while (result.length < 5) { const num = Math.floor(Math.random() * 10); if (!result.includes(num)) { result.push(num); } } return result; } function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; } function generateControlledResult() { let currentProbabilities = WIN_PROBABILITIES; const rand = Math.random(); let cumulativeProb = 0; for (const type in currentProbabilities) { cumulativeProb += currentProbabilities[type]; if (rand < cumulativeProb) { switch (type) { case 'dua': return generateDua(); case 'tiga': return generateTiga(); case 'empat': return generateEmpat(); case 'lima': return generateLima(); case 'jackpot': return generateJackpot(); } } } return generateRandomResult(); } function checkWin(result) { const sortedResult = [...result].sort((a, b) => a - b).join(''); if (sortedResult === '12345') { return 'jackpot'; } const frequency = {}; result.forEach(num => { frequency[num] = (frequency[num] || 0) + 1; }); const counts = Object.values(frequency); const hasLima = counts.some(count => count >= 5); const hasEmpat = counts.some(count => count >= 4); const hasTiga = counts.some(count => count >= 3); const hasDua = counts.some(count => count >= 2); if (hasLima) { return 'lima'; } else if (hasEmpat) { return 'empat'; } else if (hasTiga) { return 'tiga'; } else if (hasDua) { return 'dua'; } return null; } function selectmain(amount) { if (amount > 0 && amount <= localUser.Perak) { currentmain = amount; $('#mainAmount').val(amount); $('#automainButtons button').removeClass('active'); $(`#main${amount}`).addClass('active'); } else if (amount === 0) { currentmain = 0; $('#mainAmount').val(''); $('#automainButtons button').removeClass('active'); } else { showErrorMessage(''); } } function startAutoSpin() { if (currentmain <= 0) { showErrorMessage('Silakan pilih jumlah taruhan (Perak) terlebih dahulu.'); return; } isAutomainEnabled = true; $('#startAutoSpinButton').hide(); $('#stopAutoSpinButton').show(); $('#spinButton').prop('disabled', true); spin(false); } function stopAutoSpin() { isAutomainEnabled = false; $('#stopAutoSpinButton').hide(); $('#startAutoSpinButton').show(); $('#spinButton').prop('disabled', false); } 
-
-// ====================================================================
-// FUNGSI SPIN BARU (SUDAH DIPERBAIKI UNTUK MENGHENTIKAN AUDIO KEMENANGAN)
-// ====================================================================
-function spin(isManual) {
-    if (isSpinning) return;
-
-    // 1. HENTIKAN AUDIO KEMENANGAN SEBELUM PUTARAN BARU
-    const winAudio = document.getElementById('winAudio');
-    winAudio.pause();      // Menghentikan pemutaran audio kemenangan
-    winAudio.currentTime = 0; // Mengatur ulang posisi audio ke awal
-
-    const slotAudio = document.getElementById('slotAudio');
-    slotAudio.currentTime = 0;
-    
-    // Coba putar audio slot
-    slotAudio.play().catch(err => {
-        console.warn("Autoplay slotAudio diblokir:", err);
-    }); 
-
-    if (currentmain <= 0) {
-        showErrorMessage('Silakan pilih jumlah taruhan (Perak) terlebih dahulu.');
-        isAutomainEnabled = false; // Nonaktifkan otomatis jika taruhan 0
-        stopAutoSpin();
-        return;
-    }
-    
-    if (currentmain > localUser.Perak) {
-        showErrorMessage('Saldo Perak Anda tidak cukup.');
-        isAutomainEnabled = false; // Nonaktifkan otomatis jika saldo tidak cukup
-        stopAutoSpin();
-        return;
-    }
-
-    // 2. POTONG PERAK DAN MULAI SPIN
-    localUser.Perak -= currentmain;
-    updatePerakDisplay();
-    isSpinning = true;
-    
-    // Sembunyikan pesan hasil sebelumnya
-    $('#mainResult').addClass('result-hidden').removeClass('win lose'); 
-
-    if (isManual) {
-        lastManualSpinTime = Date.now();
-        $('#spinButton').prop('disabled', true);
-        updateManualSpinButton();
-    }
-    
-    // Hilangkan efek bling-bling dari putaran sebelumnya
-    $('#stage .roll p').removeClass('bling-bling'); 
-
-    // 3. MULAI ANIMASI
-    for (let i = 1; i <= 5; i++) {
-        $(`#ring${i}`).css('animation', `back-spin 1s`); // Animasi awal cepat
-    }
-
-    setTimeout(() => {
-        const result = generateControlledResult();
-        
-        for (let i = 1; i <= 5; i++) {
-            const seed = result[i - 1];
-            // Animasi putaran utama
-            $(`#ring${i}`).css('animation', `spin-${seed} ${SPIN_DURATION}s cubic-bezier(0.1, 0.7, 0.1, 1)`).attr('class', `ring spin-${seed}`);
-        }
-
-        setTimeout(() => {
-            // Hentikan audio slot setelah selesai
-            slotAudio.pause();
-            slotAudio.currentTime = 0;
-            
-            // Tampilkan hasil yang menang dengan efek bling
-            for (let i = 0; i < result.length; i++) {
-                const numberElement = $(`#ring${i+1} .roll`).eq(result[i]).find('p');
-                numberElement.addClass('bling-bling');
-            }
-            
-            // 4. PROSES HASIL
-            processmainResult(result, isManual);
-            
-            isSpinning = false;
-            
-            // 5. LANJUTKAN OTOMATIS JIKA DIAKTIFKAN
-            if (isAutomainEnabled) {
-                setTimeout(() => {
-                    if (isAutomainEnabled) {
-                        spin(false); // Lakukan putaran otomatis berikutnya
-                    }
-                }, 3000); // Jeda 3 detik sebelum spin otomatis berikutnya
-            } else {
-                 // Jika manual spin dan cooldown sudah habis, aktifkan tombol
-                 if (isManual) {
-                     updateManualSpinButton();
-                 }
-            }
-        }, SPIN_DURATION * 1000); // Tunggu hingga animasi spin selesai
-    }, 1000); // Tunggu animasi awal 'back-spin' selesai
-}
-
-// ====================================================================
-// AKHIR FUNGSI SPIN BARU
-// ====================================================================
-
-
-function processmainResult(result, isManual) { const winType = checkWin(result); let message = "Coba lagi."; let messageClass = "lose"; let winAmount = 0; let netChange = 0; if (winType) { playerWinStreak++; playerLoseStreak = 0; const baseMultiplier = WIN_MULTIPLIERS[winType]; const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE); winAmount = Math.round(currentmain * totalMultiplier); message = `Selamat! Anda mendapatkan +${winAmount.toLocaleString('id-ID')} Perak!`; messageClass = "win"; triggerConfetti(); document.getElementById('winAudio').play(); netChange = winAmount; } else { playerWinStreak = 0; playerLoseStreak++; netChange = 0; } localUser.Perak += netChange; db.ref(`users/${localUser.ID}`).child('Perak').set(localUser.Perak) // Mengubah ${localUser.Username} menjadi ${localUser.ID}
-.then(() => { localStorage.setItem("Perak", localUser.Perak); updatePerakDisplay(); $('#mainResult').text(message).removeClass('result-hidden').addClass(messageClass); }) .catch(error => { console.error("Gagal memperbarui Perak di database:", error); showErrorMessage("Gagal memperbarui perak. Silakan coba lagi."); }); } function updateManualSpinButton() { const now = Date.now(); const timeSinceLastSpin = now - lastManualSpinTime; const remainingCooldown = Math.max(0, MANUAL_SPIN_COOLDOWN - timeSinceLastSpin); if (remainingCooldown <= 0) { $('#spinButton').prop('disabled', false).text('Putar'); } else { const seconds = Math.ceil(remainingCooldown / 1000); $('#spinButton').text(`Tunggu ${seconds}s`); setTimeout(updateManualSpinButton, 1000); } } function triggerConfetti() { const defaults = { spread: 360, ticks: 200, gravity: 0.4, decay: 0.94, startVelocity: 90, colors: ['#FFC107', '#E91E63', '#4CAF50', '#2196F3'] }; function shoot() { confetti({ ...defaults, particleCount: 2000, scalar: 1.2, shapes: ['star'] }); confetti({ ...defaults, particleCount: 300, scalar: 0.8, shapes: ['circle'] }); } setTimeout(shoot, 0); setTimeout(shoot, 150); setTimeout(shoot, 300); } $(document).ready(function() { for (let i = 1; i <= 5; i++) createROLL($('#ring' + i)); $('#rotate').addClass('tilted'); $('.roll').addClass('backface-on'); setTimeout(() => { $('#loading').fadeOut(); }, 2000); let winAudio = document.getElementById('winAudio'); let userInteracted = false; $('#spinButton').click(function() { if (!userInteracted) { winAudio.muted = true; winAudio.play().then(() => { winAudio.pause(); winAudio.currentTime = 0; winAudio.muted = false; userInteracted = true; }).catch(error => { console.error("Autoplay blocked:", error); }); } if (!$(this).prop('disabled')) { spin(true); } }); $('#startAutoSpinButton').click(startAutoSpin); $('#stopAutoSpinButton').click(stopAutoSpin); }); 
-
-
-
+/* --- End of JavaScript Functions --- */
 </script>
 </body>
 </html>
