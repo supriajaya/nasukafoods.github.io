@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="https://nasukafoods.site/show.css">
   
   <style>
-/* --- Styles from original <style> block --- */
 
 #editprofil-container textarea {
     width: 100%;
@@ -174,7 +173,18 @@
     .profil-card .btn-kembali:hover {
         background-color: #da190b;
     }
-    /* Tambahan style untuk payment-card */
+    .profil-card .button-group-bottom {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+    }
+    .profil-card .button-group-bottom .btn-kembali,
+    .profil-card .button-group-bottom #btnLogout {
+        width: 50%;
+        margin: 0;
+    }
+
     #payment-container {
         display: none;
         position: fixed;
@@ -301,7 +311,6 @@
     #fixedFooter a:hover {
         text-decoration: underline;
     }
-/* --- End of Styles from original <style> block --- */
   </style>
 </head>
 <body id="gameBody" class="home-bg">
@@ -475,7 +484,6 @@
 
 
 <script>
-/* --- Start of JavaScript Functions --- */
 
  const firebaseConfig = {
     apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
@@ -519,10 +527,7 @@ if (localUser.ID) {
     });
 }
 function updatePoinDisplay() {
-  // Hanya jika elemen PoinBalance ada (seperti di fungsi original Anda yang hilang)
-  // if ($('#PoinBalance').length) {
-  //    $('#PoinBalance').text(localUser.Poin.toLocaleString('id-ID'));
-  // }
+
 }
 function initializeHome() {
   console.log('Home page successfully loaded and initialized.');
@@ -657,7 +662,6 @@ async function showChatSendersList(userID) {
     btn.style.cursor = 'pointer';
     btn.onclick = () => {
       document.body.removeChild(container);
-      // showInbox(id); // Fungsi ini tidak didefinisikan, biarkan saja
     };
     container.appendChild(btn);
   });
@@ -674,7 +678,6 @@ function loadUserProfile(userID) {
         const user = Object.values(snap.val() || {})[0];
         if (user) {
             renderUser(user);
-            // mopost(); // Fungsi ini tidak didefinisikan, biarkan saja
         } else {
             alert("Pengguna tidak ditemukan");
         }
@@ -684,26 +687,7 @@ function loadUserProfile(userID) {
     });
 }
 function renderUser(user) {
-  // document.getElementById("foto-profil").src = user.Foto || "https://nasukafoods.site/gambarkosong.jpg"; // elemen tidak ada
-  // document.querySelector('.form-post').style.display = isOwner ? 'flex' : 'none'; // elemen tidak ada
-  // const dataUserDiv = document.getElementById("dataUser"); // elemen tidak ada
-  // if(dataUserDiv) {
-  //  dataUserDiv.innerHTML = `
-  //    <p>${user.Nama || '-'}</p>
-  //    <p>${user.Poin || 0}</p>
-  //    <p>${user.Jenis || '-'}</p>
-  //  `;
-  //  if (isLoggedIn && !isOwner) {
-  //    const btnPesan = document.createElement("button");
-  //    btnPesan.innerHTML = '🎇 Kirim Pesan';
-  //    btnPesan.style.cssText = 'padding: 8px 16px; margin-top: 10px; cursor: pointer;';
-  //    btnPesan.onclick = () => {
-  //      localStorage.setItem("targetID", viewedID);
-  //      showInbox(viewedID);
-  //    };
-  //    dataUserDiv.appendChild(btnPesan);
-  //  }
-  // }
+
 }
 function hideAllContainers() {
     document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #zona1-container, #cross-container').forEach(el => {
@@ -745,9 +729,6 @@ function processPoinPayment(amount, productName) {
                     Pesanan akan segera diproses dan dikirim ke alamat Anda: ${localUser.Alamat}.
                 </span>
             `;
-            // if (typeof triggerConfetti === 'function') { // Fungsi ini tidak didefinisikan, biarkan saja
-            //     triggerConfetti();
-            // }
             
             setTimeout(showHome, 5000); 
         })
@@ -788,7 +769,6 @@ function showPayment(productName, productDescription, productPrice, productImage
             </div>
         `;
     }
-    // QRIS logic removed, only Poin payment remains
     paymentContainer.innerHTML = `
         <div class="payment-card">
             ${sliderHtml}
@@ -848,13 +828,32 @@ function currentSlide(index) {
     updateSlider();
 }
 
-// NOTE: The original function 'processPayment(method, amount, productName)' has been removed
-// as requested, since its only purpose was to handle QRIS payment.
-
 function showHome() {
     hideAllContainers();
     document.getElementById('home-container').style.display = 'block';
     initializeHome();
+}
+function logoutUser() {
+    if (confirm("Anda yakin ingin keluar?")) {
+        localStorage.removeItem("ID");
+        localStorage.removeItem("Username");
+        localStorage.removeItem("Nama");
+        localStorage.removeItem("Poin");
+        localStorage.removeItem("Alamat");
+        localStorage.removeItem("NomorHP");
+        localStorage.removeItem("Foto");
+
+        localUser.ID = null;
+        localUser.Username = null;
+        localUser.Nama = null;
+        localUser.Poin = 0;
+        localUser.Alamat = "Alamat belum diatur";
+        localUser.NomorHP = "Nomor HP belum diatur";
+        localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg";
+
+        alert("Anda telah keluar.");
+        showHome();
+    }
 }
 function showProfil() {
     hideAllContainers();
@@ -902,6 +901,7 @@ function showProfil() {
         });
     }
     const profilCard = document.querySelector('#profil-container .profil-card');
+    
     let editButton = profilCard.querySelector('#btnEditProfil');
     if (!editButton) {
         editButton = document.createElement('button');
@@ -913,6 +913,47 @@ function showProfil() {
         editButton.onclick = showEditProfil;
         const kembaliButton = profilCard.querySelector('.btn-kembali');
         profilCard.insertBefore(editButton, kembaliButton);
+    }
+
+    let logoutButton = profilCard.querySelector('#btnLogout');
+    if (!logoutButton) {
+        logoutButton = document.createElement('button');
+        logoutButton.id = 'btnLogout';
+        logoutButton.textContent = 'Logout';
+        logoutButton.className = 'btn-kembali';
+        logoutButton.style.backgroundColor = '#f44336';
+        logoutButton.onclick = logoutUser;
+
+        const existingKembaliButton = profilCard.querySelector('.btn-kembali');
+        if(existingKembaliButton) {
+            existingKembaliButton.remove();
+        }
+
+        let buttonGroupBottom = profilCard.querySelector('.button-group-bottom');
+        if (!buttonGroupBottom) {
+            buttonGroupBottom = document.createElement('div');
+            buttonGroupBottom.className = 'button-group-bottom';
+            buttonGroupBottom.style.display = 'flex';
+            buttonGroupBottom.style.justifyContent = 'space-between';
+            buttonGroupBottom.style.marginTop = '30px';
+            buttonGroupBottom.style.gap = '20px';
+
+            const newKembaliButton = document.createElement('button');
+            newKembaliButton.textContent = 'Kembali';
+            newKembaliButton.className = 'btn-kembali';
+            newKembaliButton.onclick = showHome;
+            newKembaliButton.style.width = '50%';
+            newKembaliButton.style.margin = '0';
+
+            logoutButton.style.width = '50%';
+            logoutButton.style.margin = '0';
+            logoutButton.style.backgroundColor = '#f44336';
+
+            buttonGroupBottom.appendChild(logoutButton);
+            buttonGroupBottom.appendChild(newKembaliButton);
+            
+            profilCard.appendChild(buttonGroupBottom);
+        }
     }
 }
 function showEditProfil() {
@@ -1093,7 +1134,7 @@ function signupUser() {
                     Username: username,
                     Nama: nama,
                     Password: password,
-                    Poin: 1000,
+                    Poin: 900,
                     Foto: "https://nasukafoods.site/gambarkosong.jpg",
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
@@ -1115,7 +1156,7 @@ function signupUser() {
                         localUser.Foto = newUser.Foto;
                         localUser.Alamat = newUser.Alamat;
                         localUser.NomorHP = newUser.NomorHP;
-                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 1.000 Poin gratis. Mengalihkan ke Beranda...';
+                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 900 Poin gratis. Mengalihkan ke Beranda...';
                         statusDiv.classList.add('success');
                         setTimeout(showHome, 1500);
                     })
@@ -1137,8 +1178,6 @@ function signupUser() {
 $(document).ready(function() {
     initializeHome();
 });
-
-/* --- End of JavaScript Functions --- */
 </script>
 </body>
 </html>
