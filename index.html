@@ -3,19 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1024">
-  
-  
-  
   <title>Nasuka Foods</title>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script> 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-
   <link rel="stylesheet" href="https://nasukafoods.site/home-payment.css">
   <link rel="stylesheet" href="https://nasukafoods.site/show.css">
-  
   <style>
-
 #editprofil-container textarea {
     width: 100%;
     padding: 15px;
@@ -26,7 +20,6 @@
     font-size: 24px;
     resize: vertical;
 }
-
     .auth-container {
         display: none;
         position: fixed;
@@ -187,7 +180,6 @@
         width: 50%;
         margin: 0;
     }
-
     #payment-container {
         display: none;
         position: fixed;
@@ -291,8 +283,6 @@
     .slider-dot.active {
         background-color: #717171;
     }
-
-
     #fixedFooter {
         position: fixed;
         bottom: 10px;
@@ -314,6 +304,49 @@
     #fixedFooter a:hover {
         text-decoration: underline;
     }
+    #video-popup-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        z-index: 200004;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    #video-wrapper {
+        position: relative;
+        width: 90%;
+        max-width: 800px;
+        aspect-ratio: 16 / 9;
+        background: black;
+    }
+    #video-player {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    .video-close-btn {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #f44336;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+        cursor: pointer;
+        line-height: 40px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        z-index: 10;
+    }
   </style>
 </head>
 <body id="gameBody" class="home-bg">
@@ -326,21 +359,28 @@
       </a>
       <span id="Nama" class="blink-glow">Silahkan Masuk</span>
     </div>
+      <div id="video-popup-container" class="auth-container" style="z-index: 200004;">
+    <div class="auth-card" style="max-width: 90%; padding: 20px;">
+        <video id="videoPlayer" controls autoplay style="width: 100%; height: auto; border-radius: 8px;">
+        </video>
+        <button onclick="hideVideoPopup()" class="btn-kembali" style="margin-top: 20px; background-color: #f44336; width: 100%;">Tutup</button>
+    </div>
+</div>
        <div class="arya-overlay">
-        <a href="#" onclick="">
-          <img src="https://nasukafoods.site/500.png" />
-        </a>
-      </div>
-         <div class="arya-overlay">
-        <a href="#" onclick="">
-          <img src="https://nasukafoods.site/1.000.png" />
-        </a>
-      </div>
-    <div class="arya-overlay">
-        <a href="#" onclick="">
-          <img src="https://nasukafoods.site/5.000.png" />
-        </a>
-      </div>
+  <a href="#" onclick="showVideoPopup('https://nasukafoods.site/nasukaads1.mp4'); return false;">
+    <img src="https://nasukafoods.site/500.png" />
+  </a>
+</div>
+       <div class="arya-overlay">
+  <a href="#" onclick="showVideoPopup('https://nasukafoods.site/nasukaads2.mp4'); return false;">
+    <img src="https://nasukafoods.site/1.000.png" />
+  </a>
+</div>
+       <div class="arya-overlay">
+  <a href="#" onclick="showVideoPopup('https://nasukafoods.site/nasukaads3.mp4'); return false;">
+    <img src="https://nasukafoods.site/5.000.png" />
+  </a>
+</div>
       <div class="arya-overlay">
         <a href="#" onclick="">
           <img src="https://nasukafoods.site/10.000.png" />
@@ -402,7 +442,6 @@
       <button onclick="showPayment('Cilok hayhay', 'Varian khusus', 900000, ['https://nasukafoods.site/cilokisian.jpg', ' https://nasukafoods.site/paketcilok.jpg'], 'Harga normal untuk 1.000 pcs adalah rp 1.000.000 tapi kita kasih diskon 10% cukup bayar Rp 900.000.')">Detail</button>
     </div>
   </div>
-
   <div class="product-grid" style="grid-template-columns: repeat(2, 1fr);">
     <div class="product-card" style="grid-column: span 1; padding: 0;">
       <a href="#" onclick="">
@@ -481,13 +520,16 @@
         <button onclick="showHome()" class="btn-kembali" style="display: none;">Kembali</button>
     </div>
 </div>
-
+<div id="video-popup-container" onclick="closeVideo(event)">
+    <div id="video-wrapper">
+        <button class="video-close-btn" onclick="closeVideo(event)">X</button>
+        <video id="video-player" controls autoplay muted playsinline>
+            </video>
+    </div>
+</div>
 <div id="fixedFooter">
     </div>
-
-
 <script>
-
  const firebaseConfig = {
     apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
     authDomain: "nasukafoods1.firebaseapp.com",
@@ -509,9 +551,6 @@ const localUser = {
   NomorHP: localStorage.getItem("NomorHP") || "Nomor HP belum diatur",
   Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg",
 };
-if (!localUser.ID) {
-  console.log("User ID not found in localStorage. Please log in.");
-}
 if (localUser.ID) {
     const userRef = db.ref(`users/${localUser.ID}`);
     userRef.on('value', (snapshot) => {
@@ -530,10 +569,8 @@ if (localUser.ID) {
     });
 }
 function updatePoinDisplay() {
-
 }
 function initializeHome() {
-  console.log('Home page successfully loaded and initialized.');
   initializeUserProfile();
   setupChatNotifications();
 }
@@ -685,42 +722,33 @@ function loadUserProfile(userID) {
             alert("Pengguna tidak ditemukan");
         }
     }).catch(error => {
-        console.error("Gagal memuat Profile:", error);
         alert("Terjadi kesalahan saat memuat Profile.");
     });
 }
 function renderUser(user) {
-
 }
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #zona1-container, #cross-container').forEach(el => {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #zona1-container, #cross-container, #video-popup-container').forEach(el => {
         if (el) el.style.display = 'none';
     });
 }
-
 function processPoinPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
-    
     if (localUser.Poin < amount) {
         statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Saldo Poin Anda (${localUser.Poin.toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')} Poin).</span>`;
         return;
     }
-
     if (!confirm(`Anda yakin ingin membeli "${productName}" seharga ${amount.toLocaleString('id-ID')} Poin?`)) {
         return;
     }
-
     const newPoin = localUser.Poin - amount;
-    
     statusDiv.innerHTML = `<span style="color: orange; display: block; text-align: center;">Memproses pembelian...</span>`;
-
     db.ref(`users/${localUser.ID}`).update({ Poin: newPoin })
         .then(() => {
             localUser.Poin = newPoin;
             localStorage.setItem("Poin", newPoin);
             updatePoinDisplay();
-
             statusDiv.innerHTML = `
                 <span style="color: green; display: block; text-align: center; font-weight: bold;">
                     Pembelian "${productName}" Berhasil! ✅
@@ -732,15 +760,12 @@ function processPoinPayment(amount, productName) {
                     Pesanan akan segera diproses dan dikirim ke alamat Anda: ${localUser.Alamat}.
                 </span>
             `;
-            
             setTimeout(showHome, 5000); 
         })
         .catch(error => {
-            console.error("Gagal memproses pembayaran Poin:", error);
             statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Pembelian gagal. Silakan coba lagi.</span>`;
         });
 }
-
 function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
     hideAllContainers();
     if (!localStorage.getItem("ID")) {
@@ -750,9 +775,7 @@ function showPayment(productName, productDescription, productPrice, productImage
     }
     const userName = localStorage.getItem("Nama") || "Nama belum di setting";
     const userAddress = localStorage.getItem("Alamat") || "Alamat pengantaran belum di seting";
-    
     const productPriceInPoin = productPrice; 
-    
     const paymentContainer = document.getElementById('payment-container');
     paymentContainer.style.display = 'flex';
     let sliderHtml = '';
@@ -830,7 +853,6 @@ function currentSlide(index) {
     currentSlideIndex = index;
     updateSlider();
 }
-
 function showHome() {
     hideAllContainers();
     document.getElementById('home-container').style.display = 'block';
@@ -845,7 +867,6 @@ function logoutUser() {
         localStorage.removeItem("Alamat");
         localStorage.removeItem("NomorHP");
         localStorage.removeItem("Foto");
-
         localUser.ID = null;
         localUser.Username = null;
         localUser.Nama = null;
@@ -853,13 +874,10 @@ function logoutUser() {
         localUser.Alamat = "Alamat belum diatur";
         localUser.NomorHP = "Nomor HP belum diatur";
         localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg";
-
         alert("Anda telah keluar.");
         showHome();
     }
 }
-
-// --- FUNGSI showProfil() YANG DIMODIFIKASI ---
 function showProfil() {
     hideAllContainers();
     const userID = localStorage.getItem("ID");
@@ -869,10 +887,7 @@ function showProfil() {
         return;
     }
     document.getElementById('profil-container').style.display = 'flex';
-    
     const profilCard = document.querySelector('#profil-container .profil-card');
-    
-    // Fungsi untuk merender data di kartu profil
     const renderProfil = () => {
         document.getElementById('profilFoto').src = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
         document.getElementById('profilNama').textContent = localUser.Nama || 'Nama belum diatur';
@@ -881,15 +896,12 @@ function showProfil() {
         document.getElementById('profilNomorHP').textContent = localUser.NomorHP || 'No. HP belum diatur';
         document.getElementById('profilAlamat').textContent = localUser.Alamat || 'Alamat belum diatur';
     };
-
-    // Load data jika belum ada di localUser
     if (localUser.Nama) {
         renderProfil();
     } else {
         db.ref(`users/${userID}`).once("value").then(snapshot => {
             const user = snapshot.val();
             if (user) {
-                // Update localUser dan localStorage
                 localUser.Nama = user.Nama || 'Nama belum diatur';
                 localUser.Username = user.Username || 'Username tidak tersedia';
                 localUser.Poin = user.Poin || 0;
@@ -907,25 +919,19 @@ function showProfil() {
                 showHome();
             }
         }).catch(error => {
-            console.error("Gagal memuat profil:", error);
             alert("Terjadi kesalahan saat memuat data profil.");
             showHome();
         });
     }
-
-    // 1. Hapus tombol Kembali statis jika ada (hanya untuk memastikan kerapian)
     let existingKembaliButton = profilCard.querySelector('.btn-kembali');
     if (existingKembaliButton) {
         existingKembaliButton.remove();
     }
-
-    // 2. Buat/Update Tombol Edit Profil
     let editButton = profilCard.querySelector('#btnEditProfil');
     if (!editButton) {
         editButton = document.createElement('button');
         editButton.id = 'btnEditProfil';
         editButton.textContent = 'Edit Profil';
-        // Atur gaya agar full-width dan seragam
         editButton.style.padding = '15px 30px';
         editButton.style.backgroundColor = '#2196F3';
         editButton.style.color = 'white';
@@ -939,50 +945,35 @@ function showProfil() {
         editButton.onclick = showEditProfil;
         profilCard.appendChild(editButton); 
     } else {
-         // Pindahkan ke bagian bawah sebelum button-group-bottom
          editButton.style.display = 'block';
     }
-
-    // 3. Buat/Update Grup Tombol Bawah (Kembali dan Logout)
     let buttonGroupBottom = profilCard.querySelector('.button-group-bottom');
     if (!buttonGroupBottom) {
         buttonGroupBottom = document.createElement('div');
         buttonGroupBottom.className = 'button-group-bottom';
         profilCard.appendChild(buttonGroupBottom);
     } else {
-        buttonGroupBottom.innerHTML = ''; // Bersihkan konten lama
+        buttonGroupBottom.innerHTML = '';
     }
-
-    // Buat Tombol Kembali (Home)
     let newKembaliButton = document.createElement('button');
     newKembaliButton.textContent = 'Kembali';
     newKembaliButton.className = 'btn-kembali'; 
     newKembaliButton.onclick = showHome;
     newKembaliButton.style.width = '50%';
     newKembaliButton.style.margin = '0';
-    newKembaliButton.style.backgroundColor = '#4CAF50'; // Warna Hijau
-
-    // Buat Tombol Logout
+    newKembaliButton.style.backgroundColor = '#4CAF50';
     let logoutButton = document.createElement('button');
     logoutButton.id = 'btnLogout';
     logoutButton.textContent = 'Logout';
     logoutButton.className = 'btn-kembali'; 
-    logoutButton.style.backgroundColor = '#f44336'; // Warna Merah
+    logoutButton.style.backgroundColor = '#f44336';
     logoutButton.onclick = logoutUser;
     logoutButton.style.width = '50%';
     logoutButton.style.margin = '0';
-
-    // Tambahkan kedua tombol ke grup
     buttonGroupBottom.appendChild(newKembaliButton);
     buttonGroupBottom.appendChild(logoutButton);
-
-    // Pastikan urutan di profilCard adalah: Info -> Edit -> Grup Bawah
-    // Pindahkan Edit Button agar berada tepat sebelum Group Bottom (jika sudah ada sebelumnya)
     profilCard.insertBefore(editButton, buttonGroupBottom);
 }
-// --- AKHIR FUNGSI showProfil() YANG DIMODIFIKASI ---
-
-// --- FUNGSI showEditProfil() YANG DIMODIFIKASI ---
 function showEditProfil() {
     hideAllContainers();
     const editContainer = document.getElementById('editprofil-container');
@@ -997,13 +988,10 @@ function showEditProfil() {
     editContainer.style.justifyContent = 'center';
     editContainer.style.alignItems = 'center';
     editContainer.style.padding = '20px';
-    
-    // Pastikan data terbaru dari localUser digunakan
     const currentUsername = localUser.Username || '';
     const currentNama = localUser.Nama || '';
     const currentNomorHP = localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP;
     const currentAlamat = localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat;
-
     editContainer.innerHTML = `
         <div class="auth-card">
             <h2>Edit Profil</h2>
@@ -1024,8 +1012,6 @@ function showEditProfil() {
         updateProfile();
     });
 }
-
-// --- FUNGSI updateProfile() YANG DIMODIFIKASI ---
 function updateProfile() {
     const userID = localUser.ID;
     const newUsername = document.getElementById('editUsername').value.trim();
@@ -1034,28 +1020,23 @@ function updateProfile() {
     const alamat = document.getElementById('editAlamat').value.trim();
     const password = document.getElementById('editPassword').value.trim();
     const statusDiv = document.getElementById('editStatus');
-    
     statusDiv.className = 'auth-status';
     statusDiv.innerHTML = 'Menyimpan...';
-
     if (!newUsername || !nama || !nomorHP || !alamat) {
         statusDiv.innerHTML = 'Username, Nama, Nomor HP, dan Alamat wajib diisi.';
         statusDiv.classList.add('error');
         return;
     }
-
     if (newUsername.length < 5) {
         statusDiv.innerHTML = 'Username minimal 5 karakter.';
         statusDiv.classList.add('error');
         return;
     }
-
     if (password && password.length < 5) {
         statusDiv.innerHTML = 'Password minimal 5 karakter.';
         statusDiv.classList.add('error');
         return;
     }
-
     const updates = {
         Nama: nama,
         NomorHP: nomorHP,
@@ -1064,67 +1045,52 @@ function updateProfile() {
     if (password) {
         updates.Password = password;
     }
-
     const processUpdate = () => {
         db.ref(`users/${userID}`).update(updates)
             .then(() => {
-                // Update local storage and local user object
                 localUser.Username = newUsername;
                 localUser.Nama = nama;
                 localUser.NomorHP = nomorHP;
                 localUser.Alamat = alamat;
-
                 localStorage.setItem("Username", newUsername);
                 localStorage.setItem("Nama", nama);
                 localStorage.setItem("NomorHP", nomorHP);
                 localStorage.setItem("Alamat", alamat);
-                
-                // Jika password diubah, Firebase sudah menanganinya, tidak perlu disimpan di localStorage
-
                 statusDiv.innerHTML = 'Profil berhasil diperbarui!';
                 statusDiv.classList.add('success');
                 updateProfileDisplay(localUser.Nama, localUser.Foto, localUser.ID);
                 setTimeout(showProfil, 1500);
             })
             .catch(error => {
-                console.error("Update Profil Error:", error);
                 statusDiv.innerHTML = 'Gagal memperbarui profil. Silakan coba lagi.';
                 statusDiv.classList.add('error');
             });
     };
-
-    // Check if Username has changed and if the new one is available
     if (newUsername !== localUser.Username) {
         db.ref("users").orderByChild("Username").equalTo(newUsername).once("value")
             .then(snapshot => {
-                // Check if the new username exists AND belongs to another user
                 let isTaken = false;
                 snapshot.forEach(child => {
                     if (child.val().ID !== userID) {
                         isTaken = true;
                     }
                 });
-
                 if (isTaken) {
                     statusDiv.innerHTML = 'Username sudah digunakan oleh pengguna lain. Silakan pilih yang lain.';
                     statusDiv.classList.add('error');
                 } else {
-                    updates.Username = newUsername; // Add new username to updates object
+                    updates.Username = newUsername;
                     processUpdate();
                 }
             })
             .catch(error => {
-                console.error("Check Username Error:", error);
                 statusDiv.innerHTML = 'Terjadi kesalahan saat memeriksa username.';
                 statusDiv.classList.add('error');
             });
     } else {
-        // Username is the same, just update other fields
         processUpdate();
     }
 }
-// --- AKHIR FUNGSI YANG DIMODIFIKASI ---
-
 function showLogin() {
     hideAllContainers();
     document.getElementById('login-container').style.display = 'flex';
@@ -1190,7 +1156,6 @@ function loginUser() {
             }
         })
         .catch(error => {
-            console.error("Login Error:", error);
             statusDiv.innerHTML = 'Terjadi kesalahan saat login.';
             statusDiv.classList.add('error');
         });
@@ -1251,20 +1216,58 @@ function signupUser() {
                         setTimeout(showHome, 1500);
                     })
                     .catch(error => {
-                        console.error("Signup Error:", error);
                         statusDiv.innerHTML = 'Gagal mendaftar. Silakan coba lagi.';
                         statusDiv.classList.add('error');
                     });
             }
         })
         .catch(error => {
-            console.error("Check Username Error:", error);
             statusDiv.innerHTML = 'Terjadi kesalahan sistem. Silakan coba lagi.';
             statusDiv.classList.add('error');
         });
 }
-
-
+function showVideo(videoUrl) {
+    hideAllContainers();
+    const videoPopup = document.getElementById('video-popup-container');
+    const videoPlayer = document.getElementById('video-player');
+    videoPlayer.src = videoUrl;
+    videoPopup.style.display = 'flex';
+    videoPlayer.play().catch(error => {
+    });
+}
+function closeVideo(event) {
+    const videoPopup = document.getElementById('video-popup-container');
+    const videoPlayer = document.getElementById('video-player');
+    if (event.target === videoPopup || event.target.classList.contains('video-close-btn')) {
+        videoPlayer.pause();
+        videoPlayer.src = '';
+        videoPopup.style.display = 'none';
+    } else {
+        const videoWrapper = document.getElementById('video-wrapper');
+        if (videoWrapper.contains(event.target) && !event.target.classList.contains('video-close-btn')) {
+            return;
+        }
+    }
+}
+function showVideoPopup(videoUrl) {
+    const videoContainer = document.getElementById('video-popup-container');
+    const videoPlayer = document.getElementById('videoPlayer');
+    if (videoContainer && videoPlayer) {
+        videoPlayer.src = videoUrl;
+        videoContainer.style.display = 'flex';
+        videoPlayer.play();
+    }
+}
+function hideVideoPopup() {
+    const videoContainer = document.getElementById('video-popup-container');
+    const videoPlayer = document.getElementById('videoPlayer');
+    if (videoContainer && videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer.removeAttribute('src'); 
+        videoPlayer.load();
+        videoContainer.style.display = 'none';
+    }
+}
 $(document).ready(function() {
     initializeHome();
 });
