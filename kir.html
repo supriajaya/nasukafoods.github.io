@@ -1,120 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kirim Lokasi Leaflet</title>
-    <meta charset="utf-8" />
+    <title>KIRIM Lokasi Live</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        /* Mengatur tinggi elemen peta */
-        #map { 
-            height: 400px; 
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+        body { font-family: Arial, sans-serif; margin: 15px; }
+        #map { height: 350px; border: 1px solid #ccc; border-radius: 8px; margin-top: 15px; }
+        .status { padding: 10px; background-color: #d4edda; color: #155724; border-radius: 4px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-    <h1>Lacak dan Kirim Lokasi Saya</h1>
-    <p>Pastikan Anda mengizinkan akses lokasi di browser Anda.</p>
+    <h1>Pengirim Lokasi Live 🔴</h1>
+    <p>Mohon izinkan akses lokasi saat diminta oleh browser.</p>
     
+    <div id="status" class="status">Menunggu inisialisasi...</div>
     <div id="map"></div>
-    
-    <button id="shareButton" disabled style="padding: 10px 20px; font-size: 16px;">
-        Buat Tautan Berbagi Lokasi
-    </button>
-    
-    <div id="shareLinkContainer" style="margin-top: 15px;"></div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
     <script>
-        // Inisialisasi peta dan set tampilan awal (menggunakan koordinat umum sementara)
-        var map = L.map('map').setView([0, 0], 2); 
+        // Konfigurasi Firebase Anda
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
+            authDomain: "nasukafoods1.firebaseapp.com",
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nasukafoods1",
+            messagingSenderId: "84287800896",
+            appId: "1:84287800896:web:83189d6766997b00f701a5"
+        };
+        
+        // Inisialisasi Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
+        const database = firebase.database();
+        // Node tempat lokasi akan disimpan. Pastikan node ini SAMA di file pelacak.
+        const locationRef = database.ref('live_location/kurir_motor'); 
 
-        // Tambahkan layer peta (menggunakan OpenStreetMap)
+        var map = L.map('map').setView([0, 0], 2);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
         var currentMarker;
-        var currentLat;
-        var currentLng;
-        var shareButton = document.getElementById('shareButton');
-        var shareLinkContainer = document.getElementById('shareLinkContainer');
+        const statusElement = document.getElementById('status');
 
-        // Fungsi untuk mendapatkan lokasi pengguna
-        function getLocation() {
-            if (navigator.geolocation) {
-                // Opsi: { enableHighAccuracy: true } untuk lokasi yang lebih akurat
-                navigator.geolocation.getCurrentPosition(showPosition, showError, { enableHighAccuracy: true });
-            } else {
-                alert("Geolocation tidak didukung oleh browser ini.");
-            }
-        }
+        function sendLocation(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const timestamp = new Date().toLocaleTimeString();
 
-        // Fungsi yang dipanggil saat lokasi berhasil ditemukan
-        function showPosition(position) {
-            currentLat = position.coords.latitude;
-            currentLng = position.coords.longitude;
-            var latlng = [currentLat, currentLng];
+            // MENGIRIM lokasi ke Firebase
+            locationRef.set({ 
+                lat: lat, 
+                lng: lng,
+                time: timestamp
+            })
+            .then(() => {
+                statusElement.innerHTML = `Lokasi terkirim. Terakhir: ${timestamp}. Lat: ${lat.toFixed(6)}`;
+            });
 
-            // Pindahkan tampilan peta ke lokasi saat ini
-            map.setView(latlng, 15); // Zoom level 15
-
-            // Hapus marker lama jika ada
-            if (currentMarker) {
-                map.removeLayer(currentMarker);
-            }
-
-            // Tambahkan marker baru di lokasi yang ditemukan
+            // Update peta lokal
+            const latlng = [lat, lng];
+            map.setView(latlng, 15);
+            if (currentMarker) map.removeLayer(currentMarker);
             currentMarker = L.marker(latlng).addTo(map)
-                .bindPopup("<b>Lokasi Saya Saat Ini</b><br>Lat: " + currentLat.toFixed(6) + "<br>Lng: " + currentLng.toFixed(6))
+                .bindPopup("Lokasi Saya Saat Ini")
                 .openPopup();
-
-            // Aktifkan tombol berbagi
-            shareButton.disabled = false;
         }
 
-        // Fungsi yang dipanggil saat terjadi kesalahan (error)
-        function showError(error) {
-            var errorMessage;
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMessage = "Pengguna menolak permintaan lokasi (Geolocation).";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMessage = "Informasi lokasi tidak tersedia.";
-                    break;
-                case error.TIMEOUT:
-                    errorMessage = "Waktu permintaan lokasi habis.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    errorMessage = "Terjadi kesalahan yang tidak diketahui.";
-                    break;
-            }
-            shareLinkContainer.innerHTML = '<p style="color: red;">Gagal mendapatkan lokasi: ' + errorMessage + '</p>';
+        function locationError(error) {
+            statusElement.className = 'status';
+            statusElement.style.backgroundColor = '#f8d7da';
+            statusElement.style.color = '#721c24';
+            statusElement.innerHTML = `Gagal melacak lokasi: ${error.message}`;
         }
 
-        // Fungsi untuk membuat tautan berbagi saat tombol diklik
-        shareButton.addEventListener('click', function() {
-            if (currentLat && currentLng) {
-                // Tautan Google Maps: format standar untuk berbagi lokasi
-                var shareUrl = "https://maps.google.com/maps?q=" + currentLat + "," + currentLng;
-
-                // Teks yang akan ditampilkan
-                shareLinkContainer.innerHTML = `
-                    <p>Silakan salin tautan di bawah ini untuk berbagi lokasi:</p>
-                    <a href="${shareUrl}" target="_blank">${shareUrl}</a>
-                    <p><i>Anda dapat menggunakan tautan ini di WhatsApp, email, atau pesan lainnya.</i></p>
-                `;
-            } else {
-                alert("Lokasi belum ditemukan. Silakan tunggu atau coba muat ulang.");
-            }
-        });
-
-        // Panggil fungsi untuk memulai proses pencarian lokasi
-        getLocation();
+        // Mulai melacak dan mengirim lokasi secara terus-menerus
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(sendLocation, locationError, {
+                enableHighAccuracy: true,
+                timeout: 10000 
+            });
+        } else {
+            statusElement.innerHTML = "Geolocation tidak didukung oleh browser ini.";
+        }
     </script>
 </body>
 </html>
