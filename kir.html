@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kirim Lokasi Leaflet</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* Mengatur tinggi elemen peta */
+        #map { 
+            height: 400px; 
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lacak dan Kirim Lokasi Saya</h1>
+    <p>Pastikan Anda mengizinkan akses lokasi di browser Anda.</p>
+    
+    <div id="map"></div>
+    
+    <button id="shareButton" disabled style="padding: 10px 20px; font-size: 16px;">
+        Buat Tautan Berbagi Lokasi
+    </button>
+    
+    <div id="shareLinkContainer" style="margin-top: 15px;"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inisialisasi peta dan set tampilan awal (menggunakan koordinat umum sementara)
+        var map = L.map('map').setView([0, 0], 2); 
+
+        // Tambahkan layer peta (menggunakan OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var currentMarker;
+        var currentLat;
+        var currentLng;
+        var shareButton = document.getElementById('shareButton');
+        var shareLinkContainer = document.getElementById('shareLinkContainer');
+
+        // Fungsi untuk mendapatkan lokasi pengguna
+        function getLocation() {
+            if (navigator.geolocation) {
+                // Opsi: { enableHighAccuracy: true } untuk lokasi yang lebih akurat
+                navigator.geolocation.getCurrentPosition(showPosition, showError, { enableHighAccuracy: true });
+            } else {
+                alert("Geolocation tidak didukung oleh browser ini.");
+            }
+        }
+
+        // Fungsi yang dipanggil saat lokasi berhasil ditemukan
+        function showPosition(position) {
+            currentLat = position.coords.latitude;
+            currentLng = position.coords.longitude;
+            var latlng = [currentLat, currentLng];
+
+            // Pindahkan tampilan peta ke lokasi saat ini
+            map.setView(latlng, 15); // Zoom level 15
+
+            // Hapus marker lama jika ada
+            if (currentMarker) {
+                map.removeLayer(currentMarker);
+            }
+
+            // Tambahkan marker baru di lokasi yang ditemukan
+            currentMarker = L.marker(latlng).addTo(map)
+                .bindPopup("<b>Lokasi Saya Saat Ini</b><br>Lat: " + currentLat.toFixed(6) + "<br>Lng: " + currentLng.toFixed(6))
+                .openPopup();
+
+            // Aktifkan tombol berbagi
+            shareButton.disabled = false;
+        }
+
+        // Fungsi yang dipanggil saat terjadi kesalahan (error)
+        function showError(error) {
+            var errorMessage;
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "Pengguna menolak permintaan lokasi (Geolocation).";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "Informasi lokasi tidak tersedia.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = "Waktu permintaan lokasi habis.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMessage = "Terjadi kesalahan yang tidak diketahui.";
+                    break;
+            }
+            shareLinkContainer.innerHTML = '<p style="color: red;">Gagal mendapatkan lokasi: ' + errorMessage + '</p>';
+        }
+
+        // Fungsi untuk membuat tautan berbagi saat tombol diklik
+        shareButton.addEventListener('click', function() {
+            if (currentLat && currentLng) {
+                // Tautan Google Maps: format standar untuk berbagi lokasi
+                var shareUrl = "https://maps.google.com/maps?q=" + currentLat + "," + currentLng;
+
+                // Teks yang akan ditampilkan
+                shareLinkContainer.innerHTML = `
+                    <p>Silakan salin tautan di bawah ini untuk berbagi lokasi:</p>
+                    <a href="${shareUrl}" target="_blank">${shareUrl}</a>
+                    <p><i>Anda dapat menggunakan tautan ini di WhatsApp, email, atau pesan lainnya.</i></p>
+                `;
+            } else {
+                alert("Lokasi belum ditemukan. Silakan tunggu atau coba muat ulang.");
+            }
+        });
+
+        // Panggil fungsi untuk memulai proses pencarian lokasi
+        getLocation();
+    </script>
+</body>
+</html>
