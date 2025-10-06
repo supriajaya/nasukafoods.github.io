@@ -9,6 +9,17 @@
         #map { height: 600px; border: 1px solid #ccc; border-radius: 8px; margin-top: 15px; }
         .status { padding: 10px; background-color: #f8d7da; color: #721c24; border-radius: 4px; margin-bottom: 15px; }
         .ready { background-color: #d4edda; color: #155724; }
+        
+        /* CSS Tambahan untuk Menyembunyikan Logo Leaflet */
+        .leaflet-control-attribution a {
+            display: none !important;
+        }
+        /* Catatan: Ini akan menyembunyikan tautan "Leaflet" saja, 
+           bukan seluruh kontrol atribusi (yang juga berisi "© OpenStreetMap contributors").
+           Jika Anda ingin menyembunyikan seluruh kontrol atribusi, gunakan:
+           .leaflet-control-attribution { display: none; } 
+           TETAPI, ini tidak disarankan karena melanggar persyaratan atribusi OpenStreetMap.
+        */
     </style>
 </head>
 <body>
@@ -25,7 +36,7 @@
     <script>
         // PASTIKAN MENGGANTI INI DENGAN KONFIGURASI FIREBASE ANDA SENDIRI
         const firebaseConfig = {
-            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", // GANTI
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpS", // GANTI
             authDomain: "nasukafoods1.firebaseapp.com", // GANTI
             databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", // GANTI
             projectId: "nasukafoods1", // GANTI
@@ -86,7 +97,7 @@
                     // Perbarui Status
                     statusElement.classList.remove('status');
                     statusElement.classList.add('ready');
-                    statusElement.innerHTML = `Lokasi Mang Cilok Ditemukan. Terakhir: ${data.time}`;
+                    statusElement.innerHTML = `Posisi Mang Cilok Saat Ini. Update : ${data.time}`;
                     
                 } else {
                     statusElement.innerHTML = "Data lokasi kurir belum tersedia.";
