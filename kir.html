@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KIRIM Lokasi Live</title>
+    <title>KIRIM Lokasi Live (OpenStreetMap)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         body { font-family: Arial, sans-serif; margin: 15px; }
         #map { height: 350px; border: 1px solid #ccc; border-radius: 8px; margin-top: 15px; }
@@ -11,84 +11,96 @@
     </style>
 </head>
 <body>
-    <h1>Pengirim Lokasi Live 🔴</h1>
-    <p>Mohon izinkan akses lokasi saat diminta oleh browser.</p>
+    <h1>Pengirim Lokasi Live 🟢 (OSM)</h1>
+    <p>Lokasi Anda dikirim secara real-time ke database.</p>
     
     <div id="status" class="status">Menunggu inisialisasi...</div>
     <div id="map"></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // Konfigurasi Firebase Anda
+        // PASTIKAN MENGGANTI INI DENGAN KONFIGURASI FIREBASE ANDA SENDIRI
         const firebaseConfig = {
-            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
-            authDomain: "nasukafoods1.firebaseapp.com",
-            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "nasukafoods1",
-            messagingSenderId: "84287800896",
-            appId: "1:84287800896:web:83189d6766997b00f701a5"
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", // GANTI
+            authDomain: "nasukafoods1.firebaseapp.com", // GANTI
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", // GANTI
+            projectId: "nasukafoods1", // GANTI
+            messagingSenderId: "84287800896", // GANTI
+            appId: "1:84287800896:web:83189d6766997b00f701a5" // GANTI
         };
         
-        // Inisialisasi Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         
         const database = firebase.database();
-        // Node tempat lokasi akan disimpan. Pastikan node ini SAMA di file pelacak.
-        const locationRef = database.ref('live_location/kurir_motor'); 
-
-        var map = L.map('map').setView([0, 0], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        var currentMarker;
+        const locationRef = database.ref('live_location/kurir_motor_osm'); // Node yang baru
         const statusElement = document.getElementById('status');
+        
+        let map;
+        let currentMarker;
+        const defaultLatLng = [-6.2088, 106.8456]; // Jakarta
+
+        // Inisialisasi Peta Leaflet (OpenStreetMap)
+        function initMap() {
+            map = L.map('map').setView(defaultLatLng, 10);
+
+            // Tambahkan tile layer dari OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            // Marker awal
+            currentMarker = L.marker(defaultLatLng).addTo(map)
+                .bindPopup('Lokasi Saya')
+                .openPopup();
+
+            // Mulai melacak setelah peta siap
+            if (navigator.geolocation) {
+                statusElement.innerHTML = "Mulai melacak lokasi...";
+                navigator.geolocation.watchPosition(sendLocation, locationError, {
+                    enableHighAccuracy: true,
+                    timeout: 10000 
+                });
+            } else {
+                statusElement.innerHTML = "Geolocation tidak didukung oleh browser Anda.";
+            }
+        }
 
         function sendLocation(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
+            const latLng = [lat, lng];
             const timestamp = new Date().toLocaleTimeString();
 
             // MENGIRIM lokasi ke Firebase
             locationRef.set({ 
                 lat: lat, 
                 lng: lng,
-                time: timestamp
-            })
-            .then(() => {
+                time: timestamp,
+                accuracy: position.coords.accuracy
+            }).then(() => {
                 statusElement.innerHTML = `Lokasi terkirim. Terakhir: ${timestamp}. Lat: ${lat.toFixed(6)}`;
+            }).catch(error => {
+                statusElement.innerHTML = `Gagal mengirim ke DB: ${error.message}`;
             });
 
-            // Update peta lokal
-            const latlng = [lat, lng];
-            map.setView(latlng, 15);
-            if (currentMarker) map.removeLayer(currentMarker);
-            currentMarker = L.marker(latlng).addTo(map)
-                .bindPopup("Lokasi Saya Saat Ini")
-                .openPopup();
+            // Update Marker dan peta
+            currentMarker.setLatLng(latLng);
+            map.setView(latLng, 15); // Pindah pandangan dan zoom ke lokasi baru
         }
 
         function locationError(error) {
-            statusElement.className = 'status';
-            statusElement.style.backgroundColor = '#f8d7da';
-            statusElement.style.color = '#721c24';
             statusElement.innerHTML = `Gagal melacak lokasi: ${error.message}`;
         }
-
-        // Mulai melacak dan mengirim lokasi secara terus-menerus
-        if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(sendLocation, locationError, {
-                enableHighAccuracy: true,
-                timeout: 10000 
-            });
-        } else {
-            statusElement.innerHTML = "Geolocation tidak didukung oleh browser ini.";
-        }
+        
+        // Panggil fungsi inisialisasi
+        initMap();
     </script>
 </body>
 </html>
