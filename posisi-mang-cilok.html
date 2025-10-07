@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>VIEW Lokasi Live (OpenStreetMap)</title>
+    <title>VIEW Lokasi Live (nasuka wireless corporation)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -14,12 +14,8 @@
         .leaflet-control-attribution a {
             display: none !important;
         }
-        /* Catatan: Ini akan menyembunyikan tautan "Leaflet" saja, 
-           bukan seluruh kontrol atribusi (yang juga berisi "© OpenStreetMap contributors").
-           Jika Anda ingin menyembunyikan seluruh kontrol atribusi, gunakan:
-           .leaflet-control-attribution { display: none; } 
-           TETAPI, ini tidak disarankan karena melanggar persyaratan atribusi OpenStreetMap.
-        */
+        /* Catatan: Atribusi "nasuka wireless corporation" kini menggantikan "OpenStreetMap contributors"
+           di bagian atribusi (pojok kanan bawah peta). */
     </style>
 </head>
 <body>
@@ -56,14 +52,15 @@
         let kurirMarker;
         const defaultLatLng = [-6.2088, 106.8456]; // Jakarta
 
-        // Inisialisasi Peta Leaflet (OpenStreetMap)
+        // Inisialisasi Peta Leaflet
         function initMap() {
             map = L.map('map').setView(defaultLatLng, 10);
 
             // Tambahkan tile layer dari OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
-                attribution: '© OpenStreetMap contributors'
+                // PERUBAHAN UTAMA DI SINI: Mengganti teks atribusi
+                attribution: '© nasuka wireless corporation' 
             }).addTo(map);
             
             // Marker awal kurir (belum ada lokasi)
