@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KIRIM Lokasi Live (OpenStreetMap)</title>
+    <title>KIRIM Lokasi Live</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -11,8 +11,7 @@
     </style>
 </head>
 <body>
-    <h1>Pengirim Lokasi Live 🟢 (OSM)</h1>
-    <p>Lokasi Anda dikirim secara real-time ke database.</p>
+    <h1>Kirim Lokasi Live 🟢</h1>
     
     <div id="status" class="status">Menunggu inisialisasi...</div>
     <div id="map"></div>
@@ -23,14 +22,13 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // PASTIKAN MENGGANTI INI DENGAN KONFIGURASI FIREBASE ANDA SENDIRI
         const firebaseConfig = {
-            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", // GANTI
-            authDomain: "nasukafoods1.firebaseapp.com", // GANTI
-            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", // GANTI
-            projectId: "nasukafoods1", // GANTI
-            messagingSenderId: "84287800896", // GANTI
-            appId: "1:84287800896:web:83189d6766997b00f701a5" // GANTI
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
+            authDomain: "nasukafoods1.firebaseapp.com", 
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
+            projectId: "nasukafoods1", 
+            messagingSenderId: "84287800896", 
+            appId: "1:84287800896:web:83189d6766997b00f701a5" 
         };
         
         if (!firebase.apps.length) {
@@ -38,68 +36,73 @@
         }
         
         const database = firebase.database();
-        const locationRef = database.ref('live_location/kurir_motor_osm'); // Node yang baru
+        const locationRef = database.ref('live_location/kurir_motor_osm'); 
         const statusElement = document.getElementById('status');
         
         let map;
         let currentMarker;
-        const defaultLatLng = [-6.2088, 106.8456]; // Jakarta
+        const defaultLatLng = [-6.2088, 106.8456]; 
+        
+        const UPDATE_INTERVAL_MS = 15 * 60 * 1000; 
 
-        // Inisialisasi Peta Leaflet (OpenStreetMap)
         function initMap() {
             map = L.map('map').setView(defaultLatLng, 10);
 
-            // Tambahkan tile layer dari OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
             
-            // Marker awal
             currentMarker = L.marker(defaultLatLng).addTo(map)
                 .bindPopup('Lokasi Saya')
                 .openPopup();
 
-            // Mulai melacak setelah peta siap
             if (navigator.geolocation) {
-                statusElement.innerHTML = "Mulai melacak lokasi...";
-                navigator.geolocation.watchPosition(sendLocation, locationError, {
-                    enableHighAccuracy: true,
-                    timeout: 10000 
-                });
+                statusElement.innerHTML = "Mulai pelacakan dengan interval 15 menit...";
+                
+                getLocationAndSend(); 
+                
+                setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
+                
             } else {
                 statusElement.innerHTML = "Geolocation tidak didukung oleh browser Anda.";
             }
+        }
+        
+        function getLocationAndSend() {
+            navigator.geolocation.getCurrentPosition(sendLocation, locationError, {
+                enableHighAccuracy: true,
+                timeout: 10000 
+            });
+            statusElement.innerHTML = "Mencari lokasi baru...";
         }
 
         function sendLocation(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             const latLng = [lat, lng];
-            const timestamp = new Date().toLocaleTimeString();
+            const timestamp = new Date().toLocaleTimeString('id-ID'); 
+            const nextUpdate = new Date(new Date().getTime() + UPDATE_INTERVAL_MS).toLocaleTimeString('id-ID');
 
-            // MENGIRIM lokasi ke Firebase
             locationRef.set({ 
                 lat: lat, 
                 lng: lng,
                 time: timestamp,
                 accuracy: position.coords.accuracy
             }).then(() => {
-                statusElement.innerHTML = `Lokasi terkirim. Terakhir: ${timestamp}. Lat: ${lat.toFixed(6)}`;
+                statusElement.innerHTML = `Lokasi **berhasil terkirim**. Terakhir: ${timestamp}. Lat: ${lat.toFixed(6)}. Update selanjutnya: ${nextUpdate}`;
             }).catch(error => {
                 statusElement.innerHTML = `Gagal mengirim ke DB: ${error.message}`;
             });
 
-            // Update Marker dan peta
             currentMarker.setLatLng(latLng);
-            map.setView(latLng, 15); // Pindah pandangan dan zoom ke lokasi baru
+            map.setView(latLng, 15); 
         }
 
         function locationError(error) {
-            statusElement.innerHTML = `Gagal melacak lokasi: ${error.message}`;
+            statusElement.innerHTML = `Gagal melacak lokasi: ${error.message}. Akan mencoba lagi dalam 15 menit.`;
         }
         
-        // Panggil fungsi inisialisasi
         initMap();
     </script>
 </body>
