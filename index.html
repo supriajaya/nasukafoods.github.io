@@ -406,15 +406,15 @@
   <div class="product-grid">
     <div class="product-card">
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
-      <h3>Rp 950</h3>
+      <h3>Rp 900</h3>
       <p>1 Pcs</p>
-      <button onclick="showPayment('Cilok Isian Gajih', ' Cilok premium dengan isian gajih pilihan .', 950, ['https://nasukafoods.site/paketcilok.jpg'], 'No detail')">Detail</button>
+      <button onclick="showPayment('Cilok Isian Gajih', ' Cilok premium dengan isian gajih pilihan .', 900, ['https://nasukafoods.site/paketcilok.jpg'], 'No detail')">Detail</button>
     </div>
     <div class="product-card">
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
-      <h3>Rp 46.000</h3>
+      <h3>Rp 45.000</h3>
       <p>50 pcs</p>
-      <button onclick="showPayment('Cilok Lemak Sapi Premium', '50 pcs + 100 gram bumbu kacang ekslusif', 46000, ['https://nasukafoods.site/cilokisian.jpg'], 'Pesanan akan dikirim ke alamat sesuai data di akun profil anda')">Detail</button>
+      <button onclick="showPayment('Cilok Lemak Sapi Premium', '50 pcs + 100 gram bumbu kacang ekslusif', 45000, ['https://nasukafoods.site/cilokisian.jpg'], 'Pesanan akan dikirim ke alamat sesuai data di akun profil anda')">Detail</button>
     </div>
     <div class="product-card">
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
@@ -426,9 +426,9 @@
   <div class="product-grid">
     <div class="product-card">
       <img src="https://nasukafoods.site/nasukacilok.jpg" alt="">
-      <h3>Rp 440.000</h3>
+      <h3>Rp 450.000</h3>
       <p>500 pcs</p>
-      <button onclick="showPayment('Cilok Wow', 'yang paling hard .', 440000, ['https://nasukafoods.site/paketcilok.jpg'], 'Keterangan tambahan untuk 500 pcs.')">Detail</button>
+      <button onclick="showPayment('Cilok Wow', 'yang paling hard .', 40000, ['https://nasukafoods.site/paketcilok.jpg'], 'Keterangan tambahan untuk 500 pcs.')">Detail</button>
     </div>
     
     
@@ -481,30 +481,42 @@
         </video>
      
     </div>
-</div>
+</div>    
 
 
 
 
        <div class="arya-overlay">
   <a href="https://tiktok.com/@cilokisiangajih">
-    <img src="https://nasukafoods.site/tiktokfoll.gif" />
+    <img src="https://nasukafoods.site/tiktok.jpg" />
   </a>
 </div>
      
         <div class="arya-overlay">
   <a href="">
-    <img src="https://nasukafoods.site/roll.jpg" />
+    <img src="https://nasukafoods.site/fb.jpg" />
   </a>
 </div>
      
+        <div class="arya-overlay">
+  <a href="">
+    <img src="https://nasukafoods.site/wa.jpg" />
+  </a>
+</div>
+ 
+        <div class="arya-overlay">
+  <a href="">
+    <img src="https://nasukafoods.site/roll.jpg" />
+  </a>
+</div>
+ 
         <div class="arya-overlay">
   <a href="">
     <img src="https://nasukafoods.site/burung.jpg" />
   </a>
 </div>
 
-       <div class="arya-overlay">
+   <div class="arya-overlay">
   <a href="#" onclick="showVideoPopup('https://nasukafoods.site/nasukaads3.mp4'); return false;">
     <img src="https://nasukafoods.site/5.000.png" />
   </a>
@@ -523,9 +535,8 @@
         <a href="#" onclick="">
           <img src="https://nasukafoods.site/40.000.png" />
         </a>
-      </div>
+      </div>    
     </div>
-  
   
 <div id="editprofil-container"></div>
 <div id="payment-container"></div>
@@ -577,7 +588,7 @@
                 <span id="profilUsername">-</span>
             </div>
             <div class="profil-info-item">
-                <strong>Saldo Poin:</strong>
+                <strong>Poin:</strong>
                 <span id="profilPoin">0</span>
             </div>
             <div class="profil-info-item">
@@ -808,7 +819,7 @@ function processPoinPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
     if (localUser.Poin < amount) {
-        statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Saldo Poin Anda (${localUser.Poin.toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')} Poin).</span>`;
+        statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Poin Anda (${localUser.Poin.toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')} Poin).</span>`;
         return;
     }
     if (!confirm(`Anda yakin ingin membeli "${productName}" seharga ${amount.toLocaleString('id-ID')} Poin?`)) {
@@ -873,13 +884,13 @@ function showPayment(productName, productDescription, productPrice, productImage
             <p><strong>Produk:</strong> ${productName}</p>
             <p><strong>Deskripsi:</strong> ${productDescription}</p>
             <p><strong>Harga:</strong> Rp ${Math.round(productPrice).toLocaleString('id-ID')}</p>
-            <p><strong>Harga Poin:</strong> <span style="font-weight: bold; color: #ff9800;">${productPriceInPoin.toLocaleString('id-ID')} Poin</span></p>
+            <p><strong>Bayar dengan poin:</strong> <span style="font-weight:; color: #black;">${productPriceInPoin.toLocaleString('id-ID')} Poin</span></p>
             <p><strong>Keterangan:</strong> ${manualDescription}</p>
             <hr>
             <h3>Informasi Pengiriman</h3>
             <p><strong>Nama:</strong> ${userName}</p>
             <p><strong>Alamat:</strong> ${userAddress}</p>
-            <p><strong>Saldo Poin Anda:</strong> <span style="font-weight: bold; color: gold; text-shadow: 1px 1px 1px #333;">${localUser.Poin.toLocaleString('id-ID')} Poin</span></p>
+            <p><strong>Poin Anda:</strong> <span style="font-weight: bold; color: black; text-shadow: 1px 1px 1px #333;">${localUser.Poin.toLocaleString('id-ID')} Poin</span></p>
             <hr>
             <div class="payment-options">
                 <button onclick="processPoinPayment(${productPriceInPoin}, '${productName}')" style="background-color: #ff9800; color: white;">Bayar dengan Poin</button>
