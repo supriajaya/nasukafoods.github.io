@@ -35,7 +35,13 @@
             border-color: #ffcc00;
         }
 
-        .leaflet-control-attribution a { display: none !important; }
+        .leaflet-control-attribution a:not(:last-child) { 
+            display: none !important; 
+        }
+        .leaflet-control-attribution .leaflet-compact-attribution {
+            display: none !important;
+        }
+
 
         .leaflet-popup-content img {
             max-width: 100%; 
@@ -45,22 +51,30 @@
             display: block;
         }
         
-        /* CSS untuk Tombol WhatsApp */
-        .whatsapp-button {
+        /* MODIFIKASI CSS UNTUK UKURAN 50% LEBIH KECIL */
+        .whatsapp-fixed-button {
+            position: fixed; 
+            bottom: 20px; 
+            left: 20px; 
+            z-index: 1000; 
             display: inline-block; 
-            background-color: #25D366; /* Warna Hijau WhatsApp */
-            color: white !important; /* Teks Putih */
-            padding: 8px 12px; 
+            background-color: #25D366; 
+            color: white !important; 
+            /* Ukuran Padding: Dari 10px 15px menjadi 5px 8px (sekitar 50%) */
+            padding: 5px 8px; 
             text-align: center; 
             text-decoration: none !important; 
-            border-radius: 5px; 
-            margin-top: 10px; 
+            /* Border Radius sedikit dikurangi */
+            border-radius: 4px; 
             font-weight: bold;
             border: 1px solid #128C7E;
-            font-size: 14px;
+            /* Ukuran Font: Dari 16px menjadi 12px atau 10px */
+            font-size: 12px; 
             cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bayangan dikurangi */
+            transition: background-color 0.3s;
         }
-        .whatsapp-button:hover {
+        .whatsapp-fixed-button:hover {
             background-color: #128C7E;
         }
     </style>
@@ -69,6 +83,10 @@
  
     <div id="status" class="status connecting">Menghubungkan ke server dan sinkronisasi waktu...</div>
     <div id="map"></div>
+    
+    <a href="https://wa.me/message/XVKAGLKZ2OPEG1" target="_blank" class="whatsapp-fixed-button">
+        Kirim Pesan ke WhatsApp
+    </a>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -103,7 +121,6 @@
 
         let serverTimeOffset = null; 
         
-        // URL WhatsApp Business Anda
         const WHATSAPP_URL = 'https://wa.me/message/XVKAGLKZ2OPEG1'; 
 
         function getAccurateTime() {
@@ -140,7 +157,7 @@
             map = L.map('map').setView(defaultLatLng, defaultZoom);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: 'Nasuka Wireless'
             }).addTo(map);
 
             kurirMarker = L.marker(defaultLatLng, {
@@ -178,15 +195,10 @@
 
                     kurirMarker.setLatLng(latLng).setOpacity(1.0);
                     
-                    // --- PEMBAHARUAN POPUP CONTENT DENGAN TOMBOL WHATSAPP ---
                     kurirMarker.setPopupContent(`
                         <b>🟢 Online</b>
                         <br>
                         <img src="https://nasukafoods.site/arya.jpg" alt="QRIS Payment">
-                        <br>
-                        <a href="${WHATSAPP_URL}" target="_blank" class="whatsapp-button">
-                            Kirim Pesan ke WhatsApp
-                        </a>
                     `).openPopup();
        
                     map.setView(latLng, 15);
