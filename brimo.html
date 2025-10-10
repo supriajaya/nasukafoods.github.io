@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi BRImo Saldo Besar</title>
+    <style>
+        /* Variabel Warna Utama */
+        :root {
+            --primary-blue: #004a99;
+            --light-blue: #e8f0f8;
+            --bg-color: #f0f2f5;
+            --white: #ffffff;
+            --text-dark: #333333;
+            --text-light: #6c757d;
+            --orange: #ff9900;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding-top: 50px;
+        }
+
+        /* --- Mockup Status Bar (Ganti jika perlu) --- */
+        .status-bar-mock {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            /* Gradien mirip latar belakang atas gambar */
+            background: linear-gradient(135deg, #FF6F00, #FFD54F); 
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            box-sizing: border-box;
+            font-size: 0.8em;
+            z-index: 10;
+        }
+
+        /* --- Bagian Atas Biru dengan Latar Belakang Simulasi Gedung --- */
+        .main-container {
+            position: relative;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding-bottom: 200px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Area lengkung biru muda/gedung (simulasi) */
+            background-image: linear-gradient(to top, rgba(255, 255, 255, 0.1) 0%, rgba(0, 74, 153, 0.8) 100%), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%23003c7a" d="M0 300 L0 100 Q 500 0, 1000 100 L1000 300 Z"/></svg>');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center bottom;
+        }
+
+        .top-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        .greeting {
+            font-size: 1.5em;
+            font-weight: bold;
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+        
+        /* --- Kartu Saldo --- */
+        .saldo-card {
+            background-color: var(--white);
+            color: var(--text-dark);
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .saldo-header {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+        .saldo-amount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .saldo-amount {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+        .saldo-toggle {
+            /* Placeholder untuk ikon mata / tombol sembunyikan saldo */
+            font-size: 1.2em;
+            color: var(--primary-blue);
+            padding-left: 10px;
+        }
+        .semua-rekening {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-blue);
+            font-weight: 500;
+            padding-top: 10px;
+            border-top: 1px solid var(--light-blue);
+            font-size: 0.9em;
+        }
+
+        /* --- Menu Utama (Ikon) --- */
+        .main-menu {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 10px;
+            background-color: var(--white);
+            border-radius: 12px;
+            margin: 0 15px;
+            transform: translateY(-50%); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .menu-item {
+            text-align: center;
+            font-size: 0.75em;
+            color: var(--text-dark);
+        }
+        .menu-icon {
+            width: 45px;
+            height: 45px;
+            background-color: var(--light-blue);
+            border-radius: 50%;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: var(--primary-blue);
+        }
+        /* Penyesuaian warna ikon agar lebih mirip gambar */
+        .menu-icon-rp { background-color: #e5f5e5; color: green; }
+        .menu-icon-briva { background-color: #e8f0f8; color: #2ecc71; } 
+        .menu-icon-pdam { background-color: #e0f7fa; color: #00bcd4; }
+        .menu-icon-pulsa { background-color: #f0e6ff; color: #8e44ad; }
+
+
+        /* --- Banner Iklan --- */
+        .banner {
+            background-color: var(--orange);
+            color: var(--white);
+            padding: 15px;
+            margin: 0 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+            background-image: linear-gradient(to right, var(--orange) 0%, #ffc107 100%);
+        }
+        .banner-text {
+            line-height: 1.4;
+        }
+        .banner button {
+            background-color: var(--white);
+            color: var(--orange);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- Bagian Pencarian dan Menu Kedua --- */
+        .search-bar {
+            padding: 0 15px 15px;
+        }
+        .search-input {
+            width: calc(100% - 30px);
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            background-color: var(--white);
+        }
+        .search-input::placeholder {
+            color: var(--text-light);
+        }
+
+        .service-menu {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .service-menu .menu-icon-setoran { background-color: #f0f0f0; color: #444; }
+        .service-menu .menu-icon-brizzi { background-color: #e5f5e5; color: #2ecc71; }
+        .service-menu .menu-icon-tagihan { background-color: #e8f0f8; color: var(--primary-blue); }
+        .service-menu .menu-icon-lifestyle { background-color: #f9e9f2; color: #cc6699; }
+        .service-menu .menu-icon-investasi { background-color: #fff3e0; color: var(--orange); }
+
+        /* --- Footer Navigasi Bawah --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 10;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 0.7em;
+            color: var(--text-light);
+            padding: 0 5px;
+        }
+        .nav-item.active {
+            color: var(--primary-blue);
+        }
+        .nav-icon {
+            width: 25px;
+            height: 25px;
+            margin: 0 auto 2px;
+            display: block;
+            border-radius: 50%;
+            font-size: 1.2em;
+            line-height: 25px;
+        }
+        .nav-icon-home { background-color: var(--light-blue); color: var(--primary-blue); border-radius: 50%; } 
+        .nav-icon-scan { 
+            background-color: var(--primary-blue); 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 15px; 
+            transform: translateY(-50%); 
+            margin-top: -15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: var(--white);
+            font-size: 1.5em;
+            line-height: 50px;
+            border: 5px solid var(--white); /* Cincin putih di sekitar ikon tengah */
+        }
+        .nav-icon-default { background-color: var(--white); color: #ccc; }
+
+    </style>
+</head>
+<body>
+
+
+    <div class="main-container">
+        <div class="top-info">
+            <span style="font-size: 1.8em; font-weight: bold; padding-right: 15px;">BRImo</span>
+            <div class="greeting">Selamat Sore, Arya</div>
+            <span style="font-size: 0.9em;">Pusat Bantuan</span>
+        </div>
+
+        <div class="saldo-card">
+            <div class="saldo-header">Saldo Rekening Utama</div>
+            <div class="saldo-amount-row">
+                <div class="saldo-amount">Rp68.240.000,00</div> 
+                <div class="saldo-toggle">**<span style="font-weight: normal;">/</span>**</div>
+            </div>
+            <div class="semua-rekening">
+                <span>Semua Rekeningmu</span>
+                <span>></span>
+            </div>
+        </div>
+
+        <div class="main-menu">
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-rp">Rp</div>
+                Transfer
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-briva">BRIVA</div>
+                BRIVA
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-pdam">💧</div>
+                PDAM
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-pulsa">⬆️</div>
+                Pulsa/<br>Data
+            </div>
+        </div>
+    </div>
+
+    <div style="background-color: var(--bg-color); padding-bottom: 70px;">
+
+        <div class="banner">
+            <div class="banner-text">
+                <strong>5 Cara Jadi Sultan Tanpa Warisan</strong><br>
+                <span style="font-size: 0.8em;">Beli, jual, transfer, cetak & cicil e...</span>
+            </div>
+            <button>Mulai ></button>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="🔍 Cari Fitur">
+        </div>
+
+        <div class="service-menu">
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-rp" style="background-color: #e5f5e5; color: green;">➕</div>
+                Top Up
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-brizzi" style="background-color: #e5f5e5; color: #2ecc71;">BRIZZI</div>
+                BRIZZI
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-tagihan" style="background-color: #e8f0f8; color: var(--primary-blue);">🧾</div>
+                Tagihan
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-setoran" style="background-color: #f0f0f0; color: #444;">🏧</div>
+                Setor & Tarik Tunai
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-lifestyle" style="background-color: #f9e9f2; color: #cc6699;">🛍️</div>
+                Lifestyle
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-tagihan" style="background-color: #e8f0f8; color: var(--primary-blue);">📱</div>
+                Virtual Account
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-investasi" style="background-color: #fff3e0; color: var(--orange);">📝</div>
+                Catatan
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon menu-icon-investasi" style="background-color: #fff3e0; color: var(--orange);">📈</div>
+                Investasi
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <span class="nav-icon nav-icon-default" style="color: var(--primary-blue);">🏠</span>
+            Home
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon nav-icon-default">📜</span>
+            Mutasi
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon nav-icon-scan">📸</span>
+            </div>
+        <div class="nav-item">
+            <span class="nav-icon nav-icon-default">📅</span>
+            Aktivitas
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon nav-icon-default">👤</span>
+            Akun
+        </div>
+    </div>
+
+</body>
+</html>
