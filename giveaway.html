@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Giveaway Simulasi</title>
+<style>
+:root{--bg:#f5f7fa;--card:#ffffff;--accent:#ff5722;--muted:#555;--glass:rgba(0,0,0,0.03)}
+*{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto}
+html,body{height:100%}
+body{margin:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);color:#222;padding:20px}
+.container{width:480px;padding:28px;border-radius:12px;background:var(--card);box-shadow:0 6px 30px rgba(0,0,0,0.1);border:1px solid rgba(0,0,0,0.05)}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.title{font-size:20px;font-weight:700;color:#333}
+.controls{display:flex;gap:10px}
+.btn{appearance:none;border:0;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#ff784e);color:#fff;font-weight:700;cursor:pointer;letter-spacing:.4px}
+.slot-window{height:140px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px solid #ff5722}
+.name-display{font-size:34px;font-weight:800;letter-spacing:.6px;color:#ff5722}
+.pulse{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,transparent,rgba(255,87,34,0.1) 60%,transparent);opacity:0;transition:opacity .4s}
+.pulse.on{opacity:1}
+.info{margin-top:14px;display:flex;align-items:center;justify-content:space-between;color:#444;font-size:13px}
+.winner-badge{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(90deg,rgba(255,87,34,0.15),transparent);color:#d84315;font-weight:700;text-align:center;display:none}
+.winner-badge.show{display:block}
+.footer{margin-top:14px;font-size:12px;color:#666;text-align:center}
+.small{font-size:12px;color:#666}
+.list-area{margin-top:12px;background:#fff;padding:10px;border-radius:8px;max-height:140px;overflow:auto;border:1px solid rgba(0,0,0,0.05);font-size:13px;color:#444}
+.search{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.1);background:#fff;color:#222;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+  
+    
+    <div class="controls">
+      <button id="startBtn" class="btn">Acak Otomatis</button>
+    </div>
+  </div>
+  <div class="slot-window" id="slot">
+    <div class="pulse" id="pulse"></div>
+    <div class="name-display" id="display">—</div>
+  </div>
+  <div class="info">
+    <div class="small">Jumlah peserta: <span id="count">100</span></div>
+    <div class="small">Pemenang: <span id="winnerText">—</span></div>
+  </div>
+  <div id="winnerBadge" class="winner-badge"></div>
+  <input id="filter" class="search" placeholder="Cari username...">
+  <div class="list-area" id="listArea"></div>
+  <div class="footer small">Daftar lengkap 25 peserta</div>
+</div>
+
+<script>
+const usernames=[
+"@alphaNova","@byteHunter","@cosmicRider","@dataWolf","@echoStorm","@fluxNova","@gigaShade","@hyperPulse","@ionDrift","@junoCore",
+"@kryptonSky","@lunarTrace","@microVast","@neoCipher","@omegaDrift","@pixelForge","@quantumAsh","@reactorX","@solarVibe","@terraNova",
+"@ultraWave","@vortexRay","@warpCode","@xenoTrace","@yottaByte",
+]
+
+const display=document.getElementById('display')
+const startBtn=document.getElementById('startBtn')
+const winnerText=document.getElementById('winnerText')
+const winnerBadge=document.getElementById('winnerBadge')
+const pulse=document.getElementById('pulse')
+const countEl=document.getElementById('count')
+const listArea=document.getElementById('listArea')
+const filter=document.getElementById('filter')
+
+let names=[...usernames]
+
+function renderList(items){
+  listArea.innerHTML=items.map(n=>`<div>${n}</div>`).join('')
+  countEl.textContent=items.length
+}
+
+function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function easeOutQuad(t){return 1-(1-t)*(1-t)}
+
+function spinOnce(){
+  if(names.length===0)return
+  startBtn.disabled=true
+  filter.disabled=true
+  winnerBadge.classList.remove('show')
+  pulse.classList.add('on')
+  const totalSteps=randInt(220,420)
+  const baseDelay=8
+  const extraMax=30
+  let cumulative=0
+  const startIndex=Math.floor(Math.random()*names.length)
+  for(let i=0;i<totalSteps;i++){
+    const p=i/(totalSteps-1)
+    const ease=easeOutQuad(p)
+    const delay=baseDelay+Math.round(ease*extraMax)
+    cumulative+=delay
+    setTimeout(()=>{
+      const idx=(startIndex+i)%names.length
+      display.textContent=names[idx]
+      if(i===totalSteps-1){
+        const winner=names[idx]
+        setTimeout(()=>{
+          pulse.classList.remove('on')
+          winnerText.textContent=winner
+          winnerBadge.textContent=`Pemenang: ${winner}`
+          winnerBadge.classList.add('show')
+          startBtn.disabled=true
+          startBtn.textContent='Putaran berikutnya setelah 6 hari 23 jam 60 menit 59 detik'
+          filter.disabled=true
+        },220)
+      }
+    },cumulative)
+  }
+}
+
+filter.addEventListener('input',()=>{
+  const q=filter.value.trim().toLowerCase()
+  if(!q)renderList(names)
+  else renderList(names.filter(n=>n.toLowerCase().includes(q)))
+})
+
+startBtn.addEventListener('click',spinOnce)
+
+renderList(names)
+</script>
+</body>
+</html>
