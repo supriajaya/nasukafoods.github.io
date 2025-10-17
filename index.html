@@ -12,7 +12,6 @@
     
     
     <style>
-        /* Gaya Dasar dan Reset */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             margin: 0;
@@ -23,33 +22,20 @@
         }
 
         .container {
-            max-width: 450px; /* Batasan lebar simulasi ponsel */
+            max-width: 450px;
             margin: 0 auto;
             background-color: white;
-            min-height: 100vh;
+            min-height: 10vh;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
         
-        /* Containers untuk Overlay/Halaman Penuh (Tambahan untuk logika JS) */
-        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #video-popup-container {
-            display: none; /* Default tersembunyi */
+        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container {
+            display: none;
         }
         
-        /* Status Bar (Simulasi) */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px 15px;
-            font-size: 12px;
-            background-color: #eee;
-            color: #333;
-        }
-
-        /* Header / Top Section */
         .header {
-            background: linear-gradient(180deg, #007bff, #0056b3); /* Blue gradient */
+            background: linear-gradient(180deg, #007bff, #0056b3);
             color: white;
             padding: 20px 15px 100px 15px;
             position: relative;
@@ -63,7 +49,6 @@
             left: 0;
             right: 0;
             bottom: 0;
-            /* Placeholder for the building image/background */
             background-image: url('placeholder-building-bg.png'); 
             background-size: cover;
             background-position: center top;
@@ -101,7 +86,6 @@
             margin-right: 5px;
         }
 
-        /* Saldo Rekening */
         .balance-card {
             background-color: white;
             color: #333;
@@ -153,7 +137,6 @@
             cursor: pointer;
         }
 
-        /* Fitur Utama */
         .main-features {
             display: flex;
             justify-content: space-around;
@@ -197,7 +180,6 @@
             font-size: 24px;
         }
 
-        /* Iklan Banner */
         .banner {
             margin: 0 15px 20px 15px;
             padding: 15px;
@@ -231,7 +213,6 @@
             margin-left: 10px;
         }
 
-        /* Search Bar */
         .search-bar {
             margin: 0 15px 20px 15px;
             padding: 10px 15px;
@@ -249,7 +230,6 @@
             color: #999;
         }
 
-        /* Fitur Lain */
         .other-features {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -279,9 +259,18 @@
             margin-bottom: 5px;
             font-size: 24px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden; /* Penting untuk gambar */
         }
+        
+        /* CSS Baru untuk Gambar Produk */
+        .product-icon-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Memastikan gambar mengisi area tanpa distorsi */
+            border-radius: 10px; /* Sesuai dengan border-radius parent */
+        }
+        /* Akhir CSS Baru */
 
-        /* Warna Icon Fitur Lain */
         .top-up-icon { color: #28a745; }
         .brizzi-icon { color: #00bcd4; }
         .tagihan-icon { color: #007bff; } 
@@ -292,7 +281,6 @@
         .investasi-icon { color: #007bff; } 
 
 
-        /* Navbar Bawah (Bottom Navigation) */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -328,7 +316,6 @@
             margin-bottom: 2px;
         }
 
-        /* Tombol QRIS/Scan */
         .qris-button {
             position: absolute;
             bottom: 30px; 
@@ -349,7 +336,6 @@
             cursor: pointer;
         }
         
-        /* Gaya untuk Kontainer Pop-up/Formulir */
         #editprofil-container textarea {
             width: 100%;
             padding: 15px;
@@ -438,7 +424,6 @@
             color: green;
             border: 1px solid green;
         }
-        /* Gaya Profil */
         #profil-container {
             display: none;
             position: fixed;
@@ -521,7 +506,6 @@
             width: 50%;
             margin: 0;
         }
-        /* Gaya Payment/Pembayaran */
         #payment-container {
             display: none;
             position: fixed;
@@ -573,7 +557,6 @@
             font-size: 24px;
             transition: background-color 0.3s;
         }
-        /* Slider Gambar Produk */
         .product-image-slider {
             position: relative;
             overflow: hidden;
@@ -626,50 +609,6 @@
         .slider-dot.active {
             background-color: #717171;
         }
-        /* Video Player Pop-up */
-        #video-popup-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 200004;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        #video-wrapper {
-            position: relative;
-            width: 90%;
-            max-width: 800px;
-            aspect-ratio: 16 / 9;
-            background: black;
-        }
-        #video-player {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .video-close-btn {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #f44336;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 24px;
-            cursor: pointer;
-            line-height: 40px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            z-index: 10;
-        }
     </style>
 </head>
 <body>
@@ -701,14 +640,14 @@
         </div>
 
         <div class="main-features">
-            <a href="https://aryawilalodra.site/simulasi.html" target="_blank" class="feature-link">
+            <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle transfer-icon">
                     <i class="fas fa-exchange-alt"></i>
                 </div>
                 <span>Give Away</span>
             </a>
             
-            <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
+            <a href="https://nasukafoods.site/test-giveaway.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle briva-icon">
                     <i class="fas fa-file-invoice"></i>
                 </div>
@@ -722,7 +661,7 @@
                 <span>Poin</span>
             </a>
             
-            <a href="https://nasukafoods.site" target="_blank" class="feature-link">
+            <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pulsa-icon">
                     <i class="fas fa-arrow-up"></i>
                 </div>
@@ -736,7 +675,7 @@
                 <br>Nasuka Wireless
             </div>
             <div class="banner-button">
-                Mulai <i class="fas fa-chevron-right"></i>
+                cek <i class="fas fa-chevron-right"></i>
             </div>
         </div>
 
@@ -748,25 +687,25 @@
         <div class="other-features">
             <div class="other-feature-item" onclick="showPayment('Produk 1', 'Deskripsi Produk 1', 900, ['https://nasukafoods.site/psu1.jpg'], 'Keterangan manual 1')">
                 <div class="other-feature-icon top-up-icon">
-                    <i class="fas fa-plus"></i>
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 900 Product" class="product-icon-img">
                 </div>
                 <span>Rp 900</span>
             </div>
             <div class="other-feature-item" onclick="showPayment('Produk 2', 'Deskripsi Produk 2', 44000, ['https://nasukafoods.site/psu2.jpg'], 'Keterangan manual 2')">
                 <div class="other-feature-icon brizzi-icon">
-                    <i class="fas fa-credit-card"></i>
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 44.000 Product" class="product-icon-img">
                 </div>
                 <span>Rp 44.000</span>
             </div>
             <div class="other-feature-item" onclick="showPayment('Produk 3', 'Deskripsi Produk 3', 87000, ['https://nasukafoods.site/psu3.jpg'], 'Keterangan manual 3')">
                 <div class="other-feature-icon tagihan-icon">
-                    <i class="fas fa-money-check-alt"></i>
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 87.000 Product" class="product-icon-img">
                 </div>
                 <span>Rp 87.000</span>
             </div>
             <div class="other-feature-item" onclick="showPayment('Produk 4', 'Deskripsi Produk 4', 850000, ['https://nasukafoods.site/psu4.jpg'], 'Keterangan manual 4')">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <i class="fas fa-cash-register"></i>
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 850.000 Product" class="product-icon-img">
                 </div>
                 <span>Rp 850.000</span>
             </div>
@@ -777,7 +716,7 @@
                 </div>
                 <span>Lifestyle</span>
             </div>
-            <div class="other-feature-item" onclick="showVideo('https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1')">
+            <div class="other-feature-item">
                 <div class="other-feature-icon virtual-icon">
                     <i class="fas fa-video"></i>
                 </div>
@@ -805,7 +744,7 @@
         <div class="other-feature-icon investasi-icon" style="margin: 0 auto; display: block; width: 50px; height: 50px;"> 
             <i class="fas fa-chart-line"></i>
         </div>
-        <span style="display: block; text-align: center; font-size: 12px; margin-bottom: 70px;">Investasi</span>
+      
         
         <div class="qris-button">
             <i class="fas fa-qrcode"></i>
@@ -829,7 +768,10 @@
                 <span>Akun</span>
             </div>
         </div>
-
+    <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <span>Game</span>
+        </div>
     </div>
     
     <div id="login-container" class="auth-container">
@@ -876,29 +818,14 @@
             
             <button id="btnEditProfil" style="display: none;"></button>
             <div class="button-group-bottom">
-                </div>
+            </div>
         </div>
     </div>
     
     <div id="editprofil-container" class="auth-container">
-        </div>
+    </div>
 
     <div id="payment-container">
-        </div>
-
-    <div id="video-popup-container" onclick="closeVideo(event)">
-        <div id="video-wrapper">
-            <button class="video-close-btn">&times;</button>
-            <iframe 
-                id="video-player" 
-                width="100%" 
-                height="100%" 
-                src="" 
-                frameborder="0" 
-                allow="autoplay; encrypted-media" 
-                allowfullscreen>
-            </iframe>
-        </div>
     </div>
     
 </div>
@@ -906,9 +833,8 @@
     
 <script>
     
-// --- Konfigurasi dan Inisialisasi Firebase ---
 const firebaseConfig = {
-    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI",
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
     authDomain: "nasukafoods1.firebaseapp.com",
     databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "nasukafoods1",
@@ -920,7 +846,6 @@ if (!firebase.apps.length) {
 }
 const db = firebase.database();
 
-// Objek untuk menyimpan data pengguna lokal
 const localUser = {
   Username: localStorage.getItem("Username"),
   Nama: localStorage.getItem("Nama"),
@@ -931,77 +856,60 @@ const localUser = {
   Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg",
 };
 
-// Listener Realtime Database untuk Poin dan Info Utama
 if (localUser.ID) {
     const userRef = db.ref(`users/${localUser.ID}`);
     userRef.on('value', (snapshot) => {
       const userData = snapshot.val();
       if (userData !== null) {
-        // Update localUser dan localStorage
         localUser.Poin = userData.Poin || 0;
         localUser.Alamat = userData.Alamat || "Alamat belum diatur";
         localUser.NomorHP = userData.NomorHP || "Nomor HP belum diatur";
         localUser.Foto = userData.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-        localUser.Nama = userData.Nama || localUser.Nama; // Pastikan nama juga terupdate
+        localUser.Nama = userData.Nama || localUser.Nama;
+        
         localStorage.setItem("Poin", localUser.Poin);
         localStorage.setItem("Alamat", localUser.Alamat);
         localStorage.setItem("NomorHP", localUser.NomorHP);
         localStorage.setItem("Foto", localUser.Foto);
         localStorage.setItem("Nama", localUser.Nama);
+        
         updatePoinDisplay();
       }
     });
 }
 
-// --- Fungsi Utama untuk Update Tampilan Beranda ---
-
-/**
- * Mengupdate Poin dan Nama User di tampilan Beranda (Home).
- * Memenuhi permintaan revisi.
- */
 function updateHomeDisplay() {
     const userNameEl = document.getElementById('userNameDisplay');
     const poinEl = document.getElementById('poinAmountDisplay');
     const welcomeEl = document.querySelector('.welcome');
     const isLoggedIn = !!localUser.ID;
 
-    // Pastikan elemen ada
     if (!userNameEl || !poinEl || !welcomeEl) return;
 
     if (isLoggedIn) {
-        // Logged-In User
         const displayName = localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username || 'Pengguna';
         
         userNameEl.textContent = displayName;
         poinEl.textContent = (localUser.Poin || 0).toLocaleString('id-ID');
         
-        // Update teks selamat datang
         welcomeEl.innerHTML = `Selamat Datang,<br><strong>${displayName}!</strong>`;
-
+        
     } else {
-        // Guest User
         userNameEl.textContent = "Tamu";
         poinEl.textContent = "0"; 
         
-        // Revert teks selamat datang
         welcomeEl.innerHTML = `Nasuka Foods<br>`; 
     }
 }
 
-/**
- * Dipanggil saat Poin atau data user utama diperbarui.
- */
 function updatePoinDisplay() {
     updateHomeDisplay();
 }
 
 
-// --- Fungsi Inisialisasi dan Profil (Disesuaikan) ---
-
 function initializeHome() {
   initializeUserProfile();
-  // setupChatNotifications(); // Tidak diimplementasikan sepenuhnya
-  updateHomeDisplay(); // Panggil fungsi update tampilan home
+  updateHomeDisplay();
 }
 
 function initializeUserProfile() {
@@ -1009,7 +917,6 @@ function initializeUserProfile() {
   const profilLink = document.getElementById("Profil");
   
   if (!userID) {
-    // Jika belum login, atur tombol Akun/Profil untuk memicu Login
     if (profilLink) {
       profilLink.href = "#";
       profilLink.onclick = showLogin;
@@ -1017,13 +924,11 @@ function initializeUserProfile() {
     return;
   }
   
-  // Jika sudah login, atur tombol Akun/Profil untuk memicu showProfil
   if (profilLink) {
     profilLink.href = "#";
     profilLink.onclick = showProfil;
   }
 
-  // Ambil data profil (jika belum ada di localUser)
   if (!localUser.Nama) {
       fetchUserProfileFromDB(userID);
   } else {
@@ -1032,25 +937,20 @@ function initializeUserProfile() {
 }
 
 function updateProfileDisplay(nama, foto, userID) {
-  // Fungsi ini seharusnya hanya digunakan untuk sinkronisasi data lokal setelah login/fetch.
-  // Tampilan home sudah diurus oleh updateHomeDisplay().
   const profilLink = document.getElementById("Profil");
   if (profilLink) {
-    // Pastikan tombol Profil memicu showProfil
     profilLink.onclick = showProfil;
   }
   updateHomeDisplay();
 }
 
 function fetchUserProfileFromDB(userID) {
-  db.ref("users").orderByChild("ID").equalTo(userID).once("value").then(snap => {
-    let userFound = false;
-    snap.forEach(child => {
-      const val = child.val();
+  db.ref(`users/${userID}`).once("value").then(snapshot => {
+    const val = snapshot.val();
+    if (val) {
       const nama = val.Nama || "Tanpa Nama";
       const foto = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
       
-      // Update localUser dan localStorage
       localUser.Nama = nama;
       localUser.Foto = foto;
       localUser.Alamat = val.Alamat || "Alamat belum diatur";
@@ -1064,36 +964,30 @@ function fetchUserProfileFromDB(userID) {
       localStorage.setItem("Poin", localUser.Poin);
 
       updateProfileDisplay(nama, foto, userID);
-      userFound = true;
-    });
-    if (!userFound) {
-      // Jika data hilang di DB tapi ID ada di localStorage
+    } else {
       localUser.ID = null;
       localStorage.clear();
       updateHomeDisplay(); 
     }
+  }).catch(error => {
+      console.error("Error fetching user profile:", error);
+      updateHomeDisplay();
   });
 }
 
-// Catatan: setupChatNotifications, loadUserProfile, renderUser, dan 
-// beberapa variabel lain dari kode asli yang tidak digunakan secara langsung
-// di home telah dihilangkan atau disederhanakan untuk kejelasan.
-
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #roll-container, #profil-container, #payment-container, #rule-container, #editprofil-container, #leaderboard-container, #belanja-container, #labirin-container, #saya-container, #inbox-container, #pasar-container, #zona1-container, #cross-container, #video-popup-container').forEach(el => {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container').forEach(el => {
         if (el) el.style.display = 'none';
     });
 }
 
-
-// --- Fungsi Navigasi dan Auth ---
 
 function showHome() {
     hideAllContainers();
     const homeContainer = document.getElementById('home-container');
     if (homeContainer) {
         homeContainer.style.display = 'block';
-        initializeHome(); // Memastikan tampilan home terupdate
+        initializeHome();
     }
 }
 
@@ -1129,7 +1023,6 @@ function loginUser() {
                 const userKey = Object.keys(userData)[0];
                 const user = userData[userKey];
                 if (user.Password === password) {
-                    // Update Local Storage & localUser
                     localStorage.setItem("ID", user.ID);
                     localStorage.setItem("Username", user.Username);
                     localStorage.setItem("Nama", user.Nama || 'Tanpa Nama');
@@ -1201,7 +1094,6 @@ function signupUser() {
                 };
                 db.ref(`users/${newID}`).set(newUser)
                     .then(() => {
-                        // Update Local Storage & localUser
                         localStorage.setItem("ID", newUser.ID);
                         localStorage.setItem("Username", newUser.Username);
                         localStorage.setItem("Nama", newUser.Nama);
@@ -1236,16 +1128,8 @@ function signupUser() {
 
 function logoutUser() {
     if (confirm("Anda yakin ingin keluar?")) {
-        // Hapus data dari localStorage
-        localStorage.removeItem("ID");
-        localStorage.removeItem("Username");
-        localStorage.removeItem("Nama");
-        localStorage.removeItem("Poin");
-        localStorage.removeItem("Alamat");
-        localStorage.removeItem("NomorHP");
-        localStorage.removeItem("Foto");
+        localStorage.clear(); 
         
-        // Reset localUser
         localUser.ID = null;
         localUser.Username = null;
         localUser.Nama = null;
@@ -1255,12 +1139,10 @@ function logoutUser() {
         localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg";
         
         alert("Anda telah keluar.");
-        showHome(); // Kembali ke home dan update tampilan
+        showHome();
     }
 }
 
-
-// --- Fungsi Profil dan Edit Profil ---
 
 function showProfil() {
     hideAllContainers();
@@ -1270,10 +1152,10 @@ function showProfil() {
         showLogin();
         return;
     }
-    document.getElementById('profil-container').style.display = 'flex';
-    const profilCard = document.querySelector('#profil-container .profil-card');
+    const profilContainer = document.getElementById('profil-container');
+    profilContainer.style.display = 'flex';
+    const profilCard = profilContainer.querySelector('.profil-card');
     
-    // Fungsi render yang menggunakan data localUser
     const renderProfil = () => {
         document.getElementById('profilFoto').src = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
         document.getElementById('profilNama').textContent = localUser.Nama || 'Nama belum diatur';
@@ -1283,42 +1165,28 @@ function showProfil() {
         document.getElementById('profilAlamat').textContent = localUser.Alamat || 'Alamat belum diatur';
     };
     
-    // Render langsung dari localUser (yang sudah disinkronkan)
     renderProfil(); 
     
-    // Pengaturan Tombol Edit, Kembali, dan Logout (seperti kode asli)
-    let existingKembaliButton = profilCard.querySelector('.btn-kembali');
-    if (existingKembaliButton) {
-        existingKembaliButton.remove();
-    }
-    let editButton = profilCard.querySelector('#btnEditProfil');
-    if (!editButton) {
-        editButton = document.createElement('button');
-        editButton.id = 'btnEditProfil';
-        editButton.textContent = 'Edit Profil';
-        editButton.style.padding = '15px 30px';
-        editButton.style.backgroundColor = '#2196F3';
-        editButton.style.color = 'white';
-        editButton.style.border = 'none';
-        editButton.style.borderRadius = '8px';
-        editButton.style.cursor = 'pointer';
-        editButton.style.fontSize = '24px';
-        editButton.style.transition = 'background-color 0.3s';
-        editButton.style.marginTop = '30px';
-        editButton.style.width = '100%';
-        editButton.onclick = showEditProfil;
-        profilCard.appendChild(editButton); 
-    } else {
-         editButton.style.display = 'block';
-    }
     let buttonGroupBottom = profilCard.querySelector('.button-group-bottom');
     if (!buttonGroupBottom) {
         buttonGroupBottom = document.createElement('div');
         buttonGroupBottom.className = 'button-group-bottom';
         profilCard.appendChild(buttonGroupBottom);
-    } else {
-        buttonGroupBottom.innerHTML = '';
     }
+    buttonGroupBottom.innerHTML = '';
+    
+    let editButton = profilCard.querySelector('#btnEditProfil');
+    if (!editButton) {
+        editButton = document.createElement('button');
+        editButton.id = 'btnEditProfil';
+        editButton.textContent = 'Edit Profil';
+        editButton.style.cssText = 'padding: 15px 30px; background-color: #2196F3; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 24px; transition: background-color 0.3s; margin-top: 30px; width: 100%;';
+        editButton.onclick = showEditProfil;
+        profilCard.insertBefore(editButton, buttonGroupBottom);
+    } else {
+        editButton.style.display = 'block';
+    }
+
     let newKembaliButton = document.createElement('button');
     newKembaliButton.textContent = 'Kembali';
     newKembaliButton.className = 'btn-kembali'; 
@@ -1326,6 +1194,7 @@ function showProfil() {
     newKembaliButton.style.width = '50%';
     newKembaliButton.style.margin = '0';
     newKembaliButton.style.backgroundColor = '#4CAF50';
+
     let logoutButton = document.createElement('button');
     logoutButton.id = 'btnLogout';
     logoutButton.textContent = 'Logout';
@@ -1334,16 +1203,16 @@ function showProfil() {
     logoutButton.onclick = logoutUser;
     logoutButton.style.width = '50%';
     logoutButton.style.margin = '0';
+    
     buttonGroupBottom.appendChild(newKembaliButton);
     buttonGroupBottom.appendChild(logoutButton);
-    profilCard.insertBefore(editButton, buttonGroupBottom);
 }
 
 function showEditProfil() {
     hideAllContainers();
     const editContainer = document.getElementById('editprofil-container');
     editContainer.style.display = 'flex';
-    // ... (style positioning seperti kode asli)
+    
     editContainer.style.position = 'fixed';
     editContainer.style.top = '0';
     editContainer.style.left = '0';
@@ -1392,7 +1261,6 @@ function updateProfile() {
     statusDiv.className = 'auth-status';
     statusDiv.innerHTML = 'Menyimpan...';
     
-    // ... (Logika Validasi seperti kode asli) ...
     if (!newUsername || !nama || !nomorHP || !alamat) {
         statusDiv.innerHTML = 'Username, Nama, Nomor HP, dan Alamat wajib diisi.';
         statusDiv.classList.add('error');
@@ -1421,7 +1289,6 @@ function updateProfile() {
     const processUpdate = () => {
         db.ref(`users/${userID}`).update(updates)
             .then(() => {
-                // Update Local Storage & localUser
                 localUser.Username = newUsername;
                 localUser.Nama = nama;
                 localUser.NomorHP = nomorHP;
@@ -1433,7 +1300,7 @@ function updateProfile() {
                 
                 statusDiv.innerHTML = 'Profil berhasil diperbarui!';
                 statusDiv.classList.add('success');
-                updateProfileDisplay(localUser.Nama, localUser.Foto, localUser.ID); // Update Home Display
+                updateProfileDisplay(localUser.Nama, localUser.Foto, localUser.ID);
                 setTimeout(showProfil, 1500);
             })
             .catch(error => {
@@ -1443,7 +1310,6 @@ function updateProfile() {
     };
 
     if (newUsername !== localUser.Username) {
-        // Cek ketersediaan username jika ada perubahan
         db.ref("users").orderByChild("Username").equalTo(newUsername).once("value")
             .then(snapshot => {
                 let isTaken = false;
@@ -1470,7 +1336,6 @@ function updateProfile() {
 }
 
 
-// --- Fungsi Pembayaran ---
 function processPoinPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
@@ -1529,7 +1394,7 @@ function showPayment(productName, productDescription, productPrice, productImage
         sliderHtml = `
             <div class="product-image-slider">
                 <div class="slider-wrapper" id="productImageSliderWrapper">
-                    ${productImageUrls.map(url => `<div class="slider-item"><img src="${url}" alt="psu${productName}"></div>`).join('')}
+                    ${productImageUrls.map(url => `<div class="slider-item"><img src="${url}" alt="${productName}"></div>`).join('')}
                 </div>
                 <div class="slider-nav">
                     <button onclick="prevSlide()">&lt;</button>
@@ -1570,8 +1435,6 @@ function showPayment(productName, productDescription, productPrice, productImage
 }
 
 
-// --- Fungsi Slider (untuk halaman Payment) ---
-
 let currentSlideIndex = 0;
 let totalSlides = 0;
 function initializeSlider(numSlides) {
@@ -1607,38 +1470,6 @@ function currentSlide(index) {
 }
 
 
-// --- Fungsi Video Pop-up ---
-
-function showVideo(videoUrl) {
-    hideAllContainers();
-    const videoPopup = document.getElementById('video-popup-container');
-    const videoPlayer = document.getElementById('video-player');
-    
-    // Pastikan URL video adalah embed URL
-    const embedUrl = videoUrl.includes("embed") ? videoUrl : `https://www.youtube.com/embed/${new URLSearchParams(new URL(videoUrl).search).get("v")}?autoplay=1`;
-    
-    videoPlayer.src = embedUrl;
-    videoPopup.style.display = 'flex';
-    
-    videoPlayer.play().catch(error => {
-        console.warn("Autoplay was prevented:", error);
-    });
-}
-
-function closeVideo(event) {
-    const videoPopup = document.getElementById('video-popup-container');
-    const videoPlayer = document.getElementById('video-player');
-    
-    // Periksa apakah yang diklik adalah area latar belakang atau tombol tutup
-    if (event.target === videoPopup || event.target.classList.contains('video-close-btn')) {
-        videoPlayer.pause();
-        // Hapus src untuk menghentikan pemuatan dan audio
-        videoPlayer.src = ''; 
-        videoPopup.style.display = 'none';
-    }
-}
-
-// Tambahkan event listener untuk tombol login dan signup
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     loginUser();
@@ -1649,9 +1480,7 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
 });
 
 
-// --- Inisialisasi Saat Dokumen Siap ---
 $(document).ready(function() {
-    // Panggil showHome untuk memuat tampilan awal dan status user
     showHome(); 
 });
 </script>
