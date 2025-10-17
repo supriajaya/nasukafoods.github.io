@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>giveaway</title>
+<style>
+:root{--bg:#f5f7fa;--card:#ffffff;--accent:#ff5722;--muted:#555;--glass:rgba(0,0,0,0.03)}
+*{box-sizing:border-box;font-family:inter,ui-sans-serif,system-ui,-apple-system,"segoe ui",roboto}
+html,body{height:100%}
+body{margin:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);color:#222;padding:20px}
+.container{width:480px;padding:28px;border-radius:12px;background:var(--card);box-shadow:0 6px 30px rgba(0,0,0,0.1);border:1px solid rgba(0,0,0,0.05)}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.main-title{font-size:24px;font-weight:800;color:#ff5722;text-align:center;margin-bottom:15px;text-transform:uppercase;letter-spacing:1px;}
+.title{font-size:20px;font-weight:700;color:#333}
+.controls{display:flex;gap:10px}
+.btn{appearance:none;border:0;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#ff784e);color:#fff;font-weight:700;cursor:pointer;letter-spacing:.4px;white-space:nowrap;}
+.slot-window{height:140px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px solid #ff5722}
+.name-display{font-size:34px;font-weight:800;letter-spacing:.6px;color:#ff5722}
+.pulse{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,transparent,rgba(255,87,34,0.1) 60%,transparent);opacity:0;transition:opacity .4s}
+.pulse.on{opacity:1}
+.info{margin-top:14px;display:flex;align-items:center;justify-content:space-between;color:#444;font-size:13px}
+.winner-badge{margin-top:12px;padding:10px;border-radius:10px;background:linear-gradient(90deg,rgba(255,87,34,0.15),transparent);color:#d84315;font-weight:700;text-align:center;display:none}
+.winner-badge.show{display:block}
+.footer{margin-top:14px;font-size:12px;color:#666;text-align:center}
+.small{font-size:12px;color:#666}
+.list-area{margin-top:12px;background:#fff;padding:10px;border-radius:8px;max-height:140px;overflow:auto;border:1px solid rgba(0,0,0,0.05);font-size:13px;color:#444}
+.search{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.1);background:#fff;color:#222;margin-bottom:8px}
+.drawing-info {
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    margin-top: 5px;
+}
+/* New style for the reward info */
+.reward-info {
+    font-size: 11px;
+    color: #444; /* Darker to stand out slightly from the small text */
+    text-align: center;
+    margin-top: 5px; /* Added some space */
+    padding: 5px 0;
+    font-weight: 500;
+}
+.reward-info a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="main-title">Nasuka Foods</div>
+  <div class="header">
+   
+    <div class="controls">
+      <button id="startbtn" class="btn" disabled>Memuat...</button>
+    </div>
+  </div>
+  <div class="slot-window" id="slot">
+    <div class="pulse" id="pulse"></div>
+    <div class="name-display" id="display">—</div>
+  </div>
+  <div class="drawing-info">Pemenang diundi setiap hari pada jam 00:00:10 WIB</div>
+  <div class="info">
+    <div class="small">jumlah peserta: <span id="count">100</span></div>
+    <div class="small">pemenang: <span id="winnertext">—</span></div>
+  </div>
+  <div id="winnerbadge" class="winner-badge"></div>
+  <input id="filter" class="search" placeholder="cari username...">
+  <div class="list-area" id="listarea"></div>
+  <div class="footer small">daftar lengkap 25 peserta</div>
+  <div class="reward-info">reward bisa diambil dari jam 17:00 - 20:00, cek posisi realtime mang cilok di <a href="https://nasukafoods.site" target="_blank">https://nasukafoods.site</a></div>
+</div>
+
+<script>
+const usernames=[
+"@alphanova","@bytehunter","@cosmicrider","@daffahadryan1","@echostorm","@fluxnova","@gigashade","@hyperpulse","@iondrift","@junocore",
+"@kryptonsky","@lunartrace","@microvast","@neocipher","@omegadrift","@pixelforge","@quantumash","@reactorx","@solarvibe","@terranova",
+"@ultrawave","@vortexray","@warpcode","@xenotrace","@yottabyte",
+]
+
+
+// Waktu Acak Otomatis: 00:00:10
+const DRAW_HOUR = 0; 
+const DRAW_MINUTE = 0;
+const DRAW_SECOND = 10;
+
+
+
+
+const LAST_DRAW_KEY = 'lastDrawDate';
+const WINNER_KEY = 'lastWinner';
+
+const display=document.getElementById('display')
+const startbtn=document.getElementById('startbtn')
+const winnertext=document.getElementById('winnertext')
+const winnerbadge=document.getElementById('winnerbadge')
+const pulse=document.getElementById('pulse')
+const countel=document.getElementById('count')
+const listarea=document.getElementById('listarea')
+const filter=document.getElementById('filter')
+
+let names=[...usernames]
+let countdownInterval;
+
+// --- State Management with Local Storage ---
+function getDrawState() {
+    const today = new Date();
+    // Get date in YYYY-MM-DD format (for daily comparison)
+    const todayDate = today.toISOString().split('T')[0]; 
+    const lastDrawDate = localStorage.getItem(LAST_DRAW_KEY);
+    const lastWinner = localStorage.getItem(WINNER_KEY);
+
+    return {
+        isTodayDrawn: lastDrawDate === todayDate,
+        todayDate: todayDate,
+        lastWinner: lastWinner
+    };
+}
+
+function setDrawComplete(todayDate, winner) {
+    localStorage.setItem(LAST_DRAW_KEY, todayDate);
+    localStorage.setItem(WINNER_KEY, winner);
+}
+
+function renderList(items){
+  listarea.innerHTML=items.map(n=>`<div>${n}</div>`).join('')
+  countel.textContent=items.length
+}
+
+function randint(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function easeOutQuad(t){return 1-(1-t)*(1-t)}
+
+function spinOnce(){
+  if(names.length===0)return
+  
+  // 1. Hentikan hitungan mundur saat animasi berjalan
+  clearInterval(countdownInterval); 
+
+  startbtn.disabled=true
+  filter.disabled=true
+  winnerbadge.classList.remove('show')
+  pulse.classList.add('on')
+  
+  const totalSteps=randint(220,420)
+  const baseDelay=8
+  const extraMax=30
+  let cumulative=0
+  const startIndex=Math.floor(Math.random()*names.length)
+  
+  for(let i=0;i<totalSteps;i++){
+    const p=i/(totalSteps-1)
+    const ease=easeOutQuad(p)
+    const delay=baseDelay+Math.round(ease*extraMax)
+    cumulative+=delay
+    setTimeout(()=>{
+      const idx=(startIndex+i)%names.length
+      display.textContent=names[idx]
+      
+      if(i===totalSteps-1){
+        const winner=names[idx]
+        const state = getDrawState();
+
+        setTimeout(()=>{
+          pulse.classList.remove('on')
+          winnertext.textContent=winner
+          winnerbadge.textContent=`Pemenang Hari Ini: ${winner}`
+          winnerbadge.classList.add('show')
+          
+          // 2. Simpan status pengundian hari ini
+          setDrawComplete(state.todayDate, winner);
+          startbtn.textContent = `Pemenang Hari Ini: ${winner}`;
+
+          // 3. MULAI LAGI hitungan mundur untuk pengundian berikutnya
+          countdownInterval = setInterval(updateCountdown, 1000); 
+          updateCountdown(); // Langsung panggil untuk update tampilan
+        },220)
+      }
+    },cumulative)
+  }
+}
+
+function updateCountdown(){
+    const now = new Date();
+    const state = getDrawState();
+    
+    // Tentukan waktu pengundian hari ini (02:02:00)
+    let nextDraw = new Date(now);
+    nextDraw.setHours(DRAW_HOUR, DRAW_MINUTE, DRAW_SECOND, 0); 
+    
+    // Jika waktu pengundian sudah lewat hari ini, atur ke besok
+    if (now > nextDraw) {
+        nextDraw.setDate(nextDraw.getDate() + 1);
+    }
+
+    const diff = nextDraw - now;
+
+    if (diff <= 1000 && diff >= 0) { // Waktunya mengundi (dalam 1 detik)
+        if (!state.isTodayDrawn) {
+            spinOnce(); // Picu pengacakan otomatis
+        }
+    } else {
+        // Hitung sisa waktu
+        const totalSeconds = Math.floor(diff / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        
+        // Perbarui teks tombol
+        if (state.isTodayDrawn) {
+            startbtn.textContent = `Acak berikutnya dalam: ${hours}j ${minutes}m ${seconds}d`;
+        } else {
+            startbtn.textContent = `Acak Otomatis dalam: ${hours}j ${minutes}m ${seconds}d`;
+        }
+        startbtn.disabled = true;
+    }
+}
+
+// --- Inisialisasi Saat Halaman Dimuat ---
+function initialize() {
+    renderList(names);
+    
+    const state = getDrawState();
+
+    if (state.isTodayDrawn) {
+        // Jika sudah terundi hari ini, tampilkan pemenang terakhir
+        winnertext.textContent = state.lastWinner;
+        winnerbadge.textContent = `Pemenang Hari Ini: ${state.lastWinner}`;
+        winnerbadge.classList.add('show');
+        display.textContent = state.lastWinner;
+        startbtn.textContent = `Pemenang Hari Ini: ${state.lastWinner}`;
+    }
+
+    // Mulai hitungan mundur dan pengecekan otomatis
+    countdownInterval = setInterval(updateCountdown, 1000); 
+    updateCountdown(); 
+}
+
+
+filter.addEventListener('input',()=>{
+  const q=filter.value.trim().toLowerCase()
+  if(!q)renderList(names)
+  else renderList(names.filter(n=>n.toLowerCase().includes(q)))
+})
+
+initialize();
+</script>
+</body>
+</html>
