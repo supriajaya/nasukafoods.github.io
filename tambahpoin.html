@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Up Poin Admin</title>
+    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], 
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+   
+    <form id="topupForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="" required>
+
+        <label for="amount">Nominal:</label>
+        <input type="number" id="amount" placeholder="" min="1" required>
+
+        <button type="submit" id="topupButton">Tambahkan Poin</button>
+
+        <div id="statusMessage" class="status"></div>
+    </form>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
+        authDomain: "nasukafoods1.firebaseapp.com", 
+        databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
+        projectId: "nasukafoods1", 
+        messagingSenderId: "84287800896", 
+        appId: "1:84287800896:web:83189d6766997b00f701a5" 
+    };
+
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    function displayStatus(message, isError = false) {
+        const statusDiv = document.getElementById('statusMessage');
+        statusDiv.textContent = message;
+        statusDiv.className = 'status';
+        statusDiv.classList.add(isError ? 'error' : 'success');
+        statusDiv.style.display = 'block';
+    }
+
+    function processTopUp(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const amount = parseInt(document.getElementById('amount').value.trim());
+        const button = document.getElementById('topupButton');
+
+        if (!username || isNaN(amount) || amount <= 0) {
+            displayStatus('Harap masukkan Username dan Nominal Poin yang valid (> 0).', true);
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = 'Memproses...';
+        document.getElementById('statusMessage').style.display = 'none';
+
+        db.ref("users").orderByChild("Username").equalTo(username).once("value")
+            .then(snapshot => {
+                const userData = snapshot.val();
+                if (!userData) {
+                    displayStatus(`Username '${username}' tidak ditemukan.`, true);
+                    button.disabled = false;
+                    button.textContent = 'Tambahkan Poin';
+                    return;
+                }
+
+                const userKey = Object.keys(userData)[0];
+                const userRef = db.ref(`users/${userKey}`);
+                const currentUser = userData[userKey];
+                const currentPoin = currentUser.Poin || 0;
+                const newPoin = currentPoin + amount;
+
+                return userRef.update({ Poin: newPoin })
+                    .then(() => {
+                        displayStatus(`Poin berhasil ditambahkan! 🥳\nUser: ${currentUser.Nama} (${username})\nSebelum: ${currentPoin.toLocaleString('id-ID')} Poin\nDitambah: ${amount.toLocaleString('id-ID')} Poin\nSekarang: ${newPoin.toLocaleString('id-ID')} Poin`);
+                        
+                        document.getElementById('topupForm').reset();
+                    });
+            })
+            .catch(error => {
+                console.error("Top Up Error:", error);
+                displayStatus('Terjadi kesalahan saat menambahkan poin. Silakan cek konsol.', true);
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.textContent = 'Tambahkan Poin';
+            });
+    }
+
+    document.getElementById('topupForm').addEventListener('submit', processTopUp);
+</script>
+
+</body>
+</html>
