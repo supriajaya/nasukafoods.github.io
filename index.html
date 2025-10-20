@@ -25,12 +25,12 @@
             max-width: 450px;
             margin: 0 auto;
             background-color: white;
-            min-height: 100vh;
+            min-height: 10vh;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
         
-        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container { 
+        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #qris-container { /* Tambahkan #qris-container di sini */
             display: none;
             position: fixed;
             top: 0;
@@ -130,7 +130,7 @@
             cursor: pointer;
         }
         
-        .download-header {
+        .download-header, .qris-header { /* Menambahkan .qris-header */
             display: flex;
             align-items: center;
             padding: 15px;
@@ -144,10 +144,190 @@
             font-weight: 600;
         }
         
-        .download-header i {
+        .download-header i, .qris-header i { /* Menambahkan .qris-header i */
             font-size: 24px;
             margin-right: 15px;
             cursor: pointer;
+        }
+        
+        /* Gaya untuk QRIS Container */
+        #qris-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f2f5; 
+            z-index: 200006; 
+            justify-content: center;
+            align-items: flex-start; 
+            padding: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .qris-card-modified {
+            background: white;
+            padding: 0;
+            border-radius: 0; 
+            width: 100%;
+            max-width: 450px; 
+            margin: 0 auto;
+            box-shadow: none; 
+            text-align: left;
+            min-height: 100vh;
+        }
+
+        .qris-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .qris-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            flex-grow: 1;
+            text-align: center;
+            padding-right: 24px; 
+        }
+
+        .qris-header i {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .qris-content-section {
+            padding: 15px;
+            background-color: white; 
+            padding-top: 0;
+        }
+
+        .qris-logo-section {
+            padding: 20px 20px 10px 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+
+        .qris-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 3px solid #007bff;
+        }
+
+        .qris-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .qris-subtitle {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .qris-code-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .qris-code-image {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .qris-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+            text-align: left;
+        }
+        
+        .qris-code-box .qris-info p {
+             text-align: center; /* Sesuaikan agar info di dalam box tetap di tengah */
+        }
+
+        .qris-instruction-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .qris-instruction-box h4 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #007bff;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .qris-instruction-box ul {
+            padding-left: 20px;
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .qris-instruction-box li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .qris-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-top: 15px;
+        }
+
+        .qris-warning i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .qris-promo-section {
+            background-color: #e6f7ff;
+            color: #007bff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .download-content {
@@ -1390,18 +1570,20 @@
                 <span>Simulasi</span>
             </a>
             
-            <div class="other-feature-item" onclick="showSignup()">
-                <div class="other-feature-icon catatan-icon">
-                    <i class="fas fa-user-plus"></i>
+            <a href="https://nasukafoods.site/burung.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                <div class="other-feature-icon catatan-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/nasukabird.jpg" alt="Daftar" class="product-icon-img">
                 </div>
-                <span>Daftar</span>
-            </div>
-            <div class="other-feature-item" onclick="showLogin()">
-                <div class="other-feature-icon investasi-icon">
-                    <i class="fas fa-sign-in-alt"></i>
+                <span>Tap Bird</span>
+            </a>
+            
+            <a href="https://nasukafoods.site/roll.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                <div class="other-feature-icon investasi-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/roll.jpg" alt="Masuk" class="product-icon-img">
                 </div>
-                <span>Masuk</span>
-            </div>
+                <span>Roll</span>
+            </a>
+            
         </div>
         
         
@@ -1422,8 +1604,7 @@
         </div>
       
         
-        <div class="qris-button">
-            <i class="fas fa-qrcode"></i>
+        <div class="qris-button" onclick="showQris()"> <i class="fas fa-qrcode"></i>
         </div>
 
         <div class="bottom-nav">
@@ -1657,7 +1838,7 @@
             
             <div class="app-stats">
                 <div class="stat-item">
-                    <div class="stat-value"><i class="fas fa-star" style="color: #ffc107;"></i> 4.8</div>
+                    <div class="stat-value"><i class="fas fa-star" style="color: #ffc107;"></i> 4.9</div>
                     <div class="stat-label">Rating</div>
                 </div>
                 <div class="stat-item">
@@ -1677,14 +1858,14 @@
             <div class="download-description">
                 <h4>Deskripsi Aplikasi</h4>
                 <p>
-                    Aplikasi resmi Nasuka Foods hadir untuk memudahkan Anda memesan produk favorit kami, mengumpulkan Poin, dan mendapatkan berbagai promo eksklusif. Rasakan pengalaman berbelanja Cilok dan jajanan viral lainnya dengan lebih cepat dan praktis!
+                    Aplikasi resmi Nasuka Foods hadir untuk memudahkan Anda memesan produk favorit kami, mengumpulkan Poin, dan mendapatkan berbagai promo eksklusif. Rasakan pengalaman berbelanja Cilok dan menu lainnya dengan lebih cepat dan praktis!
                 </p>
                 <p>
                     <strong>Fitur Unggulan:</strong>
                     <ul>
                         <li>Pemesanan Cepat dan Aman.</li>
                         <li>Integrasi Poin Hadiah.</li>
-                        <li>Akses ke video dan tutorial eksklusif.</li>
+                       
                         <li>Notifikasi promo terbaru.</li>
                     </ul>
                 </p>
@@ -1693,7 +1874,7 @@
                 <p>
                     Diperbarui: 15 Okt 2025<br>
                     Membutuhkan Android: 5.0 ke atas<br>
-                    Ditawarkan oleh: Nasuka Wireless
+                    Ditawarkan oleh developer: Nasuka Wireless
                 </p>
                 <div style="height: 60px;"></div> 
             </div>
@@ -1706,6 +1887,54 @@
             </div>
             <i class="fas fa-download download-footer-icon"></i>
         </a>
+    </div>
+
+    <div id="qris-container">
+        <div class="qris-card-modified">
+            <div class="qris-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Pembayaran QRIS</h3>
+            </div>
+            
+            <div class="qris-content-section">
+                <div class="qris-logo-section">
+                    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="qris-logo">
+                    <div class="qris-title">NASUKA FOODS</div>
+                    <div class="qris-subtitle">Pembayaran Digital QRIS</div>
+                </div>
+                
+                <div class="qris-code-box">
+                    <img src="https://nasukafoods.site/aqris.jpg" alt="QRIS Code Placeholder" class="qris-code-image" id="qrisCodeImage">
+                    <div class="qris-info">
+                        <p style="text-align: center; font-weight: 700; color: #007bff; margin-bottom: 10px;">Kode QRIS untuk Pembelian Anda</p>
+                        <p><strong>Merchant ID:</strong> ID2025NF001</p>
+                        <p><strong>Status:</strong> QRIS Statis (Masukkan Nominal Manual)</p>
+                    </div>
+                </div>
+                
+                <div class="qris-promo-section">
+                    <i class="fas fa-gift"></i> &nbsp; Dapatkan diskon 5% untuk pembelian di atas 50.000 menggunakan E-Wallet!
+                </div>
+                
+                <div class="qris-instruction-box">
+                    <h4>Cara Pembayaran</h4>
+                    <ul>
+                        <li>Pastikan Anda telah mencatat total nominal belanja Anda.</li>
+                        <li>Buka aplikasi Bank / E-Wallet Anda (Gopay, Dana, OVO, dll.) yang mendukung **QRIS**.</li>
+                        <li>Pilih menu **Scan** atau Pindai QRIS.</li>
+                        <li>Pindai kode QRIS di atas.</li>
+                        <li>Masukkan nominal yang sesuai dengan total belanja Anda.</li>
+                        <li>Selesaikan pembayaran, dan konfirmasi ke admin kami.</li>
+                    </ul>
+                </div>
+                
+                <div class="qris-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Periksa kembali! Pastikan nama Merchant yang muncul adalah NASUKA FOODS
+                </div>
+                
+            </div>
+            <div style="height: 20px;"></div> 
+        </div>
     </div>
     </div>
     
@@ -1795,10 +2024,14 @@ function initializeUserProfile() {
   const userID = localStorage.getItem("ID") || "";
   const profilLink = document.getElementById("Profil");
   
+  // NOTE: showLogin/showSignup in JavaScript will no longer be used for the icons
+  // because they now point to external links. The nav-item 'Akun' still uses showLogin.
+  
   if (!userID) {
     if (profilLink) {
       profilLink.href = "#";
-      profilLink.onclick = showLogin;
+      // This is for the top right profile icon, keeping it functional but not a link to prevent accidental navigation
+      profilLink.onclick = () => { if (!localStorage.getItem('ID')) showLogin(); else showProfil(); };
     }
     return;
   }
@@ -1855,7 +2088,7 @@ function fetchUserProfileFromDB(userID) {
 }
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container').forEach(el => {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container').forEach(el => { /* Tambahkan #qris-container */
         if (el) el.style.display = 'none';
     });
 }
@@ -1870,6 +2103,7 @@ function showHome() {
     }
 }
 
+// Keeping showLogin/showSignup for the Nav-Item 'Akun' fallback and switch links in auth popups
 function showLogin() {
     hideAllContainers();
     document.getElementById('login-container').style.display = 'flex';
@@ -1892,6 +2126,21 @@ function showDownload() {
         downloadContainer.scrollTop = 0; 
     }
 }
+
+// Fungsi showQris() baru
+function showQris() {
+    hideAllContainers();
+    const qrisContainer = document.getElementById('qris-container');
+    if (qrisContainer) {
+        qrisContainer.style.display = 'flex'; 
+        qrisContainer.scrollTop = 0; 
+        
+        // Catatan: Jika Anda ingin mengganti gambar placeholder QRIS, lakukan di sini
+        // const qrisCodeImage = qrisContainer.querySelector('#qrisCodeImage');
+        // qrisCodeImage.src = 'URL_QRIS_ANDA'; 
+    }
+}
+// Akhir fungsi showQris()
 
 
 function loginUser() {
