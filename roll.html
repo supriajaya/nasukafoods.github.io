@@ -4,18 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1024">
   <title>Roll & Burung</title>
-    
+
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
-   
+
     <script src="https://nasukafoods.site/fungsi-switch-halaman.js"></script>
        <style>
-           
-                    
-  
- 
+
+
 .atasanaturan {
   display: flex;
   justify-content: center;
@@ -24,9 +22,9 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: white; 
-  padding: 10px 0; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+  background-color: white;
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
@@ -39,10 +37,10 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: white; 
-  padding: 10px 0; 
+  background-color: white;
+  padding: 10px 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .variansiaturan {
@@ -55,9 +53,9 @@
       border-radius: 5px;
       transition: background-color 0.3s;
       text-align: center;
-      font-size: 38px; 
-    }     
-    
+      font-size: 38px;
+    }
+
 
 
 
@@ -88,17 +86,12 @@
 
 
 
- 
- 
 
- 
- 
- 
- 
-      
+
+
       .perspective-on { perspective: 1000px; }
     .perspective-off { perspective: 0; }
-    
+
     .tilted { transform: rotateY(45deg); }
     .spin-0  { transform: rotateX(-3600deg); }
     .spin-1  { transform: rotateX(-3636deg); }
@@ -110,7 +103,7 @@
     .spin-7  { transform: rotateX(-3852deg); }
     .spin-8  { transform: rotateX(-3888deg); }
     .spin-9  { transform: rotateX(-3924deg); }
-    
+
     @keyframes back-spin { 100% { transform: rotateX(36deg); } }
     @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} }
     @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} }
@@ -124,7 +117,7 @@
     @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }
     @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }
     @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }
-    
+
     #resultDisplay {
       position: absolute;
       top: 50%;
@@ -135,7 +128,7 @@
       z-index: 9999;
       pointer-events: none;
     }
-    
+
     #numbersDisplay {
       position: absolute;
       top: 50px;
@@ -151,7 +144,7 @@
       display: flex;
       gap: 10px;
     }
-    
+
     #timeDisplay {
       position: absolute;
       top: 20px;
@@ -164,10 +157,9 @@
       z-index: 10000;
       text-align: left;
     }
-    
-        
-    
-  
+
+
+
     #rotate {
       margin: 0 auto;
       width: 700px;
@@ -176,7 +168,7 @@
       transform-style: preserve-3d;
       transform: rotateY(45deg);
     }
-    
+
     .ring {
       margin: 0 auto;
       height: 115px;
@@ -184,7 +176,7 @@
       float: left;
       transform-style: preserve-3d;
     }
-    
+
     .roll {
       position: absolute;
       width: 120px;
@@ -196,7 +188,7 @@
       border: solid 5px #ccc;
       backface-visibility: visible;
     }
-    
+
     .roll p {
       font-size: 100px;
       font-weight: bold;
@@ -204,10 +196,9 @@
       margin: 0;
       text-align: center;
     }
-    
+
     .backface-on { backface-visibility: visible; }
-    
-  
+
 
     .bottom-links {
       position: fixed;
@@ -218,14 +209,14 @@
       padding: 0 20px;
       box-sizing: border-box;
     }
-  
+
     #spinButton:disabled {
       cursor: not-allowed;
       opacity: 0.6;
     }
-  
+
     #spinButton {
-      position: absolute;    
+      position: absolute;
       top: 1500px;
       left: 50%;
       transform: translateX(-50%);
@@ -237,7 +228,7 @@
       font-size: 30px;
       width: 950px;
     }
-    
+
     .mainting-panel {
       position: absolute;
       top: 1600px;
@@ -250,7 +241,7 @@
       width: 950px;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    
+
     .main-input {
       width: 100%;
       padding: 8px;
@@ -261,7 +252,7 @@
       color: white;
       font-size: 30px;
     }
-    
+
     .main-button {
       background-color: #4CAF50;
       color: white;
@@ -273,16 +264,16 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    
+
     .main-button:hover {
       background-color: #45a049;
     }
-    
+
     .main-button:disabled {
       background-color: #cccccc;
       cursor: not-allowed;
     }
-    
+
     .result-message {
       margin-top: 10px;
       padding: 10px;
@@ -291,12 +282,12 @@
       font-weight: bold;
       transition: all 0.3s ease;
     }
-    
-   #perakBalance {
+
+   #PoinBalance {
       font-weight: bold;
       color: snow;
     }
-    
+
    .win {
       background-color: rgba(255, 215, 0, 0.7) !important;
       color: black !important;
@@ -330,14 +321,14 @@
       display: flex;
       gap: 10px;
     }
-    
+
     #numbersDisplay span {
       display: inline-block;
       width: 30px;
       text-align: center;
       font-size: 30px;
     }
-    
+
     #loading {
       position: fixed;
       top: 0;
@@ -350,26 +341,26 @@
       align-items: center;
       z-index: 1000;
     }
-    
+
     .auto-main-options {
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid #444;
       font-size: 30px;
     }
-    
+
     .auto-main-options h4 {
       margin-bottom: 10px;
       font-size: 30px;
     }
-    
+
     #automainButtons {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
       font-size: 30px;
     }
-    
+
     #automainButtons button {
       flex: 1;
       min-width: 50px;
@@ -381,18 +372,18 @@
       cursor: pointer;
       font-size: 30px;
     }
-    
+
     #automainButtons button.active {
       background-color: #4CAF50;
       font-weight: bold;
       font-size: 30px;
     }
-    
+
     #automainButtons button:last-child {
       background-color: #f44336;
       font-size: 30px;
     }
-    
+
     .result-hidden {
       opacity: 0;
       height: 0;
@@ -401,7 +392,7 @@
       padding: 0;
       transition: all 0.3s ease;
     }
-    
+
     .rolling-text {
       position: fixed;
       bottom: 10px;
@@ -419,7 +410,7 @@
       gap: 10px;
       margin-bottom: 20px;
     }
-    
+
     .menu-link {
       background-color: rgba(255, 255, 255, 0.1);
       border: 2px solid red;
@@ -430,14 +421,10 @@
       border-radius: 5px;
       transition: background-color 0.3s;
       text-align: center;
-      font-size: 28px; 
+      font-size: 28px;
     }
-    
-    
-     
-    
-    
-      
+
+
     .menu-link:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
@@ -446,8 +433,8 @@
       position: absolute;
       bottom: 20px;
       left: 20px;
-    }     
-    
+    }
+
     .error-message {
       color: red;
       font-weight: bold;
@@ -455,7 +442,7 @@
       margin-top: 10px;
       display: none;
     }
-    
+
     .bling-bling {
       animation: glowing 1.5s infinite alternate;
       text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
@@ -469,12 +456,12 @@
         text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
       }
     }
-    
+
     .link-container {
       position: relative;
       z-index: 200000;
     }
-    
+
     .menu-link {
       background-color: rgba(255, 255, 255, 0.1);
       border: 2px solid red;
@@ -485,10 +472,10 @@
       border-radius: 5px;
       transition: background-color 0.3s;
       text-align: center;
-      font-size: 28px; 
+      font-size: 28px;
       background: rgba(0,0,0,0.7);
     }
-      
+
     .menu-link:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
@@ -498,7 +485,7 @@
       bottom: 20px;
       left: 20px;
     }
-    
+
     .auto-spin-buttons {
         display: flex;
         justify-content: center;
@@ -519,13 +506,10 @@
     }
     #stopAutoSpinButton {
         background-color: #f44336;
-        display: none; 
+        display: none;
     }
-  
-  
-  
-  
- 
+
+
 .input-circle ~ .pajaro { opacity: 0; transition: 0.3s cubic-bezier(0,.43,1,0); animation: move 8s infinite alternate; }
 .pajaro.hidden { opacity: 0 !important; }
 .pajaro.hide-all { display: none !important; }
@@ -613,7 +597,7 @@ border-radius: 50%;
 }
 
 .pajaro > span:before {
-content: "1 Perak";
+content: "1 Poin";
 color: yellow;
 font-weight: bold;
 }
@@ -645,7 +629,7 @@ left: 50%;
 }
 
 .pajaro:after {
-box-shadow: inset 0px 11px 0 black;    
+box-shadow: inset 0px 11px 0 black;
 border-radius: 100% 100% 0 0;
 width: 200px;
 height: 200px;
@@ -696,8 +680,8 @@ left: 1%;
 top: 20px;
 font-size: 50px;
 font-weight: bold;
-}       
-         
+}
+
 
 .button-container-flex {
   display: flex;
@@ -709,20 +693,17 @@ font-weight: bold;
 }
 
 
-      
        </style>
-     <link rel="stylesheet" href="https://nasukafoods.site/switch-halaman.css">   
-<link rel="stylesheet" href="https://nasukafoods.site/perak.css">          
-     <link rel="stylesheet" href="https://nasukafoods.site/game.css">          
-     
-</head><body id="gameBody" class="roll-bg"> 
-  <div id="roll-container">      
+     <link rel="stylesheet" href="https://nasukafoods.site/switch-halaman.css">
+<link rel="stylesheet" href="https://nasukafoods.site/Poin.css">
+     <link rel="stylesheet" href="https://nasukafoods.site/game.css">
+
+</head><body id="gameBody" class="roll-bg">
+  <div id="roll-container">
     <div class="link-container">
-        
-      <a href="#" class="menu-link" onclick="showContainer('rulle')">Aturan Main</a>   
-       <a href="#" class="menu-link" onclick="showContainer('investor')">Beli Perak</a>   
-      
-      <a href="#" class="menu-link" onclick="showContainer('burung')">Perak Gratis</a>
+
+      <a href="#" class="menu-link" onclick="showContainer('rulle')">Aturan Main</a>
+      <a href="#" class="menu-link" onclick="showContainer('burung')">Tap Burung</a>
     </div>
 
     <div id="loading">Memuat Game...</div>
@@ -740,7 +721,7 @@ font-weight: bold;
 
       <button id="spinButton">Putar</button>
       <div class="mainting-panel">
-        <div>Perak Saya: <span id="perakBalance">0</span></div>
+        <div>Poin Saya: <span id="PoinBalance">0</span></div>
         <div id="errorMessage" class="error-message"></div>
         <div class="auto-main-options">
           <div id="automainButtons">
@@ -758,38 +739,32 @@ font-weight: bold;
         <div id="mainResult" class="result-message result-hidden"></div>
       </div>
     </div>
-    
+
     <div class="history-link-container">
       <a href="index.html" class="menu-link">Beranda</a>
     </div>
   </div>
-  
-  
-  
-  
+
+
+
+
   <div id="burung-container">
-      
-      
+
+
       <div class="burungan">
     <div class="button-container-flex">
         <button id="selesai">AMBIL</button>
         <button id="rollBtn" onclick="showContainer('roll')">Main Roll</button>
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
     </div>
     </div>
 
-      
-      
-      
-   
-     
+
       <div id="customAlert" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.2); z-index: 1001; text-align: center; max-width: 80%;">
           <div id="alertIcon" style="font-size: 50px; margin-bottom: 15px;"></div>
           <div id="alertMessage" style="font-size: 18px; margin-bottom: 20px;"></div>
@@ -835,105 +810,53 @@ font-weight: bold;
       <label for="circle18" class="pajaro pajaro18"><span></span></label>
       <label for="circle19" class="pajaro pajaro19"><span></span></label>
       <label for="circle20" class="pajaro pajaro20"><span></span></label>
-      <div class="sum">🎁<span id="total-perak">0</span> Perak Gratis</div>
+      <div class="sum">🎁<span id="total-Poin">0</span> Poin Gratis</div>
     </div>
   </div>
 
-  <div id="rulle-container">    
+  <div id="rulle-container">
     <div class="atasanaturan">
       <a class="variansiaturan">Rule</a>
     </div>
-    <div class="aturan">     
+    <div class="aturan">
       <h1 class="judul-aturan">Aturan Main</h1>
-      <p>Saat anda mendapatkan angka kembar, Anda mendapatkan PERAK kemenangan bervariansiaturan, x2 x3 x4 x5 x50 ( Jackpot )</p>
+      <p>Saat anda mendapatkan angka kembar, Anda mendapatkan Poin kemenangan bervariansi, x2 x3 x4 x5 x50</p>
     </div>
     <div class="bawahanaturan">
-      <a href="#" class="variansiaturan" onclick="showContainer('burung')">Main Burung</a>      
-      <a href="#" class="variansiaturan" onclick="showContainer('roll')">Main Roll</a> 
-    </div>
-  </div> 
-  
-
-
-  
-  
-     <div id="investor-container">    
-  <div class="container">
-  <div class="header-receipt">
-    <h2>NASUKA WIRELESS</h2>
-    <p>Jl. Eretan Wetan — Kandanghaur</p>
-    <p>Indramayu - Jawabarat</p>
-  </div>
-  
-  <div class="receipt-line"></div>
-  
-  <form id="topupForm">
-    <label for="id">ID:</label>
-    <input type="text" id="id" name="id" required>
-
-    <label for="nama">Nama:</label>
-    <input type="text" id="nama" name="nama" required>
-
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-
-    <label for="deposit">Jumlah:</label>
-    <input type="number" id="deposit" name="deposit" required>
-
-    <label for="bukti">Bukti Tf:</label>
-    <div class="file-upload-burungan">
-      <label class="custom-file-upload" for="bukti">PILIH FOTO</label>
-      <span class="file-name" id="file-name"></span>
-      <input type="file" id="bukti" name="bukti" accept="image/jpeg,image/png" required>
-    </div>
-    
-    <button type="submit">BELI PERAK</button>
-  </form>
-
-  <div id="statusMessage"></div>
-
-  <div id="transactionReceipt">
-    <div class="header-receipt">
-      <h2>STRUK TRANSAKSI</h2>
-    </div>
-    <div class="receipt-line"></div>
-    <div class="receipt-details" id="receiptDetails">
-    </div>
-    <div class="receipt-line"></div>
-    <div class="header-receipt">
-      <p>Terima kasih atas kepercayaan Anda.</p>
-      <p>NASUKA WIRELESS</p>
+      <a href="#" class="variansiaturan" onclick="showContainer('burung')">Main Burung</a>
+      <a href="#" class="variansiaturan" onclick="showContainer('roll')">Main Roll</a>
     </div>
   </div>
-  
-   <div class="bawahanaturan">    
-      <a href="#" class="variansiaturan" onclick="showContainer('roll')">Ke Roll</a> 
-    </div>
-  </div> 
-  
-</div>
 
-<script>
-    
-    
-    
-    
-      const firebaseConfig = {
-    apiKey: "AIzaSyDPJfJgUg8a_e1zS3nSbU8RqHj3TOALX2s",
-    authDomain: "nasuka-fc780.firebaseapp.com",
-    databaseURL: "https://nasuka-fc780-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasuka-fc780",
-    messagingSenderId: "860641747257",
-    appId: "1:860641747257:web:d1dc28bf34cc1f64ad48e8"
-  };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+  <script>
+
+// Konfigurasi Firebase dan Inisialisasi
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafoods1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.database();
 
   const localUser = {
     Username: localStorage.getItem("Username"),
-    Perak: parseInt(localStorage.getItem("Perak")) || 0,
+    Poin: parseInt(localStorage.getItem("Poin")) || 0,
   };
+
+
+
+
+
+
+
+
 
 
   if (!localUser.Username) {
@@ -945,15 +868,26 @@ font-weight: bold;
   userRef.on('value', (snapshot) => {
       const userData = snapshot.val();
       if (userData !== null) {
-          localUser.Perak = userData.Perak || 0;
-          
-          localStorage.setItem("Perak", localUser.Perak);
-          
-          updatePerakDisplay();
+          localUser.Poin = userData.Poin || 0;
+
+          localStorage.setItem("Poin", localUser.Poin);
+
+          updatePoinDisplay();
           console.log("");
       }
   });
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
   const ROLL_PER_REEL = 10;
   const REEL_RADIUS = 400;
   const TIME_TOLERANCE = 5 * 60 * 1000;
@@ -986,12 +920,12 @@ font-weight: bold;
   let playerWinStreak = 0;
   let playerLoseStreak = 0;
   const HOUSE_EDGE = 0;
-  let totalPerakBurung = 0; // Variabel untuk Burung Game
-  function updatePerakDisplay() {
-    $('#perakBalance').text(localUser.Perak.toLocaleString('id-ID'));
+  let totalPoinBurung = 0; // Variabel untuk Burung Game
+  function updatePoinDisplay() {
+    $('#PoinBalance').text(localUser.Poin.toLocaleString('id-ID'));
   }
 
-  
+
   function showErrorMessage(message) {
     $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut();
   }
@@ -1012,7 +946,7 @@ font-weight: bold;
   function saveRollToDatabase(result, isManual = false) {
     console.log("Logging roll data has been disabled.");
   }
-  
+
   function generateDua() {
     const num = Math.floor(Math.random() * 10);
     const result = [num, num];
@@ -1024,7 +958,7 @@ font-weight: bold;
     }
     return shuffleArray(result);
   }
-  
+
   function generateTiga() {
     const num = Math.floor(Math.random() * 10);
     const result = [num, num, num];
@@ -1036,7 +970,7 @@ font-weight: bold;
     }
     return shuffleArray(result);
   }
-  
+
   function generateEmpat() {
     const num = Math.floor(Math.random() * 10);
     const result = [num, num, num, num];
@@ -1048,12 +982,12 @@ font-weight: bold;
     }
     return shuffleArray(result);
   }
-  
+
   function generateLima() {
     const num = Math.floor(Math.random() * 10);
     return [num, num, num, num, num];
   }
-  
+
   function generateJackpot() {
     const result = [1, 2, 3, 4, 5];
     return shuffleArray(result);
@@ -1077,10 +1011,10 @@ font-weight: bold;
     }
     return array;
   }
-  
+
   function generateControlledResult() {
     let currentProbabilities = WIN_PROBABILITIES;
-    
+
     const rand = Math.random();
     let cumulativeProb = 0;
 
@@ -1108,24 +1042,24 @@ font-weight: bold;
     }
     return baseProbability;
   }
-  
+
   function checkWin(result) {
     const sortedResult = [...result].sort((a, b) => a - b).join('');
     if (sortedResult === '12345') {
       return 'jackpot';
     }
-    
+
     const frequency = {};
     result.forEach(num => {
       frequency[num] = (frequency[num] || 0) + 1;
     });
-    
+
     const counts = Object.values(frequency);
     const hasLima = counts.some(count => count >= 5);
     const hasEmpat = counts.some(count => count >= 4);
     const hasTiga = counts.some(count => count >= 3);
     const hasDua = counts.some(count => count >= 2);
-    
+
     if (hasLima) {
       return 'lima';
     } else if (hasEmpat) {
@@ -1139,25 +1073,25 @@ font-weight: bold;
   }
 
   function selectmain(amount) {
-    if (amount > 0 && amount <= localUser.Perak) {
+    if (amount > 0 && amount <= localUser.Poin) {
       currentmain = amount;
-      $('#mainAmount').val(amount);
+      // $('#mainAmount').val(amount); // Dihapus karena tidak ada input #mainAmount
       $('#automainButtons button').removeClass('active');
       $(`#main${amount}`).addClass('active');
-      
+
     } else if (amount === 0) {
       currentmain = 0;
-      $('#mainAmount').val('');
+      // $('#mainAmount').val(''); // Dihapus karena tidak ada input #mainAmount
       $('#automainButtons button').removeClass('active');
-      
+
     } else {
-      showErrorMessage('');
+      showErrorMessage('Poin tidak mencukupi atau jumlah main tidak valid.');
     }
   }
 
   function startAutoSpin() {
     if (currentmain <= 0) {
-      showErrorMessage('');
+      showErrorMessage('Pilih jumlah main terlebih dahulu.');
       return;
     }
     isAutomainEnabled = true;
@@ -1172,72 +1106,72 @@ font-weight: bold;
     $('#stopAutoSpinButton').hide();
     $('#startAutoSpinButton').show();
     $('#spinButton').prop('disabled', false);
-    
+
   }
 
   function spin(isManual) {
     if (isSpinning) return;
-    
+
     const slotAudio = document.getElementById('slotAudio');
 slotAudio.currentTime = 0;
 slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
-    
+
     if (currentmain <= 0) {
-      showErrorMessage('');
+      showErrorMessage('Pilih jumlah main.');
       return;
     }
-    if (currentmain > localUser.Perak) {
-      showErrorMessage('');
+    if (currentmain > localUser.Poin) {
+      showErrorMessage('Poin tidak cukup untuk main ini.');
       return;
     }
-    
-    localUser.Perak -= currentmain;
-    updatePerakDisplay(); 
-    userRef.child('Perak').set(localUser.Perak); 
+
+    localUser.Poin -= currentmain;
+    updatePoinDisplay();
+    userRef.child('Poin').set(localUser.Poin);
     const winAudio = document.getElementById('winAudio');
     if (!winAudio.paused) {
       winAudio.pause();
-      winAudio.currentTime = 0; 
+      winAudio.currentTime = 0;
     }
-    
+
     isSpinning = true;
-    
+
     $('#mainResult').addClass('result-hidden');
-    
+
     if (isManual) {
       lastManualSpinTime = Date.now();
       $('#spinButton').prop('disabled', true);
       updateManualSpinButton();
     }
-    
+
     $('#stage .roll p').removeClass('bling-bling');
-      
+
     for (let i = 1; i <= 5; i++) {
       $(`#ring${i}`).css('animation', `back-spin 1s`);
     }
-      
+
     setTimeout(() => {
       const result = generateControlledResult();
       currentSeeds = result;
-      
+
       for (let i = 1; i <= 5; i++) {
         const seed = result[i-1];
         $(`#ring${i}`)
           .css('animation', `spin-${seed} ${SPIN_DURATION}s cubic-bezier(0.1, 0.7, 0.1, 1)`)
           .attr('class', `ring spin-${seed}`);
       }
-        
+
       setTimeout(() => {
         for (let i = 0; i < result.length; i++) {
           const numberElement = $(`#ring${i+1} .roll`).eq(result[i]).find('p');
           numberElement.addClass('bling-bling');
         }
-        
+
         saveRollToDatabase(result, isManual);
         processmainResult(result, isManual);
-        
+
         isSpinning = false;
-        
+
         if (isAutomainEnabled) {
           setTimeout(() => {
             if (isAutomainEnabled) {
@@ -1258,38 +1192,38 @@ slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
     if (winType) {
       playerWinStreak++;
       playerLoseStreak = 0;
-      
+
       const baseMultiplier = WIN_MULTIPLIERS[winType];
       const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
       winAmount = Math.round(currentmain * totalMultiplier);
 
       message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
-      messageClass = "win";           
-      triggerConfetti(); 
+      messageClass = "win";
+      triggerConfetti();
       document.getElementById('winAudio').play();
-      
-     
+
+
     } else {
       playerWinStreak = 0;
       playerLoseStreak++;
     }
 
-    localUser.Perak += winAmount;
-    
+    localUser.Poin += winAmount;
+
     userRef.transaction((currentData) => {
       if (currentData) {
-        let finalPerak = (currentData.Perak || 0) + winAmount;
-        
+        let finalPoin = (currentData.Poin || 0) + winAmount;
+
         return {
           ...currentData,
-          Perak: finalPerak,
+          Poin: finalPoin,
         };
       } else {
         return;
       }
     }).then(() => {
-      updatePerakDisplay();
-      
+      updatePoinDisplay();
+
       $('#mainResult')
         .text(message)
         .removeClass('result-hidden')
@@ -1299,16 +1233,17 @@ slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
     });
   }
 
-  
+
   function updateManualSpinButton() {
     const now = Date.now();
     const timeSinceLastSpin = now - lastManualSpinTime;
     const remainingCooldown = Math.max(0, MANUAL_SPIN_COOLDOWN - timeSinceLastSpin);
-    
+
     if (remainingCooldown <= 0) {
       $('#spinButton').prop('disabled', false).text('Putar');
     } else {
       const seconds = Math.ceil(remainingCooldown / 1000);
+      // $('#spinButton').text(`Tunggu ${seconds}s`); // Menghapus teks cooldown
       setTimeout(updateManualSpinButton, 1000);
     }
   }
@@ -1343,17 +1278,17 @@ slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
 
   $(document).ready(function() {
     for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));
-      
+
     $('#rotate').addClass('tilted');
     $('.roll').addClass('backface-on');
-    
+
     setTimeout(() => {
       $('#loading').fadeOut();
     }, 2000);
-    
+
     let winAudio = document.getElementById('winAudio');
     let userInteracted = false;
-    
+
     $('#spinButton').click(function() {
       if (!userInteracted) {
         winAudio.muted = true;
@@ -1375,18 +1310,17 @@ slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
     $('#startAutoSpinButton').click(startAutoSpin);
     $('#stopAutoSpinButton').click(stopAutoSpin);
   });
-  
-  
-  
+
+
   function showCustomAlert(message, type = 'info') {
     const alertDiv = document.getElementById('customAlert');
     const alertMessage = document.getElementById('alertMessage');
     const alertIcon = document.getElementById('alertIcon');
-      
+
     alertMessage.textContent = message;
     switch(type) {
         case 'success':
-            alertIcon.textContent = '';
+            alertIcon.textContent = '✅';
             alertDiv.style.border = '2px solid #4CAF50';
             break;
         case 'error':
@@ -1401,8 +1335,8 @@ slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
             alertIcon.textContent = 'ℹ️';
             alertDiv.style.border = '2px solid #2196F3';
     }
-       
-    alertDiv.style.display = 'block';  
+
+    alertDiv.style.display = 'block';
     const overlay = document.createElement('div');
     overlay.style.position = 'fixed';
     overlay.style.top = '0';
@@ -1420,40 +1354,40 @@ slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const limitReachedDiv = document.getElementById("limitReached");
-    const burungan = document.querySelector('.burungan');
+    // const limitReachedDiv = document.getElementById("limitReached"); // Dihapus karena tidak ada limitReached
+    // const burungan = document.querySelector('.burungan'); // Dihapus karena tidak diperlukan
     const selesai = document.getElementById("selesai");
-    
-    const totalPerakSpan = document.getElementById("total-perak");
-    let totalPerak = 0;
-    
+
+    const totalPoinSpan = document.getElementById("total-Poin");
+    let totalPoin = 0;
+
     const inputs = document.querySelectorAll('.input-circle');
     inputs.forEach(input => {
         input.addEventListener('change', () => {
             if (input.checked) {
-                totalPerak++;
-                totalPerakSpan.textContent = totalPerak;
+                totalPoin++;
+                totalPoinSpan.textContent = totalPoin;
             }
         });
     });
 
     selesai.addEventListener("click", () => {
-        if (localUser.Username && totalPerak > 0) {
+        if (localUser.Username && totalPoin > 0) {
             const usersRef = db.ref('users');
             usersRef.orderByChild('Username').equalTo(localUser.Username).once('value')
             .then(snapshot => {
                 if (snapshot.exists()) {
                     snapshot.forEach(childSnapshot => {
-                        const userId = childSnapshot.key;                      
-                        
-                        let currentPerak = childSnapshot.val().Perak ? parseInt(childSnapshot.val().Perak) : 0;
-                        let newPerak = currentPerak + totalPerak;
-                        
-                        return db.ref('users/' + userId).update({ Perak: newPerak })
+                        const userId = childSnapshot.key;
+
+                        let currentPoin = childSnapshot.val().Poin ? parseInt(childSnapshot.val().Poin) : 0;
+                        let newPoin = currentPoin + totalPoin;
+
+                        return db.ref('users/' + userId).update({ Poin: newPoin })
                         .then(() => {
-                            showCustomAlert(` ${totalPerak} Perak berhasil diklaim!`, "success");
-                            totalPerak = 0;
-                            totalPerakSpan.textContent = totalPerak;
+                            showCustomAlert(` ${totalPoin} Poin berhasil diklaim!`, "success");
+                            totalPoin = 0;
+                            totalPoinSpan.textContent = totalPoin;
                             inputs.forEach(input => input.checked = false);
                         });
                     });
@@ -1462,148 +1396,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             })
             .catch(error => {
-                console.error("Gagal mengirim perak:", error);
-                showCustomAlert("Gagal mengirim perak. Silakan coba lagi.", "error");
+                console.error("Gagal mengirim Poin:", error);
+                showCustomAlert("Gagal mengirim Poin. Silakan coba lagi.", "error");
             });
         } else {
-            showCustomAlert("Tidak ada perak yang di klaim", "info");
+            showCustomAlert("Tidak ada Poin yang di klaim", "info");
         }
     });
 });
-  
-  
-  
-  
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-  const form = document.getElementById('topupForm');
-  const statusMessage = document.getElementById('statusMessage');
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpOktAYKx2f4hOLaTcwynZO8EghJYKpwGgMO39dr10tYZzgoUsdaLsWbjyi6AvOYiR_A/exec';
-
-  const fileInput = document.getElementById('bukti');
-  const fileNameSpan = document.getElementById('file-name');
-  const transactionReceipt = document.getElementById('transactionReceipt');
-  const receiptDetails = document.getElementById('receiptDetails');
-  const backButton = document.getElementById('backButton');
-  const printButton = document.getElementById('printButton');
-
-
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files.length > 0) {
-      fileNameSpan.textContent = fileInput.files[0].name;
-      fileNameSpan.style.display = 'inline';
-    } else {
-      fileNameSpan.textContent = '';
-      fileNameSpan.style.display = 'none';
-    }
-  });
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    statusMessage.textContent = 'Loading...';
-    statusMessage.className = '';
-
-    const formData = new FormData(form);
-    const buktiFile = formData.get('bukti');
-
-    if (!buktiFile || buktiFile.size === 0) {
-      statusMessage.textContent = 'Harap lampirkan bukti foto.';
-      statusMessage.className = 'error';
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(buktiFile);
-    
-    reader.onload = async () => {
-      const base64Image = reader.result.split(',')[1];
-      
-      const payload = {
-        action: 'handleTopup',
-        id: formData.get('id'),
-        nama: formData.get('nama'),
-        username: formData.get('username'),
-        deposit: formData.get('deposit'),
-        bukti: base64Image
-      };
-
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload) 
-        });
-
-        const result = await response.json();
-        statusMessage.textContent = result.message;
-        statusMessage.className = result.status === 'success' ? 'success' : 'error';
-        
-        if (result.status === 'success') {
-   
-          const id = formData.get('id');
-          const nama = formData.get('nama');
-          const username = formData.get('username');
-          const deposit = formData.get('deposit');
-
-      
-          const now = new Date();
-          const formattedDate = now.toLocaleDateString('id-ID', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          });
-
-    
-          receiptDetails.innerHTML = `
-            <p><strong>ID:</strong> ${id}</p>
-            <p><strong>Nama:</strong> ${nama}</p>
-            <p><strong>Username:</strong> ${username}</p>
-            <p><strong>Jumlah:</strong> Rp. ${Number(deposit).toLocaleString('id-ID')}</p>
-            <p><strong>Tanggal:</strong> ${formattedDate}</p>
-          `;
-          
-       
-          form.style.display = 'none';
-          transactionReceipt.style.display = 'block';
-        }
-      } catch (error) {
-        statusMessage.textContent = 'Terjadi kesalahan saat mengirim permintaan.';
-        statusMessage.className = 'error';
-        console.error('Error:', error);
-      }
-    };
-    reader.onerror = () => {
-      statusMessage.textContent = 'Gagal membaca file bukti transfer.';
-      statusMessage.className = 'error';
-    };
-  });
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const userId = localStorage.getItem('ID');
-    const userName = localStorage.getItem('Nama');
-    const userUsername = localStorage.getItem('Username');
-    
-    if (userId) {
-      document.getElementById('id').value = userId;
-    }
-    if (userName) {
-      document.getElementById('nama').value = userName;
-    }
-    if (userUsername) {
-      document.getElementById('username').value = userUsername;
-    }
-  
-  });
 </script>
 
 
