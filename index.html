@@ -564,6 +564,20 @@
             margin-right: 10px;
             color: #999;
         }
+        
+        /* Gaya tambahan untuk Marquee agar sesuai dengan kolom search */
+        .search-bar .marquee-content {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        .search-bar marquee {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: block; /* Memastikan marquee mengambil ruang yang tersedia */
+        }
 
         .other-features {
             display: grid;
@@ -1469,7 +1483,7 @@
                 <span class="balance-amount" id="PoinAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             <div class="all-accounts">
-                <span>Aset Digital (segera)</span>
+                <span>Fitur baru (segera)</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
@@ -1497,24 +1511,22 @@
             </a>
             
             <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
-                <div class="feature-icon-circle pulsa-icon">
-                    <i class="fas fa-arrow-up"></i>
+                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="Lacak Lokasi" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
                 <span>Lihat Posisi</span>
             </a>
-        </div>
+            </div>
 
         <div class="banner">
             <div class="banner-text">
-                <strong>Promo khusus</strong>
+                <strong>Reward</strong>
                 <br>Nasuka Wireless
             </div>
             <div class="banner-button">
                 cek <i class="fas fa-chevron-right"></i>
             </div>
         </div>
-
-
 
         <div class="search-bar">
             <i class="fas fa-search"></i>
@@ -1548,10 +1560,12 @@
             </div>
             </div>
             
-              <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <span>Lain nya</span>
-        </div>
+              <div class="search-bar" id="marquee-search-bar">
+                <i class="fas fa-search"></i>
+                <div class="marquee-content">
+                    <span id="running-text"></span>
+                </div>
+            </div>
         </div> 
         
  <div class="other-features">
@@ -1589,15 +1603,6 @@
         
         
         
-        
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <span>Game</span>
-        </div>
-        
-        
-        
-          
         
         <div class="other-feature-icon investasi-icon" style="margin: 0 auto; display: block; width: 50px; height: 50px;"> 
             <i class="fas fa-chart-line"></i>
@@ -2003,7 +2008,7 @@ function updateHomeDisplay() {
         welcomeEl.innerHTML = `Selamat Datang,<br><strong>${displayName}!</strong>`;
         
     } else {
-        userNameEl.textContent = "Tamu";
+        userNameEl.textContent = "Masuk";
         PoinEl.textContent = "0"; 
         
         welcomeEl.innerHTML = `Nasuka Foods<br>`; 
@@ -2018,6 +2023,20 @@ function updatePoinDisplay() {
 function initializeHome() {
   initializeUserProfile();
   updateHomeDisplay();
+  
+  // LOGIC TEKS BERJALAN DITAMBAHKAN DI SINI
+  const runningTextEl = document.getElementById('running-text');
+  if (runningTextEl) {
+    // Membuat elemen <marquee> secara dinamis
+    const marqueeEl = document.createElement('marquee');
+    marqueeEl.setAttribute('behavior', 'scroll');
+    marqueeEl.setAttribute('direction', 'left');
+    marqueeEl.setAttribute('scrollamount', '3'); // Kecepatan scroll
+    marqueeEl.textContent = 'Website sedang dalam pengembangan, beri kami kritik dan saran supaya aplikasi berkerja lebih baik lagi';
+    
+    // Mengganti konten <span> dengan elemen <marquee>
+    runningTextEl.parentNode.replaceChild(marqueeEl, runningTextEl);
+  }
 }
 
 function initializeUserProfile() {
