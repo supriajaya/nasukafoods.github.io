@@ -25,13 +25,21 @@
             max-width: 450px;
             margin: 0 auto;
             background-color: white;
-            min-height: 100vh; /* Changed from 10vh to 100vh for better mobile experience */
+            min-height: 100vh;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
         
-        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup {
+        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container { 
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 200005; 
+            overflow-y: auto;
         }
         
         .header {
@@ -120,6 +128,153 @@
             font-size: 20px;
             color: #007bff; 
             cursor: pointer;
+        }
+        
+        .download-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .download-header i {
+            font-size: 24px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .download-content {
+            padding: 15px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .app-info-top {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-top: 10px;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-right: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-text {
+            flex-grow: 1;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 5px 0;
+        }
+
+        .app-version {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .app-publisher {
+            font-size: 14px;
+            color: #007bff;
+        }
+
+        .app-stats {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item {
+            flex: 1;
+            padding: 0 10px;
+            border-right: 1px solid #eee;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .stat-value i {
+            color: gold;
+            margin-right: 5px;
+        }
+
+        .download-description h4 {
+            font-size: 18px;
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+
+        .download-description p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .download-footer-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 450px;
+            width: 100%;
+            background-color: #007bff; 
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+        }
+
+        .download-footer-text {
+            font-size: 16px;
+        }
+        
+        .download-footer-version {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        .download-footer-icon {
+            font-size: 24px;
         }
 
         .all-accounts {
@@ -1010,6 +1165,105 @@
             background-color: #0056b3;
         }
 
+        #video-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f2f5; 
+            z-index: 200004; 
+            justify-content: center;
+            align-items: flex-start; 
+            padding: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .video-card-modified {
+            background: white;
+            padding: 0;
+            border-radius: 0; 
+            width: 100%;
+            max-width: 450px; 
+            margin: 0 auto;
+            box-shadow: none; 
+            text-align: left;
+            min-height: 100vh;
+        }
+
+        .video-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .video-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            flex-grow: 1;
+            text-align: center;
+            padding-right: 24px; 
+        }
+
+        .video-header i {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .video-content-section {
+            padding: 10px 15px;
+            background-color: #f0f2f5; 
+            padding-bottom: 80px; 
+        }
+        
+        .video-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .video-thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+        }
+        
+        .video-details {
+            padding: 10px 15px;
+        }
+        
+        .video-details h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .video-details p {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -1032,7 +1286,7 @@
         <div class="balance-card">
             <div class="balance-title">Poin</div>
             <div class="balance-details">
-                <span class="balance-amount" id="PoinAmountDisplay">...</span> <i class="fas fa-eye-slash balance-icon"></i>
+                <span class="balance-amount" id="PoinAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             <div class="all-accounts">
                 <span>Aset Digital (segera)</span>
@@ -1048,12 +1302,12 @@
                 <span>Give Away</span>
             </a>
             
-            <a href="https://nasukafoods.site/test-giveaway.html" target="_blank" class="feature-link">
+            <div class="feature-item" onclick="showVideo()">
                 <div class="feature-icon-circle briva-icon">
-                    <i class="fas fa-file-invoice"></i>
+                    <i class="fas fa-video"></i>
                 </div>
-                <span>Simulasi</span>
-            </a>
+                <span>Video</span>
+            </div>
             
             <a href="" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pdam-icon">
@@ -1114,28 +1368,6 @@
             </div>
             </div>
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-      
-            
-            
-           
-            
-            
-            
               <div class="search-bar">
             <i class="fas fa-search"></i>
             <span>Lain nya</span>
@@ -1151,12 +1383,13 @@
                 <span>Lifestyle</span>
             </div>
             
-            <div class="other-feature-item">
+            <a href="https://nasukafoods.site/test-giveaway.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
                 <div class="other-feature-icon virtual-icon">
-                    <i class="fas fa-video"></i>
+                    <i class="fas fa-file-invoice"></i>
                 </div>
-                <span>Video</span>
-            </div>
+                <span>Simulasi</span>
+            </a>
+            
             <div class="other-feature-item" onclick="showSignup()">
                 <div class="other-feature-icon catatan-icon">
                     <i class="fas fa-user-plus"></i>
@@ -1389,8 +1622,92 @@
             </button>
         </div>
     </div>
+
+    <div id="video-container" class="auth-container">
+        <div class="video-card-modified">
+            <div class="video-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Pilihan Video</h3>
+            </div>
+            
+            <div class="video-content-section">
+                <div id="video-list">
+                    <p style="text-align: center; color: #666; margin-top: 20px;">Memuat video...</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
     
-</div>
+    <div id="download-container">
+        <div class="download-header">
+            <i class="fas fa-arrow-left" onclick="showHome()"></i>
+            Nasuka Foods
+        </div>
+        
+        <div class="download-content">
+            <div class="app-info-top">
+                <img src="https://nasukafoods.site/nasukafoods.jpg" alt="App Logo" class="app-logo">
+                <div class="app-text">
+                    <div class="app-title">Nasuka Foods App</div>
+                    <div class="app-version">Versi: 1.0.2</div>
+                    <div class="app-publisher">Nasuka Wireless</div>
+                </div>
+            </div>
+            
+            <div class="app-stats">
+                <div class="stat-item">
+                    <div class="stat-value"><i class="fas fa-star" style="color: #ffc107;"></i> 4.8</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100+</div>
+                    <div class="stat-label">Ulasan</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4 MB</div>
+                    <div class="stat-label">Ukuran File</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">200+</div>
+                    <div class="stat-label">Unduhan</div>
+                </div>
+            </div>
+            
+            <div class="download-description">
+                <h4>Deskripsi Aplikasi</h4>
+                <p>
+                    Aplikasi resmi Nasuka Foods hadir untuk memudahkan Anda memesan produk favorit kami, mengumpulkan Poin, dan mendapatkan berbagai promo eksklusif. Rasakan pengalaman berbelanja Cilok dan jajanan viral lainnya dengan lebih cepat dan praktis!
+                </p>
+                <p>
+                    <strong>Fitur Unggulan:</strong>
+                    <ul>
+                        <li>Pemesanan Cepat dan Aman.</li>
+                        <li>Integrasi Poin Hadiah.</li>
+                        <li>Akses ke video dan tutorial eksklusif.</li>
+                        <li>Notifikasi promo terbaru.</li>
+                    </ul>
+                </p>
+                
+                <h4>Informasi Tambahan</h4>
+                <p>
+                    Diperbarui: 15 Okt 2025<br>
+                    Membutuhkan Android: 5.0 ke atas<br>
+                    Ditawarkan oleh: Nasuka Wireless
+                </p>
+                <div style="height: 60px;"></div> 
+            </div>
+        </div>
+        
+        <a href="https://nasukafoods.site/nasuka.apk" target="_blank" class="download-footer-bar">
+            <div>
+                <div class="download-footer-text">Dapatkan versi terbaru</div>
+                <div class="download-footer-version">1.0.2 • 15 Okt 2025</div>
+            </div>
+            <i class="fas fa-download download-footer-icon"></i>
+        </a>
+    </div>
+    </div>
     
     
 <script>
@@ -1404,7 +1721,6 @@ const firebaseConfig = {
     appId: "1:84287800896:web:83189d6766997b00f701a5"
 };
 if (!firebase.apps.length) {
-    // Menggunakan inisialisasi yang sesuai dengan versi yang diimpor (v8)
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
@@ -1539,8 +1855,7 @@ function fetchUserProfileFromDB(userID) {
 }
 
 function hideAllContainers() {
-    // Menambahkan #receipt-popup agar tersembunyi
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup').forEach(el => {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container').forEach(el => {
         if (el) el.style.display = 'none';
     });
 }
@@ -1568,6 +1883,16 @@ function showSignup() {
     document.getElementById('signupStatus').innerHTML = '';
     document.getElementById('signupForm').reset();
 }
+
+function showDownload() {
+    hideAllContainers();
+    const downloadContainer = document.getElementById('download-container');
+    if (downloadContainer) {
+        downloadContainer.style.display = 'block'; 
+        downloadContainer.scrollTop = 0; 
+    }
+}
+
 
 function loginUser() {
     const username = document.getElementById('loginUsername').value.trim();
@@ -1731,15 +2056,14 @@ function showProfil() {
         const tanggalObj = new Date(tanggalJoinISO);
         const bulanJoin = tanggalObj.toLocaleString('id-ID', { month: 'short', year: 'numeric' });
         
-        // Perubahan di sini: Mengambil Nomor HP dari localUser
         const displayNomorHP = localUser.NomorHP || 'Nomor HP belum diatur'; 
         
-        // --- Memperbarui Elemen Profil ---
+        
         document.getElementById('profilFoto').src = foto;
         document.getElementById('profilNamaDriver').textContent = nama;
         document.getElementById('profilBulanJoin').textContent = bulanJoin;
         
-        // Perubahan di sini: Mengganti ID Plat dengan Nomor HP
+        
         document.getElementById('profilIDPlat').textContent = 'Nomor HP: ' + displayNomorHP; 
         
         document.getElementById('profilPoinDisplay').textContent = Poin + ' Poin';
@@ -1749,13 +2073,11 @@ function showProfil() {
             alamatPengirimanEl.textContent = localUser.Alamat || "Alamat belum diatur";
         }
         
-        // Memastikan Riwayat Pembelian memiliki handler showHistory()
         const safetyReport = document.querySelector('.safety-report');
         if (safetyReport) {
              safetyReport.onclick = showHistory;
         }
 
-        // --- Akhir Pembaruan Elemen Profil ---
         
         document.getElementById('profilRatingScore').textContent = '5.00';
         document.getElementById('ratingCount5').textContent = '10';
@@ -1783,7 +2105,6 @@ function showProfil() {
         if (activeTab === 'pencapaian') {
             tabPencapaian.classList.add('active');
             contentPencapaian.style.display = 'block';
-             // Reset content jika beralih kembali dari riwayat
              if (contentPencapaian.querySelector('#history-list')) {
                 contentPencapaian.innerHTML = `
                     <div class="badge-section">
@@ -1815,13 +2136,9 @@ function showProfil() {
     switchTab('pencapaian');
 }
 
-/**
- * Fungsi baru untuk menampilkan riwayat pembelian.
- */
 function showHistory() {
     const contentPencapaian = document.getElementById('contentPencapaian');
     
-    // Ganti isi tab saat ini dengan tampilan riwayat
     contentPencapaian.innerHTML = `
         <div style="text-align: center; padding: 20px;">
             <h4 style="margin-top: 0; color: #333; font-size: 16px; font-weight: 600;">Riwayat Pembelian</h4>
@@ -1834,11 +2151,9 @@ function showHistory() {
         </div>
     `;
     
-    // Pastikan tab "Umum" tetap aktif secara visual
     document.getElementById('tabPencapaian').classList.add('active');
     document.getElementById('tabPerbaikan').classList.remove('active');
 
-    // Ambil data transaksi dari Firebase
     db.ref(`transactions/${localUser.ID}`).orderByChild('timestamp').limitToLast(20).once('value')
         .then(snapshot => {
             const historyListEl = document.getElementById('history-list');
@@ -1853,7 +2168,6 @@ function showHistory() {
                 return;
             }
 
-            // Membalikkan urutan untuk menampilkan yang terbaru di atas
             transactions.reverse(); 
 
             transactions.forEach(tx => {
@@ -1877,7 +2191,6 @@ function showHistory() {
                     <i class="fas fa-chevron-right" style="font-size: 12px; color: #999;"></i>
                 `;
                 txItem.onclick = () => {
-                    // Menampilkan alert detail transaksi
                     alert(`Detail Transaksi:\nID: ${tx.transactionID}\nProduk: ${tx.productName}\nJumlah Poin: ${tx.amount.toLocaleString('id-ID')}\nStatus: ${tx.status}\nTanggal: ${date}\nAlamat Kirim: ${tx.deliveryAddress}`);
                 };
                 historyListEl.appendChild(txItem);
@@ -2055,14 +2368,10 @@ function updateProfile() {
 }
 
 
-/**
- * Fungsi baru: Log transaksi pembelian ke database.
- */
 function logPurchaseToDB(productName, amount, newPoin) {
     const userID = localUser.ID;
     if (!userID) return; 
 
-    // Membuat ID transaksi baru
     const transactionRef = db.ref(`transactions/${userID}`).push();
     const transactionID = transactionRef.key;
     const timestamp = new Date().toISOString();
@@ -2080,7 +2389,6 @@ function logPurchaseToDB(productName, amount, newPoin) {
         deliveryContact: localUser.NomorHP
     };
 
-    // Menyimpan data transaksi
     transactionRef.set(transactionData)
         .then(() => {
             console.log("Transaction logged successfully with ID:", transactionID);
@@ -2092,16 +2400,12 @@ function logPurchaseToDB(productName, amount, newPoin) {
     return transactionData;
 }
 
-/**
- * Fungsi baru: Menghasilkan HTML untuk struk pembelian (gaya KFC).
- */
 function generateReceiptHTML(txData) {
     const date = new Date(txData.timestamp);
     const dateString = date.toLocaleString('id-ID', { dateStyle: 'medium' });
     const timeString = date.toLocaleString('id-ID', { timeStyle: 'short' });
     const totalPoin = txData.amount.toLocaleString('id-ID');
 
-    // Menggunakan font monospace untuk tampilan struk
     return `
         <div style="font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #333; line-height: 1.4;">
             <h3 style="text-align: center; margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">NASUKA FOODS</h3>
@@ -2153,17 +2457,11 @@ function generateReceiptHTML(txData) {
     `;
 }
 
-/**
- * Fungsi baru: Menyembunyikan struk dan kembali ke Home.
- */
 function hideReceiptAndShowHome() {
     document.getElementById('receipt-popup').style.display = 'none';
     showHome();
 }
 
-/**
- * Fungsi yang Diperbarui: Proses pembayaran Poin.
- */
 function processPoinPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
@@ -2187,7 +2485,6 @@ function processPoinPayment(amount, productName) {
             localStorage.setItem("Poin", newPoin);
             updatePoinDisplay();
             
-            // 1. Log transaksi dan dapatkan data yang disimpan
             const transactionData = logPurchaseToDB(productName, amount, newPoin);
             
             statusDiv.innerHTML = `
@@ -2196,7 +2493,6 @@ function processPoinPayment(amount, productName) {
                 </div>
             `;
             
-            // 2. Tampilkan Struk
             document.getElementById('receipt-content').innerHTML = generateReceiptHTML(transactionData);
             document.getElementById('payment-container').style.display = 'none';
             document.getElementById('receipt-popup').style.display = 'flex';
@@ -2207,9 +2503,6 @@ function processPoinPayment(amount, productName) {
         });
 }
 
-/**
- * Fungsi yang Diperbarui: showPayment memanggil processPoinPayment
- */
 function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
     hideAllContainers();
     if (!localStorage.getItem("ID")) {
@@ -2217,7 +2510,6 @@ function showPayment(productName, productDescription, productPrice, productImage
         showLogin();
         return;
     }
-    // Pastikan user sudah setting alamat dan nomor HP
     if (localUser.Alamat === "Alamat belum diatur" || localUser.NomorHP === "Nomor HP belum diatur") {
          alert("Mohon lengkapi Alamat Pengiriman dan Nomor HP Anda di menu Edit Profil sebelum melakukan pembelian.");
          showEditProfil();
@@ -2299,6 +2591,67 @@ function showPayment(productName, productDescription, productPrice, productImage
     
 }
 
+function showVideo() {
+    hideAllContainers();
+    const videoContainer = document.getElementById('video-container');
+    if (videoContainer) {
+        videoContainer.style.display = 'flex';
+    }
+
+    const videoListEl = document.getElementById('video-list');
+    if (!videoListEl) return;
+
+    const videos = [
+        { 
+            title: "Nasuka Foods (Cilok Isian Gajih)", 
+            uploader: "Natasya", 
+            views: "2.2 Juta ", 
+            videoUrl: "https://nasukafoods.site/nasukaads1.mp4", 
+            posterUrl: "https://nasukafoods.site/cilokpro.jpg" 
+        },
+        { 
+            title: "Logo", 
+            uploader: "Supria", 
+            views: "1.7 Juta ", 
+            videoUrl: "https://nasukafoods.site/nasukaads2.mp4", 
+            posterUrl: "https://nasukafoods.site/nasukafoods.jpg" 
+        },
+        { 
+            title: "Produksi", 
+            uploader: "Karlina", 
+            views: "1.2 Juta ", 
+            videoUrl: "https://nasukafoods.site/nasukaads3.mp4", 
+            posterUrl: "https://nasukafoods.site/gambarkosong.jpg" 
+        }
+    ];
+
+    videoListEl.innerHTML = ''; 
+
+    videos.forEach(video => {
+        const videoItem = document.createElement('div');
+        videoItem.className = 'video-item';
+        
+        videoItem.innerHTML = `
+            <div class="video-thumbnail">
+                <video controls controlslist="nodownload" poster="${video.posterUrl}">
+                    <source src="${video.videoUrl}" type="video/mp4">
+                    Browser Anda tidak mendukung tag video.
+                </video>
+            </div>
+            <div class="video-details">
+                <h4>${video.title}</h4>
+                <p>Oleh: ${video.uploader} | ${video.views}x ditonton</p>
+            </div>
+        `;
+        
+        videoListEl.appendChild(videoItem);
+    });
+    
+    if (videos.length === 0) {
+        videoListEl.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">Tidak ada video untuk saat ini.</p>';
+    }
+}
+
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -2314,3 +2667,6 @@ $(document).ready(function() {
     showHome(); 
 });
 </script>
+
+</body>
+</html>
