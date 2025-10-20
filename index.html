@@ -6,8 +6,8 @@
     <title>Nasuka Foods</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
     
     
@@ -25,12 +25,12 @@
             max-width: 450px;
             margin: 0 auto;
             background-color: white;
-            min-height: 10vh;
+            min-height: 100vh; /* Changed from 10vh to 100vh for better mobile experience */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
         
-        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container {
+        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup {
             display: none;
         }
         
@@ -259,17 +259,15 @@
             margin-bottom: 5px;
             font-size: 24px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            overflow: hidden; /* Penting untuk gambar */
+            overflow: hidden; 
         }
         
-        /* CSS Baru untuk Gambar Produk */
         .product-icon-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Memastikan gambar mengisi area tanpa distorsi */
-            border-radius: 10px; /* Sesuai dengan border-radius parent */
+            object-fit: cover; 
+            border-radius: 10px; 
         }
-        /* Akhir CSS Baru */
 
         .top-up-icon { color: #28a745; }
         .brizzi-icon { color: #00bcd4; }
@@ -424,6 +422,7 @@
             color: green;
             border: 1px solid green;
         }
+        
         #profil-container {
             display: none;
             position: fixed;
@@ -431,81 +430,405 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: #f0f2f5; 
             z-index: 200002;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            overflow-y: auto; 
+            padding: 0;
             box-sizing: border-box;
         }
         .profil-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
+            background: none; 
+            padding: 0;
+            border-radius: 0;
             width: 100%;
-            max-width: 600px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            max-width: 450px; 
+            margin: 0 auto;
+            box-shadow: none;
+            text-align: left;
+            min-height: 100vh;
         }
         .profil-card h2 {
-            font-size: 36px;
-            margin-bottom: 30px;
-            color: #333;
+            display: none; 
         }
-        .profil-foto {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-            border: 5px solid #4CAF50;
-        }
-        .profil-info-item {
+
+        .profil-header-nav {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
             border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .profil-header-nav h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .profil-header-nav i {
             font-size: 24px;
+            color: #333;
+            cursor: pointer;
         }
-        .profil-info-item strong {
-            color: #555;
+
+        .driver-info {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        .profil-info-item span {
-            font-weight: bold;
-            color: #000;
+        .driver-foto {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 3px solid #007bff;
         }
-        .profil-info-item:last-child {
-            border-bottom: none;
+        .driver-text h4 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
         }
-        .profil-info-item #profilPoin {
-            color: gold;
-            text-shadow: 1px 1px 2px #333;
+        .driver-details {
+            font-size: 12px;
+            color: #666;
         }
-        .profil-card .btn-kembali {
-            margin-top: 30px;
-            padding: 15px 30px;
-            background-color: #f44336;
+
+        .safety-report {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        .safety-report-left {
+            display: flex;
+            align-items: center;
+        }
+        .safety-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #007bff;
+            margin-right: 10px;
+        }
+        .safety-text {
+            font-size: 14px;
+            color: #333;
+        }
+        .safety-text span {
+            display: block;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .rating-section {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .rating-main {
+            text-align: center;
+            margin-right: 20px;
+        }
+        .rating-score {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+        }
+        .rating-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .rating-breakdown {
+            flex-grow: 1;
+            font-size: 12px;
+            color: #666;
+        }
+        .rating-bar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+        .rating-bar-row span:first-child {
+            width: 10px;
+            text-align: right;
+            margin-right: 5px;
+        }
+        .rating-bar {
+            flex-grow: 1;
+            height: 6px;
+            background-color: #eee;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        .rating-fill {
+            height: 100%;
+            background-color: #ffc107; 
+            border-radius: 3px;
+        }
+
+        .profil-tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            background-color: white;
+        }
+        .profil-tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .profil-tab-item.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .tab-content-section {
+            padding: 15px;
+            background-color: white;
+            margin-top: 1px;
+            margin-bottom: 70px; 
+        }
+        .badge-section h4 {
+            margin-top: 0;
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .badge-card {
+            display: flex;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f7f7f7;
+            align-items: center;
+        }
+        .badge-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+        .badge-text strong {
+            font-size: 14px;
+            color: #333;
+        }
+        .badge-text span {
+            display: block;
+            font-size: 12px;
+            color: #007bff;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .passenger-comments {
+            padding: 15px;
+            background-color: white;
+            margin-top: 10px;
+        }
+        .passenger-comments h4 {
+            margin: 0 0 15px 0;
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        .magnifying-glass {
+            display: block;
+            margin: 20px auto;
+            width: 80px;
+            height: 80px;
+            
+        }
+        
+        #editprofil-container {
+            background-color: #f0f2f5; 
+            align-items: flex-start; 
+            padding: 0;
+            overflow-y: auto;
+        }
+
+        #editprofil-container .auth-card {
+            background: #f0f2f5; 
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            max-width: 450px;
+            margin: 0 auto;
+            width: 100%;
+            min-height: 100vh; 
+        }
+
+        .edit-header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .edit-header-nav h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .edit-header-nav .fas {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .edit-profile-photo-section {
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .edit-profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 4px solid #007bff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .change-photo-text {
+            color: #007bff;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .edit-form-section {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .edit-form-section h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .edit-form-section input[type="text"],
+        .edit-form-section input[type="password"],
+        .edit-form-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+            -webkit-appearance: none; 
+            -moz-appearance: none; 
+            appearance: none;
+        }
+
+        .edit-form-section textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        #editProfilForm button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 5px;
+            margin-bottom: 15px;
             transition: background-color 0.3s;
         }
-        .profil-card .btn-kembali:hover {
-            background-color: #da190b;
+
+        #editProfilForm button[type="submit"]:hover {
+            background-color: #0056b3;
         }
-        .profil-card .button-group-bottom {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 20px;
+
+        .edit-footer-buttons {
+            padding: 15px;
+            background-color: white;
+            text-align: center;
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
         }
-        .profil-card .button-group-bottom .btn-kembali,
-        .profil-card .button-group-bottom #btnLogout {
-            width: 50%;
-            margin: 0;
+
+        .edit-footer-buttons button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: 1px solid #ccc;
         }
+
+        .edit-footer-buttons .btn-batal {
+            background-color: white;
+            color: #f44336;
+            margin-bottom: 10px;
+        }
+
+        .edit-footer-buttons .btn-logout {
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+
+        .edit-footer-buttons .btn-batal:hover {
+            background-color: #f0f0f0;
+        }
+        
         #payment-container {
             display: none;
             position: fixed;
@@ -513,102 +836,180 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: #f0f2f5; 
             z-index: 200003;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start; 
+            padding: 0;
             box-sizing: border-box;
-        }
-        .payment-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            text-align: left;
-            max-height: 90vh;
             overflow-y: auto;
         }
-        .payment-card p, .payment-card h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-        .payment-options button {
+
+        .payment-card-modified {
+            background: white;
+            padding: 0;
+            border-radius: 0; 
             width: 100%;
-            padding: 15px;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 24px;
-            transition: background-color 0.3s;
+            max-width: 450px; 
+            margin: 0 auto;
+            box-shadow: none; 
+            text-align: left;
+            min-height: 100vh;
         }
-        .payment-card .btn-kembali {
-            width: 100%;
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 24px;
-            transition: background-color 0.3s;
-        }
-        .product-image-slider {
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-        .slider-wrapper {
+
+        .payment-header {
             display: flex;
-            transition: transform 0.5s ease-in-out;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-        .slider-item {
-            min-width: 100%;
+
+        .payment-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            flex-grow: 1;
+            text-align: center;
+            padding-right: 24px; 
         }
-        .slider-item img {
+
+        .payment-header i {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .product-image-slider, .slider-nav, .slider-dots { 
+             display: none;
+        }
+        
+        .product-image-container {
             width: 100%;
-            height: auto;
+            height: 250px; 
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
             display: block;
         }
-        .slider-nav button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 10;
+
+        .product-details-section {
+            padding: 15px;
+            background-color: white;
+            border-bottom: 8px solid #f0f2f5; 
+        }
+
+        .product-details-section h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
             font-size: 20px;
+            color: #333;
+            font-weight: 700;
         }
-        .slider-nav button:first-child {
-            left: 0;
+
+        .product-price-display {
+            font-size: 16px;
+            color: #f44336; 
+            font-weight: 600;
+            margin-bottom: 15px;
         }
-        .slider-nav button:last-child {
-            right: 0;
+
+        .product-description-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
         }
-        .slider-dots {
-            text-align: center;
+
+        .product-keterangan-manual {
+            font-size: 14px;
+            color: #007bff;
+            font-style: italic;
             margin-top: 10px;
         }
-        .slider-dot {
-            height: 10px;
-            width: 10px;
-            margin: 0 5px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
+
+        .payment-info-section {
+            padding: 15px;
+            background-color: white;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .info-value.address {
+            max-width: 60%;
+        }
+
+        .Poin-row {
+            font-size: 16px;
+            font-weight: 700;
+            color: #007bff; 
+        }
+        
+        .total-bayar-row {
+            font-weight: 700; 
+            font-size: 18px; 
+            margin-top: 10px; 
+            border-top: 1px solid #ddd;
+        }
+
+        .total-bayar-row .info-value {
+             color: #f44336; 
+        }
+
+        .payment-action-section {
+            padding: 15px;
+            background-color: white;
+            position: sticky;
+            bottom: 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .btn-bayar-Poin {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff; 
+            color: white;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: background-color 0.3s;
         }
-        .slider-dot.active {
-            background-color: #717171;
+
+        .btn-bayar-Poin:hover {
+            background-color: #0056b3;
         }
+
     </style>
 </head>
 <body>
@@ -631,7 +1032,7 @@
         <div class="balance-card">
             <div class="balance-title">Poin</div>
             <div class="balance-details">
-                <span class="balance-amount" id="poinAmountDisplay">...</span> <i class="fas fa-eye-slash balance-icon"></i>
+                <span class="balance-amount" id="PoinAmountDisplay">...</span> <i class="fas fa-eye-slash balance-icon"></i>
             </div>
             <div class="all-accounts">
                 <span>Aset Digital (segera)</span>
@@ -687,27 +1088,27 @@
         </div>
 
         <div class="other-features">
-            <div class="other-feature-item" onclick="showPayment('Produk 1', 'Deskripsi Produk 1', 900, ['https://nasukafoods.site/psu1.jpg'], 'Keterangan manual 1')">
+            <div class="other-feature-item" onclick="showPayment('Produk 1: Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih.', 900, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 10 biji. Level pedas: Sedang.')">
                 <div class="other-feature-icon top-up-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 900 Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="900 Poin Product" class="product-icon-img">
                 </div>
-                <span>900 poin</span>
+                <span>900 Poin</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Produk 2', 'Deskripsi Produk 2', 44000, ['https://nasukafoods.site/psu2.jpg'], 'Keterangan manual 2')">
+            <div class="other-feature-item" onclick="showPayment('Produk 2: Paket Hemat 1', 'Paket hemat cilok dan tahu bakso.', 44000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 30 cilok, 10 tahu bakso. Level pedas: Standar.')">
                 <div class="other-feature-icon brizzi-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 44.000 Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="44.000 Poin Product" class="product-icon-img">
                 </div>
-                <span>44.000 poin</span>
+                <span>44.000 Poin</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Produk 3', 'Deskripsi Produk 3', 87000, ['https://nasukafoods.site/psu3.jpg'], 'Keterangan manual 3')">
+            <div class="other-feature-item" onclick="showPayment('Produk 3: Paket Keluarga', 'Porsi besar untuk acara keluarga.', 87000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 100 cilok, saus extra pedas. Promo terbatas!')">
                 <div class="other-feature-icon tagihan-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 87.000 Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="87.000 Poin Product" class="product-icon-img">
                 </div>
-                <span>87.000 poin</span>
+                <span>87.000 Poin</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Produk 4', 'Deskripsi Produk 4', 850000, ['https://nasukafoods.site/psu4.jpg'], 'Keterangan manual 4')">
+            <div class="other-feature-item" onclick="showPayment('Produk 4: Premium Frozen', 'Cilok frozen siap masak untuk stok di rumah.', 850000, ['https://nasukafoods.site/cilokpro.jpg'], 'Stok 1 bulan. Gratis ongkir Jawa.')">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Rp 850.000 Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="850.000 Poin Product" class="product-icon-img">
                 </div>
                 <span>850.000 Poin</span>
             </div>
@@ -816,7 +1217,7 @@
             
             
             
-        </div> </div>
+        </div> 
    
     
     
@@ -861,27 +1262,132 @@
 
     <div id="profil-container">
         <div class="profil-card">
-            <h2>Profil Pengguna</h2>
-            <img id="profilFoto" class="profil-foto" src="https://nasukafoods.site/gambarkosong.jpg" alt="Foto Profil">
             
-            <div class="profil-info">
-                <div class="profil-info-item"><strong>Nama:</strong> <span id="profilNama">...</span></div>
-                <div class="profil-info-item"><strong>Username:</strong> <span id="profilUsername">...</span></div>
-                <div class="profil-info-item"><strong>Poin:</strong> <span id="profilPoin">0</span></div>
-                <div class="profil-info-item"><strong>No. HP:</strong> <span id="profilNomorHP">...</span></div>
-                <div class="profil-info-item"><strong>Alamat:</strong> <span id="profilAlamat">...</span></div>
+            <div class="profil-header-nav">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Profil Saya</h3>
+                <div>
+                    <i class="fas fa-pencil-alt" onclick="showEditProfil()"></i>
+                    <i class="fas fa-question-circle" style="margin-left: 15px;"></i>
+                </div>
+            </div>
+
+            <div class="driver-info">
+                <img id="profilFoto" class="driver-foto" src="https://nasukafoods.site/gambarkosong.jpg" alt="Foto Profil">
+                <div class="driver-text">
+                    <h4 id="profilNamaDriver">...</h4>
+                    <div class="driver-details">
+                        Gabung bulan <span id="profilBulanJoin">...</span> | 
+                        <span id="profilIDPlat">...</span> 
+                    </div>
+                </div>
             </div>
             
-            <button id="btnEditProfil" style="display: none;"></button>
-            <div class="button-group-bottom">
+            <div class="rating-section" style="padding: 10px 15px; margin-bottom: 5px; background-color: #fff8e1; border-radius: 8px; border: 1px solid #ffecb3;">
+                <div style="font-size: 14px; font-weight: 600; color: #ff9800;">Poin Anda</div>
+                <div style="font-size: 20px; font-weight: 700; color: #333;" id="profilPoinDisplay">...</div>
             </div>
+
+
+            <div class="safety-report" onclick="showHistory()"> <div class="safety-report-left">
+                    <div class="safety-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="safety-text">
+                        Riwayat pembelian
+                        <span>Lihat transaksi anda</span>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            
+            <div class="rating-section" style="padding-bottom: 5px;">
+                <div class="rating-breakdown" style="margin-right: 0;">
+                    <div style="font-size: 10px; color: #666; margin-bottom: 5px;">Aktivitas 10 order terakhir</div>
+                    <div style="font-size: 10px; color: #666; margin-bottom: 10px;">Diperbarui setiap hari</div>
+                </div>
+            </div>
+
+            <div class="rating-section" style="margin-top: -10px; padding-top: 0; border-top: 1px solid #eee;">
+                <div class="rating-main">
+                    <div class="rating-score" id="profilRatingScore">5.00</div>
+                    <div class="rating-label">Penilaian</div>
+                </div>
+                <div class="rating-breakdown">
+                    <div class="rating-bar-row">
+                        <span>5</span>
+                        <div class="rating-bar"><div class="rating-fill" style="width: 100%;"></div></div>
+                        <span id="ratingCount5">10</span>
+                    </div>
+                    <div class="rating-bar-row">
+                        <span>4</span>
+                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
+                        <span id="ratingCount4">0</span>
+                    </div>
+                    <div class="rating-bar-row">
+                        <span>3</span>
+                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
+                        <span id="ratingCount3">0</span>
+                    </div>
+                    <div class="rating-bar-row">
+                        <span>2</span>
+                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
+                        <span id="ratingCount2">0</span>
+                    </div>
+                    <div class="rating-bar-row">
+                        <span>1</span>
+                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
+                        <span id="ratingCount1">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profil-tabs">
+                <div class="profil-tab-item active" id="tabPencapaian">Umum</div>
+                <div class="profil-tab-item" id="tabPerbaikan">PERBAIKAN</div>
+            </div>
+
+            <div id="contentPencapaian" class="tab-content-section">
+                <div class="badge-section">
+                    <h4>Informasi</h4>
+                    <div class="badge-card">
+                        <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Lencana" class="badge-image">
+                        <div class="badge-text">
+                            <strong>Alamat pengiriman</strong>
+                            <span id="profilAlamatPengiriman">...</span>
+                          
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="passenger-comments">
+                    <h4>Apa Kata Anda</h4>
+                    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Mencari Komentar" class="magnifying-glass">
+                    <p style="text-align: center; color: #666; margin-top: 10px;">Belum ada kata kata untuk ditampilkan</p>
+                </div>
+            </div>
+
+            <div id="contentPerbaikan" class="tab-content-section" style="display: none; text-align: center;">
+                <p style="color: #666; font-style: italic;">Tidak ada saran perbaikan saat ini.</p>
+                <button id="btnLogout" class="btn-kembali" onclick="logoutUser()" style="background-color: #f44336; margin-top: 20px;">Logout</button>
+            </div>
+            
         </div>
     </div>
-    
     <div id="editprofil-container" class="auth-container">
     </div>
 
     <div id="payment-container">
+    </div>
+    
+    <div id="receipt-popup" class="auth-container">
+        <div class="auth-card" style="max-width: 350px; padding: 20px; text-align: left; background: #fff;">
+            <div id="receipt-content">
+                </div>
+            <button onclick="hideReceiptAndShowHome()" style="width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px;">
+                Selesai
+            </button>
+        </div>
     </div>
     
 </div>
@@ -898,6 +1404,7 @@ const firebaseConfig = {
     appId: "1:84287800896:web:83189d6766997b00f701a5"
 };
 if (!firebase.apps.length) {
+    // Menggunakan inisialisasi yang sesuai dengan versi yang diimpor (v8)
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
@@ -936,23 +1443,23 @@ if (localUser.ID) {
 
 function updateHomeDisplay() {
     const userNameEl = document.getElementById('userNameDisplay');
-    const poinEl = document.getElementById('poinAmountDisplay');
+    const PoinEl = document.getElementById('PoinAmountDisplay');
     const welcomeEl = document.querySelector('.welcome');
     const isLoggedIn = !!localUser.ID;
 
-    if (!userNameEl || !poinEl || !welcomeEl) return;
+    if (!userNameEl || !PoinEl || !welcomeEl) return;
 
     if (isLoggedIn) {
         const displayName = localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username || 'Pengguna';
         
         userNameEl.textContent = displayName;
-        poinEl.textContent = (localUser.Poin || 0).toLocaleString('id-ID');
+        PoinEl.textContent = (localUser.Poin || 0).toLocaleString('id-ID');
         
         welcomeEl.innerHTML = `Selamat Datang,<br><strong>${displayName}!</strong>`;
         
     } else {
         userNameEl.textContent = "Tamu";
-        poinEl.textContent = "0"; 
+        PoinEl.textContent = "0"; 
         
         welcomeEl.innerHTML = `Nasuka Foods<br>`; 
     }
@@ -1032,7 +1539,8 @@ function fetchUserProfileFromDB(userID) {
 }
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container').forEach(el => {
+    // Menambahkan #receipt-popup agar tersembunyi
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup').forEach(el => {
         if (el) el.style.display = 'none';
     });
 }
@@ -1086,7 +1594,8 @@ function loginUser() {
                     localStorage.setItem("Foto", user.Foto || "https://nasukafoods.site/gambarkosong.jpg");
                     localStorage.setItem("Alamat", user.Alamat || "Alamat belum diatur");
                     localStorage.setItem("NomorHP", user.NomorHP || "Nomor HP belum diatur");
-                    
+                    localStorage.setItem("TanggalJoin", user.TanggalJoin || new Date().toISOString());
+
                     localUser.ID = user.ID;
                     localUser.Username = user.Username;
                     localUser.Nama = user.Nama || 'Tanpa Nama';
@@ -1146,7 +1655,8 @@ function signupUser() {
                     Foto: "https://nasukafoods.site/gambarkosong.jpg",
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
-                    NomorHP: "Nomor HP belum diatur"
+                    NomorHP: "Nomor HP belum diatur",
+                    TanggalJoin: new Date().toISOString(), 
                 };
                 db.ref(`users/${newID}`).set(newUser)
                     .then(() => {
@@ -1157,6 +1667,7 @@ function signupUser() {
                         localStorage.setItem("Foto", newUser.Foto);
                         localStorage.setItem("Alamat", newUser.Alamat);
                         localStorage.setItem("NomorHP", newUser.NomorHP);
+                        localStorage.setItem("TanggalJoin", newUser.TanggalJoin);
                         
                         localUser.ID = newUser.ID;
                         localUser.Username = newUser.Username;
@@ -1199,7 +1710,6 @@ function logoutUser() {
     }
 }
 
-
 function showProfil() {
     hideAllContainers();
     const userID = localStorage.getItem("ID");
@@ -1208,96 +1718,249 @@ function showProfil() {
         showLogin();
         return;
     }
-    const profilContainer = document.getElementById('profil-container');
-    profilContainer.style.display = 'flex';
-    const profilCard = profilContainer.querySelector('.profil-card');
     
+    const profilContainer = document.getElementById('profil-container');
+    profilContainer.style.display = 'block'; 
+
     const renderProfil = () => {
-        document.getElementById('profilFoto').src = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-        document.getElementById('profilNama').textContent = localUser.Nama || 'Nama belum diatur';
-        document.getElementById('profilUsername').textContent = localUser.Username || 'Username tidak tersedia';
-        document.getElementById('profilPoin').textContent = (localUser.Poin || 0).toLocaleString('id-ID');
-        document.getElementById('profilNomorHP').textContent = localUser.NomorHP || 'No. HP belum diatur';
-        document.getElementById('profilAlamat').textContent = localUser.Alamat || 'Alamat belum diatur';
+        const nama = localUser.Nama || 'Nama belum diatur';
+        const foto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+        const Poin = (localUser.Poin || 0).toLocaleString('id-ID');
+        
+        const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
+        const tanggalObj = new Date(tanggalJoinISO);
+        const bulanJoin = tanggalObj.toLocaleString('id-ID', { month: 'short', year: 'numeric' });
+        
+        // Perubahan di sini: Mengambil Nomor HP dari localUser
+        const displayNomorHP = localUser.NomorHP || 'Nomor HP belum diatur'; 
+        
+        // --- Memperbarui Elemen Profil ---
+        document.getElementById('profilFoto').src = foto;
+        document.getElementById('profilNamaDriver').textContent = nama;
+        document.getElementById('profilBulanJoin').textContent = bulanJoin;
+        
+        // Perubahan di sini: Mengganti ID Plat dengan Nomor HP
+        document.getElementById('profilIDPlat').textContent = 'Nomor HP: ' + displayNomorHP; 
+        
+        document.getElementById('profilPoinDisplay').textContent = Poin + ' Poin';
+        
+        const alamatPengirimanEl = document.getElementById('profilAlamatPengiriman');
+        if (alamatPengirimanEl) {
+            alamatPengirimanEl.textContent = localUser.Alamat || "Alamat belum diatur";
+        }
+        
+        // Memastikan Riwayat Pembelian memiliki handler showHistory()
+        const safetyReport = document.querySelector('.safety-report');
+        if (safetyReport) {
+             safetyReport.onclick = showHistory;
+        }
+
+        // --- Akhir Pembaruan Elemen Profil ---
+        
+        document.getElementById('profilRatingScore').textContent = '5.00';
+        document.getElementById('ratingCount5').textContent = '10';
+        document.getElementById('ratingCount4').textContent = '0';
+        document.getElementById('ratingCount3').textContent = '0';
+        document.getElementById('ratingCount2').textContent = '0';
+        document.getElementById('ratingCount1').textContent = '0';
+        
+        updateHomeDisplay();
     };
     
     renderProfil(); 
     
-    let buttonGroupBottom = profilCard.querySelector('.button-group-bottom');
-    if (!buttonGroupBottom) {
-        buttonGroupBottom = document.createElement('div');
-        buttonGroupBottom.className = 'button-group-bottom';
-        profilCard.appendChild(buttonGroupBottom);
-    }
-    buttonGroupBottom.innerHTML = '';
+    const tabPencapaian = document.getElementById('tabPencapaian');
+    const tabPerbaikan = document.getElementById('tabPerbaikan');
+    const contentPencapaian = document.getElementById('contentPencapaian');
+    const contentPerbaikan = document.getElementById('contentPerbaikan');
     
-    let editButton = profilCard.querySelector('#btnEditProfil');
-    if (!editButton) {
-        editButton = document.createElement('button');
-        editButton.id = 'btnEditProfil';
-        editButton.textContent = 'Edit Profil';
-        editButton.style.cssText = 'padding: 15px 30px; background-color: #2196F3; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 24px; transition: background-color 0.3s; margin-top: 30px; width: 100%;';
-        editButton.onclick = showEditProfil;
-        profilCard.insertBefore(editButton, buttonGroupBottom);
-    } else {
-        editButton.style.display = 'block';
-    }
+    const switchTab = (activeTab) => {
+        tabPencapaian.classList.remove('active');
+        tabPerbaikan.classList.remove('active');
+        contentPencapaian.style.display = 'none';
+        contentPerbaikan.style.display = 'none';
 
-    let newKembaliButton = document.createElement('button');
-    newKembaliButton.textContent = 'Kembali';
-    newKembaliButton.className = 'btn-kembali'; 
-    newKembaliButton.onclick = showHome;
-    newKembaliButton.style.width = '50%';
-    newKembaliButton.style.margin = '0';
-    newKembaliButton.style.backgroundColor = '#4CAF50';
-
-    let logoutButton = document.createElement('button');
-    logoutButton.id = 'btnLogout';
-    logoutButton.textContent = 'Logout';
-    logoutButton.className = 'btn-kembali'; 
-    logoutButton.style.backgroundColor = '#f44336';
-    logoutButton.onclick = logoutUser;
-    logoutButton.style.width = '50%';
-    logoutButton.style.margin = '0';
+        if (activeTab === 'pencapaian') {
+            tabPencapaian.classList.add('active');
+            contentPencapaian.style.display = 'block';
+             // Reset content jika beralih kembali dari riwayat
+             if (contentPencapaian.querySelector('#history-list')) {
+                contentPencapaian.innerHTML = `
+                    <div class="badge-section">
+                        <h4>Informasi</h4>
+                        <div class="badge-card">
+                            <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Lencana" class="badge-image">
+                            <div class="badge-text">
+                                <strong>Alamat pengiriman</strong>
+                                <span id="profilAlamatPengiriman">${localUser.Alamat || "Alamat belum diatur"}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="passenger-comments">
+                        <h4>Apa Kata Anda</h4>
+                        <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Mencari Komentar" class="magnifying-glass">
+                        <p style="text-align: center; color: #666; margin-top: 10px;">Belum ada kata kata untuk ditampilkan</p>
+                    </div>
+                `;
+            }
+        } else {
+            tabPerbaikan.classList.add('active');
+            contentPerbaikan.style.display = 'block';
+        }
+    };
     
-    buttonGroupBottom.appendChild(newKembaliButton);
-    buttonGroupBottom.appendChild(logoutButton);
+    tabPencapaian.onclick = () => switchTab('pencapaian');
+    tabPerbaikan.onclick = () => switchTab('perbaikan');
+    
+    switchTab('pencapaian');
+}
+
+/**
+ * Fungsi baru untuk menampilkan riwayat pembelian.
+ */
+function showHistory() {
+    const contentPencapaian = document.getElementById('contentPencapaian');
+    
+    // Ganti isi tab saat ini dengan tampilan riwayat
+    contentPencapaian.innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+            <h4 style="margin-top: 0; color: #333; font-size: 16px; font-weight: 600;">Riwayat Pembelian</h4>
+            <div id="history-list" style="margin-top: 15px; background-color: white; padding: 10px; border-radius: 8px;">
+                <p style="color: #007bff;"><i class="fas fa-spinner fa-spin"></i> Memuat riwayat...</p>
+            </div>
+            <button onclick="showProfil()" style="margin-top: 20px; padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                Kembali ke Profil
+            </button>
+        </div>
+    `;
+    
+    // Pastikan tab "Umum" tetap aktif secara visual
+    document.getElementById('tabPencapaian').classList.add('active');
+    document.getElementById('tabPerbaikan').classList.remove('active');
+
+    // Ambil data transaksi dari Firebase
+    db.ref(`transactions/${localUser.ID}`).orderByChild('timestamp').limitToLast(20).once('value')
+        .then(snapshot => {
+            const historyListEl = document.getElementById('history-list');
+            historyListEl.innerHTML = ''; 
+            const transactions = [];
+            snapshot.forEach(childSnapshot => {
+                transactions.push(childSnapshot.val());
+            });
+            
+            if (transactions.length === 0) {
+                historyListEl.innerHTML = '<p style="color: #666; font-style: italic;">Belum ada riwayat pembelian.</p>';
+                return;
+            }
+
+            // Membalikkan urutan untuk menampilkan yang terbaru di atas
+            transactions.reverse(); 
+
+            transactions.forEach(tx => {
+                const date = new Date(tx.timestamp).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+                const txItem = document.createElement('div');
+                txItem.style.cssText = `
+                    padding: 10px 0;
+                    border-bottom: 1px solid #eee;
+                    text-align: left;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                `;
+                txItem.innerHTML = `
+                    <div>
+                        <strong style="color: ${tx.status === 'Success' ? '#28a745' : '#f44336'};">${tx.productName}</strong><br>
+                        <span style="font-size: 12px; color: #666;">${date} | ID: ${tx.transactionID.substring(0, 8)}...</span><br>
+                        <span style="font-size: 14px; font-weight: 500;">Dipotong: -${tx.amount.toLocaleString('id-ID')} Poin</span>
+                    </div>
+                    <i class="fas fa-chevron-right" style="font-size: 12px; color: #999;"></i>
+                `;
+                txItem.onclick = () => {
+                    // Menampilkan alert detail transaksi
+                    alert(`Detail Transaksi:\nID: ${tx.transactionID}\nProduk: ${tx.productName}\nJumlah Poin: ${tx.amount.toLocaleString('id-ID')}\nStatus: ${tx.status}\nTanggal: ${date}\nAlamat Kirim: ${tx.deliveryAddress}`);
+                };
+                historyListEl.appendChild(txItem);
+            });
+        })
+        .catch(error => {
+            document.getElementById('history-list').innerHTML = `<p style="color: red;">Gagal memuat riwayat: ${error.message}</p>`;
+        });
 }
 
 function showEditProfil() {
     hideAllContainers();
     const editContainer = document.getElementById('editprofil-container');
-    editContainer.style.display = 'flex';
+    editContainer.style.display = 'flex'; 
+
+    const currentUsername = localUser.Username || '';
+    const currentNama = localUser.Nama || '';
+    const currentNomorHP = localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP; 
+    const currentAlamat = localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat; 
+    const currentFoto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
     
     editContainer.style.position = 'fixed';
     editContainer.style.top = '0';
     editContainer.style.left = '0';
     editContainer.style.width = '100%';
     editContainer.style.height = '100%';
-    editContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
     editContainer.style.zIndex = '200003';
-    editContainer.style.justifyContent = 'center';
-    editContainer.style.alignItems = 'center';
-    editContainer.style.padding = '20px';
-    
-    const currentUsername = localUser.Username || '';
-    const currentNama = localUser.Nama || '';
-    const currentNomorHP = localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP;
-    const currentAlamat = localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat;
-    
+    editContainer.style.padding = '0';
+    editContainer.style.backgroundColor = '#f0f2f5'; 
+    editContainer.style.alignItems = 'flex-start'; 
+    editContainer.style.overflowY = 'auto'; 
+
     editContainer.innerHTML = `
         <div class="auth-card">
-            <h2>Edit Profil</h2>
+            
+            <div class="edit-header-nav">
+                <i class="fas fa-arrow-left" onclick="showProfil()"></i>
+                <h3>Edit Profil</h3>
+                <i class="fas fa-question-circle"></i>
+            </div>
+            
+            <div class="edit-profile-photo-section">
+                <img id="editFotoProfil" class="edit-profile-photo" src="${currentFoto}" alt="Foto Profil">
+                <div class="change-photo-text" onclick="alert('Fitur ganti foto belum tersedia.')">Ubah foto profil</div>
+            </div>
+
             <form id="editProfilForm">
-                <input type="text" id="editUsername" placeholder="Username" value="${currentUsername}" required>
-                <input type="text" id="editNama" placeholder="Nama Lengkap" value="${currentNama}" required>
-                <input type="text" id="editNomorHP" placeholder="Nomor HP" value="${currentNomorHP}" required>
-                <textarea id="editAlamat" placeholder="Alamat Pengiriman" rows="3" required>${currentAlamat}</textarea>
-                <input type="password" id="editPassword" placeholder="Password Baru (kosongkan jika tidak ingin ganti)">
+                <div class="edit-form-section">
+                    <h4>Informasi Akun</h4>
+                    <div class="form-group">
+                        <label for="editUsername">Username</label>
+                        <input type="text" id="editUsername" placeholder="Username" value="${currentUsername}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editNama">Nama Lengkap</label>
+                        <input type="text" id="editNama" placeholder="Nama Lengkap" value="${currentNama}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPassword">Password Baru (Kosongkan jika tidak ingin ganti)</label>
+                        <input type="password" id="editPassword" placeholder="Password Baru">
+                    </div>
+                </div>
+
+                <div class="edit-form-section">
+                    <h4>Informasi Kontak & Pengiriman</h4>
+                    <div class="form-group">
+                        <label for="editNomorHP">Nomor HP</label>
+                        <input type="text" id="editNomorHP" placeholder="Nomor HP" value="${currentNomorHP}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAlamat">Alamat Pengiriman</label>
+                        <textarea id="editAlamat" placeholder="Alamat Pengiriman" rows="3" required>${currentAlamat}</textarea>
+                    </div>
+                </div>
+
                 <button type="submit">Simpan Perubahan</button>
-                <div id="editStatus" class="auth-status"></div>
+                <div id="editStatus" class="auth-status" style="margin-bottom: 10px; margin-top: 0;"></div>
             </form>
-            <button onclick="showProfil()" class="btn-kembali" style="margin-top: 10px; background-color: #f44336;">Batal</button>
+            
+            <div class="edit-footer-buttons" style="padding-bottom: 20px;">
+                <button onclick="showProfil()" class="btn-batal">Batal</button>
+               
+            </div>
         </div>
     `;
     document.getElementById('editProfilForm').addEventListener('submit', function(e) {
@@ -1392,12 +2055,121 @@ function updateProfile() {
 }
 
 
+/**
+ * Fungsi baru: Log transaksi pembelian ke database.
+ */
+function logPurchaseToDB(productName, amount, newPoin) {
+    const userID = localUser.ID;
+    if (!userID) return; 
+
+    // Membuat ID transaksi baru
+    const transactionRef = db.ref(`transactions/${userID}`).push();
+    const transactionID = transactionRef.key;
+    const timestamp = new Date().toISOString();
+    
+    const transactionData = {
+        transactionID: transactionID,
+        userID: userID,
+        productName: productName,
+        amount: amount,
+        timestamp: timestamp,
+        status: 'Success',
+        initialPoin: localUser.Poin + amount, 
+        finalPoin: newPoin,
+        deliveryAddress: localUser.Alamat,
+        deliveryContact: localUser.NomorHP
+    };
+
+    // Menyimpan data transaksi
+    transactionRef.set(transactionData)
+        .then(() => {
+            console.log("Transaction logged successfully with ID:", transactionID);
+        })
+        .catch(error => {
+            console.error("Failed to log transaction:", error);
+        });
+        
+    return transactionData;
+}
+
+/**
+ * Fungsi baru: Menghasilkan HTML untuk struk pembelian (gaya KFC).
+ */
+function generateReceiptHTML(txData) {
+    const date = new Date(txData.timestamp);
+    const dateString = date.toLocaleString('id-ID', { dateStyle: 'medium' });
+    const timeString = date.toLocaleString('id-ID', { timeStyle: 'short' });
+    const totalPoin = txData.amount.toLocaleString('id-ID');
+
+    // Menggunakan font monospace untuk tampilan struk
+    return `
+        <div style="font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #333; line-height: 1.4;">
+            <h3 style="text-align: center; margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">NASUKA FOODS</h3>
+            <div style="text-align: center; margin-bottom: 15px;">Pembayaran Poin</div>
+            <div style="border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 10px 0; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>TGL/JAM:</span>
+                    <span>${dateString} ${timeString}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>TRX ID:</span>
+                    <span>${txData.transactionID.substring(0, 15)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>PELANGGAN:</span>
+                    <span>${localUser.Nama}</span>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">
+                    <span>PRODUK</span>
+                    <span>POIN</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>1 x ${txData.productName}</span>
+                    <span>${totalPoin}</span>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed #333; padding-top: 10px;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px;">
+                    <span>TOTAL BAYAR:</span>
+                    <span style="color: #f44336;">${totalPoin} Poin</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px; border-top: 1px dashed #333; padding-top: 10px;">
+                <div style="font-weight: bold;">SISA POIN ANDA:</div>
+                <div style="font-size: 18px; color: #007bff; text-align: right; margin-top: 5px;">
+                    ${txData.finalPoin.toLocaleString('id-ID')} Poin
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px; font-size: 12px; font-style: italic;">
+                Terima kasih telah berbelanja! <br> Pesanan akan dikirim ke: <br> ${txData.deliveryAddress}
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Fungsi baru: Menyembunyikan struk dan kembali ke Home.
+ */
+function hideReceiptAndShowHome() {
+    document.getElementById('receipt-popup').style.display = 'none';
+    showHome();
+}
+
+/**
+ * Fungsi yang Diperbarui: Proses pembayaran Poin.
+ */
 function processPoinPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
     
     if (localUser.Poin < amount) {
-        statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Poin Anda (${(localUser.Poin || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')} Poin).</span>`;
+        statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Poin Anda (${(localUser.Poin || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')} Poin).</div>`;
         return;
     }
     
@@ -1405,8 +2177,9 @@ function processPoinPayment(amount, productName) {
         return;
     }
     
-    const newPoin = localUser.Poin - amount;
-    statusDiv.innerHTML = `<span style="color: orange; display: block; text-align: center;">Memproses pembelian...</span>`;
+    const initialPoin = localUser.Poin;
+    const newPoin = initialPoin - amount;
+    statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
     
     db.ref(`users/${localUser.ID}`).update({ Poin: newPoin })
         .then(() => {
@@ -1414,24 +2187,29 @@ function processPoinPayment(amount, productName) {
             localStorage.setItem("Poin", newPoin);
             updatePoinDisplay();
             
+            // 1. Log transaksi dan dapatkan data yang disimpan
+            const transactionData = logPurchaseToDB(productName, amount, newPoin);
+            
             statusDiv.innerHTML = `
-                <span style="color: green; display: block; text-align: center; font-weight: bold;">
-                    Pembelian "${productName}" Berhasil! ✅
-                </span>
-                <span style="display: block; text-align: center; margin-top: 10px;">
-                    Poin Anda sekarang: ${newPoin.toLocaleString('id-ID')}.
-                </span>
-                <span style="display: block; text-align: center; margin-top: 10px; font-style: italic;">
-                    Pesanan akan segera diproses dan dikirim ke alamat Anda: ${localUser.Alamat}.
-                </span>
+                <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
+                    Pembelian Berhasil! ✅ Menampilkan struk...
+                </div>
             `;
-            setTimeout(showHome, 5000); 
+            
+            // 2. Tampilkan Struk
+            document.getElementById('receipt-content').innerHTML = generateReceiptHTML(transactionData);
+            document.getElementById('payment-container').style.display = 'none';
+            document.getElementById('receipt-popup').style.display = 'flex';
+
         })
         .catch(error => {
-            statusDiv.innerHTML = `<span style="color: red; display: block; text-align: center;">Pembelian gagal. Silakan coba lagi.</span>`;
+            statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Silakan coba lagi.</div>`;
         });
 }
 
+/**
+ * Fungsi yang Diperbarui: showPayment memanggil processPoinPayment
+ */
 function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
     hideAllContainers();
     if (!localStorage.getItem("ID")) {
@@ -1439,90 +2217,86 @@ function showPayment(productName, productDescription, productPrice, productImage
         showLogin();
         return;
     }
-    const userName = localUser.Nama || "Nama belum di setting";
-    const userAddress = localUser.Alamat || "Alamat pengantaran belum di seting";
-    const productPriceInPoin = productPrice; 
-    const paymentContainer = document.getElementById('payment-container');
-    paymentContainer.style.display = 'flex';
-    
-    let sliderHtml = '';
-    if (productImageUrls && productImageUrls.length > 0) {
-        sliderHtml = `
-            <div class="product-image-slider">
-                <div class="slider-wrapper" id="productImageSliderWrapper">
-                    ${productImageUrls.map(url => `<div class="slider-item"><img src="${url}" alt="${productName}"></div>`).join('')}
-                </div>
-                <div class="slider-nav">
-                    <button onclick="prevSlide()">&lt;</button>
-                    <button onclick="nextSlide()">&gt;</button>
-                </div>
-                <div class="slider-dots" id="sliderDots">
-                    ${productImageUrls.map((_, index) => `<span class="slider-dot" onclick="currentSlide(${index})"></span>`).join('')}
-                </div>
-            </div>
-        `;
+    // Pastikan user sudah setting alamat dan nomor HP
+    if (localUser.Alamat === "Alamat belum diatur" || localUser.NomorHP === "Nomor HP belum diatur") {
+         alert("Mohon lengkapi Alamat Pengiriman dan Nomor HP Anda di menu Edit Profil sebelum melakukan pembelian.");
+         showEditProfil();
+         return;
     }
     
+    const userName = localUser.Nama || "Nama belum di seting";
+    const userAddress = localUser.Alamat || "Alamat pengantaran belum di seting";
+    const userNomorHP = localUser.NomorHP || "Nomor HP belum di seting";
+    const productPriceInPoin = productPrice; 
+    const paymentContainer = document.getElementById('payment-container');
+    
+    paymentContainer.style.display = 'flex';
+    paymentContainer.style.backgroundColor = '#f0f2f5'; 
+
+    const imageUrl = (productImageUrls && productImageUrls.length > 0) ? productImageUrls[0] : 'https://nasukafoods.site/cilokpro.jpg';
+
+
     paymentContainer.innerHTML = `
-        <div class="payment-card">
-            ${sliderHtml}
-            <p><strong>Produk:</strong> ${productName}</p>
-            <p><strong>Deskripsi:</strong> ${productDescription}</p>
-            <p><strong>Harga:</strong> Rp ${Math.round(productPrice).toLocaleString('id-ID')}</p>
-            <p><strong>Bayar dengan poin:</strong> <span style="font-weight:; color: black;">${productPriceInPoin.toLocaleString('id-ID')} Poin</span></p>
-            <p><strong>Keterangan:</strong> ${manualDescription}</p>
-            <hr>
-            <h3>Informasi Pengiriman</h3>
-            <p><strong>Nama:</strong> ${userName}</p>
-            <p><strong>Alamat:</strong> ${userAddress}</p>
-            <p><strong>Poin Anda:</strong> <span style="font-weight: bold; color: black; text-shadow: 1px 1px 1px #333;">${(localUser.Poin || 0).toLocaleString('id-ID')} Poin</span></p>
-            <hr>
-            <div class="payment-options">
-                <button onclick="processPoinPayment(${productPriceInPoin}, '${productName}')" style="background-color: #ff9800; color: white;">Bayar dengan Poin</button>
+        <div class="payment-card-modified">
+            
+            <div class="payment-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Detail Produk</h3>
             </div>
-            <button onclick="showHome()" class="btn-kembali">Kembali ke Beranda</button>
-            <div id="payment-status" style="margin-top: 15px;"></div>
+            
+            <div class="product-image-container">
+                <img src="${imageUrl}" alt="${productName}">
+            </div>
+
+            <div class="product-details-section">
+                <h4>${productName}</h4>
+                <div class="product-price-display">
+                    Harga: ${productPriceInPoin.toLocaleString('id-ID')} Poin 
+                </div>
+                <p class="product-description-text">
+                    ${productDescription}
+                </p>
+                <p class="product-keterangan-manual">
+                    ${manualDescription}
+                </p>
+            </div>
+
+            <div class="payment-info-section">
+                <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #333;">Info Pembeli & Pengiriman</div>
+                
+                <div class="info-row">
+                    <span class="info-label">Pembeli</span>
+                    <span class="info-value">${userName}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nomor HP</span>
+                    <span class="info-value">${userNomorHP}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Alamat Kirim</span>
+                    <span class="info-value address">${userAddress}</span>
+                </div>
+                <div class="info-row Poin-row">
+                    <span class="info-label">Poin Anda</span>
+                    <span class="info-value" style="color: #007bff;">${(localUser.Poin || 0).toLocaleString('id-ID')} Poin</span>
+                </div>
+                <div class="info-row total-bayar-row">
+                    <span class="info-label" style="color: #333;">Total Bayar (Poin)</span>
+                    <span class="info-value">${productPriceInPoin.toLocaleString('id-ID')} Poin</span>
+                </div>
+            </div>
+            
+            <div id="payment-status" style="margin: 0 15px 15px 15px;"></div>
+
+            <div class="payment-action-section">
+                <button class="btn-bayar-Poin" onclick="processPoinPayment(${productPriceInPoin}, '${productName}')">
+                    Bayar ${productPriceInPoin.toLocaleString('id-ID')} Poin
+                </button>
+            </div>
+            
         </div>
     `;
     
-    if (productImageUrls && productImageUrls.length > 0) {
-        initializeSlider(productImageUrls.length);
-    }
-}
-
-
-let currentSlideIndex = 0;
-let totalSlides = 0;
-function initializeSlider(numSlides) {
-    totalSlides = numSlides;
-    currentSlideIndex = 0;
-    updateSlider();
-}
-function updateSlider() {
-    const sliderWrapper = document.getElementById('productImageSliderWrapper');
-    const sliderDotsContainer = document.getElementById('sliderDots');
-    if (sliderWrapper && sliderDotsContainer) {
-        sliderWrapper.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
-        const dots = sliderDotsContainer.children;
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].classList.remove('active');
-        }
-        if (dots[currentSlideIndex]) {
-            dots[currentSlideIndex].classList.add('active');
-        }
-    }
-}
-function nextSlide() {
-    currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
-    updateSlider();
-}
-function prevSlide() {
-    currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
-    updateSlider();
-}
-function currentSlide(index) {
-    currentSlideIndex = index;
-    updateSlider();
 }
 
 
@@ -1540,6 +2314,3 @@ $(document).ready(function() {
     showHome(); 
 });
 </script>
-    
-</body>
-</html>
