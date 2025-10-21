@@ -693,6 +693,8 @@
             font-size: 24px;
             resize: vertical;
         }
+        
+        /* --- START: Modified Auth Styles to match Image --- */
         .auth-container {
             display: none;
             position: fixed;
@@ -700,77 +702,127 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: white; /* Changed to white or a light color */
             z-index: 200001;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start; /* Start from the top */
+            padding: 0; 
             box-sizing: border-box;
+            overflow-y: auto;
         }
         .auth-card {
             background: white;
-            padding: 40px;
-            border-radius: 15px;
+            padding: 20px 20px 40px 20px; /* Reduced vertical padding, increased horizontal */
+            border-radius: 0; /* No border-radius for full screen container */
             width: 100%;
-            max-width: 500px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 450px; /* Max width to contain on larger screens */
+            box-shadow: none; /* No shadow */
+            text-align: left; /* Aligned left for inputs/labels */
+            min-height: 100vh;
+            margin: 0 auto;
+        }
+        
+        .auth-logo-section {
             text-align: center;
+            padding: 30px 0 10px 0;
         }
+        
+        .auth-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 3px solid #007bff;
+            margin-bottom: 10px;
+        }
+
         .auth-card h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
+            font-size: 24px;
+            margin-bottom: 30px; /* Increased margin */
             color: #333;
+            text-align: center;
+            font-weight: 700;
         }
+        
+        .auth-input-group {
+            margin-bottom: 20px; /* Increased space between inputs */
+        }
+        
+        .auth-input-group label {
+             display: block;
+             font-size: 14px;
+             color: #666;
+             margin-bottom: 5px;
+             font-weight: 500;
+        }
+        
         .auth-card input[type="text"],
         .auth-card input[type="password"] {
             width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
+            padding: 12px; /* Slightly smaller padding */
+            margin-bottom: 0; /* Handled by auth-input-group */
+            border: 1px solid #ccc; /* Thinner, lighter border */
+            border-radius: 6px; /* Smaller radius */
             box-sizing: border-box;
-            font-size: 24px;
+            font-size: 16px; /* Smaller font size */
         }
-        .auth-card button {
+        
+        .auth-card button.btn-primary {
             width: 100%;
-            padding: 15px;
-            background-color: #4CAF50;
+            padding: 12px;
+            background-color: #007bff; /* Primary color */
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 28px;
-            margin-top: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
             transition: background-color 0.3s;
         }
-        .auth-card button:hover {
-            background-color: #45a049;
+        
+        .auth-card button.btn-primary:hover {
+            background-color: #0056b3;
         }
+        
         .auth-card .link-switch {
             margin-top: 20px;
-            font-size: 20px;
+            font-size: 14px; /* Smaller font size */
+            text-align: center;
         }
         .auth-card .link-switch a {
-            color: #2196F3;
+            color: #007bff; /* Primary link color */
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
         }
         .auth-status {
             margin-top: 15px;
             padding: 10px;
             border-radius: 5px;
-            font-size: 22px;
+            font-size: 14px; /* Smaller font size */
+            text-align: center;
         }
-        .auth-status.error {
-            background-color: #fdd;
-            color: red;
-            border: 1px solid red;
+        
+        .auth-card button.btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background-color: white; /* Secondary style */
+            color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background-color 0.3s;
         }
-        .auth-status.success {
-            background-color: #dfd;
-            color: green;
-            border: 1px solid green;
+        
+        .auth-card button.btn-secondary:hover {
+            background-color: #e6f7ff;
         }
+        /* --- END: Modified Auth Styles to match Image --- */
+
+
         
         #profil-container {
             display: none;
@@ -1520,8 +1572,8 @@
 
         <div class="banner">
             <div class="banner-text">
-                <strong>Reward</strong>
-                <br>Nasuka Wireless
+                <strong>Promo Hari Ini</strong>
+                <br>Harga khusus party
             </div>
             <div class="banner-button">
                 cek <i class="fas fa-chevron-right"></i>
@@ -1652,30 +1704,51 @@
     
     <div id="login-container" class="auth-container">
         <div class="auth-card">
-            <h2>Masuk</h2>
+            <div class="auth-logo-section">
+                <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="auth-logo">
+            </div>
+            <h2>Masuk Akun Anda</h2>
             <form id="loginForm">
-                <input type="text" id="loginUsername" placeholder="Username" required>
-                <input type="password" id="loginPassword" placeholder="Password" required>
-                <button type="submit">Login</button>
+                <div class="auth-input-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" placeholder="Masukkan Username Anda" required>
+                </div>
+                <div class="auth-input-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Masukkan Password Anda" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
                 <div id="loginStatus" class="auth-status"></div>
             </form>
             <div class="link-switch">Belum punya akun? <a href="#" onclick="showSignup()">Daftar di sini</a></div>
-            <button onclick="showHome()" class="btn-kembali" style="margin-top: 10px; background-color: #f44336;">Batal</button>
+            <button onclick="showHome()" class="btn-secondary">Batal / Kembali ke Beranda</button>
         </div>
     </div>
 
     <div id="signup-container" class="auth-container">
         <div class="auth-card">
+            <div class="auth-logo-section">
+                <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="auth-logo">
+            </div>
             <h2>Daftar Akun Baru</h2>
             <form id="signupForm">
-                <input type="text" id="signupUsername" placeholder="Username" required>
-                <input type="text" id="signupNama" placeholder="Nama Lengkap" required>
-                <input type="password" id="signupPassword" placeholder="Password" required>
-                <button type="submit">Daftar</button>
+                <div class="auth-input-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" id="signupUsername" placeholder="Buat Username" required>
+                </div>
+                <div class="auth-input-group">
+                    <label for="signupNama">Nama Lengkap</label>
+                    <input type="text" id="signupNama" placeholder="Nama Lengkap Anda" required>
+                </div>
+                <div class="auth-input-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Buat Password" required>
+                </div>
+                <button type="submit" class="btn-primary">Daftar</button>
                 <div id="signupStatus" class="auth-status"></div>
             </form>
             <div class="link-switch">Sudah punya akun? <a href="#" onclick="showLogin()">Masuk di sini</a></div>
-            <button onclick="showHome()" class="btn-kembali" style="margin-top: 10px; background-color: #f44336;">Batal</button>
+            <button onclick="showHome()" class="btn-secondary">Batal / Kembali ke Beranda</button>
         </div>
     </div>
 
