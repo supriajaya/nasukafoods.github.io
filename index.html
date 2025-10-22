@@ -1633,7 +1633,7 @@
                 <span class="balance-amount" id="SaldoAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             <div class="all-accounts">
-                <span>(segera)</span>
+                <span>Tarik dana</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
@@ -1671,7 +1671,7 @@
         <div class="banner">
             <div class="banner-text">
                 <strong>Promo Hari Ini</strong>
-                <br>Harga khusus warga bojongloa kidul
+                <br>Harga khusus warga cibaduyut
             </div>
             <div class="banner-button">
                 cek <i class="fas fa-chevron-right"></i>
@@ -1726,7 +1726,7 @@
                 <div class="other-feature-icon lifestyle-icon">
                     <i class="fas fa-shopping-bag"></i>
                 </div>
-                <span>Lifestyle</span>
+                <span>Kado</span>
             </div>
             
             <a href="https://nasukafoods.site/test-giveaway.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
@@ -1775,7 +1775,7 @@
             </div>
             <div class="nav-item">
                 <i class="fas fa-list-alt"></i>
-                <span>Aktivitas</span>
+                <span>Kontak Admin</span>
             </div>
             <div class="nav-item" onclick="localStorage.getItem('ID') ? showProfil() : showLogin()">
                 <i class="fas fa-user-circle"></i>
@@ -2036,7 +2036,7 @@
             <div class="download-description">
                 <h4>Deskripsi Aplikasi</h4>
                 <p>
-                    Aplikasi resmi Nasuka Foods hadir untuk memudahkan Anda memesan produk favorit kami, mengumpulkan poin, dan mendapatkan berbagai promo eksklusif. Rasakan pengalaman berbelanja Cilok dan menu lainnya dengan lebih cepat dan praktis!
+                    Aplikasi resmi Nasuka Foods hadir untuk memudahkan Anda memesan produk favorit kami, mengumpulkan Poin, dan mendapatkan berbagai promo eksklusif. Rasakan pengalaman berbelanja Cilok dan menu lainnya dengan lebih cepat dan praktis!
                 </p>
                 <p>
                     <strong>Fitur Unggulan:</strong>
@@ -2078,15 +2078,16 @@
                 <div class="qris-logo-section">
                     <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="qris-logo">
                     <div class="qris-title">NASUKA FOODS</div>
-                    <div class="qris-subtitle">Quick Respon Indonesian Standard</div>
+                    <div class="qris-subtitle">Cibaduyut - Kota Bandung</div>
                 </div>
                 
                 <div class="qris-code-box">
                     <img src="https://nasukafoods.site/aqris.jpg" alt="QRIS Code Placeholder" class="qris-code-image" id="qrisCodeImage">
                     <div class="qris-info">
-                        <p style="text-align: center; font-weight: 700; color: #007bff; margin-bottom: 10px;">Powered BANK BRI</p>
+                        <p style="text-align: center; font-weight: 700; color: #007bff; margin-bottom: 10px;">QUICK RESPON INDONESIAN STANDARD</p>
                         <p><strong>Merchant ID:</strong> ID2025NF001</p>
-                       
+                        <p><strong>Powered:</strong> BANK BRI</p>
+                    </div>
                 </div>
                 
                 <div class="qris-promo-section">
@@ -2097,16 +2098,16 @@
                     <h4>Cara Pembayaran</h4>
                     <ul>
                         <li>Pastikan Anda telah mencatat total nominal belanja Anda.</li>
-                        <li>Buka aplikasi Bank / E-Wallet Anda, Gopay, Dana, OVO, dll yang mendukung QRIS.</li>
-                        <li>Pilih menu SCAN atau Pindai QRIS.</li>
-                    
-                        <li>Masukkan nominal yang sesuai dengan total belanja Anda.</li>
+                        <li>Buka aplikasi Bank / E-Wallet Anda, Gopay, Dana, OVO, dll yang mendukung QRIS</li>
+                       
+                        <li>Pindai kode QRIS di atas</li>
+                        <li>Masukkan nominal yang sesuai dengan total belanja Anda</li>
                         <li>Selesaikan pembayaran, dan konfirmasi ke admin kami.</li>
                     </ul>
                 </div>
                 
                 <div class="qris-warning">
-                    <i class="fas fa-exclamation-triangle"></i> Periksa kembali Pastikan nama Merchant yang muncul adalah NASUKA FOODS
+                    <i class="fas fa-exclamation-triangle"></i> Periksa kembali! Pastikan nama Merchant yang muncul adalah NASUKA FOODS
                 </div>
                 
             </div>
@@ -2123,8 +2124,8 @@
             <div class="leaderboard-content-section">
                 <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px;">
                     <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard Wings" style="width: 50px; height: 50px; margin-bottom: 10px;">
-                    <p style="font-size: 16px; font-weight: 600; color: #007bff;">Peringkat Pelanggan Istimewa</p>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">King & Queen <p>Best sultan cibaduyut raya</p></p>
+                    <p style="font-size: 16px; font-weight: 600; color: #007bff;">Peringkat 5 Besar Pelanggan Istimewa</p>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;"> Best Sultan Cibaduyut!</p>
                 </div>
 
                 <div id="leaderboard-list">
@@ -2376,11 +2377,11 @@ function showLeaderboard() {
     if (leaderboardListEl) {
         // Contoh data Leaderboard (bisa diganti dengan data dari Firebase di masa depan)
         const mockLeaderboardData = [
-            { rank: 1, name: "Setya Ningsih", score: 980900 },
-            { rank: 2, name: "Anip", score: 750000 },
-            { rank: 3, name: "Salwa Cute", score: 585000 },
-            { rank: 4, name: "Farrah", score: 187000 },
-            { rank: 5, name: "Norze", score: 84000 },
+            { rank: 1, name: "Setya Ningsih", score: 2650900 },
+            { rank: 2, name: "Anipkah", score: 1765900 },
+            { rank: 3, name: "Salwa Aqila", score: 983000 },
+            { rank: 4, name: "Apri Wijaya", score: 835000 },
+            { rank: 5, name: "Nanda", score: 434500 },
         ];
 
         let listHTML = '';
@@ -2397,7 +2398,7 @@ function showLeaderboard() {
         if (mockLeaderboardData.length > 0) {
             leaderboardListEl.innerHTML = listHTML;
         } else {
-             leaderboardListEl.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">Belum ada data Leaderboard.</p>';
+             leaderboardListEl.innerHTML = '<p style="text-align: center; color: black; margin-top: 20px;">Belum ada data Leaderboard.</p>';
         }
     }
 }
