@@ -30,7 +30,7 @@
             position: relative;
         }
         
-        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #qris-container { /* Tambahkan #qris-container di sini */
+        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container { /* Tambahkan #qris-container dan #leaderboard-container di sini */
             display: none;
             position: fixed;
             top: 0;
@@ -130,7 +130,7 @@
             cursor: pointer;
         }
         
-        .download-header, .qris-header { /* Menambahkan .qris-header */
+        .download-header, .qris-header, .leaderboard-header { /* Menambahkan .qris-header dan .leaderboard-header */
             display: flex;
             align-items: center;
             padding: 15px;
@@ -144,7 +144,7 @@
             font-weight: 600;
         }
         
-        .download-header i, .qris-header i { /* Menambahkan .qris-header i */
+        .download-header i, .qris-header i, .leaderboard-header i { /* Menambahkan .qris-header i dan .leaderboard-header i */
             font-size: 24px;
             margin-right: 15px;
             cursor: pointer;
@@ -514,6 +514,14 @@
         .feature-icon-circle i {
             font-size: 24px;
         }
+        
+        /* Gaya untuk gambar Leaderboard */
+        .leaderboard-icon-img {
+            width: 25px; /* Sesuaikan ukuran gambar */
+            height: 25px;
+            object-fit: contain;
+            /* Tambahan untuk animasi jika GIF */
+        }
 
         .banner {
             margin: 0 15px 20px 15px;
@@ -661,6 +669,13 @@
         .nav-item i {
             font-size: 20px;
             margin-bottom: 2px;
+        }
+        
+        .nav-item .leaderboard-img {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 2px;
+            object-fit: contain;
         }
 
         .qris-button {
@@ -1368,7 +1383,7 @@
             max-width: 60%;
         }
 
-        .Poin-row {
+        .Saldo-row {
             font-size: 16px;
             font-weight: 700;
             color: #007bff; 
@@ -1394,7 +1409,7 @@
             z-index: 10;
         }
 
-        .btn-bayar-Poin {
+        .btn-bayar-Saldo {
             width: 100%;
             padding: 15px;
             background-color: #007bff; 
@@ -1407,7 +1422,7 @@
             transition: background-color 0.3s;
         }
 
-        .btn-bayar-Poin:hover {
+        .btn-bayar-Saldo:hover {
             background-color: #0056b3;
         }
 
@@ -1510,6 +1525,89 @@
             font-size: 12px;
             color: #666;
         }
+        
+        /* Gaya untuk Leaderboard Container */
+        #leaderboard-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f2f5;
+            z-index: 200006;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .leaderboard-card-modified {
+            background: white;
+            padding: 0;
+            border-radius: 0;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            box-shadow: none;
+            text-align: left;
+            min-height: 100vh;
+        }
+        
+        .leaderboard-content-section {
+            padding: 15px;
+            background-color: #f0f2f5; 
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+        }
+
+        .leaderboard-rank {
+            font-weight: 700;
+            color: #007bff;
+            width: 30px;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        .leaderboard-name {
+            flex-grow: 1;
+            font-weight: 500;
+            color: #333;
+            padding-left: 10px;
+        }
+
+        .leaderboard-score {
+            font-weight: 700;
+            color: #ffc107;
+        }
+
+        .leaderboard-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            flex-grow: 1;
+            text-align: center;
+            padding-right: 24px;
+        }
+
+        .leaderboard-header i {
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        
     </style>
 </head>
 <body>
@@ -1530,12 +1628,12 @@
         </div>
 
         <div class="balance-card">
-            <div class="balance-title">Poin</div>
+            <div class="balance-title">Saldo</div>
             <div class="balance-details">
-                <span class="balance-amount" id="PoinAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
+                <span class="balance-amount" id="SaldoAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             <div class="all-accounts">
-                <span>Fitur baru (segera)</span>
+                <span>(segera)</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
@@ -1559,7 +1657,7 @@
                 <div class="feature-icon-circle pdam-icon">
                     <i class="fas fa-plus"></i> 
                 </div>
-                <span>Poin</span>
+                <span>Saldo</span>
             </a>
             
             <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
@@ -1573,7 +1671,7 @@
         <div class="banner">
             <div class="banner-text">
                 <strong>Promo Hari Ini</strong>
-                <br>Harga khusus party
+                <br>Harga khusus warga bojongloa kidul
             </div>
             <div class="banner-button">
                 cek <i class="fas fa-chevron-right"></i>
@@ -1586,29 +1684,31 @@
         </div>
 
         <div class="other-features">
-            <div class="other-feature-item" onclick="showPayment('Produk 1: Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih.', 900, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 10 biji. Level pedas: Sedang.')">
+            <div class="other-feature-item" onclick="showPayment(' Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih.', 900, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 1 biji.')">
                 <div class="other-feature-icon top-up-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="900 Poin Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="cilok 1" class="product-icon-img">
                 </div>
-                <span>900 Poin</span>
+                <span>Rp 900</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Produk 2: Paket Hemat 1', 'Paket hemat cilok dan tahu bakso.', 44000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 30 cilok, 10 tahu bakso. Level pedas: Standar.')">
+            
+            
+            <div class="other-feature-item" onclick="showPayment('Paket Hemat 1', 'Paket hemat diskon 20%.', 44000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 50 cilok.')">
                 <div class="other-feature-icon brizzi-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="44.000 Poin Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Paket hemat 1" class="product-icon-img">
                 </div>
-                <span>44.000 Poin</span>
+                <span>Rp 44.000</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Produk 3: Paket Keluarga', 'Porsi besar untuk acara keluarga.', 87000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 100 cilok, saus extra pedas. Promo terbatas!')">
+            <div class="other-feature-item" onclick="showPayment('Cilok Premium: Paket Keluarga', 'Porsi besar untuk acara keluarga.', 87000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 100 cilok, saus extra pedas. Promo terbatas!')">
                 <div class="other-feature-icon tagihan-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="87.000 Poin Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Paket premium" class="product-icon-img">
                 </div>
-                <span>87.000 Poin</span>
+                <span>Rp 87.000</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Produk 4: Premium Frozen', 'Cilok frozen siap masak untuk stok di rumah.', 850000, ['https://nasukafoods.site/cilokpro.jpg'], 'Stok 1 bulan. Gratis ongkir Jawa.')">
+            <div class="other-feature-item" onclick="showPayment('Paket Premium Sultan', 'Cilok frozen siap masak untuk stok di rumah.', 850000, ['https://nasukafoods.site/cilokpro.jpg'], 'Stok 1 bulan. Gratis ongkos kirim seluruh kota bandung.')">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="850.000 Poin Product" class="product-icon-img">
+                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Sultan" class="product-icon-img">
                 </div>
-                <span>850.000 Poin</span>
+                <span>Rp 850.000</span>
             </div>
             </div>
             
@@ -1665,12 +1765,12 @@
         </div>
 
         <div class="bottom-nav">
-            <div class="nav-item active" onclick="showHome()">
+            <div class="nav-item active" id="nav-home" onclick="showHome()">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </div>
-            <div class="nav-item">
-                <i class="fas fa-redo"></i>
+            <div class="nav-item" id="nav-leaderboard" onclick="showLeaderboard()">
+                <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard" class="leaderboard-img">
                 <span>Leaderboard</span>
             </div>
             <div class="nav-item">
@@ -1776,8 +1876,8 @@
             </div>
             
             <div class="rating-section" style="padding: 10px 15px; margin-bottom: 5px; background-color: #fff8e1; border-radius: 8px; border: 1px solid #ffecb3;">
-                <div style="font-size: 14px; font-weight: 600; color: #ff9800;">Poin Anda</div>
-                <div style="font-size: 20px; font-weight: 700; color: #333;" id="profilPoinDisplay">...</div>
+                <div style="font-size: 14px; font-weight: 600; color: #ff9800;">Saldo Anda</div>
+                <div style="font-size: 20px; font-weight: 700; color: #333;" id="profilSaldoDisplay">...</div>
             </div>
 
 
@@ -1936,13 +2036,13 @@
             <div class="download-description">
                 <h4>Deskripsi Aplikasi</h4>
                 <p>
-                    Aplikasi resmi Nasuka Foods hadir untuk memudahkan Anda memesan produk favorit kami, mengumpulkan Poin, dan mendapatkan berbagai promo eksklusif. Rasakan pengalaman berbelanja Cilok dan menu lainnya dengan lebih cepat dan praktis!
+                    Aplikasi resmi Nasuka Foods hadir untuk memudahkan Anda memesan produk favorit kami, mengumpulkan Saldo, dan mendapatkan berbagai promo eksklusif. Rasakan pengalaman berbelanja Cilok dan menu lainnya dengan lebih cepat dan praktis!
                 </p>
                 <p>
                     <strong>Fitur Unggulan:</strong>
                     <ul>
                         <li>Pemesanan Cepat dan Aman.</li>
-                        <li>Integrasi Poin Hadiah.</li>
+                        <li>Integrasi Saldo Hadiah.</li>
                        
                         <li>Notifikasi promo terbaru.</li>
                     </ul>
@@ -2014,6 +2114,26 @@
             <div style="height: 20px;"></div> 
         </div>
     </div>
+    
+    <div id="leaderboard-container">
+        <div class="leaderboard-card-modified">
+            <div class="leaderboard-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Leaderboard</h3>
+            </div>
+            <div class="leaderboard-content-section">
+                <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px;">
+                    <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard Wings" style="width: 50px; height: 50px; margin-bottom: 10px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #007bff;">Peringkat Pelanggan Istimewa</p>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">King & Queen <p>Best sultan cibaduyut raya</p></p>
+                </div>
+
+                <div id="leaderboard-list">
+                    <p style="text-align: center; color: #666; margin-top: 20px;">Leaderboard masih kosong.</p>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     
     
@@ -2036,7 +2156,7 @@ const localUser = {
   Username: localStorage.getItem("Username"),
   Nama: localStorage.getItem("Nama"),
   ID: localStorage.getItem("ID"),
-  Poin: parseInt(localStorage.getItem("Poin")) || 0,
+  Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
   Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
   NomorHP: localStorage.getItem("NomorHP") || "Nomor HP belum diatur",
   Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg",
@@ -2047,48 +2167,55 @@ if (localUser.ID) {
     userRef.on('value', (snapshot) => {
       const userData = snapshot.val();
       if (userData !== null) {
-        localUser.Poin = userData.Poin || 0;
+        localUser.Saldo = userData.Saldo || 0;
         localUser.Alamat = userData.Alamat || "Alamat belum diatur";
         localUser.NomorHP = userData.NomorHP || "Nomor HP belum diatur";
         localUser.Foto = userData.Foto || "https://nasukafoods.site/gambarkosong.jpg";
         localUser.Nama = userData.Nama || localUser.Nama;
         
-        localStorage.setItem("Poin", localUser.Poin);
+        localStorage.setItem("Saldo", localUser.Saldo);
         localStorage.setItem("Alamat", localUser.Alamat);
         localStorage.setItem("NomorHP", localUser.NomorHP);
         localStorage.setItem("Foto", localUser.Foto);
         localStorage.setItem("Nama", localUser.Nama);
         
-        updatePoinDisplay();
+        updateSaldoDisplay();
       }
     });
 }
 
 function updateHomeDisplay() {
     const userNameEl = document.getElementById('userNameDisplay');
-    const PoinEl = document.getElementById('PoinAmountDisplay');
+    const SaldoEl = document.getElementById('SaldoAmountDisplay');
     const welcomeEl = document.querySelector('.welcome');
     const isLoggedIn = !!localUser.ID;
+    
+    const navHome = document.getElementById('nav-home');
+    const navLeaderboard = document.getElementById('nav-leaderboard');
+    
+    // Perbarui status active di bottom nav
+    if (navHome) navHome.classList.add('active');
+    if (navLeaderboard) navLeaderboard.classList.remove('active');
 
-    if (!userNameEl || !PoinEl || !welcomeEl) return;
+    if (!userNameEl || !SaldoEl || !welcomeEl) return;
 
     if (isLoggedIn) {
         const displayName = localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username || 'Pengguna';
         
         userNameEl.textContent = displayName;
-        PoinEl.textContent = (localUser.Poin || 0).toLocaleString('id-ID');
+        SaldoEl.textContent = (localUser.Saldo || 0).toLocaleString('id-ID');
         
         welcomeEl.innerHTML = `Selamat Datang,<br><strong>${displayName}!</strong>`;
         
     } else {
         userNameEl.textContent = "Masuk";
-        PoinEl.textContent = "0"; 
+        SaldoEl.textContent = "0"; 
         
         welcomeEl.innerHTML = `Nasuka Foods<br>`; 
     }
 }
 
-function updatePoinDisplay() {
+function updateSaldoDisplay() {
     updateHomeDisplay();
 }
 
@@ -2104,8 +2231,8 @@ function initializeHome() {
     const marqueeEl = document.createElement('marquee');
     marqueeEl.setAttribute('behavior', 'scroll');
     marqueeEl.setAttribute('direction', 'left');
-    marqueeEl.setAttribute('scrollamount', '3'); // Kecepatan scroll
-    marqueeEl.textContent = 'Website sedang dalam pengembangan, beri kami kritik dan saran supaya aplikasi berkerja lebih baik lagi';
+    marqueeEl.setAttribute('scrollamount', '8'); // Kecepatan scroll
+    marqueeEl.textContent = 'Gratis ongkos kirim se cibaduyut raya';
     
     // Mengganti konten <span> dengan elemen <marquee>
     runningTextEl.parentNode.replaceChild(marqueeEl, runningTextEl);
@@ -2159,13 +2286,13 @@ function fetchUserProfileFromDB(userID) {
       localUser.Foto = foto;
       localUser.Alamat = val.Alamat || "Alamat belum diatur";
       localUser.NomorHP = val.NomorHP || "Nomor HP belum diatur";
-      localUser.Poin = val.Poin || 0;
+      localUser.Saldo = val.Saldo || 0;
       
       localStorage.setItem("Nama", nama);
       localStorage.setItem("Foto", foto);
       localStorage.setItem("Alamat", localUser.Alamat);
       localStorage.setItem("NomorHP", localUser.NomorHP);
-      localStorage.setItem("Poin", localUser.Poin);
+      localStorage.setItem("Saldo", localUser.Saldo);
 
       updateProfileDisplay(nama, foto, userID);
     } else {
@@ -2180,7 +2307,7 @@ function fetchUserProfileFromDB(userID) {
 }
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container').forEach(el => { /* Tambahkan #qris-container */
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container').forEach(el => { /* Tambahkan #qris-container dan #leaderboard-container */
         if (el) el.style.display = 'none';
     });
 }
@@ -2219,20 +2346,63 @@ function showDownload() {
     }
 }
 
-// Fungsi showQris() baru
+// Fungsi showQris()
 function showQris() {
     hideAllContainers();
     const qrisContainer = document.getElementById('qris-container');
     if (qrisContainer) {
         qrisContainer.style.display = 'flex'; 
         qrisContainer.scrollTop = 0; 
-        
-        // Catatan: Jika Anda ingin mengganti gambar placeholder QRIS, lakukan di sini
-        // const qrisCodeImage = qrisContainer.querySelector('#qrisCodeImage');
-        // qrisCodeImage.src = 'URL_QRIS_ANDA'; 
     }
 }
-// Akhir fungsi showQris()
+
+// Fungsi showLeaderboard() yang baru
+function showLeaderboard() {
+    hideAllContainers();
+    const leaderboardContainer = document.getElementById('leaderboard-container');
+    const navLeaderboard = document.getElementById('nav-leaderboard');
+    const navHome = document.getElementById('nav-home');
+    
+    if (leaderboardContainer) {
+        leaderboardContainer.style.display = 'flex';
+        leaderboardContainer.scrollTop = 0;
+    }
+    
+    // Atur status active di bottom nav
+    if (navLeaderboard) navLeaderboard.classList.add('active');
+    if (navHome) navHome.classList.remove('active');
+
+    // Logic placeholder untuk Leaderboard
+    const leaderboardListEl = document.getElementById('leaderboard-list');
+    if (leaderboardListEl) {
+        // Contoh data Leaderboard (bisa diganti dengan data dari Firebase di masa depan)
+        const mockLeaderboardData = [
+            { rank: 1, name: "Setya Ningsih", score: 980900 },
+            { rank: 2, name: "Anip", score: 750000 },
+            { rank: 3, name: "Salwa Cute", score: 585000 },
+            { rank: 4, name: "Farrah", score: 187000 },
+            { rank: 5, name: "Norze", score: 84000 },
+        ];
+
+        let listHTML = '';
+        mockLeaderboardData.forEach(item => {
+            listHTML += `
+                <div class="leaderboard-item">
+                    <span class="leaderboard-rank">${item.rank}</span>
+                    <span class="leaderboard-name">${item.name}</span>
+                    <span class="leaderboard-score">Rp ${item.score.toLocaleString('id-ID')}</span>
+                </div>
+            `;
+        });
+        
+        if (mockLeaderboardData.length > 0) {
+            leaderboardListEl.innerHTML = listHTML;
+        } else {
+             leaderboardListEl.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">Belum ada data Leaderboard.</p>';
+        }
+    }
+}
+// Akhir fungsi showLeaderboard()
 
 
 function loginUser() {
@@ -2256,7 +2426,7 @@ function loginUser() {
                     localStorage.setItem("ID", user.ID);
                     localStorage.setItem("Username", user.Username);
                     localStorage.setItem("Nama", user.Nama || 'Tanpa Nama');
-                    localStorage.setItem("Poin", user.Poin || 0);
+                    localStorage.setItem("Saldo", user.Saldo || 0);
                     localStorage.setItem("Foto", user.Foto || "https://nasukafoods.site/gambarkosong.jpg");
                     localStorage.setItem("Alamat", user.Alamat || "Alamat belum diatur");
                     localStorage.setItem("NomorHP", user.NomorHP || "Nomor HP belum diatur");
@@ -2265,7 +2435,7 @@ function loginUser() {
                     localUser.ID = user.ID;
                     localUser.Username = user.Username;
                     localUser.Nama = user.Nama || 'Tanpa Nama';
-                    localUser.Poin = user.Poin || 0;
+                    localUser.Saldo = user.Saldo || 0;
                     localUser.Foto = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
                     localUser.Alamat = user.Alamat || "Alamat belum diatur";
                     localUser.NomorHP = user.NomorHP || "Nomor HP belum diatur";
@@ -2317,7 +2487,7 @@ function signupUser() {
                     Username: username,
                     Nama: nama,
                     Password: password,
-                    Poin: 500,
+                    Saldo: 500,
                     Foto: "https://nasukafoods.site/gambarkosong.jpg",
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
@@ -2329,7 +2499,7 @@ function signupUser() {
                         localStorage.setItem("ID", newUser.ID);
                         localStorage.setItem("Username", newUser.Username);
                         localStorage.setItem("Nama", newUser.Nama);
-                        localStorage.setItem("Poin", newUser.Poin);
+                        localStorage.setItem("Saldo", newUser.Saldo);
                         localStorage.setItem("Foto", newUser.Foto);
                         localStorage.setItem("Alamat", newUser.Alamat);
                         localStorage.setItem("NomorHP", newUser.NomorHP);
@@ -2338,12 +2508,12 @@ function signupUser() {
                         localUser.ID = newUser.ID;
                         localUser.Username = newUser.Username;
                         localUser.Nama = newUser.Nama;
-                        localUser.Poin = newUser.Poin;
+                        localUser.Saldo = newUser.Saldo;
                         localUser.Foto = newUser.Foto;
                         localUser.Alamat = newUser.Alamat;
                         localUser.NomorHP = newUser.NomorHP;
                         
-                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 500 Poin gratis. Mengalihkan ke Beranda...';
+                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 500 Saldo gratis. Mengalihkan ke Beranda...';
                         statusDiv.classList.add('success');
                         setTimeout(showHome, 1500);
                     })
@@ -2366,7 +2536,7 @@ function logoutUser() {
         localUser.ID = null;
         localUser.Username = null;
         localUser.Nama = null;
-        localUser.Poin = 0;
+        localUser.Saldo = 0;
         localUser.Alamat = "Alamat belum diatur";
         localUser.NomorHP = "Nomor HP belum diatur";
         localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg";
@@ -2387,11 +2557,19 @@ function showProfil() {
     
     const profilContainer = document.getElementById('profil-container');
     profilContainer.style.display = 'block'; 
+    
+    // Pastikan nav-item 'Akun' aktif dan yang lain tidak
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    const navAkun = document.querySelector('.bottom-nav').lastElementChild;
+    if(navAkun) navAkun.classList.add('active');
+
 
     const renderProfil = () => {
         const nama = localUser.Nama || 'Nama belum diatur';
         const foto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
-        const Poin = (localUser.Poin || 0).toLocaleString('id-ID');
+        const Saldo = (localUser.Saldo || 0).toLocaleString('id-ID');
         
         const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
         const tanggalObj = new Date(tanggalJoinISO);
@@ -2407,7 +2585,7 @@ function showProfil() {
         
         document.getElementById('profilIDPlat').textContent = 'Nomor HP: ' + displayNomorHP; 
         
-        document.getElementById('profilPoinDisplay').textContent = Poin + ' Poin';
+        document.getElementById('profilSaldoDisplay').textContent = Saldo + ' Saldo';
         
         const alamatPengirimanEl = document.getElementById('profilAlamatPengiriman');
         if (alamatPengirimanEl) {
@@ -2527,12 +2705,12 @@ function showHistory() {
                     <div>
                         <strong style="color: ${tx.status === 'Success' ? '#28a745' : '#f44336'};">${tx.productName}</strong><br>
                         <span style="font-size: 12px; color: #666;">${date} | ID: ${tx.transactionID.substring(0, 8)}...</span><br>
-                        <span style="font-size: 14px; font-weight: 500;">Dipotong: -${tx.amount.toLocaleString('id-ID')} Poin</span>
+                        <span style="font-size: 14px; font-weight: 500;">Dipotong: -${tx.amount.toLocaleString('id-ID')} Saldo</span>
                     </div>
                     <i class="fas fa-chevron-right" style="font-size: 12px; color: #999;"></i>
                 `;
                 txItem.onclick = () => {
-                    alert(`Detail Transaksi:\nID: ${tx.transactionID}\nProduk: ${tx.productName}\nJumlah Poin: ${tx.amount.toLocaleString('id-ID')}\nStatus: ${tx.status}\nTanggal: ${date}\nAlamat Kirim: ${tx.deliveryAddress}`);
+                    alert(`Detail Transaksi:\nID: ${tx.transactionID}\nProduk: ${tx.productName}\nJumlah Saldo: ${tx.amount.toLocaleString('id-ID')}\nStatus: ${tx.status}\nTanggal: ${date}\nAlamat Kirim: ${tx.deliveryAddress}`);
                 };
                 historyListEl.appendChild(txItem);
             });
@@ -2709,7 +2887,7 @@ function updateProfile() {
 }
 
 
-function logPurchaseToDB(productName, amount, newPoin) {
+function logPurchaseToDB(productName, amount, newSaldo) {
     const userID = localUser.ID;
     if (!userID) return; 
 
@@ -2724,8 +2902,8 @@ function logPurchaseToDB(productName, amount, newPoin) {
         amount: amount,
         timestamp: timestamp,
         status: 'Success',
-        initialPoin: localUser.Poin + amount, 
-        finalPoin: newPoin,
+        initialSaldo: localUser.Saldo + amount, 
+        finalSaldo: newSaldo,
         deliveryAddress: localUser.Alamat,
         deliveryContact: localUser.NomorHP
     };
@@ -2745,12 +2923,12 @@ function generateReceiptHTML(txData) {
     const date = new Date(txData.timestamp);
     const dateString = date.toLocaleString('id-ID', { dateStyle: 'medium' });
     const timeString = date.toLocaleString('id-ID', { timeStyle: 'short' });
-    const totalPoin = txData.amount.toLocaleString('id-ID');
+    const totalSaldo = txData.amount.toLocaleString('id-ID');
 
     return `
         <div style="font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #333; line-height: 1.4;">
             <h3 style="text-align: center; margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">NASUKA FOODS</h3>
-            <div style="text-align: center; margin-bottom: 15px;">Pembayaran Poin</div>
+            <div style="text-align: center; margin-bottom: 15px;">Pembayaran Nasuka Pay</div>
             <div style="border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 10px 0; margin-bottom: 15px;">
                 <div style="display: flex; justify-content: space-between;">
                     <span>TGL/JAM:</span>
@@ -2769,25 +2947,25 @@ function generateReceiptHTML(txData) {
             <div style="margin-bottom: 15px;">
                 <div style="display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">
                     <span>PRODUK</span>
-                    <span>POIN</span>
+                    <span>Harga</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>1 x ${txData.productName}</span>
-                    <span>${totalPoin}</span>
+                    <span>${totalSaldo}</span>
                 </div>
             </div>
 
             <div style="border-top: 1px dashed #333; padding-top: 10px;">
                 <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px;">
-                    <span>TOTAL BAYAR:</span>
-                    <span style="color: #f44336;">${totalPoin} Poin</span>
+                    <span>Dibayar lunas:</span>
+                    <span style="color: #f44336;">${totalSaldo}</span>
                 </div>
             </div>
             
             <div style="margin-top: 15px; border-top: 1px dashed #333; padding-top: 10px;">
-                <div style="font-weight: bold;">SISA POIN ANDA:</div>
+                <div style="font-weight: bold;">SISA Saldo ANDA:</div>
                 <div style="font-size: 18px; color: #007bff; text-align: right; margin-top: 5px;">
-                    ${txData.finalPoin.toLocaleString('id-ID')} Poin
+                    ${txData.finalSaldo.toLocaleString('id-ID')}
                 </div>
             </div>
 
@@ -2803,30 +2981,30 @@ function hideReceiptAndShowHome() {
     showHome();
 }
 
-function processPoinPayment(amount, productName) {
+function processSaldoPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
     
-    if (localUser.Poin < amount) {
-        statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Poin Anda (${(localUser.Poin || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')} Poin).</div>`;
+    if (localUser.Saldo < amount) {
+        statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Saldo Anda (${(localUser.Saldo || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')}.</div>`;
         return;
     }
     
-    if (!confirm(`Anda yakin ingin membeli "${productName}" seharga ${amount.toLocaleString('id-ID')} Poin?`)) {
+    if (!confirm(`Anda yakin ingin membeli "${productName}" seharga ${amount.toLocaleString('id-ID')} ?`)) {
         return;
     }
     
-    const initialPoin = localUser.Poin;
-    const newPoin = initialPoin - amount;
+    const initialSaldo = localUser.Saldo;
+    const newSaldo = initialSaldo - amount;
     statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
     
-    db.ref(`users/${localUser.ID}`).update({ Poin: newPoin })
+    db.ref(`users/${localUser.ID}`).update({ Saldo: newSaldo })
         .then(() => {
-            localUser.Poin = newPoin;
-            localStorage.setItem("Poin", newPoin);
-            updatePoinDisplay();
+            localUser.Saldo = newSaldo;
+            localStorage.setItem("Saldo", newSaldo);
+            updateSaldoDisplay();
             
-            const transactionData = logPurchaseToDB(productName, amount, newPoin);
+            const transactionData = logPurchaseToDB(productName, amount, newSaldo);
             
             statusDiv.innerHTML = `
                 <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
@@ -2860,7 +3038,7 @@ function showPayment(productName, productDescription, productPrice, productImage
     const userName = localUser.Nama || "Nama belum di seting";
     const userAddress = localUser.Alamat || "Alamat pengantaran belum di seting";
     const userNomorHP = localUser.NomorHP || "Nomor HP belum di seting";
-    const productPriceInPoin = productPrice; 
+    const productPriceInSaldo = productPrice; 
     const paymentContainer = document.getElementById('payment-container');
     
     paymentContainer.style.display = 'flex';
@@ -2884,7 +3062,7 @@ function showPayment(productName, productDescription, productPrice, productImage
             <div class="product-details-section">
                 <h4>${productName}</h4>
                 <div class="product-price-display">
-                    Harga: ${productPriceInPoin.toLocaleString('id-ID')} Poin 
+                    Harga: ${productPriceInSaldo.toLocaleString('id-ID')}
                 </div>
                 <p class="product-description-text">
                     ${productDescription}
@@ -2909,21 +3087,21 @@ function showPayment(productName, productDescription, productPrice, productImage
                     <span class="info-label">Alamat Kirim</span>
                     <span class="info-value address">${userAddress}</span>
                 </div>
-                <div class="info-row Poin-row">
-                    <span class="info-label">Poin Anda</span>
-                    <span class="info-value" style="color: #007bff;">${(localUser.Poin || 0).toLocaleString('id-ID')} Poin</span>
+                <div class="info-row Saldo-row">
+                    <span class="info-label">Saldo Anda</span>
+                    <span class="info-value" style="color: #007bff;">${(localUser.Saldo || 0).toLocaleString('id-ID')}</span>
                 </div>
                 <div class="info-row total-bayar-row">
-                    <span class="info-label" style="color: #333;">Total Bayar (Poin)</span>
-                    <span class="info-value">${productPriceInPoin.toLocaleString('id-ID')} Poin</span>
+                    <span class="info-label" style="color: #333;">Harga yang akan di bayar</span>
+                    <span class="info-value">${productPriceInSaldo.toLocaleString('id-ID')}</span>
                 </div>
             </div>
             
             <div id="payment-status" style="margin: 0 15px 15px 15px;"></div>
 
             <div class="payment-action-section">
-                <button class="btn-bayar-Poin" onclick="processPoinPayment(${productPriceInPoin}, '${productName}')">
-                    Bayar ${productPriceInPoin.toLocaleString('id-ID')} Poin
+                <button class="btn-bayar-Saldo" onclick="processSaldoPayment(${productPriceInSaldo}, '${productName}')">
+                    Bayar ${productPriceInSaldo.toLocaleString('id-ID')} Sekarang
                 </button>
             </div>
             
