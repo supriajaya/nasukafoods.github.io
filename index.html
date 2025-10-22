@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nasuka Foods</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-    
-    
     <style>
+        /* [SELURUH KODE CSS ANDA DISINI] */
+        /* ... */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             margin: 0;
@@ -30,7 +29,7 @@
             position: relative;
         }
         
-        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container { /* Tambahkan #qris-container dan #leaderboard-container di sini */
+        #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container { 
             display: none;
             position: fixed;
             top: 0;
@@ -130,7 +129,7 @@
             cursor: pointer;
         }
         
-        .download-header, .qris-header, .leaderboard-header { /* Menambahkan .qris-header dan .leaderboard-header */
+        .download-header, .qris-header, .leaderboard-header { 
             display: flex;
             align-items: center;
             padding: 15px;
@@ -144,13 +143,12 @@
             font-weight: 600;
         }
         
-        .download-header i, .qris-header i, .leaderboard-header i { /* Menambahkan .qris-header i dan .leaderboard-header i */
+        .download-header i, .qris-header i, .leaderboard-header i { 
             font-size: 24px;
             margin-right: 15px;
             cursor: pointer;
         }
         
-        /* Gaya untuk QRIS Container */
         #qris-container {
             display: none;
             position: fixed;
@@ -267,7 +265,7 @@
         }
         
         .qris-code-box .qris-info p {
-             text-align: center; /* Sesuaikan agar info di dalam box tetap di tengah */
+             text-align: center; 
         }
 
         .qris-instruction-box {
@@ -515,12 +513,10 @@
             font-size: 24px;
         }
         
-        /* Gaya untuk gambar Leaderboard */
         .leaderboard-icon-img {
-            width: 25px; /* Sesuaikan ukuran gambar */
+            width: 25px; 
             height: 25px;
             object-fit: contain;
-            /* Tambahan untuk animasi jika GIF */
         }
 
         .banner {
@@ -573,7 +569,6 @@
             color: #999;
         }
         
-        /* Gaya tambahan untuk Marquee agar sesuai dengan kolom search */
         .search-bar .marquee-content {
             flex-grow: 1;
             white-space: nowrap;
@@ -584,7 +579,7 @@
             width: 100%;
             margin: 0;
             padding: 0;
-            display: block; /* Memastikan marquee mengambil ruang yang tersedia */
+            display: block; 
         }
 
         .other-features {
@@ -709,7 +704,6 @@
             resize: vertical;
         }
         
-        /* --- START: Modified Auth Styles to match Image --- */
         .auth-container {
             display: none;
             position: fixed;
@@ -717,22 +711,22 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: white; /* Changed to white or a light color */
+            background-color: white; 
             z-index: 200001;
             justify-content: center;
-            align-items: flex-start; /* Start from the top */
+            align-items: flex-start; 
             padding: 0; 
             box-sizing: border-box;
             overflow-y: auto;
         }
         .auth-card {
             background: white;
-            padding: 20px 20px 40px 20px; /* Reduced vertical padding, increased horizontal */
-            border-radius: 0; /* No border-radius for full screen container */
+            padding: 20px 20px 40px 20px; 
+            border-radius: 0; 
             width: 100%;
-            max-width: 450px; /* Max width to contain on larger screens */
-            box-shadow: none; /* No shadow */
-            text-align: left; /* Aligned left for inputs/labels */
+            max-width: 450px; 
+            box-shadow: none; 
+            text-align: left; 
             min-height: 100vh;
             margin: 0 auto;
         }
@@ -753,14 +747,14 @@
 
         .auth-card h2 {
             font-size: 24px;
-            margin-bottom: 30px; /* Increased margin */
+            margin-bottom: 30px; 
             color: #333;
             text-align: center;
             font-weight: 700;
         }
         
         .auth-input-group {
-            margin-bottom: 20px; /* Increased space between inputs */
+            margin-bottom: 20px; 
         }
         
         .auth-input-group label {
@@ -774,18 +768,18 @@
         .auth-card input[type="text"],
         .auth-card input[type="password"] {
             width: 100%;
-            padding: 12px; /* Slightly smaller padding */
-            margin-bottom: 0; /* Handled by auth-input-group */
-            border: 1px solid #ccc; /* Thinner, lighter border */
-            border-radius: 6px; /* Smaller radius */
+            padding: 12px; 
+            margin-bottom: 0; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
             box-sizing: border-box;
-            font-size: 16px; /* Smaller font size */
+            font-size: 16px; 
         }
         
         .auth-card button.btn-primary {
             width: 100%;
             padding: 12px;
-            background-color: #007bff; /* Primary color */
+            background-color: #007bff; 
             color: white;
             border: none;
             border-radius: 8px;
@@ -802,11 +796,11 @@
         
         .auth-card .link-switch {
             margin-top: 20px;
-            font-size: 14px; /* Smaller font size */
+            font-size: 14px; 
             text-align: center;
         }
         .auth-card .link-switch a {
-            color: #007bff; /* Primary link color */
+            color: #007bff; 
             text-decoration: none;
             font-weight: 600;
         }
@@ -814,14 +808,14 @@
             margin-top: 15px;
             padding: 10px;
             border-radius: 5px;
-            font-size: 14px; /* Smaller font size */
+            font-size: 14px; 
             text-align: center;
         }
         
         .auth-card button.btn-secondary {
             width: 100%;
             padding: 12px;
-            background-color: white; /* Secondary style */
+            background-color: white; 
             color: #007bff;
             border: 1px solid #007bff;
             border-radius: 8px;
@@ -835,10 +829,7 @@
         .auth-card button.btn-secondary:hover {
             background-color: #e6f7ff;
         }
-        /* --- END: Modified Auth Styles to match Image --- */
 
-
-        
         #profil-container {
             display: none;
             position: fixed;
@@ -1526,7 +1517,6 @@
             color: #666;
         }
         
-        /* Gaya untuk Leaderboard Container */
         #leaderboard-container {
             display: none;
             position: fixed;
@@ -1570,6 +1560,22 @@
             margin-bottom: 10px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             font-size: 16px;
+            transition: background-color 0.2s;
+        }
+        
+        .leaderboard-item:nth-child(1) {
+            border: 2px solid gold;
+            background-color: #fffde7;
+        }
+        
+        .leaderboard-item:nth-child(2) {
+            border: 2px solid silver;
+            background-color: #f5f5f5;
+        }
+        
+        .leaderboard-item:nth-child(3) {
+            border: 2px solid #cd7f32;
+            background-color: #fcf8e3;
         }
 
         .leaderboard-rank {
@@ -1579,6 +1585,11 @@
             text-align: left;
             font-size: 18px;
         }
+        
+        .leaderboard-item:nth-child(1) .leaderboard-rank { color: gold; font-size: 20px; }
+        .leaderboard-item:nth-child(2) .leaderboard-rank { color: silver; font-size: 19px; }
+        .leaderboard-item:nth-child(3) .leaderboard-rank { color: #cd7f32; font-size: 18px; }
+
 
         .leaderboard-name {
             flex-grow: 1;
@@ -1805,7 +1816,7 @@
     <div id="login-container" class="auth-container">
         <div class="auth-card">
             <div class="auth-logo-section">
-                <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="auth-logo">
+                <img src="1000362604.jpg" alt="Nasuka Foods Logo" class="auth-logo">
             </div>
             <h2>Masuk Akun Anda</h2>
             <form id="loginForm">
@@ -1828,7 +1839,7 @@
     <div id="signup-container" class="auth-container">
         <div class="auth-card">
             <div class="auth-logo-section">
-                <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="auth-logo">
+                <img src="1000362604.jpg" alt="Nasuka Foods Logo" class="auth-logo">
             </div>
             <h2>Daftar Akun Baru</h2>
             <form id="signupForm">
@@ -1943,7 +1954,7 @@
                 <div class="badge-section">
                     <h4>Informasi</h4>
                     <div class="badge-card">
-                        <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Lencana" class="badge-image">
+                        <img src="1000362604.jpg" alt="Lencana" class="badge-image">
                         <div class="badge-text">
                             <strong>Alamat pengiriman</strong>
                             <span id="profilAlamatPengiriman">...</span>
@@ -1954,7 +1965,7 @@
                 
                 <div class="passenger-comments">
                     <h4>Apa Kata Anda</h4>
-                    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Mencari Komentar" class="magnifying-glass">
+                    <img src="1000362604.jpg" alt="Mencari Komentar" class="magnifying-glass">
                     <p style="text-align: center; color: #666; margin-top: 10px;">Belum ada kata kata untuk ditampilkan</p>
                 </div>
             </div>
@@ -2006,7 +2017,7 @@
         
         <div class="download-content">
             <div class="app-info-top">
-                <img src="https://nasukafoods.site/nasukafoods.jpg" alt="App Logo" class="app-logo">
+                <img src="1000362604.jpg" alt="App Logo" class="app-logo">
                 <div class="app-text">
                     <div class="app-title">Nasuka Foods App</div>
                     <div class="app-version">Versi: 1.0.2</div>
@@ -2076,7 +2087,7 @@
             
             <div class="qris-content-section">
                 <div class="qris-logo-section">
-                    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="qris-logo">
+                    <img src="1000362604.jpg" alt="Nasuka Foods Logo" class="qris-logo">
                     <div class="qris-title">NASUKA FOODS</div>
                     <div class="qris-subtitle">Cibaduyut - Kota Bandung</div>
                 </div>
@@ -2086,7 +2097,7 @@
                     <div class="qris-info">
                         <p style="text-align: center; font-weight: 700; color: #007bff; margin-bottom: 10px;">QUICK RESPON INDONESIAN STANDARD</p>
                         <p><strong>Merchant ID:</strong> ID2025NF001</p>
-                        <p><strong>Powered:</strong> BANK BRI</p>
+                        <p><strong>Powered by:</strong> BANK BRI</p>
                     </div>
                 </div>
                 
@@ -2097,17 +2108,17 @@
                 <div class="qris-instruction-box">
                     <h4>Cara Pembayaran</h4>
                     <ul>
-                        <li>Pastikan Anda telah mencatat total nominal belanja Anda.</li>
-                        <li>Buka aplikasi Bank / E-Wallet Anda, Gopay, Dana, OVO, dll yang mendukung QRIS</li>
+                        <li>Catat total nominal belanja Anda.</li>
+                        <li>Buka aplikasi Bank / E-Wallet Anda (Gopay, Dana, OVO, dll.) yang mendukung QRIS.</li>
                        
-                        <li>Pindai kode QRIS di atas</li>
-                        <li>Masukkan nominal yang sesuai dengan total belanja Anda</li>
+                        <li>Pindai kode QRIS di atas.</li>
+                        <li>Masukkan nominal yang sesuai dengan total belanja Anda.</li>
                         <li>Selesaikan pembayaran, dan konfirmasi ke admin kami.</li>
                     </ul>
                 </div>
                 
                 <div class="qris-warning">
-                    <i class="fas fa-exclamation-triangle"></i> Periksa kembali! Pastikan nama Merchant yang muncul adalah NASUKA FOODS
+                    <i class="fas fa-exclamation-triangle"></i> Periksa kembali! Pastikan nama Merchant yang muncul adalah **NASUKA FOODS**.
                 </div>
                 
             </div>
@@ -2122,10 +2133,10 @@
                 <h3>Leaderboard</h3>
             </div>
             <div class="leaderboard-content-section">
-                <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px;">
+                <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard Wings" style="width: 50px; height: 50px; margin-bottom: 10px;">
-                    <p style="font-size: 16px; font-weight: 600; color: #007bff;">Peringkat 5 Besar Pelanggan Istimewa</p>
-                    <p style="font-size: 14px; color: #666; margin-bottom: 20px;"> Best Sultan Cibaduyut!</p>
+                    <p style="font-size: 16px; font-weight: 600; color: #007bff; margin: 0;">Peringkat 10 Besar Pelanggan Istimewa</p>
+                    <p style="font-size: 14px; color: #666; margin-top: 5px;"> Best Sultan Cibaduyut!</p>
                 </div>
 
                 <div id="leaderboard-list">
@@ -2136,6 +2147,24 @@
     </div>
     </div>
     
+    <div id="formal-confirmation-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 300000; justify-content: center; align-items: center;">
+        <div style="background-color: white; max-width: 350px; width: 90%; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); text-align: left; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+            <h4 style="margin-top: 0; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; font-size: 18px; font-weight: 700;">
+                <i class="fas fa-file-signature" style="margin-right: 8px;"></i>Persetujuan Pembayaran
+            </h4>
+            <p style="font-size: 14px; color: #333; line-height: 1.5; margin-bottom: 20px;">
+                Saya memastikan bahwa semua detail pesanan termasuk produk, harga, dan alamat pengiriman ($$ALAMAT$$), telah diverifikasi. Dengan menekan tombol "Setuju & Bayar", Saya menyetujui pemotongan Saldo sebesar  $$JUMLAH$$ untuk pembelian $$PRODUK$$.
+            </p>
+            <div style="display: flex; justify-content: space-between; gap: 10px;">
+                <button id="modal-cancel-btn" style="flex: 1; padding: 12px; background-color: #f44336; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    Batal
+                </button>
+                <button id="modal-confirm-btn" style="flex: 1; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    Setuju & Bayar
+                </button>
+            </div>
+        </div>
+    </div>
     
 <script>
     
@@ -2159,7 +2188,7 @@ const localUser = {
   Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
   Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
   NomorHP: localStorage.getItem("NomorHP") || "Nomor HP belum diatur",
-  Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg",
+  Foto: localStorage.getItem("Foto") || "1000362604.jpg", 
 };
 
 if (localUser.ID) {
@@ -2170,7 +2199,7 @@ if (localUser.ID) {
         localUser.Saldo = userData.Saldo || 0;
         localUser.Alamat = userData.Alamat || "Alamat belum diatur";
         localUser.NomorHP = userData.NomorHP || "Nomor HP belum diatur";
-        localUser.Foto = userData.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+        localUser.Foto = userData.Foto || "1000362604.jpg"; 
         localUser.Nama = userData.Nama || localUser.Nama;
         
         localStorage.setItem("Saldo", localUser.Saldo);
@@ -2193,7 +2222,6 @@ function updateHomeDisplay() {
     const navHome = document.getElementById('nav-home');
     const navLeaderboard = document.getElementById('nav-leaderboard');
     
-    // Perbarui status active di bottom nav
     if (navHome) navHome.classList.add('active');
     if (navLeaderboard) navLeaderboard.classList.remove('active');
 
@@ -2224,17 +2252,14 @@ function initializeHome() {
   initializeUserProfile();
   updateHomeDisplay();
   
-  // LOGIC TEKS BERJALAN DITAMBAHKAN DI SINI
   const runningTextEl = document.getElementById('running-text');
   if (runningTextEl) {
-    // Membuat elemen <marquee> secara dinamis
     const marqueeEl = document.createElement('marquee');
     marqueeEl.setAttribute('behavior', 'scroll');
     marqueeEl.setAttribute('direction', 'left');
-    marqueeEl.setAttribute('scrollamount', '8'); // Kecepatan scroll
+    marqueeEl.setAttribute('scrollamount', '8'); 
     marqueeEl.textContent = 'Gratis ongkos kirim se cibaduyut raya';
     
-    // Mengganti konten <span> dengan elemen <marquee>
     runningTextEl.parentNode.replaceChild(marqueeEl, runningTextEl);
   }
 }
@@ -2243,13 +2268,10 @@ function initializeUserProfile() {
   const userID = localStorage.getItem("ID") || "";
   const profilLink = document.getElementById("Profil");
   
-  // NOTE: showLogin/showSignup in JavaScript will no longer be used for the icons
-  // because they now point to external links. The nav-item 'Akun' still uses showLogin.
   
   if (!userID) {
     if (profilLink) {
       profilLink.href = "#";
-      // This is for the top right profile icon, keeping it functional but not a link to prevent accidental navigation
       profilLink.onclick = () => { if (!localStorage.getItem('ID')) showLogin(); else showProfil(); };
     }
     return;
@@ -2280,7 +2302,7 @@ function fetchUserProfileFromDB(userID) {
     const val = snapshot.val();
     if (val) {
       const nama = val.Nama || "Tanpa Nama";
-      const foto = val.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+      const foto = val.Foto || "1000362604.jpg"; 
       
       localUser.Nama = nama;
       localUser.Foto = foto;
@@ -2307,7 +2329,7 @@ function fetchUserProfileFromDB(userID) {
 }
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container').forEach(el => { /* Tambahkan #qris-container dan #leaderboard-container */
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container, #formal-confirmation-modal').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
@@ -2322,7 +2344,6 @@ function showHome() {
     }
 }
 
-// Keeping showLogin/showSignup for the Nav-Item 'Akun' fallback and switch links in auth popups
 function showLogin() {
     hideAllContainers();
     document.getElementById('login-container').style.display = 'flex';
@@ -2346,7 +2367,6 @@ function showDownload() {
     }
 }
 
-// Fungsi showQris()
 function showQris() {
     hideAllContainers();
     const qrisContainer = document.getElementById('qris-container');
@@ -2356,7 +2376,6 @@ function showQris() {
     }
 }
 
-// Fungsi showLeaderboard() yang baru
 function showLeaderboard() {
     hideAllContainers();
     const leaderboardContainer = document.getElementById('leaderboard-container');
@@ -2368,28 +2387,34 @@ function showLeaderboard() {
         leaderboardContainer.scrollTop = 0;
     }
     
-    // Atur status active di bottom nav
     if (navLeaderboard) navLeaderboard.classList.add('active');
     if (navHome) navHome.classList.remove('active');
 
-    // Logic placeholder untuk Leaderboard
     const leaderboardListEl = document.getElementById('leaderboard-list');
     if (leaderboardListEl) {
-        // Contoh data Leaderboard (bisa diganti dengan data dari Firebase di masa depan)
         const mockLeaderboardData = [
             { rank: 1, name: "Setya Ningsih", score: 2650900 },
-            { rank: 2, name: "Anipkah", score: 1765900 },
-            { rank: 3, name: "Salwa Aqila", score: 983000 },
-            { rank: 4, name: "Apri Wijaya", score: 835000 },
-            { rank: 5, name: "Nanda", score: 434500 },
+            { rank: 2, name: "Anipkah", score: 1865900 },
+            { rank: 3, name: "Salwa Aqila", score: 1630500 },
+            { rank: 4, name: "Apri Wijaya", score: 1235000 },
+            { rank: 5, name: "Nanda", score: 934500 },
+            { rank: 6, name: "Bambang", score: 815000 },
+            { rank: 7, name: "Cicilia", score: 690000 },
+            { rank: 8, name: "Rehan", score: 515000 },
+            { rank: 9, name: "Amanda", score: 270900 },                
+            { rank: 10, name: "Indra", score: 155000 },        
+            
+            
+            
         ];
 
         let listHTML = '';
         mockLeaderboardData.forEach(item => {
+            const isMe = item.name.includes('(Anda)');
             listHTML += `
-                <div class="leaderboard-item">
+                <div class="leaderboard-item" style="${isMe ? 'border: 2px solid #007bff; background-color: #e6f7ff;' : ''}">
                     <span class="leaderboard-rank">${item.rank}</span>
-                    <span class="leaderboard-name">${item.name}</span>
+                    <span class="leaderboard-name" style="${isMe ? 'font-weight: 700; color: #007bff;' : ''}">${item.name}</span>
                     <span class="leaderboard-score">Rp ${item.score.toLocaleString('id-ID')}</span>
                 </div>
             `;
@@ -2402,9 +2427,6 @@ function showLeaderboard() {
         }
     }
 }
-// Akhir fungsi showLeaderboard()
-
-
 function loginUser() {
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
@@ -2427,7 +2449,7 @@ function loginUser() {
                     localStorage.setItem("Username", user.Username);
                     localStorage.setItem("Nama", user.Nama || 'Tanpa Nama');
                     localStorage.setItem("Saldo", user.Saldo || 0);
-                    localStorage.setItem("Foto", user.Foto || "https://nasukafoods.site/gambarkosong.jpg");
+                    localStorage.setItem("Foto", user.Foto || "1000362604.jpg"); 
                     localStorage.setItem("Alamat", user.Alamat || "Alamat belum diatur");
                     localStorage.setItem("NomorHP", user.NomorHP || "Nomor HP belum diatur");
                     localStorage.setItem("TanggalJoin", user.TanggalJoin || new Date().toISOString());
@@ -2436,7 +2458,7 @@ function loginUser() {
                     localUser.Username = user.Username;
                     localUser.Nama = user.Nama || 'Tanpa Nama';
                     localUser.Saldo = user.Saldo || 0;
-                    localUser.Foto = user.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+                    localUser.Foto = user.Foto || "1000362604.jpg"; 
                     localUser.Alamat = user.Alamat || "Alamat belum diatur";
                     localUser.NomorHP = user.NomorHP || "Nomor HP belum diatur";
                     
@@ -2488,7 +2510,7 @@ function signupUser() {
                     Nama: nama,
                     Password: password,
                     Saldo: 500,
-                    Foto: "https://nasukafoods.site/gambarkosong.jpg",
+                    Foto: "1000362604.jpg", 
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
                     NomorHP: "Nomor HP belum diatur",
@@ -2539,7 +2561,7 @@ function logoutUser() {
         localUser.Saldo = 0;
         localUser.Alamat = "Alamat belum diatur";
         localUser.NomorHP = "Nomor HP belum diatur";
-        localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg";
+        localUser.Foto = "1000362604.jpg"; 
         
         alert("Anda telah keluar.");
         showHome();
@@ -2558,7 +2580,6 @@ function showProfil() {
     const profilContainer = document.getElementById('profil-container');
     profilContainer.style.display = 'block'; 
     
-    // Pastikan nav-item 'Akun' aktif dan yang lain tidak
     document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
         item.classList.remove('active');
     });
@@ -2568,7 +2589,7 @@ function showProfil() {
 
     const renderProfil = () => {
         const nama = localUser.Nama || 'Nama belum diatur';
-        const foto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+        const foto = localUser.Foto || "1000362604.jpg"; 
         const Saldo = (localUser.Saldo || 0).toLocaleString('id-ID');
         
         const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
@@ -2629,7 +2650,7 @@ function showProfil() {
                     <div class="badge-section">
                         <h4>Informasi</h4>
                         <div class="badge-card">
-                            <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Lencana" class="badge-image">
+                            <img src="1000362604.jpg" alt="Lencana" class="badge-image">
                             <div class="badge-text">
                                 <strong>Alamat pengiriman</strong>
                                 <span id="profilAlamatPengiriman">${localUser.Alamat || "Alamat belum diatur"}</span>
@@ -2638,7 +2659,7 @@ function showProfil() {
                     </div>
                     <div class="passenger-comments">
                         <h4>Apa Kata Anda</h4>
-                        <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Mencari Komentar" class="magnifying-glass">
+                        <img src="1000362604.jpg" alt="Mencari Komentar" class="magnifying-glass">
                         <p style="text-align: center; color: #666; margin-top: 10px;">Belum ada kata kata untuk ditampilkan</p>
                     </div>
                 `;
@@ -2655,9 +2676,20 @@ function showProfil() {
     switchTab('pencapaian');
 }
 
+
+
+
+
+// ... (Kode JavaScript sebelumnya)
+
 function showHistory() {
     const contentPencapaian = document.getElementById('contentPencapaian');
     
+    // Pastikan tab yang benar aktif
+    document.getElementById('tabPencapaian').classList.add('active');
+    document.getElementById('tabPerbaikan').classList.remove('active');
+
+    // Kosongkan dan siapkan konten riwayat pembelian
     contentPencapaian.innerHTML = `
         <div style="text-align: center; padding: 20px;">
             <h4 style="margin-top: 0; color: #333; font-size: 16px; font-weight: 600;">Riwayat Pembelian</h4>
@@ -2670,9 +2702,7 @@ function showHistory() {
         </div>
     `;
     
-    document.getElementById('tabPencapaian').classList.add('active');
-    document.getElementById('tabPerbaikan').classList.remove('active');
-
+    // Ambil data transaksi dari Firebase
     db.ref(`transactions/${localUser.ID}`).orderByChild('timestamp').limitToLast(20).once('value')
         .then(snapshot => {
             const historyListEl = document.getElementById('history-list');
@@ -2687,7 +2717,7 @@ function showHistory() {
                 return;
             }
 
-            transactions.reverse(); 
+            transactions.reverse(); // Urutkan terbaru di atas
 
             transactions.forEach(tx => {
                 const date = new Date(tx.timestamp).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
@@ -2700,18 +2730,24 @@ function showHistory() {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    transition: background-color 0.1s;
                 `;
+                txItem.onmouseover = function() { this.style.backgroundColor = '#f9f9f9'; };
+                txItem.onmouseout = function() { this.style.backgroundColor = 'white'; };
+                
+                // Ubah behavior onclick
+                txItem.onclick = () => {
+                    showReceiptPopup(tx); // Panggil fungsi baru untuk menampilkan kwitansi
+                };
+
                 txItem.innerHTML = `
                     <div>
                         <strong style="color: ${tx.status === 'Success' ? '#28a745' : '#f44336'};">${tx.productName}</strong><br>
                         <span style="font-size: 12px; color: #666;">${date} | ID: ${tx.transactionID.substring(0, 8)}...</span><br>
-                        <span style="font-size: 14px; font-weight: 500;">Dipotong: -${tx.amount.toLocaleString('id-ID')} Saldo</span>
+                        <span style="font-size: 14px; font-weight: 500;">Total: -Rp ${tx.amount.toLocaleString('id-ID')}</span>
                     </div>
                     <i class="fas fa-chevron-right" style="font-size: 12px; color: #999;"></i>
                 `;
-                txItem.onclick = () => {
-                    alert(`Detail Transaksi:\nID: ${tx.transactionID}\nProduk: ${tx.productName}\nJumlah Saldo: ${tx.amount.toLocaleString('id-ID')}\nStatus: ${tx.status}\nTanggal: ${date}\nAlamat Kirim: ${tx.deliveryAddress}`);
-                };
                 historyListEl.appendChild(txItem);
             });
         })
@@ -2719,6 +2755,44 @@ function showHistory() {
             document.getElementById('history-list').innerHTML = `<p style="color: red;">Gagal memuat riwayat: ${error.message}</p>`;
         });
 }
+
+/**
+ * Menampilkan pop-up kwitansi (receipt-popup) dengan data transaksi spesifik.
+ * @param {object} txData - Objek data transaksi dari Firebase.
+ */
+function showReceiptPopup(txData) {
+    hideAllContainers();
+    
+    // Perlu sedikit penyesuaian data untuk memastikan format kwitansi benar
+    const tempTxData = {
+        ...txData,
+        // Asumsi data yang disimpan di Firebase sudah lengkap, jika tidak, perlu diisi default/fallback
+        initialSaldo: txData.initialSaldo || (txData.finalSaldo + txData.amount),
+        deliveryAddress: txData.deliveryAddress || localUser.Alamat || 'Alamat tidak tercatat'
+    };
+    
+    // Generate dan tampilkan HTML kwitansi
+    document.getElementById('receipt-content').innerHTML = generateReceiptHTML(tempTxData);
+    
+    // Tampilkan pop-up
+    const receiptPopup = document.getElementById('receipt-popup');
+    receiptPopup.style.display = 'flex';
+    
+    // Ubah tombol "Selesai" di kwitansi untuk kembali ke Profil, bukan Home.
+    const finishButton = receiptPopup.querySelector('button');
+    if(finishButton) {
+        finishButton.onclick = showProfil;
+        finishButton.textContent = 'Kembali ke Riwayat';
+    }
+}
+
+// ... (Sisa Kode JavaScript Anda)
+
+
+
+
+
+
 
 function showEditProfil() {
     hideAllContainers();
@@ -2729,7 +2803,7 @@ function showEditProfil() {
     const currentNama = localUser.Nama || '';
     const currentNomorHP = localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP; 
     const currentAlamat = localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat; 
-    const currentFoto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg";
+    const currentFoto = localUser.Foto || "1000362604.jpg"; 
     
     editContainer.style.position = 'fixed';
     editContainer.style.top = '0';
@@ -2928,7 +3002,7 @@ function generateReceiptHTML(txData) {
     return `
         <div style="font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #333; line-height: 1.4;">
             <h3 style="text-align: center; margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">NASUKA FOODS</h3>
-            <div style="text-align: center; margin-bottom: 15px;">Pembayaran Nasuka Pay</div>
+            <div style="text-align: center; margin-bottom: 15px;">Cibaduyut - Kota Bandung</div>
             <div style="border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 10px 0; margin-bottom: 15px;">
                 <div style="display: flex; justify-content: space-between;">
                     <span>TGL/JAM:</span>
@@ -2951,21 +3025,21 @@ function generateReceiptHTML(txData) {
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>1 x ${txData.productName}</span>
-                    <span>${totalSaldo}</span>
+                    <span>Rp ${totalSaldo}</span>
                 </div>
             </div>
 
             <div style="border-top: 1px dashed #333; padding-top: 10px;">
                 <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px;">
                     <span>Dibayar lunas:</span>
-                    <span style="color: #f44336;">${totalSaldo}</span>
+                    <span style="color: #f44336;">Rp ${totalSaldo}</span>
                 </div>
             </div>
             
             <div style="margin-top: 15px; border-top: 1px dashed #333; padding-top: 10px;">
                 <div style="font-weight: bold;">SISA Saldo ANDA:</div>
                 <div style="font-size: 18px; color: #007bff; text-align: right; margin-top: 5px;">
-                    ${txData.finalSaldo.toLocaleString('id-ID')}
+                    Rp ${txData.finalSaldo.toLocaleString('id-ID')}
                 </div>
             </div>
 
@@ -2981,45 +3055,85 @@ function hideReceiptAndShowHome() {
     showHome();
 }
 
+// === FUNGSI BARU UNTUK MENAMPILKAN MODAL KONFIRMASI FORMAL ===
+function showFormalConfirmation(amount, productName, onConfirm) {
+    const modal = document.getElementById('formal-confirmation-modal');
+    const userAddress = localUser.Alamat || "Alamat belum di seting";
+    
+    // Ambil konten paragraf dan placeholder
+    const contentP = modal.querySelector('p');
+    let originalHtml = `Saya memastikan bahwa semua detail pesanan termasuk produk, harga, dan alamat pengiriman ($$ALAMAT$$), telah diverifikasi. Dengan menekan tombol "Setuju & Bayar", Saya menyetujui pemotongan Saldo sebesar $$JUMLAH$$ untuk pembelian $$PRODUK$$}.`;
+    
+    // Ganti placeholder dengan nilai yang sebenarnya
+    contentP.innerHTML = originalHtml
+        .replace(/\$\$ALAMAT\$\$/g, `${userAddress}`)
+        .replace(/\$\$JUMLAH\$\$/g, `Rp ${amount.toLocaleString('id-ID')}`)
+        .replace(/\$\$PRODUK\$\$/g, `${productName}`);
+
+    const confirmBtn = document.getElementById('modal-confirm-btn');
+    const cancelBtn = document.getElementById('modal-cancel-btn');
+    
+    // Hapus event listener lama
+    confirmBtn.onclick = null;
+    cancelBtn.onclick = null;
+
+    // Set event listener baru
+    confirmBtn.onclick = () => {
+        modal.style.display = 'none';
+        onConfirm(); // Panggil fungsi pembayaran sebenarnya
+    };
+    cancelBtn.onclick = () => {
+        modal.style.display = 'none';
+        // Opsional: Beri pesan status batal di halaman pembayaran
+        document.getElementById('payment-status').innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembayaran dibatalkan oleh pengguna.</div>`;
+    };
+
+    modal.style.display = 'flex';
+}
+// === AKHIR FUNGSI BARU ===
+
+
 function processSaldoPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
     
     if (localUser.Saldo < amount) {
-        statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Saldo Anda (${(localUser.Saldo || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (${amount.toLocaleString('id-ID')}.</div>`;
+        statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Saldo Anda (Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (Rp ${amount.toLocaleString('id-ID')}).</div>`;
         return;
     }
     
-    if (!confirm(`Anda yakin ingin membeli "${productName}" seharga ${amount.toLocaleString('id-ID')} ?`)) {
-        return;
-    }
+    // FUNGSI INTI PEMBAYARAN
+    const executePayment = () => {
+        const initialSaldo = localUser.Saldo;
+        const newSaldo = initialSaldo - amount;
+        statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
+        
+        db.ref(`users/${localUser.ID}`).update({ Saldo: newSaldo })
+            .then(() => {
+                localUser.Saldo = newSaldo;
+                localStorage.setItem("Saldo", newSaldo);
+                updateSaldoDisplay();
+                
+                const transactionData = logPurchaseToDB(productName, amount, newSaldo);
+                
+                statusDiv.innerHTML = `
+                    <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
+                        Pembelian Berhasil! ✅ Menampilkan struk...
+                    </div>
+                `;
+                
+                document.getElementById('receipt-content').innerHTML = generateReceiptHTML(transactionData);
+                document.getElementById('payment-container').style.display = 'none';
+                document.getElementById('receipt-popup').style.display = 'flex';
     
-    const initialSaldo = localUser.Saldo;
-    const newSaldo = initialSaldo - amount;
-    statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
-    
-    db.ref(`users/${localUser.ID}`).update({ Saldo: newSaldo })
-        .then(() => {
-            localUser.Saldo = newSaldo;
-            localStorage.setItem("Saldo", newSaldo);
-            updateSaldoDisplay();
-            
-            const transactionData = logPurchaseToDB(productName, amount, newSaldo);
-            
-            statusDiv.innerHTML = `
-                <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
-                    Pembelian Berhasil! ✅ Menampilkan struk...
-                </div>
-            `;
-            
-            document.getElementById('receipt-content').innerHTML = generateReceiptHTML(transactionData);
-            document.getElementById('payment-container').style.display = 'none';
-            document.getElementById('receipt-popup').style.display = 'flex';
+            })
+            .catch(error => {
+                statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Silakan coba lagi.</div>`;
+            });
+    };
 
-        })
-        .catch(error => {
-            statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Silakan coba lagi.</div>`;
-        });
+    // Ganti konfirmasi 'confirm()' dengan modal kustom formal
+    showFormalConfirmation(amount, productName, executePayment); 
 }
 
 function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
@@ -3062,7 +3176,7 @@ function showPayment(productName, productDescription, productPrice, productImage
             <div class="product-details-section">
                 <h4>${productName}</h4>
                 <div class="product-price-display">
-                    Harga: ${productPriceInSaldo.toLocaleString('id-ID')}
+                    Harga: Rp ${productPriceInSaldo.toLocaleString('id-ID')}
                 </div>
                 <p class="product-description-text">
                     ${productDescription}
@@ -3089,11 +3203,11 @@ function showPayment(productName, productDescription, productPrice, productImage
                 </div>
                 <div class="info-row Saldo-row">
                     <span class="info-label">Saldo Anda</span>
-                    <span class="info-value" style="color: #007bff;">${(localUser.Saldo || 0).toLocaleString('id-ID')}</span>
+                    <span class="info-value" style="color: #007bff;">Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}</span>
                 </div>
                 <div class="info-row total-bayar-row">
                     <span class="info-label" style="color: #333;">Harga yang akan di bayar</span>
-                    <span class="info-value">${productPriceInSaldo.toLocaleString('id-ID')}</span>
+                    <span class="info-value">Rp ${productPriceInSaldo.toLocaleString('id-ID')}</span>
                 </div>
             </div>
             
@@ -3101,7 +3215,7 @@ function showPayment(productName, productDescription, productPrice, productImage
 
             <div class="payment-action-section">
                 <button class="btn-bayar-Saldo" onclick="processSaldoPayment(${productPriceInSaldo}, '${productName}')">
-                    Bayar ${productPriceInSaldo.toLocaleString('id-ID')} Sekarang
+                    Bayar Rp ${productPriceInSaldo.toLocaleString('id-ID')} Sekarang
                 </button>
             </div>
             
@@ -3133,7 +3247,7 @@ function showVideo() {
             uploader: "Supria", 
             views: "1.7 Juta ", 
             videoUrl: "https://nasukafoods.site/nasukaads2.mp4", 
-            posterUrl: "https://nasukafoods.site/nasukafoods.jpg" 
+            posterUrl: "1000362604.jpg" 
         },
         { 
             title: "Produksi", 
