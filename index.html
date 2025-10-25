@@ -13,31 +13,88 @@
     <link rel="stylesheet" href="https://nasukafoods.site/cuss.css">
 
     <style>
-        /* Definisikan keyframes untuk animasi berkedip */
         @keyframes blinker {
             50% {
                 opacity: 0;
             }
         }
 
-        /* Terapkan animasi berkedip ke teks di dalam marquee */
         #blinking-text {
-            animation: blinker 1s linear infinite; /* Animasi berjalan setiap 1 detik, berulang tak terbatas */
-            color: #ffffff; /* Menggunakan warna putih agar menonjol di banner */
-            font-size: 14px; /* Ukuran font opsional */
+            animation: blinker 1s linear infinite;
+            color: #ffffff;
+            font-size: 14px;
             font-weight: 700;
-            text-shadow: 0 0 5px #000; /* Opsional: sedikit bayangan untuk keterbacaan */
+            text-shadow: 0 0 5px #000;
         }
         
-        /* Pastikan marquee di dalam banner-text terlihat baik */
         .banner-text {
-            overflow: hidden; /* Penting untuk mengontrol marquee */
+            overflow: hidden;
             padding-right: 10px;
         }
         
         .banner-text marquee {
             width: 100%;
             line-height: 1.2; 
+        }
+
+        .dokumen-card-modified {
+            background-color: #fff;
+            padding-bottom: 70px;
+            min-height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .dokumen-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background-color: #007bff;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .dokumen-header i {
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .dokumen-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .dokumen-content-section {
+            padding: 15px;
+        }
+        
+        .dokumen-item {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .dokumen-item h4 {
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-bottom: 1px solid #b8daff;
+            padding-bottom: 5px;
+        }
+
+        .dokumen-item p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #495057;
+            margin-bottom: 10px;
         }
     </style>
        
@@ -205,9 +262,9 @@
                 <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard" class="leaderboard-img">
                 <span>Leaderboard</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" id="nav-dokumen" onclick="showDokumen()">
                 <i class="fas fa-list-alt"></i>
-                <span>Kontak Admin</span>
+                <span>Dokumen</span>
             </div>
             <div class="nav-item" onclick="localStorage.getItem('ID') ? showProfil() : showLogin()">
                 <i class="fas fa-user-circle"></i>
@@ -565,8 +622,45 @@
             </div>
         </div>
     </div>
+
+    <div id="dokumen-container" class="auth-container" style="display: none;">
+        <div class="dokumen-card-modified">
+            <div class="dokumen-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Dokumen & Informasi</h3>
+            </div>
+            
+            <div class="dokumen-content-section">
+                
+                <div class="dokumen-item">
+                    <h4>✨ Perjalanan Nasuka Foods</h4>
+                    <p>Nasuka Foods didirikan dengan visi membawa kelezatan Cilok Premium ke setiap rumah. Kami berfokus pada kualitas bahan baku dan resep otentik. Kini, kami hadir secara digital untuk melayani lebih banyak pelanggan dengan produk frozen siap masak dan paket keluarga.</p>
+                    <p>Kami berkomitmen untuk terus berinovasi dan menjaga kualitas rasa yang gurih dan lezat.</p>
+                </div>
+                
+                <div class="dokumen-item">
+                    <h4>💳 Pembayaran Non Tunai (Saldo)</h4>
+                    <p>Kami menerapkan sistem pembayaran Saldo/Non Tunai untuk mempercepat transaksi, Menghindari risiko uang palsu dan order fiktif dan memudahkan catatan riwayat pembelian Anda. Setiap pembelian langsung memotong saldo Anda, yang juga terintegrasi dengan sistem Reward dan Loyalty pelanggan.</p>
+                </div>
+
+                <div class="dokumen-item">
+                    <h4>🎁 Program Reward Pelanggan</h4>
+                    <p>Setiap pembelian produk Nasuka Foods akan terakumulasi. Pelanggan dengan akumulasi pembelian tertinggi (terlihat di Leaderboard) akan mendapatkan hadiah bulanan, seperti Voucher diskon atau Produk gratis, Semakin sering Anda bertransaksi, Semakin besar peluang Anda menjadi Sultan Cibaduyut Terhormat versi Nasuka Foods!</p>
+                </div>
+                
+                <div class="dokumen-item">
+                    <h4>🔄 Kebijakan Pengembalian Dana & Produk</h4>
+                    <p>Kami menerima pengembalian dana atau penggantian produk jika: (1) Produk yang diterima basi atau rusak parah akibat pengiriman. (2) Terdapat kesalahan pengiriman (produk atau kuantitas tidak sesuai pesanan). Pengajuan bisa dilakukan 1x24 jam setelah produk diterima, disertai bukti foto/video. Saldo akan dikembalikan dalam waktu 1-3 hari kerja.</p>
+                </div>
+                
+                 <div class="dokumen-item">
+                    <h4>🔒 Keamanan Akun Anda</h4>
+                    <p>Jaga kerahasiaan Username dan Password* Anda. Nasuka Foods tidak pernah meminta informasi akun sensitif melalui telepon atau apapun itu. Segera ubah password jika Anda mencurigai adanya aktivitas tidak sah di akun Anda.</p>
+                </div>
+
+            </div>
+        </div>
     </div>
-    
     <div id="formal-confirmation-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 300000; justify-content: center; align-items: center;">
         <div style="background-color: white; max-width: 350px; width: 90%; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); text-align: left; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
             <h4 style="margin-top: 0; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; font-size: 18px; font-weight: 700;">
@@ -641,9 +735,11 @@ function updateHomeDisplay() {
     
     const navHome = document.getElementById('nav-home');
     const navLeaderboard = document.getElementById('nav-leaderboard');
+    const navDokumen = document.getElementById('nav-dokumen');
     
     if (navHome) navHome.classList.add('active');
     if (navLeaderboard) navLeaderboard.classList.remove('active');
+    if (navDokumen) navDokumen.classList.remove('active');
 
     if (!userNameEl || !SaldoEl || !welcomeEl) return;
 
@@ -749,7 +845,7 @@ function fetchUserProfileFromDB(userID) {
 }
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container, #formal-confirmation-modal').forEach(el => { 
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
@@ -762,6 +858,12 @@ function showHome() {
         homeContainer.style.display = 'block';
         initializeHome();
     }
+    
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    const navHome = document.getElementById('nav-home');
+    if (navHome) navHome.classList.add('active');
 }
 
 function showLogin() {
@@ -796,19 +898,37 @@ function showQris() {
     }
 }
 
+function showDokumen() {
+    hideAllContainers();
+    const dokumenContainer = document.getElementById('dokumen-container');
+    
+    if (dokumenContainer) {
+        dokumenContainer.style.display = 'flex';
+        dokumenContainer.scrollTop = 0; 
+    }
+    
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    const navDokumen = document.getElementById('nav-dokumen');
+    if(navDokumen) navDokumen.classList.add('active');
+}
+
 function showLeaderboard() {
     hideAllContainers();
     const leaderboardContainer = document.getElementById('leaderboard-container');
-    const navLeaderboard = document.getElementById('nav-leaderboard');
-    const navHome = document.getElementById('nav-home');
     
     if (leaderboardContainer) {
         leaderboardContainer.style.display = 'flex';
         leaderboardContainer.scrollTop = 0;
     }
     
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    const navLeaderboard = document.getElementById('nav-leaderboard');
     if (navLeaderboard) navLeaderboard.classList.add('active');
-    if (navHome) navHome.classList.remove('active');
+
 
     const leaderboardListEl = document.getElementById('leaderboard-list');
     if (leaderboardListEl) {
@@ -1100,16 +1220,14 @@ function showProfil() {
 
 
 
-// ... (Kode JavaScript sebelumnya)
-
 function showHistory() {
     const contentPencapaian = document.getElementById('contentPencapaian');
     
-    // Pastikan tab yang benar aktif
+    
     document.getElementById('tabPencapaian').classList.add('active');
     document.getElementById('tabPerbaikan').classList.remove('active');
 
-    // Kosongkan dan siapkan konten riwayat pembelian
+    
     contentPencapaian.innerHTML = `
         <div style="text-align: center; padding: 20px;">
             <h4 style="margin-top: 0; color: #333; font-size: 16px; font-weight: 600;">Riwayat Pembelian</h4>
@@ -1122,7 +1240,7 @@ function showHistory() {
         </div>
     `;
     
-    // Ambil data transaksi dari Firebase
+    
     db.ref(`transactions/${localUser.ID}`).orderByChild('timestamp').limitToLast(20).once('value')
         .then(snapshot => {
             const historyListEl = document.getElementById('history-list');
@@ -1137,7 +1255,7 @@ function showHistory() {
                 return;
             }
 
-            transactions.reverse(); // Urutkan terbaru di atas
+            transactions.reverse();
 
             transactions.forEach(tx => {
                 const date = new Date(tx.timestamp).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
@@ -1155,9 +1273,9 @@ function showHistory() {
                 txItem.onmouseover = function() { this.style.backgroundColor = '#f9f9f9'; };
                 txItem.onmouseout = function() { this.style.backgroundColor = 'white'; };
                 
-                // Ubah behavior onclick
+                
                 txItem.onclick = () => {
-                    showReceiptPopup(tx); // Panggil fungsi baru untuk menampilkan kwitansi
+                    showReceiptPopup(tx);
                 };
 
                 txItem.innerHTML = `
@@ -1176,42 +1294,30 @@ function showHistory() {
         });
 }
 
-/**
- * Menampilkan pop-up kwitansi (receipt-popup) dengan data transaksi spesifik.
- * @param {object} txData - Objek data transaksi dari Firebase.
- */
 function showReceiptPopup(txData) {
     hideAllContainers();
     
-    // Perlu sedikit penyesuaian data untuk memastikan format kwitansi benar
     const tempTxData = {
         ...txData,
-        // Asumsi data yang disimpan di Firebase sudah lengkap, jika tidak, perlu diisi default/fallback
+        
         initialSaldo: txData.initialSaldo || (txData.finalSaldo + txData.amount),
         deliveryAddress: txData.deliveryAddress || localUser.Alamat || 'Alamat tidak tercatat'
     };
     
-    // Generate dan tampilkan HTML kwitansi
+    
     document.getElementById('receipt-content').innerHTML = generateReceiptHTML(tempTxData);
     
-    // Tampilkan pop-up
+    
     const receiptPopup = document.getElementById('receipt-popup');
     receiptPopup.style.display = 'flex';
     
-    // Ubah tombol "Selesai" di kwitansi untuk kembali ke Profil, bukan Home.
+    
     const finishButton = receiptPopup.querySelector('button');
     if(finishButton) {
         finishButton.onclick = showProfil;
         finishButton.textContent = 'Kembali ke Riwayat';
     }
 }
-
-// ... (Sisa Kode JavaScript Anda)
-
-
-
-
-
 
 
 function showEditProfil() {
@@ -1396,7 +1502,7 @@ function logPurchaseToDB(productName, amount, newSaldo) {
         amount: amount,
         timestamp: timestamp,
         status: 'Success',
-        initialSaldo: localUser.Saldo + amount, 
+        initialSaldo: localUser.Saldo, 
         finalSaldo: newSaldo,
         deliveryAddress: localUser.Alamat,
         deliveryContact: localUser.NomorHP
@@ -1475,16 +1581,15 @@ function hideReceiptAndShowHome() {
     showHome();
 }
 
-// === FUNGSI BARU UNTUK MENAMPILKAN MODAL KONFIRMASI FORMAL ===
 function showFormalConfirmation(amount, productName, onConfirm) {
     const modal = document.getElementById('formal-confirmation-modal');
     const userAddress = localUser.Alamat || "Alamat belum di seting";
     
-    // Ambil konten paragraf dan placeholder
-    const contentP = modal.querySelector('p');
-    let originalHtml = `Saya memastikan bahwa semua detail pesanan termasuk produk, harga, dan alamat pengiriman ($$ALAMAT$$), telah diverifikasi. Dengan menekan tombol "Setuju & Bayar", Saya menyetujui pemotongan Saldo sebesar $$JUMLAH$$ untuk pembelian $$PRODUK$$}.`;
     
-    // Ganti placeholder dengan nilai yang sebenarnya
+    const contentP = modal.querySelector('p');
+    let originalHtml = `Saya memastikan bahwa semua detail pesanan termasuk produk, harga, dan alamat pengiriman ($$ALAMAT$$), telah diverifikasi. Dengan menekan tombol "Setuju & Bayar", Saya menyetujui pemotongan Saldo sebesar $$JUMLAH$$ untuk pembelian $$PRODUK$$.`;
+    
+    
     contentP.innerHTML = originalHtml
         .replace(/\$\$ALAMAT\$\$/g, `${userAddress}`)
         .replace(/\$\$JUMLAH\$\$/g, `Rp ${amount.toLocaleString('id-ID')}`)
@@ -1493,25 +1598,24 @@ function showFormalConfirmation(amount, productName, onConfirm) {
     const confirmBtn = document.getElementById('modal-confirm-btn');
     const cancelBtn = document.getElementById('modal-cancel-btn');
     
-    // Hapus event listener lama
+    
     confirmBtn.onclick = null;
     cancelBtn.onclick = null;
 
-    // Set event listener baru
+    
     confirmBtn.onclick = () => {
         modal.style.display = 'none';
-        onConfirm(); // Panggil fungsi pembayaran sebenarnya
+        onConfirm(); 
     };
     cancelBtn.onclick = () => {
         modal.style.display = 'none';
-        // Opsional: Beri pesan status batal di halaman pembayaran
+        
         document.getElementById('payment-status').innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembayaran dibatalkan oleh pengguna.</div>`;
     };
 
     modal.style.display = 'flex';
 }
-// === AKHIR FUNGSI BARU ===
-
+ 
 
 function processSaldoPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
@@ -1522,7 +1626,7 @@ function processSaldoPayment(amount, productName) {
         return;
     }
     
-    // FUNGSI INTI PEMBAYARAN
+    
     const executePayment = () => {
         const initialSaldo = localUser.Saldo;
         const newSaldo = initialSaldo - amount;
@@ -1552,7 +1656,7 @@ function processSaldoPayment(amount, productName) {
             });
     };
 
-    // Ganti konfirmasi 'confirm()' dengan modal kustom formal
+    
     showFormalConfirmation(amount, productName, executePayment); 
 }
 
