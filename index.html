@@ -8,11 +8,23 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-  
-     
+
     <link rel="stylesheet" href="https://nasukafoods.site/cuss.css">
 
     <style>
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: grey;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
         @keyframes blinker {
             50% {
                 opacity: 0;
@@ -232,14 +244,15 @@
                 <span>Tap Bird</span>
             </a>
             
-            <a href="https://nasukafoods.site/roll.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
-                <div class="other-feature-icon investasi-icon" style="overflow: hidden; padding: 0;">
-                    <img src="https://nasukafoods.site/roll.jpg" alt="Masuk" class="product-icon-img">
+              <a href="https://nasukafoods.site/roll.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                <div class="other-feature-icon catatan-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/roll.jpg" alt="Daftar" class="product-icon-img">
                 </div>
                 <span>Roll</span>
             </a>
             
-        </div>
+           
+            </div>
         
         
         
@@ -280,18 +293,7 @@
         </div> 
    
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div id="login-container" class="auth-container">
+      <div id="login-container" class="auth-container">
         <div class="auth-card">
             <div class="auth-logo-section">
                 <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods" class="auth-logo">
@@ -694,6 +696,7 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
+const userRef = db.ref(`users/${localStorage.getItem("ID")}`); 
 
 const localUser = {
   Username: localStorage.getItem("Username"),
@@ -844,11 +847,14 @@ function fetchUserProfileFromDB(userID) {
   });
 }
 
+
+
 function hideAllContainers() {
     document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
+
 
 
 function showHome() {
@@ -1823,6 +1829,8 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
 $(document).ready(function() {
     showHome(); 
 });
+
+
 </script>
 
 </body>
