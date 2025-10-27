@@ -1,444 +1,54 @@
-<!DOCTYPE html>
+
+    
+    
+    <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=1024">
-  <title>Roll - SPA Demo</title>
-    
-    
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Roll</title>
+ 
     
     
     <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+   <style>
+       
+       
+     
 
-    <style>
-        body { 
-            background-color: #333; 
-            color: white; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
-            font-family: sans-serif; 
-            background-image: url('https://nasukafoods.site/langit.jpg');
-            background-size: cover; 
-            background-repeat: no-repeat; 
-            background-attachment: fixed; 
-            scroll-behavior: smooth; 
-        }
+    body {
+        background-image: url('https://nasukafoods.site/langit.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Opsional: membuat gambar latar belakang tetap saat menggulir */
+        background-color: #333; /* Opsional: Warna latar belakang cadangan */
+    }
 
-        .top-nav {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            position: fixed; 
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
 
-        .nav-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            max-width: 1000px; 
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .nav-list li a {
-            display: block;
-            padding: 15px 25px;
-            text-decoration: none;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .nav-list li a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #4CAF50;
-        }
-        
-        .section-content {
-            background: rgba(0,0,0,0.8);
-            padding: 30px;
-            margin-top: 30px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            width: 95%;
-            max-width: 950px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.7);
-            display: none; 
-        }
-
-        .section-content h2 {
-            color: #4CAF50;
-            border-bottom: 3px solid #4CAF50;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .perspective-on { perspective: 1000px; }
-        .tilted { transform: rotateY(45deg); }
-
-        @keyframes back-spin { 100% { transform: rotateX(36deg); } }
-        .spin-0  { transform: rotateX(-3600deg); }
-        .spin-1  { transform: rotateX(-3636deg); }
-        .spin-2  { transform: rotateX(-3672deg); }
-        .spin-3  { transform: rotateX(-3708deg); }
-        .spin-4  { transform: rotateX(-3744deg); }
-        .spin-5  { transform: rotateX(-3780deg); }
-        .spin-6  { transform: rotateX(-3816deg); }
-        .spin-7  { transform: rotateX(-3852deg); }
-        .spin-8  { transform: rotateX(-3888deg); }
-        .spin-9  { transform: rotateX(-3924deg); }
-        @keyframes spin-0  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } }
-        @keyframes spin-1  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } }
-        @keyframes spin-2  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } }
-        @keyframes spin-3  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } }
-        @keyframes spin-4  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } }
-        @keyframes spin-5  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } }
-        @keyframes spin-6  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } }
-        @keyframes spin-7  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } }
-        @keyframes spin-8  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } }
-        @keyframes spin-9  { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } }
-        #rotate {
-            margin: 0 auto;
-            width: 700px;
-            height: 700px;
-            padding-top: 700px;
-            transform-style: preserve-3d;
-            transform: rotateY(45deg);
-        }
-        .ring {
-            margin: 0 auto;
-            height: 115px;
-            width: 115px;
-            float: left;
-            transform-style: preserve-3d;
-        }
-        .roll {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            box-sizing: border-box;
-            opacity: 0.9;
-            color: black;
-            background: white;
-            border: solid 5px #ccc;
-            backface-visibility: visible;
-        }
-        .roll p {
-            font-size: 100px;
-            font-weight: bold;
-            line-height: 130px;
-            margin: 0;
-            text-align: center;
-        }
-        .backface-on { backface-visibility: visible; }
-
-        #spinButton {
-            position: relative;
-            margin-top: 20px;
-            padding: 30px;
-            background-color: blue;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 30px;
-            width: 95%;
-            max-width: 950px;
-        }
-        #spinButton:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        .mainting-panel {
-            position: relative;
-            margin-top: 20px;
-            background: rgba(0,0,0,0.7);
-            padding: 15px;
-            font-size: 30px;
-            border-radius: 10px;
-            color: white;
-            width: 95%;
-            max-width: 950px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        .auto-main-options {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #444;
-            font-size: 30px;
-        }
-        #automainButtons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            font-size: 30px;
-        }
-        #automainButtons button {
-            flex: 1;
-            min-width: 50px;
-            padding: 5px;
-            background-color: #333;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            font-size: 30px;
-        }
-        #automainButtons button.active {
-            background-color: #4CAF50;
-            font-weight: bold;
-        }
-        #automainButtons button:last-child {
-            background-color: #f44336;
-        }
-        .auto-spin-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-            gap: 10px;
-        }
-        .auto-spin-buttons button {
-            padding: 15px 30px;
-            font-size: 24px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            width: 45%;
-            color: white;
-        }
-        #startAutoSpinButton {
-            background-color: #4CAF50;
-        }
-        #stopAutoSpinButton {
-            background-color: #f44336;
-            display: none;
-        }
-        
-        .result-message {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            font-size: 30px;
-        }
-        .result-hidden {
-            opacity: 0;
-            height: 0;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            transition: all 0.3s ease;
-        }
-        .win {
-            background-color: rgba(255, 215, 0, 0.7) !important;
-            color: black !important;
-        }
-        #SaldoBalance {
-            font-weight: bold;
-            color: snow;
-        }
-        .bling-bling {
-            animation: glowing 1.5s infinite alternate;
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
-        }
-        @keyframes glowing {
-            from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; }
-            to { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7; }
-        }
-        
-        .top-nav {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            position: fixed; 
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .nav-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            max-width: 1000px; 
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .nav-list li a {
-            display: block;
-            padding: 15px 25px;
-            text-decoration: none;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .nav-list li a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #4CAF50;
-        }
-        
-        .section-content {
-            background: rgba(0,0,0,0.8);
-            padding: 30px;
-            margin-top: 30px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            width: 95%;
-            max-width: 950px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.7);
-            display: none;
-        }
-
-        .section-content h2 {
-            color: #4CAF50;
-            border-bottom: 3px solid #4CAF50;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        #customModalOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); 
-            z-index: 2000; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0; 
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        }
-
-        #customModalOverlay.show-modal {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        #customModalBox {
-            background-color: #333;
-            color: white;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            transform: scale(0.9);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        #customModalOverlay.show-modal #customModalBox {
-            transform: scale(1);
-        }
-
-        #modalHeader {
-            background-color: #f44336; 
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-        }
-
-        #modalHeader.info {
-            background-color: #2196F3; 
-        }
-        
-        #modalIcon {
-            font-size: 30px;
-            margin-right: 10px;
-        }
-
-        #modalTitle {
-            margin: 0;
-            font-weight: bold;
-        }
-
-        #modalBody {
-            padding: 20px;
-            font-size: 18px;
-            line-height: 1.5;
-        }
-
-        #modalBody p {
-            white-space: pre-line; 
-            margin: 0;
-        }
-
-        #modalFooter {
-            padding: 10px 20px 20px;
-            text-align: right;
-            border-top: 1px solid #555;
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .modal-button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 18px;
-            transition: background-color 0.2s;
-            flex-grow: 1;
-        }
-
-        .no-button {
-            background-color: #555;
-            color: white;
-        }
-
-        .no-button:hover {
-            background-color: #777;
-        }
-
-        .yes-button {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .yes-button:hover {
-            background-color: #66BB6A;
-        }
-        .ok-button-single {
-            background-color: #2196F3;
-            color: white;
-            width: 100%;
-        }
-    </style>
+       
+       
+       
+       
+       .perspective-on { perspective: 1000px; } .perspective-off { perspective: 0; } .tilted { transform: rotateY(45deg); } .spin-0 { transform: rotateX(-3600deg); } .spin-1 { transform: rotateX(-3636deg); } .spin-2 { transform: rotateX(-3672deg); } .spin-3 { transform: rotateX(-3708deg); } .spin-4 { transform: rotateX(-3744deg); } .spin-5 { transform: rotateX(-3780deg); } .spin-6 { transform: rotateX(-3816deg); } .spin-7 { transform: rotateX(-3852deg); } .spin-8 { transform: rotateX(-3888deg); } .spin-9 { transform: rotateX(-3924deg); } @keyframes back-spin { 100% { transform: rotateX(36deg); } } @keyframes tiltin { 0% { transform: rotateY(0deg);} 50% { transform: rotateY(0deg);} 100% { transform: rotateY(45deg);} } @keyframes tiltout { 0% { transform: rotateY(45deg);} 100% { transform: rotateY(0deg);} } @keyframes spin-0 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3600deg); } } @keyframes spin-1 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3636deg); } } @keyframes spin-2 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3672deg); } } @keyframes spin-3 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3708deg); } } @keyframes spin-4 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3744deg); } } @keyframes spin-5 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3780deg); } } @keyframes spin-6 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3816deg); } } @keyframes spin-7 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3852deg); } } @keyframes spin-8 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3888deg); } } @keyframes spin-9 { 0% { transform: rotateX(36deg); } 100% { transform: rotateX(-3924deg); } } #resultDisplay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; z-index: 9999; pointer-events: none; } #numbersDisplay { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); font-size: 40px; font-weight: bold; color: #000; background: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 10px; z-index: 10000; display: flex; gap: 10px; } #timeDisplay { position: absolute; top: 20px; left: 20px; font-size: 18px; color: #000; background: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 10px; z-index: 10000; text-align: left; } #rotate { margin: 0 auto; width: 700px; height: 700px; padding-top: 700px; transform-style: preserve-3d; transform: rotateY(45deg); } .ring { margin: 0 auto; height: 115px; width: 115px; float: left; transform-style: preserve-3d; } .roll { position: absolute; width: 120px; height: 120px; box-sizing: border-box; opacity: 0.9; color: black; background: white; border: solid 5px #ccc; backface-visibility: visible; } .roll p { font-size: 100px; font-weight: bold; line-height: 130px; margin: 0; text-align: center; } .backface-on { backface-visibility: visible; } .bottom-links { position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; box-sizing: border-box; } 
+       
+       
+       #spinButton:disabled { cursor: not-allowed; opacity: 0.6; } #spinButton { position: absolute; top: 1500px; left: 490px; transform: translateX(-50%); padding: 30px; background-color: blue; color: white; border: none; border-radius: 5px; font-size: 30px; width: 950px; } 
+       
+       
+       .mainting-panel { position: absolute; top: 1600px; left: -10px; background: rgba(0,0,0,0.7); padding: 15px; font-size: 30px; border-radius: 10px; color: white; width: 950px; box-shadow: 0 0 10px rgba(0,0,0,0.5); } 
+       
+       .main-input { width: 100%; padding: 8px; margin: 5px 0; border-radius: 5px; border: none; background-color: #333; color: white; font-size: 30px; } .main-button { background-color: #4CAF50; color: white; border: none; font-size: 2px; padding: 8px 15px; margin: 5px 2px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; } .main-button:hover { background-color: #45a049; } .main-button:disabled { background-color: #cccccc; cursor: not-allowed; } .result-message { margin-top: 10px; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; transition: all 0.3s ease; } #perakBalance { font-weight: bold; color: snow; } .win { background-color: rgba(255, 215, 0, 0.7) !important; color: black !important; } .win-types { margin-top: 15px; font-size: 30px; background-color: rgba(255, 215, 0, 0.7) !important; color: black !important; } .win-type { display: flex; justify-content: space-between; margin: 5px 0; background-color: rgba(255, 215, 0, 0.7) !important; color: black !important; } #numbersDisplay { position: absolute; top: 20px; left: 80%; transform: translateX(-50%); font-size: 50px; font-weight: bold; background: snow; padding: 10px 20px; border-radius: 5px; display: flex; gap: 10px; } #numbersDisplay span { display: inline-block; width: 30px; text-align: center; font-size: 30px; } #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: grey; display: flex; justify-content: center; align-items: center; z-index: 1000; } .auto-main-options { margin-top: 15px; padding-top: 15px; border-top: 1px solid #444; font-size: 30px; } .auto-main-options h4 { margin-bottom: 10px; font-size: 30px; } #automainButtons { display: flex; flex-wrap: wrap; gap: 5px; font-size: 30px; } #automainButtons button { flex: 1; min-width: 50px; padding: 5px; background-color: #333; border: none; border-radius: 4px; color: white; cursor: pointer; font-size: 30px; } #automainButtons button.active { background-color: #4CAF50; font-weight: bold; font-size: 30px; } #automainButtons button:last-child { background-color: #f44336; font-size: 30px; } .result-hidden { opacity: 0; height: 0; overflow: hidden; margin: 0; padding: 0; transition: all 0.3s ease; } .rolling-text { position: fixed; bottom: 10px; left: 10px; color: black; font-size: 30px; opacity: 0.7; z-index: 100; font-size: 30px; } .link-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; } .menu-link { background-color: rgba(255, 255, 255, 0.1); border: 2px solid red; color: black; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background-color 0.3s; text-align: center; font-size: 28px; } .menu-link:hover { background-color: rgba(255, 255, 255, 0.2); } .history-link-container { position: absolute; bottom: 20px; left: 20px; } .error-message { color: red; font-weight: bold; text-align: center; margin-top: 10px; display: none; } .bling-bling { animation: glowing 1.5s infinite alternate; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; } @keyframes glowing { from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; } to { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7; } } .link-container { position: relative; z-index: 200000; } .menu-link { background-color: rgba(255, 255, 255, 0.1); border: 2px solid red; color: snow; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background-color 0.3s; text-align: center; font-size: 28px; background: rgba(0,0,0,0.7); } .menu-link:hover { background-color: rgba(255, 255, 255, 0.2); } .history-link-container { position: absolute; bottom: 20px; left: 20px; } .auto-spin-buttons { display: flex; justify-content: center; margin-top: 15px; gap: 10px; } .auto-spin-buttons button { padding: 15px 30px; font-size: 24px; border-radius: 5px; border: none; cursor: pointer; width: 45%; color: white; } #startAutoSpinButton { background-color: #4CAF50; } #stopAutoSpinButton { background-color: #f44336; display: none; } 
+       
+       
+       
+   </style>
+  
 </head>
 
 <body>
-    <div class="top-nav">
-        <ul class="nav-list">
-            <li><a href="javascript:void(0)" onclick="showArticle('aturan-main')">Aturan Main</a></li>
-            <li><a href="javascript:void(0)" onclick="showArticle('disclaimer')">Disclaimer</a></li>
-            <li><a href="javascript:void(0)" onclick="showArticle('edukasi')">Edukasi</a></li>
-        </ul>
-    </div>
+  
     <div id="stage" class="perspective-on" style="margin-top: 100px;"> <div id="rotate" class="tilted">
             <div id="ring1" class="ring"></div>
             <div id="ring2" class="ring"></div>
@@ -470,49 +80,7 @@
         </div>
     </div>
     
-    <div id="aturan-main" class="section-content">
-        <button onclick="hideArticles()" style="float: right; background: #f44336; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 20px;">X Tutup</button>
-        <h2>📜 Aturan Main</h2>
-        <p>1. Tujuan Putar 5 gulungan angka (0-9) untuk mendapatkan kombinasi kemenangan.</p>
-        <p>2. Pilih jumlah main yang Anda inginkan (1, 5, 100, atau 1.000) sebelum memutar.</p>
-        <p>3. KOMBINASI KEMENANGAN :</p>
-        <ul>
-            <li>Dua: 2 angka yang sama</li>
-            <li>Tiga: 3 angka yang sama</li>
-            <li>Empat: 4 angka yang sama</li>
-            <li>Lima: 5 angka yang sama</li>
-            <li>Jackpot:** Kombinasi urutan 1-2-3-4-5</li>
-        </ul>
-        <p>4. Putaran Otomatis: Anda dapat menggunakan fitur Otomatis untuk memutar terus-menerus hingga Anda menghentikannya atau saldo habis.</p>
-    </div>
-
-    <div id="disclaimer" class="section-content">
-        <button onclick="hideArticles()" style="float: right; background: #f44336; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 20px;">X Tutup</button>
-        <h2>⚠️ Disclaimer</h2>
-        <p>Aplikasi ini hanya untuk tujuan edukasi dan demonstrasi keterampilan pemograman komputer.</p>
-        <p>Kami menyederhanakan mesin slot simpel untuk mudah dipahami pengguna dan mengklaim bahwa pada dasarnya mekanisme nya sama.</p>
-        <p>Semua hasil putaran (Roll) didasarkan pada probabilitas yang diatur dalam system</p>
-    </div>
-
-    <div id="edukasi" class="section-content">
-        <button onclick="hideArticles()" style="float: right; background: #f44336; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 20px;">X Tutup</button>
-        <h2>🧠 Edukasi:</h2>
-        <p>1. Probabilitas (Peluang): Setiap hasil diatur oleh peluang yang telah ditentukan. Dalam kode ini, peluang kemenangan sangat rendah untuk simulasi kesenangan (misalnya, peluang Jackpot mendekati nol).</p>
-        <p>2. House Edge (Keunggulan Bandar): Ini adalah keuntungan matematis yang dimiliki kasino atau permainan terhadap pemain. Dalam kode ini diatur ke 0</p>
-        <p>3. Generator: ini memungkinkan sistem untuk menghasilkan hasil kemenangan berdasarkan probabilitas yang telah ditentukan, bukan benar-benar acak, untuk tujuan efek menang tapi kalah pada akhirnya</p>
-    </div>
-    
-    <div id="customModalOverlay" style="display: none;">
-        <div id="customModalBox">
-            <div id="modalHeader">
-                <span id="modalIcon"></span>
-                <h3 id="modalTitle"></h3>
-            </div>
-            <div id="modalBody">
-                <p id="modalMessage"></p>
-            </div>
-            <div id="modalFooter">
-                </div>
+ 
         </div>
     </div>
     <script>
@@ -578,58 +146,21 @@
         let playerLoseStreak = 0;
         const HOUSE_EDGE = 0;
 
-        /**
-         * FUNGSI YANG DIREVISI UNTUK MENAMPILKAN SALDO DENGAN FORMAT 'Rp'
-         */
-        function updateSaldoDisplay() {
-            // Menggunakan toLocaleString('id-ID') untuk pemisah ribuan lokal
-            const formattedSaldo = 'Rp '  + localUser.Saldo.toLocaleString('id-ID');
-            $('#SaldoBalance').text(formattedSaldo);
+     
+
+      
+      
+              function updateSaldoDisplay() {
+            // Mengambil nilai saldo dan memformatnya dengan 'Rp' dan pemisah ribuan
+            // toLocaleString('id-ID') akan menambahkan pemisah ribuan (titik)
+            // dan secara default tidak menggunakan desimal jika angka bulat.
+            $('#SaldoBalance').text('Rp ' + localUser.Saldo.toLocaleString('id-ID'));
         }
 
-        function showErrorMessage(message) {
-            $('#modalHeader').removeClass('info').css('background-color', '#f44336');
-            $('#modalTitle').text('Terjadi Kesalahan');
-            $('#modalIcon').text('❌');
-            $('#modalMessage').text(message);
-            
-            $('#modalFooter').html('<button id="modalOkButton" class="modal-button ok-button-single">OK</button>');
-
-            $('#customModalOverlay').addClass('show-modal');
-
-            $('#modalOkButton').off('click').on('click', () => {
-                $('#customModalOverlay').removeClass('show-modal');
-                setTimeout(() => $('#customModalOverlay').hide(), 300); 
-            });
-        }
-        
-        function showEducationalWarning(message) {
-            return new Promise((resolve) => {
-                $('#modalHeader').removeClass('info').css('background-color', '#f44336');
-                $('#modalTitle').text('PERINGATAN');
-                $('#modalIcon').text('⚠️');
-                $('#modalMessage').text(message);
-                
-                $('#modalFooter').html(`
-                    <button id="modalNoButton" class="modal-button no-button">Batal</button>
-                    <button id="modalYesButton" class="modal-button yes-button">Saya ambil resiko</button>
-                `);
-
-                $('#customModalOverlay').show().addClass('show-modal');
-
-                $('#modalYesButton').off('click').on('click', () => {
-                    $('#customModalOverlay').removeClass('show-modal');
-                    setTimeout(() => $('#customModalOverlay').hide(), 300); 
-                    resolve(true); 
-                });
-
-                $('#modalNoButton').off('click').on('click', () => {
-                    $('#customModalOverlay').removeClass('show-modal');
-                    setTimeout(() => $('#customModalOverlay').hide(), 300); 
-                    resolve(false); 
-                });
-            });
-        }
+      
+      
+      
+      
 
         function createROLL(ring) {
             const rollAngle = 360 / ROLL_PER_REEL;
@@ -643,6 +174,15 @@
                 ring.append(roll);
             }
         }
+
+
+
+
+      
+
+
+
+
 
         function saveRollToDatabase(result, isManual = false) {
             console.log("Logging roll data has been disabled.");
@@ -910,9 +450,7 @@
                 const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
                 winAmount = Math.round(currentmain * totalMultiplier);
 
-                // Format winAmount dengan 'Rp' dan pemisah ribuan
-                const formattedWinAmount = 'Rp '  + winAmount.toLocaleString('id-ID');
-                message = `Selamat Anda MENDAPATKAN +${formattedWinAmount} `;
+                message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
                 messageClass = "win";
                 triggerConfetti();
                 document.getElementById('winAudio').play();
