@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1024">
-  <title>Roll</title>
+  <title>Roll - SPA Demo</title>
     
-  
+    
     
     
     
@@ -15,8 +15,78 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        body { background-color: #333; color: white; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; font-family: sans-serif; }
+        body { 
+            background-color: #333; 
+            color: white; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            font-family: sans-serif; 
+            background-image: url('https://nasukafoods.site/langit.jpg');
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            scroll-behavior: smooth; 
+        }
 
+        .top-nav {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: fixed; 
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            max-width: 1000px; 
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .nav-list li a {
+            display: block;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .nav-list li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #4CAF50;
+        }
+        
+        .section-content {
+            background: rgba(0,0,0,0.8);
+            padding: 30px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 950px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.7);
+            display: none; 
+        }
+
+        .section-content h2 {
+            color: #4CAF50;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
         .perspective-on { perspective: 1000px; }
         .tilted { transform: rotateY(45deg); }
 
@@ -156,13 +226,7 @@
             background-color: #f44336;
             display: none;
         }
-        .error-message {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
-            display: none;
-        }
+        
         .result-message {
             margin-top: 10px;
             padding: 10px;
@@ -196,12 +260,186 @@
             from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; }
             to { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7; }
         }
+        
+        .top-nav {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: fixed; 
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            max-width: 1000px; 
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .nav-list li a {
+            display: block;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .nav-list li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #4CAF50;
+        }
+        
+        .section-content {
+            background: rgba(0,0,0,0.8);
+            padding: 30px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 950px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.7);
+            display: none;
+        }
+
+        .section-content h2 {
+            color: #4CAF50;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        #customModalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); 
+            z-index: 2000; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0; 
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        #customModalOverlay.show-modal {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #customModalBox {
+            background-color: #333;
+            color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #customModalOverlay.show-modal #customModalBox {
+            transform: scale(1);
+        }
+
+        #modalHeader {
+            background-color: #f44336; 
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        #modalHeader.info {
+            background-color: #2196F3; 
+        }
+        
+        #modalIcon {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+
+        #modalTitle {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        #modalBody {
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        #modalBody p {
+            white-space: pre-line; 
+            margin: 0;
+        }
+
+        #modalFooter {
+            padding: 10px 20px 20px;
+            text-align: right;
+            border-top: 1px solid #555;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: background-color 0.2s;
+            flex-grow: 1;
+        }
+
+        .no-button {
+            background-color: #555;
+            color: white;
+        }
+
+        .no-button:hover {
+            background-color: #777;
+        }
+
+        .yes-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .yes-button:hover {
+            background-color: #66BB6A;
+        }
+        .ok-button-single {
+            background-color: #2196F3;
+            color: white;
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
-    <div id="stage" class="perspective-on" style="margin-top: 50px;">
-        <div id="rotate" class="tilted">
+    <div class="top-nav">
+        <ul class="nav-list">
+            <li><a href="javascript:void(0)" onclick="showArticle('aturan-main')">Aturan Main</a></li>
+            <li><a href="javascript:void(0)" onclick="showArticle('disclaimer')">Disclaimer</a></li>
+            <li><a href="javascript:void(0)" onclick="showArticle('edukasi')">Edukasi</a></li>
+        </ul>
+    </div>
+    <div id="stage" class="perspective-on" style="margin-top: 100px;"> <div id="rotate" class="tilted">
             <div id="ring1" class="ring"></div>
             <div id="ring2" class="ring"></div>
             <div id="ring3" class="ring"></div>
@@ -215,13 +453,12 @@
         <button id="spinButton">Putar</button>
         <div class="mainting-panel">
             <div>Saldo Saya: <span id="SaldoBalance">0</span></div>
-            <div id="errorMessage" class="error-message"></div>
             <div class="auto-main-options">
                 <div id="automainButtons">
                     <button onclick="selectmain(1)" id="main1">1</button>
+                    <button onclick="selectmain(5)" id="main5">5</button>
                     <button onclick="selectmain(100)" id="main100">100</button>
                     <button onclick="selectmain(1000)" id="main1000">1.000</button>
-                    <button onclick="selectmain(10000)" id="main10000">10.000</button>
                     <button onclick="selectmain(0)">off</button>
                 </div>
             </div>
@@ -232,7 +469,52 @@
             <div id="mainResult" class="result-message result-hidden"></div>
         </div>
     </div>
+    
+    <div id="aturan-main" class="section-content">
+        <button onclick="hideArticles()" style="float: right; background: #f44336; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 20px;">X Tutup</button>
+        <h2>📜 Aturan Main</h2>
+        <p>1. Tujuan Putar 5 gulungan angka (0-9) untuk mendapatkan kombinasi kemenangan.</p>
+        <p>2. Pilih jumlah main yang Anda inginkan (1, 5, 100, atau 1.000) sebelum memutar.</p>
+        <p>3. KOMBINASI KEMENANGAN :</p>
+        <ul>
+            <li>Dua: 2 angka yang sama</li>
+            <li>Tiga: 3 angka yang sama</li>
+            <li>Empat: 4 angka yang sama</li>
+            <li>Lima: 5 angka yang sama</li>
+            <li>Jackpot:** Kombinasi urutan 1-2-3-4-5</li>
+        </ul>
+        <p>4. Putaran Otomatis: Anda dapat menggunakan fitur Otomatis untuk memutar terus-menerus hingga Anda menghentikannya atau saldo habis.</p>
+    </div>
 
+    <div id="disclaimer" class="section-content">
+        <button onclick="hideArticles()" style="float: right; background: #f44336; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 20px;">X Tutup</button>
+        <h2>⚠️ Disclaimer</h2>
+        <p>Aplikasi ini hanya untuk tujuan edukasi dan demonstrasi keterampilan pemograman komputer.</p>
+        <p>Kami menyederhanakan mesin slot simpel untuk mudah dipahami pengguna dan mengklaim bahwa pada dasarnya mekanisme nya sama.</p>
+        <p>Semua hasil putaran (Roll) didasarkan pada probabilitas yang diatur dalam system</p>
+    </div>
+
+    <div id="edukasi" class="section-content">
+        <button onclick="hideArticles()" style="float: right; background: #f44336; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 20px;">X Tutup</button>
+        <h2>🧠 Edukasi:</h2>
+        <p>1. Probabilitas (Peluang): Setiap hasil diatur oleh peluang yang telah ditentukan. Dalam kode ini, peluang kemenangan sangat rendah untuk simulasi kesenangan (misalnya, peluang Jackpot mendekati nol).</p>
+        <p>2. House Edge (Keunggulan Bandar): Ini adalah keuntungan matematis yang dimiliki kasino atau permainan terhadap pemain. Dalam kode ini diatur ke 0</p>
+        <p>3. Generator: ini memungkinkan sistem untuk menghasilkan hasil kemenangan berdasarkan probabilitas yang telah ditentukan, bukan benar-benar acak, untuk tujuan efek menang tapi kalah pada akhirnya</p>
+    </div>
+    
+    <div id="customModalOverlay" style="display: none;">
+        <div id="customModalBox">
+            <div id="modalHeader">
+                <span id="modalIcon"></span>
+                <h3 id="modalTitle"></h3>
+            </div>
+            <div id="modalBody">
+                <p id="modalMessage"></p>
+            </div>
+            <div id="modalFooter">
+                </div>
+        </div>
+    </div>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
@@ -301,7 +583,47 @@
         }
 
         function showErrorMessage(message) {
-            $('#errorMessage').text(message).fadeIn().delay(3000).fadeOut();
+            $('#modalHeader').removeClass('info').css('background-color', '#f44336');
+            $('#modalTitle').text('Terjadi Kesalahan');
+            $('#modalIcon').text('❌');
+            $('#modalMessage').text(message);
+            
+            $('#modalFooter').html('<button id="modalOkButton" class="modal-button ok-button-single">OK</button>');
+
+            $('#customModalOverlay').addClass('show-modal');
+
+            $('#modalOkButton').off('click').on('click', () => {
+                $('#customModalOverlay').removeClass('show-modal');
+                setTimeout(() => $('#customModalOverlay').hide(), 300); 
+            });
+        }
+        
+        function showEducationalWarning(message) {
+            return new Promise((resolve) => {
+                $('#modalHeader').removeClass('info').css('background-color', '#f44336');
+                $('#modalTitle').text('PERINGATAN');
+                $('#modalIcon').text('⚠️');
+                $('#modalMessage').text(message);
+                
+                $('#modalFooter').html(`
+                    <button id="modalNoButton" class="modal-button no-button">Batal</button>
+                    <button id="modalYesButton" class="modal-button yes-button">Saya ambil resiko</button>
+                `);
+
+                $('#customModalOverlay').show().addClass('show-modal');
+
+                $('#modalYesButton').off('click').on('click', () => {
+                    $('#customModalOverlay').removeClass('show-modal');
+                    setTimeout(() => $('#customModalOverlay').hide(), 300); 
+                    resolve(true); 
+                });
+
+                $('#modalNoButton').off('click').on('click', () => {
+                    $('#customModalOverlay').removeClass('show-modal');
+                    setTimeout(() => $('#customModalOverlay').hide(), 300); 
+                    resolve(false); 
+                });
+            });
         }
 
         function createROLL(ring) {
@@ -336,6 +658,10 @@
                 const uniqueNum = Math.floor(Math.random() * 10);
                 if (!result.includes(uniqueNum)) {
                     result.push(uniqueNum);
+                } else if (Math.random() < 0.5) { 
+                    result.push(uniqueNum);
+                } else {
+                    result.push(Math.floor(Math.random() * 10));
                 }
             }
             return shuffleArray(result);
@@ -348,6 +674,8 @@
                 const uniqueNum = Math.floor(Math.random() * 10);
                 if (!result.includes(uniqueNum)) {
                     result.push(uniqueNum);
+                } else {
+                    result.push(Math.floor(Math.random() * 10));
                 }
             }
             return shuffleArray(result);
@@ -358,9 +686,7 @@
             const result = [num, num, num, num];
             while (result.length < 5) {
                 const uniqueNum = Math.floor(Math.random() * 10);
-                if (!result.includes(uniqueNum)) {
-                    result.push(uniqueNum);
-                }
+                result.push(uniqueNum);
             }
             return shuffleArray(result);
         }
@@ -372,16 +698,13 @@
 
         function generateJackpot() {
             const result = [1, 2, 3, 4, 5];
-            return shuffleArray(result);
+            return result; 
         }
 
         function generateRandomResult() {
             const result = [];
-            while (result.length < 5) {
-                const num = Math.floor(Math.random() * 10);
-                if (!result.includes(num)) {
-                    result.push(num);
-                }
+            for (let i = 0; i < 5; i++) {
+                result.push(Math.floor(Math.random() * 10));
             }
             return result;
         }
@@ -408,8 +731,8 @@
         }
         
         function checkWin(result) {
-            const sortedResult = [...result].sort((a, b) => a - b).join('');
-            if (sortedResult === '12345') {
+            const strResult = result.join('');
+            if (strResult === '12345') {
                 return 'jackpot';
             }
 
@@ -436,18 +759,43 @@
             return null;
         }
 
-        function selectmain(amount) {
+        async function selectmain(amount) {
+            if (amount === 100 || amount === 1000) {
+                const warningMessage = "\n\n" +
+                                       "Kami tidak ingin Anda menghabiskan saldo Anda untuk sistem yang dirancang agar Anda kalah.\n\n" +
+                                       "Mesin ini ditujukan untuk EDUKASI bahwa judi slot manapun kekuasaan ada di tangan bandar.\n\n" +
+                                       "Mari gunakan logika bahwa judi apapun jenisnya tidak baik untuk kesehatan secara mental maupun ekonomi Anda.\n\n" +
+                                       "Apakah Anda YAKIN ingin menetapkan jumlah main sebesar " + amount.toLocaleString('id-ID') + "? (Kami harap anda pilih 'Batal' untuk menghindari risiko)";
+
+                const userConfirmed = await showEducationalWarning(warningMessage); 
+
+                if (!userConfirmed) {
+                    currentmain = 0;
+                    $('#automainButtons button').removeClass('active');
+                    return; 
+                }
+            }
+            
             if (amount > 0 && amount <= localUser.Saldo) {
                 currentmain = amount;
                 $('#automainButtons button').removeClass('active');
-                $(`#main${amount}`).addClass('active');
+                 if (amount === 5) {
+                    $(`#main5`).addClass('active');
+                } else if (amount === 100) {
+                    $(`#main100`).addClass('active');
+                } else if (amount === 1000) {
+                    $(`#main1000`).addClass('active');
+                } else if (amount === 1) {
+                     $(`#main1`).addClass('active');
+                }
 
             } else if (amount === 0) {
                 currentmain = 0;
                 $('#automainButtons button').removeClass('active');
-
+            } else if (amount > localUser.Saldo && amount !== 0) {
+                showErrorMessage('Saldo tidak mencukupi untuk jumlah main ini.');
             } else {
-                showErrorMessage('Saldo tidak mencukupi atau jumlah main tidak valid.');
+                showErrorMessage('Jumlah main tidak valid.');
             }
         }
 
@@ -630,6 +978,21 @@
             setTimeout(shoot, 150);
             setTimeout(shoot, 300);
         }
+
+        function showArticle(articleId) {
+            $('.section-content').slideUp(400); 
+            
+            $(`#${articleId}`).slideDown(400);
+            
+            $('html, body').animate({
+                scrollTop: $(`#${articleId}`).offset().top - $('.top-nav').outerHeight()
+            }, 500);
+        }
+        
+        function hideArticles() {
+             $('.section-content').slideUp(400);
+        }
+
 
         $(document).ready(function() {
             for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));
