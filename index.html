@@ -750,13 +750,15 @@ function updateHomeDisplay() {
         const displayName = localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username || 'Pengguna';
         
         userNameEl.textContent = displayName;
-        SaldoEl.textContent = (localUser.Saldo || 0).toLocaleString('id-ID');
+        // ⭐ PERBAIKAN: Menambahkan awalan "Rp "
+        SaldoEl.textContent = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID'); 
         
         welcomeEl.innerHTML = `Selamat Datang,<br><strong>${displayName}!</strong>`;
         
     } else {
         userNameEl.textContent = "Masuk";
-        SaldoEl.textContent = "0"; 
+        // ⭐ PERBAIKAN: Menambahkan awalan "Rp " untuk default 0
+        SaldoEl.textContent = "Rp 0"; 
         
         welcomeEl.innerHTML = `Nasuka Foods<br>`; 
     }
@@ -1136,7 +1138,8 @@ function showProfil() {
     const renderProfil = () => {
         const nama = localUser.Nama || 'Nama belum diatur';
         const foto = localUser.Foto || "1000362604.jpg"; 
-        const Saldo = (localUser.Saldo || 0).toLocaleString('id-ID');
+        // ⭐ PERBAIKAN: Menambahkan awalan "Rp "
+        const Saldo = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID');
         
         const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
         const tanggalObj = new Date(tanggalJoinISO);
@@ -1152,7 +1155,8 @@ function showProfil() {
         
         document.getElementById('profilIDPlat').textContent = 'Nomor HP: ' + displayNomorHP; 
         
-        document.getElementById('profilSaldoDisplay').textContent = Saldo + ' Saldo';
+        // ⭐ PERBAIKAN: Saldo sudah termasuk 'Rp'
+        document.getElementById('profilSaldoDisplay').textContent = Saldo; 
         
         const alamatPengirimanEl = document.getElementById('profilAlamatPengiriman');
         if (alamatPengirimanEl) {
