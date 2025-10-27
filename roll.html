@@ -452,7 +452,7 @@
 
         <button id="spinButton">Putar</button>
         <div class="mainting-panel">
-            <div>Saldo Saya: <span id="SaldoBalance">0</span></div>
+            <div>Saldo : <span id="SaldoBalance">0</span></div>
             <div class="auto-main-options">
                 <div id="automainButtons">
                     <button onclick="selectmain(1)" id="main1">1</button>
@@ -578,8 +578,13 @@
         let playerLoseStreak = 0;
         const HOUSE_EDGE = 0;
 
+        /**
+         * FUNGSI YANG DIREVISI UNTUK MENAMPILKAN SALDO DENGAN FORMAT 'Rp'
+         */
         function updateSaldoDisplay() {
-            $('#SaldoBalance').text(localUser.Saldo.toLocaleString('id-ID'));
+            // Menggunakan toLocaleString('id-ID') untuk pemisah ribuan lokal
+            const formattedSaldo = 'Rp '  + localUser.Saldo.toLocaleString('id-ID');
+            $('#SaldoBalance').text(formattedSaldo);
         }
 
         function showErrorMessage(message) {
@@ -905,7 +910,9 @@
                 const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
                 winAmount = Math.round(currentmain * totalMultiplier);
 
-                message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
+                // Format winAmount dengan 'Rp' dan pemisah ribuan
+                const formattedWinAmount = 'Rp '  + winAmount.toLocaleString('id-ID');
+                message = `Selamat Anda MENDAPATKAN +${formattedWinAmount} `;
                 messageClass = "win";
                 triggerConfetti();
                 document.getElementById('winAudio').play();
