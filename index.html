@@ -12,6 +12,70 @@
     <link rel="stylesheet" href="https://nasukafoods.site/cuss.css">
 
     <style>
+        .leaderboard-card-modified {
+            background-color: #f0f2f5;
+            padding-bottom: 70px;
+            min-height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .leaderboard-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background-color: #007bff;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .leaderboard-header i {
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .leaderboard-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .leaderboard-content-section {
+            padding: 15px;
+        }
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .leaderboard-rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: #007bff;
+            width: 30px; 
+            text-align: center;
+        }
+        .leaderboard-name {
+            flex-grow: 1;
+            margin-left: 15px;
+            font-size: 16px;
+            color: #333;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .leaderboard-score {
+            font-size: 16px;
+            font-weight: 600;
+            color: #28a745;
+        }
+
+
         #loading {
             position: fixed;
             top: 0;
@@ -205,11 +269,11 @@
                 </div>
                 <span>Rp 87.000</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Paket Sultan', 'Cilok frozen siap masak untuk stok di rumah, Cilok isian gajih berkualitas super, isi 1000 pcs', 850000, ['https://nasukafoods.site/cilokpro.jpg'], 'Gratis ongkos kirim seluruh kota bandung.')">
+            <div class="other-feature-item" onclick="showPayment('Paket Sultan', 'Cilok frozen siap masak untuk stok di rumah, Cilok isian gajih berkualitas super, isi 1000 pcs', 1500000, ['https://nasukafoods.site/cilokpro.jpg'], 'Gratis ongkos kirim seluruh kota bandung.')">
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/cilokpro.jpg" alt="Sultan" class="product-icon-img">
                 </div>
-                <span>Rp 850.000</span>
+                <span>Rp 1500.000</span>
             </div>
             </div>
             
@@ -705,7 +769,8 @@ const localUser = {
   Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
   Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
   NomorHP: localStorage.getItem("NomorHP") || "Nomor HP belum diatur",
-  Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/nasukafoods.jpg", 
+  Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg", 
+  TotalPengeluaran: parseInt(localStorage.getItem("TotalPengeluaran")) || 0, 
 };
 
 if (localUser.ID) {
@@ -716,14 +781,16 @@ if (localUser.ID) {
         localUser.Saldo = userData.Saldo || 0;
         localUser.Alamat = userData.Alamat || "Alamat belum diatur";
         localUser.NomorHP = userData.NomorHP || "Nomor HP belum diatur";
-        localUser.Foto = userData.Foto || "1000362604.jpg"; 
+        localUser.Foto = userData.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
         localUser.Nama = userData.Nama || localUser.Nama;
+        localUser.TotalPengeluaran = userData.TotalPengeluaran || 0; 
         
         localStorage.setItem("Saldo", localUser.Saldo);
         localStorage.setItem("Alamat", localUser.Alamat);
         localStorage.setItem("NomorHP", localUser.NomorHP);
         localStorage.setItem("Foto", localUser.Foto);
         localStorage.setItem("Nama", localUser.Nama);
+        localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran); 
         
         updateSaldoDisplay();
       }
@@ -750,14 +817,14 @@ function updateHomeDisplay() {
         const displayName = localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username || 'Pengguna';
         
         userNameEl.textContent = displayName;
-        // ⭐ PERBAIKAN: Menambahkan awalan "Rp "
+        
         SaldoEl.textContent = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID'); 
         
         welcomeEl.innerHTML = `Selamat Datang,<br><strong>${displayName}!</strong>`;
         
     } else {
         userNameEl.textContent = "Masuk";
-        // ⭐ PERBAIKAN: Menambahkan awalan "Rp " untuk default 0
+        
         SaldoEl.textContent = "Rp 0"; 
         
         welcomeEl.innerHTML = `Nasuka Foods<br>`; 
@@ -823,19 +890,21 @@ function fetchUserProfileFromDB(userID) {
     const val = snapshot.val();
     if (val) {
       const nama = val.Nama || "Tanpa Nama";
-      const foto = val.Foto || "1000362604.jpg"; 
+      const foto = val.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
       
       localUser.Nama = nama;
       localUser.Foto = foto;
       localUser.Alamat = val.Alamat || "Alamat belum diatur";
       localUser.NomorHP = val.NomorHP || "Nomor HP belum diatur";
       localUser.Saldo = val.Saldo || 0;
+      localUser.TotalPengeluaran = val.TotalPengeluaran || 0; 
       
       localStorage.setItem("Nama", nama);
       localStorage.setItem("Foto", foto);
       localStorage.setItem("Alamat", localUser.Alamat);
       localStorage.setItem("NomorHP", localUser.NomorHP);
       localStorage.setItem("Saldo", localUser.Saldo);
+      localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran); 
 
       updateProfileDisplay(nama, foto, userID);
     } else {
@@ -922,6 +991,8 @@ function showDokumen() {
     if(navDokumen) navDokumen.classList.add('active');
 }
 
+
+
 function showLeaderboard() {
     hideAllContainers();
     const leaderboardContainer = document.getElementById('leaderboard-container');
@@ -937,44 +1008,94 @@ function showLeaderboard() {
     const navLeaderboard = document.getElementById('nav-leaderboard');
     if (navLeaderboard) navLeaderboard.classList.add('active');
 
-
     const leaderboardListEl = document.getElementById('leaderboard-list');
-    if (leaderboardListEl) {
-        const mockLeaderboardData = [
-            { rank: 1, name: "Setya Ningsih", score: 2650900 },
-            { rank: 2, name: "Anipkah", score: 1965900 },
-            { rank: 3, name: "Salwa Aqila", score: 1830500 },
-            { rank: 4, name: "Apri Wijaya", score: 1235000 },
-            { rank: 5, name: "Nanda", score: 934500 },
-            { rank: 6, name: "Bambang", score: 815000 },
-            { rank: 7, name: "Cicilia", score: 690000 },
-            { rank: 8, name: "Rehan", score: 515500 },
-            { rank: 9, name: "Amanda", score: 370900 },                
-            { rank: 10, name: "Indra", score: 355000 },        
-            
-            
-            
-        ];
+    if (!leaderboardListEl) return;
 
-        let listHTML = '';
-        mockLeaderboardData.forEach(item => {
-            const isMe = item.name.includes('(Anda)');
-            listHTML += `
-                <div class="leaderboard-item" style="${isMe ? 'border: 2px solid #007bff; background-color: #e6f7ff;' : ''}">
-                    <span class="leaderboard-rank">${item.rank}</span>
-                    <span class="leaderboard-name" style="${isMe ? 'font-weight: 700; color: #007bff;' : ''}">${item.name}</span>
-                    <span class="leaderboard-score">Rp ${item.score.toLocaleString('id-ID')}</span>
-                </div>
-            `;
+    leaderboardListEl.innerHTML = '<p style="text-align: center; color: #007bff;"><i class="fas fa-spinner fa-spin"></i> Memuat Leaderboard...</p>';
+    
+    const userID = localUser.ID;
+    
+    
+    db.ref("users").orderByChild("TotalPengeluaran").limitToLast(10).once("value")
+        .then(top10Snapshot => {
+            let top10Users = [];
+            top10Snapshot.forEach(childSnapshot => {
+                top10Users.push({
+                    ID: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
+            });
+
+            
+            top10Users.reverse(); 
+
+            let listHTML = '';
+            let isUserInTop10 = false;
+            
+            top10Users.forEach((user, index) => {
+                const rank = index + 1;
+                const isMe = userID && user.ID === userID;
+                
+                if (isMe) {
+                    isUserInTop10 = true;
+                }
+                
+                const displayName = user.Nama || user.Username || 'Pengguna Anonim';
+                
+                const scoreDisplay = `Rp ${(user.TotalPengeluaran || 0).toLocaleString('id-ID')}`;
+                
+                listHTML += `
+                    <div class="leaderboard-item" style="${isMe ? 'border: 2px solid #007bff; background-color: #e6f7ff;' : ''}">
+                        <span class="leaderboard-rank">${rank}</span>
+                        <span class="leaderboard-name" style="${isMe ? 'font-weight: 700; color: #007bff;' : ''}">${displayName} ${isMe ? '(Anda)' : ''}</span>
+                        <span class="leaderboard-score">${scoreDisplay}</span>
+                    </div>
+                `;
+            });
+
+            if (top10Users.length > 0) {
+                leaderboardListEl.innerHTML = listHTML;
+            } else {
+                 leaderboardListEl.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">Belum ada data Leaderboard.</p>';
+            }
+            
+            
+            if (userID && !isUserInTop10) {
+                const userTotalPengeluaran = localUser.TotalPengeluaran || 0;
+                
+                
+                db.ref("users").orderByChild("TotalPengeluaran").startAt(userTotalPengeluaran + 1).once("value")
+                    .then(rankSnapshot => {
+                        let rank = 1;
+                        rankSnapshot.forEach(childSnapshot => {
+                            rank++;
+                        });
+                        
+                        const rankAndaHTML = `
+                            <div style="margin-top: 20px; padding: 15px; border: 2px solid #ff9800; background-color: #fff3e0; border-radius: 8px; text-align: center;">
+                                <p style="margin: 0; font-size: 16px; font-weight: 600; color: #ff9800;">🏆 Peringkat Anda</p>
+                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: 700; color: #333;">#${rank}</p>
+                                <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Sultan Jajan Cilok: Rp ${userTotalPengeluaran.toLocaleString('id-ID')}</p>
+                            </div>
+                        `;
+                        leaderboardListEl.innerHTML += rankAndaHTML;
+                    })
+                    .catch(error => {
+                        console.error("Gagal mengambil peringkat pengguna:", error);
+                        leaderboardListEl.innerHTML += `<p style="text-align: center; color: red; margin-top: 10px;">Gagal mengambil peringkat Anda.</p>`;
+                    });
+            } else if (!userID) {
+                leaderboardListEl.innerHTML += `<p style="text-align: center; color: #666; margin-top: 10px;">Silakan login untuk melihat peringkat Anda.</p>`;
+            }
+
+        })
+        .catch(error => {
+            console.error("Gagal memuat Leaderboard:", error);
+            leaderboardListEl.innerHTML = `<p style="text-align: center; color: red; margin-top: 20px;">Gagal memuat Leaderboard: ${error.message}</p>`;
         });
-        
-        if (mockLeaderboardData.length > 0) {
-            leaderboardListEl.innerHTML = listHTML;
-        } else {
-             leaderboardListEl.innerHTML = '<p style="text-align: center; color: black; margin-top: 20px;">Belum ada data Leaderboard.</p>';
-        }
-    }
 }
+
+
 function loginUser() {
     const username = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
@@ -997,18 +1118,20 @@ function loginUser() {
                     localStorage.setItem("Username", user.Username);
                     localStorage.setItem("Nama", user.Nama || 'Tanpa Nama');
                     localStorage.setItem("Saldo", user.Saldo || 0);
-                    localStorage.setItem("Foto", user.Foto || "1000362604.jpg"); 
+                    localStorage.setItem("Foto", user.Foto || "https://nasukafoods.site/gambarkosong.jpg"); 
                     localStorage.setItem("Alamat", user.Alamat || "Alamat belum diatur");
                     localStorage.setItem("NomorHP", user.NomorHP || "Nomor HP belum diatur");
                     localStorage.setItem("TanggalJoin", user.TanggalJoin || new Date().toISOString());
+                    localStorage.setItem("TotalPengeluaran", user.TotalPengeluaran || 0); 
 
                     localUser.ID = user.ID;
                     localUser.Username = user.Username;
                     localUser.Nama = user.Nama || 'Tanpa Nama';
                     localUser.Saldo = user.Saldo || 0;
-                    localUser.Foto = user.Foto || "1000362604.jpg"; 
+                    localUser.Foto = user.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
                     localUser.Alamat = user.Alamat || "Alamat belum diatur";
                     localUser.NomorHP = user.NomorHP || "Nomor HP belum diatur";
+                    localUser.TotalPengeluaran = user.TotalPengeluaran || 0; 
                     
                     statusDiv.innerHTML = 'Login Berhasil! Mengalihkan...';
                     statusDiv.classList.add('success');
@@ -1045,25 +1168,38 @@ function signupUser() {
         statusDiv.classList.add('error');
         return;
     }
+    
+    
+    const generateRandomNumber = () => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    };
+
+    
+    const newID = "NASUKA" + generateRandomNumber(); 
+    
+    
     db.ref("users").orderByChild("Username").equalTo(username).once("value")
         .then(snapshot => {
             if (snapshot.exists()) {
                 statusDiv.innerHTML = 'Username sudah digunakan. Silakan pilih yang lain.';
                 statusDiv.classList.add('error');
             } else {
-                const newID = db.ref().child('users').push().key;
+                
                 const newUser = {
-                    ID: newID,
+                    ID: newID, 
                     Username: username,
                     Nama: nama,
                     Password: password,
                     Saldo: 500,
-                    Foto: "1000362604.jpg", 
+                    Foto: "https://nasukafoods.site/gambarkosong.jpg", 
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
                     NomorHP: "Nomor HP belum diatur",
-                    TanggalJoin: new Date().toISOString(), 
+                    TanggalJoin: new Date().toISOString(),
+                    TotalPengeluaran: 0, 
                 };
+                
+                
                 db.ref(`users/${newID}`).set(newUser)
                     .then(() => {
                         localStorage.setItem("ID", newUser.ID);
@@ -1074,6 +1210,7 @@ function signupUser() {
                         localStorage.setItem("Alamat", newUser.Alamat);
                         localStorage.setItem("NomorHP", newUser.NomorHP);
                         localStorage.setItem("TanggalJoin", newUser.TanggalJoin);
+                        localStorage.setItem("TotalPengeluaran", newUser.TotalPengeluaran); 
                         
                         localUser.ID = newUser.ID;
                         localUser.Username = newUser.Username;
@@ -1082,6 +1219,7 @@ function signupUser() {
                         localUser.Foto = newUser.Foto;
                         localUser.Alamat = newUser.Alamat;
                         localUser.NomorHP = newUser.NomorHP;
+                        localUser.TotalPengeluaran = newUser.TotalPengeluaran; 
                         
                         statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 500 Saldo gratis. Mengalihkan ke Beranda...';
                         statusDiv.classList.add('success');
@@ -1109,7 +1247,8 @@ function logoutUser() {
         localUser.Saldo = 0;
         localUser.Alamat = "Alamat belum diatur";
         localUser.NomorHP = "Nomor HP belum diatur";
-        localUser.Foto = "1000362604.jpg"; 
+        localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg"; 
+        localUser.TotalPengeluaran = 0;
         
         alert("Anda telah keluar.");
         showHome();
@@ -1137,8 +1276,7 @@ function showProfil() {
 
     const renderProfil = () => {
         const nama = localUser.Nama || 'Nama belum diatur';
-        const foto = localUser.Foto || "1000362604.jpg"; 
-        // ⭐ PERBAIKAN: Menambahkan awalan "Rp "
+        const foto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
         const Saldo = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID');
         
         const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
@@ -1155,7 +1293,7 @@ function showProfil() {
         
         document.getElementById('profilIDPlat').textContent = 'Nomor HP: ' + displayNomorHP; 
         
-        // ⭐ PERBAIKAN: Saldo sudah termasuk 'Rp'
+        
         document.getElementById('profilSaldoDisplay').textContent = Saldo; 
         
         const alamatPengirimanEl = document.getElementById('profilAlamatPengiriman');
@@ -1200,7 +1338,7 @@ function showProfil() {
                     <div class="badge-section">
                         <h4>Informasi</h4>
                         <div class="badge-card">
-                            <img src="1000362604.jpg" alt="Lencana" class="badge-image">
+                            <img src="https://nasukafoods.site/sayapunggu.gif" alt="Lencana" class="badge-image">
                             <div class="badge-text">
                                 <strong>Alamat pengiriman</strong>
                                 <span id="profilAlamatPengiriman">${localUser.Alamat || "Alamat belum diatur"}</span>
@@ -1209,7 +1347,7 @@ function showProfil() {
                     </div>
                     <div class="passenger-comments">
                         <h4>Apa Kata Anda</h4>
-                        <img src="1000362604.jpg" alt="Mencari Komentar" class="magnifying-glass">
+                        <img src="https://nasukafoods.site/pitasebar.gif" alt="Mencari Komentar" class="magnifying-glass">
                         <p style="text-align: center; color: #666; margin-top: 10px;">Belum ada kata kata untuk ditampilkan</p>
                     </div>
                 `;
@@ -1339,7 +1477,7 @@ function showEditProfil() {
     const currentNama = localUser.Nama || '';
     const currentNomorHP = localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP; 
     const currentAlamat = localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat; 
-    const currentFoto = localUser.Foto || "1000362604.jpg"; 
+    const currentFoto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
     
     editContainer.style.position = 'fixed';
     editContainer.style.top = '0';
@@ -1512,10 +1650,11 @@ function logPurchaseToDB(productName, amount, newSaldo) {
         amount: amount,
         timestamp: timestamp,
         status: 'Success',
-        initialSaldo: localUser.Saldo, 
+        initialSaldo: localUser.Saldo + amount, 
         finalSaldo: newSaldo,
         deliveryAddress: localUser.Alamat,
-        deliveryContact: localUser.NomorHP
+        deliveryContact: localUser.NomorHP,
+        totalPengeluaranSaatIni: localUser.TotalPengeluaran 
     };
 
     transactionRef.set(transactionData)
@@ -1631,6 +1770,11 @@ function processSaldoPayment(amount, productName) {
     const statusDiv = document.getElementById('payment-status');
     statusDiv.innerHTML = '';
     
+    if (!localUser.ID) {
+         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Anda belum login. Silakan login untuk membeli.</div>`;
+         return;
+    }
+    
     if (localUser.Saldo < amount) {
         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Saldo Anda (Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (Rp ${amount.toLocaleString('id-ID')}).</div>`;
         return;
@@ -1639,16 +1783,37 @@ function processSaldoPayment(amount, productName) {
     
     const executePayment = () => {
         const initialSaldo = localUser.Saldo;
-        const newSaldo = initialSaldo - amount;
+        
+        
         statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
         
-        db.ref(`users/${localUser.ID}`).update({ Saldo: newSaldo })
-            .then(() => {
-                localUser.Saldo = newSaldo;
-                localStorage.setItem("Saldo", newSaldo);
+        
+        const userRef = db.ref(`users/${localUser.ID}`);
+        userRef.transaction((currentData) => {
+            if (currentData) {
+                
+                if ((currentData.Saldo || 0) < amount) {
+                     return; 
+                }
+                currentData.Saldo = (currentData.Saldo || 0) - amount; 
+                
+                currentData.TotalPengeluaran = (currentData.TotalPengeluaran || 0) + amount;
+            }
+            return currentData;
+        })
+        .then(({committed, snapshot}) => {
+            if (committed) {
+                
+                const updatedUserData = snapshot.val();
+                localUser.Saldo = updatedUserData.Saldo;
+                localUser.TotalPengeluaran = updatedUserData.TotalPengeluaran;
+                
+                localStorage.setItem("Saldo", localUser.Saldo);
+                localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran);
+                
                 updateSaldoDisplay();
                 
-                const transactionData = logPurchaseToDB(productName, amount, newSaldo);
+                const transactionData = logPurchaseToDB(productName, amount, localUser.Saldo);
                 
                 statusDiv.innerHTML = `
                     <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
@@ -1659,11 +1824,14 @@ function processSaldoPayment(amount, productName) {
                 document.getElementById('receipt-content').innerHTML = generateReceiptHTML(transactionData);
                 document.getElementById('payment-container').style.display = 'none';
                 document.getElementById('receipt-popup').style.display = 'flex';
-    
-            })
-            .catch(error => {
-                statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Silakan coba lagi.</div>`;
-            });
+            } else {
+                 statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Terjadi konflik data atau saldo tidak cukup. Coba ulangi.</div>`;
+            }
+        })
+        .catch(error => {
+            console.error("Firebase Transaction Failed:", error);
+            statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Silakan coba lagi.</div>`;
+        });
     };
 
     
@@ -1781,7 +1949,7 @@ function showVideo() {
             uploader: "Supria", 
             views: "1.7 Juta ", 
             videoUrl: "https://nasukafoods.site/nasukaads2.mp4", 
-            posterUrl: "1000362604.jpg" 
+            posterUrl: "https://nasukafoods.site/gambarkosong.jpg" 
         },
         { 
             title: "Produksi", 
