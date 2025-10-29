@@ -35,11 +35,37 @@
             cursor: pointer;
             margin-right: 15px;
         }
+        
+        
+        
+        
         .leaderboard-header h3 {
             margin: 0;
             font-size: 18px;
             font-weight: 600;
         }
+        
+        
+                /* ... CSS sebelumnya ... */
+        .leaderboard-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* CSS BARU UNTUK TEKS BERKEDIP DAN BERPIJAR */
+        .blinking-glowing-text {
+            animation: blinker 1.5s linear infinite; /* Menggunakan blinker yang sudah ada */
+            color: red; /* Warna teks kuning/emas */
+            font-size: 30px;
+            font-weight: 700;
+            text-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffc107, 0 0 15px blue; /* Efek pijar */
+        }
+        /* ... CSS selanjutnya ... */
+
+        
+        
+        
         .leaderboard-content-section {
             padding: 15px;
         }
@@ -676,11 +702,21 @@
                 <h3>Leaderboard</h3>
             </div>
             <div class="leaderboard-content-section">
+                
+                
+               
+
+
+
                 <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard Wings" style="width: 50px; height: 50px; margin-bottom: 10px;">
-                    <p style="font-size: 16px; font-weight: 600; color: #007bff; margin: 0;">Peringkat 10 Besar Pelanggan Istimewa</p>
-                    <p style="font-size: 14px; color: #666; margin-top: 5px;"> Best Sultan Cibaduyut!<p>Big Bos 2025</p></p>
+                    <p style="font-size: 16px; font-weight: 600; color: #007bff; margin: 0;">Daftar 10 Besar Pelanggan VIP</p>
+                    <p style="font-size: 14px; color: #666; margin-top: 5px;"> Sultan Kota Bandung 2018 - 2025
+                        <p class="blinking-glowing-text">Big Bos 2025</p>
+                    </p>
                 </div>
+
+
 
                 <div id="leaderboard-list">
                     <p style="text-align: center; color: #666; margin-top: 20px;">Leaderboard masih kosong.</p>
@@ -1073,8 +1109,8 @@ function showLeaderboard() {
                         
                         const rankAndaHTML = `
                             <div style="margin-top: 20px; padding: 15px; border: 2px solid #ff9800; background-color: #fff3e0; border-radius: 8px; text-align: center;">
-                                <p style="margin: 0; font-size: 16px; font-weight: 600; color: #ff9800;">🏆 Peringkat Anda, Sultan Ke :</p>
-                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: 700; color: #333;">#${rank}</p>
+                                <p style="margin: 0; font-size: 16px; font-weight: 600; color: #ff9800;">🏆 Dominasi Sultan<p>Peringkat Anda :</p>
+                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: 700; color: #333;">Ke ${rank}</p>
                                 <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Total Jajan: Rp ${userTotalPengeluaran.toLocaleString('id-ID')}</p>
                             </div>
                         `;
