@@ -36,17 +36,12 @@
             margin-right: 15px;
         }
         
-        
-        
-        
         .leaderboard-header h3 {
             margin: 0;
             font-size: 18px;
             font-weight: 600;
         }
         
-        
-                /* ... CSS sebelumnya ... */
         .leaderboard-header h3 {
             margin: 0;
             font-size: 18px;
@@ -61,10 +56,6 @@
             font-weight: 700;
             text-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffc107, 0 0 15px blue; /* Efek pijar */
         }
-        /* ... CSS selanjutnya ... */
-
-        
-        
         
         .leaderboard-content-section {
             padding: 15px;
@@ -211,9 +202,15 @@
             <div class="header-content">
                 <div class="top-nav">
                     <span class="welcome">Nasuka Foods<br></span> 
+                    
+                    <a href="https://nasukafoods.site/galer.html" target="_blank" class="help-center" style="text-decoration: none; color: inherit; margin-right: 10px;">
+                        <i class="fas fa-crown"></i>
+                        <span style="font-size: 14px;">Sultan 2025</span> 
+                    </a>
                     <div class="help-center" id="Profil">
                         <i class="fas fa-user"></i>
-                        <span id="userNameDisplay">...</span> </div>
+                        <span id="userNameDisplay">...</span> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -275,11 +272,11 @@
         </div>
 
         <div class="other-features">
-            <div class="other-feature-item" onclick="showPayment(' Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih.', 900, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 1 biji.')">
+            <div class="other-feature-item" onclick="showPayment(' Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih.', 1000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 1 biji.')">
                 <div class="other-feature-icon top-up-icon">
                     <img src="https://nasukafoods.site/cilokpro.jpg" alt="cilok 1" class="product-icon-img">
                 </div>
-                <span>Rp 900</span>
+                <span>Rp 1.000</span>
             </div>
             
             
@@ -460,8 +457,11 @@
                 <div style="font-size: 14px; font-weight: 600; color: #ff9800;">Saldo Anda</div>
                 <div style="font-size: 20px; font-weight: 700; color: #333;" id="profilSaldoDisplay">...</div>
             </div>
-
-
+            
+            <div class="rating-section" style="padding: 10px 15px; margin-bottom: 5px; background-color: #e6f7ff; border-radius: 8px; border: 1px solid #b3e5ff;">
+                <div style="font-size: 14px; font-weight: 600; color: #007bff;">Total Poin Anda</div>
+                <div style="font-size: 20px; font-weight: 700; color: #333;" id="profilPoinDisplay">...</div>
+            </div>
             <div class="safety-report" onclick="showHistory()"> <div class="safety-report-left">
                     <div class="safety-icon">
                         <i class="fas fa-shield-alt"></i>
@@ -821,7 +821,8 @@ const localUser = {
   Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
   NomorHP: localStorage.getItem("NomorHP") || "Nomor HP belum diatur",
   Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg", 
-  TotalPengeluaran: parseInt(localStorage.getItem("TotalPengeluaran")) || 0, 
+  TotalPengeluaran: parseInt(localStorage.getItem("TotalPengeluaran")) || 0,
+  Poin: parseInt(localStorage.getItem("Poin")) || 0, // LOGIKA POIN DIUBAH: Menggunakan parseInt
 };
 
 if (localUser.ID) {
@@ -835,6 +836,7 @@ if (localUser.ID) {
         localUser.Foto = userData.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
         localUser.Nama = userData.Nama || localUser.Nama;
         localUser.TotalPengeluaran = userData.TotalPengeluaran || 0; 
+        localUser.Poin = userData.Poin || 0; // LOGIKA POIN DIUBAH
         
         localStorage.setItem("Saldo", localUser.Saldo);
         localStorage.setItem("Alamat", localUser.Alamat);
@@ -842,6 +844,7 @@ if (localUser.ID) {
         localStorage.setItem("Foto", localUser.Foto);
         localStorage.setItem("Nama", localUser.Nama);
         localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran); 
+        localStorage.setItem("Poin", localUser.Poin); // LOGIKA POIN DIUBAH
         
         updateSaldoDisplay();
       }
@@ -949,6 +952,7 @@ function fetchUserProfileFromDB(userID) {
       localUser.NomorHP = val.NomorHP || "Nomor HP belum diatur";
       localUser.Saldo = val.Saldo || 0;
       localUser.TotalPengeluaran = val.TotalPengeluaran || 0; 
+      localUser.Poin = val.Poin || 0; // LOGIKA POIN DIUBAH
       
       localStorage.setItem("Nama", nama);
       localStorage.setItem("Foto", foto);
@@ -956,6 +960,7 @@ function fetchUserProfileFromDB(userID) {
       localStorage.setItem("NomorHP", localUser.NomorHP);
       localStorage.setItem("Saldo", localUser.Saldo);
       localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran); 
+      localStorage.setItem("Poin", localUser.Poin); // LOGIKA POIN DIUBAH
 
       updateProfileDisplay(nama, foto, userID);
     } else {
@@ -1062,12 +1067,12 @@ function showLeaderboard() {
     const leaderboardListEl = document.getElementById('leaderboard-list');
     if (!leaderboardListEl) return;
 
-    leaderboardListEl.innerHTML = '<p style="text-align: center; color: #007bff;"><i class="fas fa-spinner fa-spin"></i> Memuat Leaderboard...</p>';
+    leaderboardListEl.innerHTML = '<p style="text-align: center; color: #007bff;"><i class="fas fa-spinner fa-spin"></i> Memuat Leaderboard Poin...</p>'; // Diperbarui
     
     const userID = localUser.ID;
     
-    
-    db.ref("users").orderByChild("TotalPengeluaran").limitToLast(10).once("value")
+    // MENGURUTKAN BERDASARKAN POIN
+    db.ref("users").orderByChild("Poin").limitToLast(10).once("value")
         .then(top10Snapshot => {
             let top10Users = [];
             top10Snapshot.forEach(childSnapshot => {
@@ -1093,13 +1098,14 @@ function showLeaderboard() {
                 
                 const displayName = user.Nama || user.Username || 'Pengguna Anonim';
                 
-                const scoreDisplay = `Rp ${(user.TotalPengeluaran || 0).toLocaleString('id-ID')}`;
+                // MENAMPILKAN POIN (tanpa toLocaleString)
+                const scoreDisplay = `${(user.Poin || 0)} Poin`;
                 
                 listHTML += `
                     <div class="leaderboard-item" style="${isMe ? 'border: 2px solid #007bff; background-color: #e6f7ff;' : ''}">
                         <span class="leaderboard-rank">${rank}</span>
                         <span class="leaderboard-name" style="${isMe ? 'font-weight: 700; color: #007bff;' : ''}">${displayName} ${isMe ? '(Anda)' : ''}</span>
-                        <span class="leaderboard-score">${scoreDisplay}</span>
+                        <span class="leaderboard-score" style="color: #ff9800;">${scoreDisplay}</span>
                     </div>
                 `;
             });
@@ -1112,10 +1118,11 @@ function showLeaderboard() {
             
             
             if (userID && !isUserInTop10) {
-                const userTotalPengeluaran = localUser.TotalPengeluaran || 0;
+                // MENGGUNAKAN POIN UNTUK PERINGKAT ANDA
+                const userPoin = localUser.Poin || 0;
                 
                 
-                db.ref("users").orderByChild("TotalPengeluaran").startAt(userTotalPengeluaran + 1).once("value")
+                db.ref("users").orderByChild("Poin").startAt(userPoin + 1).once("value")
                     .then(rankSnapshot => {
                         let rank = 1;
                         rankSnapshot.forEach(childSnapshot => {
@@ -1126,7 +1133,7 @@ function showLeaderboard() {
                             <div style="margin-top: 20px; padding: 15px; border: 2px solid #ff9800; background-color: #fff3e0; border-radius: 8px; text-align: center;">
                                 <p style="margin: 0; font-size: 16px; font-weight: 600; color: #ff9800;">🏆 Dominasi Sultan<p>Peringkat Anda :</p>
                                 <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: 700; color: #333;">Ke ${rank}</p>
-                                <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Total Jajan: Rp ${userTotalPengeluaran.toLocaleString('id-ID')}</p>
+                                <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Total Poin: ${userPoin}</p>
                             </div>
                         `;
                         leaderboardListEl.innerHTML += rankAndaHTML;
@@ -1173,7 +1180,8 @@ function loginUser() {
                     localStorage.setItem("Alamat", user.Alamat || "Alamat belum diatur");
                     localStorage.setItem("NomorHP", user.NomorHP || "Nomor HP belum diatur");
                     localStorage.setItem("TanggalJoin", user.TanggalJoin || new Date().toISOString());
-                    localStorage.setItem("TotalPengeluaran", user.TotalPengeluaran || 0); 
+                    localStorage.setItem("TotalPengeluaran", user.TotalPengeluaran || 0);
+                    localStorage.setItem("Poin", user.Poin || 0); // LOGIKA POIN DIUBAH
 
                     localUser.ID = user.ID;
                     localUser.Username = user.Username;
@@ -1183,6 +1191,7 @@ function loginUser() {
                     localUser.Alamat = user.Alamat || "Alamat belum diatur";
                     localUser.NomorHP = user.NomorHP || "Nomor HP belum diatur";
                     localUser.TotalPengeluaran = user.TotalPengeluaran || 0; 
+                    localUser.Poin = user.Poin || 0; // LOGIKA POIN DIUBAH
                     
                     statusDiv.innerHTML = 'Lading...';
                     statusDiv.classList.add('success');
@@ -1248,6 +1257,7 @@ function signupUser() {
                     NomorHP: "Nomor HP belum diatur",
                     TanggalJoin: new Date().toISOString(),
                     TotalPengeluaran: 0, 
+                    Poin: 0, // LOGIKA POIN DIUBAH
                 };
                 
                 
@@ -1262,6 +1272,7 @@ function signupUser() {
                         localStorage.setItem("NomorHP", newUser.NomorHP);
                         localStorage.setItem("TanggalJoin", newUser.TanggalJoin);
                         localStorage.setItem("TotalPengeluaran", newUser.TotalPengeluaran); 
+                        localStorage.setItem("Poin", newUser.Poin); // LOGIKA POIN DIUBAH
                         
                         localUser.ID = newUser.ID;
                         localUser.Username = newUser.Username;
@@ -1271,6 +1282,7 @@ function signupUser() {
                         localUser.Alamat = newUser.Alamat;
                         localUser.NomorHP = newUser.NomorHP;
                         localUser.TotalPengeluaran = newUser.TotalPengeluaran; 
+                        localUser.Poin = newUser.Poin; // LOGIKA POIN DIUBAH
                         
                         statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 500 Saldo gratis';
                         statusDiv.classList.add('success');
@@ -1300,6 +1312,7 @@ function logoutUser() {
         localUser.NomorHP = "Nomor HP belum diatur";
         localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg"; 
         localUser.TotalPengeluaran = 0;
+        localUser.Poin = 0; // LOGIKA POIN DIUBAH
         
         alert("Anda telah keluar.");
         showHome();
@@ -1329,6 +1342,7 @@ function showProfil() {
         const nama = localUser.Nama || 'Nama belum diatur';
         const foto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
         const Saldo = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID');
+        const Poin = (localUser.Poin || 0) + ' Poin'; // LOGIKA POIN DIUBAH: Poin tanpa desimal
         
         const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
         const tanggalObj = new Date(tanggalJoinISO);
@@ -1346,6 +1360,11 @@ function showProfil() {
         
         
         document.getElementById('profilSaldoDisplay').textContent = Saldo; 
+        
+        const profilPoinDisplayEl = document.getElementById('profilPoinDisplay'); // DITAMBAHKAN
+        if (profilPoinDisplayEl) { // DITAMBAHKAN
+            profilPoinDisplayEl.textContent = Poin; // LOGIKA POIN DIUBAH
+        }
         
         const alamatPengirimanEl = document.getElementById('profilAlamatPengiriman');
         if (alamatPengirimanEl) {
@@ -1476,12 +1495,16 @@ function showHistory() {
                 txItem.onclick = () => {
                     showReceiptPopup(tx);
                 };
+                
+                // Menambahkan Poin yang didapat ke tampilan riwayat
+                // LOGIKA POIN DIUBAH: Poin tanpa toFixed(2)
+                const pointsDisplay = tx.pointsEarned ? `<span style="font-size: 12px; color: #ff9800; margin-left: 10px;">(+${tx.pointsEarned} Poin)</span>` : '';
 
                 txItem.innerHTML = `
                     <div>
                         <strong style="color: ${tx.status === 'Success' ? '#28a745' : '#f44336'};">${tx.productName}</strong><br>
                         <span style="font-size: 12px; color: #666;">${date} | ID: ${tx.transactionID.substring(0, 8)}...</span><br>
-                        <span style="font-size: 14px; font-weight: 500;">Total: -Rp ${tx.amount.toLocaleString('id-ID')}</span>
+                        <span style="font-size: 14px; font-weight: 500;">Total: -Rp ${tx.amount.toLocaleString('id-ID')} ${pointsDisplay}</span>
                     </div>
                     <i class="fas fa-chevron-right" style="font-size: 12px; color: #999;"></i>
                 `;
@@ -1703,7 +1726,8 @@ function updateProfile() {
 }
 
 
-function logPurchaseToDB(productName, amount, newSaldo) {
+// DITAMBAHKAN: pointsEarned sebagai argumen baru
+function logPurchaseToDB(productName, amount, newSaldo, pointsEarned) {
     const userID = localUser.ID;
     if (!userID) return; 
 
@@ -1722,7 +1746,8 @@ function logPurchaseToDB(productName, amount, newSaldo) {
         finalSaldo: newSaldo,
         deliveryAddress: localUser.Alamat,
         deliveryContact: localUser.NomorHP,
-        totalPengeluaranSaatIni: localUser.TotalPengeluaran 
+        totalPengeluaranSaatIni: localUser.TotalPengeluaran,
+        pointsEarned: pointsEarned // LOGIKA POIN DIUBAH: Poin yang diperoleh (integer)
     };
 
     transactionRef.set(transactionData)
@@ -1741,6 +1766,9 @@ function generateReceiptHTML(txData) {
     const dateString = date.toLocaleString('id-ID', { dateStyle: 'medium' });
     const timeString = date.toLocaleString('id-ID', { timeStyle: 'short' });
     const totalSaldo = txData.amount.toLocaleString('id-ID');
+    // LOGIKA POIN DIUBAH: Poin tanpa toFixed(2)
+    const pointsText = txData.pointsEarned ? `<div style="text-align: center; font-size: 14px; font-weight: bold; color: #ff9800; margin-top: 10px;">Anda Mendapat ${txData.pointsEarned} Poin!</div>` : '';
+
 
     return `
         <div style="font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #333; line-height: 1.4;">
@@ -1786,6 +1814,8 @@ function generateReceiptHTML(txData) {
                 </div>
             </div>
 
+            ${pointsText} 
+            
             <div style="text-align: center; margin-top: 20px; font-size: 12px; font-style: italic;">
                 Terima kasih telah berbelanja! <br> Pesanan akan dikirim ke: <br> ${txData.deliveryAddress}
             </div>
@@ -1843,6 +1873,11 @@ function processSaldoPayment(amount, productName) {
          return;
     }
     
+    if (localUser.Alamat === "Alamat belum diatur" || localUser.NomorHP === "Nomor HP belum diatur") {
+         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Mohon lengkapi Alamat Pengiriman dan Nomor HP Anda di menu Edit Profil.</div>`;
+         return;
+    }
+    
     if (localUser.Saldo < amount) {
         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Saldo Anda (Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (Rp ${amount.toLocaleString('id-ID')}).</div>`;
         return;
@@ -1852,6 +1887,8 @@ function processSaldoPayment(amount, productName) {
     const executePayment = () => {
         const initialSaldo = localUser.Saldo;
         
+        // LOGIKA POIN DIUBAH: Rp 1.000 = 1 Poin (Pembulatan ke bawah)
+        const pointsEarned = Math.floor(amount / 1000);
         
         statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
         
@@ -1866,6 +1903,7 @@ function processSaldoPayment(amount, productName) {
                 currentData.Saldo = (currentData.Saldo || 0) - amount; 
                 
                 currentData.TotalPengeluaran = (currentData.TotalPengeluaran || 0) + amount;
+                currentData.Poin = (currentData.Poin || 0) + pointsEarned; // UPDATE POIN (INTEGER)
             }
             return currentData;
         })
@@ -1875,13 +1913,16 @@ function processSaldoPayment(amount, productName) {
                 const updatedUserData = snapshot.val();
                 localUser.Saldo = updatedUserData.Saldo;
                 localUser.TotalPengeluaran = updatedUserData.TotalPengeluaran;
+                localUser.Poin = updatedUserData.Poin; // UPDATE localUser POIN
                 
                 localStorage.setItem("Saldo", localUser.Saldo);
                 localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran);
+                localStorage.setItem("Poin", localUser.Poin); // UPDATE localStorage POIN
                 
                 updateSaldoDisplay();
                 
-                const transactionData = logPurchaseToDB(productName, amount, localUser.Saldo);
+                // Kirim pointsEarned ke fungsi log
+                const transactionData = logPurchaseToDB(productName, amount, localUser.Saldo, pointsEarned);
                 
                 statusDiv.innerHTML = `
                     <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
