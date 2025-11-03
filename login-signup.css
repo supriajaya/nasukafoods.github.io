@@ -1,0 +1,51 @@
+/* ==================================== */
+/* 2. LOGIN & SIGNUP STYLES             */
+/* ==================================== */
+
+.auth-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 200001;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.auth-card {
+    background: white;
+    padding: 20px 20px 40px 20px;
+    border-radius: 0;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: none;
+    text-align: left;
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+.auth-logo-section { text-align: center; padding: 30px 0 10px 0; }
+.auth-logo { width: 80px; height: 80px; object-fit: contain; border-radius: 50%; border: 3px solid #007bff; margin-bottom: 10px; }
+.auth-card h2 { font-size: 24px; margin-bottom: 30px; color: #333; text-align: center; font-weight: 700; }
+
+.auth-input-group { margin-bottom: 20px; }
+.auth-input-group label { display: block; font-size: 14px; color: #666; margin-bottom: 5px; font-weight: 500; }
+.auth-card input[type="text"], .auth-card input[type="password"] {
+    width: 100%; padding: 12px; margin-bottom: 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px;
+}
+
+.auth-card button.btn-primary { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 600; margin-top: 20px; transition: background-color 0.3s; }
+.auth-card button.btn-primary:hover { background-color: #0056b3; }
+
+.auth-card .link-switch { margin-top: 20px; font-size: 14px; text-align: center; }
+.auth-card .link-switch a { color: #007bff; text-decoration: none; font-weight: 600; }
+.auth-status { margin-top: 15px; padding: 10px; border-radius: 5px; font-size: 14px; text-align: center; }
+
+.auth-card button.btn-secondary { width: 100%; padding: 12px; background-color: white; color: #007bff; border: 1px solid #007bff; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; margin-top: 10px; transition: background-color 0.3s; }
+.auth-card button.btn-secondary:hover { background-color: #e6f7ff; }
