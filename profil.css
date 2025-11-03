@@ -1,63 +1,51 @@
-.form-post {
-    padding:10px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-   label {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:6px;
-  cursor:pointer;
-}
-   .form-post {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-   
-   
-   
-   #btnPosting {
-  background: #2196f3;
-  color: white;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 15px;
+/* ==================================== */
+/* 3. PROFIL STYLES                     */
+/* ==================================== */
+
+#profil-container {
+    background-color: #f0f2f5;
+    z-index: 200002;
+    /* inherited: display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; */
 }
 
-.btnKirim {
-  background: #ff9800;
-  color: white;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
+.profil-card {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    box-shadow: none;
+    text-align: left;
+    min-height: 100vh;
 }
-   
-   
-      
-    body {margin:0;font-family:'Segoe UI',sans-serif;background-color:#f5f5f5}
-    .container {display:flex;flex-wrap:wrap;justify-content:space-between;padding:10px}
-    .nasuka {flex:0 0 48%;background-color:#fff;margin-bottom:10px;border-radius:8px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,0.1);text-align:center;box-sizing:border-box}
-    .nasuka img {width:100%;height:auto;display:block}
-    .nasuka-info {padding:10px}
-    .nasuka-info.left {text-align:left}
-    .form-post {padding:10px}
-    .form-post input,.form-post textarea,.form-post select {width:100%;margin-bottom:10px;padding:8px;font-size:16px;box-sizing:border-box}
-    .postingan {padding:10px}
-    .card {background:#fff;margin-bottom:10px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.1);overflow:hidden;position:relative}
-    .card img {width:100%;height:auto}
-    .card-content {padding:10px;text-align:left}
-    .hapus-btn {position:absolute;top:10px;right:10px;background-color:red;color:white;border:none;padding:6px 10px;font-size:12px;border-radius:4px;cursor:pointer}
-    .komentar {padding:10px}
-    .komentar input {width:100%;box-sizing:border-box;padding:5px;margin-bottom:5px}
-    .komentar-list {max-height:100px;overflow-y:auto;font-size:14px;color:#333}
-    .komentar-list div {margin-bottom:5px}
-  
+
+.profil-header-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; }
+.profil-header-nav h3 { margin: 0; font-size: 18px; font-weight: 500; }
+.profil-header-nav i { font-size: 24px; color: #333; cursor: pointer; }
+
+.driver-info { display: flex; align-items: center; padding: 15px; background-color: white; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+.driver-foto { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 3px solid #007bff; }
+.driver-text h4 { margin: 0 0 5px 0; font-size: 18px; font-weight: 600; color: #333; }
+.driver-details { font-size: 12px; color: #666; }
+
+.safety-report { background-color: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); cursor: pointer; }
+.safety-report-left { display: flex; align-items: center; }
+.safety-icon { width: 30px; height: 30px; border-radius: 4px; display: flex; justify-content: center; align-items: center; color: #007bff; margin-right: 10px; }
+.safety-text { font-size: 14px; color: #333; }
+.safety-text span { display: block; font-size: 12px; color: #666; }
+
+.rating-section { background-color: white; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+.rating-main { text-align: center; margin-right: 20px; }
+.rating-score { font-size: 32px; font-weight: 700; color: #333; }
+.rating-label { font-size: 12px; color: #666; }
+.rating-breakdown { flex-grow: 1; font-size: 12px; color: #666; }
+.rating-bar-row { display: flex; align-items: center; margin-bottom: 2px; }
+.rating-bar { flex-grow: 1; height: 6px; background-color: #eee; border-radius: 3px; margin-right: 10px; }
+.rating-fill { height: 100%; background-color: #ffc107; border-radius: 3px; }
+
+.profil-tabs { display: flex; border-bottom: 2px solid #eee; background-color: white; }
+.profil-tab-item { flex: 1; text-align: center; padding: 15px 0; font-weight: 500; color: #666; cursor: pointer; border-bottom: 2px solid transparent; }
+.profil-tab-item.active { color: #007bff; border-bottom: 2px solid #007bff; }
+.tab-content-section { padding: 15px; background-color: white; margin-top: 1px; margin-bottom: 70px; }
+/* ... (Gaya badge dan komentar) ... */
