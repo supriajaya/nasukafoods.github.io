@@ -1,0 +1,47 @@
+/* ==================================== */
+/* 8. QRIS STYLES                       */
+/* ==================================== */
+
+#qris-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f0f2f5;
+    z-index: 200006;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.qris-card-modified {
+    background: white; padding: 0; border-radius: 0; width: 100%; max-width: 450px; margin: 0 auto; box-shadow: none; text-align: left; min-height: 100vh;
+}
+
+.qris-header { display: flex; align-items: center; padding: 15px; background-color: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; }
+.qris-header h3 { margin: 0; font-size: 18px; font-weight: 600; flex-grow: 1; text-align: center; padding-right: 24px; }
+.qris-header i { font-size: 24px; color: #333; cursor: pointer; }
+
+.qris-content-section { padding: 15px; background-color: white; padding-top: 0; }
+.qris-logo-section { padding: 20px 20px 10px 20px; text-align: center; margin-bottom: 15px; background-color: #fff; }
+.qris-logo { width: 80px; height: 80px; object-fit: contain; border-radius: 50%; margin-bottom: 10px; border: 3px solid #007bff; }
+.qris-title { font-size: 22px; font-weight: 700; color: #333; margin-bottom: 5px; }
+.qris-subtitle { font-size: 14px; color: #666; font-style: italic; }
+
+.qris-code-box { background-color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); border: 1px solid #eee; }
+.qris-code-image { width: 180px; height: 180px; object-fit: contain; border: 1px solid #eee; border-radius: 8px; margin-bottom: 15px; }
+.qris-info p { margin: 5px 0; font-size: 14px; color: #555; text-align: left; }
+.qris-code-box .qris-info p { text-align: center; }
+
+.qris-instruction-box { background-color: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); border: 1px solid #eee; }
+.qris-instruction-box h4 { margin-top: 0; font-size: 16px; color: #007bff; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; font-weight: 600; }
+.qris-instruction-box ul { padding-left: 20px; margin: 0; font-size: 14px; color: #333; }
+.qris-instruction-box li { margin-bottom: 8px; line-height: 1.4; }
+
+.qris-warning { background-color: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; font-size: 14px; display: flex; align-items: center; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); margin-top: 15px; }
+.qris-warning i { margin-right: 10px; font-size: 18px; }
+.qris-promo-section { background-color: #e6f7ff; color: #007bff; padding: 15px; border-radius: 10px; margin-top: 15px; text-align: center; font-size: 14px; font-weight: 600; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); }
