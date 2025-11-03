@@ -1,71 +1,44 @@
- body {
-      font-family: sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-      margin: 0;
-    }
-    .form-container {
-      background: white;
-      max-width: 100%;
-      width: 100%;
-      box-sizing: border-box;
-      margin: auto;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 1.2rem;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0 16px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      font-size: 0.9rem;
-    }
-    button {
-      background-color: #1877f2;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 1rem;
-    }
-    button:hover {
-      background-color: #145dbf;
-    }
-    img.preview {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      display: block;
-      margin-bottom: 12px;
-      border-radius: 4px;
-    }
-    #status {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #333;
-    }
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-      .form-container {
-        padding: 12px;
-      }
-      input, textarea, button {
-        font-size: 0.95rem;
-      }
-    }
+/* ==================================== */
+/* 4. EDIT PROFIL STYLES                */
+/* ==================================== */
+
+#editprofil-container {
+    background-color: #f0f2f5;
+    align-items: flex-start;
+    padding: 0;
+    overflow-y: auto;
+}
+
+#editprofil-container textarea { /* Gaya unik yang ditempatkan di awal file */
+    width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 24px; resize: vertical;
+}
+
+#editprofil-container .auth-card {
+    background: #f0f2f5;
+    padding: 0; border-radius: 0; box-shadow: none; max-width: 450px; margin: 0 auto; width: 100%; min-height: 100vh;
+}
+
+.edit-header-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); }
+.edit-header-nav h3 { margin: 0; font-size: 18px; font-weight: 600; }
+.edit-header-nav .fas { font-size: 24px; color: #333; cursor: pointer; }
+
+.edit-profile-photo-section { padding: 20px; background-color: white; text-align: center; margin-bottom: 10px; }
+.edit-profile-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); cursor: pointer; }
+.change-photo-text { color: #007bff; font-weight: 500; font-size: 14px; cursor: pointer; }
+
+.edit-form-section { background-color: white; padding: 15px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+.edit-form-section h4 { margin-top: 0; margin-bottom: 10px; font-size: 16px; color: #333; font-weight: 600; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 500; }
+.edit-form-section input[type="text"], .edit-form-section input[type="password"], .edit-form-section textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; color: #333; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+.edit-form-section textarea { resize: vertical; min-height: 80px; }
+
+#editProfilForm button[type="submit"] { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: 600; margin-top: 5px; margin-bottom: 15px; transition: background-color 0.3s; }
+#editProfilForm button[type="submit"]:hover { background-color: #0056b3; }
+
+.edit-footer-buttons { padding: 15px; background-color: white; text-align: center; position: sticky; bottom: 0; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05); }
+.edit-footer-buttons button { width: 100%; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.3s; border: 1px solid #ccc; }
+.edit-footer-buttons .btn-batal { background-color: white; color: #f44336; margin-bottom: 10px; }
+.edit-footer-buttons .btn-logout { background-color: #f44336; color: white; border: none; }
+.edit-footer-buttons .btn-batal:hover { background-color: #f0f0f0; }
