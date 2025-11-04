@@ -1,94 +1,449 @@
-/* ==================================== */
-/* 1. BASE & HOME LAYOUT STYLES         */
-/* ==================================== */
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; 
+    margin: 0; 
+    padding: 0; 
+    background-color: #f0f2f5; 
+    color: #333; 
+    -webkit-font-smoothing: antialiased; 
+} 
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    margin: 0;
-    padding: 0;
-    background-color: #f0f2f5;
-    color: #333;
-    -webkit-font-smoothing: antialiased;
-}
+.container { 
+    max-width: 450px; 
+    margin: 0 auto; 
+    background-color: white; 
+    min-height: 10vh; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    position: relative; 
+} 
 
-.container {
-    max-width: 450px;
-    margin: 0 auto;
-    background-color: white;
-    min-height: 10vh;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
+/* Struktur Container Halaman Overlay (default hidden) */
+#login-container, 
+#signup-container, 
+#profil-container, 
+#editprofil-container, 
+#payment-container, 
+#receipt-popup, 
+#video-container, 
+#download-container, 
+#qris-container, 
+#leaderboard-container { 
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: white; 
+    z-index: 200005; 
+    overflow-y: auto; 
+} 
 
-/* Gaya dasar untuk semua kontainer halaman penuh (semuanya display: none) */
-#login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    z-index: 200005;
-    overflow-y: auto;
-}
+/* Header Utama (Home) */
+.header { 
+    background: linear-gradient(180deg, #007bff, #0056b3); 
+    color: white; 
+    padding: 20px 15px 100px 15px; 
+    position: relative; 
+    overflow: hidden; 
+} 
 
-/* --- Header & Saldo --- */
-.header {
-    background: linear-gradient(180deg, #007bff, #0056b3);
-    color: white;
-    padding: 20px 15px 100px 15px;
-    position: relative;
+.header::before { 
+    content: ""; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background-image: url('placeholder-building-bg.png'); 
+    background-size: cover; 
+    background-position: center top; 
+    opacity: 0.2; 
+    z-index: 1; 
+} 
+
+.header-content { 
+    position: relative; 
+    z-index: 2; 
+} 
+
+.top-nav { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px; 
+} 
+
+.welcome { 
+    font-size: 18px; 
+    font-weight: 500; 
+} 
+
+.help-center { 
+    background-color: rgba(255, 255, 255, 0.2); 
+    padding: 5px 10px; 
+    border-radius: 20px; 
+    font-size: 12px; 
+    display: flex; 
+    align-items: center; 
+} 
+
+.help-center i { 
+    margin-right: 5px; 
+} 
+
+/* Kartu Saldo */
+.balance-card { 
+    background-color: white; 
+    color: #333; 
+    padding: 15px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    position: absolute; 
+    top: 100px; 
+    left: 15px; 
+    right: 15px; 
+    z-index: 10; 
+} 
+
+.balance-title { 
+    font-size: 14px; 
+    color: #666; 
+    margin-bottom: 5px; 
+} 
+
+.balance-details { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+} 
+
+.balance-amount { 
+    font-size: 24px; 
+    font-weight: 700; 
+} 
+
+.balance-icon { 
+    font-size: 20px; 
+    color: #007bff; 
+    cursor: pointer; 
+} 
+
+.all-accounts { 
+    background-color: #f0f2f5; 
+    color: #007bff; 
+    padding: 10px; 
+    border-radius: 8px; 
+    margin-top: 15px; 
+    text-align: center; 
+    font-weight: 600; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 14px; 
+    cursor: pointer; 
+} 
+
+/* Fitur Utama */
+.main-features { 
+    display: flex; 
+    justify-content: space-around; 
+    padding: 20px 10px; 
+    margin-top: 100px; 
+    margin-bottom: 10px; 
+    background-color: white; 
+    border-bottom: 1px solid #eee; 
+} 
+
+.feature-item, .feature-link { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    font-size: 12px; 
+    color: #555; 
+    cursor: pointer; 
+    width: 20%; 
+    text-decoration: none; 
+} 
+
+.feature-icon-circle { 
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-bottom: 5px; 
+    font-size: 22px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+} 
+
+.transfer-icon { 
+    background-color: #e6f7ff; 
+    color: #007bff; 
+} 
+
+.briva-icon { 
+    background-color: #e6fffb; 
+    color: #00bcd4; 
+} 
+
+.pdam-icon { 
+    background-color: #e6f0ff; 
+    color: #007bff; 
+} 
+
+.pulsa-icon { 
+    background-color: #e6ffe6; 
+    color: #28a745; 
+} 
+
+.feature-icon-circle i { 
+    font-size: 24px; 
+} 
+
+.leaderboard-icon-img { 
+    width: 25px; 
+    height: 25px; 
+    object-fit: contain; 
+} 
+
+/* Banner & Search Bar */
+.banner { 
+    margin: 0 15px 20px 15px; 
+    padding: 15px; 
+    border-radius: 12px; 
+    background: linear-gradient(90deg, #007bff, #0056b3); 
+    color: white; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 14px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    cursor: pointer; 
+} 
+
+.banner-text { 
+    flex-grow: 1; 
+    line-height: 1.4; 
     overflow: hidden;
+    padding-right: 10px;
+} 
+
+.banner-text strong { 
+    font-size: 16px; 
+    font-weight: 700; 
+} 
+
+.banner-text marquee {
+    width: 100%;
+    line-height: 1.2;
 }
 
-.header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('placeholder-building-bg.png');
-    background-size: cover;
-    background-position: center top;
-    opacity: 0.2;
-    z-index: 1;
+.banner-button { 
+    background-color: white; 
+    color: #007bff; 
+    padding: 8px 15px; 
+    border-radius: 20px; 
+    font-weight: 600; 
+    margin-left: 10px; 
+} 
+
+.search-bar { 
+    margin: 0 15px 20px 15px; 
+    padding: 10px 15px; 
+    background-color: #f0f2f5; 
+    border-radius: 8px; 
+    color: #666; 
+    display: flex; 
+    align-items: center; 
+    font-size: 16px; 
+    cursor: text; 
+} 
+
+.search-bar i { 
+    margin-right: 10px; 
+    color: #999; 
+} 
+
+.search-bar .marquee-content { 
+    flex-grow: 1; 
+    white-space: nowrap; 
+    overflow: hidden; 
+} 
+
+.search-bar marquee { 
+    width: 100%; 
+    margin: 0; 
+    padding: 0; 
+    display: block; 
+} 
+
+/* Fitur Lainnya */
+.other-features { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 15px 10px; 
+    padding: 0 15px 20px 15px; 
+} 
+
+.other-feature-item { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    font-size: 12px; 
+    color: #555; 
+    cursor: pointer; 
+} 
+
+.other-feature-icon { 
+    width: 50px; 
+    height: 50px; 
+    background-color: #fff; 
+    border: 1px solid #eee; 
+    border-radius: 10px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-bottom: 5px; 
+    font-size: 24px; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
+    overflow: hidden; 
+} 
+
+.product-icon-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    border-radius: 10px; 
+} 
+
+.top-up-icon { 
+    color: #28a745; 
+} 
+
+.brizzi-icon { 
+    color: #00bcd4; 
+} 
+
+.tagihan-icon { 
+    color: #007bff; 
+} 
+
+.setor-tarik-icon { 
+    color: #007bff; 
+} 
+
+.lifestyle-icon { 
+    color: #e83e8c; 
+} 
+
+.virtual-icon { 
+    color: #007bff; 
+} 
+
+.catatan-icon { 
+    color: #007bff; 
+} 
+
+.investasi-icon { 
+    color: #007bff; 
+} 
+
+/* Bottom Navigasi Bar */
+.bottom-nav { 
+    position: fixed; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    max-width: 450px; 
+    width: 100%; 
+    background-color: white; 
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); 
+    display: flex; 
+    justify-content: space-around; 
+    padding: 5px 0; 
+    z-index: 100; 
+} 
+
+.nav-item { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    font-size: 10px; 
+    color: #999; 
+    padding: 5px; 
+    cursor: pointer; 
+} 
+
+.nav-item.active { 
+    color: #007bff; 
+    font-weight: 600; 
+} 
+
+.nav-item i { 
+    font-size: 20px; 
+    margin-bottom: 2px; 
+} 
+
+.nav-item .leaderboard-img { 
+    width: 20px; 
+    height: 20px; 
+    margin-bottom: 2px; 
+    object-fit: contain; 
+} 
+
+.qris-button { 
+    position: absolute; 
+    bottom: 30px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 60px; 
+    height: 60px; 
+    background-color: #007bff; 
+    border-radius: 50%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    color: white; 
+    font-size: 28px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+    border: 5px solid white; 
+    z-index: 101; 
+    cursor: pointer; 
+} 
+
+/* Loading & Animation */
+#loading { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: grey; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 1000; 
+} 
+
+@keyframes blinker { 
+    50% { opacity: 0; } 
+} 
+
+.blinking-glowing-text { 
+    animation: blinker 1.5s linear infinite; 
+    color: red; 
+    font-size: 30px; 
+    font-weight: 700; 
+    text-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffc107, 0 0 15px blue; 
+} 
+
+#blinking-text { 
+    animation: blinker 1s linear infinite; 
+    color: #ffffff; 
+    font-size: 14px; 
+    font-weight: 700; 
+    text-shadow: 0 0 5px #000; 
 }
-
-.header-content { position: relative; z-index: 2; }
-.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.welcome { font-size: 18px; font-weight: 500; }
-.help-center { background-color: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; }
-.help-center i { margin-right: 5px; }
-
-.balance-card { background-color: white; color: #333; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); position: absolute; top: 100px; left: 15px; right: 15px; z-index: 10; }
-.balance-title { font-size: 14px; color: #666; margin-bottom: 5px; }
-.balance-details { display: flex; justify-content: space-between; align-items: center; }
-.balance-amount { font-size: 24px; font-weight: 700; }
-.balance-icon { font-size: 20px; color: #007bff; cursor: pointer; }
-
-/* --- Fitur & Banner --- */
-.main-features { display: flex; justify-content: space-around; padding: 20px 10px; margin-top: 100px; margin-bottom: 10px; background-color: white; border-bottom: 1px solid #eee; }
-.feature-item, .feature-link { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 12px; color: #555; cursor: pointer; width: 20%; text-decoration: none; }
-.feature-icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 5px; font-size: 22px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
-.transfer-icon { background-color: #e6f7ff; color: #007bff; }
-/* ... (Gaya ikon fitur lainnya) ... */
-
-.banner { margin: 0 15px 20px 15px; padding: 15px; border-radius: 12px; background: linear-gradient(90deg, #007bff, #0056b3); color: white; display: flex; justify-content: space-between; align-items: center; font-size: 14px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); cursor: pointer; }
-.banner-text { flex-grow: 1; line-height: 1.4; overflow: hidden; padding-right: 10px; }
-.banner-text strong { font-size: 16px; font-weight: 700; }
-.banner-text marquee { width: 100%; line-height: 1.2; }
-.banner-button { background-color: white; color: #007bff; padding: 8px 15px; border-radius: 20px; font-weight: 600; margin-left: 10px; }
-
-/* --- Fitur Lainnya --- */
-.other-features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px 10px; padding: 0 15px 20px 15px; }
-.other-feature-item { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 12px; color: #555; cursor: pointer; }
-.other-feature-icon { width: 50px; height: 50px; background-color: #fff; border: 1px solid #eee; border-radius: 10px; display: flex; justify-content: center; align-items: center; margin-bottom: 5px; font-size: 24px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); overflow: hidden; }
-
-/* --- Navigasi Bawah --- */
-.bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); max-width: 450px; width: 100%; background-color: white; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); display: flex; justify-content: space-around; padding: 5px 0; z-index: 100; }
-.nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #999; padding: 5px; cursor: pointer; }
-.nav-item.active { color: #007bff; font-weight: 600; }
-.nav-item i { font-size: 20px; margin-bottom: 2px; }
-.qris-button { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background-color: #007bff; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 28px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); border: 5px solid white; z-index: 101; cursor: pointer; }
