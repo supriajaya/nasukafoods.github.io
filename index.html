@@ -562,7 +562,7 @@
                 <span class="balance-amount" id="SaldoAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             <div class="all-accounts">
-                <span>Saat Ini Website sedang dalam perbaikan</span>
+                <span>Website sedang dalam pengembangan</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
@@ -2412,67 +2412,6 @@ function showPayment(productName, productDescription, productPrice, productImage
         </div>
     `;
     
-}
-
-function showVideo() {
-    hideAllContainers();
-    const videoContainer = document.getElementById('video-container');
-    if (videoContainer) {
-        videoContainer.style.display = 'flex';
-    }
-
-    const videoListEl = document.getElementById('video-list');
-    if (!videoListEl) return;
-
-    const videos = [
-        { 
-            title: "Nasuka Foods ", 
-            uploader: "Natasya", 
-            views: "2.2 Juta ", 
-            videoUrl: "https://nasukafoods.site/nasukaads1.mp4", 
-            posterUrl: "https://nasukafoods.site/cilokpro.jpg" 
-        },
-        { 
-            title: "Logo", 
-            uploader: "Supria", 
-            views: "1.7 Juta ", 
-            videoUrl: "https://nasukafoods.site/nasukaads2.mp4", 
-            posterUrl: "https://nasukafoods.site/gambarkosong.jpg" 
-        },
-        { 
-            title: "Produksi", 
-            uploader: "Karlina", 
-            views: "1.2 Juta ", 
-            videoUrl: "https://nasukafoods.site/nasukaads3.mp4", 
-            posterUrl: "https://nasukafoods.site/gambarkosong.jpg" 
-        }
-    ];
-
-    videoListEl.innerHTML = ''; 
-
-    videos.forEach(video => {
-        const videoItem = document.createElement('div');
-        videoItem.className = 'video-item';
-        
-        videoItem.innerHTML = `
-            <div class="video-thumbnail">
-                <video controls controlslist="nodownload" poster="${video.posterUrl}">
-                    <source src="${video.videoUrl}" type="video/mp4">
-                    Browser Anda tidak mendukung tag video.
-                </video>
-            </div>
-            <div class="video-details">
-                <h4>${video.title}</h4>
-                <p>Oleh: ${video.uploader} | ${video.views}x ditonton</p>
-            </div>
-        `;
-        
-        videoListEl.appendChild(videoItem);
-    });
-    
-    if (videos.length === 0) {
-        videoListEl.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">Tidak ada video untuk saat ini.</p>';
-    }
 }
 
 
