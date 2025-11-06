@@ -22,12 +22,11 @@
 
 
 <style>
-    /* Reset dan Dasar */
     body { 
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; 
         margin: 0; 
         padding: 0; 
-        background-color: #ffffff; /* Latar belakang body putih */
+        background-color: #ffffff; 
         color: #333; 
         -webkit-font-smoothing: antialiased; 
     } 
@@ -36,11 +35,9 @@
         margin: 0 auto; 
         background-color: white; 
         min-height: 10vh; 
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Bayangan lebih halus */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); 
         position: relative; 
     } 
-    /* Struktur Container Halaman Overlay (default hidden) */ 
-    /* Hapus #qris-container dari list di bawah */
     #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #dokumen-container { 
         display: none; 
         position: fixed; 
@@ -53,18 +50,16 @@
         overflow-y: auto; 
     } 
     
-    /* Header Utama (Home) - Dibuat lebih tipis, tanpa gradien */ 
     .header { 
-        background: #007bff; /* Warna biru solid */
+        background: #007bff; 
         color: white; 
-        padding: 15px 15px 50px 15px; /* Padding atas-bawah dikurangi, padding bawah dikurangi */
+        padding: 15px 15px 50px 15px; 
         position: relative; 
         overflow: hidden; 
-        border-bottom-left-radius: 15px; /* Sedikit lengkungan di bawah */
+        border-bottom-left-radius: 15px; 
         border-bottom-right-radius: 15px; 
     } 
     .header::before { 
-        /* Hapus atau nonaktifkan background image placeholder */
         content: ""; 
         position: absolute; 
         top: 0; 
@@ -83,34 +78,33 @@
         display: flex; 
         justify-content: space-between; 
         align-items: center; 
-        margin-bottom: 5px; /* Disesuaikan agar lebih rapat */
+        margin-bottom: 5px; 
     } 
     .welcome { 
-        font-size: 20px; /* Sedikit lebih besar */
+        font-size: 20px; 
         font-weight: 600; 
     } 
     .help-center { 
-        background-color: rgba(255, 255, 255, 0.1); /* Latar belakang lebih transparan */
+        background-color: rgba(255, 255, 255, 0.1); 
         padding: 5px 10px; 
         border-radius: 20px; 
         font-size: 12px; 
         display: flex; 
         align-items: center; 
-        border: 1px solid rgba(255, 255, 255, 0.5); /* Tambah border putih */
+        border: 1px solid rgba(255, 255, 255, 0.5); 
     } 
     .help-center i { 
         margin-right: 5px; 
     } 
     
-    /* Kartu Saldo - Diubah agar menempel di bawah header, lebih kompak */ 
     .balance-card { 
         background-color: white; 
         color: #333; 
         padding: 15px; 
         border-radius: 12px; 
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Bayangan lebih kuat agar menonjol */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
         position: absolute; 
-        top: 65px; /* Posisikan di bawah header */
+        top: 65px; 
         left: 15px; 
         right: 15px; 
         z-index: 10; 
@@ -127,9 +121,9 @@
         align-items: center; 
     } 
     .balance-amount { 
-        font-size: 26px; /* Lebih besar */
-        font-weight: 800; /* Lebih tebal */
-        color: #007bff; /* Warna saldo utama */
+        font-size: 26px; 
+        font-weight: 800; 
+        color: #007bff; 
     } 
     .balance-icon { 
         font-size: 20px; 
@@ -139,28 +133,27 @@
     .all-accounts { 
         background-color: #f0f2f5; 
         color: #007bff; 
-        padding: 8px; /* Padding dikurangi */
+        padding: 8px; 
         border-radius: 8px; 
-        margin-top: 10px; /* Margin dikurangi */
+        margin-top: 10px; 
         text-align: center; 
         font-weight: 600; 
         display: flex; 
         justify-content: space-between; 
         align-items: center; 
-        font-size: 13px; /* Ukuran font dikurangi */
+        font-size: 13px; 
         cursor: pointer; 
         border: none;
     } 
     
-    /* Fitur Utama - Disesuaikan agar lebih rapi dan ikon lebih sederhana */ 
     .main-features { 
         display: flex; 
         justify-content: space-around; 
         padding: 20px 10px 10px 10px; 
-        margin-top: 170px; /* Disesuaikan agar di bawah balance card */
+        margin-top: 170px; 
         margin-bottom: 10px; 
         background-color: white; 
-        border-bottom: none; /* Hapus border */
+        border-bottom: none; 
     } 
     .feature-item, .feature-link { 
         display: flex; 
@@ -176,14 +169,14 @@
     .feature-icon-circle { 
         width: 50px; 
         height: 50px; 
-        border-radius: 10px; /* Ubah menjadi kotak dengan sudut melengkung */
+        border-radius: 10px; 
         display: flex; 
         justify-content: center; 
         align-items: center; 
         margin-bottom: 5px; 
         font-size: 22px; 
-        box-shadow: none; /* Hapus shadow */
-        border: 1px solid #f0f2f5; /* Tambahkan border tipis */
+        box-shadow: none; 
+        border: 1px solid #f0f2f5; 
     } 
     .transfer-icon { 
         background-color: #e6f7ff; 
@@ -194,11 +187,11 @@
         color: #00bcd4; 
     } 
     .pdam-icon { 
-        background-color: #f0f2f5; /* Ubah warna latar belakang */
+        background-color: #f0f2f5; 
         color: #007bff; 
     } 
     .pulsa-icon { 
-        background-color: #f0f2f5; /* Ubah warna latar belakang */
+        background-color: #f0f2f5; 
         color: #28a745; 
     } 
     .feature-icon-circle i { 
@@ -210,18 +203,17 @@
         object-fit: contain; 
     } 
     
-    /* Banner & Search Bar - Disesuaikan */ 
     .banner { 
         margin: 0 15px 20px 15px; 
-        padding: 12px 15px; /* Padding dikurangi */
-        border-radius: 8px; /* Sudut lebih kecil */
-        background: linear-gradient(90deg, #ff9800, #f57c00); /* Ubah ke warna oranye */
+        padding: 12px 15px; 
+        border-radius: 8px; 
+        background: linear-gradient(90deg, #ff9800, #f57c00); 
         color: white; 
         display: flex; 
         justify-content: space-between; 
         align-items: center; 
         font-size: 14px; 
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow lebih halus */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
         cursor: pointer; 
     } 
     .banner-text { 
@@ -231,7 +223,7 @@
         padding-right: 10px; 
     } 
     .banner-text strong { 
-        font-size: 15px; /* Ukuran sedikit lebih kecil */
+        font-size: 15px; 
         font-weight: 700; 
     } 
     .banner-text marquee { 
@@ -240,7 +232,7 @@
     } 
     .banner-button { 
         background-color: white; 
-        color: #ff9800; /* Warna tombol sesuai banner */
+        color: #ff9800; 
         padding: 8px 15px; 
         border-radius: 20px; 
         font-weight: 600; 
@@ -248,13 +240,13 @@
     } 
     .search-bar { 
         margin: 0 15px 20px 15px; 
-        padding: 12px 15px; /* Padding disesuaikan */
-        background-color: #f0f2f5; /* Latar belakang abu-abu muda */
+        padding: 12px 15px; 
+        background-color: #f0f2f5; 
         border-radius: 8px; 
         color: #666; 
         display: flex; 
         align-items: center; 
-        font-size: 14px; /* Ukuran font lebih kecil */
+        font-size: 14px; 
         cursor: text; 
     } 
     .search-bar i { 
@@ -273,13 +265,12 @@
         display: block; 
     } 
     
-    /* Fitur Lainnya - Dipertahankan namun dengan penyesuaian */ 
     .other-features { 
         display: grid; 
         grid-template-columns: repeat(4, 1fr); 
         gap: 15px 10px; 
         padding: 0 15px 20px 15px; 
-        background-color: white; /* Pastikan latar belakang putih jika ada */
+        background-color: white; 
     } 
     .other-feature-item { 
         display: flex; 
@@ -294,14 +285,14 @@
         width: 50px; 
         height: 50px; 
         background-color: #fff; 
-        border: none; /* Hapus border */
+        border: none; 
         border-radius: 10px; 
         display: flex; 
         justify-content: center; 
         align-items: center; 
         margin-bottom: 5px; 
         font-size: 24px; 
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Shadow lebih halus */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); 
         overflow: hidden; 
     } 
     .product-icon-img { 
@@ -310,7 +301,6 @@
         object-fit: cover; 
         border-radius: 10px; 
     } 
-    /* Warna ikon lainnya - Disesuaikan */
     .top-up-icon { color: #28a745; } 
     .brizzi-icon { color: #00bcd4; } 
     .tagihan-icon { color: #007bff; } 
@@ -320,7 +310,6 @@
     .catatan-icon { color: #4caf50; } 
     .investasi-icon { color: #007bff; } 
     
-    /* Bottom Navigasi Bar */ 
     .bottom-nav { 
         position: fixed; 
         bottom: 0; 
@@ -329,7 +318,7 @@
         max-width: 450px; 
         width: 100%; 
         background-color: white; 
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Bayangan lebih jelas */
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); 
         display: flex; 
         justify-content: space-around; 
         padding: 5px 0; 
@@ -358,9 +347,7 @@
         margin-bottom: 2px; 
         object-fit: contain; 
     } 
-    /* Hapus .qris-button */
     
-    /* Loading & Animation - Dipertahankan */ 
     #loading { 
         position: fixed; 
         top: 0; 
@@ -391,7 +378,6 @@
         text-shadow: 0 0 5px #000; 
     }
     
-    /* Tambahan untuk menyesuaikan Leaderboard dan Auth Screens */
     .auth-container {
         display: none;
         position: fixed;
@@ -402,8 +388,8 @@
         background-color: white;
         z-index: 200005;
         overflow-y: auto;
-        justify-content: center; /* Tambahkan ini agar auth card di tengah */
-        align-items: flex-start; /* Tambahkan ini agar konten dimulai dari atas */
+        justify-content: center; 
+        align-items: flex-start; 
         padding-top: 20px;
     }
     
@@ -415,10 +401,9 @@
         padding: 20px;
         border-radius: 12px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px; /* Tambahkan margin bawah */
+        margin-bottom: 20px; 
     }
     
-    /* Gaya untuk Leaderboard Item */
     .leaderboard-item {
         display: flex;
         justify-content: space-between;
@@ -449,7 +434,6 @@
         color: #ff9800;
     }
     
-    /* Pastikan video card memiliki gaya yang konsisten */
     .video-card-modified {
         width: 100%;
         max-width: 450px;
@@ -457,7 +441,6 @@
         min-height: 100vh;
         background-color: white;
     }
-    /* Hapus .qris-header dari list di bawah */
     .video-header, .download-header, .dokumen-header, .leaderboard-header {
         display: flex;
         align-items: center;
@@ -471,25 +454,21 @@
         z-index: 10;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    /* Hapus .qris-header i dari list di bawah */
     .video-header i, .download-header i, .dokumen-header i, .leaderboard-header i {
         margin-right: 15px;
         font-size: 20px;
         cursor: pointer;
     }
-    /* Hapus .qris-header h3 dari list di bawah */
     .video-header h3, .dokumen-header h3, .leaderboard-header h3 {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
         flex-grow: 1;
     }
-    /* Hapus .qris-content-section dari list di bawah */
     .video-content-section, .download-content, .dokumen-content-section, .leaderboard-content-section {
         padding: 15px;
     }
     
-    /* Gaya untuk video item */
     .video-item {
         margin-bottom: 20px;
         background-color: #fff;
@@ -606,9 +585,9 @@
         </div>
 
         <div class="other-features">
-            <div class="other-feature-item" onclick="showPayment(' Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih. lezat', 1000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 1 biji.')">
+            <div class="other-feature-item" onclick="showPayment(' Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih. lezat', 1000, ['https://nasukafoods.site/1pcs.jpg'], 'Isi 1 biji.')">
                 <div class="other-feature-icon top-up-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="cilok 1" class="product-icon-img">
+                    <img src="https://nasukafoods.site/1pcs.jpg" alt="cilok 1" class="product-icon-img">
                 </div>
                 <span>Rp 1.000</span>
             </div>
@@ -620,15 +599,15 @@
                 </div>
                 <span>Rp 44.000</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Cilok Premium: Paket Keluarga', 'Porsi besar untuk acara keluarga.', 87000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 100 pc. Promo terbatas!')">
+            <div class="other-feature-item" onclick="showPayment('Cilok Premium: Paket Keluarga', 'Porsi besar untuk acara keluarga.', 87000, ['https://nasukafoods.site/100pcs.jpg'], 'Isi 100 pc. Promo terbatas!')">
                 <div class="other-feature-icon tagihan-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Paket premium" class="product-icon-img">
+                    <img src="https://nasukafoods.site/100pcs.jpg" alt="Paket premium" class="product-icon-img">
                 </div>
                 <span>Rp 87.000</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Paket Sultan', 'Cilok frozen siap masak untuk stok di rumah, Cilok isian gajih berkualitas super, isi 1000 pcs', 850000, ['https://nasukafoods.site/cilokpro.jpg'], 'Gratis ongkos kirim seluruh kota bandung.')">
+            <div class="other-feature-item" onclick="showPayment('Paket Sultan', 'Cilok frozen siap masak untuk stok di rumah, Cilok isian gajih berkualitas super, isi 1000 pcs', 850000, ['https://nasukafoods.site/1000pcs.jpg'], 'Gratis ongkos kirim seluruh kota bandung.')">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/cilokpro.jpg" alt="Sultan" class="product-icon-img">
+                    <img src="https://nasukafoods.site/1000pcs.jpg" alt="Sultan" class="product-icon-img">
                 </div>
                 <span>Rp 850.000</span>
             </div>
@@ -1128,7 +1107,6 @@ if (localUser.ID) {
     });
 }
 
-// FUNGSI INI TELAH DIMODIFIKASI UNTUK MENGHAPUS SAPAAN DAN NAMA USER
 function updateHomeDisplay() {
     const userNameEl = document.getElementById('userNameDisplay');
     const SaldoEl = document.getElementById('SaldoAmountDisplay');
@@ -1145,21 +1123,21 @@ function updateHomeDisplay() {
 
     if (!userNameEl || !SaldoEl || !welcomeEl) return;
     
-    // Set elemen welcome menjadi statis "Nasuka Foods"
+    
     welcomeEl.textContent = 'Nasuka Foods'; 
 
     if (isLoggedIn) {
         const displayName = localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username || 'Pengguna';
         
-        // Tampilkan nama/username di tombol Profil
+        
         userNameEl.textContent = displayName;
         
-        // Tampilkan saldo
+        
         SaldoEl.textContent = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID'); 
         
     } else {
      
-        // Tampilkan Saldo 0
+        
         SaldoEl.textContent = "Rp 0"; 
     }
 }
@@ -1256,7 +1234,7 @@ function fetchUserProfileFromDB(userID) {
 
 
 function hideAllContainers() {
-    // Hapus #qris-container
+    
     document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
@@ -1302,7 +1280,6 @@ function showDownload() {
     }
 }
 
-// Hapus fungsi showQris()
 
 function showDokumen() {
     hideAllContainers();
@@ -1340,10 +1317,10 @@ function showLeaderboard() {
     const leaderboardListEl = document.getElementById('leaderboard-list');
     if (!leaderboardListEl) return;
 
-    // Hapus konten statis Leaderboard sebelumnya dari content-section jika ada
+    
     const contentSection = document.querySelector('.leaderboard-content-section');
     if (contentSection) {
-        // Hapus elemen header statis lama (yang memiliki background-color: white)
+        
         let staticHeader = contentSection.querySelector('div[style*="background-color: white"]');
         if (staticHeader) {
             contentSection.removeChild(staticHeader);
@@ -1355,7 +1332,7 @@ function showLeaderboard() {
     
     const userID = localUser.ID;
     
-    // TEMPATKAN WING LEADERBOARD DI SINI UNTUK MUDAH DIMODIFIKASI
+    
     const leaderboardHeaderContent = `
         <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
             <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard Wings" style="width: 50px; height: 50px; margin-bottom: 10px;">
@@ -1368,7 +1345,7 @@ function showLeaderboard() {
         </div>
     `;
     
-    // Tambahkan konten baru di bagian atas, sebelum leaderboard-list
+    
     $(leaderboardHeaderContent).insertBefore(leaderboardListEl);
     
     const rankOneDisplayEl = document.getElementById('rank-one-display');
@@ -1390,7 +1367,7 @@ function showLeaderboard() {
             let listHTML = '';
             let isUserInTop10 = false;
             
-            // Logika untuk menampilkan nama user Rank 1
+            
             if (top10Users.length > 0) {
                 const rankOneUser = top10Users[0];
                 const rankOneName = rankOneUser.Nama || rankOneUser.Username || 'Pengguna Anonim';
@@ -1403,7 +1380,7 @@ function showLeaderboard() {
             }
             
             
-            // Logika untuk membuat daftar Leaderboard
+            
             top10Users.forEach((user, index) => {
                 const rank = index + 1;
                 const isMe = userID && user.ID === userID;
@@ -1414,7 +1391,7 @@ function showLeaderboard() {
                 
                 const displayName = user.Nama || user.Username || 'Pengguna Anonim';
                 
-                // MODIFIKASI: Menggunakan toLocaleString('id-ID') untuk Poin
+                
                 const scoreDisplay = `${(user.Poin || 0).toLocaleString('id-ID')} Poin`;
                 
                 listHTML += `
@@ -1658,7 +1635,7 @@ function showProfil() {
         const nama = localUser.Nama || 'Nama belum diatur';
         const foto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
         const Saldo = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID');
-        // MODIFIKASI: Menggunakan toLocaleString() untuk format ribuan
+        
         const Poin = (localUser.Poin || 0).toLocaleString('id-ID') + ' Poin';
         
         const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
