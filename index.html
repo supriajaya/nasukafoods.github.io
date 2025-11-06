@@ -22,7 +22,6 @@
 
 
 <style>
-    <style>
     /* Reset dan Dasar */
     body { 
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; 
@@ -41,7 +40,8 @@
         position: relative; 
     } 
     /* Struktur Container Halaman Overlay (default hidden) */ 
-    #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container, #dokumen-container { 
+    /* Hapus #qris-container dari list di bawah */
+    #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #dokumen-container { 
         display: none; 
         position: fixed; 
         top: 0; 
@@ -236,7 +236,7 @@
     } 
     .banner-text marquee { 
         width: 100%; 
-        line-height: 1.2; 
+        line-height: 1.2;
     } 
     .banner-button { 
         background-color: white; 
@@ -358,25 +358,7 @@
         margin-bottom: 2px; 
         object-fit: contain; 
     } 
-    .qris-button { 
-        position: absolute; 
-        bottom: 30px; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        width: 60px; 
-        height: 60px; 
-        background-color: #007bff; 
-        border-radius: 50%; 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        color: white; 
-        font-size: 28px; 
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
-        border: 5px solid white; 
-        z-index: 101; 
-        cursor: pointer; 
-    } 
+    /* Hapus .qris-button */
     
     /* Loading & Animation - Dipertahankan */ 
     #loading { 
@@ -475,7 +457,8 @@
         min-height: 100vh;
         background-color: white;
     }
-    .video-header, .qris-header, .download-header, .dokumen-header, .leaderboard-header {
+    /* Hapus .qris-header dari list di bawah */
+    .video-header, .download-header, .dokumen-header, .leaderboard-header {
         display: flex;
         align-items: center;
         padding: 15px;
@@ -488,18 +471,21 @@
         z-index: 10;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    .video-header i, .qris-header i, .download-header i, .dokumen-header i, .leaderboard-header i {
+    /* Hapus .qris-header i dari list di bawah */
+    .video-header i, .download-header i, .dokumen-header i, .leaderboard-header i {
         margin-right: 15px;
         font-size: 20px;
         cursor: pointer;
     }
-    .video-header h3, .qris-header h3, .dokumen-header h3, .leaderboard-header h3 {
+    /* Hapus .qris-header h3 dari list di bawah */
+    .video-header h3, .dokumen-header h3, .leaderboard-header h3 {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
         flex-grow: 1;
     }
-    .video-content-section, .qris-content-section, .download-content, .dokumen-content-section, .leaderboard-content-section {
+    /* Hapus .qris-content-section dari list di bawah */
+    .video-content-section, .download-content, .dokumen-content-section, .leaderboard-content-section {
         padding: 15px;
     }
     
@@ -562,25 +548,32 @@
                 <span class="balance-amount" id="SaldoAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             <div class="all-accounts">
-                <span>Website sedang dalam pengembangan</span>
+                <span>Event giveaway</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
 
         <div class="main-features">
-            <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
+           <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle transfer-icon">
                     <i class="fas fa-exchange-alt"></i>
                 </div>
                 <span>Give Away</span>
             </a>
             
-            <div class="feature-item" onclick="showVideo()">
-                <div class="feature-icon-circle briva-icon">
-                    <i class="fas fa-video"></i>
+             
+            <a href="https://" target="_blank" class="feature-link">
+                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Lacak Lokasi" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
-                <span>Video</span>
-            </div>
+                <span>Resep</span>
+            </a>
+            
+            
+            
+            
+            
+            
             
             <a href="" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pdam-icon">
@@ -601,7 +594,7 @@
             <div class="banner-text">
                 <marquee behavior="scroll" direction="left" scrollamount="5" style="white-space: nowrap;">
                     <span id="blinking-text">
-                        <strong>Pesanan bisa tetap dilakukan</strong>
+                        <strong>Gratis ongkos kirim secibaduyut : Kota bandung</strong>
                     </span>
                 </marquee>
             </div>
@@ -691,9 +684,6 @@
         </div>
       
         
-        <div class="qris-button" onclick="showQris()"> <i class="fas fa-qrcode"></i>
-        </div>
-
         <div class="bottom-nav">
             <div class="nav-item active" id="nav-home" onclick="showHome()">
                 <i class="fas fa-home"></i>
@@ -993,54 +983,6 @@
         </a>
     </div>
 
-    <div id="qris-container">
-        <div class="qris-card-modified">
-            <div class="qris-header">
-                <i class="fas fa-arrow-left" onclick="showHome()"></i>
-                <h3>Pembayaran Non Tunai</h3>
-            </div>
-            
-            <div class="qris-content-section">
-                <div class="qris-logo-section">
-                    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods Logo" class="qris-logo">
-                    <div class="qris-title">NASUKA FOODS</div>
-                    <div class="qris-subtitle">Cibaduyut - Kota Bandung</div>
-                </div>
-                
-                <div class="qris-code-box">
-                    <img src="https://nasukafoods.site/aqris.jpg" alt="QRIS Code Placeholder" class="qris-code-image" id="qrisCodeImage">
-                    <div class="qris-info">
-                        <p style="text-align: center; font-weight: 700; color: #007bff; margin-bottom: 10px;">QUICK RESPON INDONESIAN STANDARD</p>
-                        <p><strong>Merchant ID:</strong> ID2025NF001</p>
-                        <p><strong>Powered by:</strong> BANK BRI</p>
-                    </div>
-                </div>
-                
-                <div class="qris-promo-section">
-                    <i class="fas fa-gift"></i> &nbsp; Dapatkan diskon 5% untuk pembelian di atas 50.000 menggunakan E-Wallet!
-                </div>
-                
-                <div class="qris-instruction-box">
-                    <h4>Cara Pembayaran</h4>
-                    <ul>
-                        <li>Catat total nominal belanja Anda.</li>
-                        <li>Buka aplikasi Bank / E-Wallet Anda, Gopay, Dana, OVO, dll yang mendukung QRIS.</li>
-                       
-                        <li>Pindai kode QRIS di atas.</li>
-                        <li>Masukkan nominal yang sesuai dengan total belanja Anda.</li>
-                        <li>Selesaikan pembayaran, dan konfirmasi ke admin kami.</li>
-                    </ul>
-                </div>
-                
-                <div class="qris-warning">
-                    <i class="fas fa-exclamation-triangle"></i>Pastikan nama Merchant yang muncul adalah : NASUKA FOODS
-                </div>
-                
-            </div>
-            <div style="height: 20px;"></div> 
-        </div>
-    </div>
-    
     <div id="leaderboard-container">
         <div class="leaderboard-card-modified">
             <div class="leaderboard-header">
@@ -1237,7 +1179,7 @@ function initializeHome() {
     marqueeEl.setAttribute('behavior', 'scroll');
     marqueeEl.setAttribute('direction', 'left');
     marqueeEl.setAttribute('scrollamount', '8'); 
-    marqueeEl.textContent = '----------';
+    marqueeEl.textContent = 'Game & Lainnya';
     
     runningTextEl.parentNode.replaceChild(marqueeEl, runningTextEl);
   }
@@ -1314,7 +1256,8 @@ function fetchUserProfileFromDB(userID) {
 
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #qris-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container').forEach(el => { 
+    // Hapus #qris-container
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
@@ -1359,14 +1302,7 @@ function showDownload() {
     }
 }
 
-function showQris() {
-    hideAllContainers();
-    const qrisContainer = document.getElementById('qris-container');
-    if (qrisContainer) {
-        qrisContainer.style.display = 'flex'; 
-        qrisContainer.scrollTop = 0; 
-    }
-}
+// Hapus fungsi showQris()
 
 function showDokumen() {
     hideAllContainers();
