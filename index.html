@@ -8,12 +8,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-
-    
-    
-    
-    
-    
     <link rel="stylesheet" href="https://nasukafoods.site/lain.css">
     </head>
 
@@ -376,6 +370,9 @@
         font-size: 14px; 
         font-weight: 700; 
         text-shadow: 0 0 5px #000; 
+        /* Pastikan properti ini ada untuk senter */
+        display: block; 
+        text-align: center;
     }
     
     .auth-container {
@@ -570,14 +567,14 @@
             </div>
 
         <div class="banner">
-            <div class="banner-text">
-                <marquee behavior="scroll" direction="left" scrollamount="5" style="white-space: nowrap;">
-                    <span id="blinking-text">
-                        <strong>Gratis ongkos kirim secibaduyut : Kota bandung</strong>
-                    </span>
-                </marquee>
+            <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
+                <span id="blinking-text" style="display: block; width: 100%; white-space: normal;">
+                    <strong>Gratis ongkos kirim secibaduyut</strong>
+                </span>
             </div>
-          
+            <div class="banner-button" onclick="alert('Gratis Ongkir berlaku untuk area Cibaduyut, Kota Bandung.')">
+                Cek
+            </div>
         </div>
         <div class="search-bar">
             <i class="fas fa-search"></i>
@@ -974,7 +971,7 @@
                 <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard Wings" style="width: 50px; height: 50px; margin-bottom: 10px;">
                    
-                        <p class="blinking-glowing-text">Big Bos 2025</p><p>Queen Of Honor In The Year</p>
+                        <p class="blinking-glowing-text">Best Customers</p><p>Queen Of Honor In The Year</p>
                     </p>
                 </div>
 
@@ -1157,7 +1154,7 @@ function initializeHome() {
     marqueeEl.setAttribute('behavior', 'scroll');
     marqueeEl.setAttribute('direction', 'left');
     marqueeEl.setAttribute('scrollamount', '8'); 
-    marqueeEl.textContent = 'Game & Lainnya';
+    marqueeEl.textContent = '';
     
     runningTextEl.parentNode.replaceChild(marqueeEl, runningTextEl);
   }
@@ -1337,11 +1334,11 @@ function showLeaderboard() {
         <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
             <img src="https://nasukafoods.site/wingbiru.gif" alt="Leaderboard Wings" style="width: 50px; height: 50px; margin-bottom: 10px;">
            
-            <p class="blinking-glowing-text">Big Bos 2025</p>
+            <p class="blinking-glowing-text">Best Customers</p>
             <p id="rank-one-display" style="font-size: 24px; font-weight: 800; color: #f44336; margin: 5px 0;">
                 <i class="fas fa-gem" style="margin-right: 5px;"></i> Memuat Juara...
             </p>
-            <p>Queen Of Honor In The Year</p>
+            <p>Big Bos In The Year</p>
         </div>
     `;
     
