@@ -8,7 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   
+    
     <style>
         body {
             background-image: url('https://nasukafoods.site/langit.jpg');
@@ -552,7 +552,6 @@
     </div>
     
     <script>
-        // Kode JavaScript tetap sama seperti sebelumnya
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
             authDomain: "nasukafoods1.firebaseapp.com",
@@ -599,11 +598,11 @@
         };
 
         const WIN_PROBABILITIES = {
-            'dua': 0.0001,
-            'tiga': 0.00001,
-            'empat': 0,
-            'lima': 0,
-            'jackpot': 0
+            'dua': 0.1,
+            'tiga': 0.03,
+            'empat': 0.02,
+            'lima': 0.0000000000000000000000000000000000000001,
+            'jackpot': 0.00000000000000000000000000000000000000000000000000001
         };
 
         let currentSeeds = [0, 0, 0, 0, 0];
@@ -900,9 +899,8 @@
 
                 message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
                 messageClass = "win";
-                triggerConfetti();
+                // HAPUS: triggerConfetti(); - Fungsi confetti dihapus
                 document.getElementById('winAudio').play();
-
 
             } else {
                 playerWinStreak = 0;
@@ -949,7 +947,7 @@
             }
         }
 
-      
+        // HAPUS: Fungsi triggerConfetti() dihapus seluruhnya
 
         function showArticle(articleId) {
             $('.section-content').slideUp(400); 
