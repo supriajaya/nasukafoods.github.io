@@ -8,8 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+   
     <style>
         body {
             background-image: url('https://nasukafoods.site/langit.jpg');
@@ -600,11 +599,11 @@
         };
 
         const WIN_PROBABILITIES = {
-            'dua': 0.1,
-            'tiga': 0.03,
-            'empat': 0.02,
-            'lima': 0.0000000000000000000000000000000000000001,
-            'jackpot': 0.00000000000000000000000000000000000000000000000000001
+            'dua': 0.0001,
+            'tiga': 0.00001,
+            'empat': 0,
+            'lima': 0,
+            'jackpot': 0
         };
 
         let currentSeeds = [0, 0, 0, 0, 0];
@@ -950,33 +949,7 @@
             }
         }
 
-        function triggerConfetti() {
-            const defaults = {
-                spread: 360,
-                ticks: 200,
-                gravity: 0.4,
-                decay: 0.94,
-                startVelocity: 90,
-                colors: ['#FFC107', '#E91E63', '#4CAF50', '#2196F3']
-            };
-            function shoot() {
-                confetti({
-                    ...defaults,
-                    particleCount: 2000,
-                    scalar: 1.2,
-                    shapes: ['star']
-                });
-                confetti({
-                    ...defaults,
-                    particleCount: 300,
-                    scalar: 0.8,
-                    shapes: ['circle']
-                });
-            }
-            setTimeout(shoot, 0);
-            setTimeout(shoot, 150);
-            setTimeout(shoot, 300);
-        }
+      
 
         function showArticle(articleId) {
             $('.section-content').slideUp(400); 
