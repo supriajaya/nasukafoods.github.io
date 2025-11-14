@@ -26,7 +26,8 @@
 
         a:hover {
             text-decoration: underline;
-            color: #FF00FF;
+            /* Diubah dari ungu neon menjadi merah neon yang lebih terang untuk hover */
+            color: #FF4500; 
         }
 
         #header-nav {
@@ -48,7 +49,7 @@
         }
 
         #logo a {
-            font-size: 1.6em;
+            font-size: 10px;
             font-weight: bold;
             color: #FFFFFF;
             text-transform: uppercase;
@@ -67,13 +68,14 @@
         #main-menu a {
             color: #FFFFFF;
             font-weight: normal;
-            font-size: 0.9em;
+            font-size: 1px;
             padding: 5px 0;
         }
 
         #main-menu a:hover {
-            color: #FF00FF;
-            text-shadow: 0 0 8px #ff00ff;
+            /* Diubah dari ungu neon menjadi merah neon */
+            color: #FF4500;
+            text-shadow: 0 0 8px #ff4500;
             text-decoration: none;
         }
 
@@ -91,7 +93,7 @@
 
         .article-category {
             color: #FFFFFF;
-            font-size: 0.8em;
+            font-size: 1px;
             margin-bottom: 10px;
             text-transform: uppercase;
         }
@@ -135,7 +137,8 @@
             font-size: 1.4em;
             color: #FFFFFF;
             margin: 1.8em 0 0.6em;
-            border-left: 3px solid #ff00ff;
+            /* Diubah dari ungu neon menjadi merah tua */
+            border-left: 3px solid #8B0000; 
             padding-left: 10px;
             font-weight: bold;
             background-color: #1a1a1a;
@@ -167,6 +170,7 @@
             margin-left: 25px;
             margin-bottom: 1em;
             list-style-type: '>> ';
+            /* Pastikan list default (untuk infobox) juga bagus */
         }
         ul li {
             padding-left: 5px;
@@ -190,23 +194,36 @@
             color: #FFFFFF;
         }
 
-        #content > div:last-of-type {
+        /* Container 'CARA MEMBUAT' (sebelumnya ungu) */
+        /* Menggunakan kelas spesifik agar aman, atau gunakan div yang memiliki children h4 */
+        #content > div.recipe-steps-box {
             padding: 15px; 
-            background-color: #330033;
-            border: 2px solid #ff00ff; 
+            /* Diubah dari #330033 menjadi merah tua gelap */
+            background-color: #330000; 
+            /* Diubah dari ungu neon #ff00ff menjadi merah neon #FF4500 */
+            border: 2px solid #FF4500; 
             margin: 15px 0;
             color: #fff;
-            box-shadow: 0 0 10px rgba(255,0,255,0.5);
+            /* Diubah dari ungu neon glow menjadi merah neon glow */
+            box-shadow: 0 0 10px rgba(255,69,0,0.5);
         }
         
-        #content > div:last-of-type h4 {
+        /* Jika menggunakan selektor di atas, maka perlu mengganti selektor ini */
+        #content > div.recipe-steps-box h4 { 
             color: #FFFFFF;
             text-transform: uppercase;
         }
         
-        #content > div:last-of-type ul {
+        #content > div.recipe-steps-box ul {
+            /* Style khusus untuk list langkah-langkah */
             list-style-type: '!!! ';
             color: #fff;
+            margin-left: 15px; /* Mengurangi indentasi agar rapi */
+        }
+        #content > div.recipe-steps-box li {
+            padding-bottom: 5px;
+            /* Menghapus padding-left dari list default agar style !!! rapi */
+            padding-left: 0; 
         }
 
 
@@ -249,80 +266,80 @@
         @media (max-width: 768px) {
             /* Penyesuaian Kontainer Utama */
             .container {
-                width: 95%; /* Pastikan kontainer menggunakan lebar penuh */
-                padding: 0 10px; /* Tambahkan sedikit padding di samping */
+                width: 95%; 
+                padding: 0 10px; 
             }
 
             /* Penyesuaian Navigasi Header */
             #header-nav .container {
-                flex-direction: column; /* Ubah tata letak logo dan menu menjadi vertikal */
-                align-items: flex-start; /* Sejajarkan ke kiri */
+                flex-direction: column; 
+                align-items: flex-start; 
             }
 
             /* Logo */
             #logo a {
-                font-size: 1.4em; /* Sedikit perkecil ukuran font logo */
-                margin-bottom: 10px; /* Tambahkan margin di bawah logo */
+                font-size: 1.4em; 
+                margin-bottom: 10px; 
             }
 
             /* Menu Utama */
             #main-menu ul {
-                flex-direction: column; /* Ubah menu menjadi tumpukan vertikal */
+                flex-direction: column; 
                 width: 100%;
             }
 
             #main-menu li {
-                margin: 5px 0 5px 0; /* Ubah margin untuk tampilan vertikal */
-                border-bottom: 1px dotted rgba(255, 255, 255, 0.1); /* Tambahkan garis pemisah */
+                margin: 5px 0 5px 0; 
+                border-bottom: 1px dotted rgba(255, 255, 255, 0.1); 
                 padding-bottom: 5px;
             }
 
             #main-menu a {
-                display: block; /* Buat link mengisi lebar penuh */
+                display: block; 
                 padding: 5px 0;
                 font-size: 1em;
             }
 
             /* Konten Artikel */
             #content {
-                padding: 15px; /* Kurangi padding konten */
+                padding: 15px; 
             }
 
             h1#firstHeading {
-                font-size: 1.8em; /* Kurangi ukuran heading utama */
+                font-size: 1.8em; 
             }
             
             .article-meta {
-                font-size: 0.75em; /* Perkecil font meta */
+                font-size: 0.75em; 
             }
             .article-meta span {
-                display: block; /* Tampilkan meta data per baris */
+                display: block; 
                 margin-right: 0;
                 margin-bottom: 5px;
             }
 
-            p:first-of-type {
-                font-size: 1em; /* Atur ukuran font paragraf pertama */
+            #content p:first-of-type {
+                font-size: 1em; 
             }
             
             h2 {
-                font-size: 1.2em; /* Kurangi ukuran H2 */
+                font-size: 1.2em; 
                 margin: 1.5em 0 0.5em;
                 padding: 5px 10px;
             }
 
             h3 {
-                font-size: 1.1em; /* Kurangi ukuran H3 */
+                font-size: 1.1em; 
             }
 
             /* List (ul, ol) */
             ul, ol {
-                margin-left: 15px; /* Kurangi indentasi list */
+                margin-left: 15px; 
             }
             
             /* Infobox */
             .infobox {
-                padding: 10px; /* Kurangi padding infobox */
+                padding: 10px; 
             }
             
             .infobox strong {
@@ -331,8 +348,13 @@
 
             /* Footer */
             #footer li {
-                display: block; /* Tampilkan link footer per baris */
+                display: block; 
                 margin: 5px 0;
+            }
+            
+            /* Penyesuaian list CARA MEMBUAT di mobile */
+            #content > div.recipe-steps-box ul {
+                margin-left: 5px; /* Kurangi lagi indentasi khusus di mobile */
             }
         }
 
@@ -341,20 +363,14 @@
             h1#firstHeading {
                 font-size: 1.6em;
             }
-            
-            /* Pastikan list '!!! PENTING' terlihat bagus */
-            #content > div:last-of-type ul {
-                list-style-type: '!!! '; /* Pertahankan style list */
-                padding-left: 10px;
-            }
         }
 
     </style>
 </head>
 <body>
   
- 
-
+   
+    </header>
 
     <div id="article-wrapper">
         <div class="container">
@@ -363,7 +379,7 @@
                 <h1 id="firstHeading">EXECUTE: Cilok_Lemak_Sapi_Premium.</h1>
 
                 <div class="article-meta">
-                    <span>// AUTHOR: REDAKSI-007</span>
+                    <span>// AUTHOR: Natasya Magdalena</span>
                     <span>// TIMESTAMP: 05-11-2025</span>
                     <span>// LOCATION: Bandung, Jawa Barat</span>
                 </div>
@@ -371,17 +387,25 @@
                 <p><strong>Cilok Isian Gajih Lemak Sapi Premium</strong> merupakan variasi modern yang revolusioner dari <a href="#">cilok</a> (aci dicolok), jajanan tradisional khas Jawa Barat. Variasi ini membedakan diri dengan penggunaan isian lemak sapi berkualitas tinggi, yang diolah sedemikian rupa hingga memberikan rasa gurih yang <a href="#">umami</a>, lembut, dan "meledak" saat digigit. Fenomena ini merombak citra cilok dari sekadar jajanan kaki lima menjadi hidangan hotel bintang lima, Penggunaan "Lemak Sapi" premium tidak hanya meningkatkan tekstur dan rasa cilok, tetapi juga menciptakan tren kuliner untuk pengalaman rasa autentik dan "nakal" dari makanan ringan.</p>
                 
                 <div class="infobox">
-                    <strong>[DATA_CACHE]: Quick_Facts_Cilok_Isian_Gajih</strong>
+                    <strong>[BAHAN BAHAN]</strong>
                     <ul>
                        
-                        <li>//Origin: Jawa Barat (Modified Protocol)</li>
-                        <li>//Primary_Material: Tepung Tapioka, Tepung Terigu, Lemak Sapi</li>
-                        <li>//Status:High-Value Street Food, Comfort Food Bintang Lima</li>
+                        <li>//Tepung Tapioka (Aci)</li>
+                        <li>//Tepung Terigu</li>
+                        <li>//Bawang Putih</li>
+                        <li>//Merica</li>
+                        <li>//Garam</li>
+                        <li>//Penyedap Rasa</li>
+                        <li>//Merica</li>
+                        <li>//Garam</li>
+                        <li>//Minyak Kelapa</li>  
+                        <li>//Lemak Sapi</li>
+                        <li>//Air</li>
+
                     </ul>
                 </div>
 
-                <h2 id="Sejarah_Popularitas">Cara membuat:</h2>
-                <p>Artikel.</p>
+              
 
                 <h2 id="Proses_Pembuatan_dan_Inovasi">Kualitas premium</h2>
                 <p>Pembuatan cilok gajih premium melibatkan teknik khusus untuk memastikan gajih matang sempurna, lembut, dan tidak terlalu berminyak, sambil tetap mempertahankan tekstur kenyal dari kulit cilok.</p>
@@ -393,22 +417,43 @@
                 <p>Cilok gajih sering disajikan dengan bumbu pendamping yang lebih kaya dan berani, menaikkan standar rasa. Saus andalan termasuk "Sambal kacang" Perpaduan toping Asin (Atom), Pedas (Aida), Kecap Manis yang kental dan pekat yang diperkaya sebagai pelengkap untuk pengalaman rasa yang lebih kompleks.</p>
 
                 <h2 id="Dampak_Ekonomi_dan_Budaya">// IMPACT_ASSESSMENT:</h2>
-                <p>Inovasi cilok gajih premium telah memberikan dorongan signifikan bagi UMKM jajanan lokal. Produk ini membuktikan bahwa makanan tradisional dapat ditingkatkan kualitasnya, dikemas dengan menarik, dan menarik segmen pasar yang lebih luas dan berani membayar lebih untuk kualitas. Secara budaya, fenomena ini memperkuat posisi cilok sebagai salah satu <a href="#">Kuliner</a> Indonesia, yang terus berevolusi sesuai selera zaman.</p>
+                <p>Inovasi cilok gajih premium telah memberikan dorongan signifikan bagi UMKM jajanan lokal. Produk ini membuktikan bahwa makanan tradisional dapat ditingkatkan kualitasnya, dikemas dengan menarik, dan menarik segmen pasar yang lebih luas dan berani membayar lebih untuk kualitas. Secara budaya, fenomena ini memperkuat posisi cilok sebagai salah satu <a href="#">Kuliner</a> Indonesia, yang terus berevolusi sesuai selera selera zaman.</p>
                 
-                <div style="padding: 15px; background-color: #330033; border: 2px solid #ff00ff; margin: 15px 0;">
-                    <h4> Dampak Inovasi</h4>
+                <div class="recipe-steps-box">
+                  
                     
-                        <li>Peningkatan Nilai Jual: Cilok beralih dari harga murah menjadi produk dengan nilai tambah yang signifikan.</li>
-                       
-                        <li>Inovasi Kuliner: Mendorong penjual jajanan lain untuk lebih kreatif dengan isian dan topping.</li>
+                    <p> "CARA MEMBUAT "</p>
+                    
+                  
+                 <p>Siapkan tepung tapioka dan tepung terigu dalam wajan</p>
+                        <p>Haluskan (ulek) bawang putih dan garam. Campur pada tepung tapioka dan tepung terigu.</p>
+                        <p>Masukan merica bubuk dan kaldu sapi, lalu aduk rata</p>
+                       <p>Setelah rata, masukan air panas sedikit demi sedikit... lalu diuleni dengan menggunakan tangan.</p>
+                       <p>Jika sudah diuleni, bentuk cilok bulat-bulan dan jangan lupa diisi dengan gajih yang sudah matang dan dipotong kecil-kecil.</p>
+                       <p> Didihkan air, dan masukan adonan cilok satu per satu. Tunggu sampai adonan matang hingga mengapung kepermukaan.</p>
+                       <p>Tiriskan adonan yang sudah matang. Lalu siap disajikan bersama bumbu asin, bumbu pedas, atau dengan saus kacang 😋.</p>
                     </ul>
                 </div>
+                
+                 <div class="recipe-steps-box">
+                  
+                    
+                    <p> "Mode Praktis "</p>
+                    
+                  
+                 <p>Cilok isian gajih lemak sapi premium tinggal nyam</p>
+                        <p>Cukup seribuan aja perbutir, Tersedia disini.</p>
+                       
+                    </ul>
+                </div>  
+                
+                
               
+            </div>
         </div>
     </div>
 
   
-    </div>
 
 </body>
 </html>
