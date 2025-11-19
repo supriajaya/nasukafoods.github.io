@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-    <h1>Bagikan Lokasi Live Anda 📍</h1>
+    <h1 id="mainTitle">Bagikan Lokasi Live Anda 📍</h1>
     <p>Data yang dikirimkan adalah ID, Nama, dan Nomor HP Anda yang tersimpan di browser.</p>
     
     <div id="status" class="status warning">Menunggu inisialisasi...</div>
@@ -53,19 +53,23 @@
         const database = firebase.database();
         const statusElement = document.getElementById('status');
         const userInfoElement = document.getElementById('userInfo');
+        const mainTitleElement = document.getElementById('mainTitle'); // Ambil elemen H1
 
         // PENTING: Mengambil ID, Nama, dan HP dari Local Storage
-        // Ganti kunci ('userId', 'userName', 'userPhone') jika berbeda di sistem Anda
         const userId = localStorage.getItem('userId');
         const userName = localStorage.getItem('userName');
         const userPhone = localStorage.getItem('userPhone');
+        
+        // Label yang akan ditampilkan di peta dan judul
+        const userLabel = userName || `User ID: ${userId}`; 
 
-        // Jika salah satu data penting tidak ada, kita harus mencegah pengiriman atau menggunakan fallback.
+        // Validasi data penting
         if (!userId) {
             statusElement.innerHTML = "❌ **ID User tidak ditemukan** di Local Storage. Pembagian lokasi dihentikan.";
             statusElement.classList.remove('online', 'warning');
             statusElement.classList.add('error');
-            // Menghentikan eksekusi jika ID user tidak ada
+            // Ganti judul
+            mainTitleElement.textContent = "Akses Ditolak/Error Data User";
             throw new Error("Local Storage key 'userId' not found."); 
         }
 
@@ -80,6 +84,9 @@
         // --- 2. FUNGSI UTAMA ---
 
         function initMap() {
+            // Perubahan: Menggunakan Nama User di Judul H1
+            mainTitleElement.textContent = `Bagikan Lokasi Live Anda, ${userLabel} 📍`;
+
             // Tampilkan informasi pengguna
             userInfoElement.innerHTML = `**Data Pengguna yang Dibagikan:**<br>Nama: ${userName || 'Nama Tidak Ada'}<br>ID User: ${userId}<br>Nomor HP: ${userPhone || 'Nomor HP Tidak Ada'}`;
 
@@ -98,11 +105,12 @@
                     iconAnchor: [15, 30]
                 })
             }).addTo(map)
-                .bindPopup(`Lokasi ${userName || userId}`)
+                // Perubahan: Menggunakan Nama User di Marker
+                .bindPopup(`Lokasi **${userLabel}**`)
                 .openPopup();
 
             if (navigator.geolocation) {
-                statusElement.innerHTML = `✅ Geolocation aktif. Mulai pembagian lokasi untuk **${userName || 'User'}** (ID: **${userId}**) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`;
+                statusElement.innerHTML = `✅ Geolocation aktif. Mulai pembagian lokasi untuk **${userLabel}** (ID: **${userId}**) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`;
                 statusElement.classList.remove('warning', 'error');
                 statusElement.classList.add('online');
                 
@@ -136,18 +144,18 @@
             const timestampLocal = new Date().toLocaleTimeString('id-ID'); 
             const nextUpdateInSeconds = UPDATE_INTERVAL_MS / 1000;
 
-            // --- PENTING: HANYA Mengirim ID, Nama, dan HP + Lokasi ---
+            // Mengirim data pribadi user dan lokasi
             locationRef.set({ 
                 lat: lat, 
                 lng: lng,
-                user_id: userId,          // ID User
-                customer_name: userName,  // Nama User
-                customer_phone: userPhone, // Nomor HP User
+                user_id: userId,          
+                customer_name: userName,  
+                customer_phone: userPhone, 
                 time: timestampLocal, 
                 accuracy: position.coords.accuracy,
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
-                const message = `✅ Lokasi **berhasil dibagikan** (User: ${userName || 'Tanpa Nama'}, ID: ${userId}). Terakhir: ${timestampLocal}. Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
+                const message = `✅ Lokasi **berhasil dibagikan** (User: ${userLabel}). Terakhir: ${timestampLocal}. Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
                 statusElement.innerHTML = message;
                 statusElement.classList.remove('error');
                 statusElement.classList.add('online');
@@ -158,14 +166,15 @@
                 statusElement.classList.add('error');
             });
 
-            currentMarker.setLatLng(latLng).bindPopup(`Lokasi ${userName || userId}. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
+            // Perubahan: Popup Marker menggunakan Nama User
+            currentMarker.setLatLng(latLng).bindPopup(`Lokasi ${userLabel}. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
             map.setView(latLng, 15);
         }
 
         function locationError(error) {
             let errorMessage = "Terjadi Kesalahan Geolocation: ";
             if (error.code === error.PERMISSION_DENIED) {
-                errorMessage += "Izin lokasi ditolak oleh Anda (Pelanggan). Mohon izinkan akses lokasi di pengaturan browser Anda.";
+                errorMessage += "Izin lokasi ditolak oleh Anda. Mohon izinkan akses lokasi di pengaturan browser Anda.";
             } else if (error.code === error.POSITION_UNAVAILABLE) {
                 errorMessage += "Posisi lokasi tidak tersedia.";
             } else if (error.code === error.TIMEOUT) {
@@ -181,7 +190,7 @@
             console.error("Geolocation Error:", error);
         }
         
-        // Cek apakah ID User ditemukan sebelum menginisialisasi peta
+        // Lanjutkan inisialisasi hanya jika ID User ditemukan
         if (userId) {
             initMap();
         }
