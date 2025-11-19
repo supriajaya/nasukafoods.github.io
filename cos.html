@@ -22,8 +22,8 @@
     </style>
 </head>
 <body>
-    <h1 id="mainTitle">Bagikan Lokasi Live Anda 📍</h1>
-    <p>Data yang dikirimkan: ID, Nama, dan Nomor HP Anda yang tersimpan di browser.</p>
+    <h1 id="mainTitle">Bagikan Lokasi</h1>
+ 
     
     <div id="status" class="status warning">Menunggu inisialisasi...</div>
     <div id="map"></div>
@@ -92,7 +92,7 @@
 
         function initMap() {
             // Perubahan: Menggunakan Nama User di Judul H1
-            mainTitleElement.textContent = `Bagikan Lokasi Live Anda, ${userLabel} 📍`;
+            mainTitleElement.textContent = ` Lokasi Anda, ${userLabel} 📍`;
 
             // Tampilkan informasi pengguna
             userInfoElement.innerHTML = `
