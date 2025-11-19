@@ -27,6 +27,8 @@
     
     <div id="status" class="status warning">Menunggu inisialisasi...</div>
     <div id="map"></div>
+    
+    <div id="userInfo" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -35,7 +37,6 @@
     
     <script>
         // --- 1. KONFIGURASI DAN VARIABEL ---
-        // PENTING: Gunakan konfigurasi Firebase yang SAMA dengan yang Anda gunakan
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
             authDomain: "nasukafoods1.firebaseapp.com", 
@@ -50,24 +51,31 @@
         }
         
         const database = firebase.database();
-        // **PERUBAHAN PENTING:** Path baru untuk lokasi pelanggan
-        // Dalam aplikasi nyata, Anda harus menghasilkan ID unik di sini.
-        // Contoh sederhana: ID dari parameter URL (misal: order_id=123)
-        const customerId = 'Pelanggan_Order_12345'; 
-        const locationRef = database.ref(`customer_locations/${customerId}`); 
-        
         const statusElement = document.getElementById('status');
+        const userInfoElement = document.getElementById('userInfo');
+
+        // PENTING: Ambil data pengguna dan ID dari Local Storage
+        const userName = localStorage.getItem('userName') || 'Pelanggan Tanpa Nama';
+        const userPhone = localStorage.getItem('userPhone') || '08xxxxxxxxxx';
+        
+        // Asumsi: ID unik dapat berasal dari parameter URL atau Local Storage
+        // Jika tidak ada ID order, kita buat ID berdasarkan waktu atau nama pengguna
+        const customerId = localStorage.getItem('orderId') || 'ORDER-' + Math.random().toString(36).substr(2, 9);
+        
+        // Path lokasi pelanggan
+        const locationRef = database.ref(`customer_locations/${customerId}`); 
         
         let map;
         let currentMarker;
         const defaultLatLng = [-6.2088, 106.8456]; // Jakarta
-        
-        // Interval pengiriman lokasi (misalnya 10 detik sekali)
         const UPDATE_INTERVAL_MS = 10000; 
 
         // --- 2. FUNGSI UTAMA ---
 
         function initMap() {
+            // Tampilkan informasi pengguna (opsional, untuk memastikan data Local Storage terbaca)
+            userInfoElement.innerHTML = `**Status Data Login:**<br>Nama: ${userName}<br>HP: ${userPhone}<br>ID Order: ${customerId}`;
+
             map = L.map('map').setView(defaultLatLng, 10);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -76,25 +84,23 @@
             }).addTo(map);
             
             currentMarker = L.marker(defaultLatLng, {
-                // Ikon kustom untuk pelanggan (misal: ikon rumah)
                 icon: L.divIcon({
                     className: 'custom-div-icon',
                     html: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#00aaff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
                     iconSize: [30, 30],
-                    iconAnchor: [15, 30] // Sesuaikan anchor ikon
+                    iconAnchor: [15, 30]
                 })
             }).addTo(map)
-                .bindPopup('Lokasi Anda Saat Ini')
+                .bindPopup(`Lokasi ${userName}`)
                 .openPopup();
 
             if (navigator.geolocation) {
-                statusElement.innerHTML = `✅ Geolocation aktif. Mulai pembagian lokasi untuk Order **${customerId}** setiap ${UPDATE_INTERVAL_MS / 1000} detik.`;
+                statusElement.innerHTML = `✅ Geolocation aktif. Mulai pembagian lokasi untuk **${userName}** (ID Order: **${customerId}**) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`;
                 statusElement.classList.remove('warning', 'error');
                 statusElement.classList.add('online');
                 
                 getLocationAndSend(); 
                 
-                // Mulai interval pengiriman lokasi
                 setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
                 
             } else {
@@ -123,17 +129,18 @@
             const timestampLocal = new Date().toLocaleTimeString('id-ID'); 
             const nextUpdateInSeconds = UPDATE_INTERVAL_MS / 1000;
 
-            // Mengirim data lokasi ke path customer_locations/pelanggan_id_unik
+            // --- PENTING: Data Nama dan HP ditambahkan ke sini ---
             locationRef.set({ 
                 lat: lat, 
                 lng: lng,
                 customer_id: customerId,
+                customer_name: userName, // Data dari Local Storage
+                customer_phone: userPhone, // Data dari Local Storage
                 time: timestampLocal, 
                 accuracy: position.coords.accuracy,
-                // Server timestamp untuk membantu Anda (owner) mendeteksi jika lokasi berhenti dikirim
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
-                const message = `✅ Lokasi Anda **berhasil dibagikan** (Order: ${customerId}). Terakhir: ${timestampLocal}. Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
+                const message = `✅ Lokasi **berhasil dibagikan** (Order: ${customerId}). Terakhir: ${timestampLocal}. Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
                 statusElement.innerHTML = message;
                 statusElement.classList.remove('error');
                 statusElement.classList.add('online');
@@ -144,12 +151,13 @@
                 statusElement.classList.add('error');
             });
 
-            currentMarker.setLatLng(latLng).bindPopup(`Lokasi Anda. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
-            map.setView(latLng, 15); // Zoom lebih dekat ke lokasi pelanggan
+            currentMarker.setLatLng(latLng).bindPopup(`Lokasi ${userName}. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
+            map.setView(latLng, 15);
         }
 
         function locationError(error) {
             let errorMessage = "Terjadi Kesalahan Geolocation: ";
+            // ... (kode penanganan error lokasi tetap sama)
             if (error.code === error.PERMISSION_DENIED) {
                 errorMessage += "Izin lokasi ditolak oleh Anda (Pelanggan). Mohon izinkan akses lokasi di pengaturan browser Anda.";
             } else if (error.code === error.POSITION_UNAVAILABLE) {
