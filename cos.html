@@ -23,21 +23,22 @@
 </head>
 <body>
     <h1 id="mainTitle">Bagikan Lokasi Live Anda 📍</h1>
-    <p>Data yang dikirimkan adalah ID, Nama, dan Nomor HP Anda yang tersimpan di browser.</p>
+    <p>Data yang dikirimkan: ID, Nama, dan Nomor HP Anda yang tersimpan di browser.</p>
     
     <div id="status" class="status warning">Menunggu inisialisasi...</div>
     <div id="map"></div>
     
     <div id="userInfo" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
         // --- 1. KONFIGURASI DAN VARIABEL ---
         const firebaseConfig = {
+            // Harap pastikan ini sesuai dengan konfigurasi Anda
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
             authDomain: "nasukafoods1.firebaseapp.com", 
             databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
@@ -53,24 +54,30 @@
         const database = firebase.database();
         const statusElement = document.getElementById('status');
         const userInfoElement = document.getElementById('userInfo');
-        const mainTitleElement = document.getElementById('mainTitle'); // Ambil elemen H1
+        const mainTitleElement = document.getElementById('mainTitle');
 
-        // PENTING: Mengambil ID, Nama, dan HP dari Local Storage
-        const userId = localStorage.getItem('userId');
-        const userName = localStorage.getItem('userName');
-        const userPhone = localStorage.getItem('userPhone');
+        // PENTING: Mengambil data dari Local Storage sesuai format file Nasuka Foods
+        const localUser = {
+            ID: localStorage.getItem("ID"),
+            Nama: localStorage.getItem("Nama"),
+            NomorHP: localStorage.getItem("NomorHP"),
+            Username: localStorage.getItem("Username")
+        };
         
+        const userId = localUser.ID;
+        const userName = localUser.Nama || localUser.Username; // Prioritaskan Nama, lalu Username
+
         // Label yang akan ditampilkan di peta dan judul
-        const userLabel = userName || `User ID: ${userId}`; 
+        const userLabel = userName || `User ID: ${userId || 'N/A'}`; 
 
         // Validasi data penting
         if (!userId) {
             statusElement.innerHTML = "❌ **ID User tidak ditemukan** di Local Storage. Pembagian lokasi dihentikan.";
             statusElement.classList.remove('online', 'warning');
             statusElement.classList.add('error');
-            // Ganti judul
             mainTitleElement.textContent = "Akses Ditolak/Error Data User";
-            throw new Error("Local Storage key 'userId' not found."); 
+            // Tidak perlu `throw` agar halaman tidak crash total
+            console.error("Local Storage key 'ID' not found."); 
         }
 
         // Path lokasi pelanggan menggunakan ID User sebagai kunci utama
@@ -88,7 +95,12 @@
             mainTitleElement.textContent = `Bagikan Lokasi Live Anda, ${userLabel} 📍`;
 
             // Tampilkan informasi pengguna
-            userInfoElement.innerHTML = `**Data Pengguna yang Dibagikan:**<br>Nama: ${userName || 'Nama Tidak Ada'}<br>ID User: ${userId}<br>Nomor HP: ${userPhone || 'Nomor HP Tidak Ada'}`;
+            userInfoElement.innerHTML = `
+                **Data Pengguna yang Dibagikan:**<br>
+                Nama: ${localUser.Nama || 'N/A'}<br>
+                ID User: ${localUser.ID || 'N/A'}<br>
+                Nomor HP: ${localUser.NomorHP || 'N/A'}
+            `;
 
             map = L.map('map').setView(defaultLatLng, 10);
 
@@ -148,9 +160,9 @@
             locationRef.set({ 
                 lat: lat, 
                 lng: lng,
-                user_id: userId,          
-                customer_name: userName,  
-                customer_phone: userPhone, 
+                user_id: localUser.ID,          
+                customer_name: localUser.Nama,  
+                customer_phone: localUser.NomorHP, 
                 time: timestampLocal, 
                 accuracy: position.coords.accuracy,
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
