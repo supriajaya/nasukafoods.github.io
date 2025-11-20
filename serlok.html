@@ -365,14 +365,14 @@
                 const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
                 const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
                 
-                
+                // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
                     minimumFractionDigits: 0, 
                     maximumFractionDigits: 0
                 });
-                
+                // ---------------------------------------------------
                 
                 renderBelanjaContent(formattedSaldo, lat, lng);
 
@@ -419,18 +419,17 @@
              `;
 
              belanjaContainerElement.innerHTML = `
-                 <h2>🛍️ Selamat Datang di Toko Nasuka Foods!</h2>
-                 
+                
                  <div style="background-color: #e9f7ef; padding: 10px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
                      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                         **Saldo Anda:**<span style="font-size: 1.2em; color: #28a745;">${formattedSaldo}</span>
+                         Saldo Anda:<span style="font-size: 1.2em; color: #28a745;">${formattedSaldo}</span>
                      </div>
                      <div style="display: flex; justify-content: space-between;">
-                         **🛒 Total belanja:**<span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">Rp ${formattedTotal}</span>
+                         Total belanja:<span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">Rp ${formattedTotal}</span>
                      </div>
                  </div>
 
-                 <p>Silakan pilih Cilok favorit Anda. Gunakan tombol **+** dan **-** untuk menambah/mengurangi keranjang.</p>
+               
                  
                  <div class="product-grid">
                      ${productHtml}
@@ -438,13 +437,14 @@
                  
                  ${bayarButton}
 
-                 <h3 style="margin-top: 30px;">Detail Pengguna:</h3>
+                 <h3 style="margin-top: 30px;">Detail Pelanggan:</h3>
                  <p id="belanjaUserInfo">
                      <b>Nama:</b> ${localUser.Nama || 'N/A'}<br>
                      <b>ID:</b> ${localUser.ID || 'N/A'}<br>
                      <b>Nomor HP:</b> ${localUser.NomorHP || 'N/A'}<br>
-                     <b>Latitude:</b> ${lat}<br>
-                     <b>Longitude:</b> ${lng}
+                     <p><strong>Kordinat Pengiriman</strong></p>
+                     <b>Garis Lintang:</b> ${lat}<br>
+                     <b>Garis Busur:</b> ${lng}
                  </p>
 
                  <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
@@ -482,14 +482,14 @@
                 const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
                 const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
                 
-                
+                // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
                     minimumFractionDigits: 0, 
                     maximumFractionDigits: 0
                 });
-                
+                // ---------------------------------------------------
 
                 renderBelanjaContent(formattedSaldo, lat, lng);
             });
@@ -526,14 +526,14 @@
             userBalanceRef.once('value').then(snapshot => {
                 const saldo = snapshot.val() || 0;
                 
-                
+                // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
                     minimumFractionDigits: 0, 
                     maximumFractionDigits: 0
                 });
-                
+                // ---------------------------------------------------
                 
                 const formattedTotal = totalBelanja.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
                 
@@ -548,7 +548,7 @@
                         style="width: 100%; margin-top: 20px; background-color: ${isSaldoCukup ? '#dc3545' : '#6c757d'};"
                         ${isSaldoCukup ? `onclick="prosesPembayaran(${totalBelanja})"` : 'disabled'}
                     >
-                        ${isSaldoCukup ? '💰 Bayar Sekarang' : 'Saldo Tidak Cukup'}
+                        ${isSaldoCukup ? 'Bayar Sekarang' : 'Saldo Tidak Cukup'}
                     </button>
                 `;
 
@@ -559,14 +559,14 @@
                     <div style="background-color: #f7f7f7; padding: 15px; border-radius: 8px;">
                         ${itemDetailsHtml}
                         <div style="border-top: 2px solid #dc3545; padding-top: 10px; margin-top: 10px; display: flex; justify-content: space-between;">
-                            <span style="font-size: 1.2em;">Total Akhir:</span>
+                            <span style="font-size: 1.2em;">Total Pembayaran:</span>
                             <span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">${formattedTotal}</span>
                         </div>
                     </div>
                     
-                    <h3 style="margin-top: 20px;">Detail Saldo:</h3>
+                  
                     <div style="padding: 10px; border-radius: 4px; background-color: #e9f7ef; margin-bottom: 10px;">
-                        **Saldo Anda Saat Ini:** <span style="font-weight: bold; color: #28a745;">${formattedSaldo}</span>
+                        Saldo Anda Saat Ini:<span style="font-weight: bold; color: #28a745;"> ${formattedSaldo}</span>
                     </div>
 
                     ${bayarSekarangButton}
@@ -597,20 +597,20 @@
                 if (result.committed) {
                     const newBalance = result.snapshot.val();
                     
-                    
+                    // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
                     const formattedNewBalance = newBalance.toLocaleString('id-ID', { 
                         style: 'currency', 
                         currency: 'IDR',
                         minimumFractionDigits: 0, 
                         maximumFractionDigits: 0
                     });
-                    
+                    // ---------------------------------------------------
                     
                     belanjaContainerElement.innerHTML = `
-                        <h2>🎉 Pembayaran Berhasil!</h2>
+                        <h2>Pembayaran Berhasil!</h2>
                         <p style="color: #28a745; font-size: 1.1em; font-weight: bold;">Terima kasih atas pembelian Anda sebesar Rp ${amount.toLocaleString('id-ID')}!</p>
                         <p>Pesanan Anda telah dicatat dan akan segera diproses.</p>
-                        <p>Sisa Saldo Anda: **${formattedNewBalance}**</p>
+                        <p>Sisa Saldo Anda: ${formattedNewBalance}</p>
                         
                         <div style="margin-top: 20px;">
                             <button class="login-submit" style="background-color: #007bff;" onclick="showBelanja()">🛒 Belanja Lagi</button>
@@ -780,7 +780,7 @@
                     iconAnchor: [15, 30]
                 })
             }).addTo(map)
-                .bindPopup(`**${userLabel}** - Saya Disini`) 
+                .bindPopup(`${userLabel} - Saya Disini`) 
                 .openPopup();
 
             if (navigator.geolocation) {
