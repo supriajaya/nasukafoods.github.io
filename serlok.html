@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BAGIKAN Lokasi Saya (Data Pribadi User)</title>
+    <title>BAGIKAN Lokasi Saya (gps User)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -19,6 +19,11 @@
         .status.online { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
         .status.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
         .status.warning { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
+        
+        /* Modifikasi CSS untuk menyembunyikan logo Leaflet dan attribution default */
+        .leaflet-control-attribution a[href^="https://leafletjs.com"] {
+            display: none; /* Menyembunyikan link ke Leaflet */
+        }
     </style>
 </head>
 <body>
@@ -82,20 +87,21 @@
         const UPDATE_INTERVAL_MS = 10000; 
 
         function initMap() {
-            mainTitleElement.textContent = ` Lokasi Anda, ${userLabel} 📍`;
+            mainTitleElement.textContent = `Server To : ${userLabel} `;
 
             userInfoElement.innerHTML = `
                
                 Nama: ${localUser.Nama || 'N/A'}<br>
-                ID User: ${localUser.ID || 'N/A'}<br>
+                ID : ${localUser.ID || 'N/A'}<br>
                 Nomor HP: ${localUser.NomorHP || 'N/A'}
             `;
 
             map = L.map('map').setView(defaultLatLng, 10);
 
+            // Modifikasi di sini: Tambahkan teks "Nasuka Wireless Geo Location" dan pertahankan OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
-                attribution: '© OpenStreetMap contributors'
+                attribution: 'Nasuka Wireless Geo Location | &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
             
             currentMarker = L.marker(defaultLatLng, {
@@ -131,7 +137,7 @@
                 timeout: 5000 
             });
             const timeNow = new Date().toLocaleTimeString('id-ID');
-            statusElement.innerHTML = `⏳ Mencari lokasi baru pada **${timeNow}**...`;
+            statusElement.innerHTML = `✅ Inisiasi ${timeNow}`;
             statusElement.classList.remove('error');
             statusElement.classList.add('online');
         }
