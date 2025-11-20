@@ -235,7 +235,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const usersRef = database.ref('users');
-        const transactionsRef = database.ref('transactions');
+        // transactionsRef dihapus karena kini menggunakan path yang spesifik USER_ID
 
         // --- Konstanta dan State Lokal ---
         const MINIMUM_PEMBELIAN = 15000;
@@ -249,7 +249,7 @@
             { id: 4, name: 'Paket Sultan (1000 Pcs)', price: 850000, description: 'Cilok frozen siap masak untuk stok di rumah', img: 'https://nasukafoods.site/1000pcs.jpg' }
         ];
 
-        // Memuat semua data user secara lengkap dari localStorage (Perbaikan Integrasi)
+        // Memuat semua data user secara lengkap dari localStorage
         let localUser = { 
             ID: localStorage.getItem("ID"), 
             Nama: localStorage.getItem("Nama"), 
@@ -278,7 +278,7 @@
         const signupMessage = document.getElementById('signupMessage');
         const loginForm = document.getElementById('loginForm');
         const signupForm = document.getElementById('signupForm');
-        const userInfo = document.getElementById('userInfo'); // Pastikan ini didefinisikan
+        const userInfo = document.getElementById('userInfo');
 
         let map;
         let currentMarker;
@@ -502,7 +502,7 @@
                     localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran);
                     localStorage.setItem("Poin", localUser.Poin);
                     
-                    // Log Riwayat Belanja (konsisten dengan index.html)
+                    // Log Riwayat Belanja (PERBAIKAN: Menggunakan path transactions/[USER_ID])
                     const transactionData = {
                         userID: userId,
                         userName: localUser.Nama || localUser.Username,
@@ -514,7 +514,9 @@
                         deliveryAddress: localUser.Alamat,
                         timestamp: new Date().toISOString()
                     };
-                    transactionsRef.push(transactionData);
+                    
+                    // *** FIX: Mencatat transaksi ke node transactions/USER_ID ***
+                    database.ref(`transactions/${userId}`).push(transactionData);
                     
                     // Kosongkan keranjang belanja
                     keranjangBelanja = {};
