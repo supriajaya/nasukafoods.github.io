@@ -8,6 +8,11 @@
         body { font-family: Arial, sans-serif; margin: 15px; background-color: #f0f8ff; }
         h1 { color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
         p { color: #555; }
+        #map, #userInfo, #status { /* Sembunyikan konten utama secara default untuk tampilan SPA */
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Konten Peta/Utama */
         #map { 
             height: 350px; 
             border: 1px solid #ccc; 
@@ -20,20 +25,138 @@
         .status.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
         .status.warning { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
         
+        /* Gaya untuk tombol utama (seperti loginButton di halaman utama) */
+        .login-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: none; 
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Gaya untuk tombol "Belanja Sekarang" */
+        .shop-button {
+            background-color: #ffc107; /* Kuning/Orange */
+            color: #343a40; /* Teks gelap */
+            border: none;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: block; /* <<< PENTING: Menggunakan block untuk menempatkannya di baris baru */
+            width: 100%; /* Agar tombol selebar container */
+            max-width: 250px; /* Batasi lebar agar tidak terlalu lebar di desktop */
+            font-size: 14px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .shop-button:hover {
+            background-color: #e0a800; 
+        }
+
+        /* Tampilan Form SPA (Login dan Signup) */
+        #login-container, #signup-container {
+            padding: 20px;
+            max-width: 400px;
+            margin: 50px auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none; /* Awalnya tersembunyi */
+        }
+        .login-input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-submit {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+        .login-submit:hover {
+            background-color: #218838;
+        }
+        .switch-link {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
         /* Modifikasi CSS untuk menyembunyikan logo Leaflet dan attribution default */
         .leaflet-control-attribution a[href^="https://leafletjs.com"] {
-            display: none; /* Menyembunyikan link ke Leaflet */
+            display: none; 
         }
     </style>
 </head>
 <body>
     <h1 id="mainTitle">Bagikan Lokasi</h1>
  
-    
-    <div id="status" class="status warning">Menunggu inisialisasi...</div>
-    <div id="map"></div>
-    
-    <div id="userInfo" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
+    <div id="main-content">
+        <div id="status" class="status warning">Menunggu inisialisasi...</div>
+        <button id="loginButton" class="login-button" onclick="showLogin()">Login Sekarang</button>
+        <div id="map"></div>
+        <div id="userInfo" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
+    </div>
+
+    <div id="login-container">
+        <h2>👋 Silakan Login</h2>
+        <p id="loginMessage" style="color: red;"></p>
+        <form id="loginForm">
+            <label for="username"><b>Username:</b></label>
+            <input type="text" placeholder="Masukkan Username" name="username" id="username" class="login-input" required>
+
+            <label for="password"><b>Password:</b></label>
+            <input type="password" placeholder="Masukkan Password" name="password" id="password" class="login-input" required>
+            
+            <button type="submit" class="login-submit">Masuk</button>
+        </form>
+        <span class="switch-link" onclick="showSignup()">Belum punya akun? Daftar Sekarang</span>
+    </div>
+
+    <div id="signup-container">
+        <h2>📝 Buat Akun Baru</h2>
+        <p id="signupMessage" style="color: red;"></p>
+        <form id="signupForm">
+            <label for="signupName"><b>Nama Lengkap:</b></label>
+            <input type="text" placeholder="Masukkan Nama Lengkap" name="signupName" id="signupName" class="login-input" required>
+
+            <label for="signupUsername"><b>Username:</b></label>
+            <input type="text" placeholder="Username unik (tanpa spasi)" name="signupUsername" id="signupUsername" class="login-input" required>
+
+            <label for="signupNomorHP"><b>Nomor HP:</b></label>
+            <input type="tel" placeholder="Contoh: 08123456789" name="signupNomorHP" id="signupNomorHP" class="login-input" required>
+
+            <label for="signupPassword"><b>Password:</b></label>
+            <input type="password" placeholder="Buat Password" name="signupPassword" id="signupPassword" class="login-input" required>
+            
+            <button type="submit" class="login-submit">Daftar Akun</button>
+        </form>
+        <span class="switch-link" onclick="showLogin()">Sudah punya akun? Login</span>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -41,6 +164,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
+        // *** BAGIAN CONFIG FIREBASE ***
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
             authDomain: "nasukafoods1.firebaseapp.com", 
@@ -55,28 +179,44 @@
         }
         
         const database = firebase.database();
+        const usersRef = database.ref('users'); 
+        
+        // *** ELEMEN DOM ***
         const statusElement = document.getElementById('status');
         const userInfoElement = document.getElementById('userInfo');
         const mainTitleElement = document.getElementById('mainTitle');
+        const loginButtonElement = document.getElementById('loginButton');
+        const mainContentElement = document.getElementById('main-content'); 
+        
+        // Elemen Login
+        const loginContainerElement = document.getElementById('login-container'); 
+        const loginForm = document.getElementById('loginForm');
+        const loginMessage = document.getElementById('loginMessage');
 
-        const localUser = {
+        // Elemen Signup (BARU)
+        const signupContainerElement = document.getElementById('signup-container');
+        const signupForm = document.getElementById('signupForm');
+        const signupMessage = document.getElementById('signupMessage');
+
+        // *** DATA PENGGUNA LOKAL ***
+        let localUser = {
             ID: localStorage.getItem("ID"),
             Nama: localStorage.getItem("Nama"),
             NomorHP: localStorage.getItem("NomorHP"),
             Username: localStorage.getItem("Username")
         };
         
-        const userId = localUser.ID;
-        const userName = localUser.Nama || localUser.Username; 
-
-        const userLabel = userName || `User ID: ${userId || 'N/A'}`; 
+        let userId = localUser.ID;
+        let userName = localUser.Nama || localUser.Username; 
+        let userLabel = userName || `User ID: ${userId || 'N/A'}`; 
 
         if (!userId) {
-            statusElement.innerHTML = "❌ Username tidak ditemukan, Anda perlu login untuk menjalankan fitur ini";
+            statusElement.innerHTML = "❌ Username tidak ditemukan, Anda perlu **login** untuk menjalankan fitur ini";
             statusElement.classList.remove('online', 'warning');
             statusElement.classList.add('error');
             mainTitleElement.textContent = "Akses Ditolak";
-            console.error("Local Storage key 'ID' not found."); 
+            loginButtonElement.style.display = 'block'; 
+            console.error("Local Storage key 'ID' not found. Access denied."); 
         }
 
         const locationRef = database.ref(`customer_locations/${userId}`); 
@@ -85,21 +225,198 @@
         let currentMarker;
         const defaultLatLng = [-6.2088, 106.8456]; 
         const UPDATE_INTERVAL_MS = 10000; 
+        let locationInterval; // Variabel untuk menyimpan interval
+
+        // =================================================================
+        // *** FUNGSI NAVIGASI SPA ***
+        // =================================================================
+
+        function hideAllViews() {
+            mainContentElement.style.display = 'none';
+            loginContainerElement.style.display = 'none';
+            signupContainerElement.style.display = 'none';
+            // Bersihkan pesan status saat berganti view
+            loginMessage.textContent = '';
+            signupMessage.textContent = '';
+        }
+        
+        function showLogin() {
+            hideAllViews();
+            loginContainerElement.style.display = 'block';
+            mainTitleElement.textContent = "Login Pengguna";
+        }
+
+        function showSignup() {
+            hideAllViews();
+            signupContainerElement.style.display = 'block';
+            mainTitleElement.textContent = "Daftar Akun Baru";
+        }
+        
+        function navigateToMain(newUser = false) {
+            hideAllViews();
+            mainContentElement.style.display = 'block';
+            // Panggil initMap untuk memulai fungsi berbagi lokasi
+            initMap(newUser); 
+        }
+
+        // =================================================================
+        // *** LOGIKA SIGNUP (BARU) ***
+        // =================================================================
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            const Nama = document.getElementById('signupName').value.trim();
+            const Username = document.getElementById('signupUsername').value.trim();
+            const NomorHP = document.getElementById('signupNomorHP').value.trim();
+            const Password = document.getElementById('signupPassword').value;
+
+            if (Username.includes(' ')) {
+                signupMessage.textContent = "❌ Username tidak boleh mengandung spasi.";
+                signupMessage.style.color = 'red';
+                return;
+            }
+
+            signupMessage.textContent = "Sedang memverifikasi ketersediaan Username...";
+            signupMessage.style.color = 'orange';
+
+            // 1. Cek apakah Username sudah ada
+            usersRef.orderByChild('Username').equalTo(Username).once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        signupMessage.textContent = `❌ Username '${Username}' sudah digunakan.`;
+                        signupMessage.style.color = 'red';
+                    } else {
+                        // 2. Username tersedia, lakukan pendaftaran
+                        const newUserData = {
+                            Nama: Nama,
+                            Username: Username,
+                            NomorHP: NomorHP,
+                            Password: Password, // Di dunia nyata: Password harus di-hash!
+                            created_at: firebase.database.ServerValue.TIMESTAMP
+                        };
+
+                        // push() akan membuat ID unik (seperti -M09dsa...)
+                        const newUserRef = usersRef.push(newUserData); 
+                        const newUserId = newUserRef.key;
+
+                        // 3. Login otomatis setelah daftar
+                        
+                        // Siapkan data pengguna lokal
+                        newUserData.ID = newUserId;
+                        
+                        // Simpan ke Local Storage
+                        localStorage.setItem("ID", newUserId);
+                        localStorage.setItem("Nama", Nama);
+                        localStorage.setItem("NomorHP", NomorHP);
+                        localStorage.setItem("Username", Username);
+
+                        // Update variabel global
+                        localUser = newUserData;
+                        userId = newUserId;
+                        userName = Nama || Username; 
+                        userLabel = userName; 
+                        
+                        signupMessage.textContent = `✅ Akun berhasil dibuat! Login otomatis...`;
+                        signupMessage.style.color = 'green';
+
+                        // 4. Navigasi ke halaman utama
+                        setTimeout(() => {
+                            navigateToMain(true);
+                        }, 1500); 
+                    }
+                })
+                .catch(error => {
+                    signupMessage.textContent = `❌ Terjadi kesalahan Firebase: ${error.message}`;
+                    signupMessage.style.color = 'red';
+                    console.error("Firebase Signup Error:", error);
+                });
+        });
+
+        // =================================================================
+        // *** LOGIKA LOGIN (DIREVISI) ***
+        // =================================================================
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            const inputUsername = document.getElementById('username').value.trim();
+            const inputPassword = document.getElementById('password').value;
+            
+            loginMessage.textContent = "Sedang memverifikasi...";
+            loginMessage.style.color = 'orange';
+
+            usersRef.orderByChild('Username').equalTo(inputUsername).once('value')
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        let userData = null;
+                        
+                        snapshot.forEach(childSnapshot => {
+                            userData = childSnapshot.val();
+                            userData.ID = childSnapshot.key; 
+                        });
+
+                        if (userData && userData.Password === inputPassword) {
+                            
+                            // 1. Simpan data ke Local Storage
+                            localStorage.setItem("ID", userData.ID);
+                            localStorage.setItem("Nama", userData.Nama || userData.Username);
+                            localStorage.setItem("NomorHP", userData.NomorHP || 'N/A');
+                            localStorage.setItem("Username", userData.Username);
+
+                            // 2. Muat ulang variabel lokal dan set map
+                            localUser = userData;
+                            userId = localUser.ID;
+                            userName = localUser.Nama || localUser.Username; 
+                            userLabel = userName || `User ID: ${userId}`; 
+
+                            loginMessage.textContent = `✅ Login berhasil! Selamat datang, ${userName}. Memuat ulang...`;
+                            loginMessage.style.color = 'green';
+                            
+                            // 3. Muat ulang fungsi utama
+                            setTimeout(() => {
+                                navigateToMain(); 
+                            }, 1500); 
+
+                        } else {
+                            loginMessage.textContent = "❌ Username atau Password salah.";
+                            loginMessage.style.color = 'red';
+                        }
+                    } else {
+                        loginMessage.textContent = "❌ Username tidak ditemukan.";
+                        loginMessage.style.color = 'red';
+                    }
+                })
+                .catch(error => {
+                    loginMessage.textContent = `❌ Terjadi kesalahan Firebase: ${error.message}`;
+                    loginMessage.style.color = 'red';
+                    console.error("Firebase Login Error:", error);
+                });
+        });
+        
+        // =================================================================
+        // *** FUNGSI UTAMA (DIREVISI) ***
+        // =================================================================
 
         function initMap() {
+            // Pastikan loginButton disembunyikan setelah berhasil login
+            loginButtonElement.style.display = 'none'; 
+            
             mainTitleElement.textContent = `Server To : ${userLabel} `;
 
+            // >>> MODIFIKASI INI DILAKUKAN DI SINI <<<
             userInfoElement.innerHTML = `
-               
                 Nama: ${localUser.Nama || 'N/A'}<br>
                 ID : ${localUser.ID || 'N/A'}<br>
                 Nomor HP: ${localUser.NomorHP || 'N/A'}
+                <button class="shop-button" onclick="alert('Fitur Belanja Sekarang belum terintegrasi.')">🛒 Belanja Sekarang</button>
             `;
+            // >>> AKHIR MODIFIKASI <<<
+
+            // Hapus peta lama jika ada (penting untuk SPA)
+            if (map) {
+                map.remove();
+            }
 
             map = L.map('map').setView(defaultLatLng, 10);
-
-            // Perubahan di sini: Mengganti "OpenStreetMap contributors" menjadi "Private"
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            
+             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: 'Nasuka Wireless Geo Location | &copy; <a href="http://www.openstreetmap.org/copyright">Private</a>'
             }).addTo(map);
@@ -112,7 +429,7 @@
                     iconAnchor: [15, 30]
                 })
             }).addTo(map)
-                .bindPopup(`**${userLabel}** - Saya Disini`) // Perubahan untuk pop-up marker awal
+                .bindPopup(`**${userLabel}** - Saya Disini`) 
                 .openPopup();
 
             if (navigator.geolocation) {
@@ -122,7 +439,11 @@
                 
                 getLocationAndSend(); 
                 
-                setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
+                // Hapus interval lama jika ada (penting untuk SPA)
+                if (locationInterval) {
+                    clearInterval(locationInterval);
+                }
+                locationInterval = setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
                 
             } else {
                 statusElement.innerHTML = "❌ Geolocation tidak didukung oleh browser Anda. Lokasi tidak dapat dibagikan secara *live*.";
@@ -137,7 +458,7 @@
                 timeout: 5000 
             });
             const timeNow = new Date().toLocaleTimeString('id-ID');
-            statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; // Teks status yang lebih umum
+            statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; 
             statusElement.classList.remove('error');
             statusElement.classList.add('online');
         }
@@ -150,7 +471,10 @@
             const timestampLocal = new Date().toLocaleTimeString('id-ID'); 
             const nextUpdateInSeconds = UPDATE_INTERVAL_MS / 1000;
 
-            locationRef.set({ 
+            // Menggunakan locationRef yang diperbarui setelah login/signup
+            const currentlocationRef = database.ref(`customer_locations/${userId}`);
+            
+            currentlocationRef.set({ 
                 lat: lat, 
                 lng: lng,
                 user_id: localUser.ID,          
@@ -160,7 +484,6 @@
                 accuracy: position.coords.accuracy,
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
-                // Perubahan di sini: Menghilangkan lat/lng dari pesan status
                 const message = `✅ Lokasi **${userLabel}** terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
                 statusElement.innerHTML = message;
                 statusElement.classList.remove('error');
@@ -172,7 +495,6 @@
                 statusElement.classList.add('error');
             });
 
-            // Perubahan di sini: Mengganti pop-up marker
             currentMarker.setLatLng(latLng).bindPopup(`**${userLabel}** - Saya Disini`);
             map.setView(latLng, 15);
         }
@@ -195,9 +517,13 @@
             statusElement.classList.add('error');
             console.error("Geolocation Error:", error);
         }
-        
+
+        // *** INISIALISASI SAAT STARTUP ***
         if (userId) {
             initMap();
+        } else {
+             // Jika belum login, tampilkan halaman login (awal)
+            showLogin();
         }
     </script>
 </body>
