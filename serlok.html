@@ -36,7 +36,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
+        // --- 1. KONFIGURASI DAN VARIABEL ---
         const firebaseConfig = {
+            // Harap pastikan ini sesuai dengan konfigurasi Anda
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
             authDomain: "nasukafoods1.firebaseapp.com", 
             databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
@@ -54,6 +56,7 @@
         const userInfoElement = document.getElementById('userInfo');
         const mainTitleElement = document.getElementById('mainTitle');
 
+        // PENTING: Mengambil data dari Local Storage sesuai format file Nasuka Foods
         const localUser = {
             ID: localStorage.getItem("ID"),
             Nama: localStorage.getItem("Nama"),
@@ -62,28 +65,36 @@
         };
         
         const userId = localUser.ID;
-        const userName = localUser.Nama || localUser.Username; 
+        const userName = localUser.Nama || localUser.Username; // Prioritaskan Nama, lalu Username
 
+        // Label yang akan ditampilkan di peta dan judul
         const userLabel = userName || `User ID: ${userId || 'N/A'}`; 
 
+        // Validasi data penting
         if (!userId) {
             statusElement.innerHTML = "❌ Username tidak ditemukan, Anda perlu login untuk menjalankan fitur ini";
             statusElement.classList.remove('online', 'warning');
             statusElement.classList.add('error');
             mainTitleElement.textContent = "Akses Ditolak";
+            // Tidak perlu `throw` agar halaman tidak crash total
             console.error("Local Storage key 'ID' not found."); 
         }
 
+        // Path lokasi pelanggan menggunakan ID User sebagai kunci utama
         const locationRef = database.ref(`customer_locations/${userId}`); 
         
         let map;
         let currentMarker;
-        const defaultLatLng = [-6.2088, 106.8456]; 
+        const defaultLatLng = [-6.2088, 106.8456]; // Jakarta
         const UPDATE_INTERVAL_MS = 10000; 
 
+        // --- 2. FUNGSI UTAMA ---
+
         function initMap() {
+            // Perubahan: Menggunakan Nama User di Judul H1
             mainTitleElement.textContent = ` Lokasi Anda, ${userLabel} 📍`;
 
+            // Tampilkan informasi pengguna
             userInfoElement.innerHTML = `
                 **Data Pengguna yang Dibagikan:**<br>
                 Nama: ${localUser.Nama || 'N/A'}<br>
@@ -92,7 +103,7 @@
             `;
 
             map = L.map('map').setView(defaultLatLng, 10);
-
+log
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '© OpenStreetMap contributors'
@@ -106,6 +117,7 @@
                     iconAnchor: [15, 30]
                 })
             }).addTo(map)
+                // Perubahan: Menggunakan Nama User di Marker
                 .bindPopup(`Lokasi **${userLabel}**`)
                 .openPopup();
 
@@ -144,6 +156,7 @@
             const timestampLocal = new Date().toLocaleTimeString('id-ID'); 
             const nextUpdateInSeconds = UPDATE_INTERVAL_MS / 1000;
 
+            // Mengirim data pribadi user dan lokasi
             locationRef.set({ 
                 lat: lat, 
                 lng: lng,
@@ -165,6 +178,7 @@
                 statusElement.classList.add('error');
             });
 
+            // Perubahan: Popup Marker menggunakan Nama User
             currentMarker.setLatLng(latLng).bindPopup(`Lokasi ${userLabel}. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
             map.setView(latLng, 15);
         }
@@ -188,6 +202,7 @@
             console.error("Geolocation Error:", error);
         }
         
+        // Lanjutkan inisialisasi hanya jika ID User ditemukan
         if (userId) {
             initMap();
         }
