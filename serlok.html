@@ -112,7 +112,7 @@
                     iconAnchor: [15, 30]
                 })
             }).addTo(map)
-                .bindPopup(`${userLabel}`)
+                .bindPopup(`**${userLabel}** - Saya Disini`) // Perubahan untuk pop-up marker awal
                 .openPopup();
 
             if (navigator.geolocation) {
@@ -137,7 +137,7 @@
                 timeout: 5000 
             });
             const timeNow = new Date().toLocaleTimeString('id-ID');
-            statusElement.innerHTML = `✅ Inisiasi ${timeNow}`;
+            statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; // Teks status yang lebih umum
             statusElement.classList.remove('error');
             statusElement.classList.add('online');
         }
@@ -160,7 +160,8 @@
                 accuracy: position.coords.accuracy,
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
-                const message = `✅(${userLabel}) : ${timestampLocal} : ±${position.coords.accuracy.toFixed(1)} ${nextUpdateInSeconds}`;
+                // Perubahan di sini: Menghilangkan lat/lng dari pesan status
+                const message = `✅ Lokasi **${userLabel}** terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
                 statusElement.innerHTML = message;
                 statusElement.classList.remove('error');
                 statusElement.classList.add('online');
@@ -171,7 +172,8 @@
                 statusElement.classList.add('error');
             });
 
-            currentMarker.setLatLng(latLng).bindPopup(` ${userLabel}. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
+            // Perubahan di sini: Mengganti pop-up marker
+            currentMarker.setLatLng(latLng).bindPopup(`**${userLabel}** - Saya Disini`);
             map.setView(latLng, 15);
         }
 
