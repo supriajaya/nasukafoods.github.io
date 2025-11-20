@@ -98,10 +98,10 @@
 
             map = L.map('map').setView(defaultLatLng, 10);
 
-            // Modifikasi di sini: Tambahkan teks "Nasuka Wireless Geo Location" dan pertahankan OpenStreetMap
+            // Perubahan di sini: Mengganti "OpenStreetMap contributors" menjadi "Private"
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
-                attribution: 'Nasuka Wireless Geo Location | &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: 'Nasuka Wireless Geo Location | &copy; <a href="http://www.openstreetmap.org/copyright">Private</a>'
             }).addTo(map);
             
             currentMarker = L.marker(defaultLatLng, {
@@ -112,7 +112,7 @@
                     iconAnchor: [15, 30]
                 })
             }).addTo(map)
-                .bindPopup(`Lokasi **${userLabel}**`)
+                .bindPopup(`${userLabel}`)
                 .openPopup();
 
             if (navigator.geolocation) {
@@ -171,7 +171,7 @@
                 statusElement.classList.add('error');
             });
 
-            currentMarker.setLatLng(latLng).bindPopup(`Lokasi ${userLabel}. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
+            currentMarker.setLatLng(latLng).bindPopup(` ${userLabel}. Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
             map.setView(latLng, 15);
         }
 
