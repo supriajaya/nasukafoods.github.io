@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KIRIM Lokasi Live (Mang Cilok)</title>
+    <title>KIRIM Lokasi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -20,9 +20,9 @@
     </style>
 </head>
 <body>
-    <h1>Kirim Lokasi Live 🛵</h1>
+    <h1>Kirim Lokasi ke server</h1>
     
-    <div id="status" class="status online">Menunggu inisialisasi Geolocation...</div>
+    <div id="status" class="status online">Menunggu inisialisasi ...</div>
     <div id="map"></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -93,7 +93,7 @@
                 timeout: 5000 
             });
             const timeNow = new Date().toLocaleTimeString('id-ID');
-            statusElement.innerHTML = `⏳ Mencari lokasi baru pada ${timeNow}...`;
+            statusElement.innerHTML = `✅ Perbarui ${timeNow}...`;
             statusElement.classList.remove('error');
             statusElement.classList.add('online');
         }
@@ -115,7 +115,7 @@
                 // Field ini digunakan oleh view.html untuk cek timeout 5 menit.
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
-                const message = `✅ Lokasi **berhasil terkirim** (Mang Cilok). Terakhir: ${timestampLocal}. Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
+                const message = `✅ Lokasi berhasil terkirim : ${timestampLocal}. Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
                 statusElement.innerHTML = message;
                 statusElement.classList.remove('error');
                 statusElement.classList.add('online');
