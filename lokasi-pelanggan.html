@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pantauan Lokasi Semua Pelanggan (Real-time)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 15px; background-color: #f4f7f9; }
+        h1 { color: #007bff; border-bottom: 3px solid #007bff; padding-bottom: 8px; margin-bottom: 15px; }
+        #map { 
+            height: 600px; 
+            border: 2px solid #ddd; 
+            border-radius: 10px; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            background-color: #e9ecef;
+        }
+        .status { padding: 12px; border-radius: 6px; margin-bottom: 15px; font-weight: bold; border: 1px solid; font-size: 0.95em; }
+        .status.online { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .status.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .status.warning { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
+        .legend { background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 10px; font-size: 0.85em; }
+        .legend div { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h1>📍 Pantauan Lokasi Semua Pelanggan Aktif</h1>
+ 
+    <div id="status" class="status warning">Memuat data lokasi...</div>
+    <div id="map"></div>
+    
+    <div class="legend">
+        **Keterangan Marker:**
+        <div><span style="color: #007bff; font-weight: bold;">●</span> Biru: Lokasi Pelanggan</div>
+        <div><span style="color: #ff0000; font-weight: bold;">●</span> Merah: Lokasi Pelanggan (Default/Error)</div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // PASTIKAN CONFIG INI SAMA DENGAN FILE ASLI ANDA
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
+            authDomain: "nasukafoods1.firebaseapp.com", 
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
+            projectId: "nasukafoods1", 
+            messagingSenderId: "84287800896", 
+            appId: "1:84287800896:web:83189d6766997b00f701a5" 
+        };
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
+        const database = firebase.database();
+        const locationsRef = database.ref('customer_locations'); // Path untuk semua lokasi pelanggan
+        const statusElement = document.getElementById('status');
+        
+        let map;
+        const markers = {}; // Objek untuk menyimpan marker L.Marker berdasarkan user_id
+        const defaultLatLng = [-6.2088, 106.8456]; // Jakarta
+        const defaultZoom = 10;
+        
+        // Custom Icon untuk marker pelanggan
+        function createCustomerIcon(color) {
+            return L.divIcon({
+                className: 'custom-customer-icon',
+                html: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="${color}"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 30]
+            });
+        }
+        
+        const blueIcon = createCustomerIcon('#007bff');
+        const redIcon = createCustomerIcon('#ff0000'); // Untuk lokasi default/error
+        
+        function initMap() {
+            map = L.map('map').setView(defaultLatLng, defaultZoom);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            setupFirebaseListener();
+        }
+        
+        function setupFirebaseListener() {
+            // Listener untuk menambahkan marker baru atau mengupdate marker yang sudah ada
+            locationsRef.on('child_changed', updateMarker);
+            locationsRef.on('child_added', updateMarker);
+            
+            // Listener untuk menghapus marker saat data dihapus dari database
+            locationsRef.on('child_removed', removeMarker);
+            
+            // Sekali saat pertama kali loading (semua data telah dimuat)
+            locationsRef.once('value', (snapshot) => {
+                const count = snapshot.numChildren();
+                statusElement.innerHTML = `✅ Terhubung. Total **${count}** lokasi pelanggan aktif dipantau secara real-time.`;
+                statusElement.classList.remove('warning', 'error');
+                statusElement.classList.add('online');
+                
+                if (count > 0) {
+                    // Coba atur batas peta agar mencakup semua marker
+                    const latLngs = Object.values(markers).map(m => m.getLatLng());
+                    if (latLngs.length > 0) {
+                        map.fitBounds(L.latLngBounds(latLngs), { padding: [50, 50] });
+                    }
+                }
+            }, (error) => {
+                statusElement.innerHTML = `❌ Gagal mengambil data dari Firebase: ${error.message}`;
+                statusElement.classList.remove('online', 'warning');
+                statusElement.classList.add('error');
+                console.error("Firebase Read Error:", error);
+            });
+        }
+
+        function updateMarker(snapshot) {
+            const userId = snapshot.key;
+            const data = snapshot.val();
+
+            if (!data || !data.lat || !data.lng) {
+                console.warn(`Data lokasi tidak valid untuk user ${userId}. Melewati.`);
+                return;
+            }
+            
+            const latLng = [data.lat, data.lng];
+            const userName = data.customer_name || data.user_id || `Pelanggan #${userId}`;
+            const timeInfo = data.time ? `Update Terakhir: ${data.time} (Waktu Pelanggan)` : '';
+            const accuracyInfo = data.accuracy ? `Akurasi: ±${data.accuracy.toFixed(1)}m` : '';
+
+            const popupContent = `
+                **${userName}**<br>
+                ID: ${data.user_id || 'N/A'}<br>
+                Nomor HP: ${data.customer_phone || 'N/A'}<br>
+                Lat: ${data.lat.toFixed(6)}, Lng: ${data.lng.toFixed(6)}<br>
+                ${timeInfo}<br>
+                ${accuracyInfo}
+            `;
+            
+            // Tentukan icon (misalnya, jika lat/lng adalah default, gunakan redIcon)
+            const icon = (data.lat === defaultLatLng[0] && data.lng === defaultLatLng[1]) ? redIcon : blueIcon;
+
+            if (markers[userId]) {
+                // Update marker yang sudah ada
+                markers[userId].setLatLng(latLng);
+                markers[userId].setIcon(icon);
+                markers[userId].setPopupContent(popupContent);
+            } else {
+                // Buat marker baru
+                const marker = L.marker(latLng, { icon: icon })
+                                .addTo(map)
+                                .bindPopup(popupContent);
+                
+                markers[userId] = marker;
+            }
+        }
+
+        function removeMarker(snapshot) {
+            const userId = snapshot.key;
+            if (markers[userId]) {
+                map.removeLayer(markers[userId]);
+                delete markers[userId];
+                console.log(`Marker untuk user ${userId} dihapus.`);
+            }
+        }
+        
+        initMap();
+    </script>
+</body>
+</html>
