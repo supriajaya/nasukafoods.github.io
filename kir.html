@@ -31,9 +31,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // --- 1. KONFIGURASI DAN VARIABEL ---
         const firebaseConfig = {
-            // Gunakan API Key Anda
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
             authDomain: "nasukafoods1.firebaseapp.com", 
             databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
@@ -54,10 +52,7 @@
         let currentMarker;
         const defaultLatLng = [-6.2088, 106.8456]; 
         
-        // Interval pengiriman 5 detik (lebih cepat dari 5 menit timeout)
         const UPDATE_INTERVAL_MS = 5000; 
-
-        // --- 2. FUNGSI UTAMA ---
 
         function initMap() {
             map = L.map('map').setView(defaultLatLng, 10);
@@ -106,16 +101,14 @@
             const timestampLocal = new Date().toLocaleTimeString('id-ID'); 
             const nextUpdateInSeconds = UPDATE_INTERVAL_MS / 1000;
 
-            // --- PENTING: Menambahkan Server Timestamp ---
             locationRef.set({ 
                 lat: lat, 
                 lng: lng,
                 time: timestampLocal, 
                 accuracy: position.coords.accuracy,
-                // Field ini digunakan oleh view.html untuk cek timeout 5 menit.
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
-                const message = `✅ Lokasi berhasil terkirim : ${timestampLocal}. Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
+                const message = `✅ Diperbarui : ${timestampLocal}. : ±${position.coords.accuracy.toFixed(1)}. : ${nextUpdateInSeconds} `;
                 statusElement.innerHTML = message;
                 statusElement.classList.remove('error');
                 statusElement.classList.add('online');
