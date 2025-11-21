@@ -8,7 +8,10 @@
         body { font-family: Arial, sans-serif; margin: 15px; background-color: #f0f8ff; }
         h1 { color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
         p { color: #555; }
-        #map, #userInfo, #status { 
+        
+        /* MODIFIKASI CSS: Sembunyikan konten utama secara default */
+        #main-content { 
+            display: none; 
             transition: opacity 0.3s ease;
         }
         
@@ -292,12 +295,8 @@
         let userLabel = userName || `User ID: ${userId || 'N/A'}`; 
 
         if (!userId) {
-            statusElement.innerHTML = "❌ Username tidak ditemukan, Anda perlu **login** untuk menjalankan fitur ini";
-            statusElement.classList.remove('online', 'warning');
-            statusElement.classList.add('error');
-            mainTitleElement.textContent = "Akses Ditolak";
-            loginButtonElement.style.display = 'block'; 
-            console.error("Local Storage key 'ID' not found. Access denied."); 
+            // Jika user belum login, biarkan kode ini berjalan, nanti akan diredirect ke showLogin()
+            console.warn("User ID not found in Local Storage. Starting in login mode.");
         }
 
         const locationRef = database.ref(`customer_locations/${userId}`); 
@@ -317,10 +316,9 @@
             loginMessage.textContent = '';
             signupMessage.textContent = '';
 
-            if (locationInterval) {
-                clearInterval(locationInterval);
-                locationInterval = null;
-            }
+            // Tidak menghentikan interval lokasi saat berpindah ke Belanja/Login, 
+            // karena kita ingin lokasi tetap update di background.
+            // Hanya hentikan saat proses login/signup berhasil, lalu init lagi.
         }
         
         function showLogin() {
@@ -365,14 +363,13 @@
                 const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
                 const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
                 
-                // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
+                // Menghilangkan desimal dari Saldo
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
                     minimumFractionDigits: 0, 
                     maximumFractionDigits: 0
                 });
-                // ---------------------------------------------------
                 
                 renderBelanjaContent(formattedSaldo, lat, lng);
 
@@ -482,14 +479,14 @@
                 const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
                 const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
                 
-                // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
+                // Menghilangkan desimal dari Saldo
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
                     minimumFractionDigits: 0, 
                     maximumFractionDigits: 0
                 });
-                // ---------------------------------------------------
+                
 
                 renderBelanjaContent(formattedSaldo, lat, lng);
             });
@@ -526,14 +523,13 @@
             userBalanceRef.once('value').then(snapshot => {
                 const saldo = snapshot.val() || 0;
                 
-                // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
+                // Menghilangkan desimal dari Saldo
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
                     minimumFractionDigits: 0, 
                     maximumFractionDigits: 0
                 });
-                // ---------------------------------------------------
                 
                 const formattedTotal = totalBelanja.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
                 
@@ -597,14 +593,13 @@
                 if (result.committed) {
                     const newBalance = result.snapshot.val();
                     
-                    // --- MODIFIKASI: Menghilangkan desimal dari Saldo ---
+                    // Menghilangkan desimal dari Saldo
                     const formattedNewBalance = newBalance.toLocaleString('id-ID', { 
                         style: 'currency', 
                         currency: 'IDR',
                         minimumFractionDigits: 0, 
                         maximumFractionDigits: 0
                     });
-                    // ---------------------------------------------------
                     
                     belanjaContainerElement.innerHTML = `
                         <h2>Pembayaran Berhasil!</h2>
@@ -629,10 +624,17 @@
                 showPembayaran(); 
             });
         }
-
+        
+        // MODIFIKASI: navigateToMain sekarang mengembalikan tampilan peta/status
         function navigateToMain(newUser = false) {
             hideAllViews();
             mainContentElement.style.display = 'block';
+            
+            // Tampilkan kembali elemen peta dan status
+            document.getElementById('map').style.display = 'block';
+            document.getElementById('status').style.display = 'block';
+            userInfoElement.style.display = 'block';
+            
             initMap(newUser); 
         }
         
@@ -686,7 +688,9 @@
                         signupMessage.style.color = 'green';
 
                         setTimeout(() => {
-                            navigateToMain(true);
+                            // Setelah berhasil, mulai proses background location dan tampilkan belanja
+                            initLocationBackground(); 
+                            showBelanja(); 
                         }, 1500); 
                     }
                 })
@@ -731,7 +735,9 @@
                             loginMessage.style.color = 'green';
                             
                             setTimeout(() => {
-                                navigateToMain(); 
+                                // Setelah berhasil, mulai proses background location dan tampilkan belanja
+                                initLocationBackground();
+                                showBelanja();
                             }, 1500); 
 
                         } else {
@@ -802,17 +808,62 @@
             }
         }
         
+        // MODIFIKASI: Fungsi baru untuk memulai lokasi di background tanpa merender UI
+        function initLocationBackground() {
+            if (!userId) return; 
+
+            // Hentikan interval lama jika ada
+            if (locationInterval) {
+                clearInterval(locationInterval);
+            }
+            
+            loginButtonElement.style.display = 'none'; 
+            mainTitleElement.textContent = `Server To : ${userLabel} `;
+
+            // Inisialisasi map dan marker secara minimal agar fungsi sendLocation tidak error
+            // saat mencoba memanggil currentMarker.setLatLng().
+            if (!map) {
+                // Buat peta dummy di elemen tersembunyi jika belum ada, atau set map ke elemen #map
+                // Kita inisialisasi seperti biasa, karena #main-content sudah di-display: none
+                map = L.map('map').setView(defaultLatLng, 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: 'Nasuka Wireless Geo Location | &copy; <a href="http://www.openstreetmap.org/copyright">Private</a>'
+                }).addTo(map);
+                currentMarker = L.marker(defaultLatLng).addTo(map);
+            }
+
+
+            if (navigator.geolocation) {
+                console.log(`✅ [Background] Geolocation aktif. Mulai pembagian lokasi untuk ${userLabel} (ID: ${userId}) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`);
+                
+                // Panggil sekali, lalu set interval
+                getLocationAndSend(); 
+                locationInterval = setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
+                
+            } else {
+                console.error("❌ Geolocation tidak didukung. Lokasi tidak dapat dibagikan secara live.");
+            }
+        }
+
         function getLocationAndSend() {
             navigator.geolocation.getCurrentPosition(sendLocation, locationError, {
                 enableHighAccuracy: true,
                 timeout: 5000 
             });
             const timeNow = new Date().toLocaleTimeString('id-ID');
-            statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; 
-            statusElement.classList.remove('error');
-            statusElement.classList.add('online');
+            
+            // HANYA update status element jika main content terlihat
+            if (mainContentElement.style.display !== 'none') {
+                statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; 
+                statusElement.classList.remove('error');
+                statusElement.classList.add('online');
+            } else {
+                 console.log(`[Background] Mencoba mendapatkan lokasi saat ini... (${timeNow})`);
+            }
         }
 
+        // MODIFIKASI: sendLocation hanya update UI jika main content terlihat
         function sendLocation(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
@@ -833,19 +884,31 @@
                 accuracy: position.coords.accuracy,
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
-                const message = `✅ Lokasi **${userLabel}** terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
-                statusElement.innerHTML = message;
-                statusElement.classList.remove('error');
-                statusElement.classList.add('online');
+                
+                // Update Marker/Map HANYA jika main content terlihat
+                if (mainContentElement.style.display !== 'none') {
+                    const message = `✅ Lokasi **${userLabel}** terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
+                    statusElement.innerHTML = message;
+                    statusElement.classList.remove('error');
+                    statusElement.classList.add('online');
+                    
+                    // Peta/Marker hanya perlu diupdate jika sedang ditampilkan
+                    currentMarker.setLatLng(latLng).bindPopup(`**${userLabel}** - Saya Disini`);
+                    map.setView(latLng, 15);
+                } else {
+                    console.log(`✅ [Background] Lokasi terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Next in ${nextUpdateInSeconds}s.`);
+                }
             }).catch(error => {
-                const message = `❌ Gagal mengirim ke Firebase: ${error.message}`;
-                statusElement.innerHTML = message;
-                statusElement.classList.remove('online');
-                statusElement.classList.add('error');
+                // Log error
+                 if (mainContentElement.style.display !== 'none') {
+                    const message = `❌ Gagal mengirim ke Firebase: ${error.message}`;
+                    statusElement.innerHTML = message;
+                    statusElement.classList.remove('online');
+                    statusElement.classList.add('error');
+                } else {
+                    console.error(`❌ [Background] Gagal mengirim ke Firebase: ${error.message}`);
+                }
             });
-
-            currentMarker.setLatLng(latLng).bindPopup(`**${userLabel}** - Saya Disini`);
-            map.setView(latLng, 15);
         }
 
         function locationError(error) {
@@ -861,15 +924,26 @@
             }
 
             const message = `⚠️ ${errorMessage}. Mencoba lagi dalam ${UPDATE_INTERVAL_MS / 1000} detik.`;
-            statusElement.innerHTML = message;
-            statusElement.classList.remove('online');
-            statusElement.classList.add('error');
+            
+            // HANYA update status element jika main content terlihat
+            if (mainContentElement.style.display !== 'none') {
+                statusElement.innerHTML = message;
+                statusElement.classList.remove('online');
+                statusElement.classList.add('error');
+            } else {
+                console.warn(`⚠️ [Background] ${errorMessage}`);
+            }
             console.error("Geolocation Error:", error);
         }
         
+        // LOGIKA INISIALISASI BARU
         if (userId) {
-            initMap();
+            // 1. Mulai update lokasi di background
+            initLocationBackground();
+            // 2. Langsung tampilkan halaman belanja
+            showBelanja();
         } else {
+            // Tampilkan halaman login jika belum ada user
             showLogin();
         }
     </script>
