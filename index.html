@@ -9,9 +9,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
     <link rel="stylesheet" href="https://nasukafoods.site/lain.css">
-    </head>
-
-   
 </head>
 
 
@@ -32,7 +29,7 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); 
         position: relative; 
     } 
-    #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #dokumen-container, #free-shipping-container { 
+    #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #dokumen-container, #free-shipping-container, #produk-detail-container { 
         display: none; 
         position: fixed; 
         top: 0; 
@@ -438,7 +435,7 @@
         min-height: 100vh;
         background-color: white;
     }
-    .video-header, .download-header, .dokumen-header, .leaderboard-header {
+    .video-header, .download-header, .dokumen-header, .leaderboard-header, .produk-header {
         display: flex;
         align-items: center;
         padding: 15px;
@@ -451,18 +448,18 @@
         z-index: 10;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    .video-header i, .download-header i, .dokumen-header i, .leaderboard-header i {
+    .video-header i, .download-header i, .dokumen-header i, .leaderboard-header i, .produk-header i {
         margin-right: 15px;
         font-size: 20px;
         cursor: pointer;
     }
-    .video-header h3, .dokumen-header h3, .leaderboard-header h3 {
+    .video-header h3, .dokumen-header h3, .leaderboard-header h3, .produk-header h3 {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
         flex-grow: 1;
     }
-    .video-content-section, .download-content, .dokumen-content-section, .leaderboard-content-section {
+    .video-content-section, .download-content, .dokumen-content-section, .leaderboard-content-section, .produk-content-section {
         padding: 15px;
     }
     
@@ -491,6 +488,84 @@
         font-size: 12px;
         color: #666;
     }
+    
+    /* STYLE BARU UNTUK DETAIL PRODUK */
+    .produk-detail-card {
+        width: 100%;
+        max-width: 450px;
+        margin: 0 auto;
+        min-height: 100vh;
+        background-color: white;
+    }
+    .produk-detail-img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        display: block;
+    }
+    .produk-info {
+        padding: 15px;
+    }
+    .produk-info h2 {
+        margin-top: 0;
+        color: #333;
+        font-size: 24px;
+    }
+    .produk-info .price {
+        font-size: 28px;
+        font-weight: 800;
+        color: #f44336;
+        margin-bottom: 15px;
+    }
+    .produk-info h4 {
+        margin-bottom: 10px;
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 5px;
+    }
+    .produk-info p {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    .produk-info ul {
+        list-style: disc;
+        padding-left: 20px;
+        margin-bottom: 15px;
+    }
+    .produk-info li {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+    .produk-action-bar {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 450px;
+        width: 100%;
+        background-color: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+    }
+    .produk-action-bar button {
+        flex: 1;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    /* END STYLE BARU */
 </style>
 
   
@@ -524,17 +599,11 @@
             </div>
             
             <a href="https://nasukafoods.site/serlok.html" target="_blank" class="all-accounts" style="text-decoration: none;">
-    <span>Antar cilok nya ke lokasi ku</span>
-    <i class="fas fa-chevron-right"></i>
-</a>
-
-            
-            
+                <span>Antar cilok nya ke lokasi ku</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
            
         </div>
-
-
-
 
         <div class="main-features">
            <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
@@ -552,12 +621,6 @@
                 <span>Resep</span>
             </a>
             
-            
-            
-            
-            
-            
-            
             <a href="" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pdam-icon">
                     <i class="fas fa-plus"></i> 
@@ -571,7 +634,7 @@
                 </div>
                 <span>Lihat Posisi</span>
             </a>
-            </div>
+        </div>
 
         <div class="banner">
             <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
@@ -592,39 +655,34 @@
         </div>
 
         <div class="other-features">
-            <div class="other-feature-item">
+            <div class="other-feature-item" onclick="showProduk('polosan')">
                 <div class="other-feature-icon top-up-icon">
                     <img src="https://nasukafoods.site/1pcs.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Polosan</span>
             </div>
             
-            
-            <div class="other-feature-item">
+            <div class="other-feature-item" onclick="showProduk('gajih')">
                 <div class="other-feature-icon brizzi-icon">
                     <img src="https://nasukafoods.site/cilokpro.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Isian Gajih</span>
             </div>
-            <div class="other-feature-item">
+            
+            <div class="other-feature-item" onclick="showProduk('telorPuyuh')">
                 <div class="other-feature-icon tagihan-icon">
                     <img src="https://nasukafoods.site/100pcs.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Isi Telor Puyuh</span>
             </div>
-            <div class="other-feature-item">
+            
+            <div class="other-feature-item" onclick="showProduk('telorAyam')">
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/1000pcs.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Isi Telor Ayam</span>
             </div>
-            
-            
-            
-            
-            
-            
-            </div>
+        </div>
             
               <div class="search-bar" id="marquee-search-bar">
                 <i class="fas fa-search"></i>
@@ -1074,6 +1132,27 @@
             </div>
         </div>
     </div>
+    
+    <div id="produk-detail-container" class="auth-container">
+        <div class="produk-detail-card">
+            <div class="produk-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3 id="produk-title">Detail Produk</h3>
+            </div>
+            <div class="produk-content-section">
+                <img id="produk-image" src="" alt="Gambar Produk" class="produk-detail-img">
+                <div class="produk-info">
+                    <h2 id="produk-name"></h2>
+                    <div class="price" id="produk-price"></div>
+                    <div id="produk-article-container">
+                        </div>
+                </div>
+            </div>
+            <div class="produk-action-bar">
+                <button onclick="alert('Fungsi beli belum diimplementasikan.')">Beli Sekarang</button>
+            </div>
+        </div>
+    </div>
     <div id="formal-confirmation-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 300000; justify-content: center; align-items: center;">
         <div style="background-color: white; max-width: 350px; width: 90%; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); text-align: left; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
             <h4 style="margin-top: 0; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; font-size: 18px; font-weight: 700;">
@@ -1275,7 +1354,7 @@ function fetchUserProfileFromDB(userID) {
 
 function hideAllContainers() {
     
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container, #free-shipping-container').forEach(el => { 
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container, #free-shipping-container, #produk-detail-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
@@ -2077,6 +2156,102 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
     e.preventDefault();
     signupUser();
 });
+
+
+// DATA PRODUK BARU
+const productData = {
+    polosan: {
+        name: 'Cilok Polosan Premium',
+        price: 'Rp 500',
+        image: 'https://nasukafoods.site/paketcilok.jpg',
+        article: `
+            <h4>Kesederhanaan Rasa Premium</h4>
+            <p><strong>Cilok Polosan Premium</strong> dari Nasuka Foods menawarkan cita rasa otentik yang tak tertandingi. Dibuat dari tepung tapioka pilihan dengan komposisi yang presisi, menghasilkan tekstur yang <strong>kenyal dan lembut</strong>.</p>
+            <p>Produk ini sangat cocok bagi Anda yang menyukai Cilok murni, tanpa isian, dan ingin menikmati kelezatan bumbu kacang Nasuka Foods secara maksimal</p>
+            <h4>Informasi Nilai Jual:</h4>
+            <ul>
+                <li><strong>Tekstur Sempurna:</strong> Kenyal, lembut, dan empuk.</li>
+                <li><strong>Rasa Otentik:</strong> Kekuatan rasa aci dan bumbu yang gurih.</li>
+                <li><strong>Serbaguna:</strong> Cocok disajikan dengan berbagai saus.</li>
+            </ul>
+        `
+    },
+    gajih: {
+        name: 'Cilok Isian Gajih Lemak Sapi Pilihan',
+        price: 'Rp 1.000',
+        image: 'https://nasukafoods.site/cilokpro.jpg',
+        article: `
+            <h4>Kekayaan Rasa Gurih Alami</h4>
+            <p>Rasakan sensasi Cilok yang ditingkatkan dengan <strong>Isian Gajih Lemak Sapi Pilihan</strong>. Kami menggunakan gajih sapi kualitas terbaik yang telah diolah dan dibumbui secara khusus, menciptakan isian yang <strong>meleleh di mulut</strong> dengan aroma dan rasa gurih yang mendalam.</p>
+            <p>Kombinasi tekstur Cilok yang kenyal dengan ledakan rasa gajih yang kaya membuat produk ini menjadi favorit bagi penggemar rasa autentik dan "nendang". Produk ini menjanjikan pengalaman kuliner Cilok yang lebih mewah.</p>
+            <h4>Informasi Nilai Jual:</h4>
+            <ul>
+                <li><strong>Isian Premium:</strong> Menggunakan gajih lemak sapi kualitas tinggi.</li>
+                <li><strong>Gurih Maksimal:</strong> Rasa kaldu dan gajih yang kuat.</li>
+                <li><strong>Pengalaman Rasa Unik:</strong> Meleleh dan kaya rasa.</li>
+            </ul>
+        `
+    },
+    telorPuyuh: {
+        name: 'Cilok Isi Telor Puyuh Spesial',
+        price: 'Rp 2.000',
+        image: 'https://nasukafoods.site/100pcs.jpg',
+        article: `
+            <h4>Kejutan Lezat di Setiap Gigitan</h4>
+            <p><strong>Cilok Isi Telor Puyuh Spesial</strong> hadir sebagai pilihan Cilok yang mengenyangkan sekaligus memanjakan lidah. Setiap butir Cilok diisi dengan <strong>telur puyuh utuh</strong>, menawarkan kejutan protein yang lezat.</p>
+            <p>Produk ini merupakan pilihan cerdas untuk camilan bernutrisi atau pendamping hidangan utama. Kualitas Cilok yang kenyal berpadu sempurna dengan kelembutan telur puyuh yang sudah dibumbui, menjadikannya pilihan favorit keluarga.</p>
+            <h4>Informasi Nilai Jual:</h4>
+            <ul>
+                <li><strong>Isian Nutrisi:</strong> Telur puyuh utuh yang kaya protein.</li>
+                <li><strong>Porsi Mengenyangkan:</strong> Ideal sebagai camilan utama.</li>
+                <li><strong>Kualitas Terjamin:</strong> Telur puyuh segar dan Cilok yang empuk.</li>
+            </ul>
+        `
+    },
+    telorAyam: {
+        name: 'Cilok Isi Telor Ayam Premium',
+        price: 'Rp 5.000',
+        image: 'https://nasukafoods.site/1000pcs.jpg',
+        article: `
+            <h4>Pilihan Eksklusif Penuh Rasa</h4>
+            <p>Nikmati <strong>Cilok Isi Telor Ayam Premium</strong>, varian Cilok eksklusif dengan isian <strong>potongan telur ayam rebus</strong> yang melimpah dan gurih. Telur ayam memberikan tekstur yang lebih padat dan rasa umami yang lebih kuat pada isian Cilok.</p>
+            <p>Produk ini disiapkan dengan standar kebersihan tertinggi dan bumbu rahasia Nasuka Foods, menjamin kualitas rasa dan keamanan pangan. Pilihan sempurna bagi Anda yang menginginkan Cilok dengan isian berkelas dan porsi yang memuaskan.</p>
+            <h4>Informasi Nilai Jual:</h4>
+            <ul>
+                <li><strong>Isian Melimpah:</strong> Potongan telur ayam rebus premium.</li>
+                <li><strong>Rasa Umami Kuat:</strong> Cita rasa gurih yang elegan.</li>
+                <li><strong>Standar Kebersihan:</strong> Diproduksi dengan protokol pangan yang ketat.</li>
+            </ul>
+        `
+    }
+};
+
+/**
+ * Menampilkan detail produk berdasarkan ID.
+ * @param {string} produkID - ID produk (polosan, gajih, telorPuyuh, telorAyam).
+ */
+function showProduk(produkID) {
+    hideAllContainers(); 
+
+    const produk = productData[produkID];
+    const produkContainer = document.getElementById('produk-detail-container');
+    
+    if (!produk || !produkContainer) {
+        alert('Produk tidak ditemukan atau container belum siap.');
+        showHome();
+        return;
+    }
+
+    // Update elemen-elemen detail produk
+    document.getElementById('produk-title').textContent = produk.name;
+    document.getElementById('produk-name').textContent = produk.name;
+    document.getElementById('produk-price').textContent = produk.price;
+    document.getElementById('produk-image').src = produk.image;
+    document.getElementById('produk-article-container').innerHTML = produk.article;
+    
+    produkContainer.style.display = 'flex';
+    produkContainer.scrollTop = 0; 
+}
 
 
 $(document).ready(function() {
