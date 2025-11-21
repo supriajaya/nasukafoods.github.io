@@ -510,8 +510,7 @@
                         <i class="fas fa-crown"></i>
                         <span style="font-size: 14px;"></span> 
                     </a>
-                    <div 
-                        <i class=""></i>
+                    <div> 
                         <span id="userNameDisplay">selamat datang</span> 
                     </div>
                 </div>
@@ -580,42 +579,51 @@
                     <strong>Jas Hujan Plastik Premium</strong>
                 </span>
             </div>
-            <div class="banner-button" onclick="showFree()">
+            <div class="banner-button">
                 Klaim sekarang
             </div>
         </div>
+        
+        
+        
         <div class="search-bar">
             <i class=""></i>
             <span>Cilok Isian Gajih</span>
         </div>
 
         <div class="other-features">
-            <div class="other-feature-item" onclick="showPayment(' Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih. lezat', 1000, ['https://nasukafoods.site/1pcs.jpg'], 'Isi 1 biji.')">
+            <div class="other-feature-item">
                 <div class="other-feature-icon top-up-icon">
                     <img src="https://nasukafoods.site/1pcs.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Rp 1.000</span>
+                <span>Polosan</span>
             </div>
             
             
-            <div class="other-feature-item" onclick="showPayment('Paket Hemat ', 'Paket hemat diskon 20%.', 44000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 50 Pcs.')">
+            <div class="other-feature-item">
                 <div class="other-feature-icon brizzi-icon">
                     <img src="https://nasukafoods.site/cilokpro.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Rp 44.000</span>
+                <span>Isian Gajih</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Cilok Premium: Paket Keluarga', 'Porsi besar untuk acara keluarga.', 87000, ['https://nasukafoods.site/100pcs.jpg'], 'Isi 100 pc. Promo terbatas!')">
+            <div class="other-feature-item">
                 <div class="other-feature-icon tagihan-icon">
                     <img src="https://nasukafoods.site/100pcs.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Rp 87.000</span>
+                <span>Isi Telor Puyuh</span>
             </div>
-            <div class="other-feature-item" onclick="showPayment('Paket Sultan', 'Cilok frozen siap masak untuk stok di rumah, Cilok isian gajih berkualitas super, isi 1000 pcs', 850000, ['https://nasukafoods.site/1000pcs.jpg'], 'Gratis ongkos kirim seluruh kota bandung.')">
+            <div class="other-feature-item">
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/1000pcs.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Rp 850.000</span>
+                <span>Isi Telor Ayam</span>
             </div>
+            
+            
+            
+            
+            
+            
             </div>
             
               <div class="search-bar" id="marquee-search-bar">
@@ -872,7 +880,7 @@
         <div class="auth-card" style="max-width: 350px; padding: 20px; text-align: left; background: #fff;">
             <div id="receipt-content">
                 </div>
-            <button onclick="hideReceiptAndShowHome()" style="width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px;">
+            <button style="width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px;">
                 Selesai
             </button>
         </div>
@@ -1311,17 +1319,6 @@ function showDownload() {
         downloadContainer.scrollTop = 0; 
     }
 }
-
-// FUNGSI BARU DITAMBAHKAN
-function showFree() {
-    hideAllContainers();
-    const freeShippingContainer = document.getElementById('free-shipping-container');
-    if (freeShippingContainer) {
-        freeShippingContainer.style.display = 'flex'; 
-        freeShippingContainer.scrollTop = 0; 
-    }
-}
-// END FUNGSI BARU
 
 
 function showDokumen() {
@@ -1830,7 +1827,7 @@ function showHistory() {
                 
                 
                 txItem.onclick = () => {
-                    showReceiptPopup(tx);
+                    alert("Fungsi melihat detail resi telah dihapus.");
                 };
                 
                 
@@ -1850,31 +1847,6 @@ function showHistory() {
         .catch(error => {
             document.getElementById('history-list').innerHTML = `<p style="color: red;">Gagal memuat riwayat: ${error.message}</p>`;
         });
-}
-
-function showReceiptPopup(txData) {
-    hideAllContainers();
-    
-    const tempTxData = {
-        ...txData,
-        
-        initialSaldo: txData.initialSaldo || (txData.finalSaldo + txData.amount),
-        deliveryAddress: txData.deliveryAddress || localUser.Alamat || 'Alamat tidak tercatat'
-    };
-    
-    
-    document.getElementById('receipt-content').innerHTML = generateReceiptHTML(tempTxData);
-    
-    
-    const receiptPopup = document.getElementById('receipt-popup');
-    receiptPopup.style.display = 'flex';
-    
-    
-    const finishButton = receiptPopup.querySelector('button');
-    if(finishButton) {
-        finishButton.onclick = showProfil;
-        finishButton.textContent = 'Kembali ke Riwayat';
-    }
 }
 
 
@@ -2094,280 +2066,6 @@ function logPurchaseToDB(productName, amount, newSaldo, pointsEarned) {
         });
         
     return transactionData;
-}
-
-function generateReceiptHTML(txData) {
-    const date = new Date(txData.timestamp);
-    const dateString = date.toLocaleString('id-ID', { dateStyle: 'medium' });
-    const timeString = date.toLocaleString('id-ID', { timeStyle: 'short' });
-    const totalSaldo = txData.amount.toLocaleString('id-ID');
-    
-    const pointsText = txData.pointsEarned ? `<div style="text-align: center; font-size: 14px; font-weight: bold; color: #ff9800; margin-top: 10px;">Anda Mendapat ${txData.pointsEarned} Poin!</div>` : '';
-
-
-    return `
-        <div style="font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #333; line-height: 1.4;">
-            <h3 style="text-align: center; margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">NASUKA FOODS</h3>
-            <div style="text-align: center; margin-bottom: 15px;">Cibaduyut - Kota Bandung</div>
-            <div style="border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 10px 0; margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between;">
-                    <span>TGL/JAM:</span>
-                    <span>${dateString} ${timeString}</span>
-                </div>
-                <div style="display: flex; justify-in-between;">
-                    <span>TRX ID:</span>
-                    <span>${txData.transactionID.substring(0, 15)}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>PELANGGAN:</span>
-                    <span>${localUser.Nama}</span>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">
-                    <span>PRODUK</span>
-                    <span>Harga</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>1 x ${txData.productName}</span>
-                    <span>Rp ${totalSaldo}</span>
-                </div>
-            </div>
-
-            <div style="border-top: 1px dashed #333; padding-top: 10px;">
-                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px;">
-                    <span>Dibayar lunas:</span>
-                    <span style="color: #f44336;">Rp ${totalSaldo}</span>
-                </div>
-            </div>
-            
-            <div style="margin-top: 15px; border-top: 1px dashed #333; padding-top: 10px;">
-                <div style="font-weight: bold;">SISA Saldo ANDA:</div>
-                <div style="font-size: 18px; color: #007bff; text-align: right; margin-top: 5px;">
-                    Rp ${txData.finalSaldo.toLocaleString('id-ID')}
-                </div>
-            </div>
-
-            ${pointsText} 
-            
-            <div style="text-align: center; margin-top: 20px; font-size: 12px; font-style: italic;">
-                Terima kasih telah berbelanja! <br> Pesanan akan dikirim ke: <br> ${txData.deliveryAddress}
-            </div>
-        </div>
-    `;
-}
-
-function hideReceiptAndShowHome() {
-    document.getElementById('receipt-popup').style.display = 'none';
-    showHome();
-}
-
-function showFormalConfirmation(amount, productName, onConfirm) {
-    const modal = document.getElementById('formal-confirmation-modal');
-    const userAddress = localUser.Alamat || "Alamat belum di seting";
-    
-    
-    const contentP = modal.querySelector('p');
-    let originalHtml = `Saya memastikan bahwa semua detail pesanan termasuk produk, harga, dan alamat pengiriman ($$ALAMAT$$), telah diverifikasi. Dengan menekan tombol "Setuju & Bayar", Saya menyetujui pemotongan Saldo sebesar $$JUMLAH$$ untuk pembelian $$PRODUK$$.`;
-    
-    
-    contentP.innerHTML = originalHtml
-        .replace(/\$\$ALAMAT\$\$/g, `${userAddress}`)
-        .replace(/\$\$JUMLAH\$\$/g, `Rp ${amount.toLocaleString('id-ID')}`)
-        .replace(/\$\$PRODUK\$\$/g, `${productName}`);
-
-    const confirmBtn = document.getElementById('modal-confirm-btn');
-    const cancelBtn = document.getElementById('modal-cancel-btn');
-    
-    
-    confirmBtn.onclick = null;
-    cancelBtn.onclick = null;
-
-    
-    confirmBtn.onclick = () => {
-        modal.style.display = 'none';
-        onConfirm(); 
-    };
-    cancelBtn.onclick = () => {
-        modal.style.display = 'none';
-        
-        document.getElementById('payment-status').innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembayaran dibatalkan oleh pengguna.</div>`;
-    };
-
-    modal.style.display = 'flex';
-}
- 
-
-function processSaldoPayment(amount, productName) {
-    const statusDiv = document.getElementById('payment-status');
-    statusDiv.innerHTML = '';
-    
-    if (!localUser.ID) {
-         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Anda belum login. Silakan login untuk membeli.</div>`;
-         return;
-    }
-    
-    if (localUser.Alamat === "Alamat belum diatur" || localUser.NomorHP === "Nomor HP belum diatur") {
-         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Mohon lengkapi Alamat Pengiriman dan Nomor HP Anda di menu Edit Profil.</div>`;
-         return;
-    }
-    
-    if (localUser.Saldo < amount) {
-        statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Saldo Anda (Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (Rp ${amount.toLocaleString('id-ID')}).</div>`;
-        return;
-    }
-    
-    
-    const executePayment = () => {
-        const initialSaldo = localUser.Saldo;
-        
-        
-        const pointsEarned = Math.floor(amount / 1000);
-        
-        statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
-        
-        
-        const userRef = db.ref(`users/${localUser.ID}`);
-        userRef.transaction((currentData) => {
-            if (currentData) {
-                
-                if ((currentData.Saldo || 0) < amount) {
-                     return; 
-                }
-                currentData.Saldo = (currentData.Saldo || 0) - amount; 
-                
-                currentData.TotalPengeluaran = (currentData.TotalPengeluaran || 0) + amount;
-                currentData.Poin = (currentData.Poin || 0) + pointsEarned;
-            }
-            return currentData;
-        })
-        .then(({committed, snapshot}) => {
-            if (committed) {
-                
-                const updatedUserData = snapshot.val();
-                localUser.Saldo = updatedUserData.Saldo;
-                localUser.TotalPengeluaran = updatedUserData.TotalPengeluaran;
-                localUser.Poin = updatedUserData.Poin;
-                
-                localStorage.setItem("Saldo", localUser.Saldo);
-                localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran);
-                localStorage.setItem("Poin", localUser.Poin);
-                
-                updateSaldoDisplay();
-                
-                
-                const transactionData = logPurchaseToDB(productName, amount, localUser.Saldo, pointsEarned);
-                
-                statusDiv.innerHTML = `
-                    <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
-                        Pembelian Berhasil! ✅  
-                    </div>
-                `;
-                
-                document.getElementById('receipt-content').innerHTML = generateReceiptHTML(transactionData);
-                document.getElementById('payment-container').style.display = 'none';
-                document.getElementById('receipt-popup').style.display = 'flex';
-            } else {
-                 statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Terjadi konflik data atau saldo tidak cukup. Coba ulangi.</div>`;
-            }
-        })
-        .catch(error => {
-            console.error("Firebase Transaction Failed:", error);
-            statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Silakan coba lagi.</div>`;
-        });
-    };
-
-    
-    showFormalConfirmation(amount, productName, executePayment); 
-}
-
-function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
-    hideAllContainers();
-    if (!localStorage.getItem("ID")) {
-        alert("Silahkan login terlebih dahulu untuk melanjutkan pembelian.");
-        showLogin();
-        return;
-    }
-    if (localUser.Alamat === "Alamat belum diatur" || localUser.NomorHP === "Nomor HP belum diatur") {
-         alert("Mohon lengkapi Alamat Pengiriman dan Nomor HP Anda di menu Edit Profil sebelum melakukan pembelian.");
-         showEditProfil();
-         return;
-    }
-    
-    const userName = localUser.Nama || "Nama belum di seting";
-    const userAddress = localUser.Alamat || "Alamat pengantaran belum di seting";
-    const userNomorHP = localUser.NomorHP || "Nomor HP belum di seting";
-    const productPriceInSaldo = productPrice; 
-    const paymentContainer = document.getElementById('payment-container');
-    
-    paymentContainer.style.display = 'flex';
-    paymentContainer.style.backgroundColor = '#f0f2f5'; 
-
-    const imageUrl = (productImageUrls && productImageUrls.length > 0) ? productImageUrls[0] : 'https://nasukafoods.site/cilokpro.jpg';
-
-
-    paymentContainer.innerHTML = `
-        <div class="payment-card-modified">
-            
-            <div class="payment-header">
-                <i class="fas fa-arrow-left" onclick="showHome()"></i>
-                <h3>Detail Produk</h3>
-            </div>
-            
-            <div class="product-image-container">
-                <img src="${imageUrl}" alt="${productName}">
-            </div>
-
-            <div class="product-details-section">
-                <h4>${productName}</h4>
-                <div class="product-price-display">
-                    Harga: Rp ${productPriceInSaldo.toLocaleString('id-ID')}
-                </div>
-                <p class="product-description-text">
-                    ${productDescription}
-                </p>
-                <p class="product-keterangan-manual">
-                    ${manualDescription}
-                </p>
-            </div>
-
-            <div class="payment-info-section">
-                <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #333;">Info Pembeli & Pengiriman</div>
-                
-                <div class="info-row">
-                    <span class="info-label">Pelanggan</span>
-                    <span class="info-value">${userName}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Nomor HP</span>
-                    <span class="info-value">${userNomorHP}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Alamat Pengiriman</span>
-                    <span class="info-value address">${userAddress}</span>
-                </div>
-                <div class="info-row Saldo-row">
-                    <span class="info-label">Saldo Anda</span>
-                    <span class="info-value" style="color: #007bff;">Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}</span>
-                </div>
-                <div class="info-row total-bayar-row">
-                    <span class="info-label" style="color: #333;">Harga yang akan di bayar</span>
-                    <span class="info-value">Rp ${productPriceInSaldo.toLocaleString('id-ID')}</span>
-                </div>
-            </div>
-            
-            <div id="payment-status" style="margin: 0 15px 15px 15px;"></div>
-
-            <div class="payment-action-section">
-                <button class="btn-bayar-Saldo" onclick="processSaldoPayment(${productPriceInSaldo}, '${productName}')">
-                    Bayar Rp ${productPriceInSaldo.toLocaleString('id-ID')} Sekarang
-                </button>
-            </div>
-            
-        </div>
-    `;
-    
 }
 
 
