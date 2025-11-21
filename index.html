@@ -1583,7 +1583,7 @@ function signupUser() {
                     Username: username,
                     Nama: nama,
                     Password: password,
-                    Saldo: 500,
+                    Saldo: 1,
                     Foto: "https://nasukafoods.site/gambarkosong.jpg", 
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
@@ -1617,7 +1617,7 @@ function signupUser() {
                         localUser.TotalPengeluaran = newUser.TotalPengeluaran; 
                         localUser.Poin = newUser.Poin;
                         
-                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 500 Saldo gratis';
+                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan Saldo gratis 1 Rupiah';
                         statusDiv.classList.add('success');
                         setTimeout(showHome, 1500);
                     })
