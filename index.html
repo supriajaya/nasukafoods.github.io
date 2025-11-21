@@ -9,6 +9,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
     <link rel="stylesheet" href="https://nasukafoods.site/lain.css">
+    </head>
+
+   
 </head>
 
 
@@ -29,7 +32,7 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); 
         position: relative; 
     } 
-    #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #dokumen-container, #free-shipping-container, #produk-detail-container { 
+    #login-container, #signup-container, #profil-container, #editprofil-container, #payment-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #dokumen-container, #free-shipping-container { 
         display: none; 
         position: fixed; 
         top: 0; 
@@ -435,7 +438,7 @@
         min-height: 100vh;
         background-color: white;
     }
-    .video-header, .download-header, .dokumen-header, .leaderboard-header, .produk-header {
+    .video-header, .download-header, .dokumen-header, .leaderboard-header {
         display: flex;
         align-items: center;
         padding: 15px;
@@ -448,18 +451,18 @@
         z-index: 10;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    .video-header i, .download-header i, .dokumen-header i, .leaderboard-header i, .produk-header i {
+    .video-header i, .download-header i, .dokumen-header i, .leaderboard-header i {
         margin-right: 15px;
         font-size: 20px;
         cursor: pointer;
     }
-    .video-header h3, .dokumen-header h3, .leaderboard-header h3, .produk-header h3 {
+    .video-header h3, .dokumen-header h3, .leaderboard-header h3 {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
         flex-grow: 1;
     }
-    .video-content-section, .download-content, .dokumen-content-section, .leaderboard-content-section, .produk-content-section {
+    .video-content-section, .download-content, .dokumen-content-section, .leaderboard-content-section {
         padding: 15px;
     }
     
@@ -488,84 +491,6 @@
         font-size: 12px;
         color: #666;
     }
-    
-    /* STYLE BARU UNTUK DETAIL PRODUK */
-    .produk-detail-card {
-        width: 100%;
-        max-width: 450px;
-        margin: 0 auto;
-        min-height: 100vh;
-        background-color: white;
-    }
-    .produk-detail-img {
-        width: 100%;
-        height: 250px;
-        object-fit: cover;
-        display: block;
-    }
-    .produk-info {
-        padding: 15px;
-    }
-    .produk-info h2 {
-        margin-top: 0;
-        color: #333;
-        font-size: 24px;
-    }
-    .produk-info .price {
-        font-size: 28px;
-        font-weight: 800;
-        color: #f44336;
-        margin-bottom: 15px;
-    }
-    .produk-info h4 {
-        margin-bottom: 10px;
-        color: #007bff;
-        border-bottom: 2px solid #007bff;
-        padding-bottom: 5px;
-    }
-    .produk-info p {
-        font-size: 14px;
-        color: #555;
-        line-height: 1.6;
-        margin-bottom: 15px;
-    }
-    .produk-info ul {
-        list-style: disc;
-        padding-left: 20px;
-        margin-bottom: 15px;
-    }
-    .produk-info li {
-        font-size: 14px;
-        color: #555;
-        margin-bottom: 5px;
-    }
-    .produk-action-bar {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        max-width: 450px;
-        width: 100%;
-        background-color: white;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        padding: 10px 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        z-index: 100;
-    }
-    .produk-action-bar button {
-        flex: 1;
-        padding: 12px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;
-    }
-    /* END STYLE BARU */
 </style>
 
   
@@ -585,7 +510,8 @@
                         <i class="fas fa-crown"></i>
                         <span style="font-size: 14px;"></span> 
                     </a>
-                    <div> 
+                    <div 
+                        <i class=""></i>
                         <span id="userNameDisplay">selamat datang</span> 
                     </div>
                 </div>
@@ -599,11 +525,17 @@
             </div>
             
             <a href="https://nasukafoods.site/serlok.html" target="_blank" class="all-accounts" style="text-decoration: none;">
-                <span>Antar cilok nya ke lokasi ku</span>
-                <i class="fas fa-chevron-right"></i>
-            </a>
+    <span>Antar cilok nya ke lokasi ku</span>
+    <i class="fas fa-chevron-right"></i>
+</a>
+
+            
+            
            
         </div>
+
+
+
 
         <div class="main-features">
            <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
@@ -621,6 +553,12 @@
                 <span>Resep</span>
             </a>
             
+            
+            
+            
+            
+            
+            
             <a href="" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pdam-icon">
                     <i class="fas fa-plus"></i> 
@@ -634,7 +572,7 @@
                 </div>
                 <span>Lihat Posisi</span>
             </a>
-        </div>
+            </div>
 
         <div class="banner">
             <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
@@ -642,47 +580,43 @@
                     <strong>Jas Hujan Plastik Premium</strong>
                 </span>
             </div>
-            <div class="banner-button">
+            <div class="banner-button" onclick="showFree()">
                 Klaim sekarang
             </div>
         </div>
-        
-        
-        
         <div class="search-bar">
             <i class=""></i>
             <span>Cilok Isian Gajih</span>
         </div>
 
         <div class="other-features">
-            <div class="other-feature-item" onclick="showProduk('polosan')">
+            <div class="other-feature-item" onclick="showPayment(' Cilok Premium', 'Cilok dengan kualitas terbaik, rasa original gurih. lezat', 1000, ['https://nasukafoods.site/1pcs.jpg'], 'Isi 1 biji.')">
                 <div class="other-feature-icon top-up-icon">
                     <img src="https://nasukafoods.site/1pcs.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Polosan</span>
+                <span>Rp 1.000</span>
             </div>
             
-            <div class="other-feature-item" onclick="showProduk('gajih')">
+            
+            <div class="other-feature-item" onclick="showPayment('Paket Hemat ', 'Paket hemat diskon 20%.', 44000, ['https://nasukafoods.site/cilokpro.jpg'], 'Isi 50 Pcs.')">
                 <div class="other-feature-icon brizzi-icon">
                     <img src="https://nasukafoods.site/cilokpro.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Isian Gajih</span>
+                <span>Rp 44.000</span>
             </div>
-            
-            <div class="other-feature-item" onclick="showProduk('telorPuyuh')">
+            <div class="other-feature-item" onclick="showPayment('Cilok Premium: Paket Keluarga', 'Porsi besar untuk acara keluarga.', 87000, ['https://nasukafoods.site/100pcs.jpg'], 'Isi 100 pc. Promo terbatas!')">
                 <div class="other-feature-icon tagihan-icon">
                     <img src="https://nasukafoods.site/100pcs.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Isi Telor Puyuh</span>
+                <span>Rp 87.000</span>
             </div>
-            
-            <div class="other-feature-item" onclick="showProduk('telorAyam')">
+            <div class="other-feature-item" onclick="showPayment('Paket Sultan', 'Cilok frozen siap masak untuk stok di rumah, Cilok isian gajih berkualitas super, isi 1000 pcs', 850000, ['https://nasukafoods.site/1000pcs.jpg'], 'Gratis ongkos kirim seluruh kota bandung.')">
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/1000pcs.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Isi Telor Ayam</span>
+                <span>Rp 850.000</span>
             </div>
-        </div>
+            </div>
             
               <div class="search-bar" id="marquee-search-bar">
                 <i class="fas fa-search"></i>
@@ -938,7 +872,7 @@
         <div class="auth-card" style="max-width: 350px; padding: 20px; text-align: left; background: #fff;">
             <div id="receipt-content">
                 </div>
-            <button style="width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px;">
+            <button onclick="hideReceiptAndShowHome()" style="width: 100%; padding: 15px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px;">
                 Selesai
             </button>
         </div>
@@ -1129,27 +1063,6 @@
                 <button onclick="showHome()" style="width: 100%; padding: 12px; background-color: #f44336; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 20px;">
                     Kembali ke Beranda
                 </button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="produk-detail-container" class="auth-container">
-        <div class="produk-detail-card">
-            <div class="produk-header">
-                <i class="fas fa-arrow-left" onclick="showHome()"></i>
-                <h3 id="produk-title">Detail Produk</h3>
-            </div>
-            <div class="produk-content-section">
-                <img id="produk-image" src="" alt="Gambar Produk" class="produk-detail-img">
-                <div class="produk-info">
-                    <h2 id="produk-name"></h2>
-                    <div class="price" id="produk-price"></div>
-                    <div id="produk-article-container">
-                        </div>
-                </div>
-            </div>
-            <div class="produk-action-bar">
-                <button onclick="alert('Fungsi beli belum diimplementasikan.')">Beli Sekarang</button>
             </div>
         </div>
     </div>
@@ -1354,7 +1267,7 @@ function fetchUserProfileFromDB(userID) {
 
 function hideAllContainers() {
     
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container, #free-shipping-container, #produk-detail-container').forEach(el => { 
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container, #free-shipping-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
@@ -1398,6 +1311,17 @@ function showDownload() {
         downloadContainer.scrollTop = 0; 
     }
 }
+
+// FUNGSI BARU DITAMBAHKAN
+function showFree() {
+    hideAllContainers();
+    const freeShippingContainer = document.getElementById('free-shipping-container');
+    if (freeShippingContainer) {
+        freeShippingContainer.style.display = 'flex'; 
+        freeShippingContainer.scrollTop = 0; 
+    }
+}
+// END FUNGSI BARU
 
 
 function showDokumen() {
@@ -1662,7 +1586,7 @@ function signupUser() {
                     Username: username,
                     Nama: nama,
                     Password: password,
-                    Saldo: 1,
+                    Saldo: 500,
                     Foto: "https://nasukafoods.site/gambarkosong.jpg", 
                     Jenis: "Member",
                     Alamat: "Alamat belum diatur",
@@ -1696,7 +1620,7 @@ function signupUser() {
                         localUser.TotalPengeluaran = newUser.TotalPengeluaran; 
                         localUser.Poin = newUser.Poin;
                         
-                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan Saldo gratis 1 Rupiah';
+                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan 500 Saldo gratis';
                         statusDiv.classList.add('success');
                         setTimeout(showHome, 1500);
                     })
@@ -1906,7 +1830,7 @@ function showHistory() {
                 
                 
                 txItem.onclick = () => {
-                    alert("Fungsi melihat detail resi telah dihapus.");
+                    showReceiptPopup(tx);
                 };
                 
                 
@@ -1926,6 +1850,31 @@ function showHistory() {
         .catch(error => {
             document.getElementById('history-list').innerHTML = `<p style="color: red;">Gagal memuat riwayat: ${error.message}</p>`;
         });
+}
+
+function showReceiptPopup(txData) {
+    hideAllContainers();
+    
+    const tempTxData = {
+        ...txData,
+        
+        initialSaldo: txData.initialSaldo || (txData.finalSaldo + txData.amount),
+        deliveryAddress: txData.deliveryAddress || localUser.Alamat || 'Alamat tidak tercatat'
+    };
+    
+    
+    document.getElementById('receipt-content').innerHTML = generateReceiptHTML(tempTxData);
+    
+    
+    const receiptPopup = document.getElementById('receipt-popup');
+    receiptPopup.style.display = 'flex';
+    
+    
+    const finishButton = receiptPopup.querySelector('button');
+    if(finishButton) {
+        finishButton.onclick = showProfil;
+        finishButton.textContent = 'Kembali ke Riwayat';
+    }
 }
 
 
@@ -2147,6 +2096,280 @@ function logPurchaseToDB(productName, amount, newSaldo, pointsEarned) {
     return transactionData;
 }
 
+function generateReceiptHTML(txData) {
+    const date = new Date(txData.timestamp);
+    const dateString = date.toLocaleString('id-ID', { dateStyle: 'medium' });
+    const timeString = date.toLocaleString('id-ID', { timeStyle: 'short' });
+    const totalSaldo = txData.amount.toLocaleString('id-ID');
+    
+    const pointsText = txData.pointsEarned ? `<div style="text-align: center; font-size: 14px; font-weight: bold; color: #ff9800; margin-top: 10px;">Anda Mendapat ${txData.pointsEarned} Poin!</div>` : '';
+
+
+    return `
+        <div style="font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #333; line-height: 1.4;">
+            <h3 style="text-align: center; margin: 0 0 5px 0; font-size: 18px; font-weight: bold;">NASUKA FOODS</h3>
+            <div style="text-align: center; margin-bottom: 15px;">Cibaduyut - Kota Bandung</div>
+            <div style="border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 10px 0; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>TGL/JAM:</span>
+                    <span>${dateString} ${timeString}</span>
+                </div>
+                <div style="display: flex; justify-in-between;">
+                    <span>TRX ID:</span>
+                    <span>${txData.transactionID.substring(0, 15)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>PELANGGAN:</span>
+                    <span>${localUser.Nama}</span>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">
+                    <span>PRODUK</span>
+                    <span>Harga</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>1 x ${txData.productName}</span>
+                    <span>Rp ${totalSaldo}</span>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed #333; padding-top: 10px;">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px;">
+                    <span>Dibayar lunas:</span>
+                    <span style="color: #f44336;">Rp ${totalSaldo}</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px; border-top: 1px dashed #333; padding-top: 10px;">
+                <div style="font-weight: bold;">SISA Saldo ANDA:</div>
+                <div style="font-size: 18px; color: #007bff; text-align: right; margin-top: 5px;">
+                    Rp ${txData.finalSaldo.toLocaleString('id-ID')}
+                </div>
+            </div>
+
+            ${pointsText} 
+            
+            <div style="text-align: center; margin-top: 20px; font-size: 12px; font-style: italic;">
+                Terima kasih telah berbelanja! <br> Pesanan akan dikirim ke: <br> ${txData.deliveryAddress}
+            </div>
+        </div>
+    `;
+}
+
+function hideReceiptAndShowHome() {
+    document.getElementById('receipt-popup').style.display = 'none';
+    showHome();
+}
+
+function showFormalConfirmation(amount, productName, onConfirm) {
+    const modal = document.getElementById('formal-confirmation-modal');
+    const userAddress = localUser.Alamat || "Alamat belum di seting";
+    
+    
+    const contentP = modal.querySelector('p');
+    let originalHtml = `Saya memastikan bahwa semua detail pesanan termasuk produk, harga, dan alamat pengiriman ($$ALAMAT$$), telah diverifikasi. Dengan menekan tombol "Setuju & Bayar", Saya menyetujui pemotongan Saldo sebesar $$JUMLAH$$ untuk pembelian $$PRODUK$$.`;
+    
+    
+    contentP.innerHTML = originalHtml
+        .replace(/\$\$ALAMAT\$\$/g, `${userAddress}`)
+        .replace(/\$\$JUMLAH\$\$/g, `Rp ${amount.toLocaleString('id-ID')}`)
+        .replace(/\$\$PRODUK\$\$/g, `${productName}`);
+
+    const confirmBtn = document.getElementById('modal-confirm-btn');
+    const cancelBtn = document.getElementById('modal-cancel-btn');
+    
+    
+    confirmBtn.onclick = null;
+    cancelBtn.onclick = null;
+
+    
+    confirmBtn.onclick = () => {
+        modal.style.display = 'none';
+        onConfirm(); 
+    };
+    cancelBtn.onclick = () => {
+        modal.style.display = 'none';
+        
+        document.getElementById('payment-status').innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembayaran dibatalkan oleh pengguna.</div>`;
+    };
+
+    modal.style.display = 'flex';
+}
+ 
+
+function processSaldoPayment(amount, productName) {
+    const statusDiv = document.getElementById('payment-status');
+    statusDiv.innerHTML = '';
+    
+    if (!localUser.ID) {
+         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Anda belum login. Silakan login untuk membeli.</div>`;
+         return;
+    }
+    
+    if (localUser.Alamat === "Alamat belum diatur" || localUser.NomorHP === "Nomor HP belum diatur") {
+         statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Mohon lengkapi Alamat Pengiriman dan Nomor HP Anda di menu Edit Profil.</div>`;
+         return;
+    }
+    
+    if (localUser.Saldo < amount) {
+        statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Saldo Anda (Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}) tidak cukup untuk membeli ${productName} (Rp ${amount.toLocaleString('id-ID')}).</div>`;
+        return;
+    }
+    
+    
+    const executePayment = () => {
+        const initialSaldo = localUser.Saldo;
+        
+        
+        const pointsEarned = Math.floor(amount / 1000);
+        
+        statusDiv.innerHTML = `<div class="auth-status" style="background-color: #fff3e0; color: #ff9800; margin-top: 0; margin-bottom: 0;">Memproses pembelian...</div>`;
+        
+        
+        const userRef = db.ref(`users/${localUser.ID}`);
+        userRef.transaction((currentData) => {
+            if (currentData) {
+                
+                if ((currentData.Saldo || 0) < amount) {
+                     return; 
+                }
+                currentData.Saldo = (currentData.Saldo || 0) - amount; 
+                
+                currentData.TotalPengeluaran = (currentData.TotalPengeluaran || 0) + amount;
+                currentData.Poin = (currentData.Poin || 0) + pointsEarned;
+            }
+            return currentData;
+        })
+        .then(({committed, snapshot}) => {
+            if (committed) {
+                
+                const updatedUserData = snapshot.val();
+                localUser.Saldo = updatedUserData.Saldo;
+                localUser.TotalPengeluaran = updatedUserData.TotalPengeluaran;
+                localUser.Poin = updatedUserData.Poin;
+                
+                localStorage.setItem("Saldo", localUser.Saldo);
+                localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran);
+                localStorage.setItem("Poin", localUser.Poin);
+                
+                updateSaldoDisplay();
+                
+                
+                const transactionData = logPurchaseToDB(productName, amount, localUser.Saldo, pointsEarned);
+                
+                statusDiv.innerHTML = `
+                    <div class="auth-status success" style="margin-top: 0; margin-bottom: 0;">
+                        Pembelian Berhasil! ✅  
+                    </div>
+                `;
+                
+                document.getElementById('receipt-content').innerHTML = generateReceiptHTML(transactionData);
+                document.getElementById('payment-container').style.display = 'none';
+                document.getElementById('receipt-popup').style.display = 'flex';
+            } else {
+                 statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Terjadi konflik data atau saldo tidak cukup. Coba ulangi.</div>`;
+            }
+        })
+        .catch(error => {
+            console.error("Firebase Transaction Failed:", error);
+            statusDiv.innerHTML = `<div class="auth-status error" style="margin-top: 0; margin-bottom: 0;">Pembelian gagal. Silakan coba lagi.</div>`;
+        });
+    };
+
+    
+    showFormalConfirmation(amount, productName, executePayment); 
+}
+
+function showPayment(productName, productDescription, productPrice, productImageUrls, manualDescription) {
+    hideAllContainers();
+    if (!localStorage.getItem("ID")) {
+        alert("Silahkan login terlebih dahulu untuk melanjutkan pembelian.");
+        showLogin();
+        return;
+    }
+    if (localUser.Alamat === "Alamat belum diatur" || localUser.NomorHP === "Nomor HP belum diatur") {
+         alert("Mohon lengkapi Alamat Pengiriman dan Nomor HP Anda di menu Edit Profil sebelum melakukan pembelian.");
+         showEditProfil();
+         return;
+    }
+    
+    const userName = localUser.Nama || "Nama belum di seting";
+    const userAddress = localUser.Alamat || "Alamat pengantaran belum di seting";
+    const userNomorHP = localUser.NomorHP || "Nomor HP belum di seting";
+    const productPriceInSaldo = productPrice; 
+    const paymentContainer = document.getElementById('payment-container');
+    
+    paymentContainer.style.display = 'flex';
+    paymentContainer.style.backgroundColor = '#f0f2f5'; 
+
+    const imageUrl = (productImageUrls && productImageUrls.length > 0) ? productImageUrls[0] : 'https://nasukafoods.site/cilokpro.jpg';
+
+
+    paymentContainer.innerHTML = `
+        <div class="payment-card-modified">
+            
+            <div class="payment-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Detail Produk</h3>
+            </div>
+            
+            <div class="product-image-container">
+                <img src="${imageUrl}" alt="${productName}">
+            </div>
+
+            <div class="product-details-section">
+                <h4>${productName}</h4>
+                <div class="product-price-display">
+                    Harga: Rp ${productPriceInSaldo.toLocaleString('id-ID')}
+                </div>
+                <p class="product-description-text">
+                    ${productDescription}
+                </p>
+                <p class="product-keterangan-manual">
+                    ${manualDescription}
+                </p>
+            </div>
+
+            <div class="payment-info-section">
+                <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #333;">Info Pembeli & Pengiriman</div>
+                
+                <div class="info-row">
+                    <span class="info-label">Pelanggan</span>
+                    <span class="info-value">${userName}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nomor HP</span>
+                    <span class="info-value">${userNomorHP}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Alamat Pengiriman</span>
+                    <span class="info-value address">${userAddress}</span>
+                </div>
+                <div class="info-row Saldo-row">
+                    <span class="info-label">Saldo Anda</span>
+                    <span class="info-value" style="color: #007bff;">Rp ${(localUser.Saldo || 0).toLocaleString('id-ID')}</span>
+                </div>
+                <div class="info-row total-bayar-row">
+                    <span class="info-label" style="color: #333;">Harga yang akan di bayar</span>
+                    <span class="info-value">Rp ${productPriceInSaldo.toLocaleString('id-ID')}</span>
+                </div>
+            </div>
+            
+            <div id="payment-status" style="margin: 0 15px 15px 15px;"></div>
+
+            <div class="payment-action-section">
+                <button class="btn-bayar-Saldo" onclick="processSaldoPayment(${productPriceInSaldo}, '${productName}')">
+                    Bayar Rp ${productPriceInSaldo.toLocaleString('id-ID')} Sekarang
+                </button>
+            </div>
+            
+        </div>
+    `;
+    
+}
+
 
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -2156,102 +2379,6 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
     e.preventDefault();
     signupUser();
 });
-
-
-// DATA PRODUK BARU
-const productData = {
-    polosan: {
-        name: 'Cilok Polosan Premium',
-        price: 'Rp 500',
-        image: 'https://nasukafoods.site/paketcilok.jpg',
-        article: `
-            <h4>Kesederhanaan Rasa Premium</h4>
-            <p><strong>Cilok Polosan Premium</strong> dari Nasuka Foods menawarkan cita rasa otentik yang tak tertandingi. Dibuat dari tepung tapioka pilihan dengan komposisi yang presisi, menghasilkan tekstur yang <strong>kenyal dan lembut</strong>.</p>
-            <p>Produk ini sangat cocok bagi Anda yang menyukai Cilok murni, tanpa isian, dan ingin menikmati kelezatan bumbu kacang Nasuka Foods secara maksimal</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Tekstur Sempurna:</strong> Kenyal, lembut, dan empuk.</li>
-                <li><strong>Rasa Otentik:</strong> Kekuatan rasa aci dan bumbu yang gurih.</li>
-                <li><strong>Serbaguna:</strong> Cocok disajikan dengan berbagai saus.</li>
-            </ul>
-        `
-    },
-    gajih: {
-        name: 'Cilok Isian Gajih Lemak Sapi Pilihan',
-        price: 'Rp 1.000',
-        image: 'https://nasukafoods.site/cilokpro.jpg',
-        article: `
-            <h4>Kekayaan Rasa Gurih Alami</h4>
-            <p>Rasakan sensasi Cilok yang ditingkatkan dengan <strong>Isian Gajih Lemak Sapi Pilihan</strong>. Kami menggunakan gajih sapi kualitas terbaik yang telah diolah dan dibumbui secara khusus, menciptakan isian yang <strong>meleleh di mulut</strong> dengan aroma dan rasa gurih yang mendalam.</p>
-            <p>Kombinasi tekstur Cilok yang kenyal dengan ledakan rasa gajih yang kaya membuat produk ini menjadi favorit bagi penggemar rasa autentik dan "nendang". Produk ini menjanjikan pengalaman kuliner Cilok yang lebih mewah.</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Isian Premium:</strong> Menggunakan gajih lemak sapi kualitas tinggi.</li>
-                <li><strong>Gurih Maksimal:</strong> Rasa kaldu dan gajih yang kuat.</li>
-                <li><strong>Pengalaman Rasa Unik:</strong> Meleleh dan kaya rasa.</li>
-            </ul>
-        `
-    },
-    telorPuyuh: {
-        name: 'Cilok Isi Telor Puyuh Spesial',
-        price: 'Rp 2.000',
-        image: 'https://nasukafoods.site/100pcs.jpg',
-        article: `
-            <h4>Kejutan Lezat di Setiap Gigitan</h4>
-            <p><strong>Cilok Isi Telor Puyuh Spesial</strong> hadir sebagai pilihan Cilok yang mengenyangkan sekaligus memanjakan lidah. Setiap butir Cilok diisi dengan <strong>telur puyuh utuh</strong>, menawarkan kejutan protein yang lezat.</p>
-            <p>Produk ini merupakan pilihan cerdas untuk camilan bernutrisi atau pendamping hidangan utama. Kualitas Cilok yang kenyal berpadu sempurna dengan kelembutan telur puyuh yang sudah dibumbui, menjadikannya pilihan favorit keluarga.</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Isian Nutrisi:</strong> Telur puyuh utuh yang kaya protein.</li>
-                <li><strong>Porsi Mengenyangkan:</strong> Ideal sebagai camilan utama.</li>
-                <li><strong>Kualitas Terjamin:</strong> Telur puyuh segar dan Cilok yang empuk.</li>
-            </ul>
-        `
-    },
-    telorAyam: {
-        name: 'Cilok Isi Telor Ayam Premium',
-        price: 'Rp 5.000',
-        image: 'https://nasukafoods.site/1000pcs.jpg',
-        article: `
-            <h4>Pilihan Eksklusif Penuh Rasa</h4>
-            <p>Nikmati <strong>Cilok Isi Telor Ayam Premium</strong>, varian Cilok eksklusif dengan isian <strong>potongan telur ayam rebus</strong> yang melimpah dan gurih. Telur ayam memberikan tekstur yang lebih padat dan rasa umami yang lebih kuat pada isian Cilok.</p>
-            <p>Produk ini disiapkan dengan standar kebersihan tertinggi dan bumbu rahasia Nasuka Foods, menjamin kualitas rasa dan keamanan pangan. Pilihan sempurna bagi Anda yang menginginkan Cilok dengan isian berkelas dan porsi yang memuaskan.</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Isian Melimpah:</strong> Potongan telur ayam rebus premium.</li>
-                <li><strong>Rasa Umami Kuat:</strong> Cita rasa gurih yang elegan.</li>
-                <li><strong>Standar Kebersihan:</strong> Diproduksi dengan protokol pangan yang ketat.</li>
-            </ul>
-        `
-    }
-};
-
-/**
- * Menampilkan detail produk berdasarkan ID.
- * @param {string} produkID - ID produk (polosan, gajih, telorPuyuh, telorAyam).
- */
-function showProduk(produkID) {
-    hideAllContainers(); 
-
-    const produk = productData[produkID];
-    const produkContainer = document.getElementById('produk-detail-container');
-    
-    if (!produk || !produkContainer) {
-        alert('Produk tidak ditemukan atau container belum siap.');
-        showHome();
-        return;
-    }
-
-    // Update elemen-elemen detail produk
-    document.getElementById('produk-title').textContent = produk.name;
-    document.getElementById('produk-name').textContent = produk.name;
-    document.getElementById('produk-price').textContent = produk.price;
-    document.getElementById('produk-image').src = produk.image;
-    document.getElementById('produk-article-container').innerHTML = produk.article;
-    
-    produkContainer.style.display = 'flex';
-    produkContainer.scrollTop = 0; 
-}
 
 
 $(document).ready(function() {
