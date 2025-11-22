@@ -9,7 +9,6 @@
         h1 { color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
         p { color: #555; }
         
-        /* Konten utama disembunyikan secara default, ditampilkan oleh JS */
         #main-content { 
             display: none; 
             transition: opacity 0.3s ease;
@@ -44,7 +43,7 @@
         
         .shop-button {
             background-color: #ffc107; 
-            color: #343a40; 
+            color: #343a0; 
             border: none;
             padding: 8px 15px;
             text-align: center;
@@ -102,6 +101,7 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+        
         .login-submit {
             background-color: #28a745;
             color: white;
@@ -208,7 +208,9 @@
 
             <label for="signupNomorHP"><b>Nomor HP:</b></label>
             <input type="tel" placeholder="Contoh: 08123456789" name="signupNomorHP" id="signupNomorHP" class="login-input" required>
-
+            
+            <label for="signupAlamat"><b>Alamat Lengkap:</b></label>
+            <textarea placeholder="Masukkan Alamat Lengkap untuk Pengiriman" name="signupAlamat" id="signupAlamat" class="login-input" required></textarea>
             <label for="signupPassword"><b>Password:</b></label>
             <input type="password" placeholder="Buat Password" name="signupPassword" id="signupPassword" class="login-input" required>
             
@@ -282,12 +284,13 @@
             }
             return total;
         }
-
+        
         let localUser = {
             ID: localStorage.getItem("ID"),
             Nama: localStorage.getItem("Nama"),
             NomorHP: localStorage.getItem("NomorHP"),
-            Username: localStorage.getItem("Username")
+            Username: localStorage.getItem("Username"),
+            Alamat: localStorage.getItem("Alamat") 
         };
         
         let userId = localUser.ID;
@@ -333,10 +336,7 @@
             belanjaContainerElement.style.display = 'block';
             mainTitleElement.textContent = "Halaman Belanja";
             
-            belanjaContainerElement.innerHTML = `
-                <h2>🛍️ Selamat Datang di Toko Nasuka Foods!</h2>
-                <p>Memuat saldo, lokasi, dan produk...</p>
-            `;
+            belanjaContainerElement.innerHTML = ``;
 
             fetchBelanjaData();
         }
@@ -356,7 +356,6 @@
                 const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
                 const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
                 
-                // Menghilangkan desimal dari Saldo
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
@@ -419,8 +418,6 @@
                      </div>
                  </div>
 
-               
-                 
                  <div class="product-grid">
                      ${productHtml}
                  </div>
@@ -430,8 +427,8 @@
                  <h3 style="margin-top: 30px;">Detail Pelanggan:</h3>
                  <p id="belanjaUserInfo">
                      <b>Nama:</b> ${localUser.Nama || 'N/A'}<br>
-                     <b>ID:</b> ${localUser.ID || 'N/A'}<br>
                      <b>Nomor HP:</b> ${localUser.NomorHP || 'N/A'}<br>
+                     <b>Alamat:</b> ${localUser.Alamat || 'N/A'}<br>
                      <p><strong>Kordinat Pengiriman (Live)</strong></p>
                      <b>Garis Lintang:</b> ${lat}<br>
                      <b>Garis Busur:</b> ${lng}
@@ -453,13 +450,11 @@
                 delete keranjangBelanja[productId];
             }
 
-            // Langsung update elemen kuantitas
             const qtyElement = document.getElementById(`qty-${productId}`);
             if(qtyElement) {
                 qtyElement.textContent = newQty;
             }
             
-            // Render ulang bagian belanja untuk update total dan tombol bayar
             fetchBelanjaData();
         }
         
@@ -491,80 +486,166 @@
             itemDetailsHtml += '</ul>';
 
             const userBalanceRef = database.ref(`users/${userId}/Saldo`);
-            userBalanceRef.once('value').then(snapshot => {
-                const saldo = snapshot.val() || 0;
-                
-                // Menghilangkan desimal dari Saldo
-                const formattedSaldo = saldo.toLocaleString('id-ID', { 
-                    style: 'currency', 
-                    currency: 'IDR',
-                    minimumFractionDigits: 0, 
-                    maximumFractionDigits: 0
-                });
-                
-                const formattedTotal = totalBelanja.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                
-                const sisaSaldo = saldo - totalBelanja;
-                const formattedSisaSaldo = sisaSaldo.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            const userLocationRef = database.ref(`customer_locations/${userId}`);
+            
+            const namaPelanggan = localUser.Nama || localStorage.getItem("Nama") || localUser.Username || localStorage.getItem("Username") || 'Pelanggan';
+            const nomorHP = localUser.NomorHP || localStorage.getItem("NomorHP") || 'N/A';
+            const userID = localUser.ID || localStorage.getItem("ID") || 'N/A';
+            const alamatLengkap = localUser.Alamat || localStorage.getItem("Alamat") || 'Alamat tidak ditemukan'; 
 
-                const isSaldoCukup = sisaSaldo >= 0;
+            
+            const addressStringAkun = `
+                Nama: ${namaPelanggan}<br>
+                Nomor HP: ${nomorHP}<br>
+                **Alamat Kirim:** ${alamatLengkap}
+            `;
 
-                const bayarSekarangButton = `
-                    <button 
-                        class="login-submit" 
-                        style="width: 100%; margin-top: 20px; background-color: ${isSaldoCukup ? '#dc3545' : '#6c757d'};"
-                        ${isSaldoCukup ? `onclick="prosesPembayaran(${totalBelanja})"` : 'disabled'}
-                    >
-                        ${isSaldoCukup ? 'Bayar Sekarang' : 'Saldo Tidak Cukup'}
-                    </button>
+
+            userLocationRef.once('value').then(locationSnapshot => {
+                const locationData = locationSnapshot.val();
+                const lat = locationData ? locationData.lat.toFixed(6) : 'N/A';
+                const lng = locationData ? locationData.lng.toFixed(6) : 'N/A';
+                
+                
+                const addressStringLive = `
+                    Nama: ${namaPelanggan}<br>
+                    Nomor HP: ${nomorHP}<br>
+                    <span style="font-weight: bold; color: #dc3545;">Koordinat (Live):</span> Lintang: ${lat}, Busur: ${lng}
                 `;
-
-                belanjaContainerElement.innerHTML = `
-                    <h2>💳 Proses Pembayaran</h2>
-                    <p style="border-bottom: 2px solid #ccc; padding-bottom: 10px;">Mohon cek kembali pesanan Anda:</p>
-
-                    <div style="background-color: #f7f7f7; padding: 15px; border-radius: 8px;">
-                        ${itemDetailsHtml}
-                        <div style="border-top: 2px solid #dc3545; padding-top: 10px; margin-top: 10px; display: flex; justify-content: space-between;">
-                            <span style="font-size: 1.2em;">Total Pembayaran:</span>
-                            <span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">${formattedTotal}</span>
-                        </div>
-                    </div>
+                
+                userBalanceRef.once('value').then(saldoSnapshot => {
+                    const saldo = saldoSnapshot.val() || 0;
                     
-                  
-                    <div style="padding: 10px; border-radius: 4px; background-color: #e9f7ef; margin-bottom: 10px;">
-                        Saldo Anda Saat Ini:<span style="font-weight: bold; color: #28a745;"> ${formattedSaldo}</span>
-                    </div>
+                    const formattedSaldo = saldo.toLocaleString('id-ID', { 
+                        style: 'currency', 
+                        currency: 'IDR',
+                        minimumFractionDigits: 0, 
+                        maximumFractionDigits: 0
+                    });
+                    
+                    const formattedTotal = totalBelanja.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                    
+                    const sisaSaldo = saldo - totalBelanja;
+                    const formattedSisaSaldo = sisaSaldo.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
-                    ${bayarSekarangButton}
-                    <div style="text-align: center; margin-top: 10px; font-weight: bold; color: ${isSaldoCukup ? '#28a745' : '#dc3545'};">
-                        Sisa Saldo Setelah Transaksi: ${formattedSisaSaldo}
-                    </div>
+                    const isSaldoCukup = sisaSaldo >= 0;
 
-                    <span class="switch-link" style="margin-top: 20px;" onclick="showBelanja()">← Kembali ke Daftar Produk</span>
-                    <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
-                `;
-            });
+                    const addressOptionsHtml = `
+                        <h3 style="margin-top: 20px; color: #007bff; border-bottom: 1px dashed #007bff;">Pilih Alamat Pengiriman:</h3>
+                        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 6px; margin-bottom: 10px; background-color: #fff;">
+                            <input type="radio" id="liveCoord" name="deliveryAddress" value="live" checked>
+                            <label for="liveCoord" style="font-weight: bold; color: #dc3545;">Lokasi Saat Ini</label>
+                            <p style="margin-left: 25px; font-size: 0.9em; color: #555; line-height: 1.5;">${addressStringLive}</p>
+                        </div>
+                        
+                        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 6px; margin-bottom: 15px; background-color: #fff;">
+                            <input type="radio" id="accountInfo" name="deliveryAddress" value="account">
+                            <label for="accountInfo" style="font-weight: bold; color: #28a745;">Data Akun</label>
+                            <p style="margin-left: 25px; font-size: 0.9em; color: #555; line-height: 1.5;">${addressStringAkun}</p>
+                        </div>
+                    `;
+
+                    const bayarSekarangButton = `
+                        <button 
+                            class="login-submit" 
+                            style="width: 100%; margin-top: 20px; background-color: ${isSaldoCukup ? '#dc3545' : '#6c757d'};"
+                            ${isSaldoCukup ? `onclick="prosesPembayaran(${totalBelanja})"` : 'disabled'}
+                        >
+                            ${isSaldoCukup ? 'Bayar Sekarang' : 'Saldo Tidak Cukup'}
+                        </button>
+                    `;
+
+                    belanjaContainerElement.innerHTML = `
+                        <h2>💳 Proses Pembayaran</h2>
+                        <p style="border-bottom: 2px solid #ccc; padding-bottom: 10px;">Mohon cek kembali pesanan Anda:</p>
+
+                        <div style="background-color: #f7f7f7; padding: 15px; border-radius: 8px;">
+                            ${itemDetailsHtml}
+                            <div style="border-top: 2px solid #dc3545; padding-top: 10px; margin-top: 10px; display: flex; justify-content: space-between;">
+                                <span style="font-size: 1.2em;">Total Pembayaran:</span>
+                                <span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">${formattedTotal}</span>
+                            </div>
+                        </div>
+                        
+                        ${addressOptionsHtml}
+                        
+                        <div style="padding: 10px; border-radius: 4px; background-color: #e9f7ef; margin-bottom: 10px;">
+                            Saldo Anda Saat Ini:<span style="font-weight: bold; color: #28a745;"> ${formattedSaldo}</span>
+                        </div>
+
+                        ${bayarSekarangButton}
+                        <div style="text-align: center; margin-top: 10px; font-weight: bold; color: ${isSaldoCukup ? '#28a745' : '#dc3545'};">
+                            Sisa Saldo Setelah Transaksi: ${formattedSisaSaldo}
+                        </div>
+
+                        <span class="switch-link" style="margin-top: 20px;" onclick="showBelanja()">← Kembali ke Daftar Produk</span>
+                        
+                        `;
+
+                }); 
+            }).catch(error => {
+                console.error("Error fetching location for payment:", error);
+                alert("Gagal memuat data lokasi saat ini.");
+                showBelanja();
+            }); 
         }
         
         function prosesPembayaran(amount) {
             const userBalanceRef = database.ref(`users/${userId}/Saldo`);
+            const userLocationRef = database.ref(`customer_locations/${userId}`);
+            
+            const selectedAddressElement = document.querySelector('input[name="deliveryAddress"]:checked');
+            const deliveryChoice = selectedAddressElement ? selectedAddressElement.value : 'live'; 
 
-            userBalanceRef.transaction((currentBalance) => {
-                if (currentBalance === null) {
-                    return 0; 
-                }
-                if (currentBalance >= amount) {
-                    return currentBalance - amount; 
-                } else {
-                    return undefined; 
-                }
+            const namaPelanggan = localUser.Nama || localStorage.getItem("Nama") || localUser.Username || localStorage.getItem("Username") || 'Pelanggan';
+            const nomorHP = localUser.NomorHP || localStorage.getItem("NomorHP") || 'N/A';
+            const userID = localUser.ID || localStorage.getItem("ID") || 'N/A';
+            const alamatLengkap = localUser.Alamat || localStorage.getItem("Alamat") || 'Alamat tidak ditemukan'; 
+            
+            let addressPromise;
+            if (deliveryChoice === 'account') {
+                addressPromise = Promise.resolve({
+                    type: 'Akun Pengguna',
+                    details: `
+                        Nama: ${namaPelanggan}<br>
+                        Nomor HP: ${nomorHP}<br>
+                        **Alamat Kirim:** ${alamatLengkap}` 
+                });
+            } else {
+                addressPromise = userLocationRef.once('value')
+                    .then(locationSnapshot => {
+                        const locationData = locationSnapshot.val();
+                        const lat = locationData ? locationData.lat.toFixed(6) : 'N/A';
+                        const lng = locationData ? locationData.lng.toFixed(6) : 'N/A';
+                        
+                         
+                        return {
+                            type: 'Koordinat Live',
+                            details: `
+                                Nama: ${namaPelanggan}<br>
+                                Nomor HP: ${nomorHP}<br>
+                                <span style="font-weight: bold; color: #dc3545;">Koordinat (Live):</span> Lintang: ${lat}, Busur: ${lng}`
+                        };
+                    });
+            }
+            
+            addressPromise.then(addressData => {
+                return userBalanceRef.transaction((currentBalance) => {
+                    if (currentBalance === null) {
+                        return 0; 
+                    }
+                    if (currentBalance >= amount) {
+                        return currentBalance - amount; 
+                    } else {
+                        return undefined; 
+                    }
+                })
+                .then(result => ({ result, addressData })); 
             })
-            .then((result) => {
+            .then(({ result, addressData }) => {
                 if (result.committed) {
                     const newBalance = result.snapshot.val();
                     
-                    // Menghilangkan desimal dari Saldo
                     const formattedNewBalance = newBalance.toLocaleString('id-ID', { 
                         style: 'currency', 
                         currency: 'IDR',
@@ -572,17 +653,40 @@
                         maximumFractionDigits: 0
                     });
                     
+                    let itemDetailsList = '<ul style="list-style-type: disc; padding-left: 20px; font-size: 0.9em;">';
+                    for (const productId in keranjangBelanja) {
+                        const quantity = keranjangBelanja[productId]; 
+                        const product = getProductById(productId);
+                        if (product && quantity > 0) {
+                            itemDetailsList += `<li>${quantity}x ${product.name}</li>`;
+                        }
+                    }
+                    itemDetailsList += '</ul>';
+                    
                     belanjaContainerElement.innerHTML = `
-                        <h2>Pembayaran Berhasil!</h2>
-                        <p style="color: #28a745; font-size: 1.1em; font-weight: bold;">Terima kasih atas pembelian Anda sebesar Rp ${amount.toLocaleString('id-ID')}!</p>
-                        <p>Pesanan Anda telah dicatat dan akan segera diproses.</p>
-                        <p>Sisa Saldo Anda: ${formattedNewBalance}</p>
+                        <h2>Pembayaran Berhasil! 🎉</h2>
+                        <p style="color: #28a745; font-size: 1.1em; font-weight: bold;">Terima kasih! Pembelian Rp ${amount.toLocaleString('id-ID')} telah diproses.</p>
+                        
+                        <div style="margin-top: 15px; padding: 10px; border: 1px dashed #007bff; background-color: #e6f7ff;">
+                            <p style="font-weight: bold;">Item yang Dipesan:</p>
+                            ${itemDetailsList}
+                        </div>
+                        
+                        <div style="margin-top: 10px; padding: 10px; border: 1px dashed #dc3545; background-color: #fff0f0;">
+                            <p style="font-weight: bold; margin-bottom: 5px;">Dikirim ke (${addressData.type}):</p>
+                            <p style="margin: 0; font-size: 0.9em; line-height: 1.5;">
+                                ${addressData.details} 
+                            </p>
+                        </div>
+                        
+                        <p style="margin-top: 15px; font-weight: bold;">Sisa Saldo Anda: <span style="color: #28a745;">${formattedNewBalance}</span></p>
                         
                         <div style="margin-top: 20px;">
                             <button class="login-submit" style="background-color: #007bff;" onclick="showBelanja()">🛒 Belanja Lagi</button>
                             <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta Utama</span>
                         </div>
                     `;
+                    
                     keranjangBelanja = {};
                 } else {
                     alert("❌ Pembayaran dibatalkan. Saldo tidak cukup.");
@@ -601,18 +705,15 @@
             mainContentElement.style.display = 'block';
             mainTitleElement.textContent = `Server To : ${userLabel} `;
             
-            // Pastikan userInfo diperbarui
             userInfoElement.innerHTML = `
                 Nama: ${localUser.Nama || 'N/A'}<br>
-                ID : ${localUser.ID || 'N/A'}<br>
-                Nomor HP: ${localUser.NomorHP || 'N/A'}
+                Nomor HP: ${localUser.NomorHP || 'N/A'}<br>
+                Alamat: ${localUser.Alamat || 'N/A'}
                 <button class="shop-button" onclick="showBelanja()">🛒 Belanja Sekarang</button> `;
             
-            // Inisialisasi peta jika belum
             if (!map) {
                 initMap();
             } else {
-                // Peta sudah ada, pastikan tampilannya benar dan centernya diperbarui
                  map.invalidateSize(); 
                  if (currentMarker) {
                     map.setView(currentMarker.getLatLng(), 15);
@@ -627,6 +728,7 @@
             const Nama = document.getElementById('signupName').value.trim();
             const Username = document.getElementById('signupUsername').value.trim();
             const NomorHP = document.getElementById('signupNomorHP').value.trim();
+            const Alamat = document.getElementById('signupAlamat').value.trim(); 
             const Password = document.getElementById('signupPassword').value;
 
             if (Username.includes(' ')) {
@@ -648,6 +750,7 @@
                             Nama: Nama,
                             Username: Username,
                             NomorHP: NomorHP,
+                            Alamat: Alamat, 
                             Password: Password, 
                             Saldo: 0, 
                             created_at: firebase.database.ServerValue.TIMESTAMP
@@ -662,8 +765,12 @@
                         localStorage.setItem("Nama", Nama);
                         localStorage.setItem("NomorHP", NomorHP);
                         localStorage.setItem("Username", Username);
+                        localStorage.setItem("Alamat", Alamat); 
 
                         localUser = newUserData;
+                        localUser.ID = newUserId; 
+                        localUser.Alamat = Alamat; 
+                        
                         userId = newUserId;
                         userName = Nama || Username; 
                         userLabel = userName; 
@@ -704,12 +811,17 @@
 
                         if (userData && userData.Password === inputPassword) {
                             
+                            const userAlamat = userData.Alamat || 'N/A';
+                            
                             localStorage.setItem("ID", userData.ID);
                             localStorage.setItem("Nama", userData.Nama || userData.Username);
                             localStorage.setItem("NomorHP", userData.NomorHP || 'N/A');
                             localStorage.setItem("Username", userData.Username);
+                            localStorage.setItem("Alamat", userAlamat); 
 
                             localUser = userData;
+                            localUser.Alamat = userAlamat; 
+                            
                             userId = localUser.ID;
                             userName = localUser.Nama || localUser.Username; 
                             userLabel = userName || `User ID: ${userId}`; 
@@ -745,8 +857,8 @@
 
             userInfoElement.innerHTML = `
                 Nama: ${localUser.Nama || 'N/A'}<br>
-                ID : ${localUser.ID || 'N/A'}<br>
-                Nomor HP: ${localUser.NomorHP || 'N/A'}
+                Nomor HP: ${localUser.NomorHP || 'N/A'}<br>
+                Alamat: ${localUser.Alamat || 'N/A'}
                 <button class="shop-button" onclick="showBelanja()">🛒 Belanja Sekarang</button> `;
 
             if (map) {
@@ -772,7 +884,7 @@
                 .openPopup();
 
             if (navigator.geolocation) {
-                statusElement.innerHTML = `✅ Geolocation aktif. Mulai pembagian lokasi untuk **${userLabel}** (ID: **${userId}**) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`;
+                statusElement.innerHTML = `✅ Geolocation aktif. Mulai pembagian lokasi untuk **${userLabel}** setiap ${UPDATE_INTERVAL_MS / 1000} detik.`;
                 statusElement.classList.remove('warning', 'error');
                 statusElement.classList.add('online');
                 
@@ -793,12 +905,10 @@
         function initLocationBackground() {
             if (!userId) return; 
 
-            // Hentikan interval lama jika ada
             if (locationInterval) {
                 clearInterval(locationInterval);
             }
             
-            // Inisialisasi map jika belum ada (hanya untuk memastikan currentMarker tersedia)
             if (!map) {
                 map = L.map('map').setView(defaultLatLng, 10);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -812,7 +922,6 @@
             if (navigator.geolocation) {
                 console.log(`✅ [Background] Geolocation aktif. Mulai pembagian lokasi untuk ${userLabel} (ID: ${userId}) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`);
                 
-                // Panggil sekali, lalu set interval
                 getLocationAndSend(); 
                 locationInterval = setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
                 
@@ -828,7 +937,6 @@
             });
             const timeNow = new Date().toLocaleTimeString('id-ID');
             
-            // HANYA update status element jika main content terlihat
             if (mainContentElement.style.display !== 'none') {
                 statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; 
                 statusElement.classList.remove('error');
@@ -859,7 +967,6 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
             }).then(() => {
                 
-                // Update Marker/Map HANYA jika main content terlihat
                 if (mainContentElement.style.display !== 'none') {
                     const message = `✅ Lokasi **${userLabel}** terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
                     statusElement.innerHTML = message;
@@ -872,7 +979,6 @@
                     console.log(`✅ [Background] Lokasi terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Next in ${nextUpdateInSeconds}s.`);
                 }
             }).catch(error => {
-                // Log error
                  if (mainContentElement.style.display !== 'none') {
                     const message = `❌ Gagal mengirim ke Firebase: ${error.message}`;
                     statusElement.innerHTML = message;
@@ -898,7 +1004,6 @@
 
             const message = `⚠️ ${errorMessage}. Mencoba lagi dalam ${UPDATE_INTERVAL_MS / 1000} detik.`;
             
-            // HANYA update status element jika main content terlihat
             if (mainContentElement.style.display !== 'none') {
                 statusElement.innerHTML = message;
                 statusElement.classList.remove('online');
@@ -909,15 +1014,11 @@
             console.error("Geolocation Error:", error);
         }
         
-        // LOGIKA INISIALISASI AKHIR
         document.addEventListener('DOMContentLoaded', () => {
             if (userId) {
-                // 1. Mulai update lokasi di background
                 initLocationBackground();
-                // 2. Langsung tampilkan halaman belanja
                 showBelanja();
             } else {
-                // Tampilkan halaman login jika belum ada user
                 showLogin();
             }
         });
