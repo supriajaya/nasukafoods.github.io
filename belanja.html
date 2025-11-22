@@ -938,7 +938,7 @@
             const timeNow = new Date().toLocaleTimeString('id-ID');
             
             if (mainContentElement.style.display !== 'none') {
-                statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; 
+                statusElement.innerHTML = `✅ Inisiasi. (${timeNow})`; 
                 statusElement.classList.remove('error');
                 statusElement.classList.add('online');
             } else {
@@ -968,7 +968,7 @@
             }).then(() => {
                 
                 if (mainContentElement.style.display !== 'none') {
-                    const message = `✅ Lokasi **${userLabel}** terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
+                    const message = `✅ ${userLabel} (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)} : ${nextUpdateInSeconds}`;
                     statusElement.innerHTML = message;
                     statusElement.classList.remove('error');
                     statusElement.classList.add('online');
