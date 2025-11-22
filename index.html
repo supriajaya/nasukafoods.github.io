@@ -581,7 +581,7 @@
                 <div class="top-nav">
                     <span class="welcome">Nasuka Foods</span> 
                     
-                    <a href="https://nasukafoods.site/galer.html" target="_blank" class="help-center" style="text-decoration: none; color: inherit; margin-right: 10px;">
+                    <a href="https://nasukafoods.site/galer.html" class="help-center" style="text-decoration: none; color: inherit; margin-right: 10px;">
                         <i class="fas fa-crown"></i>
                         <span style="font-size: 14px;"></span> 
                     </a>
@@ -598,7 +598,7 @@
                 <span class="balance-amount" id="SaldoAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             
-            <a href="https://nasukafoods.site/serlok.html" target="_blank" class="all-accounts" style="text-decoration: none;">
+            <a href="https://nasukafoods.site/serlok.html" class="all-accounts" style="text-decoration: none;">
                 <span>Antar cilok nya ke lokasi ku</span>
                 <i class="fas fa-chevron-right"></i>
             </a>
@@ -606,7 +606,7 @@
         </div>
 
         <div class="main-features">
-           <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
+           <a href="https://nasukafoods.site/giveaway.html" class="feature-link">
                 <div class="feature-icon-circle transfer-icon">
                     <i class="fas fa-exchange-alt"></i>
                 </div>
@@ -614,21 +614,21 @@
             </a>
             
              
-            <a href="https://nasukafoods.site/resep.html" target="_blank" class="feature-link">
+            <a href="https://nasukafoods.site/resep.html" class="feature-link">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/nasukafoods.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
                 <span>Resep</span>
             </a>
             
-            <a href="" target="_blank" class="feature-link">
+            <a href="" class="feature-link">
                 <div class="feature-icon-circle pdam-icon">
                     <i class="fas fa-plus"></i> 
                 </div>
                 <span>Saldo</span>
             </a>
             
-            <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
+            <a href="https://nasukafoods.site/posisi-mang-cilok.html" class="feature-link">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
@@ -701,21 +701,21 @@
                 <span>Kado</span>
             </div>
             
-            <a href="https://nasukafoods.site/test-giveaway.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+            <a href="https://nasukafoods.site/test-giveaway.html" class="other-feature-item" style="text-decoration: none; color: inherit;">
                 <div class="other-feature-icon virtual-icon">
                     <i class="fas fa-file-invoice"></i>
                 </div>
                 <span>Simulasi</span>
             </a>
             
-            <a href="https://nasukafoods.site/burung.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+            <a href="https://nasukafoods.site/burung.html" class="other-feature-item" style="text-decoration: none; color: inherit;">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/nasukabird.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Tap Bird</span>
             </a>
             
-              <a href="https://nasukafoods.site/roll.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+              <a href="https://nasukafoods.site/roll.html" class="other-feature-item" style="text-decoration: none; color: inherit;">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/roll.jpg" alt="" class="product-icon-img">
                 </div>
@@ -1024,7 +1024,7 @@
             </div>
         </div>
         
-        <a href="https://nasukafoods.site/nasuka.apk" target="_blank" class="download-footer-bar">
+        <a href="https://nasukafoods.site/nasuka.apk" class="download-footer-bar">
             <div>
                 <div class="download-footer-text">Dapatkan versi terbaru</div>
                 <div class="download-footer-version">Download sekarang</div>
@@ -1149,7 +1149,7 @@
                 </div>
             </div>
             <div class="produk-action-bar">
-                <button onclick="alert('Fungsi beli belum diimplementasikan.')">Beli Sekarang</button>
+                <button id="btn-beli-sekarang">Beli Sekarang</button>
             </div>
         </div>
     </div>
@@ -2249,6 +2249,19 @@ function showProduk(produkID) {
     document.getElementById('produk-image').src = produk.image;
     document.getElementById('produk-article-container').innerHTML = produk.article;
     
+    // --- START PERUBAHAN UNTUK MENGARAHKAN KE SERLOK.HTML ---
+    const btnBeliSekarang = document.getElementById('btn-beli-sekarang');
+    if (btnBeliSekarang) {
+        // Hapus event listener lama
+        btnBeliSekarang.onclick = null; 
+        
+        // Tambahkan event listener baru untuk mengarahkan ke serlok.html
+        btnBeliSekarang.onclick = function() {
+            window.location.href = 'https://nasukafoods.site/serlok.html';
+        };
+    }
+    // --- END PERUBAHAN UNTUK MENGARAHKAN KE SERLOK.HTML ---
+
     produkContainer.style.display = 'flex';
     produkContainer.scrollTop = 0; 
 }
