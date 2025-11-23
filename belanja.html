@@ -353,8 +353,8 @@
                 const saldo = saldoSnapshot.val() || 0; 
                 const locationData = locationSnapshot.val();
                 
-                const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
-                const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
+                const lat = locationData ? locationData.lat.toFixed(6) : '';
+                const lng = locationData ? locationData.lng.toFixed(6) : '';
                 
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
@@ -369,7 +369,7 @@
                 belanjaContainerElement.innerHTML = `
                     <h2>⚠️ Terjadi Kesalahan</h2>
                     <p>Gagal memuat data pengguna/lokasi: ${error.message}</p>
-                    <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
+                    <span class="back-to-main" onclick="navigateToMain()">Update lokasi</span>
                 `;
                 console.error("Error fetching user data/location:", error);
             });
@@ -434,7 +434,7 @@
                      <b>Garis Busur:</b> ${lng}
                  </p>
 
-                 <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
+                 <span class="back-to-main" onclick="navigateToMain()">Update lokasi</span>
              `;
         }
         
@@ -683,7 +683,14 @@
                         
                         <div style="margin-top: 20px;">
                             <button class="login-submit" style="background-color: #007bff;" onclick="showBelanja()">🛒 Belanja Lagi</button>
-                            <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta Utama</span>
+                         
+                            
+          <a class="back-to-main" href="https://nasukafoods.site">Kembali ke halaman utama</a>
+                 
+                            
+                            
+                            
+                            
                         </div>
                     `;
                     
