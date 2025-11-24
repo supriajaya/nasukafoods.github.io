@@ -565,6 +565,31 @@
         font-weight: 700;
         cursor: pointer;
     }
+    
+    /* STYLE BARU UNTUK PROFIL */
+    .rating-main a {
+        text-decoration: none;
+        color: inherit;
+    }
+    .contributor-rating-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        font-size: 12px;
+        color: #333;
+        border-bottom: 1px dashed #eee;
+    }
+    .contributor-rating-row:last-child {
+        border-bottom: none;
+    }
+    .contributor-name {
+        font-weight: 600;
+    }
+    .contributor-donation {
+        font-weight: 700;
+        color: #28a745; 
+    }
     /* END STYLE BARU */
 </style>
 
@@ -581,7 +606,7 @@
                 <div class="top-nav">
                     <span class="welcome">Nasuka Foods</span> 
                     
-                    <a href="https://nasukafoods.site/galer.html" class="help-center" style="text-decoration: none; color: inherit; margin-right: 10px;">
+                    <a href="https://nasukafoods.site/galer.html" target="_blank" class="help-center" style="text-decoration: none; color: inherit; margin-right: 10px;">
                         <i class="fas fa-crown"></i>
                         <span style="font-size: 14px;"></span> 
                     </a>
@@ -598,7 +623,7 @@
                 <span class="balance-amount" id="SaldoAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
             </div>
             
-            <a href="https://nasukafoods.site/belanja.html" class="all-accounts" style="text-decoration: none;">
+            <a href="https://nasukafoods.site/serlok.html" target="_blank" class="all-accounts" style="text-decoration: none;">
                 <span>Antar cilok nya ke lokasi ku</span>
                 <i class="fas fa-chevron-right"></i>
             </a>
@@ -606,7 +631,7 @@
         </div>
 
         <div class="main-features">
-           <a href="https://nasukafoods.site/giveaway.html" class="feature-link">
+           <a href="https://nasukafoods.site/giveaway.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle transfer-icon">
                     <i class="fas fa-exchange-alt"></i>
                 </div>
@@ -614,21 +639,21 @@
             </a>
             
              
-            <a href="https://nasukafoods.site/resep.html" class="feature-link">
+            <a href="https://nasukafoods.site/resep.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/nasukafoods.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
                 <span>Resep</span>
             </a>
             
-            <a href="" class="feature-link">
+            <a href="" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pdam-icon">
                     <i class="fas fa-plus"></i> 
                 </div>
                 <span>Saldo</span>
             </a>
             
-            <a href="https://nasukafoods.site/posisi-mang-cilok.html" class="feature-link">
+            <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/lacak-lokasi.gif" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
@@ -701,21 +726,21 @@
                 <span>Kado</span>
             </div>
             
-            <a href="https://nasukafoods.site/test-giveaway.html" class="other-feature-item" style="text-decoration: none; color: inherit;">
+            <a href="https://nasukafoods.site/test-giveaway.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
                 <div class="other-feature-icon virtual-icon">
                     <i class="fas fa-file-invoice"></i>
                 </div>
                 <span>Simulasi</span>
             </a>
             
-            <a href="https://nasukafoods.site/burung.html" class="other-feature-item" style="text-decoration: none; color: inherit;">
+            <a href="https://nasukafoods.site/burung.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/nasukabird.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Tap Bird</span>
             </a>
             
-              <a href="https://nasukafoods.site/roll.html" class="other-feature-item" style="text-decoration: none; color: inherit;">
+              <a href="https://nasukafoods.site/roll.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
                     <img src="https://nasukafoods.site/roll.jpg" alt="" class="product-icon-img">
                 </div>
@@ -857,41 +882,40 @@
             
             <div class="rating-section" style="padding-bottom: 5px;">
                 <div class="rating-breakdown" style="margin-right: 0;">
-                    <div style="font-size: 10px; color: #666; margin-bottom: 5px;">Aktivitas 10 order terakhir</div>
+                    <div style="font-size: 10px; color: #666; margin-bottom: 5px;">Aktivitas donasi Saldo Publik</div>
                     <div style="font-size: 10px; color: #666; margin-bottom: 10px;">Diperbarui setiap hari</div>
                 </div>
             </div>
 
             <div class="rating-section" style="margin-top: -10px; padding-top: 0; border-top: 1px solid #eee;">
                 <div class="rating-main">
-                    <div class="rating-score" id="profilRatingScore">5.00</div>
-                    <div class="rating-label">Penilaian</div>
+                    <div class="rating-score" id="profilRatingScore">Kontributor</div>
+                    <div class="rating-label">
+                         <a href="https://nasukafoods.site/kontributor-saldo-publik.html" target="_blank" style="text-decoration: none; color: inherit;">
+                            <span>Nasuka Bird</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="rating-breakdown">
-                    <div class="rating-bar-row">
-                        <span>5</span>
-                        <div class="rating-bar"><div class="rating-fill" style="width: 100%;"></div></div>
-                        <span id="ratingCount5">10</span>
+                <div class="rating-breakdown" id="contributor-list">
+                    <div class="contributor-rating-row">
+                        <span class="contributor-name">Doni Prasetyo</span>
+                        <span class="contributor-donation">Rp 50.000</span>
                     </div>
-                    <div class="rating-bar-row">
-                        <span>4</span>
-                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
-                        <span id="ratingCount4">0</span>
+                    <div class="contributor-rating-row">
+                        <span class="contributor-name">Siti Fatimah</span>
+                        <span class="contributor-donation">Rp 30.000</span>
                     </div>
-                    <div class="rating-bar-row">
-                        <span>3</span>
-                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
-                        <span id="ratingCount3">0</span>
+                    <div class="contributor-rating-row">
+                        <span class="contributor-name">Budi Hartono</span>
+                        <span class="contributor-donation">Rp 20.000</span>
                     </div>
-                    <div class="rating-bar-row">
-                        <span>2</span>
-                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
-                        <span id="ratingCount2">0</span>
+                    <div class="contributor-rating-row">
+                        <span class="contributor-name">Aulia Zahra</span>
+                        <span class="contributor-donation">Rp 15.000</span>
                     </div>
-                    <div class="rating-bar-row">
-                        <span>1</span>
-                        <div class="rating-bar"><div class="rating-fill" style="width: 0%;"></div></div>
-                        <span id="ratingCount1">0</span>
+                    <div class="contributor-rating-row">
+                        <span class="contributor-name">Fajar Gemilang</span>
+                        <span class="contributor-donation">Rp 10.000</span>
                     </div>
                 </div>
             </div>
@@ -1024,7 +1048,7 @@
             </div>
         </div>
         
-        <a href="https://nasukafoods.site/nasuka.apk" class="download-footer-bar">
+        <a href="https://nasukafoods.site/nasuka.apk" target="_blank" class="download-footer-bar">
             <div>
                 <div class="download-footer-text">Dapatkan versi terbaru</div>
                 <div class="download-footer-version">Download sekarang</div>
@@ -1789,13 +1813,43 @@ function showProfil() {
              safetyReport.onclick = showHistory;
         }
 
+        // START: PERUBAHAN FOKUS KE DONATUR
+        document.getElementById('profilRatingScore').textContent = 'Sultan'; // Ubah teks utama
         
-        document.getElementById('profilRatingScore').textContent = '5.00';
-        document.getElementById('ratingCount5').textContent = '10';
-        document.getElementById('ratingCount4').textContent = '0';
-        document.getElementById('ratingCount3').textContent = '0';
-        document.getElementById('ratingCount2').textContent = '0';
-        document.getElementById('ratingCount1').textContent = '0';
+        // Ganti elemen-elemen rating bintang dengan daftar kontributor statis
+        const contributorListEl = document.getElementById('contributor-list');
+        if (contributorListEl) {
+            contributorListEl.innerHTML = `
+                <div class="contributor-rating-row">
+                    <span class="contributor-name">Doni Prasetyo</span>
+                    <span class="contributor-donation">Rp 50.000</span>
+                </div>
+                <div class="contributor-rating-row">
+                    <span class="contributor-name">Siti Fatimah</span>
+                    <span class="contributor-donation">Rp 30.000</span>
+                </div>
+                <div class="contributor-rating-row">
+                    <span class="contributor-name">Budi Hartono</span>
+                    <span class="contributor-donation">Rp 20.000</span>
+                </div>
+                <div class="contributor-rating-row">
+                    <span class="contributor-name">Aulia Zahra</span>
+                    <span class="contributor-donation">Rp 15.000</span>
+                </div>
+                <div class="contributor-rating-row">
+                    <span class="contributor-name">Fajar Gemilang</span>
+                    <span class="contributor-donation">Rp 10.000</span>
+                </div>
+                
+            `;
+        }
+
+        // Tambahkan event listener untuk tautan Kontributor
+        const ratingLabelEl = document.querySelector('.rating-label a');
+        if (ratingLabelEl) {
+            ratingLabelEl.href = 'https://nasukafoods.site/kontributor-saldo-publik.html';
+        }
+        // END: PERUBAHAN FOKUS KE DONATUR
         
         updateHomeDisplay();
     };
