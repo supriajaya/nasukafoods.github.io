@@ -119,9 +119,9 @@ body {
     border-radius: 100% 0% 20% 0%;
     margin-top: 12px;
     margin-left: -5px;
+    transform: rotateZ(45deg);
     width: 12px;
     height: 12px;
-    transform: rotateZ(45deg);
 }
 
 .pajaro:after {
@@ -284,23 +284,18 @@ body {
 </div>
 
 <script>
-    // Inisialisasi Firebase (Ganti dengan konfigurasi Anda jika berbeda)
-    const firebaseConfig = {
-        // Asumsi konfigurasi Firebase sudah ada di sini, atau diambil dari lingkungan
-    };
-    
-    // Asumsi firebase.initializeApp() dipanggil di sini jika belum.
-    // Karena Anda menggunakan firebase-app-compat.js dan firebase-database-compat.js
-    // Saya akan berasumsi inisialisasi sudah berjalan atau dikonfigurasi secara eksternal/global.
+    // Konfigurasi Firebase Anda (Asumsi sudah ada atau disiapkan secara eksternal)
+    // const firebaseConfig = { ... }; 
+    // firebase.initializeApp(firebaseConfig); 
 
     const db = firebase.database();
     const publicPoolRef = db.ref('public_pool');
     const birdsRef = db.ref('birds');
     const usersRef = db.ref('users');
     
-    // ** REFERENSI FIREBASE BARU UNTUK SUMBANGAN **
+    // ** REFERENSI FIREBASE BARU UNTUK SULTAN/SUMBANGAN **
     const sumbanganRef = db.ref('sumbangan'); // Riwayat setiap sumbangan
-    const sultanTotalSumbanganRef = db.ref('sultan_total_sumbangan'); // Total sumbangan per user (untuk ranking)
+    const sultanTotalSumbanganRef = db.ref('sultan_total_sumbangan'); // Total sumbangan per user (untuk ranking Sultan)
 
 
     // Asumsi localUser sudah terdefinisi dari localStorage (seperti di index.html)
@@ -309,15 +304,33 @@ body {
         Username: localStorage.getItem("Username"),
         Nama: localStorage.getItem("Nama") || 'Pengguna Anonim',
         Saldo: Number(localStorage.getItem("Saldo")) || 0,
-        // ... properti lain
     };
 
     const updateSaldoDisplay = () => {
-        // Fungsi ini mungkin tidak relevan di burung.html, tapi kita biarkan jika ada
+        // Fungsi ini mungkin hanya untuk debug di sini
         console.log(`Saldo lokal: Rp ${localUser.Saldo.toLocaleString('id-ID')}`);
     };
+
+    function formatRupiah(number) {
+        return `Rp ${number.toLocaleString('id-ID')}`;
+    }
+
+    // Fungsi untuk menampilkan total saldo di public pool
+    function updatePublicPoolTotal(total) {
+        const formattedTotal = formatRupiah(total);
+        document.getElementById('public-pool-total').textContent = formattedTotal;
+        document.getElementById('public-pool-details').textContent = `Total Saldo: ${formattedTotal}`;
+    }
+
+    // Listener untuk public pool
+    publicPoolRef.child('total').on('value', (snapshot) => {
+        const total = snapshot.val() || 0;
+        updatePublicPoolTotal(total);
+    });
     
-    // Fungsi contributeToPublicPool (diambil dari burung.html snippet dan dimodifikasi)
+    // ===========================================
+    // LOGIKA SULTAN: SUMBANG SALDO
+    // ===========================================
     async function contributeToPublicPool() {
         if (!localUser.ID) {
             showCustomAlert("Harap login terlebih dahulu untuk menyumbang.", "warning");
@@ -344,6 +357,7 @@ body {
             await userRef.child('Saldo').transaction((currentSaldo) => {
                 const saldo = currentSaldo === null ? 0 : Number(currentSaldo);
                 if (saldo < contribution) {
+                    // Ini akan membatalkan transaksi di sisi Firebase jika saldo kurang
                     throw new Error("Saldo tidak cukup saat transaksi.");
                 }
                 return saldo - contribution;
@@ -354,7 +368,7 @@ body {
                 return (currentTotal || 0) + contribution;
             });
             
-            // 3. ** LOGIKA BARU: Catat Sumbangan ke node 'sumbangan' **
+            // 3. Catat Sumbangan ke node 'sumbangan' (Riwayat)
             const donationData = {
                 userID: localUser.ID,
                 username: localUser.Username,
@@ -364,7 +378,7 @@ body {
             };
             await sumbanganRef.push().set(donationData);
 
-            // 4. ** LOGIKA BARU: Update total sumbangan pengguna untuk ranking Sultan **
+            // 4. Update total sumbangan pengguna untuk ranking Sultan
             const sultanTotalRef = sultanTotalSumbanganRef.child(localUser.ID);
             await sultanTotalRef.transaction((currentTotal) => {
                 return (currentTotal || 0) + contribution;
@@ -375,7 +389,7 @@ body {
             localStorage.setItem("Saldo", localUser.Saldo);
             updateSaldoDisplay();
             document.getElementById('contributionAmount').value = '';
-            showCustomAlert(`✅ Berhasil! Anda telah menyumbang Rp ${contribution.toLocaleString('id-ID')}. Terima kasih, Sultan!`, "success");
+            showCustomAlert(`✅ Berhasil! Anda telah menyumbang ${formatRupiah(contribution)}. Terima kasih, Sultan!`, "success");
 
         } catch (error) {
             console.error("Gagal Transaksi Sumbangan:", error);
@@ -383,23 +397,151 @@ body {
         }
     }
     
-    // Tambahkan event listener untuk tombol Sumbang Saldo
     document.getElementById('contributeBtn').addEventListener("click", contributeToPublicPool);
 
 
-    // [ ... Fungsi lain seperti claimPrize, showCustomAlert, updatePublicPoolTotal, dll. dipertahankan sama seperti kode burung.html yang Anda miliki ... ]
+    // ===========================================
+    // LOGIKA BURUNG DAN HADIAH (Klaim)
+    // ===========================================
+    function calculateTotalBirdsToClaim() {
+        const claimedBirdsCount = document.querySelectorAll('.input-circle:checked').length;
+        document.getElementById('selesaiBtn').textContent = `Selesai Berburu (Klaim ${claimedBirdsCount} Hadiah)`;
+        return claimedBirdsCount;
+    }
     
-    // Asumsi fungsi dan logika lain (seperti claimPrize, showCustomAlert, birds logic) yang ada di burung.html tetap sama.
+    // Ambil data burung yang sudah diklaim dari Firebase saat load
+    birdsRef.on('value', (snapshot) => {
+        const birdsData = snapshot.val() || {};
+        document.querySelectorAll('.input-circle').forEach(input => {
+            const birdId = input.id.replace('circle', 'bird');
+            if (birdsData[birdId]) {
+                input.checked = true;
+            } else {
+                input.checked = false;
+            }
+        });
+        calculateTotalBirdsToClaim();
+    });
 
+
+    // Fungsi klaim hadiah
+    async function claimPrize() {
+        if (!localUser.ID) {
+            showCustomAlert("Harap login terlebih dahulu.", "warning");
+            return;
+        }
+
+        const claimedInputs = document.querySelectorAll('.input-circle:checked');
+        if (claimedInputs.length === 0) {
+            showCustomAlert("Anda belum berhasil menjatuhkan satu burung pun.", "info");
+            return;
+        }
+
+        const claimedBirds = Array.from(claimedInputs).map(input => ({
+            id: input.id,
+            birdId: input.id.replace('circle', 'bird')
+        }));
+        
+        const birdsToClaimCount = claimedBirds.length;
+
+        try {
+            // Ambil public pool saat ini
+            const poolSnapshot = await publicPoolRef.child('total').once('value');
+            let publicPoolTotal = poolSnapshot.val() || 0;
+
+            if (publicPoolTotal < birdsToClaimCount) {
+                // Jika saldo pool kurang, ambil sesuai jumlah pool yang ada
+                birdsToClaimCount = publicPoolTotal; 
+            }
+            
+            if (birdsToClaimCount === 0) {
+                showCustomAlert("Saldo kolam hadiah (Public Pool) sedang kosong. Coba lagi nanti.", "warning");
+                return;
+            }
+
+            // Hitung hadiah
+            const saldoPerBurung = 10; // Nilai hadiah dasar per burung
+            const saldoYangDiklaim = birdsToClaimCount * saldoPerBurung;
+
+            // 1. Ambil nama donatur terakhir (untuk informasi)
+            const sumbanganSnap = await sumbanganRef.limitToLast(1).once('value');
+            let penambahSaldoNama = "Sistem";
+            sumbanganSnap.forEach(child => {
+                penambahSaldoNama = child.val().nama || "Sultan";
+            });
+
+            // 2. Kurangi saldo di public pool
+            await publicPoolRef.child('total').transaction((currentTotal) => {
+                const newTotal = (currentTotal || 0) - saldoYangDiklaim;
+                return newTotal >= 0 ? newTotal : 0;
+            });
+            
+            // 3. Tambahkan saldo ke pengguna
+            const userRef = usersRef.child(localUser.ID);
+            await userRef.child('Saldo').transaction((currentSaldo) => {
+                const saldo = currentSaldo === null ? 0 : Number(currentSaldo);
+                return saldo + saldoYangDiklaim;
+            });
+            
+            // 4. Catat burung yang sudah diklaim
+            const updates = {};
+            claimedBirds.forEach(input => {
+                updates[`${input.birdId}`] = {
+                    claimedBy: localUser.ID,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                }; 
+            });
+            await birdsRef.update(updates);
+
+            // Update Saldo lokal
+            localUser.Saldo += saldoYangDiklaim;
+            localStorage.setItem("Saldo", localUser.Saldo);
+
+            // Reset tampilan burung yang diklaim di lokal (dilakukan oleh listener 'birdsRef.on')
+            
+            showCustomAlert(
+                `Anda berhasil mendapat saldo **${formatRupiah(saldoYangDiklaim)}**<br>` +
+                `Saldo ini berasal dari kiriman **${penambahSaldoNama}**!`,
+                "jackpot"
+            );
+            
+        } catch (error) {
+            console.error("Gagal Transaksi Klaim Hadiah:", error);
+            showCustomAlert("❌ Gagal mengklaim Saldo: " + (error.message || "Terjadi kesalahan."), "error");
+        }
+    }
+
+    // ===========================================
+    // FUNGSI UTILITY & EVENT LISTENER
+    // ===========================================
     function showCustomAlert(message, type = "info") {
-        // [ ... Isi fungsi showCustomAlert dipertahankan sama ... ]
         const alertDiv = document.getElementById('customAlert');
         const alertTitle = document.getElementById('alertTitle');
         const alertMessage = document.getElementById('alertMessage');
         const overlay = document.createElement('div');
 
-        alertTitle.textContent = type === "success" ? "Sukses!" : type === "error" ? "Error!" : type === "warning" ? "Peringatan!" : "Informasi";
+        let titleText = "Informasi";
+        let bgColor = '#007bff';
+
+        if (type === "success") {
+            titleText = "Sukses!";
+            bgColor = '#4CAF50';
+        } else if (type === "error") {
+            titleText = "Error!";
+            bgColor = '#f44336';
+        } else if (type === "warning") {
+            titleText = "Peringatan!";
+            bgColor = '#ff9800';
+        } else if (type === "jackpot") {
+            titleText = "JACKPOT SALDO!";
+            bgColor = '#ffd700'; // Gold color for jackpot
+        }
+
+        alertTitle.textContent = titleText;
+        alertTitle.style.color = bgColor;
         alertMessage.innerHTML = message;
+        
+        document.getElementById('alertOkBtn').style.backgroundColor = bgColor;
         alertDiv.style.display = 'block';
 
         overlay.style.position = 'fixed';
@@ -419,27 +561,26 @@ body {
         };
     }
     
-    // Asumsi fungsi updatePublicPoolTotal() dan claimPrize() sudah ada dan berfungsi.
-    
-    
-    // [ ... Sisa script burung.html dipertahankan sama ... ]
     document.addEventListener("DOMContentLoaded", () => { 
-        // ... existing DOMContentLoaded logic ...
         const inputs = document.querySelectorAll('.input-circle');
-        const labels = document.querySelectorAll('.pajaro');
         const selesaiBtn = document.getElementById("selesaiBtn");
-        const publicPoolBox = document.getElementById("public-pool-box");
         const resetBirdsBtn = document.getElementById("resetBirdsBtn");
-
-        // Asumsi blok ini ada:
+        
+        inputs.forEach(input => {
+            input.addEventListener('change', calculateTotalBirdsToClaim);
+        });
+        
+        selesaiBtn.addEventListener("click", claimPrize);
+        
+        // Listener untuk update Saldo lokal dan Nama dari Firebase
         if (localUser.ID) { 
              const userRef = usersRef.child(localUser.ID);
              userRef.on('value', (snapshot) => {
                  const userData = snapshot.val();
                  if (userData !== null) {
                      localUser.Saldo = userData.Saldo ? Number(userData.Saldo) : 0;
-                     localUser.Nama = userData.Nama || localUser.Nama; // Update Nama
-                     localUser.Username = userData.Username || localUser.Username; // Update Username
+                     localUser.Nama = userData.Nama || localUser.Nama; 
+                     localUser.Username = userData.Username || localUser.Username;
                      localStorage.setItem("Saldo", localUser.Saldo);
                      localStorage.setItem("Nama", localUser.Nama);
                      localStorage.setItem("Username", localUser.Username);
@@ -448,10 +589,25 @@ body {
              });
         }
         
-        // Asumsi fungsi-fungsi lain yang ada di akhir script sudah dipertahankan.
-        // ...
+        resetBirdsBtn.addEventListener("click", async () => {
+            if (!localUser.ID) {
+                showCustomAlert("Harap login.", "warning");
+                return;
+            }
+            
+            try {
+                 await birdsRef.remove();
+                 showCustomAlert("✅ Semua burung berhasil di-reset! Semua hadiah sudah diklaim atau dihilangkan.", "success");
+            } catch(error) {
+                 console.error("Gagal mereset burung:", error);
+                 showCustomAlert("❌ Gagal mereset burung.", "error");
+            }
+        });
+
+
+        updateSaldoDisplay();
+        calculateTotalBirdsToClaim();
     });
-    // ...
 </script>
 
 </body>
