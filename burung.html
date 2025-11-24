@@ -33,22 +33,23 @@ body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-#public-pool-box {
+/* Ganti #public-pool-box menjadi #public-pool-box-static dan tambahkan interaksi klik */
+#public-pool-box-static { 
     background: rgba(4, 58, 112, 0.8); 
     padding: 15px;
     border-radius: 10px;
     border: 3px solid yellow;
-    cursor: pointer;
     text-shadow: 1px 1px 2px black;
-    transition: 0.3s;
     width: 300px; 
+    cursor: pointer; /* Ditambahkan kembali agar terlihat bisa diklik */
+    transition: background 0.3s;
 }
 
-#public-pool-box:hover {
-    background: rgba(6, 85, 163, 0.9);
+#public-pool-box-static:hover {
+    background: rgba(4, 58, 112, 0.95); /* Efek hover ringan */
 }
 
-#public-pool-box h3 {
+#public-pool-box-static h3 {
     margin-top: 0;
     font-size: 1.5em;
     text-align: center;
@@ -88,6 +89,23 @@ body {
     text-align: center; 
     max-width: 80%;
     color: #333; 
+}
+
+#alertContent {
+    max-height: 400px; /* Batasi tinggi konten alert */
+    overflow-y: auto;
+    text-align: left;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.sultan-entry {
+    border-bottom: 1px solid #eee;
+    padding: 5px 0;
+}
+
+.sultan-entry:last-child {
+    border-bottom: none;
 }
 
 
@@ -186,18 +204,19 @@ body {
     <div class="wrapper">
    
       <button id="selesaiBtn" style="position: fixed; bottom: 10px; right: 10px; font-size: 50px;">Klaim Hadiah</button>
-   
+      
+      <button id="resetBirdsBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 14px; background: red; color: white;">Reset Burung</button>
 
       <div id="customAlert">
           <div id="alertIcon"></div>
           <div id="alertMessage"></div>
-          <button id="alertOkBtn">OK</button>
+          <div id="alertContent"></div> <button id="alertOkBtn">OK</button>
       </div>
       
       <div class="header-info">
         <div class="sum">Saldo Anda: <span id="SaldoBalance"> 0</span></div>
         
-        <div id="public-pool-box">
+        <div id="public-pool-box-static"> 
             <h3>🏦 Saldo Publik</h3>
             <div id="public-pool-details">
                 <p>Total Saldo Tersedia: <strong id="PublicPoolTotal">0</strong></p>
@@ -205,10 +224,7 @@ body {
               
                 <p style="font-size: 0.9em; margin-bottom: 5px;">Terakhir ditambahkan oleh: <strong id="PublicPoolContributor">Belum ada</strong></p>
                 <p style="font-size: 0.9em; margin-top: 0;">Jumlah: <strong id="PublicPoolContributionAmount">0</strong></p>
-                <hr style="border-color: rgba(255, 255, 255, 0.3);">
-                <div id="PublicPoolHistory" style="max-height: 150px; overflow-y: auto; padding: 5px;">
-                    </div>
-            </div>
+                </div>
         </div>
       </div>
 
@@ -258,7 +274,12 @@ let publicPoolData = {
 
 function formatCurrency(amount) {
     const num = Number(amount);
-    return num.toLocaleString('id-ID');
+    // Asumsi Rupiah (IDR) berdasarkan 'id-ID' di toLocaleString
+    return num.toLocaleString('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).replace('IDR', '').trim(); // Menghilangkan simbol IDR
 }
 
 function updateSaldoDisplay() {
@@ -271,24 +292,13 @@ function updateSaldoDisplay() {
 function updatePublicPoolDisplay() {
     document.getElementById('PublicPoolTotal').textContent = formatCurrency(publicPoolData.total);
     
-    const historyContainer = document.getElementById('PublicPoolHistory');
     const contributorEl = document.getElementById('PublicPoolContributor');
     const contributionAmountEl = document.getElementById('PublicPoolContributionAmount');
 
-    historyContainer.innerHTML = ''; 
-
     if (publicPoolData.history && publicPoolData.history.length > 0) {
+        // Urutkan riwayat berdasarkan waktu (timestamp) terbaru di atas
         const reversedHistory = [...publicPoolData.history].sort((a, b) => b.timestamp - a.timestamp);
         
-        reversedHistory.forEach(item => {
-            const p = document.createElement('p');
-            const time = item.timestamp ? new Date(item.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
-            p.style.margin = '3px 0';
-            p.style.fontSize = '0.9em';
-            p.innerHTML = `${item.username} (${time}): ${formatCurrency(item.amount)}`;
-            historyContainer.appendChild(p);
-        });
-
         const latestContribution = reversedHistory[0];
         contributorEl.textContent = latestContribution.username;
         contributionAmountEl.textContent = formatCurrency(latestContribution.amount);
@@ -300,11 +310,15 @@ function updatePublicPoolDisplay() {
 }
 
 
-function showCustomAlert(message, type = 'info') {
+function showCustomAlert(message, type = 'info', contentHtml = '') {
     const alertDiv = document.getElementById('customAlert');
     const alertMessage = document.getElementById('alertMessage');
     const alertIcon = document.getElementById('alertIcon');
+    const alertContent = document.getElementById('alertContent');
+    
     alertMessage.innerHTML = message; 
+    alertContent.innerHTML = contentHtml; // Set konten tambahan
+    alertContent.style.display = contentHtml ? 'block' : 'none';
 
     switch(type) {
         case 'success':
@@ -322,6 +336,10 @@ function showCustomAlert(message, type = 'info') {
         case 'jackpot': 
             alertIcon.textContent = '🎁';
             alertDiv.style.border = '2px solid gold';
+            break;
+        case 'sultans': // Tipe baru untuk daftar sultan
+            alertIcon.textContent = '👑';
+            alertDiv.style.border = '2px solid #DAA520';
             break;
         default:
             alertIcon.textContent = 'ℹ️';
@@ -348,6 +366,31 @@ function showCustomAlert(message, type = 'info') {
     };
 }
 
+function showSultanListAlert() {
+    let historyHtml = '';
+    
+    if (publicPoolData.history && publicPoolData.history.length > 0) {
+        // Urutkan riwayat berdasarkan waktu (timestamp) terbaru di atas
+        const reversedHistory = [...publicPoolData.history].sort((a, b) => b.timestamp - a.timestamp);
+        
+        reversedHistory.forEach(item => {
+            const time = item.timestamp ? new Date(item.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+            historyHtml += `
+                <div class="sultan-entry">
+                    <strong style="color: #043a70;">${item.username}</strong> (${time}): 
+                    <span style="float: right; font-weight: bold; color: #4CAF50;">+${formatCurrency(item.amount)}</span>
+                </div>`;
+        });
+    } else {
+        historyHtml = '<p style="text-align: center;">Belum ada kontribusi.</p>';
+    }
+
+    showCustomAlert(
+        `Daftar Kontributor Saldo Publik`,
+        'sultans',
+        historyHtml
+    );
+}
 
 let totalBirdsToClaim = 0; 
 
@@ -361,9 +404,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputs = document.querySelectorAll('.input-circle'); 
     const labels = document.querySelectorAll('.pajaro');
     const selesaiBtn = document.getElementById("selesaiBtn");
-    const publicPoolBox = document.getElementById("public-pool-box");
     const resetBirdsBtn = document.getElementById("resetBirdsBtn");
-
+    const publicPoolBox = document.getElementById("public-pool-box-static");
 
     if (userRef) {
         userRef.on('value', (snapshot) => {
@@ -380,6 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
     publicPoolRef.on('value', (snapshot) => {
         const data = snapshot.val();
         publicPoolData.total = data && data.total ? Number(data.total) : 0;
+        // Ambil riwayat dan konversi ke array
         publicPoolData.history = data && data.history ? Object.values(data.history) : []; 
         updatePublicPoolDisplay();
     });
@@ -397,7 +440,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const isClaimed = birdStatuses && birdStatuses[birdID] && birdStatuses[birdID].isClaimed;
 
             if (inputElement) {
-                inputElement.checked = isClaimed || false; 
+                // Tunda pembaruan checked agar animasi bekerja
+                setTimeout(() => {
+                    inputElement.checked = isClaimed || false; 
+                }, 50); 
             }
         }
         calculateTotalBirdsToClaim();
@@ -445,56 +491,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    publicPoolBox.addEventListener("click", async () => {
-        if (!localUser.ID) {
-            showCustomAlert("Silakan login untuk menambah Saldo Publik.", "warning");
-            return;
-        }
-
-        const contributionInput = prompt(`Masukkan jumlah Saldo yang ingin Anda masukan ke Kotak Saldo Publik (Saldo Anda saat ini: ${formatCurrency(localUser.Saldo)})`);
-        const contribution = parseInt(contributionInput);
-        
-        if (isNaN(contribution) || contribution <= 0) {
-            if (contributionInput !== null) { 
-                 showCustomAlert("Input tidak valid. Masukkan angka positif.", "warning");
-            }
-            return;
-        }
-
-        if (contribution > localUser.Saldo) {
-            showCustomAlert("Saldo Pribadi tidak cukup.", "error");
-            return;
-        }
-        
-        try {
-            await userRef.child('Saldo').transaction((currentSaldo) => {
-                const saldo = currentSaldo === null ? 0 : Number(currentSaldo);
-                if (saldo < contribution) {
-                    throw new Error("Saldo tidak cukup saat transaksi."); 
-                }
-                return saldo - contribution;
-            });
-
-            const newContribution = {
-                username: localUser.Username,
-                amount: contribution,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-            
-            const historyRef = publicPoolRef.child('history').push();
-            await historyRef.set(newContribution);
-            
-            await publicPoolRef.child('total').transaction((currentTotal) => {
-                const total = currentTotal === null ? 0 : Number(currentTotal);
-                return total + contribution;
-            });
-
-            showCustomAlert(`✅ Berhasil menyumbang ${formatCurrency(contribution)} Saldo!`, "success");
-        } catch (error) {
-            console.error("Gagal Transaksi Saldo Publik:", error);
-            showCustomAlert("❌ Transaksi gagal: " + (error.message || "Terjadi kesalahan."), "error");
-        }
-    });
+    // Event listener untuk Saldo Publik (untuk menampilkan daftar sultan)
+    publicPoolBox.addEventListener("click", showSultanListAlert);
     
     
     selesaiBtn.addEventListener("click", async () => {
@@ -511,7 +509,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        if (saldoYangDiklaim > publicPoolData.total) {
+        // Asumsi nilai hadiah per burung adalah 1 IDR (sesuai logika $saldoYangDiklaim)
+        if (saldoYangDiklaim > publicPoolData.total) { 
             showCustomAlert(`⚠️ Saldo Publik (${formatCurrency(publicPoolData.total)}) tidak cukup untuk ${saldoYangDiklaim} hadiah.`, "warning");
             return;
         }
@@ -520,29 +519,33 @@ document.addEventListener("DOMContentLoaded", () => {
         const penambahSaldoNama = lastHistory ? lastHistory.username : "Kotak Saldo Publik";
         
         try {
+            // 1. Kurangi Saldo Publik
             await publicPoolRef.child('total').transaction((currentTotal) => {
                 const total = currentTotal === null ? 0 : Number(currentTotal);
                 if (total < saldoYangDiklaim) {
-                    throw new Error("Saldo publik tidak cukup saat klaim."); 
+                    // Ini akan ditangkap oleh catch, tapi cek di luar transaksi lebih baik
+                    return; 
                 }
                 return total - saldoYangDiklaim;
             });
             
+            // 2. Tambah Saldo User
             await userRef.child('Saldo').transaction((currentSaldo) => {
                 const saldo = currentSaldo === null ? 0 : Number(currentSaldo);
                 return saldo + saldoYangDiklaim;
             });
             
+            // 3. Reset Status Burung yang Diklaim
             const updates = {};
             claimedBirds.forEach(input => {
-                updates[`${input.id.replace('circle', 'bird')}`] = null; 
+                updates[`${input.id.replace('circle', 'bird')}`] = null; // Hapus data burung
             });
             await birdsRef.update(updates);
 
 
             showCustomAlert(
-                `Anda berhasil mendapat saldo ${saldoYangDiklaim} Rupiah<br>` +
-                `Saldo ini berasal dari kiriman ${penambahSaldoNama}!`,
+                `Anda berhasil mendapat saldo **${formatCurrency(saldoYangDiklaim)}** Rupiah<br>` +
+                `Saldo ini berasal dari kiriman **${penambahSaldoNama}**!`,
                 "jackpot"
             );
             
@@ -559,12 +562,14 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        try {
-             await birdsRef.remove();
-             showCustomAlert("✅ Semua burung berhasil di-reset!", "success");
-        } catch(error) {
-             console.error("Gagal mereset burung:", error);
-             showCustomAlert("❌ Gagal mereset burung.", "error");
+        if (confirm("Apakah Anda yakin ingin mereset SEMUA burung? Tindakan ini tidak dapat dibatalkan.")) {
+             try {
+                  await birdsRef.remove();
+                  showCustomAlert("✅ Semua burung berhasil di-reset!", "success");
+             } catch(error) {
+                  console.error("Gagal mereset burung:", error);
+                  showCustomAlert("❌ Gagal mereset burung.", "error");
+             }
         }
     });
 
