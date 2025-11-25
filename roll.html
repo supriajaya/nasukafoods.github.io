@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Roll</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <style>
+        body {
+            background-image: url('https://nasukafoods.site/langit.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #333;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        #runningTextContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #FFD700;
+            font-size: 30px;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0;
+            z-index: 100001;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #runningText {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-100%, 0);
+            }
+        }
+        
+        .perspective-on { perspective: 1000px; }
+        .tilted { transform: rotateY(45deg); }
+
+        @keyframes back-spin {
+            100% { transform: rotateX(36deg); }
+        }
+
+        @keyframes spin-0 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3600deg); }
+        }
+
+        @keyframes spin-1 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3636deg); }
+        }
+
+        @keyframes spin-2 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3672deg); }
+        }
+
+        @keyframes spin-3 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3708deg); }
+        }
+
+        @keyframes spin-4 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3744deg); }
+        }
+
+        @keyframes spin-5 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3780deg); }
+        }
+
+        @keyframes spin-6 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3816deg); }
+        }
+
+        @keyframes spin-7 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3852deg); }
+        }
+
+        @keyframes spin-8 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3888deg); }
+        }
+
+        @keyframes spin-9 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3924deg); }
+        }
+
+        #resultDisplay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        #numbersDisplay {
+            position: absolute;
+            top: 20px;
+            left: 80%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            font-weight: bold;
+            background: snow;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #numbersDisplay span {
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        #timeDisplay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            color: #000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 10000;
+            text-align: left;
+        }
+
+        #rotate {
+            margin: 0 auto;
+            width: 700px;
+            height: 700px;
+            padding-top: 700px;
+            transform-style: preserve-3d;
+            transform: rotateY(45deg);
+        }
+
+        .ring {
+            margin: 0 auto;
+            height: 115px;
+            width: 115px;
+            float: left;
+            transform-style: preserve-3d;
+        }
+
+        .roll {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            box-sizing: border-box;
+            opacity: 0.9;
+            color: black;
+            background: white;
+            border: solid 5px #ccc;
+            backface-visibility: visible;
+        }
+
+        .roll p {
+            font-size: 100px;
+            font-weight: bold;
+            line-height: 130px;
+            margin: 0;
+            text-align: center;
+        }
+
+        .backface-on {
+            backface-visibility: visible;
+        }
+
+        .bottom-links {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        #spinButton:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        #spinButton {
+            position: absolute;
+            top: 1500px;
+            left: 490px;
+            transform: translateX(-50%);
+            padding: 30px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 30px;
+            width: 950px;
+        }
+
+        .mainting-panel {
+            position: absolute;
+            top: 1600px;
+            left: -10px;
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            font-size: 30px;
+            border-radius: 10px;
+            color: white;
+            width: 950px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .main-input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: white;
+            font-size: 30px;
+        }
+
+        .main-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 2px;
+            padding: 8px 15px;
+            margin: 5px 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .main-button:hover {
+            background-color: #45a049;
+        }
+
+        .main-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .result-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 99999;
+            padding: 30px 50px;
+            border-radius: 15px;
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+            width: 80%;
+            max-width: 600px;
+            transition: all 0.5s ease;
+        }
+
+        #perakBalance {
+            font-weight: bold;
+            color: snow;
+        }
+
+        .win {
+            background-color: rgba(255, 215, 0, 0.95) !important;
+            color: black !important;
+            border: 5px solid gold;
+        }
+
+        .win-types {
+            margin-top: 15px;
+            font-size: 30px;
+            background-color: rgba(255, 215, 0, 0.7) !important;
+            color: black !important;
+        }
+
+        .win-type {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            background-color: rgba(255, 215, 0, 0.7) !important;
+            color: black !important;
+        }
+
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: grey;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .auto-main-options {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #444;
+            font-size: 30px;
+        }
+
+        .auto-main-options h4 {
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
+
+        #automainButtons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            font-size: 30px;
+        }
+
+        #automainButtons button {
+            flex: 1;
+            min-width: 50px;
+            padding: 5px;
+            background-color: #333;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 30px;
+        }
+
+        #automainButtons button.active {
+            background-color: #4CAF50;
+            font-weight: bold;
+            font-size: 30px;
+        }
+
+        #automainButtons button:last-child {
+            background-color: #f44336;
+            font-size: 30px;
+        }
+
+        .result-hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .rolling-text {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            color: black;
+            font-size: 30px;
+            opacity: 0.7;
+            z-index: 100;
+            font-size: 30px;
+        }
+
+        .link-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 200000;
+        }
+
+        .menu-link {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid red;
+            color: snow;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: center;
+            font-size: 28px;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .menu-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .history-link-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .bling-bling {
+            animation: glowing 1.5s infinite alternate;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+        }
+
+        @keyframes glowing {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
+            }
+        }
+
+        .auto-spin-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .auto-spin-buttons button {
+            padding: 15px 30px;
+            font-size: 24px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            width: 45%;
+            color: white;
+        }
+
+        #startAutoSpinButton {
+            background-color: #4CAF50;
+        }
+
+        #stopAutoSpinButton {
+            background-color: #f44336;
+            display: none;
+        }
+
+        .lose {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            color: white !important;
+            border: 5px solid #666;
+        }
+
+        @media (max-width: 768px) {
+            .result-message {
+                width: 90%;
+                font-size: 32px;
+                padding: 20px 30px;
+            }
+        }
+        
+        #customAlertOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200000;
+        }
+
+        #customAlertBox {
+            /* Perubahan di sini */
+            background-color: #1a1a1a; /* Hitam gelap */
+            color: #f0f0f0; /* Putih/Abu-abu muda */
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            border: 3px solid #444; /* Batas abu-abu gelap */
+        }
+
+        #customAlertBox h3 {
+            /* Perubahan di sini */
+            color: #FFD700; /* Kuning Emas untuk Judul Peringatan */
+            margin-top: 0;
+            font-size: 28px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        #customAlertMessage {
+            /* Perubahan di sini */
+            color: #f0f0f0;
+            white-space: pre-wrap;
+            text-align: left;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #customAlertButtons button {
+            padding: 15px 30px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #alertCancelButton {
+            background-color: #cc0000; /* Merah gelap */
+            color: white;
+        }
+
+        #alertCancelButton:hover {
+            background-color: #990000;
+        }
+
+        #alertConfirmButton {
+            background-color: #008000; /* Hijau gelap */
+            color: white;
+        }
+
+        #alertConfirmButton:hover {
+            background-color: #005500;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="customAlertOverlay">
+        <div id="customAlertBox">
+            <h3>⚠️ PERINGATAN JUDI ⚠️</h3>
+            <div id="customAlertMessage"></div>
+            <div id="customAlertButtons">
+                <button id="alertCancelButton">BATAL</button>
+                <button id="alertConfirmButton">TETAP MAIN</button>
+            </div>
+        </div>
+    </div>
+    <div id="runningTextContainer">
+        <span id="runningText">
+            🛑 PERHATIAN: Game ini adalah SIMULASI dan alat EDUKASI yang menunjukkan bahwa mesin slot dirancang untuk membuat pemain kalah. Kekuatan ada di tangan bandar. Jangan berjudi. Judol adalah fiksi dengan uang sungguhan yang akan membuat anda kalah secara ekonomi dan mental. 🛑
+        </span>
+    </div>
+    <div id="stage" class="perspective-on" style="margin-top: 100px;">
+        <div id="rotate" class="tilted">
+            <div id="ring1" class="ring"></div>
+            <div id="ring2" class="ring"></div>
+            <div id="ring3" class="ring"></div>
+            <div id="ring4" class="ring"></div>
+            <div id="ring5" class="ring"></div>
+        </div>
+
+        <audio id="winAudio" src="https://nasukafoods.site/slavafunk.mp3" preload="auto"></audio>
+        <audio id="slotAudio" src="https://nasukafoods.site/mesinslot.mp3" preload="auto"></audio>
+
+        <button id="spinButton">Putar</button>
+        <div class="mainting-panel">
+            <div>Saldo : <span id="SaldoBalance">0</span></div>
+            <div class="auto-main-options">
+                <div id="automainButtons">
+                    <button onclick="selectmain(1)" id="main1">1</button>
+                    <button onclick="selectmain(5)" id="main5">5</button>
+                    <button onclick="selectmain(100)" id="main100">100</button>
+                    <button onclick="selectmain(1000)" id="main1000">1.000</button>
+                    <button onclick="selectmain(0)">off</button>
+                </div>
+            </div>
+            <div class="auto-spin-buttons">
+                <button id="startAutoSpinButton"> Otomatis</button>
+                <button id="stopAutoSpinButton">Hentikan</button>
+            </div>
+            <div id="mainResult" class="result-message result-hidden"></div>
+        </div>
+    </div>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+            authDomain: "nasukafoods1.firebaseapp.com",
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nasukafoods1",
+            messagingSenderId: "84287800896",
+            appId: "1:84287800896:web:83189d6766997b00f701a5"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        const localUser = {
+            ID: localStorage.getItem("ID"),
+            Username: localStorage.getItem("Username"),
+            Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
+        };
+
+        const userRef = db.ref(`users/${localUser.ID}`);
+
+        if (localUser.ID) {
+            userRef.on('value', (snapshot) => {
+                const userData = snapshot.val();
+                if (userData !== null) {
+                    localUser.Saldo = userData.Saldo || 0;
+                    localStorage.setItem("Saldo", localUser.Saldo);
+                    updateSaldoDisplay();
+                }
+            });
+        }
+
+        const ROLL_PER_REEL = 10;
+        const REEL_RADIUS = 400;
+        const SPIN_DURATION = 5;
+        const MANUAL_SPIN_COOLDOWN = 4 * 400;
+
+        const WIN_MULTIPLIERS = {
+            'dua': 2,
+            'tiga': 3,
+            'empat': 4,
+            'lima': 5,
+            'jackpot': 10
+        };
+
+        const WIN_PROBABILITIES = {
+            'dua': 0.1,
+            'tiga': 0.03,
+            'empat': 0.02,
+            'lima': 0.0000000000000000000000000000000000000001,
+            'jackpot': 0.00000000000000000000000000000000000000000000000000001
+        };
+
+        let currentSeeds = [0, 0, 0, 0, 0];
+        let isSpinning = false;
+        let lastManualSpinTime = 0;
+        let currentmain = 0;
+        let isAutomainEnabled = false;
+        let playerWinStreak = 0;
+        let playerLoseStreak = 0;
+        const HOUSE_EDGE = 0;
+
+        function updateSaldoDisplay() {
+            $('#SaldoBalance').text('Rp ' + localUser.Saldo.toLocaleString('id-ID'));
+        }
+
+        function createROLL(ring) {
+            const rollAngle = 360 / ROLL_PER_REEL;
+            for (let i = 0; i < ROLL_PER_REEL; i++) {
+                const roll = document.createElement('div');
+                roll.className = 'roll backface-on';
+                roll.style.transform = `rotateX(${rollAngle * i}deg) translateZ(${REEL_RADIUS}px)`;
+                const p = document.createElement('p');
+                p.textContent = i;
+                roll.appendChild(p);
+                ring.append(roll);
+            }
+        }
+
+        function saveRollToDatabase(result, isManual = false) {
+            console.log("Logging roll data has been disabled.");
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function generateDua() {
+            const num = Math.floor(Math.random() * 10);
+            const result = [num, num];
+            while (result.length < 5) {
+                const uniqueNum = Math.floor(Math.random() * 10);
+                if (!result.includes(uniqueNum)) {
+                    result.push(uniqueNum);
+                } else if (Math.random() < 0.5) { 
+                    result.push(uniqueNum);
+                } else {
+                    result.push(Math.floor(Math.random() * 10));
+                }
+            }
+            return shuffleArray(result);
+        }
+
+        function generateTiga() {
+            const num = Math.floor(Math.random() * 10);
+            const result = [num, num, num];
+            while (result.length < 5) {
+                const uniqueNum = Math.floor(Math.random() * 10);
+                if (!result.includes(uniqueNum)) {
+                    result.push(uniqueNum);
+                } else {
+                    result.push(Math.floor(Math.random() * 10));
+                }
+            }
+            return shuffleArray(result);
+        }
+
+        function generateEmpat() {
+            const num = Math.floor(Math.random() * 10);
+            const result = [num, num, num, num];
+            while (result.length < 5) {
+                const uniqueNum = Math.floor(Math.random() * 10);
+                result.push(uniqueNum);
+            }
+            return shuffleArray(result);
+        }
+
+        function generateLima() {
+            const num = Math.floor(Math.random() * 10);
+            return [num, num, num, num, num];
+        }
+
+        function generateJackpot() {
+            const result = [1, 2, 3, 4, 5];
+            return result; 
+        }
+
+        function generateRandomResult() {
+            const result = [];
+            for (let i = 0; i < 5; i++) {
+                result.push(Math.floor(Math.random() * 10));
+            }
+            return result;
+        }
+
+        function generateControlledResult() {
+            let currentProbabilities = WIN_PROBABILITIES;
+
+            const rand = Math.random();
+            let cumulativeProb = 0;
+
+            for (const type in currentProbabilities) {
+                cumulativeProb += currentProbabilities[type];
+                if (rand < cumulativeProb) {
+                    switch(type) {
+                        case 'dua': return generateDua();
+                        case 'tiga': return generateTiga();
+                        case 'empat': return generateEmpat();
+                        case 'lima': return generateLima();
+                        case 'jackpot': return generateJackpot();
+                    }
+                }
+            }
+            return generateRandomResult();
+        }
+        
+        function checkWin(result) {
+            const strResult = result.join('');
+            if (strResult === '12345') {
+                return 'jackpot';
+            }
+
+            const frequency = {};
+            result.forEach(num => {
+                frequency[num] = (frequency[num] || 0) + 1;
+            });
+
+            const counts = Object.values(frequency);
+            const hasLima = counts.some(count => count >= 5);
+            const hasEmpat = counts.some(count => count >= 4);
+            const hasTiga = counts.some(count => count >= 3);
+            const hasDua = counts.some(count => count >= 2);
+
+            if (hasLima) {
+                return 'lima';
+            } else if (hasEmpat) {
+                return 'empat';
+            } else if (hasTiga) {
+                return 'tiga';
+            } else if (hasDua) {
+                return 'dua';
+            }
+            return null;
+        }
+
+        async function selectmain(amount) {
+            if (amount === 100 || amount === 1000) {
+                const formattedAmount = amount.toLocaleString('id-ID');
+                const warningMessage = "Kami tidak ingin Anda menghabiskan saldo Anda untuk sistem yang dirancang agar Anda kalah.\n\n" +
+                                       "Mesin ini ditujukan untuk EDUKASI bahwa judi slot manapun kekuasaan ada di tangan bandar.\n\n" +
+                                       "Mari gunakan logika bahwa judi apapun jenisnya tidak baik untuk kesehatan secara mental maupun ekonomi Anda.\n\n" +
+                                       `Apakah Anda YAKIN ingin menetapkan jumlah main sebesar **Rp ${formattedAmount}**? (Kami harap anda pilih 'BATAL' untuk menghindari risiko)`;
+
+                const userConfirmed = await showEducationalWarning(warningMessage); 
+
+                if (!userConfirmed) {
+                    currentmain = 0;
+                    $('#automainButtons button').removeClass('active');
+                    return; 
+                }
+            }
+            
+            if (amount > 0 && amount <= localUser.Saldo) {
+                currentmain = amount;
+                $('#automainButtons button').removeClass('active');
+                 if (amount === 5) {
+                    $(`#main5`).addClass('active');
+                } else if (amount === 100) {
+                    $(`#main100`).addClass('active');
+                } else if (amount === 1000) {
+                    $(`#main1000`).addClass('active');
+                } else if (amount === 1) {
+                     $(`#main1`).addClass('active');
+                }
+
+            } else if (amount === 0) {
+                currentmain = 0;
+                $('#automainButtons button').removeClass('active');
+            } else if (amount > localUser.Saldo && amount !== 0) {
+                showErrorMessage('Saldo tidak mencukupi untuk jumlah main ini.');
+            } else {
+                showErrorMessage('Jumlah main tidak valid.');
+            }
+        }
+
+        function startAutoSpin() {
+            if (currentmain <= 0) {
+                showErrorMessage('Pilih jumlah main terlebih dahulu.');
+                return;
+            }
+            isAutomainEnabled = true;
+            $('#startAutoSpinButton').hide();
+            $('#stopAutoSpinButton').show();
+            $('#spinButton').prop('disabled', true);
+            spin(false);
+        }
+
+        function stopAutoSpin() {
+            isAutomainEnabled = false;
+            $('#stopAutoSpinButton').hide();
+            $('#startAutoSpinButton').show();
+            $('#spinButton').prop('disabled', false);
+        }
+
+        function spin(isManual) {
+            if (isSpinning) return;
+
+            const slotAudio = document.getElementById('slotAudio');
+            slotAudio.currentTime = 0;
+            slotAudio.play().catch(err => console.log("Autoplay blocked:", err));
+
+            if (currentmain <= 0) {
+                showErrorMessage('Pilih jumlah main.');
+                return;
+            }
+            if (currentmain > localUser.Saldo) {
+                showErrorMessage('Saldo tidak cukup untuk main ini.');
+                return;
+            }
+
+            localUser.Saldo -= currentmain;
+            updateSaldoDisplay();
+            userRef.child('Saldo').set(localUser.Saldo); 
+            
+            const winAudio = document.getElementById('winAudio');
+            if (!winAudio.paused) {
+                winAudio.pause();
+                winAudio.currentTime = 0;
+            }
+
+            isSpinning = true;
+            $('#mainResult').addClass('result-hidden').removeClass('win lose');
+            if (isManual) {
+                lastManualSpinTime = Date.now();
+                $('#spinButton').prop('disabled', true);
+                updateManualSpinButton();
+            }
+
+            $('#stage .roll p').removeClass('bling-bling');
+
+            for (let i = 1; i <= 5; i++) {
+                $(`#ring${i}`).css('animation', `back-spin 1s`);
+            }
+
+            setTimeout(() => {
+                const result = generateControlledResult();
+                currentSeeds = result;
+
+                for (let i = 1; i <= 5; i++) {
+                    const seed = result[i-1];
+                    $(`#ring${i}`)
+                        .css('animation', `spin-${seed} ${SPIN_DURATION}s cubic-bezier(0.1, 0.7, 0.1, 1)`)
+                        .attr('class', `ring spin-${seed}`);
+                }
+
+                setTimeout(() => {
+                    for (let i = 0; i < result.length; i++) {
+                        const numberElement = $(`#ring${i+1} .roll`).eq(result[i]).find('p');
+                        numberElement.addClass('bling-bling');
+                    }
+
+                    saveRollToDatabase(result, isManual);
+                    processmainResult(result, isManual);
+
+                    isSpinning = false;
+
+                    if (isAutomainEnabled) {
+                        setTimeout(() => {
+                            if (isAutomainEnabled) {
+                                spin(false);
+                            }
+                        }, 3000);
+                    }
+                }, SPIN_DURATION * 1000);
+            }, 1000);
+        }
+
+        function processmainResult(result, isManual) {
+            const winType = checkWin(result);
+            let message = "coba lagi";
+            let messageClass = "lose";
+            let winAmount = 0;
+
+            if (winType) {
+                playerWinStreak++;
+                playerLoseStreak = 0;
+
+                const baseMultiplier = WIN_MULTIPLIERS[winType];
+                const totalMultiplier = baseMultiplier * (1 - HOUSE_EDGE);
+                winAmount = Math.round(currentmain * totalMultiplier);
+
+                message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
+                messageClass = "win";
+                document.getElementById('winAudio').play();
+
+            } else {
+                playerWinStreak = 0;
+                playerLoseStreak++;
+            }
+
+            localUser.Saldo += winAmount;
+
+            userRef.transaction((currentData) => {
+                if (currentData) {
+                    let finalSaldo = (currentData.Saldo || 0) + winAmount;
+                    return { ...currentData, Saldo: finalSaldo, };
+                } else {
+                    return;
+                }
+            }).then(() => {
+                updateSaldoDisplay();
+
+                $('#mainResult')
+                    .text(message)
+                    .removeClass('result-hidden')
+                    .addClass(messageClass);
+                    
+                setTimeout(() => {
+                    $('#mainResult').addClass('result-hidden');
+                }, 3000);
+            }).catch(error => {
+                console.error("Transaksi gagal:", error);
+            });
+        }
+
+        function updateManualSpinButton() {
+            const now = Date.now();
+            const timeSinceLastSpin = now - lastManualSpinTime;
+            const remainingCooldown = Math.max(0, MANUAL_SPIN_COOLDOWN - timeSinceLastSpin);
+
+            if (remainingCooldown <= 0) {
+                $('#spinButton').prop('disabled', isAutomainEnabled ? true : false).text('Putar');
+            } else {
+                const seconds = Math.ceil(remainingCooldown / 1000);
+                $('#spinButton').text(`Tunggu (${seconds}s)`);
+                setTimeout(updateManualSpinButton, 1000);
+            }
+        }
+
+        function showErrorMessage(message) {
+            alert(message);
+        }
+        
+        function showEducationalWarning(message) {
+            return new Promise((resolve) => {
+                const $overlay = $('#customAlertOverlay');
+                const $message = $('#customAlertMessage');
+                const $confirmBtn = $('#alertConfirmButton');
+                const $cancelBtn = $('#alertCancelButton');
+
+                $message.html(message.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
+                $overlay.css('display', 'flex');
+
+                $confirmBtn.off('click');
+                $cancelBtn.off('click');
+
+                $confirmBtn.click(() => {
+                    $overlay.css('display', 'none');
+                    resolve(true);
+                });
+
+                $cancelBtn.click(() => {
+                    $overlay.css('display', 'none');
+                    resolve(false);
+                });
+            });
+        }
+
+        $(document).ready(function() {
+            for (let i = 1; i <= 5; i++) createROLL($('#ring' + i));
+
+            $('#rotate').addClass('tilted');
+            $('.roll').addClass('backface-on');
+
+            let winAudio = document.getElementById('winAudio');
+            let userInteracted = false;
+
+            $('#spinButton').click(function() {
+                if (!userInteracted) {
+                    winAudio.muted = true;
+                    winAudio.play().then(() => {
+                        winAudio.pause();
+                        winAudio.currentTime = 0;
+                        winAudio.muted = false;
+                        userInteracted = true;
+                    }).catch(error => {
+                        console.error("Audio play blocked:", error);
+                    });
+                }
+
+                if (!$(this).prop('disabled')) {
+                    spin(true);
+                }
+            });
+
+            $('#startAutoSpinButton').click(startAutoSpin);
+            $('#stopAutoSpinButton').click(stopAutoSpin);
+            
+            updateSaldoDisplay(); 
+        });
+    </script>
+</body>
+</html>
