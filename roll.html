@@ -21,7 +21,6 @@
             overflow-x: hidden;
         }
 
-        /* --- Tambahan untuk Teks Berjalan --- */
         #runningTextContainer {
             position: fixed;
             top: 0;
@@ -52,9 +51,7 @@
                 transform: translate(-100%, 0);
             }
         }
-        /* --- Akhir Tambahan untuk Teks Berjalan --- */
-
-        /* CSS yang Dioptimalkan */
+        
         .perspective-on { perspective: 1000px; }
         .tilted { transform: rotateY(45deg); }
 
@@ -272,7 +269,6 @@
             cursor: not-allowed;
         }
 
-        /* MODIFIKASI: Posisi alert di tengah layar */
         .result-message {
             position: fixed;
             top: 50%;
@@ -469,14 +465,12 @@
             display: none;
         }
 
-        /* MODIFIKASI: Alert kalah */
         .lose {
             background-color: rgba(0, 0, 0, 0.9) !important;
             color: white !important;
             border: 5px solid #666;
         }
 
-        /* Responsif untuk perangkat mobile */
         @media (max-width: 768px) {
             .result-message {
                 width: 90%;
@@ -484,10 +478,97 @@
                 padding: 20px 30px;
             }
         }
+        
+        #customAlertOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200000;
+        }
+
+        #customAlertBox {
+            /* Perubahan di sini */
+            background-color: #1a1a1a; /* Hitam gelap */
+            color: #f0f0f0; /* Putih/Abu-abu muda */
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            border: 3px solid #444; /* Batas abu-abu gelap */
+        }
+
+        #customAlertBox h3 {
+            /* Perubahan di sini */
+            color: #FFD700; /* Kuning Emas untuk Judul Peringatan */
+            margin-top: 0;
+            font-size: 28px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        #customAlertMessage {
+            /* Perubahan di sini */
+            color: #f0f0f0;
+            white-space: pre-wrap;
+            text-align: left;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #customAlertButtons button {
+            padding: 15px 30px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #alertCancelButton {
+            background-color: #cc0000; /* Merah gelap */
+            color: white;
+        }
+
+        #alertCancelButton:hover {
+            background-color: #990000;
+        }
+
+        #alertConfirmButton {
+            background-color: #008000; /* Hijau gelap */
+            color: white;
+        }
+
+        #alertConfirmButton:hover {
+            background-color: #005500;
+        }
     </style>
 </head>
 
 <body>
+    <div id="customAlertOverlay">
+        <div id="customAlertBox">
+            <h3>⚠️ PERINGATAN JUDI ⚠️</h3>
+            <div id="customAlertMessage"></div>
+            <div id="customAlertButtons">
+                <button id="alertCancelButton">BATAL</button>
+                <button id="alertConfirmButton">TETAP MAIN</button>
+            </div>
+        </div>
+    </div>
     <div id="runningTextContainer">
         <span id="runningText">
             🛑 PERHATIAN: Game ini adalah SIMULASI dan alat EDUKASI yang menunjukkan bahwa mesin slot dirancang untuk membuat pemain kalah. Kekuatan ada di tangan bandar. Jangan berjudi. Judol adalah fiksi dengan uang sungguhan yang akan membuat anda kalah secara ekonomi dan mental. 🛑
@@ -727,11 +808,11 @@
 
         async function selectmain(amount) {
             if (amount === 100 || amount === 1000) {
-                const warningMessage = "\n\n" +
-                                       "Kami tidak ingin Anda menghabiskan saldo Anda untuk sistem yang dirancang agar Anda kalah.\n\n" +
+                const formattedAmount = amount.toLocaleString('id-ID');
+                const warningMessage = "Kami tidak ingin Anda menghabiskan saldo Anda untuk sistem yang dirancang agar Anda kalah.\n\n" +
                                        "Mesin ini ditujukan untuk EDUKASI bahwa judi slot manapun kekuasaan ada di tangan bandar.\n\n" +
                                        "Mari gunakan logika bahwa judi apapun jenisnya tidak baik untuk kesehatan secara mental maupun ekonomi Anda.\n\n" +
-                                       "Apakah Anda YAKIN ingin menetapkan jumlah main sebesar " + amount.toLocaleString('id-ID') + "? (Kami harap anda pilih 'Batal' untuk menghindari risiko)";
+                                       `Apakah Anda YAKIN ingin menetapkan jumlah main sebesar **Rp ${formattedAmount}**? (Kami harap anda pilih 'BATAL' untuk menghindari risiko)`;
 
                 const userConfirmed = await showEducationalWarning(warningMessage); 
 
@@ -897,7 +978,6 @@
                     .removeClass('result-hidden')
                     .addClass(messageClass);
                     
-                // Sembunyikan alert setelah 3 detik
                 setTimeout(() => {
                     $('#mainResult').addClass('result-hidden');
                 }, 3000);
@@ -921,13 +1001,31 @@
         }
 
         function showErrorMessage(message) {
-            alert(message); // Ganti dengan implementasi UI yang lebih baik jika diperlukan
+            alert(message);
         }
         
         function showEducationalWarning(message) {
             return new Promise((resolve) => {
-                const confirmed = confirm(message);
-                resolve(confirmed);
+                const $overlay = $('#customAlertOverlay');
+                const $message = $('#customAlertMessage');
+                const $confirmBtn = $('#alertConfirmButton');
+                const $cancelBtn = $('#alertCancelButton');
+
+                $message.html(message.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
+                $overlay.css('display', 'flex');
+
+                $confirmBtn.off('click');
+                $cancelBtn.off('click');
+
+                $confirmBtn.click(() => {
+                    $overlay.css('display', 'none');
+                    resolve(true);
+                });
+
+                $cancelBtn.click(() => {
+                    $overlay.css('display', 'none');
+                    resolve(false);
+                });
             });
         }
 
