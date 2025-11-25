@@ -21,243 +21,259 @@
             overflow-x: hidden;
         }
 
-        /* CSS lainnya tetap sama */
-        .perspective-on { perspective: 1000px; } 
-        .perspective-off { perspective: 0; } 
-        .tilted { transform: rotateY(45deg); } 
-        .spin-0 { transform: rotateX(-3600deg); } 
-        .spin-1 { transform: rotateX(-3636deg); } 
-        .spin-2 { transform: rotateX(-3672deg); } 
-        .spin-3 { transform: rotateX(-3708deg); } 
-        .spin-4 { transform: rotateX(-3744deg); } 
-        .spin-5 { transform: rotateX(-3780deg); } 
-        .spin-6 { transform: rotateX(-3816deg); } 
-        .spin-7 { transform: rotateX(-3852deg); } 
-        .spin-8 { transform: rotateX(-3888deg); } 
-        .spin-9 { transform: rotateX(-3924deg); } 
-        
-        @keyframes back-spin { 
-            100% { transform: rotateX(36deg); } 
-        } 
-        
-        @keyframes tiltin { 
-            0% { transform: rotateY(0deg);} 
-            50% { transform: rotateY(0deg);} 
-            100% { transform: rotateY(45deg);} 
-        } 
-        
-        @keyframes tiltout { 
-            0% { transform: rotateY(45deg);} 
-            100% { transform: rotateY(0deg);} 
-        } 
-        
-        @keyframes spin-0 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3600deg); } 
-        } 
-        
-        @keyframes spin-1 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3636deg); } 
-        } 
-        
-        @keyframes spin-2 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3672deg); } 
-        } 
-        
-        @keyframes spin-3 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3708deg); } 
-        } 
-        
-        @keyframes spin-4 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3744deg); } 
-        } 
-        
-        @keyframes spin-5 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3780deg); } 
-        } 
-        
-        @keyframes spin-6 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3816deg); } 
-        } 
-        
-        @keyframes spin-7 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3852deg); } 
-        } 
-        
-        @keyframes spin-8 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3888deg); } 
-        } 
-        
-        @keyframes spin-9 { 
-            0% { transform: rotateX(36deg); } 
-            100% { transform: rotateX(-3924deg); } 
-        } 
-        
-        #resultDisplay { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 600px; 
-            height: 600px; 
-            z-index: 9999; 
-            pointer-events: none; 
-        } 
-        
-        #numbersDisplay { 
-            position: absolute; 
-            top: 50px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            font-size: 40px; 
-            font-weight: bold; 
-            color: #000; 
-            background: rgba(255, 255, 255, 0.9); 
-            padding: 10px 20px; 
-            border-radius: 10px; 
-            z-index: 10000; 
-            display: flex; 
-            gap: 10px; 
-        } 
-        
-        #timeDisplay { 
-            position: absolute; 
-            top: 20px; 
-            left: 20px; 
-            font-size: 18px; 
-            color: #000; 
-            background: rgba(255, 255, 255, 0.9); 
-            padding: 10px 20px; 
-            border-radius: 10px; 
-            z-index: 10000; 
-            text-align: left; 
-        } 
-        
-        #rotate { 
-            margin: 0 auto; 
-            width: 700px; 
-            height: 700px; 
-            padding-top: 700px; 
-            transform-style: preserve-3d; 
-            transform: rotateY(45deg); 
-        } 
-        
-        .ring { 
-            margin: 0 auto; 
-            height: 115px; 
-            width: 115px; 
-            float: left; 
-            transform-style: preserve-3d; 
-        } 
-        
-        .roll { 
-            position: absolute; 
-            width: 120px; 
-            height: 120px; 
-            box-sizing: border-box; 
-            opacity: 0.9; 
-            color: black; 
-            background: white; 
-            border: solid 5px #ccc; 
-            backface-visibility: visible; 
-        } 
-        
-        .roll p { 
-            font-size: 100px; 
-            font-weight: bold; 
-            line-height: 130px; 
-            margin: 0; 
-            text-align: center; 
-        } 
-        
-        .backface-on { 
-            backface-visibility: visible; 
-        } 
-        
-        .bottom-links { 
-            position: fixed; 
-            bottom: 20px; 
-            width: 100%; 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 0 20px; 
-            box-sizing: border-box; 
-        } 
-        
-        #spinButton:disabled { 
-            cursor: not-allowed; 
-            opacity: 0.6; 
-        } 
-        
-        #spinButton { 
-            position: absolute; 
-            top: 1500px; 
-            left: 490px; 
-            transform: translateX(-50%); 
-            padding: 30px; 
-            background-color: blue; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            font-size: 30px; 
-            width: 950px; 
-        } 
-        
-        .mainting-panel { 
-            position: absolute; 
-            top: 1600px; 
-            left: -10px; 
-            background: rgba(0,0,0,0.7); 
-            padding: 15px; 
-            font-size: 30px; 
-            border-radius: 10px; 
-            color: white; 
-            width: 950px; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.5); 
-        } 
-        
-        .main-input { 
-            width: 100%; 
-            padding: 8px; 
-            margin: 5px 0; 
-            border-radius: 5px; 
-            border: none; 
-            background-color: #333; 
-            color: white; 
-            font-size: 30px; 
-        } 
-        
-        .main-button { 
-            background-color: #4CAF50; 
-            color: white; 
-            border: none; 
-            font-size: 2px; 
-            padding: 8px 15px; 
-            margin: 5px 2px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            transition: background-color 0.3s; 
-        } 
-        
-        .main-button:hover { 
-            background-color: #45a049; 
-        } 
-        
-        .main-button:disabled { 
-            background-color: #cccccc; 
-            cursor: not-allowed; 
-        } 
-        
+        /* --- Tambahan untuk Teks Berjalan --- */
+        #runningTextContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #FFD700;
+            font-size: 30px;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0;
+            z-index: 100001;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #runningText {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-100%, 0);
+            }
+        }
+        /* --- Akhir Tambahan untuk Teks Berjalan --- */
+
+        /* CSS yang Dioptimalkan */
+        .perspective-on { perspective: 1000px; }
+        .tilted { transform: rotateY(45deg); }
+
+        @keyframes back-spin {
+            100% { transform: rotateX(36deg); }
+        }
+
+        @keyframes spin-0 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3600deg); }
+        }
+
+        @keyframes spin-1 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3636deg); }
+        }
+
+        @keyframes spin-2 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3672deg); }
+        }
+
+        @keyframes spin-3 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3708deg); }
+        }
+
+        @keyframes spin-4 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3744deg); }
+        }
+
+        @keyframes spin-5 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3780deg); }
+        }
+
+        @keyframes spin-6 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3816deg); }
+        }
+
+        @keyframes spin-7 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3852deg); }
+        }
+
+        @keyframes spin-8 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3888deg); }
+        }
+
+        @keyframes spin-9 {
+            0% { transform: rotateX(36deg); }
+            100% { transform: rotateX(-3924deg); }
+        }
+
+        #resultDisplay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        #numbersDisplay {
+            position: absolute;
+            top: 20px;
+            left: 80%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            font-weight: bold;
+            background: snow;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #numbersDisplay span {
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        #timeDisplay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            color: #000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 10000;
+            text-align: left;
+        }
+
+        #rotate {
+            margin: 0 auto;
+            width: 700px;
+            height: 700px;
+            padding-top: 700px;
+            transform-style: preserve-3d;
+            transform: rotateY(45deg);
+        }
+
+        .ring {
+            margin: 0 auto;
+            height: 115px;
+            width: 115px;
+            float: left;
+            transform-style: preserve-3d;
+        }
+
+        .roll {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            box-sizing: border-box;
+            opacity: 0.9;
+            color: black;
+            background: white;
+            border: solid 5px #ccc;
+            backface-visibility: visible;
+        }
+
+        .roll p {
+            font-size: 100px;
+            font-weight: bold;
+            line-height: 130px;
+            margin: 0;
+            text-align: center;
+        }
+
+        .backface-on {
+            backface-visibility: visible;
+        }
+
+        .bottom-links {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        #spinButton:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        #spinButton {
+            position: absolute;
+            top: 1500px;
+            left: 490px;
+            transform: translateX(-50%);
+            padding: 30px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 30px;
+            width: 950px;
+        }
+
+        .mainting-panel {
+            position: absolute;
+            top: 1600px;
+            left: -10px;
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            font-size: 30px;
+            border-radius: 10px;
+            color: white;
+            width: 950px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .main-input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: white;
+            font-size: 30px;
+        }
+
+        .main-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 2px;
+            padding: 8px 15px;
+            margin: 5px 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .main-button:hover {
+            background-color: #45a049;
+        }
+
+        .main-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
         /* MODIFIKASI: Posisi alert di tengah layar */
-        .result-message { 
+        .result-message {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -273,233 +289,186 @@
             max-width: 600px;
             transition: all 0.5s ease;
         }
-        
-        #perakBalance { 
-            font-weight: bold; 
-            color: snow; 
-        } 
-        
-        .win { 
-            background-color: rgba(255, 215, 0, 0.95) !important; 
-            color: black !important; 
+
+        #perakBalance {
+            font-weight: bold;
+            color: snow;
+        }
+
+        .win {
+            background-color: rgba(255, 215, 0, 0.95) !important;
+            color: black !important;
             border: 5px solid gold;
-        } 
-        
-        .win-types { 
-            margin-top: 15px; 
-            font-size: 30px; 
-            background-color: rgba(255, 215, 0, 0.7) !important; 
-            color: black !important; 
-        } 
-        
-        .win-type { 
-            display: flex; 
-            justify-content: space-between; 
-            margin: 5px 0; 
-            background-color: rgba(255, 215, 0, 0.7) !important; 
-            color: black !important; 
-        } 
-        
-        #numbersDisplay { 
-            position: absolute; 
-            top: 20px; 
-            left: 80%; 
-            transform: translateX(-50%); 
-            font-size: 50px; 
-            font-weight: bold; 
-            background: snow; 
-            padding: 10px 20px; 
-            border-radius: 5px; 
-            display: flex; 
-            gap: 10px; 
-        } 
-        
-        #numbersDisplay span { 
-            display: inline-block; 
-            width: 30px; 
-            text-align: center; 
-            font-size: 30px; 
-        } 
-        
-        #loading { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: grey; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 1000; 
-        } 
-        
-        .auto-main-options { 
-            margin-top: 15px; 
-            padding-top: 15px; 
-            border-top: 1px solid #444; 
-            font-size: 30px; 
-        } 
-        
-        .auto-main-options h4 { 
-            margin-bottom: 10px; 
-            font-size: 30px; 
-        } 
-        
-        #automainButtons { 
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 5px; 
-            font-size: 30px; 
-        } 
-        
-        #automainButtons button { 
-            flex: 1; 
-            min-width: 50px; 
-            padding: 5px; 
-            background-color: #333; 
-            border: none; 
-            border-radius: 4px; 
-            color: white; 
-            cursor: pointer; 
-            font-size: 30px; 
-        } 
-        
-        #automainButtons button.active { 
-            background-color: #4CAF50; 
-            font-weight: bold; 
-            font-size: 30px; 
-        } 
-        
-        #automainButtons button:last-child { 
-            background-color: #f44336; 
-            font-size: 30px; 
-        } 
-        
-        .result-hidden { 
-            opacity: 0; 
+        }
+
+        .win-types {
+            margin-top: 15px;
+            font-size: 30px;
+            background-color: rgba(255, 215, 0, 0.7) !important;
+            color: black !important;
+        }
+
+        .win-type {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            background-color: rgba(255, 215, 0, 0.7) !important;
+            color: black !important;
+        }
+
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: grey;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .auto-main-options {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #444;
+            font-size: 30px;
+        }
+
+        .auto-main-options h4 {
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
+
+        #automainButtons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            font-size: 30px;
+        }
+
+        #automainButtons button {
+            flex: 1;
+            min-width: 50px;
+            padding: 5px;
+            background-color: #333;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 30px;
+        }
+
+        #automainButtons button.active {
+            background-color: #4CAF50;
+            font-weight: bold;
+            font-size: 30px;
+        }
+
+        #automainButtons button:last-child {
+            background-color: #f44336;
+            font-size: 30px;
+        }
+
+        .result-hidden {
+            opacity: 0;
             visibility: hidden;
             transform: translate(-50%, -50%) scale(0.8);
-        } 
-        
-        .rolling-text { 
-            position: fixed; 
-            bottom: 10px; 
-            left: 10px; 
-            color: black; 
-            font-size: 30px; 
-            opacity: 0.7; 
-            z-index: 100; 
-            font-size: 30px; 
-        } 
-        
-        .link-container { 
-            display: flex; 
-            justify-content: center; 
-            gap: 10px; 
-            margin-bottom: 20px; 
-        } 
-        
-        .menu-link { 
-            background-color: rgba(255, 255, 255, 0.1); 
-            border: 2px solid red; 
-            color: black; 
-            padding: 10px 20px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border-radius: 5px; 
-            transition: background-color 0.3s; 
-            text-align: center; 
-            font-size: 28px; 
-        } 
-        
-        .menu-link:hover { 
-            background-color: rgba(255, 255, 255, 0.2); 
-        } 
-        
-        .history-link-container { 
-            position: absolute; 
-            bottom: 20px; 
-            left: 20px; 
-        } 
-        
-        .error-message { 
-            color: red; 
-            font-weight: bold; 
-            text-align: center; 
-            margin-top: 10px; 
-            display: none; 
-        } 
-        
-        .bling-bling { 
-            animation: glowing 1.5s infinite alternate; 
-            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; 
-        } 
-        
-        @keyframes glowing { 
-            from { 
-                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0; 
-            } 
-            to { 
-                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7; 
-            } 
-        } 
-        
-        .link-container { 
-            position: relative; 
-            z-index: 200000; 
-        } 
-        
-        .menu-link { 
-            background-color: rgba(255, 255, 255, 0.1); 
-            border: 2px solid red; 
-            color: snow; 
-            padding: 10px 20px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border-radius: 5px; 
-            transition: background-color 0.3s; 
-            text-align: center; 
-            font-size: 28px; 
-            background: rgba(0,0,0,0.7); 
-        } 
-        
-        .menu-link:hover { 
-            background-color: rgba(255, 255, 255, 0.2); 
-        } 
-        
-        .history-link-container { 
-            position: absolute; 
-            bottom: 20px; 
-            left: 20px; 
-        } 
-        
-        .auto-spin-buttons { 
-            display: flex; 
-            justify-content: center; 
-            margin-top: 15px; 
-            gap: 10px; 
-        } 
-        
-        .auto-spin-buttons button { 
-            padding: 15px 30px; 
-            font-size: 24px; 
-            border-radius: 5px; 
-            border: none; 
-            cursor: pointer; 
-            width: 45%; 
-            color: white; 
-        } 
-        
-        #startAutoSpinButton { 
-            background-color: #4CAF50; 
-        } 
-        
-        #stopAutoSpinButton { 
-            background-color: #f44336; 
-            display: none; 
         }
-        
+
+        .rolling-text {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            color: black;
+            font-size: 30px;
+            opacity: 0.7;
+            z-index: 100;
+            font-size: 30px;
+        }
+
+        .link-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 200000;
+        }
+
+        .menu-link {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid red;
+            color: snow;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-align: center;
+            font-size: 28px;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .menu-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .history-link-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .bling-bling {
+            animation: glowing 1.5s infinite alternate;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+        }
+
+        @keyframes glowing {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff7, 0 0 20px #ff7, 0 0 25px #ff0, 0 0 30px #ff0, 0 0 35px #ff0;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #ff0, 0 0 50px #ff7, 0 0 60px #ff7, 0 0 70px #ff7;
+            }
+        }
+
+        .auto-spin-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .auto-spin-buttons button {
+            padding: 15px 30px;
+            font-size: 24px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            width: 45%;
+            color: white;
+        }
+
+        #startAutoSpinButton {
+            background-color: #4CAF50;
+        }
+
+        #stopAutoSpinButton {
+            background-color: #f44336;
+            display: none;
+        }
+
         /* MODIFIKASI: Alert kalah */
         .lose {
             background-color: rgba(0, 0, 0, 0.9) !important;
@@ -519,7 +488,12 @@
 </head>
 
 <body>
-    <div id="stage" class="perspective-on" style="margin-top: 100px;"> 
+    <div id="runningTextContainer">
+        <span id="runningText">
+            🛑 PERHATIAN: Game ini adalah SIMULASI dan alat EDUKASI yang menunjukkan bahwa mesin slot dirancang untuk membuat pemain kalah. Kekuatan ada di tangan bandar. Jangan berjudi. Judol adalah fiksi dengan uang sungguhan yang akan membuat anda kalah secara ekonomi dan mental. 🛑
+        </span>
+    </div>
+    <div id="stage" class="perspective-on" style="margin-top: 100px;">
         <div id="rotate" class="tilted">
             <div id="ring1" class="ring"></div>
             <div id="ring2" class="ring"></div>
@@ -899,7 +873,6 @@
 
                 message = `Selamat Anda MENDAPATKAN +${winAmount.toLocaleString('id-ID')} `;
                 messageClass = "win";
-                // HAPUS: triggerConfetti(); - Fungsi confetti dihapus
                 document.getElementById('winAudio').play();
 
             } else {
@@ -947,28 +920,10 @@
             }
         }
 
-        // HAPUS: Fungsi triggerConfetti() dihapus seluruhnya
-
-        function showArticle(articleId) {
-            $('.section-content').slideUp(400); 
-            
-            $(`#${articleId}`).slideDown(400);
-            
-            $('html, body').animate({
-                scrollTop: $(`#${articleId}`).offset().top - $('.top-nav').outerHeight()
-            }, 500);
-        }
-        
-        function hideArticles() {
-             $('.section-content').slideUp(400);
-        }
-
-        // Fungsi bantu untuk menampilkan pesan error
         function showErrorMessage(message) {
             alert(message); // Ganti dengan implementasi UI yang lebih baik jika diperlukan
         }
         
-        // Fungsi bantu untuk menampilkan peringatan edukasi
         function showEducationalWarning(message) {
             return new Promise((resolve) => {
                 const confirmed = confirm(message);
