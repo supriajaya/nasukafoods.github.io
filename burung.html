@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1024">
+  <title>Burung Hadiah Interaktif</title>
+    
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.1.0/firebase-database-compat.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+    <style>
+      
+body {
+    background-image: url('https://nasukafoods.site/langit.jpg');
+    background-size: cover; 
+    background-attachment: fixed;
+    background-position: center;
+    color: white; 
+}
+      
+.header-info {
+    position: fixed;
+    left: 1%;
+    top: 20px;
+    z-index: 1000;
+}
+
+.sum {
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Ganti #public-pool-box menjadi #public-pool-box-static dan tambahkan interaksi klik */
+#public-pool-box-static { 
+    background: rgba(4, 58, 112, 0.8); 
+    padding: 15px;
+    border-radius: 10px;
+    border: 3px solid yellow;
+    text-shadow: 1px 1px 2px black;
+    width: 300px; 
+    cursor: pointer; /* Ditambahkan kembali agar terlihat bisa diklik */
+    transition: background 0.3s;
+}
+
+#public-pool-box-static:hover {
+    background: rgba(4, 58, 112, 0.95); /* Efek hover ringan */
+}
+
+#public-pool-box-static h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#public-pool-details {
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+.input-circle ~ .pajaro {
+    opacity: 1; 
+    transition: 0.3s cubic-bezier(0,.43,1,0);
+    animation: move 8s infinite alternate;
+}
+
+.input-circle:checked ~ .pajaro {
+    opacity: 0;
+}
+
+.pajaro > span {
+    display: none !important; 
+}
+
+
+#customAlert {
+    display: none; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+    z-index: 1001; 
+    text-align: center; 
+    max-width: 80%;
+    color: #333; 
+}
+
+#alertContent {
+    max-height: 400px; /* Batasi tinggi konten alert */
+    overflow-y: auto;
+    text-align: left;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.sultan-entry {
+    border-bottom: 1px solid #eee;
+    padding: 5px 0;
+}
+
+.sultan-entry:last-child {
+    border-bottom: none;
+}
+
+
+.pajaro {
+    background: gray;
+    position: absolute;
+    left: 0;
+    cursor: crosshair;
+    border-radius: 50% 50% 20% 20%;
+    color: white;
+    line-height: 20px;
+    letter-spacing: 2px;
+    font-size: 0.8em;
+    text-align: center;
+    margin-top: -10px;
+    margin-left: 0px;
+    width: 30px;
+    height: 30px;
+    animation: planeo 0.8s linear infinite;
+    z-index: 999;
+}
+
+.pajaro:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: black;
+    border-radius: 100% 0% 20% 0%;
+    margin-top: 12px;
+    margin-left: -5px;
+    width: 12px;
+    height: 12px;
+    transform: rotateZ(45deg);
+}
+
+.pajaro:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    box-shadow: inset 0px 11px 0 black;
+    border-radius: 100% 100% 0 0;
+    width: 200px;
+    height: 200px;
+    margin-top: -5px;
+    margin-left: -90px;
+    transform-origin: 100% 0%;
+    animation: alas 3s linear infinite;
+}
+
+.pajaro1 { top: 50px; animation-delay: -2s !important; transform: scale(0.9); }
+.pajaro2 { top: 100px; animation-delay: -1s !important; transform: scale(0.8); }
+.pajaro3 { top: 200px; animation-delay: -3s !important; transform: scale(1.4); }
+.pajaro4 { top: 50px; animation-delay: -12s !important; transform: scale(0.9); }
+.pajaro5 { top: 100px; animation-delay: -16s !important; transform: scale(0.5); }
+.pajaro6 { top: 200px; animation-delay: -20s !important; transform: scale(1.4); }
+.pajaro7 { top: 150px; animation-delay: -4s !important; transform: scale(1.0); }
+.pajaro8 { top: 250px; animation-delay: -5s !important; transform: scale(0.7); }
+.pajaro9 { top: 300px; animation-delay: -6s !important; transform: scale(1.1); }
+.pajaro10 { top: 150px; animation-delay: -7s !important; transform: scale(0.9); }
+.pajaro11 { top: 250px; animation-delay: -8s !important; transform: scale(1.2); }
+.pajaro12 { top: 300px; animation-delay: -9s !important; transform: scale(0.6); }
+.pajaro13 { top: 70px; animation-delay: -10s !important; transform: scale(1.3); }
+.pajaro14 { top: 120px; animation-delay: -11s !important; transform: scale(0.85); }
+.pajaro15 { top: 180px; animation-delay: -12s !important; transform: scale(1.15); }
+.pajaro16 { top: 220px; animation-delay: -13s !important; transform: scale(0.95); }
+.pajaro17 { top: 280px; animation-delay: -14s !important; transform: scale(1.05); }
+.pajaro18 { top: 320px; animation-delay: -15s !important; transform: scale(0.75); }
+.pajaro19 { top: 90px; animation-delay: -16s !important; transform: scale(1.25); }
+.pajaro20 { top: 140px; animation-delay: -17s !important; transform: scale(0.65); }
+
+@keyframes move {
+    10% { left: 10%; }
+    20% { left: 20%; top: 50%; }
+    40% { top: 30%; left: 60%; }
+    60% { top: 80%; left: 80%; }
+    80% { top: 10%; left: 20%; }
+    100% { top: 30%; left: 20%; }
+}
+
+@keyframes alas {
+    50% { transform: rotateX(-1440deg); }
+}
+
+@keyframes planeo {
+}
+
+    </style>
+
+</head>
+
+
+<body> 
+ 
+    <div class="wrapper">
+   
+      <button id="selesaiBtn" style="position: fixed; bottom: 10px; right: 10px; font-size: 50px;">Klaim Hadiah</button>
+      
+      <button id="resetBirdsBtn" style="position: fixed; bottom: 10px; left: 10px; font-size: 14px; background: red; color: white;">Reset Burung</button>
+
+      <div id="customAlert">
+          <div id="alertIcon"></div>
+          <div id="alertMessage"></div>
+          <div id="alertContent"></div> <button id="alertOkBtn">OK</button>
+      </div>
+      
+      <div class="header-info">
+        <div class="sum">Saldo Anda: <span id="SaldoBalance"> 0</span></div>
+        
+        <div id="public-pool-box-static"> 
+            <h3>🏦 Saldo Publik</h3>
+            <div id="public-pool-details">
+                <p>Total Saldo Tersedia: <strong id="PublicPoolTotal">0</strong></p>
+                <hr style="border-color: rgba(255, 255, 255, 0.3);">
+              
+                <p style="font-size: 0.9em; margin-bottom: 5px;">Terakhir ditambahkan oleh: <strong id="PublicPoolContributor">Belum ada</strong></p>
+                <p style="font-size: 0.9em; margin-top: 0;">Jumlah: <strong id="PublicPoolContributionAmount">0</strong></p>
+                </div>
+        </div>
+      </div>
+
+
+      <input class="input-circle input-circle1" type="checkbox" id="circle1">
+      <input class="input-circle input-circle2" type="checkbox" id="circle2"><input class="input-circle input-circle3" type="checkbox" id="circle3"><input class="input-circle input-circle4" type="checkbox" id="circle4"><input class="input-circle input-circle5" type="checkbox" id="circle5"><input class="input-circle input-circle6" type="checkbox" id="circle6"><input class="input-circle input-circle7" type="checkbox" id="circle7"><input class="input-circle input-circle8" type="checkbox" id="circle8"><input class="input-circle input-circle9" type="checkbox" id="circle9"><input class="input-circle input-circle10" type="checkbox" id="circle10"><input class="input-circle input-circle11" type="checkbox" id="circle11"><input class="input-circle input-circle12" type="checkbox" id="circle12"><input class="input-circle input-circle13" type="checkbox" id="circle13"><input class="input-circle input-circle14" type="checkbox" id="circle14"><input class="input-circle input-circle15" type="checkbox" id="circle15"><input class="input-circle input-circle16" type="checkbox" id="circle16"><input class="input-circle input-circle17" type="checkbox" id="circle17"><input class="input-circle input-circle18" type="checkbox" id="circle18"><input class="input-circle input-circle19" type="checkbox" id="circle19"><input class="input-circle input-circle20" type="checkbox" id="circle20">
+      
+      <label for="circle1" class="pajaro pajaro1" data-bird-id="bird1"><span></span></label>
+      <label for="circle2" class="pajaro pajaro2" data-bird-id="bird2"><span></span></label><label for="circle3" class="pajaro pajaro3" data-bird-id="bird3"><span></span></label><label for="circle4" class="pajaro pajaro4" data-bird-id="bird4"><span></span></label><label for="circle5" class="pajaro pajaro5" data-bird-id="bird5"><span></span></label><label for="circle6" class="pajaro pajaro6" data-bird-id="bird6"><span></span></label><label for="circle7" class="pajaro pajaro7" data-bird-id="bird7"><span></span></label><label for="circle8" class="pajaro pajaro8" data-bird-id="bird8"><span></span></label><label for="circle9" class="pajaro pajaro9" data-bird-id="bird9"><span></span></label><label for="circle10" class="pajaro pajaro10" data-bird-id="bird10"><span></span></label><label for="circle11" class="pajaro pajaro11" data-bird-id="bird11"><span></span></label><label for="circle12" class="pajaro pajaro12" data-bird-id="bird12"><span></span></label><label for="circle13" class="pajaro pajaro13" data-bird-id="bird13"><span></span></label><label for="circle14" class="pajaro pajaro14" data-bird-id="bird14"><span></span></label><label for="circle15" class="pajaro pajaro15" data-bird-id="bird15"><span></span></label><label for="circle16" class="pajaro pajaro16" data-bird-id="bird16"><span></span></label><label for="circle17" class="pajaro pajaro17" data-bird-id="bird17"><span></span></label><label for="circle18" class="pajaro pajaro18" data-bird-id="bird18"><span></span></label><label for="circle19" class="pajaro pajaro19" data-bird-id="bird19"><span></span></label><label for="circle20" class="pajaro pajaro20" data-bird-id="bird20"><span></span></label>
+      
+    </div>
+  
+
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafoods1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.database();
+
+const totalBirds = 20;
+const birdsRef = db.ref('gameStatus/birds'); 
+const publicPoolRef = db.ref('gameStatus/publicPool');
+
+const userID = localStorage.getItem("ID") || localStorage.getItem("Username");
+const username = localStorage.getItem("Username") || userID; 
+const userRef = userID ? db.ref(`users/${userID}`) : null; 
+
+let localUser = {
+  ID: userID,
+  Username: username,
+  Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
+};
+
+let publicPoolData = {
+    total: 0,
+    history: [] 
+};
+
+function formatCurrency(amount) {
+    const num = Number(amount);
+    // Asumsi Rupiah (IDR) berdasarkan 'id-ID' di toLocaleString
+    return num.toLocaleString('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).replace('IDR', '').trim(); // Menghilangkan simbol IDR
+}
+
+function updateSaldoDisplay() {
+    const saldoBalanceEl = document.getElementById('SaldoBalance');
+    if(saldoBalanceEl) {
+        saldoBalanceEl.textContent = formatCurrency(localUser.Saldo); 
+    }
+}
+
+function updatePublicPoolDisplay() {
+    document.getElementById('PublicPoolTotal').textContent = formatCurrency(publicPoolData.total);
+    
+    const contributorEl = document.getElementById('PublicPoolContributor');
+    const contributionAmountEl = document.getElementById('PublicPoolContributionAmount');
+
+    if (publicPoolData.history && publicPoolData.history.length > 0) {
+        // Urutkan riwayat berdasarkan waktu (timestamp) terbaru di atas
+        const reversedHistory = [...publicPoolData.history].sort((a, b) => b.timestamp - a.timestamp);
+        
+        const latestContribution = reversedHistory[0];
+        contributorEl.textContent = latestContribution.username;
+        contributionAmountEl.textContent = formatCurrency(latestContribution.amount);
+
+    } else {
+        contributorEl.textContent = "Belum ada";
+        contributionAmountEl.textContent = "0";
+    }
+}
+
+
+function showCustomAlert(message, type = 'info', contentHtml = '') {
+    const alertDiv = document.getElementById('customAlert');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = document.getElementById('alertIcon');
+    const alertContent = document.getElementById('alertContent');
+    
+    alertMessage.innerHTML = message; 
+    alertContent.innerHTML = contentHtml; // Set konten tambahan
+    alertContent.style.display = contentHtml ? 'block' : 'none';
+
+    switch(type) {
+        case 'success':
+            alertIcon.textContent = '✅';
+            alertDiv.style.border = '2px solid #4CAF50';
+            break;
+        case 'error':
+            alertIcon.textContent = '❌';
+            alertDiv.style.border = '2px solid #f44336';
+            break;
+        case 'warning':
+            alertIcon.textContent = '⚠️';
+            alertDiv.style.border = '2px solid #FFC107';
+            break;
+        case 'jackpot': 
+            alertIcon.textContent = '🎁';
+            alertDiv.style.border = '2px solid gold';
+            break;
+        case 'sultans': // Tipe baru untuk daftar sultan
+            alertIcon.textContent = '👑';
+            alertDiv.style.border = '2px solid #DAA520';
+            break;
+        default:
+            alertIcon.textContent = 'ℹ️';
+            alertDiv.style.border = '2px solid #2196F3';
+    }
+
+    alertDiv.style.display = 'block';
+
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.background = 'rgba(0,0,0,0.5)';
+    overlay.style.zIndex = '1000';
+    overlay.id = 'alertOverlay';
+    document.body.appendChild(overlay);
+
+    document.getElementById('alertOkBtn').onclick = function() {
+        alertDiv.style.display = 'none';
+        const overlayElement = document.getElementById('alertOverlay');
+        if (overlayElement) overlayElement.remove();
+    };
+}
+
+function showSultanListAlert() {
+    let historyHtml = '';
+    
+    if (publicPoolData.history && publicPoolData.history.length > 0) {
+        // Urutkan riwayat berdasarkan waktu (timestamp) terbaru di atas
+        const reversedHistory = [...publicPoolData.history].sort((a, b) => b.timestamp - a.timestamp);
+        
+        reversedHistory.forEach(item => {
+            const time = item.timestamp ? new Date(item.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+            historyHtml += `
+                <div class="sultan-entry">
+                    <strong style="color: #043a70;">${item.username}</strong> (${time}): 
+                    <span style="float: right; font-weight: bold; color: #4CAF50;">+${formatCurrency(item.amount)}</span>
+                </div>`;
+        });
+    } else {
+        historyHtml = '<p style="text-align: center;">Belum ada kontribusi.</p>';
+    }
+
+    showCustomAlert(
+        `Daftar Kontributor Saldo Publik`,
+        'sultans',
+        historyHtml
+    );
+}
+
+let totalBirdsToClaim = 0; 
+
+function calculateTotalBirdsToClaim() {
+    const inputs = document.querySelectorAll('.input-circle');
+    totalBirdsToClaim = Array.from(inputs).filter(i => i.checked).length;
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const inputs = document.querySelectorAll('.input-circle'); 
+    const labels = document.querySelectorAll('.pajaro');
+    const selesaiBtn = document.getElementById("selesaiBtn");
+    const resetBirdsBtn = document.getElementById("resetBirdsBtn");
+    const publicPoolBox = document.getElementById("public-pool-box-static");
+
+    if (userRef) {
+        userRef.on('value', (snapshot) => {
+            const userData = snapshot.val();
+            if (userData !== null) {
+                localUser.Saldo = userData.Saldo ? Number(userData.Saldo) : 0; 
+                localStorage.setItem("Saldo", localUser.Saldo);
+                updateSaldoDisplay();
+            }
+        });
+    }
+
+
+    publicPoolRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        publicPoolData.total = data && data.total ? Number(data.total) : 0;
+        // Ambil riwayat dan konversi ke array
+        publicPoolData.history = data && data.history ? Object.values(data.history) : []; 
+        updatePublicPoolDisplay();
+    });
+
+
+    birdsRef.on('value', (snapshot) => {
+        const birdStatuses = snapshot.val();
+        
+        inputs.forEach(input => input.checked = false);
+
+        for (let i = 1; i <= totalBirds; i++) {
+            const birdID = `bird${i}`;
+            const inputElement = document.getElementById(`circle${i}`);
+            
+            const isClaimed = birdStatuses && birdStatuses[birdID] && birdStatuses[birdID].isClaimed;
+
+            if (inputElement) {
+                // Tunda pembaruan checked agar animasi bekerja
+                setTimeout(() => {
+                    inputElement.checked = isClaimed || false; 
+                }, 50); 
+            }
+        }
+        calculateTotalBirdsToClaim();
+    });
+
+
+    labels.forEach(label => {
+        label.addEventListener('click', (event) => {
+            if (!localUser.ID) {
+                showCustomAlert("Silakan login untuk mengklaim Saldo.", "warning");
+                return;
+            }
+
+            const birdID = label.dataset.birdId;
+            const inputElement = document.getElementById(label.getAttribute('for'));
+
+            if (inputElement.checked) {
+                return; 
+            }
+
+            birdsRef.child(birdID).transaction((currentData) => {
+                if (currentData === null || currentData.isClaimed === false) {
+                    return {
+                        isClaimed: true,
+                        claimedBy: localUser.Username,
+                        claimedAt: firebase.database.ServerValue.TIMESTAMP 
+                    };
+                } else {
+                    return; 
+                }
+            })
+            .then(({committed, snapshot}) => {
+                if (committed) {
+                    showCustomAlert(`✅ Berhasil mengunci ${birdID}! Klik Klaim Hadiah untuk mengambil saldo.`, "success");
+                } else {
+                    const claimant = snapshot.val().claimedBy || "Pemain Lain";
+                    showCustomAlert(`⚠️ ${birdID} gagal diklaim. Sudah diambil oleh ${claimant}.`, "warning");
+                }
+            })
+            .catch(error => {
+                console.error("Error saat klaim burung:", error);
+                showCustomAlert("❌ Gagal saat mencoba mengklaim burung.", "error");
+            });
+        });
+    });
+
+
+    // Event listener untuk Saldo Publik (untuk menampilkan daftar sultan)
+    publicPoolBox.addEventListener("click", showSultanListAlert);
+    
+    
+    selesaiBtn.addEventListener("click", async () => {
+        if (!localUser.ID) {
+            showCustomAlert("Silakan login untuk mengklaim Saldo.", "warning");
+            return;
+        }
+
+        const claimedBirds = Array.from(inputs).filter(i => i.checked);
+        const saldoYangDiklaim = claimedBirds.length;
+        
+        if (saldoYangDiklaim <= 0) {
+            showCustomAlert("Tidak ada burung yang diklaim.", "info");
+            return;
+        }
+        
+        // Asumsi nilai hadiah per burung adalah 1 IDR (sesuai logika $saldoYangDiklaim)
+        if (saldoYangDiklaim > publicPoolData.total) { 
+            showCustomAlert(`⚠️ Saldo Publik (${formatCurrency(publicPoolData.total)}) tidak cukup untuk ${saldoYangDiklaim} hadiah.`, "warning");
+            return;
+        }
+
+        const lastHistory = publicPoolData.history.length > 0 ? publicPoolData.history.sort((a, b) => b.timestamp - a.timestamp)[0] : null;
+        const penambahSaldoNama = lastHistory ? lastHistory.username : "Kotak Saldo Publik";
+        
+        try {
+            // 1. Kurangi Saldo Publik
+            await publicPoolRef.child('total').transaction((currentTotal) => {
+                const total = currentTotal === null ? 0 : Number(currentTotal);
+                if (total < saldoYangDiklaim) {
+                    // Ini akan ditangkap oleh catch, tapi cek di luar transaksi lebih baik
+                    return; 
+                }
+                return total - saldoYangDiklaim;
+            });
+            
+            // 2. Tambah Saldo User
+            await userRef.child('Saldo').transaction((currentSaldo) => {
+                const saldo = currentSaldo === null ? 0 : Number(currentSaldo);
+                return saldo + saldoYangDiklaim;
+            });
+            
+            // 3. Reset Status Burung yang Diklaim
+            const updates = {};
+            claimedBirds.forEach(input => {
+                updates[`${input.id.replace('circle', 'bird')}`] = null; // Hapus data burung
+            });
+            await birdsRef.update(updates);
+
+
+            showCustomAlert(
+                `Anda berhasil mendapat saldo **${formatCurrency(saldoYangDiklaim)}** Rupiah<br>` +
+                `Saldo ini berasal dari kiriman **${penambahSaldoNama}**!`,
+                "jackpot"
+            );
+            
+        } catch (error) {
+            console.error("Gagal Transaksi Klaim Hadiah:", error);
+            showCustomAlert("❌ Gagal mengklaim Saldo: " + (error.message || "Terjadi kesalahan."), "error");
+        }
+    });
+    
+    
+    resetBirdsBtn.addEventListener("click", async () => {
+        if (!localUser.ID) {
+            showCustomAlert("Harap login.", "warning");
+            return;
+        }
+        
+        if (confirm("Apakah Anda yakin ingin mereset SEMUA burung? Tindakan ini tidak dapat dibatalkan.")) {
+             try {
+                  await birdsRef.remove();
+                  showCustomAlert("✅ Semua burung berhasil di-reset!", "success");
+             } catch(error) {
+                  console.error("Gagal mereset burung:", error);
+                  showCustomAlert("❌ Gagal mereset burung.", "error");
+             }
+        }
+    });
+
+
+    updateSaldoDisplay();
+    calculateTotalBirdsToClaim();
+});
+</script>
+
+
+</body>
+</html>
