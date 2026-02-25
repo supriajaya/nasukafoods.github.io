@@ -3,64 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nasuka Foods - Testimoni Berhadiah</title>
+    <title>Nasuka Foods - Diskusi Publik</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .gradient-bg { background: linear-gradient(135deg, #ff9800 0%, #f44336 100%); }
-        .comment-card { border-radius: 15px; border-left: 5px solid #ff9800; transition: transform 0.2s; }
-        .comment-card:hover { transform: scale(1.02); }
+        .comment-card { border-radius: 20px; border-left: 6px solid #ff9800; transition: all 0.3s ease; }
+        .reply-card { border-left: 2px solid #e2e8f0; background-color: #f8fafc; }
+        .tag-name { color: #3b82f6; font-weight: bold; margin-right: 4px; }
+        .btn-action { font-size: 11px; color: #64748b; font-weight: bold; cursor: pointer; }
+        .btn-view-replies { font-size: 12px; color: #ff9800; font-weight: bold; cursor: pointer; display: flex; items-center: center; gap: 5px; margin-top: 10px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body class="bg-gray-50 pb-20">
 
-    <div class="gradient-bg text-white p-6 rounded-b-[40px] shadow-lg mb-6">
-        <div class="flex items-center mb-4">
-            <a href="index.html" class="text-white text-xl mr-4"><i class="fas fa-arrow-left"></i></a>
-            <h1 class="text-xl font-bold uppercase tracking-wider">Nasuka Testimoni</h1>
-        </div>
-        <p class="text-sm opacity-90">Bagikan pengalamanmu makan Cilok Nasuka dan dapatkan hadiah menarik!</p>
+    <div class="gradient-bg text-white p-6 rounded-b-[40px] shadow-lg mb-6 text-center">
+        <h1 class="text-xl font-bold uppercase tracking-widest">Nasuka Diskusi</h1>
+        <p class="text-xs opacity-90">Profil bersifat private ( tidak bisa mengetahui info satu sama lain)</p>
     </div>
 
     <div class="max-w-md mx-auto px-4">
-        
-        <div id="userInfo" class="bg-white p-4 rounded-2xl shadow-sm mb-6 flex items-center border border-orange-100">
-            <img id="userAvatar" src="https://nasukafoods.site/gambarkosong.jpg" class="w-12 h-12 rounded-full border-2 border-orange-400 object-cover">
-            <div class="ml-4">
-                <p class="text-xs text-gray-500">Menulis sebagai:</p>
-                <p id="userName" class="font-bold text-gray-800">Tamu / Belum Login</p>
-            </div>
-        </div>
-
-        <div class="bg-white p-5 rounded-2xl shadow-md border border-gray-100 mb-8">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Apa pendapatmu tentang Nasuka Foods?</label>
-            <textarea id="testiText" placeholder="Contoh: Cilok gajihnya lumer banget di mulut, mantap!..." 
-                class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:outline-none h-32 text-sm"></textarea>
-            
-            <button onclick="kirimTestimoni()" id="btnKirim"
-                class="w-full mt-4 bg-orange-500 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-orange-600 active:scale-95 transition-all">
-                KIRIM TESTIMONI <i class="fas fa-paper-plane ml-2"></i>
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-8">
+            <textarea id="testiText" placeholder="Bagikan ceritamu hari ini..." 
+                class="w-full p-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-orange-400 focus:outline-none h-20 text-sm"></textarea>
+            <button onclick="kirimTestimoni()" class="w-full mt-2 bg-orange-500 text-white font-bold py-3 rounded-xl shadow-md active:scale-95 transition-all text-sm uppercase">
+                Kirim Postingan
             </button>
-            <p class="text-[10px] text-gray-400 mt-3 text-center italic">*Testimoni terpilih akan mendapatkan saldo/produk gratis.</p>
         </div>
 
-        <div class="space-y-4">
-            <h3 class="font-bold text-gray-700 flex items-center">
-                <i class="fas fa-comments text-orange-500 mr-2"></i> Suara Pelanggan
-            </h3>
-            <div id="containerList" class="space-y-4">
-                <div class="text-center py-10 text-gray-400">
-                    <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
-                    <p>Memuat testimoni...</p>
-                </div>
+        <div id="containerList" class="space-y-6">
+            <div class="text-center py-10 text-gray-400">
+                <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                <p>Menyiapkan obrolan...</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Gunakan Config yang sama dengan index.html Anda
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
             authDomain: "nasukafoods1.firebaseapp.app",
@@ -70,91 +52,150 @@
             appId: "1:84287800896:web:83189d6766997b00f701a5"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Ambil data user dari LocalStorage (Data dari sistem login index.html)
         const userSession = {
             ID: localStorage.getItem("ID"),
-            Nama: localStorage.getItem("Nama") || "Pelanggan Nasuka",
+            Nama: localStorage.getItem("Nama") || "Tamu",
             Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg"
         };
 
-        // Tampilkan info profil di atas form
-        if(userSession.ID) {
-            document.getElementById('userName').innerText = userSession.Nama;
-            document.getElementById('userAvatar').src = userSession.Foto;
-        }
-
-        // Fungsi Kirim Testimoni
         function kirimTestimoni() {
             const pesan = document.getElementById('testiText').value.trim();
-            
-            if (!userSession.ID) {
-                alert("Silahkan login di menu AKUN terlebih dahulu!");
-                return;
-            }
+            if (!userSession.ID) return alert("Yuk, login dulu!");
+            if (!pesan) return;
 
-            if (pesan.length < 10) {
-                alert("Testimoni terlalu pendek, ceritakan sedikit lagi ya!");
-                return;
-            }
-
-            const btn = document.getElementById('btnKirim');
-            btn.disabled = true;
-            btn.innerText = "MENGIRIM...";
-
-            // Simpan ke node 'testimoni_publik'
             db.ref('testimoni_publik').push({
                 userID: userSession.ID,
                 nama: userSession.Nama,
                 foto: userSession.Foto,
                 pesan: pesan,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => { document.getElementById('testiText').value = ""; });
+        }
+
+        function kirimBalasan(postID, targetNama) {
+            const input = document.getElementById(`input-${postID}`);
+            let pesan = input.value.trim();
+            if (!userSession.ID) return alert("Login dulu ya!");
+            if (!pesan) return;
+
+            if (targetNama) pesan = `<span class="tag-name">@${targetNama}</span> ` + pesan;
+
+            db.ref(`testimoni_publik/${postID}/balasan`).push({
+                userID: userSession.ID,
+                nama: userSession.Nama,
+                foto: userSession.Foto,
+                pesan: pesan,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
             }).then(() => {
-                alert("Terima kasih! Testimoni kamu sangat berarti bagi Natasya, Supria, & Karlina.");
-                document.getElementById('testiText').value = "";
-                btn.disabled = false;
-                btn.innerHTML = 'KIRIM TESTIMONI <i class="fas fa-paper-plane ml-2"></i>';
-            }).catch(err => {
-                alert("Gagal mengirim. Coba lagi.");
-                btn.disabled = false;
+                input.value = "";
+                document.getElementById(`field-${postID}`).classList.add('hidden');
+                // Otomatis buka balasan setelah mengirim agar user melihat hasilnya
+                document.getElementById(`replies-${postID}`).classList.remove('hidden');
             });
         }
 
-        // Load Testimoni secara Realtime
-        db.ref('testimoni_publik').orderByChild('timestamp').limitToLast(20).on('value', (snapshot) => {
+        // Fungsi toggle untuk Sembunyi/Lihat Balasan
+        function toggleReplies(postID) {
+            const replyContainer = document.getElementById(`replies-${postID}`);
+            const btnText = document.getElementById(`btn-text-${postID}`);
+            const btnIcon = document.getElementById(`btn-icon-${postID}`);
+            
+            if (replyContainer.classList.contains('hidden')) {
+                replyContainer.classList.remove('hidden');
+                btnText.innerText = "Sembunyikan Balasan";
+                btnIcon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            } else {
+                replyContainer.classList.add('hidden');
+                btnText.innerText = "Lihat Balasan";
+                btnIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+            }
+        }
+
+        function openReply(postID, namaTujuan) {
+            const field = document.getElementById(`field-${postID}`);
+            const input = document.getElementById(`input-${postID}`);
+            field.classList.remove('hidden');
+            input.focus();
+            if(namaTujuan) input.placeholder = `Balas ${namaTujuan}...`;
+        }
+
+        db.ref('testimoni_publik').on('value', (snapshot) => {
             const listDiv = document.getElementById('containerList');
             listDiv.innerHTML = "";
             
-            if (!snapshot.exists()) {
-                listDiv.innerHTML = "<p class='text-center text-gray-400'>Belum ada testimoni. Jadilah yang pertama!</p>";
-                return;
-            }
-
-            let entries = [];
-            snapshot.forEach(child => {
-                entries.push(child.val());
+            let dataArray = [];
+            snapshot.forEach(c => { 
+                let val = c.val(); 
+                val.key = c.key; 
+                dataArray.push(val); 
             });
-            entries.reverse(); // Terbaru di atas
+            dataArray.reverse();
 
-            entries.forEach(data => {
-                const waktu = new Date(data.timestamp).toLocaleDateString('id-ID');
-                const card = `
+            dataArray.forEach(data => {
+                let balasanHtml = "";
+                let jumlahBalasan = 0;
+                
+                if (data.balasan) {
+                    const balasanList = Object.values(data.balasan);
+                    jumlahBalasan = balasanList.length;
+                    balasanList.forEach(r => {
+                        balasanHtml += `
+                            <div class="reply-card p-3 rounded-xl mt-2 border border-gray-50">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <img src="${r.foto}" class="w-5 h-5 rounded-full object-cover">
+                                    <span class="text-[11px] font-bold text-gray-700">${r.nama}</span>
+                                </div>
+                                <div class="text-xs text-gray-600 mb-1 leading-relaxed">${r.pesan}</div>
+                                <span onclick="openReply('${data.key}', '${r.nama}')" class="btn-action hover:text-orange-500">Balas</span>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Tombol Lihat Balasan hanya muncul jika ada balasan
+                const showReplyBtn = jumlahBalasan > 0 ? `
+                    <div class="btn-view-replies" onclick="toggleReplies('${data.key}')">
+                        <i id="btn-icon-${data.key}" class="fas fa-chevron-down text-[10px]"></i>
+                        <span id="btn-text-${data.key}">Lihat ${jumlahBalasan} Balasan</span>
+                    </div>
+                ` : "";
+
+                listDiv.innerHTML += `
                     <div class="bg-white p-4 comment-card shadow-sm border border-gray-100">
-                        <div class="flex items-center mb-2">
-                            <img src="${data.foto}" class="w-8 h-8 rounded-full object-cover border border-orange-200">
-                            <div class="ml-3">
+                        <div class="flex items-center gap-3 mb-3">
+                            <img src="${data.foto}" class="w-10 h-10 rounded-full border-2 border-orange-100 object-cover">
+                            <div>
                                 <p class="text-sm font-bold text-gray-800">${data.nama}</p>
-                                <p class="text-[10px] text-gray-400">${waktu}</p>
+                                <p class="text-[9px] text-gray-400">Pelanggan Setia</p>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-600 italic">"${data.pesan}"</p>
+                        <p class="text-sm text-gray-700 mb-4 leading-relaxed font-medium">"${data.pesan}"</p>
+                        
+                        <div class="flex items-center border-t border-gray-50 pt-3">
+                            <span onclick="openReply('${data.key}', '${data.nama}')" class="btn-action text-orange-500 bg-orange-50 px-3 py-1 rounded-full">
+                                <i class="fas fa-comment-dots mr-1"></i> Balas
+                            </span>
+                        </div>
+
+                        ${showReplyBtn}
+
+                        <div id="replies-${data.key}" class="hidden space-y-1 mt-2">
+                            ${balasanHtml}
+                        </div>
+
+                        <div id="field-${data.key}" class="mt-4 hidden">
+                            <div class="flex gap-2">
+                                <input id="input-${data.key}" type="text" 
+                                    class="flex-1 text-xs p-3 bg-gray-50 rounded-xl outline-none border border-gray-200 focus:border-orange-400">
+                                <button onclick="kirimBalasan('${data.key}', document.getElementById('input-${data.key}').placeholder.replace('Balas ','').replace('...',''))" 
+                                    class="bg-orange-500 text-white px-4 rounded-xl text-[10px] font-bold shadow-sm">KIRIM</button>
+                            </div>
+                        </div>
                     </div>
                 `;
-                listDiv.insertAdjacentHTML('beforeend', card);
             });
         });
     </script>
