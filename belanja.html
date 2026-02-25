@@ -9,7 +9,6 @@
         h1 { color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
         p { color: #555; }
         
-        /* MODIFIKASI CSS: Sembunyikan konten utama secara default */
         #main-content { 
             display: none; 
             transition: opacity 0.3s ease;
@@ -295,7 +294,6 @@
         let userLabel = userName || `User ID: ${userId || 'N/A'}`; 
 
         if (!userId) {
-            // Jika user belum login, biarkan kode ini berjalan, nanti akan diredirect ke showLogin()
             console.warn("User ID not found in Local Storage. Starting in login mode.");
         }
 
@@ -315,10 +313,6 @@
             
             loginMessage.textContent = '';
             signupMessage.textContent = '';
-
-            // Tidak menghentikan interval lokasi saat berpindah ke Belanja/Login, 
-            // karena kita ingin lokasi tetap update di background.
-            // Hanya hentikan saat proses login/signup berhasil, lalu init lagi.
         }
         
         function showLogin() {
@@ -363,7 +357,6 @@
                 const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
                 const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
                 
-                // Menghilangkan desimal dari Saldo
                 const formattedSaldo = saldo.toLocaleString('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR',
@@ -379,7 +372,6 @@
                     <p>Gagal memuat data pengguna/lokasi: ${error.message}</p>
                     <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
                 `;
-                console.error("Error fetching user data/location:", error);
             });
         }
         
@@ -416,7 +408,6 @@
              `;
 
              belanjaContainerElement.innerHTML = `
-                
                  <div style="background-color: #e9f7ef; padding: 10px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
                      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                          Saldo Anda:<span style="font-size: 1.2em; color: #28a745;">${formattedSaldo}</span>
@@ -425,8 +416,6 @@
                          Total belanja:<span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">Rp ${formattedTotal}</span>
                      </div>
                  </div>
-
-               
                  
                  <div class="product-grid">
                      ${productHtml}
@@ -451,51 +440,19 @@
         function updateKeranjang(productId, change) {
             let currentQty = keranjangBelanja[productId] || 0;
             let newQty = currentQty + change;
-
             if (newQty < 0) newQty = 0; 
-
             if (newQty > 0) {
                 keranjangBelanja[productId] = newQty;
             } else {
                 delete keranjangBelanja[productId];
             }
-
-            const qtyElement = document.getElementById(`qty-${productId}`);
-            if(qtyElement) {
-                qtyElement.textContent = newQty;
-            }
-            
-            const userBalanceRef = database.ref(`users/${userId}/Saldo`);
-            const userLocationRef = database.ref(`customer_locations/${userId}`);
-            
-            Promise.all([
-                userBalanceRef.once('value'),
-                userLocationRef.once('value')
-            ])
-            .then(([saldoSnapshot, locationSnapshot]) => {
-                const saldo = saldoSnapshot.val() || 0; 
-                const locationData = locationSnapshot.val();
-                
-                const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
-                const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
-                
-                // Menghilangkan desimal dari Saldo
-                const formattedSaldo = saldo.toLocaleString('id-ID', { 
-                    style: 'currency', 
-                    currency: 'IDR',
-                    minimumFractionDigits: 0, 
-                    maximumFractionDigits: 0
-                });
-                
-
-                renderBelanjaContent(formattedSaldo, lat, lng);
-            });
+            showBelanja(); 
         }
         
         function showPembayaran() {
             const totalBelanja = calculateTotal();
             if (totalBelanja < MINIMUM_PEMBELIAN) {
-                alert(`Pembelian minimal adalah Rp ${MINIMUM_PEMBELIAN.toLocaleString('id-ID')}. Total Anda saat ini: Rp ${totalBelanja.toLocaleString('id-ID')}.`);
+                alert(`Pembelian minimal adalah Rp ${MINIMUM_PEMBELIAN.toLocaleString('id-ID')}.`);
                 return;
             }
 
@@ -511,7 +468,7 @@
                     const subtotal = product.price * quantity;
                     itemDetailsHtml += `
                         <li style="border-bottom: 1px dotted #ccc; padding: 5px 0; display: flex; justify-content: space-between;">
-                            <span>${quantity}x ${product.name} (@Rp ${product.price.toLocaleString('id-ID')})</span>
+                            <span>${quantity}x ${product.name}</span>
                             <span style="font-weight: bold;">Rp ${subtotal.toLocaleString('id-ID')}</span>
                         </li>
                     `;
@@ -522,69 +479,43 @@
             const userBalanceRef = database.ref(`users/${userId}/Saldo`);
             userBalanceRef.once('value').then(snapshot => {
                 const saldo = snapshot.val() || 0;
-                
-                // Menghilangkan desimal dari Saldo
-                const formattedSaldo = saldo.toLocaleString('id-ID', { 
-                    style: 'currency', 
-                    currency: 'IDR',
-                    minimumFractionDigits: 0, 
-                    maximumFractionDigits: 0
-                });
-                
-                const formattedTotal = totalBelanja.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                
-                const sisaSaldo = saldo - totalBelanja;
-                const formattedSisaSaldo = sisaSaldo.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 });
-
-                const isSaldoCukup = sisaSaldo >= 0;
-
-                const bayarSekarangButton = `
-                    <button 
-                        class="login-submit" 
-                        style="width: 100%; margin-top: 20px; background-color: ${isSaldoCukup ? '#dc3545' : '#6c757d'};"
-                        ${isSaldoCukup ? `onclick="prosesPembayaran(${totalBelanja})"` : 'disabled'}
-                    >
-                        ${isSaldoCukup ? 'Bayar Sekarang' : 'Saldo Tidak Cukup'}
-                    </button>
-                `;
+                const formattedSaldo = saldo.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+                const formattedTotal = totalBelanja.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+                const isSaldoCukup = saldo >= totalBelanja;
 
                 belanjaContainerElement.innerHTML = `
                     <h2>💳 Proses Pembayaran</h2>
-                    <p style="border-bottom: 2px solid #ccc; padding-bottom: 10px;">Mohon cek kembali pesanan Anda:</p>
-
                     <div style="background-color: #f7f7f7; padding: 15px; border-radius: 8px;">
                         ${itemDetailsHtml}
                         <div style="border-top: 2px solid #dc3545; padding-top: 10px; margin-top: 10px; display: flex; justify-content: space-between;">
-                            <span style="font-size: 1.2em;">Total Pembayaran:</span>
+                            <span>Total Pembayaran:</span>
                             <span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">${formattedTotal}</span>
                         </div>
                     </div>
                     
-                  
-                    <div style="padding: 10px; border-radius: 4px; background-color: #e9f7ef; margin-bottom: 10px;">
-                        Saldo Anda Saat Ini:<span style="font-weight: bold; color: #28a745;"> ${formattedSaldo}</span>
+                    <div style="padding: 10px; border-radius: 4px; background-color: #e9f7ef; margin: 15px 0;">
+                        Saldo Anda: <span style="font-weight: bold; color: #28a745;">${formattedSaldo}</span>
                     </div>
 
-                    ${bayarSekarangButton}
-                    <div style="text-align: center; margin-top: 10px; font-weight: bold; color: ${isSaldoCukup ? '#28a745' : '#dc3545'};">
-                        Sisa Saldo Setelah Transaksi: ${formattedSisaSaldo}
-                    </div>
+                    <button class="login-submit" style="background-color: ${isSaldoCukup ? '#dc3545' : '#6c757d'};"
+                        ${isSaldoCukup ? `onclick="prosesPembayaran(${totalBelanja})"` : 'disabled'}>
+                        ${isSaldoCukup ? 'Bayar Sekarang' : 'Saldo Tidak Cukup'}
+                    </button>
 
-                    <span class="switch-link" style="margin-top: 20px;" onclick="showBelanja()">← Kembali ke Daftar Produk</span>
-                    <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
+                    <span class="switch-link" onclick="showBelanja()">← Kembali ke Daftar Produk</span>
                 `;
             });
         }
         
+        // MODIFIKASI: FUNGSI PEMBAYARAN DENGAN DISPLAY VOUCHER
         function prosesPembayaran(amount) {
             const userBalanceRef = database.ref(`users/${userId}/Saldo`);
+            const vouchersRef = database.ref('vouchers');
 
             userBalanceRef.transaction((currentBalance) => {
-                if (currentBalance === null) {
-                    return 0; 
-                }
+                if (currentBalance === null) return 0;
                 if (currentBalance >= amount) {
-                    return currentBalance - amount; 
+                    return currentBalance - amount;
                 } else {
                     return undefined; 
                 }
@@ -592,49 +523,70 @@
             .then((result) => {
                 if (result.committed) {
                     const newBalance = result.snapshot.val();
-                    
-                    // Menghilangkan desimal dari Saldo
                     const formattedNewBalance = newBalance.toLocaleString('id-ID', { 
-                        style: 'currency', 
-                        currency: 'IDR',
-                        minimumFractionDigits: 0, 
-                        maximumFractionDigits: 0
+                        style: 'currency', currency: 'IDR', 
+                        minimumFractionDigits: 0, maximumFractionDigits: 0
                     });
-                    
-                    belanjaContainerElement.innerHTML = `
-                        <h2>Pembayaran Berhasil!</h2>
-                        <p style="color: #28a745; font-size: 1.1em; font-weight: bold;">Terima kasih atas pembelian Anda sebesar Rp ${amount.toLocaleString('id-ID')}!</p>
-                        <p>Pesanan Anda telah dicatat dan akan segera diproses.</p>
-                        <p>Sisa Saldo Anda: ${formattedNewBalance}</p>
+
+                    // Logika Pengambilan Voucher
+                    vouchersRef.limitToFirst(1).once('value').then(snapshot => {
+                        let voucherHtml = "";
                         
-                        <div style="margin-top: 20px;">
-                            <button class="login-submit" style="background-color: #007bff;" onclick="showBelanja()">🛒 Belanja Lagi</button>
-                            <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta Utama</span>
-                        </div>
-                    `;
-                    keranjangBelanja = {};
+                        if (snapshot.exists()) {
+                            const vKey = Object.keys(snapshot.val())[0];
+                            const vCode = snapshot.val()[vKey].code;
+                            
+                            // Hapus voucher dari stok agar tidak terpakai orang lain
+                            vouchersRef.child(vKey).remove();
+
+                            voucherHtml = `
+                                <div style="margin: 20px 0; padding: 15px; border: 3px dashed #28a745; background-color: #f0fff4; border-radius: 10px;">
+                                    <p style="margin: 0; color: #555; font-size: 0.9em;">🎉 Bonus Voucher Untukmu:</p>
+                                    <h2 style="margin: 10px 0; color: #28a745; letter-spacing: 3px; font-size: 2em;">${vCode}</h2>
+                                    <small style="color: #888;">Simpan kode ini untuk klaim hadiah/diskon!</small>
+                                </div>
+                            `;
+                        } else {
+                            voucherHtml = `
+                                <div style="margin: 20px 0; padding: 10px; color: #856404; background-color: #fff3cd; border-radius: 8px; font-size: 0.8em;">
+                                    Maaf, stok voucher hadiah sedang habis.
+                                </div>
+                            `;
+                        }
+
+                        belanjaContainerElement.innerHTML = `
+                            <div style="text-align: center; padding: 10px;">
+                                <h2 style="color: #28a745;">✅ Pembayaran Berhasil!</h2>
+                                <p>Terima kasih <b>${localUser.Nama}</b>!</p>
+                                <p style="font-size: 0.9em;">Sisa Saldo: <b>${formattedNewBalance}</b></p>
+                                
+                                ${voucherHtml}
+                                
+                                <div style="margin-top: 20px;">
+                                    <button class="login-submit" style="background-color: #007bff; margin-bottom: 10px;" onclick="showBelanja()">🛒 Belanja Lagi</button>
+                                    <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    keranjangBelanja = {}; 
                 } else {
-                    alert("❌ Pembayaran dibatalkan. Saldo tidak cukup.");
+                    alert("❌ Pembayaran gagal. Saldo tidak cukup.");
                     showPembayaran(); 
                 }
             })
             .catch((error) => {
-                console.error("Firebase Transaction Failed:", error);
-                alert(`❌ Gagal memproses pembayaran: ${error.message}`);
-                showPembayaran(); 
+                alert(`❌ Terjadi kesalahan: ${error.message}`);
             });
         }
         
-        // MODIFIKASI: navigateToMain sekarang mengembalikan tampilan peta/status
         function navigateToMain(newUser = false) {
             hideAllViews();
             mainContentElement.style.display = 'block';
-            
-            // Tampilkan kembali elemen peta dan status
             document.getElementById('map').style.display = 'block';
             document.getElementById('status').style.display = 'block';
             userInfoElement.style.display = 'block';
-            
             initMap(newUser); 
         }
         
@@ -647,58 +599,30 @@
 
             if (Username.includes(' ')) {
                 signupMessage.textContent = "❌ Username tidak boleh mengandung spasi.";
-                signupMessage.style.color = 'red';
                 return;
             }
 
-            signupMessage.textContent = "Sedang memverifikasi ketersediaan Username...";
-            signupMessage.style.color = 'orange';
+            usersRef.orderByChild('Username').equalTo(Username).once('value').then(snapshot => {
+                if (snapshot.exists()) {
+                    signupMessage.textContent = `❌ Username '${Username}' sudah digunakan.`;
+                } else {
+                    const newUserData = { Nama, Username, NomorHP, Password, Saldo: 0, created_at: firebase.database.ServerValue.TIMESTAMP };
+                    const newUserRef = usersRef.push(newUserData);
+                    const newUserId = newUserRef.key;
+                    
+                    localStorage.setItem("ID", newUserId);
+                    localStorage.setItem("Nama", Nama);
+                    localStorage.setItem("NomorHP", NomorHP);
+                    localStorage.setItem("Username", Username);
 
-            usersRef.orderByChild('Username').equalTo(Username).once('value')
-                .then(snapshot => {
-                    if (snapshot.exists()) {
-                        signupMessage.textContent = `❌ Username '${Username}' sudah digunakan.`;
-                        signupMessage.style.color = 'red';
-                    } else {
-                        const newUserData = {
-                            Nama: Nama,
-                            Username: Username,
-                            NomorHP: NomorHP,
-                            Password: Password, 
-                            Saldo: 0, 
-                            created_at: firebase.database.ServerValue.TIMESTAMP
-                        };
-
-                        const newUserRef = usersRef.push(newUserData); 
-                        const newUserId = newUserRef.key;
-
-                        newUserData.ID = newUserId;
-                        
-                        localStorage.setItem("ID", newUserId);
-                        localStorage.setItem("Nama", Nama);
-                        localStorage.setItem("NomorHP", NomorHP);
-                        localStorage.setItem("Username", Username);
-
-                        localUser = newUserData;
-                        userId = newUserId;
-                        userName = Nama || Username; 
-                        userLabel = userName; 
-                        
-                        signupMessage.textContent = `✅ Akun berhasil dibuat! Login otomatis...`;
-                        signupMessage.style.color = 'green';
-
-                        setTimeout(() => {
-                            // Setelah berhasil, mulai proses background location dan tampilkan belanja
-                            initLocationBackground(); 
-                            showBelanja(); 
-                        }, 1500); 
-                    }
-                })
-                .catch(error => {
-                    signupMessage.textContent = `❌ Terjadi kesalahan Firebase: ${error.message}`;
-                    signupMessage.style.color = 'red';
-                    console.error("Firebase Signup Error:", error);
-                });
+                    userId = newUserId;
+                    localUser = { ID: newUserId, Nama, NomorHP, Username };
+                    userLabel = Nama;
+                    
+                    initLocationBackground(); 
+                    showBelanja(); 
+                }
+            });
         });
 
         loginForm.addEventListener('submit', function(e) {
@@ -706,244 +630,89 @@
             const inputUsername = document.getElementById('username').value.trim();
             const inputPassword = document.getElementById('password').value;
             
-            loginMessage.textContent = "Sedang memverifikasi...";
-            loginMessage.style.color = 'orange';
+            usersRef.orderByChild('Username').equalTo(inputUsername).once('value').then(snapshot => {
+                if (snapshot.exists()) {
+                    let userData = null;
+                    snapshot.forEach(child => { userData = child.val(); userData.ID = child.key; });
 
-            usersRef.orderByChild('Username').equalTo(inputUsername).once('value')
-                .then(snapshot => {
-                    if (snapshot.exists()) {
-                        let userData = null;
-                        
-                        snapshot.forEach(childSnapshot => {
-                            userData = childSnapshot.val();
-                            userData.ID = childSnapshot.key; 
-                        });
+                    if (userData.Password === inputPassword) {
+                        localStorage.setItem("ID", userData.ID);
+                        localStorage.setItem("Nama", userData.Nama || userData.Username);
+                        localStorage.setItem("Username", userData.Username);
 
-                        if (userData && userData.Password === inputPassword) {
-                            
-                            localStorage.setItem("ID", userData.ID);
-                            localStorage.setItem("Nama", userData.Nama || userData.Username);
-                            localStorage.setItem("NomorHP", userData.NomorHP || 'N/A');
-                            localStorage.setItem("Username", userData.Username);
+                        userId = userData.ID;
+                        localUser = userData;
+                        userLabel = userData.Nama || userData.Username;
 
-                            localUser = userData;
-                            userId = localUser.ID;
-                            userName = localUser.Nama || localUser.Username; 
-                            userLabel = userName || `User ID: ${userId}`; 
-
-                            loginMessage.textContent = `✅ Login berhasil! Selamat datang, ${userName}. Memuat ulang...`;
-                            loginMessage.style.color = 'green';
-                            
-                            setTimeout(() => {
-                                // Setelah berhasil, mulai proses background location dan tampilkan belanja
-                                initLocationBackground();
-                                showBelanja();
-                            }, 1500); 
-
-                        } else {
-                            loginMessage.textContent = "❌ Username atau Password salah.";
-                            loginMessage.style.color = 'red';
-                        }
+                        initLocationBackground();
+                        showBelanja();
                     } else {
-                        loginMessage.textContent = "❌ Username tidak ditemukan.";
-                        loginMessage.style.color = 'red';
+                        loginMessage.textContent = "❌ Password salah.";
                     }
-                })
-                .catch(error => {
-                    loginMessage.textContent = `❌ Terjadi kesalahan Firebase: ${error.message}`;
-                    loginMessage.style.color = 'red';
-                    console.error("Firebase Login Error:", error);
-                });
+                } else {
+                    loginMessage.textContent = "❌ Username tidak ditemukan.";
+                }
+            });
         });
         
         function initMap() {
             loginButtonElement.style.display = 'none'; 
-            
-            mainTitleElement.textContent = `Server To : ${userLabel} `;
-
+            mainTitleElement.textContent = `Server To : ${userLabel}`;
             userInfoElement.innerHTML = `
                 Nama: ${localUser.Nama || 'N/A'}<br>
                 ID : ${localUser.ID || 'N/A'}<br>
-                Nomor HP: ${localUser.NomorHP || 'N/A'}
-                <button class="shop-button" onclick="showBelanja()">🛒 Belanja Sekarang</button> `;
+                <button class="shop-button" onclick="showBelanja()">🛒 Belanja Sekarang</button>`;
 
-            if (map) {
-                map.remove();
-            }
-
+            if (map) map.remove();
             map = L.map('map').setView(defaultLatLng, 10);
-            
-             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: 'Nasuka Wireless Geo Location | &copy; <a href="http://www.openstreetmap.org/copyright">Private</a>'
-            }).addTo(map);
-            
-            currentMarker = L.marker(defaultLatLng, {
-                icon: L.divIcon({
-                    className: 'custom-div-icon',
-                    html: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#00aaff"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 30]
-                })
-            }).addTo(map)
-                .bindPopup(`${userLabel} - Saya Disini`) 
-                .openPopup();
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            currentMarker = L.marker(defaultLatLng).addTo(map).bindPopup(`${userLabel} - Saya Disini`).openPopup();
 
             if (navigator.geolocation) {
-                statusElement.innerHTML = `✅ Geolocation aktif. Mulai pembagian lokasi untuk **${userLabel}** (ID: **${userId}**) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`;
-                statusElement.classList.remove('warning', 'error');
-                statusElement.classList.add('online');
-                
                 getLocationAndSend(); 
-                
-                if (locationInterval) {
-                    clearInterval(locationInterval);
-                }
+                if (locationInterval) clearInterval(locationInterval);
                 locationInterval = setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
-                
-            } else {
-                statusElement.innerHTML = "❌ Geolocation tidak didukung oleh browser Anda. Lokasi tidak dapat dibagikan secara *live*.";
-                statusElement.classList.remove('online', 'warning');
-                statusElement.classList.add('error');
             }
         }
         
-        // MODIFIKASI: Fungsi baru untuk memulai lokasi di background tanpa merender UI
         function initLocationBackground() {
             if (!userId) return; 
-
-            // Hentikan interval lama jika ada
-            if (locationInterval) {
-                clearInterval(locationInterval);
-            }
-            
-            loginButtonElement.style.display = 'none'; 
-            mainTitleElement.textContent = `Server To : ${userLabel} `;
-
-            // Inisialisasi map dan marker secara minimal agar fungsi sendLocation tidak error
-            // saat mencoba memanggil currentMarker.setLatLng().
+            if (locationInterval) clearInterval(locationInterval);
             if (!map) {
-                // Buat peta dummy di elemen tersembunyi jika belum ada, atau set map ke elemen #map
-                // Kita inisialisasi seperti biasa, karena #main-content sudah di-display: none
                 map = L.map('map').setView(defaultLatLng, 10);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: 'Nasuka Wireless Geo Location | &copy; <a href="http://www.openstreetmap.org/copyright">Private</a>'
-                }).addTo(map);
                 currentMarker = L.marker(defaultLatLng).addTo(map);
             }
-
-
             if (navigator.geolocation) {
-                console.log(`✅ [Background] Geolocation aktif. Mulai pembagian lokasi untuk ${userLabel} (ID: ${userId}) setiap ${UPDATE_INTERVAL_MS / 1000} detik.`);
-                
-                // Panggil sekali, lalu set interval
                 getLocationAndSend(); 
                 locationInterval = setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
-                
-            } else {
-                console.error("❌ Geolocation tidak didukung. Lokasi tidak dapat dibagikan secara live.");
             }
         }
 
         function getLocationAndSend() {
-            navigator.geolocation.getCurrentPosition(sendLocation, locationError, {
-                enableHighAccuracy: true,
-                timeout: 5000 
-            });
-            const timeNow = new Date().toLocaleTimeString('id-ID');
-            
-            // HANYA update status element jika main content terlihat
-            if (mainContentElement.style.display !== 'none') {
-                statusElement.innerHTML = `✅ Mencoba mendapatkan lokasi saat ini... (${timeNow})`; 
-                statusElement.classList.remove('error');
-                statusElement.classList.add('online');
-            } else {
-                 console.log(`[Background] Mencoba mendapatkan lokasi saat ini... (${timeNow})`);
-            }
+            navigator.geolocation.getCurrentPosition(sendLocation, locationError, { enableHighAccuracy: true });
         }
 
-        // MODIFIKASI: sendLocation hanya update UI jika main content terlihat
         function sendLocation(position) {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
-            const latLng = [lat, lng];
-            
-            const timestampLocal = new Date().toLocaleTimeString('id-ID'); 
-            const nextUpdateInSeconds = UPDATE_INTERVAL_MS / 1000;
-
-            const currentlocationRef = database.ref(`customer_locations/${userId}`);
-            
-            currentlocationRef.set({ 
-                lat: lat, 
-                lng: lng,
-                user_id: localUser.ID,          
-                customer_name: localUser.Nama,  
-                customer_phone: localUser.NomorHP, 
-                time: timestampLocal, 
-                accuracy: position.coords.accuracy,
+            database.ref(`customer_locations/${userId}`).set({ 
+                lat, lng, user_id: userId, customer_name: localUser.Nama, 
+                time: new Date().toLocaleTimeString('id-ID'),
                 timestamp: firebase.database.ServerValue.TIMESTAMP 
-            }).then(() => {
-                
-                // Update Marker/Map HANYA jika main content terlihat
-                if (mainContentElement.style.display !== 'none') {
-                    const message = `✅ Lokasi **${userLabel}** terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Update berikutnya dalam ${nextUpdateInSeconds} detik.`;
-                    statusElement.innerHTML = message;
-                    statusElement.classList.remove('error');
-                    statusElement.classList.add('online');
-                    
-                    // Peta/Marker hanya perlu diupdate jika sedang ditampilkan
-                    currentMarker.setLatLng(latLng).bindPopup(`**${userLabel}** - Saya Disini`);
-                    map.setView(latLng, 15);
-                } else {
-                    console.log(`✅ [Background] Lokasi terkirim (${timestampLocal}). Akurasi: ±${position.coords.accuracy.toFixed(1)}m. Next in ${nextUpdateInSeconds}s.`);
-                }
-            }).catch(error => {
-                // Log error
-                 if (mainContentElement.style.display !== 'none') {
-                    const message = `❌ Gagal mengirim ke Firebase: ${error.message}`;
-                    statusElement.innerHTML = message;
-                    statusElement.classList.remove('online');
-                    statusElement.classList.add('error');
-                } else {
-                    console.error(`❌ [Background] Gagal mengirim ke Firebase: ${error.message}`);
-                }
             });
-        }
-
-        function locationError(error) {
-            let errorMessage = "Terjadi Kesalahan Geolocation: ";
-            if (error.code === error.PERMISSION_DENIED) {
-                errorMessage += "Izin lokasi ditolak oleh Anda. Mohon izinkan akses lokasi di pengaturan browser Anda.";
-            } else if (error.code === error.POSITION_UNAVAILABLE) {
-                errorMessage += "Posisi lokasi tidak tersedia.";
-            } else if (error.code === error.TIMEOUT) {
-                errorMessage += "Waktu tunggu (timeout) untuk mendapatkan lokasi habis.";
-            } else {
-                errorMessage += error.message;
-            }
-
-            const message = `⚠️ ${errorMessage}. Mencoba lagi dalam ${UPDATE_INTERVAL_MS / 1000} detik.`;
-            
-            // HANYA update status element jika main content terlihat
             if (mainContentElement.style.display !== 'none') {
-                statusElement.innerHTML = message;
-                statusElement.classList.remove('online');
-                statusElement.classList.add('error');
-            } else {
-                console.warn(`⚠️ [Background] ${errorMessage}`);
+                statusElement.innerHTML = `✅ Lokasi terkirim (${new Date().toLocaleTimeString('id-ID')})`;
+                currentMarker.setLatLng([lat, lng]);
+                map.setView([lat, lng], 15);
             }
-            console.error("Geolocation Error:", error);
         }
+
+        function locationError(error) { console.error("Geo Error:", error); }
         
-        // LOGIKA INISIALISASI BARU
         if (userId) {
-            // 1. Mulai update lokasi di background
             initLocationBackground();
-            // 2. Langsung tampilkan halaman belanja
             showBelanja();
         } else {
-            // Tampilkan halaman login jika belum ada user
             showLogin();
         }
     </script>
