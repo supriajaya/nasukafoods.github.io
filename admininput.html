@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Super Admin - Central Control</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .admin-container { background: white; width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
+        
+        /* Header & Tabs */
+        .header { background: #333; color: white; padding: 20px; text-align: center; }
+        .tabs { display: flex; background: #e9ecef; }
+        .tab-btn { flex: 1; padding: 15px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; color: #555; font-size: 13px; }
+        .tab-btn.active { background: white; color: #28a745; border-bottom: 3px solid #28a745; }
+        
+        /* Form & UI */
+        .content { padding: 25px; min-height: 400px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; color: #333; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: #28a745; outline: none; }
+        
+        .btn-action { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; transition: 0.3s; }
+        .btn-green { background: #28a745; }
+        .btn-green:hover { background: #218838; }
+        .btn-blue { background: #007bff; }
+        .btn-blue:hover { background: #0069d9; }
+        
+        /* List Style */
+        .list-container { margin-top: 25px; border-top: 2px solid #eee; padding-top: 15px; }
+        h4 { margin: 0 0 10px 0; color: #666; font-size: 14px; text-transform: uppercase; }
+        .v-item { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee; }
+        .v-info b { color: #007bff; }
+        .delete-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        
+        .notif { text-align: center; margin-top: 10px; font-size: 13px; font-weight: bold; padding: 8px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <div class="header">
+        <h2 style="margin:0">Nasuka Super Admin</h2>
+        <p style="margin:5px 0 0; opacity: 0.8; font-size: 12px;">Gabungan Voucher & Top Up Langsung</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'topupTab')">Top Up Saldo</button>
+        <button class="tab-btn" onclick="openTab(event, 'saldoTab')">Buat Voucher</button>
+        <button class="tab-btn" onclick="openTab(event, 'promoTab')">Wifi/Promo</button>
+    </div>
+
+    <div class="content">
+        
+        <div id="topupTab" class="tab-content active">
+            <h3 style="margin-top:0; color:#007bff;">Kirim Saldo Langsung</h3>
+            <div class="form-group">
+                <label>Username Tujuan</label>
+                <input type="text" id="targetUsername" placeholder="Masukkan Username Pengguna">
+            </div>
+            <div class="form-group">
+                <label>Nominal Saldo (Rp)</label>
+                <input type="number" id="topupAmount" placeholder="Contoh: 10000">
+            </div>
+            <button class="btn-action btn-blue" id="btnProsesTopup" onclick="prosesTopUpManual()">Kirim Saldo Sekarang</button>
+            <div id="topupNotif" class="notif"></div>
+        </div>
+
+        <div id="saldoTab" class="tab-content">
+            <h3 style="margin-top:0; color:#28a745;">Generate Voucher Saldo</h3>
+            <div class="form-group">
+                <label>Kode Voucher (6 Digit Angka)</label>
+                <input type="number" id="sCode" placeholder="Contoh: 881234" oninput="limitDigits(this, 6)">
+            </div>
+            <div class="form-group">
+                <label>Nilai Saldo (Rp)</label>
+                <input type="number" id="sValue" placeholder="Contoh: 5000">
+            </div>
+            <button class="btn-action btn-green" onclick="addSaldoVoucher()">Buat Voucher Saldo</button>
+            <div id="sNotif" class="notif"></div>
+
+            <div class="list-container">
+                <h4>Voucher Saldo Aktif:</h4>
+                <div id="sList">Memuat...</div>
+            </div>
+        </div>
+
+        <div id="promoTab" class="tab-content">
+            <h3 style="margin-top:0; color:#6c757d;">Stok Promo & Wifi</h3>
+            <div class="form-group">
+                <label>Kode Promo / Wifi</label>
+                <input type="text" id="pCode" placeholder="Contoh: WIFI-GRATIS">
+            </div>
+            <button class="btn-action btn-green" style="background:#6c757d" onclick="addPromoVoucher()">Tambah Stok Promo</button>
+            <div id="pNotif" class="notif"></div>
+
+            <div class="list-container">
+                <h4>Stok Voucher Promo:</h4>
+                <div id="pList">Memuat...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- KONFIGURASI FIREBASE ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+        authDomain: "nasukafoods1.firebaseapp.com",
+        databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "nasukafoods1",
+        messagingSenderId: "84287800896",
+        appId: "1:84287800896:web:83189d6766997b00f701a5"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // --- FUNGSI UI TAB ---
+    function openTab(evt, tabName) {
+        let i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) tabcontent[i].classList.remove("active");
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) tablinks[i].classList.remove("active");
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    function limitDigits(el, max) {
+        if(el.value.length > max) el.value = el.value.slice(0, max);
+    }
+
+    function showFeedback(el, msg, type) {
+        el.innerHTML = msg;
+        el.className = "notif " + type;
+        setTimeout(() => { el.innerHTML = ""; el.className = "notif"; }, 4000);
+    }
+
+    // --- LOGIKA TOP UP MANUAL (LOG DATA) ---
+    function prosesTopUpManual() {
+        const user = document.getElementById('targetUsername').value.trim();
+        const amount = parseInt(document.getElementById('topupAmount').value);
+        const notif = document.getElementById('topupNotif');
+        const btn = document.getElementById('btnProsesTopup');
+
+        if (!user || isNaN(amount) || amount <= 0) return showFeedback(notif, "Data tidak lengkap!", "error");
+
+        btn.disabled = true;
+        btn.innerHTML = "Memproses...";
+
+        db.ref("users").orderByChild("Username").equalTo(user).once("value")
+        .then(snapshot => {
+            if (snapshot.exists()) {
+                let userKey = Object.keys(snapshot.val())[0];
+                return db.ref(`users/${userKey}/Saldo`).transaction((s) => (s || 0) + amount)
+                .then(() => {
+                    showFeedback(notif, `✅ Berhasil Kirim Rp ${amount.toLocaleString()} ke @${user}`, "success");
+                    document.getElementById('targetUsername').value = "";
+                    document.getElementById('topupAmount').value = "";
+                });
+            } else {
+                showFeedback(notif, "❌ Username tidak ditemukan!", "error");
+            }
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = "Kirim Saldo Sekarang";
+        });
+    }
+
+    // --- LOGIKA VOUCHER SALDO ---
+    function addSaldoVoucher() {
+        const code = document.getElementById('sCode').value;
+        const val = parseInt(document.getElementById('sValue').value);
+        const notif = document.getElementById('sNotif');
+
+        if (code.length !== 6 || isNaN(val)) return showFeedback(notif, "Format salah!", "error");
+
+        db.ref('vouchers/' + code).set(val).then(() => {
+            showFeedback(notif, "✅ Voucher Saldo Aktif!", "success");
+            document.getElementById('sCode').value = "";
+            document.getElementById('sValue').value = "";
+        });
+    }
+
+    // --- LOGIKA VOUCHER PROMO ---
+    function addPromoVoucher() {
+        const code = document.getElementById('pCode').value.trim();
+        const notif = document.getElementById('pNotif');
+        if(!code) return showFeedback(notif, "Kode kosong!", "error");
+        
+        db.ref('promo_vouchers').push({ code: code, timestamp: firebase.database.ServerValue.TIMESTAMP })
+        .then(() => {
+            showFeedback(notif, "✅ Promo Ditambahkan!", "success");
+            document.getElementById('pCode').value = "";
+        });
+    }
+
+    // --- MONITORING DATA REALTIME ---
+    db.ref('vouchers').on('value', (snapshot) => {
+        const listDiv = document.getElementById('sList');
+        listDiv.innerHTML = snapshot.exists() ? "" : "<p style='color:#999'>Kosong.</p>";
+        snapshot.forEach(child => {
+            listDiv.innerHTML += `<div class="v-item">
+                <div class="v-info">Kode: <b>${child.key}</b> <br> Rp ${child.val().toLocaleString()}</div>
+                <button class="delete-btn" onclick="deleteData('vouchers/${child.key}')">Hapus</button>
+            </div>`;
+        });
+    });
+
+    db.ref('promo_vouchers').on('value', (snapshot) => {
+        const listDiv = document.getElementById('pList');
+        listDiv.innerHTML = snapshot.exists() ? "" : "<p style='color:#999'>Kosong.</p>";
+        snapshot.forEach(child => {
+            listDiv.innerHTML += `<div class="v-item">
+                <div class="v-info"><b>${child.val().code}</b></div>
+                <button class="delete-btn" onclick="deleteData('promo_vouchers/${child.key}')">Hapus</button>
+            </div>`;
+        });
+    });
+
+    function deleteData(path) {
+        if(confirm('Hapus data?')) db.ref(path).remove();
+    }
+</script>
+
+</body>
+</html>
