@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Foods - Testimoni Berhadiah</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #ff9800 0%, #f44336 100%); }
+        .comment-card { border-radius: 15px; border-left: 5px solid #ff9800; transition: transform 0.2s; }
+        .comment-card:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body class="bg-gray-50 pb-20">
+
+    <div class="gradient-bg text-white p-6 rounded-b-[40px] shadow-lg mb-6">
+        <div class="flex items-center mb-4">
+            <a href="index.html" class="text-white text-xl mr-4"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="text-xl font-bold uppercase tracking-wider">Nasuka Testimoni</h1>
+        </div>
+        <p class="text-sm opacity-90">Bagikan pengalamanmu makan Cilok Nasuka dan dapatkan hadiah menarik!</p>
+    </div>
+
+    <div class="max-w-md mx-auto px-4">
+        
+        <div id="userInfo" class="bg-white p-4 rounded-2xl shadow-sm mb-6 flex items-center border border-orange-100">
+            <img id="userAvatar" src="https://nasukafoods.site/gambarkosong.jpg" class="w-12 h-12 rounded-full border-2 border-orange-400 object-cover">
+            <div class="ml-4">
+                <p class="text-xs text-gray-500">Menulis sebagai:</p>
+                <p id="userName" class="font-bold text-gray-800">Tamu / Belum Login</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl shadow-md border border-gray-100 mb-8">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Apa pendapatmu tentang Nasuka Foods?</label>
+            <textarea id="testiText" placeholder="Contoh: Cilok gajihnya lumer banget di mulut, mantap!..." 
+                class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:outline-none h-32 text-sm"></textarea>
+            
+            <button onclick="kirimTestimoni()" id="btnKirim"
+                class="w-full mt-4 bg-orange-500 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-orange-600 active:scale-95 transition-all">
+                KIRIM TESTIMONI <i class="fas fa-paper-plane ml-2"></i>
+            </button>
+            <p class="text-[10px] text-gray-400 mt-3 text-center italic">*Testimoni terpilih akan mendapatkan saldo/produk gratis.</p>
+        </div>
+
+        <div class="space-y-4">
+            <h3 class="font-bold text-gray-700 flex items-center">
+                <i class="fas fa-comments text-orange-500 mr-2"></i> Suara Pelanggan
+            </h3>
+            <div id="containerList" class="space-y-4">
+                <div class="text-center py-10 text-gray-400">
+                    <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                    <p>Memuat testimoni...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gunakan Config yang sama dengan index.html Anda
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+            authDomain: "nasukafoods1.firebaseapp.app",
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nasukafoods1",
+            messagingSenderId: "84287800896",
+            appId: "1:84287800896:web:83189d6766997b00f701a5"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        // Ambil data user dari LocalStorage (Data dari sistem login index.html)
+        const userSession = {
+            ID: localStorage.getItem("ID"),
+            Nama: localStorage.getItem("Nama") || "Pelanggan Nasuka",
+            Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg"
+        };
+
+        // Tampilkan info profil di atas form
+        if(userSession.ID) {
+            document.getElementById('userName').innerText = userSession.Nama;
+            document.getElementById('userAvatar').src = userSession.Foto;
+        }
+
+        // Fungsi Kirim Testimoni
+        function kirimTestimoni() {
+            const pesan = document.getElementById('testiText').value.trim();
+            
+            if (!userSession.ID) {
+                alert("Silahkan login di menu AKUN terlebih dahulu!");
+                return;
+            }
+
+            if (pesan.length < 10) {
+                alert("Testimoni terlalu pendek, ceritakan sedikit lagi ya!");
+                return;
+            }
+
+            const btn = document.getElementById('btnKirim');
+            btn.disabled = true;
+            btn.innerText = "MENGIRIM...";
+
+            // Simpan ke node 'testimoni_publik'
+            db.ref('testimoni_publik').push({
+                userID: userSession.ID,
+                nama: userSession.Nama,
+                foto: userSession.Foto,
+                pesan: pesan,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                alert("Terima kasih! Testimoni kamu sangat berarti bagi Natasya, Supria, & Karlina.");
+                document.getElementById('testiText').value = "";
+                btn.disabled = false;
+                btn.innerHTML = 'KIRIM TESTIMONI <i class="fas fa-paper-plane ml-2"></i>';
+            }).catch(err => {
+                alert("Gagal mengirim. Coba lagi.");
+                btn.disabled = false;
+            });
+        }
+
+        // Load Testimoni secara Realtime
+        db.ref('testimoni_publik').orderByChild('timestamp').limitToLast(20).on('value', (snapshot) => {
+            const listDiv = document.getElementById('containerList');
+            listDiv.innerHTML = "";
+            
+            if (!snapshot.exists()) {
+                listDiv.innerHTML = "<p class='text-center text-gray-400'>Belum ada testimoni. Jadilah yang pertama!</p>";
+                return;
+            }
+
+            let entries = [];
+            snapshot.forEach(child => {
+                entries.push(child.val());
+            });
+            entries.reverse(); // Terbaru di atas
+
+            entries.forEach(data => {
+                const waktu = new Date(data.timestamp).toLocaleDateString('id-ID');
+                const card = `
+                    <div class="bg-white p-4 comment-card shadow-sm border border-gray-100">
+                        <div class="flex items-center mb-2">
+                            <img src="${data.foto}" class="w-8 h-8 rounded-full object-cover border border-orange-200">
+                            <div class="ml-3">
+                                <p class="text-sm font-bold text-gray-800">${data.nama}</p>
+                                <p class="text-[10px] text-gray-400">${waktu}</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 italic">"${data.pesan}"</p>
+                    </div>
+                `;
+                listDiv.insertAdjacentHTML('beforeend', card);
+            });
+        });
+    </script>
+</body>
+</html>
