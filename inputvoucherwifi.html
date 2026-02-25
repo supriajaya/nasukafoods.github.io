@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Nasuka Foods - Voucher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; border-bottom: 2px solid #28a745; padding-bottom: 10px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #218838; }
+        .list-voucher { margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+        .v-item { display: flex; justify-content: space-between; padding: 8px; background: #f9f9f9; margin-bottom: 5px; border-radius: 4px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Input Kode Voucher</h2>
+    <p>Masukkan kode promo untuk dibagikan ke pembeli.</p>
+    <input type="text" id="voucherInput" placeholder="Contoh: DISKON50K atau FREE-CILOK">
+    <button onclick="addVoucher()">Tambah Voucher</button>
+
+    <div class="list-voucher">
+        <h3>Stok Voucher Saat Ini:</h3>
+        <div id="voucherList">Memuat...</div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+    // Gunakan Config yang sama dengan file utama Anda
+    const firebaseConfig = {
+        apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
+        authDomain: "nasukafoods1.firebaseapp.com", 
+        databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
+        projectId: "nasukafoods1"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function addVoucher() {
+        const code = document.getElementById('voucherInput').value.trim();
+        if(code === "") return alert("Isi kode dulu!");
+        
+        db.ref('vouchers').push({
+            code: code,
+            created_at: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            document.getElementById('voucherInput').value = "";
+            alert("Voucher berhasil ditambah!");
+        });
+    }
+
+    // Tampilkan daftar voucher yang tersedia
+    db.ref('vouchers').on('value', (snapshot) => {
+        const listDiv = document.getElementById('voucherList');
+        listDiv.innerHTML = "";
+        if(!snapshot.exists()) {
+            listDiv.innerHTML = "Stok kosong.";
+            return;
+        }
+        snapshot.forEach((child) => {
+            listDiv.innerHTML += `<div class="v-item"><span>${child.val().code}</span> <button onclick="hapus('${child.key}')" style="width:auto; padding:2px 10px; background:red;">X</button></div>`;
+        });
+    });
+
+    function hapus(id) {
+        if(confirm('Hapus voucher ini?')) db.ref('vouchers').child(id).remove();
+    }
+</script>
+</body>
+</html>
