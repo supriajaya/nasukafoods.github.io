@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Nasuka Voucher</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .admin-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #333; margin-top: 0; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #218838; }
+        .voucher-list { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        .v-item { display: flex; justify-content: space-between; background: #f9f9f9; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; border: 1px solid #eee; }
+        .v-item span { font-weight: bold; color: #007bff; }
+        .delete-btn { color: #f44336; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="admin-card">
+    <h2>Nasuka Admin</h2>
+    <p style="font-size: 12px; color: #666; text-align: center;">Input kode 6 angka untuk saldo gratis</p>
+    
+    <div class="form-group">
+        <label>Kode Voucher (6 Digit)</label>
+        <input type="number" id="vCode" placeholder="Contoh: 881234" oninput="if(this.value.length > 6) this.value = this.value.slice(0,6)">
+    </div>
+    
+    <div class="form-group">
+        <label>Nilai Saldo (Rupiah)</label>
+        <input type="number" id="vValue" placeholder="Contoh: 5000">
+    </div>
+    
+    <button onclick="addVoucher()">Buat Voucher</button>
+    <div id="notif" style="text-align: center; margin-top: 10px; font-size: 13px;"></div>
+
+    <div class="voucher-list">
+        <h4 style="margin: 0 0 10px 0;">Voucher Aktif di Server:</h4>
+        <div id="listContainer">Memuat data...</div>
+    </div>
+</div>
+
+<script>
+    // Konfigurasi Firebase (Sesuai dengan project Anda)
+    const firebaseConfig = {
+        apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+        authDomain: "nasukafoods1.firebaseapp.com",
+        databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "nasukafoods1",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Fungsi Tambah Voucher
+    function addVoucher() {
+        const code = document.getElementById('vCode').value;
+        const val = parseInt(document.getElementById('vValue').value);
+        const notif = document.getElementById('notif');
+
+        if (code.length !== 6 || isNaN(val)) {
+            notif.innerHTML = "❌ Kode harus 6 digit & Saldo harus angka!";
+            notif.style.color = "red";
+            return;
+        }
+
+        db.ref('vouchers/' + code).set(val)
+        .then(() => {
+            notif.innerHTML = "✅ Voucher " + code + " berhasil dibuat!";
+            notif.style.color = "green";
+            document.getElementById('vCode').value = "";
+            document.getElementById('vValue').value = "";
+        })
+        .catch(err => {
+            notif.innerHTML = "❌ Gagal: " + err.message;
+            notif.style.color = "red";
+        });
+    }
+
+    // Fungsi Pantau List Voucher
+    db.ref('vouchers').on('value', (snapshot) => {
+        const container = document.getElementById('listContainer');
+        const data = snapshot.val();
+        
+        if (!data) {
+            container.innerHTML = "<p style='color:#999'>Tidak ada voucher aktif.</p>";
+            return;
+        }
+
+        let html = "";
+        for (let key in data) {
+            html += `
+                <div class="v-item">
+                    <div>Kode: <span>${key}</span> <br> Nilai: Rp ${data[key].toLocaleString()}</div>
+                    <div class="delete-btn" onclick="deleteVoucher('${key}')">Hapus</div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    });
+
+    // Fungsi Hapus Manual
+    function deleteVoucher(key) {
+        if(confirm('Hapus voucher ' + key + '?')) {
+            db.ref('vouchers/' + key).remove();
+        }
+    }
+</script>
+
+</body>
+</html>
