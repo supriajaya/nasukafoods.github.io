@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Foods</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <link rel="stylesheet" href="https://nasukafoods.site/lain.css">
+    <link rel="stylesheet" href="https://nasukafoods.site/index.css">
+    
+    <style>
+        .moving-text-container {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+        }
+        .moving-text {
+            font-weight: bold;
+            color: #333;
+        }
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+        /* Style Tambahan untuk Kartu Keluarga Nasuka */
+        .nasuka-family-card {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin: 10px 0;
+        }
+        /* Style Preview Foto Edit */
+        .edit-foto-preview {
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid #2575fc;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    
+<div class="container">
+    <div id="home-container" style="display: block;">
+        <div class="header">
+            <div class="header-content">
+                <div class="top-nav">
+                    <span class="welcome">Nasuka Foods</span> 
+                    <div><span id="userNameDisplay"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="balance-card">
+            <div class="balance-title">Saldo</div>
+            <div class="balance-details">
+                <span class="balance-amount" id="SaldoAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
+            </div>
+            <a href="https://nasukafoods.site/etalase.html" target="_blank" class="all-accounts" style="text-decoration: none;">
+                <span>Etalase Nasuka Foods</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+
+        <div class="main-features">
+           <a href="https://nasukafoods.site/album.html" target="_blank" class="feature-link">
+                <div class="feature-icon-circle transfer-icon"><i class="fas fa-exchange-alt"></i></div>
+                <span>Album</span>
+            </a>
+            <a href="https://nasukafoods.site/resep.html" target="_blank" class="feature-link">
+                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/nasukafoods.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                </div>
+                <span>Resep</span>
+            </a>
+            <a href="javascript:void(0)" onclick="showTopUp()" class="feature-link">
+                <div class="feature-icon-circle pdam-icon"><i class="fas fa-plus"></i></div>
+                <span>Top Up</span>
+            </a>
+            <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
+                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/image/lacak-lokasi.gif" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                </div>
+                <span>Lihat Posisi</span>
+            </a>
+        </div>
+
+        <div class="banner">
+            <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
+                <span id="blinking-text" style="display: block; width: 100%; white-space: normal;">
+                    <strong>Jas Hujan Premium</strong>
+                </span>
+            </div>
+            <div class="banner-button">Reward</div>
+        </div>
+        
+        <div class="search-bar" style="overflow: hidden; white-space: nowrap;">
+            <div class="moving-text-container">
+                <span class="moving-text">Layanan pesan antar khusus ciparay tengah</span>
+            </div>
+        </div>
+
+        <div class="other-features">
+            <div class="other-feature-item" onclick="showProduk('polosan')">
+                <div class="other-feature-icon top-up-icon"><img src="https://nasukafoods.site/image/paketcilok.jpg" alt="" class="product-icon-img"></div>
+                <span>CILOK</span>
+            </div>
+            <div class="other-feature-item" onclick="showProduk('gajih')">
+                <div class="other-feature-icon brizzi-icon"><img src="https://nasukafoods.site/image/isiangajih.jpg" alt="" class="product-icon-img"></div>
+                <span>NITACELL</span>
+            </div>
+            <div class="other-feature-item" onclick="showProduk('telorPuyuh')">
+                <div class="other-feature-icon tagihan-icon"><img src="https://nasukafoods.site/image/isitelorpuyuh.jpg" alt="" class="product-icon-img"></div>
+                <span>ORDER</span>
+            </div>
+            <div class="other-feature-item" onclick="showProduk('telorAyam')">
+                <div class="other-feature-icon setor-tarik-icon"><img src="https://nasukafoods.site/image/isitelorayam.jpg" alt="" class="product-icon-img"></div>
+                <span>Chat</span>
+            </div>
+        </div>
+            
+        <div class="search-bar" id="marquee-search-bar">
+            <i class="fas fa-search"></i>
+            <div class="marquee-content"><span id="running-text"></span></div>
+        </div>
+
+        <div class="other-features">
+            <div class="other-feature-item">
+                <div class="other-feature-icon lifestyle-icon"><i class="fas fa-shopping-bag"></i></div>
+                <span>LAYANAN KALONG</span>
+            </div>
+            <a href="https://nasukafoods.site/testimoni.html" target="_self" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                <div class="other-feature-icon virtual-icon"><i class="fas fa-file-invoice"></i></div>
+                <span>Suara Pelanggan</span>
+            </a>
+            <a href="https://nasukafoods.site/burung.html" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/image/nasukabird.jpg" alt="" class="product-icon-img">
+                </div>
+                <span>Saldo Gratis</span>
+            </a>
+            <a href="https://nasukafoods.site" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
+                    <img src="https://nasukafoods.site/roll.jpg" alt="" class="product-icon-img">
+                </div>
+                <span>segera</span>
+            </a>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active" id="nav-home" onclick="showHome()">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item" id="nav-leaderboard" onclick="showLeaderboard()">
+                <img src="https://nasukafoods.site/image/wingbiru.gif" alt="Leaderboard" class="leaderboard-img">
+                <span>Leaderboard</span>
+            </div>
+            <div class="nav-item" id="nav-dokumen" onclick="showDokumen()">
+                <i class="fas fa-list-alt"></i>
+                <span>Informasi</span>
+            </div>
+            <div class="nav-item" id="nav-akun" onclick="localStorage.getItem('ID') ? showProfil() : showLogin()">
+                <i class="fas fa-user-circle"></i>
+                <span>Akun</span>
+            </div>
+        </div>
+    </div> 
+
+    <div id="login-container" class="auth-container" style="display: none;">
+        <div class="auth-card">
+            <div class="auth-logo-section"><img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods" class="auth-logo"></div>
+            <h2>Masuk Akun Anda</h2>
+            <form id="loginForm">
+                <div class="auth-input-group"><label>Username</label><input type="text" id="loginUsername" required></div>
+                <div class="auth-input-group"><label>Password</label><input type="password" id="loginPassword" required></div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <div class="link-switch">Belum punya akun? <a href="#" onclick="showSignup()">Daftar di sini</a></div>
+            <button onclick="showHome()" class="btn-secondary">Batal</button>
+        </div>
+    </div>
+
+    <div id="signup-container" class="auth-container" style="display: none;">
+        <div class="auth-card">
+            <div class="auth-logo-section"><img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods" class="auth-logo"></div>
+            <h2>Daftar Akun Baru</h2>
+            <form id="signupForm">
+                <div class="auth-input-group"><label>Username</label><input type="text" id="signupUsername" required></div>
+                <div class="auth-input-group"><label>Nama Lengkap</label><input type="text" id="signupNama" required></div>
+                <div class="auth-input-group"><label>Password</label><input type="password" id="signupPassword" required></div>
+                <button type="submit" class="btn-primary">Daftar</button>
+            </form>
+            <div class="link-switch">Sudah punya akun? <a href="#" onclick="showLogin()">Masuk di sini</a></div>
+            <button onclick="showHome()" class="btn-secondary">Batal</button>
+        </div>
+    </div>
+
+    <div id="profil-container" style="display: none;">
+        <div class="profil-card">
+            <div class="profil-header-nav">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Profil Saya</h3>
+                <div>
+                    <i class="fas fa-pencil-alt" onclick="showEditProfil()" style="cursor: pointer;"></i>
+                    <i class="fas fa-question-circle" style="margin-left: 15px;"></i>
+                </div>
+            </div>
+
+            <div class="driver-info">
+                <img id="profilFoto" class="driver-foto" src="https://nasukafoods.site/gambarkosong.jpg" alt="Foto Profil">
+                <div class="driver-text">
+                    <h4 id="profilNamaDriver">...</h4>
+                    <div class="driver-details">
+                        Gabung bulan <span id="profilBulanJoin">...</span> | 
+                        <span id="profilIDPlat">...</span> 
+                    </div>
+                </div>
+            </div>
+            
+            <div class="rating-section" style="padding: 10px 15px; margin-bottom: 5px; background-color: #fff8e1; border-radius: 8px; border: 1px solid #ffecb3;">
+                <div style="font-size: 14px; font-weight: 600; color: #ff9800;">Saldo Anda</div>
+                <div style="font-size: 20px; font-weight: 700; color: #333;" id="profilSaldoDisplay">...</div>
+            </div>
+
+            <div id="nasukaFamilyArea" style="margin: 15px 0;"></div>
+
+
+
+
+           
+            
+            
+            
+            <div class="safety-report" onclick="toggleRiwayat()"> 
+    <div class="safety-report-left">
+        <div class="safety-icon"><i class="fas fa-history"></i></div>
+        <div class="safety-text">Riwayat Pembelian <span id="countRiwayat">Lihat transaksi</span></div>
+    </div>
+    <i class="fas fa-chevron-down"></i>
+</div>
+<div id="riwayatList" style="display:none; padding: 10px; background: #fff; border-radius: 8px; margin-top: 5px; font-size: 12px; max-height: 200px; overflow-y: auto; border: 1px solid #ddd;">
+    Memuat riwayat...
+</div>
+
+            
+            
+            
+            
+            
+            
+            
+            
+
+            <div class="profil-tabs">
+                <div class="profil-tab-item active" id="tabPencapaian">Umum</div>
+                <div class="profil-tab-item" id="tabPerbaikan">Keluar</div>
+            </div>
+
+            <div id="contentPencapaian" class="tab-content-section">
+                <div class="badge-section">
+                    <h4>Informasi Pengiriman</h4>
+                    <div class="badge-card">
+                       
+                        <div class="badge-text">
+                            <strong>Alamat :</strong>
+                            <span id="profilAlamatPengiriman">...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="passenger-comments">
+                    <h4>Informasi Kontak</h4>
+                    <p style="font-size: 13px; color: #555;">WA: <span id="profilNomorWA">...</span></p>
+                </div>
+            </div>
+
+            <div id="contentPerbaikan" class="tab-content-section" style="display: none; text-align: center;">
+                <p style="color: #666; font-style: italic;">Anda yakin ingin keluar ?.</p>
+                <button id="btnLogout" class="btn-kembali" onclick="logoutUser()" style="background-color: #f44336; margin-top: 20px;">Keluar Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editprofil-container" class="auth-container" style="display: none;"></div>
+
+    <div id="leaderboard-container"></div>
+    <div id="dokumen-container" class="auth-container" style="display: none;"></div>
+
+</div>
+
+<script>
+// --- FIREBASE & CONFIG ---
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafoods1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Load local data ke object localUser
+let localUser = {
+  Username: localStorage.getItem("Username"),
+  Nama: localStorage.getItem("Nama"),
+  ID: localStorage.getItem("ID"),
+  Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
+  Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
+  NomorHP: localStorage.getItem("NomorHP") || "-",
+  Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg", 
+};
+
+// --- CORE FUNCTIONS ---
+function hideAllContainers() {
+    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #editprofil-container, #leaderboard-container, #dokumen-container').forEach(el => { 
+        if (el) el.style.display = 'none';
+    });
+}
+
+function showHome() {
+    hideAllContainers();
+    document.getElementById('home-container').style.display = 'block';
+    updateHomeDisplay();
+    setActiveNav('nav-home');
+}
+
+function setActiveNav(id) {
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => item.classList.remove('active'));
+    const activeItem = document.getElementById(id);
+    if(activeItem) activeItem.classList.add('active');
+}
+
+function updateHomeDisplay() {
+    const isLoggedIn = !!localUser.ID;
+    document.getElementById('userNameDisplay').textContent = isLoggedIn ? (localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username) : '';
+    document.getElementById('SaldoAmountDisplay').textContent = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID');
+}
+
+// --- PROFIL LOGIC ---
+function showProfil() {
+    hideAllContainers();
+    const userID = localStorage.getItem("ID");
+    if (!userID) { showLogin(); return; }
+    
+    document.getElementById('profil-container').style.display = 'block'; 
+    setActiveNav('nav-akun');
+
+    // Render Data Statis
+    document.getElementById('profilFoto').src = localUser.Foto;
+    document.getElementById('profilNamaDriver').textContent = localUser.Nama || 'Tanpa Nama';
+    document.getElementById('profilIDPlat').textContent = 'ID: ' + (localUser.ID || '-');
+    document.getElementById('profilSaldoDisplay').textContent = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID');
+    document.getElementById('profilAlamatPengiriman').textContent = localUser.Alamat;
+    document.getElementById('profilNomorWA').textContent = localUser.NomorHP;
+    
+    const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
+    document.getElementById('profilBulanJoin').textContent = new Date(tanggalJoinISO).toLocaleString('id-ID', { month: 'short', year: 'numeric' });
+
+    document.getElementById('nasukaFamilyArea').innerHTML = `
+        <div class="nasuka-family-card">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; margin-bottom: 5px;">Status Pelanggan</div>
+            <div style="font-size: 22px; font-weight: 800; margin-bottom: 5px;">Keluarga Nasuka</div>
+            <div style="font-size: 12px; font-style: italic; opacity: 0.9;">"Rasa yang menyatukan hati"</div>
+            <div style="margin-top: 15px; font-size: 10px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px;">
+                Terinspirasi oleh Natasya & Karlina
+            </div>
+        </div>
+    `;
+
+    // Tab Logic
+    const tabPencapaian = document.getElementById('tabPencapaian');
+    const tabPerbaikan = document.getElementById('tabPerbaikan');
+    tabPencapaian.onclick = () => {
+        tabPencapaian.classList.add('active'); tabPerbaikan.classList.remove('active');
+        document.getElementById('contentPencapaian').style.display = 'block'; document.getElementById('contentPerbaikan').style.display = 'none';
+    };
+    tabPerbaikan.onclick = () => {
+        tabPerbaikan.classList.add('active'); tabPencapaian.classList.remove('active');
+        document.getElementById('contentPerbaikan').style.display = 'block'; document.getElementById('contentPencapaian').style.display = 'none';
+    };
+}
+
+// --- EDIT PROFIL LOGIC ---
+function showEditProfil() {
+    hideAllContainers();
+    const editContainer = document.getElementById('editprofil-container');
+    editContainer.style.display = 'flex';
+    
+    editContainer.innerHTML = `
+        <div class="auth-card">
+            <div class="auth-logo-section">
+                <img src="${localUser.Foto}" id="previewFoto" class="edit-foto-preview">
+            </div>
+            <h2>Edit Profil Keluarga</h2>
+            <form id="editProfilForm">
+                <div class="auth-input-group">
+                    <label>URL Foto Profil</label>
+                    <input type="text" id="editFoto" value="${localUser.Foto}" oninput="document.getElementById('previewFoto').src = this.value">
+                </div>
+                <div class="auth-input-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="editNama" value="${localUser.Nama || ''}" required>
+                </div>
+                <div class="auth-input-group">
+                    <label>Username (Tetap)</label>
+                    <input type="text" value="${localUser.Username}" disabled style="background:#eee;">
+                </div>
+                <div class="auth-input-group">
+                    <label>Nomor WA</label>
+                    <input type="number" id="editNomorHP" value="${localUser.NomorHP || ''}" required>
+                </div>
+                <div class="auth-input-group">
+                    <label>Alamat Lengkap</label>
+                    <textarea id="editAlamat" rows="3" style="width:100%; padding:8px; border-radius:8px; border:1px solid #ddd;">${localUser.Alamat || ''}</textarea>
+                </div>
+                <button type="submit" class="btn-primary">Simpan Perubahan</button>
+                <button type="button" onclick="showProfil()" class="btn-secondary" style="margin-top:10px;">Batal</button>
+            </form>
+        </div>
+    `;
+
+    document.getElementById('editProfilForm').onsubmit = (e) => {
+        e.preventDefault();
+        updateProfil();
+    };
+}
+
+function updateProfil() {
+    const newNama = document.getElementById('editNama').value;
+    const newNomorHP = document.getElementById('editNomorHP').value;
+    const newAlamat = document.getElementById('editAlamat').value;
+    const newFoto = document.getElementById('editFoto').value || "https://nasukafoods.site/gambarkosong.jpg";
+    const userID = localUser.ID;
+
+    const btn = document.querySelector('#editProfilForm .btn-primary');
+    btn.disabled = true;
+    btn.textContent = "Menyimpan...";
+
+    const updateData = {
+        Nama: newNama,
+        NomorHP: newNomorHP,
+        Alamat: newAlamat,
+        Foto: newFoto
+    };
+
+    db.ref("users/" + userID).update(updateData)
+    .then(() => {
+        // Sync local object & storage
+        localUser.Nama = newNama;
+        localUser.NomorHP = newNomorHP;
+        localUser.Alamat = newAlamat;
+        localUser.Foto = newFoto;
+
+        localStorage.setItem("Nama", newNama);
+        localStorage.setItem("NomorHP", newNomorHP);
+        localStorage.setItem("Alamat", newAlamat);
+        localStorage.setItem("Foto", newFoto);
+
+        alert("Profil Keluarga Nasuka Berhasil Diperbarui!");
+        showProfil();
+    })
+    .catch((err) => {
+        alert("Gagal: " + err.message);
+        btn.disabled = false;
+        btn.textContent = "Simpan Perubahan";
+    });
+}
+
+// --- AUTH FUNCTIONS ---
+function loginUser() {
+    const u = document.getElementById('loginUsername').value;
+    const p = document.getElementById('loginPassword').value;
+    db.ref("users").orderByChild("Username").equalTo(u).once("value").then(snap => {
+        const val = snap.val();
+        if (val) {
+            const id = Object.keys(val)[0];
+            const user = val[id];
+            if (user.Password === p) {
+                localUser = user;
+                for (let key in user) localStorage.setItem(key, user[key]);
+                showHome();
+            } else alert("Password salah");
+        } else alert("User tidak ditemukan");
+    });
+}
+
+function logoutUser() {
+    if(confirm("Keluar?")) { localStorage.clear(); location.reload(); }
+}
+
+function showLeaderboard() {
+    hideAllContainers();
+    document.getElementById('leaderboard-container').style.display = 'flex';
+    setActiveNav('nav-leaderboard');
+    document.getElementById('leaderboard-container').innerHTML = `<div class="auth-card"><h3>Leaderboard</h3><p>Segera Hadir</p><button onclick="showHome()">Kembali</button></div>`;
+}
+
+function showDokumen() {
+    hideAllContainers();
+    document.getElementById('dokumen-container').style.display = 'flex';
+    setActiveNav('nav-dokumen');
+}
+
+function showLogin() { hideAllContainers(); document.getElementById('login-container').style.display = 'flex'; }
+function showSignup() { hideAllContainers(); document.getElementById('signup-container').style.display = 'flex'; }
+
+// Init
+$(document).ready(() => {
+    showHome();
+    document.getElementById('loginForm').onsubmit = (e) => { e.preventDefault(); loginUser(); };
+});
+
+
+function toggleRiwayat() {
+    const list = document.getElementById('riwayatList');
+    if (list.style.display === 'none') {
+        list.style.display = 'block';
+        loadRiwayat();
+    } else {
+        list.style.display = 'none';
+    }
+}
+
+function loadRiwayat() {
+    const userID = localStorage.getItem("ID");
+    const list = document.getElementById('riwayatList');
+    
+    db.ref("users/" + userID + "/Riwayat").limitToLast(10).once("value", snap => {
+        const data = snap.val();
+        if (!data) {
+            list.innerHTML = "Belum ada transaksi.";
+            return;
+        }
+        
+        let html = "";
+        const items = Object.values(data).reverse();
+        items.forEach(item => {
+            const tgl = new Date(item.tanggal).toLocaleDateString('id-ID');
+            html += `
+                <div style="border-bottom: 1px solid #eee; padding: 8px 0;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>${item.namaProduk}</strong>
+                        <span style="color:red;">-Rp ${item.harga.toLocaleString('id-ID')}</span>
+                    </div>
+                    <small style="color:#888;">${tgl} • ${item.status}</small>
+                </div>
+            `;
+        });
+        list.innerHTML = html;
+    });
+}
+
+
+
+</script>
+</body>
+</html>
