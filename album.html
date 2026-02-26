@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Foods - Short Stories</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #000;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        .tiktok-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .tiktok-container::-webkit-scrollbar { display: none; }
+
+        .video-section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        video {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            max-width: 500px;
+            background-color: #111;
+        }
+
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            padding: 20px 20px 60px 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8) 40%, rgba(0,0,0,1));
+            color: white;
+            z-index: 10;
+            pointer-events: none; /* Klik tembus ke video */
+        }
+
+        .channel-name, .description-container, .read-more-btn {
+            pointer-events: auto; /* Tombol & teks tetap bisa diklik/scroll */
+        }
+
+        .channel-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .description-container {
+            max-height: 70px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding-right: 10px;
+            transition: max-height 0.3s ease;
+            white-space: pre-line; /* Menjaga paragraf tetap rapi */
+            text-align: left;
+        }
+
+        .description-container::-webkit-scrollbar { width: 3px; }
+        .description-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+
+        .video-overlay.expanded .description-container {
+            max-height: 350px;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .side-bar {
+            position: absolute;
+            right: 10px;
+            bottom: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            color: white;
+            z-index: 11;
+        }
+
+        .icon-btn { text-align: center; font-size: 26px; cursor: pointer; }
+        .icon-label { font-size: 12px; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="tiktok-container">
+
+    <div class="video-section">
+        <video loop onclick="togglePlay(this)" poster="https://nasukafoods.site/image/cover1.jpg">
+            <source src="https://nasukafoods.site/video/ceritanasuka1.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay" id="ov1">
+            <span class="channel-name">Cerita Singkat Nasuka Foods</span>
+            <div class="description-container"><strong></strong>
+​(Era Awal: Bayang-bayang Kehancuran)
+
+Dunia seolah berhenti berputar. Pandemi Covid-19 datang bagaikan ledakan besar yang meluluhlantakkan tatanan hidup. Di tengah kepulan asap ketidakpastian, Nasuka Foods berdiri di persimpangan jalan. Seperti sosok prajurit yang menatap medan perang yang hancur, kami melihat impian kami terancam sirna dan bendera peringatan berkibar di mana-mana.
+
+​(Masa Krisis: Perjuangan di Garis Depan)
+
+Jalanan yang dulu ramai, berubah menjadi sunyi dan mencekam. Di tengah kota yang berdebu, para pejuang  nafkah tetap melangkah. Kami ingat betul momen memilukan itu: ketika gerobak dagangan kami harus berhadapan dengan petugas medis berpakaian hazmat, saat butiran Cilok Isian Gajih kami tumpah berserakan di aspal yang dingin. Itu bukan sekadar tumpahan makanan, itu adalah tumpahan air mata dan kerja keras yang seolah sia-sia.
+
+​(Titik Balik: Komitmen dalam Kesunyian)
+
+Namun, di balik masker dan helm pengantar yang menembus garis pembatas, api komitmen kami tidak pernah padam. Kami tidak menyerah pada keadaan. Di dapur-dapur kami yang higienis, Kami tetap bekerja dengan penuh ketelitian. Setiap butir Cilok Isian Gajih dibentuk dengan doa dan tekad bahwa kualitas tidak boleh dikompromi, bahkan saat dunia sedang sakit.
+
+​(Era Baru: Persembahan Terbaik)
+
+Hari ini, matahari baru telah terbit. Dari sebuah rumah sederhana yang menjadi saksi bisu perjuangan, membawa pesan bahwa kami telah berhasil melewati badai.
+
+​Kami bukan sekadar menjual makanan. Kami menyajikan sebuah cerita tentang ketahanan. Setiap butir Cilok Isian Gajih adalah hasil dari komitmen panjang untuk tetap memberikan yang terbaik, melewati masa-masa tersulit dalam sejarah.
+
+​Nasuka Foods: "Karena kualitas adalah janji yang kami jaga dari dulu, hingga selamanya".
+
+
+</div>
+            <button class="read-more-btn" onclick="toggleText('ov1', this)">Lihat selengkapnya</button>
+        </div>
+        <div class="side-bar">
+            <div class="icon-btn">❤️<div class="icon-label">1.2k</div></div>
+            <div class="icon-btn">💬<div class="icon-label">45</div></div>
+        </div>
+    </div>
+
+    <div class="video-section">
+        <video loop onclick="togglePlay(this)" poster="https://nasukafoods.site/image/cover2.jpg">
+            <source src="https://nasukafoods.site/video/ceritanasuka2.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay" id="ov2">
+            <span class="channel-name">Di Cibaduyut Ciparay Tengah</span>
+            <div class="description-container">Nasuka tidak pernah pergi. Kami hanya tertimbun prioritas-prioritasmu yang lain.
+
+Jika rindu rasa yang dulu, datanglah ke Ciparay Tengah. Kami ada di sini pukul 22:00 - 03:00.
+
+Ditunggu kehadirannya!</div>
+            <button class="read-more-btn" onclick="toggleText('ov2', this)">Lihat selengkapnya</button>
+        </div>
+        <div class="side-bar">
+            <div class="icon-btn">❤️<div class="icon-label">850</div></div>
+            <div class="icon-btn">💬<div class="icon-label">12</div></div>
+        </div>
+    </div>
+
+    <div class="video-section">
+        <video loop onclick="togglePlay(this)" poster="https://nasukafoods.site/image/cover3.jpg">
+            <source src="https://nasukafoods.site/video/ceritanasuka3.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay" id="ov3">
+            <span class="channel-name">Persembahan</span>
+            <div class="description-container"><strong>Premium Serve</strong>
+Kami memahami gengsi pelanggan dan kami paham pelanggan adalah raja, kita siapkan mode premium, kemasan premium, layanan premium dan bos seperti anda tentu tidak keberatan untuk membayar lebih untuk gaya hidup level premium.
+
+Hubungi whatsapp kami, Pesta anda, Khaul anda, Dan kebahagiaan anda
+
+Karena tentang rasa yang dulu pernah ada</div>
+            <button class="read-more-btn" onclick="toggleText('ov3', this)">Lihat selengkapnya</button>
+        </div>
+        <div class="side-bar">
+            <div class="icon-btn">❤️<div class="icon-label">900</div></div>
+        </div>
+    </div>
+
+    <div class="video-section">
+        <video loop onclick="togglePlay(this)" poster="https://nasukafoods.site/image/cover4.jpg">
+            <source src="https://nasukafoods.site/video/ceritanasuka4.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay" id="ov4">
+            <span class="channel-name">Dedikasi</span>
+            <div class="description-container"><strong></strong>
+
+Dedikasi tanpa henti untuk pelanggan Nasuka Foods</div>
+            <button class="read-more-btn" onclick="toggleText('ov4', this)">Lihat selengkapnya</button>
+        </div>
+        <div class="side-bar">
+            <div class="icon-btn">❤️<div class="icon-label">1.5k</div></div>
+        </div>
+    </div>
+
+    <div class="video-section">
+        <video loop onclick="togglePlay(this)" poster="https://nasukafoods.site/image/cover5.jpg">
+            <source src="https://nasukafoods.site/video/ceritanasuka5.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay" id="ov5">
+            <span class="channel-name">Komitmen Setia</span>
+            <div class="description-container"><strong>Harapan ke Depan</strong>
+
+Kami akan terus melayani dengan sepenuh hati. 
+Terima kasih, pelanggan setia Nasuka!</div>
+            <button class="read-more-btn" onclick="toggleText('ov5', this)">Lihat selengkapnya</button>
+        </div>
+        <div class="side-bar">
+            <div class="icon-btn">❤️<div class="icon-label">700</div></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleText(id, btn) {
+        const ov = document.getElementById(id);
+        ov.classList.toggle('expanded');
+        btn.innerText = ov.classList.contains('expanded') ? 'Sembunyikan' : 'Lihat selengkapnya';
+    }
+
+    function togglePlay(v) {
+        v.paused ? v.play() : v.pause();
+    }
+
+    const videos = document.querySelectorAll('video');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.play().catch(() => {}); 
+            } else {
+                entry.target.pause();
+                entry.target.currentTime = 0;
+            }
+        });
+    }, { threshold: 0.6 });
+
+    videos.forEach(v => observer.observe(v));
+</script>
+
+</body>
+</html>
+ody>
+</html>
