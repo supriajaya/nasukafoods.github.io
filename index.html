@@ -404,6 +404,7 @@ if (localUser.ID) {
         localStorage.setItem("Alamat", localUser.Alamat);
         localStorage.setItem("NomorHP", localUser.NomorHP);
         localStorage.setItem("Nama", localUser.Nama);
+        localStorage.setItem("Username", localUser.Username);
         updateHomeDisplay();
       }
     });
@@ -452,9 +453,16 @@ async function handleAuth() {
         }
     } else {
         const newID = "NSK" + Math.floor(1000 + Math.random() * 9000);
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
         const newUser = {
-            ID: newID, NomorHP: noWA, PIN: pin, Nama: "User_" + newID,
-            Koin: 0, Alamat: "Belum diatur", TanggalJoin: new Date().toISOString()
+            ID: newID, 
+            NomorHP: noWA, 
+            PIN: pin, 
+            Nama: "Pelanggan Baru",
+            Username: "NS-" + randomNum,
+            Koin: 0, 
+            Alamat: "Belum diatur", 
+            TanggalJoin: new Date().toISOString()
         };
         await db.ref(`users/${newID}`).set(newUser);
         loginSuccess(newUser);
