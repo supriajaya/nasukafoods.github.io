@@ -27,6 +27,35 @@
     0% { transform: translate(0, 0); }
     100% { transform: translate(-100%, 0); }
 }
+
+/* Style Tambahan untuk Chat */
+.chat-messages {
+    height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+.msg {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+.msg-user {
+    align-self: flex-end;
+    background: #ee4d2d;
+    color: white;
+}
+.msg-admin {
+    align-self: flex-start;
+    background: #e0e0e0;
+    color: #333;
+}
 </style>
 </head>
 
@@ -52,7 +81,7 @@
             </div>
             
             <a href="https://nasukafoods.site/belanja.html" target="_blank" class="all-accounts" style="text-decoration: none;">
-                <span>Etalase</span>
+                <span>Shop</span>
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>
@@ -76,93 +105,82 @@
                 <div class="feature-icon-circle pdam-icon">
                     <i class="fas fa-plus"></i> 
                 </div>
-                <span>Gudang</span>
+                <span>Input Saldo</span>
             </a>
 
             <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
-                    <img src="https://nasukafoods.site/image/lacak-lokasi.gif" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    <img src="https://nasukafoods.site/image/lacak-lokasgif" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
-                <span>Lihat Posisi</span>
+                <span>Posisi</span>
             </a>
         </div>
 
-        <div class="banner">
+        <a href="https://nasukafoods.site/testimoni.html" target="_blank" class="banner" style="text-decoration: none; display: flex;">
             <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
                 <span id="blinking-txt" style="display: block; width: 100%; white-space: normal;">
-                    <strong>Interaksi Pelanggan</strong>
+                    <strong>Kata Pelanggan</strong>
                 </span>
             </div>
             <div class="banner-button">
-                Lihat
+               Lihat
             </div>
-        </div>
-
-        
+        </a>
 
         <div class="other-features">
             <div class="other-feature-item" onclick="('')">
                 <div class="other-feature-icon top-up-icon">
                     <img src="https://nasukafoods.site/image/paket.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Produk Kami</span>
+                <span>Produk Nasuka</span>
             </div>
             
-            <div class="other-feature-item" onclick="('Wifi')">
+            <div class="other-feature-item" onclick="('')">
                 <div class="other-feature-icon brizzi-icon">
                     <img src="https://nasukafoods.site/image/isia.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>NITA CELL</span>
             </div>
             
-            <div class="other-feature-item" onclick="('telorPuyuh')">
+            <div class="other-feature-item" onclick="('')">
                 <div class="other-feature-icon tagihan-icon">
                     <img src="https://nasukafoods.site/image/h.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>ORDER</span>
             </div>
             
-            <div class="other-feature-item" onclick="('telorAyam')">
+            <div class="other-feature-item" onclick="showChat()">
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/image/is.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>KANTOR</span>
+                <span>CHAT</span>
             </div>
         </div>
             
         <div class="search-bar" id="marquee-search-bar">
-            <i class="fas fa-search"></i>
+            <i class="fas fa-search">Sponsor</i>
             <div class="marquee-content">
                 <span id="running-text"></span>
             </div>
         </div>
 
-        <div class="other-features">
-            <div class="other-feature-item">
-                <div class="other-feature-icon lifestyle-icon">
-                    <i class="fas fa-shopping-bag"></i>
-                </div>
-                <span>Kado</span>
-            </div>
-            
-            <a href="" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
-                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
-                    <img src="https://nasukafoods.site/" alt="" class="product-icon-img">
-                </div>
-                <span>Sald</span>
-            </a>
-            
-            <a href="" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
-                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
-                    <img src="" alt="" class="product-icon-img">
-                </div>
-                <span>segera</span>
-            </a>
-        </div>
+       
+           
 
-        <div class="other-feature-icon investasi-icon" style="margin: 0 auto; display: block; width: 50px; height: 50px;"> 
-            <i class="fas fa-chart-line"></i>
+           
+            <div class="other-features">
+    <div class="other-feature-item" onclick="('')">
+        <div class="other-feature-icon top-up-icon">
+            <img src="https://nasukafoods.site/image/paket.jpg" alt="" class="product-icon-img">
         </div>
+        <span>Papan Sponsor</span>
+    </div>
+    <div id="dynamic-sponsors" style="display: contents;"></div>
+</div>
+
+           
+
+       
       
         <div class="bottom-nav">
             <div class="nav-item active" id="nav-home" onclick="showHome()">
@@ -368,18 +386,10 @@
         <div class="dokumen-card-modified">
             <div class="dokumen-header">
                 <i class="fas fa-arrow-left" onclick="showHome()"></i>
-                <h3>Informasi</h3>
+                <h3 id="dokumen-title">Informasi</h3>
             </div>
             <div class="dokumen-content-section">
-                <div class="dokumen-item">
-                    <h4>✨ Perjalanan Nasuka Foods</h4>
-                    <p>Nasuka Foods didirikan dengan visi membawa kelezatan Cilok Premium ke setiap rumah.</p>
                 </div>
-                <div class="dokumen-item">
-                    <h4>💳 Pembayaran Non Tunai</h4>
-                    <p>Kami menerapkan sistem pembayaran Non Tunai untuk mempercepat transaksi dan keamanan.</p>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -456,7 +466,6 @@ function hideAllContainers() {
 function updateHomeDisplay() {
     const userNameEl = document.getElementById('userNameDisplay');
     const SaldoEl = document.getElementById('SaldoAmountDisplay');
-    const welcomeEl = document.querySelector('.welcome');
     const isLoggedIn = !!localUser.ID;
     
     document.querySelectorAll('.bottom-nav .nav-item').forEach(item => item.classList.remove('active'));
@@ -501,6 +510,17 @@ function showDokumen() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Informasi';
+    doc.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4>✨ Perjalanan Nasuka Foods</h4>
+            <p>Nasuka Foods didirikan dengan visi membawa kelezatan Cilok Premium ke setiap rumah.</p>
+        </div>
+        <div class="dokumen-item">
+            <h4>💳 Pembayaran Non Tunai</h4>
+            <p>Kami menerapkan sistem pembayaran Non Tunai untuk mempercepat transaksi dan keamanan.</p>
+        </div>
+    `;
     document.querySelectorAll('.bottom-nav .nav-item').forEach(item => item.classList.remove('active'));
     document.getElementById('nav-dokumen').classList.add('active');
 }
@@ -519,6 +539,7 @@ function loginUser() {
                 localStorage.setItem("ID", user.ID);
                 localStorage.setItem("Username", user.Username);
                 localStorage.setItem("Nama", user.Nama);
+                localStorage.setItem("TanggalJoin", user.TanggalJoin || new Date().toISOString());
                 location.reload();
             } else { statusDiv.innerHTML = 'Password salah.'; }
         } else { statusDiv.innerHTML = 'User tidak ditemukan.'; }
@@ -537,6 +558,8 @@ function signupUser() {
         TanggalJoin: new Date().toISOString()
     }).then(() => {
         localStorage.setItem("ID", newID);
+        localStorage.setItem("Username", username);
+        localStorage.setItem("Nama", nama);
         location.reload();
     });
 }
@@ -590,11 +613,12 @@ function showGudang() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Guda';
     doc.querySelector('.dokumen-content-section').innerHTML = `
         <div style="padding: 20px; text-align: center;">
             <h4>Tambah Saldo</h4>
-            <input type="number" id="inputVoucher" placeholder="6 Digit Voucher" style="width: 80%; padding: 10px; margin: 10px 0;">
-            <button onclick="prosesVoucher6Digit()" class="btn-primary">Klaim Voucher</button>
+            <input type="number" id="inputVoucher" placeholder="Masukan 6 Digit Voucher" style="width: 80%; padding: 10px; margin: 10px 0;">
+            <button onclick="prosesVoucher6Digit()" class="btn-primary">Oke</button>
             <div id="statusVoucher"></div>
             <hr>
             <p>Atau hubungi admin:</p>
@@ -620,13 +644,142 @@ function prosesVoucher6Digit() {
 }
 
 function showHistory() {
-    alert("Fitur riwayat dalam pemeliharaan.");
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Riwayat Belanja';
+    const contentArea = doc.querySelector('.dokumen-content-section');
+    contentArea.innerHTML = '<p style="text-align:center;">Memuat riwayat...</p>';
+
+    db.ref(`history/${localUser.ID}`).once('value').then((snapshot) => {
+        contentArea.innerHTML = '';
+        if (snapshot.exists()) {
+            snapshot.forEach((child) => {
+                const data = child.val();
+                let voucherDisplay = "";
+                if (data.voucher && data.voucher !== "-") {
+                    voucherDisplay = `<div style="margin-top: 5px; padding: 5px; background: #f0f0f0; border: 1px dashed #ccc; font-family: monospace; font-size: 12px;">
+                                        KODE: ${data.voucher}
+                                      </div>`;
+                }
+
+                contentArea.innerHTML = `
+                    <div class="dokumen-item" style="border-left: 4px solid #ee4d2d; margin-bottom:10px; padding: 10px;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <div>
+                                <strong>${data.produk}</strong><br>
+                                <small>${data.tanggal}</small>
+                                ${voucherDisplay}
+                            </div>
+                            <div style="text-align:right;">
+                                <span style="color:#ee4d2d; font-weight:bold;">-Rp ${data.total.toLocaleString('id-ID')}</span><br>
+                                <small style="color:green;">${data.status}</small>
+                            </div>
+                        </div>
+                    </div>` + contentArea.innerHTML;
+            });
+        } else {
+            contentArea.innerHTML = '<p style="text-align:center; color:#999;">Belum ada transaksi.</p>';
+        }
+    });
 }
+
+// ================= LOGIKA CHAT PELANGGAN =================
+function showChat() {
+    if (!localUser.ID) {
+        showLogin();
+        return;
+    }
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Chat Admin';
+    
+    const contentArea = doc.querySelector('.dokumen-content-section');
+    contentArea.innerHTML = `
+        <div id="chatBox" class="chat-messages"></div>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <input type="text" id="chatInput" placeholder="Ketik pesan..." style="flex:1; padding:10px; border-radius:5px; border:1px solid #ddd;">
+            <button onclick="sendChat()" class="btn-primary" style="width:auto; padding:0 15px;"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    `;
+
+    // Listen pesan masuk
+    db.ref(`chats/${localUser.ID}`).on('value', (snapshot) => {
+        const chatBox = document.getElementById('chatBox');
+        if (!chatBox) return;
+        chatBox.innerHTML = '';
+        snapshot.forEach((child) => {
+            const msg = child.val();
+            const typeClass = msg.sender === 'admin' ? 'msg-admin' : 'msg-user';
+            chatBox.innerHTML += `<div class="msg ${typeClass}">${msg.text}</div>`;
+        });
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+}
+
+function sendChat() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const chatData = {
+        sender: 'user',
+        text: text,
+        timestamp: Date.now(),
+        nama: localUser.Nama
+    };
+
+    // Simpan pesan ke node pelanggan tersebut
+    db.ref(`chats/${localUser.ID}`).push(chatData);
+    
+    // Update daftar chat aktif untuk Admin agar admin tahu ada pesan baru
+    db.ref(`admin_inbox/${localUser.ID}`).set({
+        lastMsg: text,
+        timestamp: Date.now(),
+        nama: localUser.Nama,
+        unread: true
+    });
+
+    input.value = '';
+}
+// =========================================================
 
 document.getElementById('loginForm').onsubmit = (e) => { e.preventDefault(); loginUser(); };
 document.getElementById('signupForm').onsubmit = (e) => { e.preventDefault(); signupUser(); };
 
 $(document).ready(() => showHome());
+
+
+function loadDynamicSponsors() {
+    db.ref('sponsors_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-sponsors');
+        if (!container) return;
+        
+        let htmlContent = '';
+        snapshot.forEach((child) => {
+            const data = child.val();
+            htmlContent += `
+                <a href="${data.url}" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                    <div class="other-feature-icon">
+                        <img src="${data.image}" alt="${data.nama}" class="product-icon-img">
+                    </div>
+                    <span>${data.nama}</span>
+                </a>
+            `;
+        });
+        container.innerHTML = htmlContent;
+    });
+}
+
+// Panggil di $(document).ready
+$(document).ready(() => {
+    showHome();
+    loadDynamicSponsors(); 
+});
+
+
+
 </script>
 </body>
 </html>
