@@ -618,6 +618,12 @@ function showProfil() {
     hideAllContainers();
     document.getElementById('profil-container').style.display = 'block';
     
+    // Reset tab view
+    document.getElementById('tabPencapaian').classList.add('active');
+    document.getElementById('tabPerbaikan').classList.remove('active');
+    document.getElementById('contentPencapaian').style.display = 'block';
+    document.getElementById('contentPerbaikan').style.display = 'none';
+
     document.getElementById('profilFoto').src = localUser.Foto;
     document.getElementById('profilNamaDriver').textContent = localUser.Nama;
     document.getElementById('profilSaldoDisplay').textContent = 'Rp ' + localUser.Saldo.toLocaleString('id-ID');
@@ -849,6 +855,21 @@ $(document).ready(() => {
     showHome();
     loadDynamicSponsors(); 
     loadDynamicPartners();
+
+    // Logika Pemindah Tab Profil (Baru ditambahkan)
+    $('#tabPencapaian').on('click', function() {
+        $('.profil-tab-item').removeClass('active');
+        $(this).addClass('active');
+        $('#contentPencapaian').show();
+        $('#contentPerbaikan').hide();
+    });
+
+    $('#tabPerbaikan').on('click', function() {
+        $('.profil-tab-item').removeClass('active');
+        $(this).addClass('active');
+        $('#contentPencapaian').hide();
+        $('#contentPerbaikan').show();
+    });
 });
 
 </script>
