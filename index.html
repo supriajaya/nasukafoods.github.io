@@ -56,6 +56,49 @@
     background: #e0e0e0;
     color: #333;
 }
+
+/* Modifikasi Navigasi Bawah Transparan Penuh */
+.bottom-nav {
+    background: rgba(255, 255, 255, 0.1) !important; /* Sangat transparan */
+    backdrop-filter: blur(8px); /* Memberikan efek blur pada konten di belakang */
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: none !important;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Memastikan konten utama tidak terpotong footer tapi tetap bisa lewat di belakangnya */
+.container {
+    padding-bottom: 70px; 
+}
+
+
+/* Frame Gradasi Keemasan untuk Sponsor */
+.sponsor-frame {
+    position: relative;
+    padding: 3px; /* Jarak antara frame dan gambar */
+    background: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+    border-radius: 50%; /* Membuat frame bulat sesuai ikon Anda */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(191, 149, 63, 0.5); /* Efek cahaya emas */
+    animation: gold-glow 3s infinite alternate;
+}
+
+.sponsor-frame img {
+    border: 2px solid #fff; /* Garis putih tipis untuk memisahkan gambar dari emas */
+    background: white;
+}
+
+@keyframes gold-glow {
+    0% { box-shadow: 0 0 5px rgba(191, 149, 63, 0.4); }
+    100% { box-shadow: 0 0 15px rgba(251, 245, 183, 0.8); }
+}
+
 </style>
 </head>
 
@@ -110,16 +153,16 @@
 
             <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
                 <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
-                    <img src="https://nasukafoods.site/image/lacak-lokasgif" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    <img src="https://nasukafoods.site/image/dokumen.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
-                <span>Posisi</span>
+                <span>Pustaka</span>
             </a>
         </div>
 
         <a href="https://nasukafoods.site/testimoni.html" target="_blank" class="banner" style="text-decoration: none; display: flex;">
             <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
                 <span id="blinking-txt" style="display: block; width: 100%; white-space: normal;">
-                    <strong>Kata Pelanggan</strong>
+                    <strong>Interaksi Pelanggan</strong>
                 </span>
             </div>
             <div class="banner-button">
@@ -130,63 +173,70 @@
         <div class="other-features">
             <div class="other-feature-item" onclick="('')">
                 <div class="other-feature-icon top-up-icon">
-                    <img src="https://nasukafoods.site/image/paket.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/logoisian.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Produk Nasuka</span>
+                <span>Unggulan</span>
             </div>
             
             <div class="other-feature-item" onclick="('')">
                 <div class="other-feature-icon brizzi-icon">
-                    <img src="https://nasukafoods.site/image/isia.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/logopremium.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>NITA CELL</span>
+                <span>Premium</span>
             </div>
             
             <div class="other-feature-item" onclick="('')">
                 <div class="other-feature-icon tagihan-icon">
-                    <img src="https://nasukafoods.site/image/h.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/order.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>ORDER</span>
             </div>
             
             <div class="other-feature-item" onclick="showChat()">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/image/is.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/customers.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>CHAT</span>
             </div>
         </div>
             
         <div class="search-bar" id="marquee-search-bar">
-            <i class="fas fa-search">Sponsor</i>
+            <i class="fas fa-search">    Sponsor</i>
             <div class="marquee-content">
                 <span id="running-text"></span>
             </div>
         </div>
 
-       
-           
-
-           
             <div class="other-features">
-    <div class="other-feature-item" onclick="('')">
-        <div class="other-feature-icon top-up-icon">
-            <img src="https://nasukafoods.site/image/paket.jpg" alt="" class="product-icon-img">
-        </div>
-        <span>Papan Sponsor</span>
-    </div>
-    <div id="dynamic-sponsors" style="display: contents;"></div>
+   
+    
+    
+    
+    
+    <div id="dynamic-sponsors" style="display: contents;"></div></div>
+
+
+   <div class="search-bar" id="marquee-search-bar">
+            <i class="fas fa-search">Partner</i>
+            <div class="marquee-content">
+                <span id="running-text"></span>
+            </div>
 </div>
 
-           
+<div class="other-features" style="margin-top: 20px;">
+    
+    
+    
+  
+    
+    
+    
+    
+    <div id="dynamic-partners" style="display: contents;"></div>
+</div>
 
        
-      
         <div class="bottom-nav">
-            <div class="nav-item active" id="nav-home" onclick="showHome()">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </div>
             <div class="nav-item" id="nav-dokumen" onclick="showDokumen()">
                 <i class="fas fa-list-alt"></i>
                 <span>Informasi</span>
@@ -684,7 +734,6 @@ function showHistory() {
     });
 }
 
-// ================= LOGIKA CHAT PELANGGAN =================
 function showChat() {
     if (!localUser.ID) {
         showLogin();
@@ -704,7 +753,6 @@ function showChat() {
         </div>
     `;
 
-    // Listen pesan masuk
     db.ref(`chats/${localUser.ID}`).on('value', (snapshot) => {
         const chatBox = document.getElementById('chatBox');
         if (!chatBox) return;
@@ -730,10 +778,8 @@ function sendChat() {
         nama: localUser.Nama
     };
 
-    // Simpan pesan ke node pelanggan tersebut
     db.ref(`chats/${localUser.ID}`).push(chatData);
     
-    // Update daftar chat aktif untuk Admin agar admin tahu ada pesan baru
     db.ref(`admin_inbox/${localUser.ID}`).set({
         lastMsg: text,
         timestamp: Date.now(),
@@ -743,12 +789,10 @@ function sendChat() {
 
     input.value = '';
 }
-// =========================================================
 
 document.getElementById('loginForm').onsubmit = (e) => { e.preventDefault(); loginUser(); };
 document.getElementById('signupForm').onsubmit = (e) => { e.preventDefault(); signupUser(); };
 
-$(document).ready(() => showHome());
 
 
 function loadDynamicSponsors() {
@@ -761,8 +805,37 @@ function loadDynamicSponsors() {
             const data = child.val();
             htmlContent += `
                 <a href="${data.url}" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
+                    <div class="other-feature-icon sponsor-frame"> <img src="${data.image}" alt="${data.nama}" class="product-icon-img">
+                    </div>
+                    <span style="font-weight: bold; color: #b38728;">${data.nama}</span>
+                </a>
+            `;
+        });
+        container.innerHTML = htmlContent;
+    });
+}
+
+
+
+
+
+
+
+
+
+
+function loadDynamicPartners() {
+    db.ref('partners_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-partners');
+        if (!container) return;
+        
+        let htmlContent = '';
+        snapshot.forEach((child) => {
+            const data = child.val();
+            htmlContent += `
+                <a href="${data.url || '#'}" target="_blank" class="other-feature-item" style="text-decoration: none; color: inherit;">
                     <div class="other-feature-icon">
-                        <img src="${data.image}" alt="${data.nama}" class="product-icon-img">
+                        <img src="${data.image}" alt="${data.nama}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">
                     </div>
                     <span>${data.nama}</span>
                 </a>
@@ -772,13 +845,11 @@ function loadDynamicSponsors() {
     });
 }
 
-// Panggil di $(document).ready
 $(document).ready(() => {
     showHome();
     loadDynamicSponsors(); 
+    loadDynamicPartners();
 });
-
-
 
 </script>
 </body>
