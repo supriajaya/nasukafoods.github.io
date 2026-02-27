@@ -1,720 +1,314 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Server Belanja Live</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>Etalase Nasuka Foods</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://nasukafoods.site/lain.css">
+    <link rel="stylesheet" href="https://nasukafoods.site/index.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 15px; background-color: #f0f8ff; }
-        h1 { color: #28a745; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
-        p { color: #555; }
-        
-        #main-content { 
-            display: none; 
-            transition: opacity 0.3s ease;
-        }
-        
-        #map { 
-            height: 350px; 
-            border: 1px solid #ccc; 
-            border-radius: 8px; 
-            margin-top: 15px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .status { padding: 12px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; border: 1px solid; }
-        .status.online { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
-        .status.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
-        .status.warning { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
-        
-        .login-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: none; 
-            font-size: 16px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .shop-button {
-            background-color: #ffc107; 
-            color: #343a40; 
-            border: none;
-            padding: 8px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: block; 
-            width: 100%; 
-            max-width: 250px; 
-            font-size: 14px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .shop-button:hover {
-            background-color: #e0a800; 
-        }
-
-        #login-container, #signup-container, #belanja-container {
-            padding: 20px;
-            max-width: 400px;
-            margin: 50px auto;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none; 
-        }
-
-        #belanja-container {
-            max-width: 600px; 
-        }
-
-        #belanja-container h3 {
-            color: #dc3545;
-            border-bottom: 1px dashed #dc3545;
-            padding-bottom: 10px;
-        }
-        .back-to-main {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            color: #28a745;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0 15px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .login-submit {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .login-submit:hover:not(:disabled) {
-            background-color: #218838;
-        }
-        .switch-link {
-            display: block;
-            margin-top: 15px;
-            text-align: center;
-            color: #007bff;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        .leaflet-control-attribution a[href^="https://leafletjs.com"] {
-            display: none; 
-        }
-
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            gap: 12px;
+            padding: 15px;
+            background: #f4f4f4;
         }
-        .product-item {
-            border: 1px solid #e9ecef;
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .product-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
         }
-        .product-item h4 {
-            margin-top: 5px;
+        .product-card:active { transform: scale(0.95); }
+        .product-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        .product-info { padding: 10px; }
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            height: 35px;
+            overflow: hidden;
             margin-bottom: 5px;
-            color: #343a40;
-            font-size: 1em;
+            color: #333;
         }
-        .product-item .price {
+        .product-price {
+            color: #ee4d2d;
             font-weight: bold;
-            color: #dc3545;
-            font-size: 1.1em;
-            display: block;
-            margin-bottom: 10px;
+            font-size: 15px;
         }
-        .buy-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
         }
-        .buy-button:hover {
-            background-color: #0056b3;
+        .modal-content {
+            background: #fff;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+        }
+        .checkout-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-box {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .receipt-box {
+            font-family: 'Courier New', Courier, monospace;
+            background: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <h1 id="mainTitle">Bagikan Lokasi</h1>
- 
-    <div id="main-content">
-        <div id="status" class="status warning">Menunggu inisialisasi...</div>
-        <button id="loginButton" class="login-button" onclick="showLogin()">Login Sekarang</button>
-        <div id="map"></div>
-        <div id="userInfo" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
+
+<div class="container">
+    <div class="header">
+        <div class="header-content">
+            <div class="top-nav">
+                <i class="fas fa-arrow-left" onclick="window.location.href='index.html'"></i>
+                <span class="welcome">Menu Nasuka</span>
+                <div id="displaySaldoTop" style="font-weight:bold; color:#fff; background:rgba(0,0,0,0.2); padding:2px 8px; border-radius:10px;">Rp 0</div>
+            </div>
+        </div>
     </div>
 
-    <div id="login-container">
-        <h2>👋 Silakan Login</h2>
-        <p id="loginMessage" style="color: red;"></p>
-        <form id="loginForm">
-            <label for="username"><b>Username:</b></label>
-            <input type="text" placeholder="Masukkan Username" name="username" id="username" class="login-input" required>
+    <div class="product-grid" id="productContainer">
+        </div>
+</div>
 
-            <label for="password"><b>Password:</b></label>
-            <input type="password" placeholder="Masukkan Password" name="password" id="password" class="login-input" required>
-            
-            <button type="submit" class="login-submit">Masuk</button>
-        </form>
-        <span class="switch-link" onclick="showSignup()">Belum punya akun? Daftar Sekarang</span>
+<div id="modalCheckout" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0;">Konfirmasi Pesanan</h3>
+        <div id="checkoutDetails" class="checkout-item"></div>
+        
+        <div class="info-box">
+            <strong>Tujuan Pengiriman:</strong><br>
+            <span id="destNama"></span><br>
+            <span id="destHP"></span><br>
+            <span id="destAlamat"></span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:18px; margin-bottom:20px;">
+            <span>Total Bayar:</span>
+            <span id="totalHarga" style="color:#ee4d2d;"></span>
+        </div>
+
+        <button onclick="eksekusiPembayaran()" id="btnBayar" class="btn-primary" style="width:100%; margin-bottom:10px;">Bayar Sekarang</button>
+        <button onclick="tutupModal('modalCheckout')" class="btn-secondary" style="width:100%;">Batal</button>
     </div>
+</div>
 
-    <div id="signup-container">
-        <h2>📝 Buat Akun Baru</h2>
-        <p id="signupMessage" style="color: red;"></p>
-        <form id="signupForm">
-            <label for="signupName"><b>Nama Lengkap:</b></label>
-            <input type="text" placeholder="Masukkan Nama Lengkap" name="signupName" id="signupName" class="login-input" required>
+<div id="modalStruk" class="modal">
+    <div class="modal-content" style="text-align:center;">
+        <i class="fas fa-check-circle" style="color:#2ecc71; font-size:50px; margin-bottom:10px;"></i>
+        <h3 style="margin:0;">Pembayaran Berhasil</h3>
+        <p style="color:#666; font-size:13px;">Silakan simpan struk ini</p>
+        
+        <div class="receipt-box" id="isiStruk"></div>
 
-            <label for="signupUsername"><b>Username:</b></label>
-            <input type="text" placeholder="Username unik (tanpa spasi)" name="signupUsername" id="signupUsername" class="login-input" required>
-
-            <label for="signupNomorHP"><b>Nomor HP:</b></label>
-            <input type="tel" placeholder="Contoh: 08123456789" name="signupNomorHP" id="signupNomorHP" class="login-input" required>
-
-            <label for="signupPassword"><b>Password:</b></label>
-            <input type="password" placeholder="Buat Password" name="signupPassword" id="signupPassword" class="login-input" required>
-            
-            <button type="submit" class="login-submit">Daftar Akun</button>
-        </form>
-        <span class="switch-link" onclick="showLogin()">Sudah punya akun? Login</span>
+        <button onclick="window.location.href='index.html'" class="btn-primary" style="width:100%; margin-top:20px;">Kembali ke Home</button>
     </div>
+</div>
 
-    <div id="belanja-container">
-    </div>
+<script>
+// Konfigurasi Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafoods1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const db = firebase.database();
+
+// Data User dari LocalStorage
+const userData = {
+    ID: localStorage.getItem("ID"),
+    Nama: localStorage.getItem("Nama"),
+    Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
+    Alamat: localStorage.getItem("Alamat"),
+    HP: localStorage.getItem("NomorHP")
+};
+
+// Data Produk (kategori: wifi, axis, tsel, atau fisik)
+const listProduk = [
+    { id: 'P1', nama: 'Bumbu Kacang Instan Tinggal Seduh', harga: 20000, img: 'https://nasukafoods.site/image/paket.jpg', kategori: 'fisik' },
+    { id: 'P2', nama: 'Voucher Wifi Nita Cell', harga: 3000, img: 'https://nasukafoods.site/image/isia.jpg', kategori: 'wifi' },
+    { id: 'P7', nama: 'Voucher Axis 3D', harga: 10000, img: 'https://nasukafoods.site/image/isia.jpg', kategori: 'axis' },
+    { id: 'P8', nama: 'Voucher Telkomsel 100GB', harga: 50000, img: 'https://nasukafoods.site/image/isia.jpg', kategori: 'tsel' },
+    { id: 'P3', nama: 'Paket 25rb 10 cilok rasa gajih + 10 cilok isian gajih + 10 cilok telor puyuh', harga: 25000, img: 'https://nasukafoods.site/image/h.jpg', kategori: 'fisik' },
+    { id: 'P4', nama: 'Es Teh Manis Jumbo', harga: 5000, img: 'https://nasukafoods.site/image/is.jpg', kategori: 'fisik' },
+    { id: 'P5', nama: 'Cilok Telur Puyuh', harga: 12000, img: 'https://nasukafoods.site/image/nasukabird.jpg', kategori: 'fisik' },
+    { id: 'P6', nama: 'Cilok Goreng Crispy', harga: 13000, img: 'https://nasukafoods.site/nasukafoods.jpg', kategori: 'fisik' }
+];
+
+let itemTerpilih = null;
+
+function muatProduk() {
+    const container = document.getElementById('productContainer');
+    document.getElementById('displaySaldoTop').textContent = 'Rp ' + userData.Saldo.toLocaleString('id-ID');
     
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    listProduk.forEach(p => {
+        container.innerHTML += `
+            <div class="product-card" onclick="siapkanCheckout('${p.id}')">
+                <img src="${p.img}">
+                <div class="product-info">
+                    <div class="product-name">${p.nama}</div>
+                    <div class="product-price">Rp ${p.harga.toLocaleString('id-ID')}</div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function siapkanCheckout(id) {
+    if(!userData.ID) { alert("Harap login terlebih dahulu."); return; }
+    itemTerpilih = listProduk.find(x => x.id === id);
     
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpI", 
-            authDomain: "nasukafoods1.firebaseapp.com", 
-            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app", 
-            projectId: "nasukafoods1", 
-            messagingSenderId: "84287800896", 
-            appId: "1:84287800896:web:83189d6766997b00f701a5" 
-        };
-        
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        
-        const database = firebase.database();
-        const usersRef = database.ref('users'); 
-        
-        const statusElement = document.getElementById('status');
-        const userInfoElement = document.getElementById('userInfo');
-        const mainTitleElement = document.getElementById('mainTitle');
-        const loginButtonElement = document.getElementById('loginButton');
-        const mainContentElement = document.getElementById('main-content'); 
-        
-        const loginContainerElement = document.getElementById('login-container'); 
-        const loginForm = document.getElementById('loginForm');
-        const loginMessage = document.getElementById('loginMessage');
+    document.getElementById('checkoutDetails').innerHTML = `
+        <img src="${itemTerpilih.img}" style="width:70px; height:70px; border-radius:8px; object-fit:cover;">
+        <div>
+            <div style="font-weight:bold;">${itemTerpilih.nama}</div>
+            <div style="color:#666; font-size:13px;">Kuantitas: 1</div>
+        </div>
+    `;
+    
+    document.getElementById('destNama').textContent = userData.Nama;
+    document.getElementById('destHP').textContent = userData.HP;
+    document.getElementById('destAlamat').textContent = userData.Alamat;
+    document.getElementById('totalHarga').textContent = 'Rp ' + itemTerpilih.harga.toLocaleString('id-ID');
+    
+    document.getElementById('modalCheckout').style.display = 'flex';
+}
 
-        const signupContainerElement = document.getElementById('signup-container');
-        const signupForm = document.getElementById('signupForm');
-        const signupMessage = document.getElementById('signupMessage');
+async function eksekusiPembayaran() {
+    if (userData.Saldo < itemTerpilih.harga) {
+        alert("Saldo Anda tidak mencukupi!");
+        return;
+    }
 
-        const belanjaContainerElement = document.getElementById('belanja-container');
+    document.getElementById('btnBayar').disabled = true;
+    document.getElementById('btnBayar').innerText = "Memproses...";
+
+    let kodeVoucherTerambil = "-";
+    let labelVoucher = "";
+
+    // Logika Pengambilan Kode Voucher
+    if (itemTerpilih.kategori !== 'fisik') {
+        let nodeDB = "";
         
-        let keranjangBelanja = {}; 
-        let MINIMUM_PEMBELIAN = 50000;
-
-        const cilokProducts = [
-            { id: 1, name: "Cilok Biasa", price: 500, description: "Cilok polos dengan bumbu kacang mini" },
-            { id: 2, name: "Cilok Isian Gajih", price: 1000, description: "Isian gajih premium" },
-            { id: 3, name: "Cilok Isian telor puyuh", price: 2000, description: "Pedas membara dengan isian telor puyuh" },
-            { id: 4, name: "Cilok Isian telor ayam", price: 5000, description: "ok" }
-        ];
-
-        function getProductById(id) {
-            return cilokProducts.find(p => p.id === parseInt(id));
-        }
-        
-        function calculateTotal() {
-            let total = 0;
-            for (const productId in keranjangBelanja) {
-                const product = getProductById(productId);
-                const quantity = keranjangBelanja[productId];
-                if (product) {
-                    total += product.price * quantity;
-                }
-            }
-            return total;
+        if (itemTerpilih.kategori === 'wifi') {
+            nodeDB = 'vouchers';
+            labelVoucher = 'KODE WIFI';
+        } else if (itemTerpilih.kategori === 'axis') {
+            nodeDB = 'vouchers_axis';
+            labelVoucher = 'KODE AXIS';
+        } else if (itemTerpilih.kategori === 'tsel') {
+            nodeDB = 'vouchers_tsel';
+            labelVoucher = 'KODE TELKOMSEL';
         }
 
-        let localUser = {
-            ID: localStorage.getItem("ID"),
-            Nama: localStorage.getItem("Nama"),
-            NomorHP: localStorage.getItem("NomorHP"),
-            Username: localStorage.getItem("Username")
-        };
+        const snapshotVoucher = await db.ref(nodeDB).orderByChild('status').equalTo('tersedia').limitToFirst(1).once('value');
         
-        let userId = localUser.ID;
-        let userName = localUser.Nama || localUser.Username; 
-        let userLabel = userName || `User ID: ${userId || 'N/A'}`; 
-
-        if (!userId) {
-            console.warn("User ID not found in Local Storage. Starting in login mode.");
+        if (!snapshotVoucher.exists()) {
+            alert(`Stok Voucher ${labelVoucher.split(' ')[1]} sedang habis!`);
+            document.getElementById('btnBayar').disabled = false;
+            document.getElementById('btnBayar').innerText = "Bayar Sekarang";
+            return;
         }
 
-        const locationRef = database.ref(`customer_locations/${userId}`); 
-        
-        let map;
-        let currentMarker;
-        const defaultLatLng = [-6.2088, 106.8456]; 
-        const UPDATE_INTERVAL_MS = 10000; 
-        let locationInterval; 
+        const keyVoucher = Object.keys(snapshotVoucher.val())[0];
+        kodeVoucherTerambil = snapshotVoucher.val()[keyVoucher].kode;
 
-        function hideAllViews() {
-            mainContentElement.style.display = 'none';
-            loginContainerElement.style.display = 'none';
-            signupContainerElement.style.display = 'none';
-            belanjaContainerElement.style.display = 'none'; 
-            
-            loginMessage.textContent = '';
-            signupMessage.textContent = '';
-        }
-        
-        function showLogin() {
-            hideAllViews();
-            loginContainerElement.style.display = 'block';
-            mainTitleElement.textContent = "Login Pengguna";
-        }
+        await db.ref(`${nodeDB}/${keyVoucher}`).remove();
+    }
 
-        function showSignup() {
-            hideAllViews();
-            signupContainerElement.style.display = 'block';
-            mainTitleElement.textContent = "Daftar Akun Baru";
-        }
+    const tgl = new Date();
+    const invoice = "NSK" + tgl.getTime();
+    const formatTgl = tgl.toLocaleString('id-ID');
 
-        function showBelanja() {
-             if (!userId) {
-                alert("Anda harus login untuk mengakses halaman belanja.");
-                showLogin();
-                return;
-            }
+    db.ref(`users/${userData.ID}/Saldo`).transaction((currentSaldo) => {
+        return (currentSaldo || 0) - itemTerpilih.harga;
+    }, (error, committed, snapshot) => {
+        if (committed) {
+            const dataRiwayat = {
+                invoice: invoice,
+                produk: itemTerpilih.nama,
+                total: itemTerpilih.harga,
+                tanggal: formatTgl,
+                status: "LUNAS",
+                voucher: kodeVoucherTerambil,
+                label: labelVoucher
+            };
 
-            hideAllViews();
-            belanjaContainerElement.style.display = 'block';
-            mainTitleElement.textContent = "Halaman Belanja";
-            
-            belanjaContainerElement.innerHTML = `
-                <h2>🛍️ Selamat Datang di Toko Nasuka Foods!</h2>
-                <p>Memuat saldo, lokasi, dan produk...</p>
-            `;
-
-            const userBalanceRef = database.ref(`users/${userId}/Saldo`);
-            const userLocationRef = database.ref(`customer_locations/${userId}`);
-            
-            Promise.all([
-                userBalanceRef.once('value'),
-                userLocationRef.once('value')
-            ])
-            .then(([saldoSnapshot, locationSnapshot]) => {
-                const saldo = saldoSnapshot.val() || 0; 
-                const locationData = locationSnapshot.val();
-                
-                const lat = locationData ? locationData.lat.toFixed(6) : 'N/A (Belum Terkirim)';
-                const lng = locationData ? locationData.lng.toFixed(6) : 'N/A (Belum Terkirim)';
-                
-                const formattedSaldo = saldo.toLocaleString('id-ID', { 
-                    style: 'currency', 
-                    currency: 'IDR',
-                    minimumFractionDigits: 0, 
-                    maximumFractionDigits: 0
-                });
-                
-                renderBelanjaContent(formattedSaldo, lat, lng);
-
-            }).catch(error => {
-                belanjaContainerElement.innerHTML = `
-                    <h2>⚠️ Terjadi Kesalahan</h2>
-                    <p>Gagal memuat data pengguna/lokasi: ${error.message}</p>
-                    <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
-                `;
+            db.ref(`history/${userData.ID}`).push(dataRiwayat).then(() => {
+                localStorage.setItem("Saldo", snapshot.val());
+                tampilkanStruk(dataRiwayat);
             });
-        }
-        
-        function renderBelanjaContent(formattedSaldo, lat, lng) {
-             const totalBelanja = calculateTotal();
-             const formattedTotal = totalBelanja.toLocaleString('id-ID'); 
-             
-             const isMinimumMet = totalBelanja >= MINIMUM_PEMBELIAN;
-             
-             let productHtml = cilokProducts.map(product => {
-                 const quantity = keranjangBelanja[product.id] || 0;
-                 return `
-                     <div class="product-item">
-                         <h4>${product.name}</h4>
-                         <span class="price">Rp ${product.price.toLocaleString('id-ID')}</span>
-                         <p style="font-size: 0.8em; color: #6c757d; margin-bottom: 10px;">${product.description}</p>
-                         <div style="display: flex; justify-content: space-around; align-items: center;">
-                            <button class="buy-button" style="width: 30%; background-color: #dc3545;" onclick="updateKeranjang(${product.id}, -1)">-</button>
-                            <span id="qty-${product.id}" style="font-weight: bold; width: 30%; font-size: 1.1em;">${quantity}</span>
-                            <button class="buy-button" style="width: 30%;" onclick="updateKeranjang(${product.id}, 1)">+</button>
-                         </div>
-                     </div>
-                 `;
-             }).join('');
-
-             const bayarButton = `
-                 <button 
-                     class="login-submit" 
-                     style="width: 100%; margin-top: 15px; background-color: ${isMinimumMet ? '#28a745' : '#6c757d'};"
-                     ${isMinimumMet ? `onclick="showPembayaran()"` : 'disabled'}
-                 >
-                     ${isMinimumMet ? '✅ Lanjut Pembayaran' : `Pembelian min. Rp ${MINIMUM_PEMBELIAN.toLocaleString('id-ID')}`}
-                 </button>
-             `;
-
-             belanjaContainerElement.innerHTML = `
-                 <div style="background-color: #e9f7ef; padding: 10px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
-                     <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                         Saldo Anda:<span style="font-size: 1.2em; color: #28a745;">${formattedSaldo}</span>
-                     </div>
-                     <div style="display: flex; justify-content: space-between;">
-                         Total belanja:<span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">Rp ${formattedTotal}</span>
-                     </div>
-                 </div>
-                 
-                 <div class="product-grid">
-                     ${productHtml}
-                 </div>
-                 
-                 ${bayarButton}
-
-                 <h3 style="margin-top: 30px;">Detail Pelanggan:</h3>
-                 <p id="belanjaUserInfo">
-                     <b>Nama:</b> ${localUser.Nama || 'N/A'}<br>
-                     <b>ID:</b> ${localUser.ID || 'N/A'}<br>
-                     <b>Nomor HP:</b> ${localUser.NomorHP || 'N/A'}<br>
-                     <p><strong>Kordinat Pengiriman</strong></p>
-                     <b>Garis Lintang:</b> ${lat}<br>
-                     <b>Garis Busur:</b> ${lng}
-                 </p>
-
-                 <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
-             `;
-        }
-        
-        function updateKeranjang(productId, change) {
-            let currentQty = keranjangBelanja[productId] || 0;
-            let newQty = currentQty + change;
-            if (newQty < 0) newQty = 0; 
-            if (newQty > 0) {
-                keranjangBelanja[productId] = newQty;
-            } else {
-                delete keranjangBelanja[productId];
-            }
-            showBelanja(); 
-        }
-        
-        function showPembayaran() {
-            const totalBelanja = calculateTotal();
-            if (totalBelanja < MINIMUM_PEMBELIAN) {
-                alert(`Pembelian minimal adalah Rp ${MINIMUM_PEMBELIAN.toLocaleString('id-ID')}.`);
-                return;
-            }
-
-            hideAllViews();
-            belanjaContainerElement.style.display = 'block';
-            mainTitleElement.textContent = "Ringkasan Pembayaran";
-            
-            let itemDetailsHtml = '<ul style="list-style-type: none; padding: 0;">';
-            for (const productId in keranjangBelanja) {
-                const quantity = keranjangBelanja[productId];
-                const product = getProductById(productId);
-                if (product && quantity > 0) {
-                    const subtotal = product.price * quantity;
-                    itemDetailsHtml += `
-                        <li style="border-bottom: 1px dotted #ccc; padding: 5px 0; display: flex; justify-content: space-between;">
-                            <span>${quantity}x ${product.name}</span>
-                            <span style="font-weight: bold;">Rp ${subtotal.toLocaleString('id-ID')}</span>
-                        </li>
-                    `;
-                }
-            }
-            itemDetailsHtml += '</ul>';
-
-            const userBalanceRef = database.ref(`users/${userId}/Saldo`);
-            userBalanceRef.once('value').then(snapshot => {
-                const saldo = snapshot.val() || 0;
-                const formattedSaldo = saldo.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
-                const formattedTotal = totalBelanja.toLocaleString('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
-                const isSaldoCukup = saldo >= totalBelanja;
-
-                belanjaContainerElement.innerHTML = `
-                    <h2>💳 Proses Pembayaran</h2>
-                    <div style="background-color: #f7f7f7; padding: 15px; border-radius: 8px;">
-                        ${itemDetailsHtml}
-                        <div style="border-top: 2px solid #dc3545; padding-top: 10px; margin-top: 10px; display: flex; justify-content: space-between;">
-                            <span>Total Pembayaran:</span>
-                            <span style="font-size: 1.2em; font-weight: bold; color: #dc3545;">${formattedTotal}</span>
-                        </div>
-                    </div>
-                    
-                    <div style="padding: 10px; border-radius: 4px; background-color: #e9f7ef; margin: 15px 0;">
-                        Saldo Anda: <span style="font-weight: bold; color: #28a745;">${formattedSaldo}</span>
-                    </div>
-
-                    <button class="login-submit" style="background-color: ${isSaldoCukup ? '#dc3545' : '#6c757d'};"
-                        ${isSaldoCukup ? `onclick="prosesPembayaran(${totalBelanja})"` : 'disabled'}>
-                        ${isSaldoCukup ? 'Bayar Sekarang' : 'Saldo Tidak Cukup'}
-                    </button>
-
-                    <span class="switch-link" onclick="showBelanja()">← Kembali ke Daftar Produk</span>
-                `;
-            });
-        }
-        
-        // MODIFIKASI: FUNGSI PEMBAYARAN DENGAN DISPLAY VOUCHER
-        function prosesPembayaran(amount) {
-            const userBalanceRef = database.ref(`users/${userId}/Saldo`);
-            const vouchersRef = database.ref('vouchers');
-
-            userBalanceRef.transaction((currentBalance) => {
-                if (currentBalance === null) return 0;
-                if (currentBalance >= amount) {
-                    return currentBalance - amount;
-                } else {
-                    return undefined; 
-                }
-            })
-            .then((result) => {
-                if (result.committed) {
-                    const newBalance = result.snapshot.val();
-                    const formattedNewBalance = newBalance.toLocaleString('id-ID', { 
-                        style: 'currency', currency: 'IDR', 
-                        minimumFractionDigits: 0, maximumFractionDigits: 0
-                    });
-
-                    // Logika Pengambilan Voucher
-                    vouchersRef.limitToFirst(1).once('value').then(snapshot => {
-                        let voucherHtml = "";
-                        
-                        if (snapshot.exists()) {
-                            const vKey = Object.keys(snapshot.val())[0];
-                            const vCode = snapshot.val()[vKey].code;
-                            
-                            // Hapus voucher dari stok agar tidak terpakai orang lain
-                            vouchersRef.child(vKey).remove();
-
-                            voucherHtml = `
-                                <div style="margin: 20px 0; padding: 15px; border: 3px dashed #28a745; background-color: #f0fff4; border-radius: 10px;">
-                                    <p style="margin: 0; color: #555; font-size: 0.9em;">🎉 Bonus Voucher Untukmu:</p>
-                                    <h2 style="margin: 10px 0; color: #28a745; letter-spacing: 3px; font-size: 2em;">${vCode}</h2>
-                                    <small style="color: #888;">Simpan kode ini untuk klaim hadiah/diskon!</small>
-                                </div>
-                            `;
-                        } else {
-                            voucherHtml = `
-                                <div style="margin: 20px 0; padding: 10px; color: #856404; background-color: #fff3cd; border-radius: 8px; font-size: 0.8em;">
-                                    Maaf, stok voucher hadiah sedang habis.
-                                </div>
-                            `;
-                        }
-
-                        belanjaContainerElement.innerHTML = `
-                            <div style="text-align: center; padding: 10px;">
-                                <h2 style="color: #28a745;">✅ Pembayaran Berhasil!</h2>
-                                <p>Terima kasih <b>${localUser.Nama}</b>!</p>
-                                <p style="font-size: 0.9em;">Sisa Saldo: <b>${formattedNewBalance}</b></p>
-                                
-                                ${voucherHtml}
-                                
-                                <div style="margin-top: 20px;">
-                                    <button class="login-submit" style="background-color: #007bff; margin-bottom: 10px;" onclick="showBelanja()">🛒 Belanja Lagi</button>
-                                    <span class="back-to-main" onclick="navigateToMain()">← Kembali ke Peta</span>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    keranjangBelanja = {}; 
-                } else {
-                    alert("❌ Pembayaran gagal. Saldo tidak cukup.");
-                    showPembayaran(); 
-                }
-            })
-            .catch((error) => {
-                alert(`❌ Terjadi kesalahan: ${error.message}`);
-            });
-        }
-        
-        function navigateToMain(newUser = false) {
-            hideAllViews();
-            mainContentElement.style.display = 'block';
-            document.getElementById('map').style.display = 'block';
-            document.getElementById('status').style.display = 'block';
-            userInfoElement.style.display = 'block';
-            initMap(newUser); 
-        }
-        
-        signupForm.addEventListener('submit', function(e) {
-            e.preventDefault(); 
-            const Nama = document.getElementById('signupName').value.trim();
-            const Username = document.getElementById('signupUsername').value.trim();
-            const NomorHP = document.getElementById('signupNomorHP').value.trim();
-            const Password = document.getElementById('signupPassword').value;
-
-            if (Username.includes(' ')) {
-                signupMessage.textContent = "❌ Username tidak boleh mengandung spasi.";
-                return;
-            }
-
-            usersRef.orderByChild('Username').equalTo(Username).once('value').then(snapshot => {
-                if (snapshot.exists()) {
-                    signupMessage.textContent = `❌ Username '${Username}' sudah digunakan.`;
-                } else {
-                    const newUserData = { Nama, Username, NomorHP, Password, Saldo: 0, created_at: firebase.database.ServerValue.TIMESTAMP };
-                    const newUserRef = usersRef.push(newUserData);
-                    const newUserId = newUserRef.key;
-                    
-                    localStorage.setItem("ID", newUserId);
-                    localStorage.setItem("Nama", Nama);
-                    localStorage.setItem("NomorHP", NomorHP);
-                    localStorage.setItem("Username", Username);
-
-                    userId = newUserId;
-                    localUser = { ID: newUserId, Nama, NomorHP, Username };
-                    userLabel = Nama;
-                    
-                    initLocationBackground(); 
-                    showBelanja(); 
-                }
-            });
-        });
-
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault(); 
-            const inputUsername = document.getElementById('username').value.trim();
-            const inputPassword = document.getElementById('password').value;
-            
-            usersRef.orderByChild('Username').equalTo(inputUsername).once('value').then(snapshot => {
-                if (snapshot.exists()) {
-                    let userData = null;
-                    snapshot.forEach(child => { userData = child.val(); userData.ID = child.key; });
-
-                    if (userData.Password === inputPassword) {
-                        localStorage.setItem("ID", userData.ID);
-                        localStorage.setItem("Nama", userData.Nama || userData.Username);
-                        localStorage.setItem("Username", userData.Username);
-
-                        userId = userData.ID;
-                        localUser = userData;
-                        userLabel = userData.Nama || userData.Username;
-
-                        initLocationBackground();
-                        showBelanja();
-                    } else {
-                        loginMessage.textContent = "❌ Password salah.";
-                    }
-                } else {
-                    loginMessage.textContent = "❌ Username tidak ditemukan.";
-                }
-            });
-        });
-        
-        function initMap() {
-            loginButtonElement.style.display = 'none'; 
-            mainTitleElement.textContent = `Server To : ${userLabel}`;
-            userInfoElement.innerHTML = `
-                Nama: ${localUser.Nama || 'N/A'}<br>
-                ID : ${localUser.ID || 'N/A'}<br>
-                <button class="shop-button" onclick="showBelanja()">🛒 Belanja Sekarang</button>`;
-
-            if (map) map.remove();
-            map = L.map('map').setView(defaultLatLng, 10);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            currentMarker = L.marker(defaultLatLng).addTo(map).bindPopup(`${userLabel} - Saya Disini`).openPopup();
-
-            if (navigator.geolocation) {
-                getLocationAndSend(); 
-                if (locationInterval) clearInterval(locationInterval);
-                locationInterval = setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
-            }
-        }
-        
-        function initLocationBackground() {
-            if (!userId) return; 
-            if (locationInterval) clearInterval(locationInterval);
-            if (!map) {
-                map = L.map('map').setView(defaultLatLng, 10);
-                currentMarker = L.marker(defaultLatLng).addTo(map);
-            }
-            if (navigator.geolocation) {
-                getLocationAndSend(); 
-                locationInterval = setInterval(getLocationAndSend, UPDATE_INTERVAL_MS);
-            }
-        }
-
-        function getLocationAndSend() {
-            navigator.geolocation.getCurrentPosition(sendLocation, locationError, { enableHighAccuracy: true });
-        }
-
-        function sendLocation(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            database.ref(`customer_locations/${userId}`).set({ 
-                lat, lng, user_id: userId, customer_name: localUser.Nama, 
-                time: new Date().toLocaleTimeString('id-ID'),
-                timestamp: firebase.database.ServerValue.TIMESTAMP 
-            });
-            if (mainContentElement.style.display !== 'none') {
-                statusElement.innerHTML = `✅ Lokasi terkirim (${new Date().toLocaleTimeString('id-ID')})`;
-                currentMarker.setLatLng([lat, lng]);
-                map.setView([lat, lng], 15);
-            }
-        }
-
-        function locationError(error) { console.error("Geo Error:", error); }
-        
-        if (userId) {
-            initLocationBackground();
-            showBelanja();
         } else {
-            showLogin();
+            alert("Transaksi gagal.");
+            document.getElementById('btnBayar').disabled = false;
         }
-    </script>
+    });
+}
+
+function tampilkanStruk(data) {
+    document.getElementById('modalCheckout').style.display = 'none';
+    const isi = document.getElementById('isiStruk');
+    
+    let infoVoucher = "";
+    if (data.voucher !== "-") {
+        infoVoucher = `${data.label}: ${data.voucher}<br>---------------------------<br>`;
+    }
+
+    isi.innerHTML = `
+        NO. INV : ${data.invoice}<br>
+        WAKTU   : ${data.tanggal}<br>
+        ---------------------------<br>
+        ITEM    : ${data.produk}<br>
+        TOTAL   : Rp ${data.total.toLocaleString('id-ID')}<br>
+        ${infoVoucher}
+        METODE  : SALDO NASUKA<br>
+        ---------------------------<br>
+        Penerima: ${userData.Nama}<br>
+        STATUS  : BERHASIL
+    `;
+    document.getElementById('modalStruk').style.display = 'flex';
+}
+
+function tutupModal(id) { document.getElementById(id).style.display = 'none'; }
+
+$(document).ready(() => muatProduk());
+</script>
+
 </body>
 </html>
