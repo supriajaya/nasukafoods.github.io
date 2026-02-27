@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Admin Mobile - Nasuka</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { font-size: 14px; -webkit-tap-highlight-color: transparent; }
+        .tab-content { display: none; height: calc(100vh - 120px); overflow-y: auto; padding-bottom: 80px; }
+        .tab-content.active { display: block; }
+        .nav-active { color: #ee4d2d !important; }
+        .nav-active i { transform: translateY(-5px); color: #ee4d2d; }
+        /* Style khusus Chat di Mobile */
+        #chatDisplay { height: 60vh; }
+        .msg-bubble { max-width: 85%; padding: 8px 12px; border-radius: 15px; font-size: 13px; line-height: 1.4; }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <header class="bg-slate-800 text-white p-4 sticky top-0 z-50 flex justify-between items-center shadow-md">
+        <h1 class="font-bold tracking-tight">NASUKA <span class="text-orange-500">ADMIN</span></h1>
+        <button onclick="toggleSidebar()" class="text-xl"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <div id="sidebar" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity" onclick="toggleSidebar()">
+        <div class="w-64 bg-white h-full p-5" onclick="event.stopPropagation()">
+            <h2 class="font-bold border-b pb-3 mb-4 text-slate-700">Menu Lainnya</h2>
+            <nav class="space-y-4">
+                <button onclick="openTab('tab-post'); toggleSidebar()" class="flex items-center gap-3 w-full"><i class="fas fa-history text-slate-500"></i> Pulihkan Kenangan</button>
+                <button onclick="openTab('tab-sponsor'); toggleSidebar()" class="flex items-center gap-3 w-full"><i class="fas fa-ad text-orange-500"></i> Manajemen Sponsor</button>
+                <div class="border-t pt-4 mt-4">
+                    <p class="text-[10px] text-gray-400">Database: NasukaFoods1</p>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <main class="container mx-auto">
+        
+        <div id="tab-chat" class="tab-content active">
+            <div id="userListContainer" class="p-2">
+                <div class="bg-white rounded-xl shadow-sm border p-4 mb-2 font-bold text-center">Inbox Pelanggan</div>
+                <div id="userList" class="space-y-2"></div>
+            </div>
+            
+            <div id="chatRoom" class="fixed inset-0 bg-white z-[55] hidden flex flex-col">
+                <div class="p-4 bg-slate-100 border-b flex items-center gap-3">
+                    <button onclick="closeChat()" class="text-lg"><i class="fas fa-arrow-left"></i></button>
+                    <div id="activeUserName" class="font-bold text-sm truncate">Nama Pelanggan</div>
+                </div>
+                <div id="chatDisplay" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 bg-slate-50"></div>
+                <div class="p-3 border-t bg-white flex gap-2">
+                    <input type="text" id="adminInput" class="flex-1 p-2 border rounded-full px-4 text-sm focus:outline-none focus:border-orange-500" placeholder="Balas...">
+                    <button onclick="sendReply()" id="sendBtn" class="bg-orange-600 text-white w-10 h-10 rounded-full flex items-center justify-center"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-topup" class="tab-content p-4">
+            <div class="space-y-4">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border">
+                    <h2 class="font-bold mb-3 flex items-center gap-2"><i class="fas fa-coins text-yellow-500"></i> Top Up Manual</h2>
+                    <input type="text" id="targetUsername" placeholder="Username" class="w-full p-3 bg-gray-50 border rounded-xl mb-2 outline-none">
+                    <input type="number" id="topupAmount" placeholder="Nominal Rp" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 outline-none">
+                    <button onclick="prosesTopUpManual()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Kirim Saldo</button>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl shadow-sm border">
+                    <h2 class="font-bold mb-3">Voucher Saldo 6-Digit</h2>
+                    <div class="flex gap-2 mb-2">
+                        <input type="number" id="sCode" placeholder="Kode" class="w-1/2 p-3 bg-gray-50 border rounded-xl outline-none">
+                        <input type="number" id="sValue" placeholder="Nilai" class="w-1/2 p-3 bg-gray-50 border rounded-xl outline-none">
+                    </div>
+                    <button onclick="addSaldoVoucher()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold">Buat Voucher</button>
+                </div>
+
+                <div id="sList" class="grid grid-cols-2 gap-2"></div>
+            </div>
+        </div>
+
+        <div id="tab-voucher" class="tab-content p-4">
+            <div class="space-y-4">
+                <div class="bg-white p-4 rounded-2xl border">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="font-bold text-red-600">Voucher Telkomsel</h2>
+                        <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold" id="stokTsel">0</span>
+                    </div>
+                    <textarea id="inputKodeTsel" class="w-full p-3 bg-gray-50 border rounded-xl h-20 text-xs mb-2" placeholder="Satu kode per baris..."></textarea>
+                    <button onclick="simpanVoucherPath('vouchers_tsel', 'inputKodeTsel')" class="w-full bg-red-600 text-white py-2 rounded-lg text-sm font-bold">Input T-Sel</button>
+                    <div id="listTsel" class="mt-3 space-y-1 max-h-40 overflow-y-auto"></div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="font-bold text-purple-600">Voucher Axis</h2>
+                        <span class="bg-purple-100 text-purple-600 px-2 py-1 rounded text-xs font-bold" id="stokAxis">0</span>
+                    </div>
+                    <textarea id="inputKodeAxis" class="w-full p-3 bg-gray-50 border rounded-xl h-20 text-xs mb-2" placeholder="Satu kode per baris..."></textarea>
+                    <button onclick="simpanVoucherPath('vouchers_axis', 'inputKodeAxis')" class="w-full bg-purple-600 text-white py-2 rounded-lg text-sm font-bold">Input Axis</button>
+                    <div id="listAxis" class="mt-3 space-y-1 max-h-40 overflow-y-auto"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-wifi" class="tab-content p-4">
+            <div class="bg-white p-4 rounded-2xl border mb-4">
+                <h2 class="font-bold text-green-600 mb-2">Voucher WiFi (Stok: <span id="stokWifi">0</span>)</h2>
+                <div class="flex gap-2">
+                    <input type="text" id="vCodeWifi" class="flex-1 p-3 border rounded-xl text-sm" placeholder="Kode WiFi">
+                    <button onclick="simpanWifi()" class="bg-green-600 text-white px-4 rounded-xl"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="listWifi" class="mt-3 flex flex-wrap gap-1"></div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border">
+                <h2 class="font-bold text-slate-700 mb-2">Nitacell (Stok: <span id="stokNitacell">0</span>)</h2>
+                <div class="flex gap-2">
+                    <input type="text" id="pCodeNitacell" class="flex-1 p-3 border rounded-xl text-sm" placeholder="Kode Nita">
+                    <button onclick="addNitacellVoucher()" class="bg-slate-700 text-white px-4 rounded-xl"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="listNitacell" class="mt-3 space-y-1"></div>
+            </div>
+        </div>
+
+        <div id="tab-post" class="tab-content p-4">
+            <div class="bg-white p-5 rounded-2xl border shadow-sm">
+                <h2 class="font-bold text-slate-800 mb-4">Pemulihan Kenangan</h2>
+                <input id="adminNama" type="text" placeholder="Nama Pengirim" class="w-full p-3 border rounded-xl mb-3 text-sm">
+                <textarea id="adminPesan" placeholder="Isi Kenangan..." class="w-full p-3 border rounded-xl mb-3 h-24 text-sm"></textarea>
+                <input id="adminTanggal" type="date" class="w-full p-3 border rounded-xl mb-4 text-sm">
+                <button onclick="postSebagaiAdmin()" class="w-full bg-slate-800 text-white py-3 rounded-xl font-bold">Posting Sekarang</button>
+            </div>
+        </div>
+
+        <div id="tab-sponsor" class="tab-content p-4">
+            <div class="bg-white p-4 rounded-2xl border">
+                <h2 class="font-bold text-orange-600 mb-3">Input Sponsor</h2>
+                <input type="text" id="spName" placeholder="Nama" class="w-full p-2 border rounded mb-2">
+                <input type="text" id="spUrl" placeholder="Link (http)" class="w-full p-2 border rounded mb-2">
+                <input type="text" id="spImg" placeholder="Link Icon" class="w-full p-2 border rounded mb-3">
+                <button onclick="saveSponsor()" class="w-full bg-orange-600 text-white py-2 rounded-lg font-bold mb-4">Simpan</button>
+                <div id="sponsorList" class="space-y-2"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center p-2 z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+        <button onclick="openTab('tab-chat')" class="nav-btn flex flex-col items-center gap-1 text-gray-400 nav-active" data-tab="tab-chat">
+            <i class="fas fa-comment-dots text-lg"></i>
+            <span class="text-[10px] font-bold">Chat</span>
+        </button>
+        <button onclick="openTab('tab-topup')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-topup">
+            <i class="fas fa-wallet text-lg"></i>
+            <span class="text-[10px] font-bold">Saldo</span>
+        </button>
+        <button onclick="openTab('tab-voucher')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-voucher">
+            <i class="fas fa-ticket-alt text-lg"></i>
+            <span class="text-[10px] font-bold">Voucher</span>
+        </button>
+        <button onclick="openTab('tab-wifi')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-wifi">
+            <i class="fas fa-wifi text-lg"></i>
+            <span class="text-[10px] font-bold">WiFi</span>
+        </button>
+    </nav>
+
+    <script>
+        // FIREBASE CONFIG (Tetap Sama)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+            authDomain: "nasukafoods1.firebaseapp.com",
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nasukafoods1",
+            messagingSenderId: "84287800896",
+            appId: "1:84287800896:web:83189d6766997b00f701a5"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
+        // UI MOBILE HELPERS
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            sb.classList.toggle('hidden');
+        }
+
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            const btn = document.querySelector(`[onclick="openTab('${tabId}')"]`);
+            if(btn) btn.classList.add('nav-active');
+            window.scrollTo(0,0);
+        }
+
+        // --- CHAT LOGIC ---
+        let selectedUserID = null;
+        db.ref('admin_inbox').orderByChild('timestamp').on('value', (snap) => {
+            const list = document.getElementById('userList');
+            list.innerHTML = '';
+            snap.forEach(child => {
+                const user = child.val();
+                list.innerHTML += `
+                <div class="bg-white p-4 rounded-xl border flex justify-between items-center active:bg-gray-50" onclick="selectUser('${child.key}', '${user.nama}')">
+                    <div class="flex-1 truncate">
+                        <div class="font-bold text-sm">${user.nama}</div>
+                        <div class="text-xs text-gray-500 truncate">${user.lastMsg}</div>
+                    </div>
+                    ${user.unread ? '<div class="w-2 h-2 bg-orange-600 rounded-full"></div>' : ''}
+                </div>`;
+            });
+        });
+
+        function selectUser(id, name) {
+            selectedUserID = id;
+            document.getElementById('activeUserName').textContent = name;
+            document.getElementById('chatRoom').classList.remove('hidden');
+            db.ref(`admin_inbox/${id}`).update({ unread: false });
+            db.ref(`chats/${id}`).on('value', (snap) => {
+                const display = document.getElementById('chatDisplay');
+                display.innerHTML = '';
+                snap.forEach(c => {
+                    const m = c.val();
+                    const isAdmin = m.sender === 'admin';
+                    display.innerHTML += `
+                    <div class="${isAdmin ? 'self-end bg-orange-600 text-white' : 'self-start bg-white text-slate-800 border'} msg-bubble shadow-sm">
+                        ${m.text}
+                    </div>`;
+                });
+                display.scrollTop = display.scrollHeight;
+            });
+        }
+
+        function closeChat() { document.getElementById('chatRoom').classList.add('hidden'); }
+
+        function sendReply() {
+            const inp = document.getElementById('adminInput');
+            const txt = inp.value.trim();
+            if(!txt || !selectedUserID) return;
+            db.ref(`chats/${selectedUserID}`).push({ sender: 'admin', text: txt, timestamp: Date.now() });
+            db.ref(`admin_inbox/${selectedUserID}`).update({ lastMsg: "Admin: "+txt, timestamp: Date.now() });
+            inp.value = '';
+        }
+
+        // --- SALDO LOGIC ---
+        function prosesTopUpManual() {
+            const u = document.getElementById('targetUsername').value.trim();
+            const a = parseInt(document.getElementById('topupAmount').value);
+            if(!u || isNaN(a)) return alert("Isi lengkap");
+            db.ref("users").orderByChild("Username").equalTo(u).once("value").then(snap => {
+                if(snap.exists()) {
+                    let key = Object.keys(snap.val())[0];
+                    db.ref(`users/${key}/Saldo`).transaction(s => (s||0)+a);
+                    alert("Berhasil!");
+                } else { alert("User tidak ditemukan"); }
+            });
+        }
+
+        function addSaldoVoucher() {
+            const c = document.getElementById('sCode').value;
+            const v = parseInt(document.getElementById('sValue').value);
+            if(c.length === 6 && !isNaN(v)) {
+                db.ref('vouchers/'+c).set(v).then(() => alert("Voucher Aktif!"));
+            }
+        }
+        db.ref('vouchers').on('value', snap => {
+            const list = document.getElementById('sList');
+            list.innerHTML = '';
+            snap.forEach(c => {
+                list.innerHTML += `<div class="bg-blue-50 p-2 rounded-lg border border-blue-100 flex justify-between items-center text-[10px]">
+                    <b>${c.key} (Rp${c.val()})</b>
+                    <button onclick="hapusData('vouchers/${c.key}')" class="text-red-500 ml-1"><i class="fas fa-trash"></i></button>
+                </div>`;
+            });
+        });
+
+        // --- VOUCHER LOGIC ---
+        function simpanVoucherPath(path, id) {
+            const val = document.getElementById(id).value.trim();
+            if(!val) return;
+            val.split('\n').forEach(k => {
+                if(k.trim()) db.ref(path).push({ kode: k.trim(), status: 'tersedia' });
+            });
+            document.getElementById(id).value = '';
+            alert("Data Masuk!");
+        }
+
+        function monitor(path, listId, countId) {
+            db.ref(path).on('value', snap => {
+                const list = document.getElementById(listId);
+                const count = document.getElementById(countId);
+                list.innerHTML = ''; let i = 0;
+                snap.forEach(c => {
+                    i++;
+                    list.innerHTML += `<div class="flex justify-between items-center p-2 bg-gray-50 border-b text-[11px]">
+                        <span>${c.val().kode || c.val().code}</span>
+                        <button onclick="hapusData('${path}/${c.key}')" class="text-red-400"><i class="fas fa-times-circle"></i></button>
+                    </div>`;
+                });
+                count.innerText = i;
+            });
+        }
+        monitor('vouchers_tsel', 'listTsel', 'stokTsel');
+        monitor('vouchers_axis', 'listAxis', 'stokAxis');
+        monitor('vouchers', 'listWifi', 'stokWifi');
+        
+        function simpanWifi() {
+            const c = document.getElementById('vCodeWifi').value;
+            if(c) db.ref('vouchers').push({ kode: c, status: 'tersedia' });
+            document.getElementById('vCodeWifi').value = '';
+        }
+
+        function addNitacellVoucher() {
+            const c = document.getElementById('pCodeNitacell').value;
+            if(c) db.ref('Nitacell_vouchers').push({ code: c });
+            document.getElementById('pCodeNitacell').value = '';
+        }
+        monitor('Nitacell_vouchers', 'listNitacell', 'stokNitacell');
+
+        // --- POST & SPONSOR ---
+        function postSebagaiAdmin() {
+            const n = document.getElementById('adminNama').value;
+            const p = document.getElementById('adminPesan').value;
+            const t = document.getElementById('adminTanggal').value;
+            if(!n || !p || !t) return alert("Lengkapi!");
+            db.ref('testimoni_publik').push({
+                nama: n, pesan: p, timestamp: new Date(t).getTime(),
+                foto: "https://nasukafoods.site/gambarkosong.jpg"
+            }).then(() => alert("Berhasil Posting!"));
+        }
+
+        function saveSponsor() {
+            const n = document.getElementById('spName').value;
+            const u = document.getElementById('spUrl').value;
+            const i = document.getElementById('spImg').value;
+            if(n && u && i) db.ref('sponsors_list').push({ nama: n, url: u, image: i });
+        }
+        db.ref('sponsors_list').on('value', snap => {
+            const list = document.getElementById('sponsorList');
+            list.innerHTML = '';
+            snap.forEach(c => {
+                const d = c.val();
+                list.innerHTML += `<div class="flex items-center gap-2 p-2 bg-white border rounded-lg text-xs">
+                    <img src="${d.image}" class="w-6 h-6 rounded">
+                    <span class="flex-1 font-bold">${d.nama}</span>
+                    <button onclick="hapusData('sponsors_list/${c.key}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                </div>`;
+            });
+        });
+
+        function hapusData(path) { if(confirm("Hapus?")) db.ref(path).remove(); }
+    </script>
+</body>
+</html>
