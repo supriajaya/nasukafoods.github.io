@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resep Cilok Isian Gajih Eksklusif | Nasuka Foods</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #E11D48;
+            --bg: #F1F5F9;
+            --surface: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --border: #E2E8F0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hero-section {
+            padding: 48px 40px 32px 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .content-body {
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+        }
+
+        .ingredients-card {
+            background: #FFF1F2;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+        }
+
+        .ingredients-list {
+            list-style: none;
+        }
+
+        .ingredients-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(225, 29, 72, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ingredients-list li:last-child {
+            border-bottom: none;
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+            list-style: none;
+        }
+
+        .steps-list li {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--text-primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .cta-section {
+            background: #F8FAFC;
+            padding: 48px 40px;
+            text-align: center;
+        }
+
+        .cta-header h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .btn-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .btn-order {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-order:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .gofood { background-color: #00aa13; }
+        .grabfood { background-color: #00b14f; }
+        .shopeefood { background-color: #ee4d2d; }
+
+        .footer-note {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .hero-section, .content-body, .cta-section {
+                padding: 30px 20px;
+            }
+            h1 { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <header class="hero-section">
+            <h1>Cara Membuat Cilok Isian Gajih Sapi yang Kenyal dan Lumer</h1>
+            <p class="description">Teknik membuat cilok yang tetap empuk meski sudah dingin dengan isian lemak sapi (gajih) yang gurih di setiap gigitan.</p>
+        </header>
+
+        <div class="content-body">
+            <h2 class="section-title">Bahan Utama</h2>
+            <div class="ingredients-card">
+                <ul class="ingredients-list">
+                    <li><span>Tepung Tapioka & Terigu</span> <span>250g & 150g</span></li>
+                    <li><span>Gajih Sapi (Potong Kecil)</span> <span>100g</span></li>
+                    <li><span>Bawang Putih (Haluskan)</span> <span>3 Siung</span></li>
+                    <li><span>Daun Bawang (Iris Halus)</span> <span>2 Batang</span></li>
+                    <li><span>Garam & Kaldu Sapi Bubuk</span> <span>Secukupnya</span></li>
+                    <li><span>Air Mendidih</span> <span>±200 ml</span></li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">Metode Memasak</h2>
+            <ul class="steps-list">
+                <li>Tumis gajih sapi sebentar dengan sedikit bawang putih dan garam hingga aromanya keluar. Sisihkan sebagai isian.</li>
+                <li>Campur tepung tapioka, terigu, bawang putih halus, garam, kaldu, dan daun bawang dalam wadah besar.</li>
+                <li>Tuangkan air mendidih sedikit demi sedikit ke campuran tepung. Aduk dengan sendok kayu, lalu uleni ringan hingga kalis dan bisa dibentuk.</li>
+                <li>Ambil sedikit adonan, pipihkan, masukkan potongan gajih di tengahnya, lalu bulatkan hingga tertutup rapat.</li>
+                <li>Rebus dalam air mendidih yang sudah diberi sedikit minyak hingga cilok mengapung. Angkat, tiriskan, dan sajikan dengan bumbu kacang atau kecap.</li>
+            </ul>
+        </div>
+
+        <section class="cta-section">
+            <div class="cta-header">
+                <h3>Malas Masak Sendiri?</h3>
+                <p class="description">Pesan langsung dari dapur <strong>Nasuka Foods</strong> melalui platform favorit Anda.</p>
+            </div>
+            
+            <div class="btn-stack">
+                <a href="https://gofood.link/a/SxpM9uU" target="_blank" class="btn-order gofood">
+                    Order via GoFood
+                </a>
+
+                <a href="https://r.grab.com/g/6-20260228_161633_278e450d858f4606bfe49afac669cafc_MEXMPS-6-C72BTT2CCPWEJN" target="_blank" class="btn-order grabfood">
+                    Order via GrabFood
+                </a>
+
+                <a href="URL_SHOPEEFOOD_ANDA" target="_blank" class="btn-order shopeefood">
+                    Order via ShopeeFood
+                </a>
+            </div>
+            
+            <p class="footer-note">
+                Tautan di atas akan membuka aplikasi yang terinstal di perangkat Anda secara otomatis.
+            </p>
+        </section>
+    </main>
+
+</body>
+</html>
