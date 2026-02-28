@@ -22,31 +22,38 @@
             border-left: 5px solid #d32f2f;
             margin-bottom: 30px;
         }
-        .order-section {
+        .order-container {
             text-align: center;
             margin-top: 50px;
             padding: 30px;
-            border: 2px dashed #00aa13;
-            border-radius: 10px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            background-color: #fcfcfc;
         }
-        .btn-gofood {
-            display: inline-block;
-            background-color: #00aa13;
-            color: white;
-            padding: 15px 30px;
+        .btn-order {
+            display: block;
+            max-width: 300px;
+            margin: 12px auto;
+            padding: 15px 20px;
             text-decoration: none;
             font-weight: bold;
-            border-radius: 50px;
-            font-size: 18px;
-            transition: background 0.3s;
-        }
-        .btn-gofood:hover {
-            background-color: #008910;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
             border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+        .btn-order:active {
+            transform: scale(0.98);
+        }
+        /* Warna Brand Resmi */
+        .gofood { background-color: #00aa13; }
+        .grabfood { background-color: #00b14f; }
+        .shopeefood { background-color: #ee4d2d; }
+        
+        .disclaimer {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -72,25 +79,29 @@
         <h2>Langkah Pembuatan:</h2>
         <ol>
             <li>Campurkan telur, air, kaldu bubuk, dan merica dalam wadah. Kocok lepas hingga benar-benar encer dan berbusa.</li>
-            <li>Panaskan minyak dalam wajan dengan api sedang cenderung besar. Pastikan minyak cukup banyak agar telur bisa mengembang.</li>
+            <li>Panaskan minyak dalam wajan dengan api sedang cenderung besar. Pastikan minyak cukup panas sebelum menuang telur.</li>
             <li>Tuangkan 2-3 sendok makan adonan telur dari jarak sekitar 20cm di atas wajan secara acak.</li>
             <li>Segera ambil tusuk sate, tarik telur dari bagian tengah ke pinggir wajan, lalu putar hingga telur terlilit rapi di tusuk sate.</li>
-            <li>Tekan sebentar di pinggir wajan untuk meniriskan minyak. Sajikan dengan saus sambal.</li>
         </ol>
 
-        <hr>
-
-        <div class="order-section">
-            <h3>Malas Masak Sendiri?</h3>
-            <p>Nikmati kelezatan Telor Gulung dan menu pilihan lainnya langsung dari dapur kami tanpa perlu repot mencuci wajan.</p>
-            <p><strong>Klik tombol di bawah ini untuk memesan:</strong></p>
+        <div class="order-container">
+            <h3>Malas Masak Sendiri? Pesan di Nasuka Foods</h3>
+            <p>Klik tombol di bawah untuk langsung membuka aplikasi:</p>
             
-            <a href="https://gofood.link/a/SxpM9uU" target="_blank" class="btn-gofood">
-                Pesan Nasuka Foods di GoFood
+            <a href="https://gofood.link/a/SxpM9uU" target="_blank" class="btn-order gofood">
+                Pesan via GoFood
+            </a>
+
+            <a href="https://r.grab.com/g/6-20260228_161633_278e450d858f4606bfe49afac669cafc_MEXMPS-6-C72BTT2CCPWEJN" target="_blank" class="btn-order grabfood">
+                Pesan via GrabFood
+            </a>
+
+            <a href="URL_SHOPEEFOOD_ANDA" target="_blank" class="btn-order shopeefood">
+                Pesan via ShopeeFood
             </a>
             
-            <p style="font-size: 0.9em; color: #666; margin-top: 15px;">
-                *Link ini akan otomatis membuka aplikasi Gojek di ponsel Anda.
+            <p class="disclaimer">
+                *Tautan di atas akan otomatis mendeteksi dan membuka aplikasi di smartphone Anda.
             </p>
         </div>
     </article>
