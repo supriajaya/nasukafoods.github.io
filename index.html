@@ -96,15 +96,322 @@
     100% { box-shadow: 0 0 15px rgba(251, 245, 183, 0.8); }
 }
 
-/* Style tambahan untuk input auth baru */
-.auth-input-group input {
+/* CSS LOGIN ADAPTASI DARI REGLOGIN.HTML */
+#login-container {
+    background: radial-gradient(circle at top right, #ffb300, #ff8c00, #e67e22);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#login-container::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 40%;
+    top: -50%;
+    left: -50%;
+    transform: rotate(30deg);
+}
+
+.auth-card-new {
+    width: 85%;
+    max-width: 400px;
+    text-align: center;
+    z-index: 1;
+}
+
+.header-text-new {
+    font-size: 28px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 30px;
+}
+
+.logo-circle-new {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.logo-image-new {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.company-name-new {
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.input-group-new {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.input-group-new input {
+    width: 100%;
+    padding: 15px 15px 15px 50px;
+    border: 1.5px solid #000;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background: transparent;
+    font-size: 16px;
+    color: #000;
+}
+
+.input-group-new .icon-new {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.terms-container-new {
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    font-size: 12px;
+    margin-bottom: 25px;
+    line-height: 1.4;
+    color: #000;
+}
+
+.terms-container-new input {
+    margin-right: 10px;
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+}
+
+.login-btn-new {
+    width: 100%;
+    padding: 15px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    color: #ff8c00;
+}
+
+.register-text-new {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #000;
+}
+
+.footer-section-new {
+    margin-top: 40px;
+}
+
+.help-divider-new {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.help-divider-new::before, .help-divider-new::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #000;
+}
+
+.help-divider-new span {
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+.wa-link-new {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #27ae60;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.priority-text-new {
+    font-style: italic;
+    font-weight: bold;
+    font-size: 18px;
+    color: #000;
+}
+
+/* ADAPTASI CSS DARI EDIT.HTML */
+#editprofil-container {
+    background-color: #ffffff;
+    color: #000000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3000;
+    overflow-y: auto;
+    display: none;
+    flex-direction: column;
+}
+
+.edit-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #dbdbdb;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 100;
+}
+
+.edit-header i {
+    font-size: 20px;
+    margin-right: 30px;
+    cursor: pointer;
+}
+
+.edit-header h1 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.images-container {
+    position: relative;
+    width: 100%;
+}
+
+.cover-photo {
+    width: 100%;
+    height: 180px;
+    background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.profile-wrapper {
+    position: relative;
+    margin-top: -60px;
+    padding-left: 15px;
+    display: inline-block;
+}
+
+.profile-pic-edit {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    background-color: #eee;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}
+
+.section-edit {
+    padding: 20px 15px;
+    border-bottom: 1px solid #efefef;
+    text-align: left;
+}
+
+.section-header-edit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-title-edit {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.item-row-edit {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.item-icon-edit {
+    width: 40px;
+    font-size: 20px;
+    color: #1c1e21;
+}
+
+.item-content-edit {
+    flex-grow: 1;
+}
+
+.item-label-edit {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.item-sublabel-edit {
+    font-size: 14px;
+    color: #65676b;
+}
+
+.edit-icon-action {
+    color: #65676b;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.save-btn-container {
+    padding: 20px;
+}
+
+.btn-save-new {
     width: 100%;
     padding: 12px;
+    background: #ee4d2d;
+    color: white;
+    border: none;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-top: 5px;
-    box-sizing: border-box;
-    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.edit-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 0;
+    font-size: 14px;
+    outline: none;
+}
+
+.edit-input:focus {
+    border-bottom: 2px solid #ee4d2d;
 }
 </style>
 </head>
@@ -127,11 +434,11 @@
         <div class="balance-card">
             <div class="balance-title">Koin</div>
             <div class="balance-details">
-                <span class="balance-amount" id="KoinAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showDownload()"></i>
+                <span class="balance-amount" id="KoinAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showGudang()"></i>
             </div>
             
-            <a href="https://nasukafoods.site/tukerkoin.html" target="_blank" class="all-accounts" style="text-decoration: none;">
-                <span>Tukar Koin</span>
+            <a href="https://nasukafoods.site/burung.html" target="_blank" class="all-accounts" style="text-decoration: none;">
+                <span>Kumpulkan Koin</span>
                 <i class="fas fa-chevron-right"></i>
             </a>
         </div>
@@ -144,26 +451,16 @@
                 <span>Video</span>
             </a>
             
-            <a href="https://nasukafoods.site/burung.html" target="_blank" class="feature-link">
-                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
-                    <img src="https://nasukafoods.site/image/nasukabird.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                </div>
-                <span>Koin Gratis</span>
-            </a>
+           
             
-            <a href="javascript:void(0)" onclick="showGudang()" class="feature-link">
-                <div class="feature-icon-circle pdam-icon">
-                    <i class="fas fa-plus"></i> 
+            
+            
+          <div class="other-feature-item" onclick="showChat()">
+                <div class="other-feature-icon setor-tarik-icon">
+                    <img src="https://nasukafoods.site/image/customers.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Input Koin</span>
-            </a>
-
-            <a href="https://nasukafoods.site/posisi-mang-cilok.html" target="_blank" class="feature-link">
-                <div class="feature-icon-circle pulsa-icon" style="overflow: hidden; padding: 0;">
-                    <img src="https://nasukafoods.site/image/dokumen.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                </div>
-                <span>Pustaka</span>
-            </a>
+                <span>CS</span>
+            </div>
         </div>
 
         <a href="https://nasukafoods.site/testimoni.html" target="_blank" class="banner" style="text-decoration: none; display: flex;">
@@ -198,17 +495,10 @@
                 </div>
                 <span>ORDER</span>
             </div>
-            
-            <div class="other-feature-item" onclick="showChat()">
-                <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/image/customers.jpg" alt="" class="product-icon-img">
-                </div>
-                <span>CHAT</span>
-            </div>
         </div>
             
         <div class="search-bar" id="marquee-search-bar">
-            <i class="fas fa-search"> Sponsor</i>
+            <i class="fas fa-search"> Katalog</i>
             <div class="marquee-content">
                 <span id="running-text"></span>
             </div>
@@ -241,26 +531,49 @@
         </div>
     </div> 
    
-    <div id="login-container" class="auth-container" style="display:none;">
-        <div class="auth-card">
-            <div class="auth-logo-section">
-                <img src="https://nasukafoods.site/nasukafoods.jpg" alt="Nasuka Foods" class="auth-logo">
-            </div>
-            <h2>Masuk / Daftar</h2>
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Akses cepat dengan nomor WA & PIN</p>
+    <div id="login-container" style="display:none;">
+        <div class="auth-card-new">
+            <div class="header-text-new">SELAMAT DATANG</div>
             
-            <div class="auth-input-group">
-                <label>Nomor WhatsApp</label>
-                <input type="number" id="authWA" placeholder="Contoh: 08123456789" required>
+            <div class="logo-circle-new">
+                <img src="https://nasukafoods.site/image/logopremium.jpg" alt="Logo" class="logo-image-new">
             </div>
-            <div class="auth-input-group" style="margin-top:10px;">
-                <label>PIN Keamanan (6 Digit)</label>
-                <input type="password" id="authPIN" placeholder="Masukkan 6 Angka" maxlength="6" inputmode="numeric" style="text-align:center; letter-spacing: 5px;">
+            <div class="company-name-new">Rasa yang dulu pernah ada</div>
+
+            <div class="input-group-new">
+                <span class="icon-new">👤</span>
+                <input type="number" id="authWA" placeholder="Nomor WhatsApp" required>
             </div>
-            
-            <button onclick="handleAuth()" class="btn-primary" style="margin-top:20px;">Lanjutkan</button>
-            <div id="authStatus" class="auth-status"></div>
-            <button onclick="showHome()" class="btn-secondary" style="margin-top:10px;">Kembali</button>
+
+            <div class="input-group-new">
+                <span class="icon-new">📱</span>
+                <input type="password" id="authPIN" placeholder="Masukkan PIN" maxlength="6" inputmode="numeric">
+            </div>
+
+            <div class="terms-container-new">
+                <input type="checkbox" checked>
+                <span>Simpan dan ingat PIN anda untuk masuk selanjutnya</span>
+            </div>
+
+            <button onclick="handleAuth()" class="login-btn-new">MASUK</button>
+            <div id="authStatus" style="margin-top:10px; font-weight:bold; color:#000;"></div>
+            <button onclick="showHome()" style="background:none; border:none; color:#000; margin-top:10px; cursor:pointer; font-size:12px;">Kembali ke Beranda</button>
+
+            <div class="register-text-new">
+               Mode cepat register / login dengan 1 klik
+            </div>
+
+            <div class="footer-section-new">
+                <div class="help-divider-new">
+                    <span>Perlu Bantuan?</span>
+                </div>
+                
+                <a href="https://wa.me/62859109819017" class="wa-link-new">
+                    Hubungi Kami (Chat Only)
+                </a>
+
+                <div class="priority-text-new">Speed is our priority</div>
+            </div>
         </div>
     </div>
 
@@ -306,10 +619,10 @@
 
             <div class="rating-section" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
                 <div class="rating-main">
-                    <div class="rating-score" id="profilRatingScore">Kontributor</div>
+                    <div class="rating-score" id="profilRatingScore"></div>
                     <div class="rating-label">
-                         <a href="https://nasukafoods.site/kontributor-Koin-publik.html" target="_blank" style="text-decoration: none; color: inherit;">
-                            <span>Pelanggan</span>
+                         <a href="https://nasukafoods.site/tukerkoin.html" target="_blank" style="text-decoration: none; color: inherit;">
+                            <span>Tuker Koin</span>
                         </a>
                     </div>
                 </div>
@@ -342,24 +655,7 @@
         </div>
     </div>
 
-    <div id="editprofil-container" class="auth-container"></div>
-
-    <div id="download-container">
-        <div class="download-header"><i class="fas fa-arrow-left" onclick="showHome()"></i> Kembali</div>
-        <div class="download-content">
-            <div class="app-info-top">
-                <img src="https://nasukafoods.site/nasukafoods.jpg" class="app-logo">
-                <div class="app-text">
-                    <div class="app-title">Nasuka.Apk</div>
-                    <div class="app-publisher">Nasuka Wireless</div>
-                </div>
-            </div>
-        </div>
-        <a href="https://nasukafoods.site/nasuka.apk" target="_blank" class="download-footer-bar">
-            <div>Download sekarang</div>
-            <i class="fas fa-download"></i>
-        </a>
-    </div>
+    <div id="editprofil-container"></div>
 
     <div id="dokumen-container" class="auth-container" style="display: none;">
         <div class="dokumen-card-modified">
@@ -392,6 +688,7 @@ const localUser = {
   Koin: parseInt(localStorage.getItem("Koin")) || 0,
   Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
   NomorHP: localStorage.getItem("NomorHP") || "Belum diatur",
+  PIN: localStorage.getItem("PIN") || "",
   Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg", 
 };
 
@@ -405,13 +702,14 @@ if (localUser.ID) {
         localStorage.setItem("NomorHP", localUser.NomorHP);
         localStorage.setItem("Nama", localUser.Nama);
         localStorage.setItem("Username", localUser.Username);
+        localStorage.setItem("PIN", localUser.PIN);
         updateHomeDisplay();
       }
     });
 }
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #profil-container, #editprofil-container, #download-container, #dokumen-container').forEach(el => { 
+    document.querySelectorAll('#home-container, #login-container, #profil-container, #editprofil-container, #dokumen-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
@@ -429,9 +727,7 @@ function updateHomeDisplay() {
 
 function showHome() { hideAllContainers(); document.getElementById('home-container').style.display = 'block'; updateHomeDisplay(); }
 function showLogin() { hideAllContainers(); document.getElementById('login-container').style.display = 'flex'; }
-function showDownload() { hideAllContainers(); document.getElementById('download-container').style.display = 'block'; }
 
-// LOGIKA AUTH WA & PIN BARU
 async function handleAuth() {
     const noWA = document.getElementById('authWA').value.trim();
     const pin = document.getElementById('authPIN').value.trim();
@@ -474,6 +770,7 @@ function loginSuccess(user) {
     localStorage.setItem("Username", user.Username || user.ID);
     localStorage.setItem("Nama", user.Nama);
     localStorage.setItem("NomorHP", user.NomorHP);
+    localStorage.setItem("PIN", user.PIN);
     
     const pesan = `Halo Admin, saya login/daftar Nasuka Foods. %0AHP: ${user.NomorHP}%0AID: ${user.ID}`;
     window.open(`https://wa.me/62859109819017?text=${pesan}`, '_blank');
@@ -531,20 +828,85 @@ function showEditProfil() {
     const editContainer = document.getElementById('editprofil-container');
     editContainer.style.display = 'flex';
     editContainer.innerHTML = `
-        <div class="auth-card">
-            <h3>Edit Profil</h3>
-            <input type="text" id="enama" value="${localUser.Nama}" style="width:100%; padding:10px; margin-bottom:10px;">
-            <textarea id="ealamat" style="width:100%; padding:10px; height:80px;">${localUser.Alamat}</textarea>
-            <button onclick="saveProfil()" class="btn-primary">Simpan</button>
-            <button onclick="showProfil()" class="btn-secondary" style="margin-top:5px;">Batal</button>
+        <div class="edit-header">
+            <i class="fas fa-arrow-left" onclick="showProfil()"></i>
+            <h1>Edit profil</h1>
+        </div>
+        <div class="images-container">
+            <div class="cover-photo"></div>
+            <div class="profile-wrapper">
+                <div class="profile-pic-edit" style="background-image: url('${localUser.Foto}')"></div>
+            </div>
+        </div>
+        <div class="section-edit">
+            <div class="section-header-edit">
+                <span class="section-title-edit">Akun</span>
+            </div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fas fa-user"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">Nama</div>
+                    <input type="text" id="enama" class="edit-input" value="${localUser.Nama}">
+                </div>
+            </div>
+        </div>
+        <div class="section-edit">
+            <div class="section-header-edit">
+                <span class="section-title-edit">Akses Keamanan</span>
+            </div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fab fa-whatsapp"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">Nomor Whatsapp</div>
+                    <input type="number" id="ewa" class="edit-input" value="${localUser.NomorHP}">
+                </div>
+            </div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fas fa-key"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">PIN Keamanan (6 Digit)</div>
+                    <input type="password" id="epin" class="edit-input" value="${localUser.PIN}" maxlength="6" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+        <div class="section-edit">
+            <div class="section-header-edit">
+                <span class="section-title-edit">Detail pengiriman</span>
+            </div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">Alamat Lengkap</div>
+                    <textarea id="ealamat" style="width:100%; border:1px solid #eee; border-radius:4px; padding:5px; font-size:14px;">${localUser.Alamat}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="save-btn-container">
+            <button onclick="saveProfil()" class="btn-save-new">SIMPAN PERUBAHAN</button>
         </div>
     `;
 }
 
 function saveProfil() {
-    const n = document.getElementById('enama').value;
-    const a = document.getElementById('ealamat').value;
-    db.ref(`users/${localUser.ID}`).update({ Nama: n, Alamat: a }).then(() => showProfil());
+    const n = document.getElementById('enama').value.trim();
+    const a = document.getElementById('ealamat').value.trim();
+    const w = document.getElementById('ewa').value.trim();
+    const p = document.getElementById('epin').value.trim();
+
+    if (w.length < 10) return alert("Nomor WhatsApp tidak valid");
+    if (p.length !== 6) return alert("PIN harus 6 digit");
+
+    db.ref(`users/${localUser.ID}`).update({ 
+        Nama: n, 
+        Alamat: a,
+        NomorHP: w,
+        PIN: p
+    }).then(() => {
+        alert("Profil berhasil diperbarui");
+        showProfil();
+    }).catch(err => {
+        alert("Gagal menyimpan: " + err.message);
+    });
 }
 
 function showDokumen() {
@@ -571,30 +933,60 @@ function showHistory() {
 }
 
 function showChat() {
-    if (!localUser.ID) return showLogin();
+    let chatId = localUser.ID;
+    let isAnonymous = false;
+
+    if (!chatId) {
+        isAnonymous = true;
+        chatId = localStorage.getItem("AnonID");
+        if (!chatId) {
+            chatId = "ANON-" + Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem("AnonID", chatId);
+        }
+    }
+
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
-    document.getElementById('dokumen-title').textContent = 'Chat Admin';
-    doc.querySelector('.dokumen-content-section').innerHTML = `<div id="chatBox" class="chat-messages"></div><div style="display:flex; gap:5px; margin-top:10px;"><input type="text" id="chatInput" placeholder="Pesan..." style="flex:1; padding:10px;"><button onclick="sendChat()" class="btn-primary" style="width:auto; padding:0 15px;"><i class="fas fa-paper-plane"></i></button></div>`;
-    db.ref(`chats/${localUser.ID}`).on('value', (snap) => {
+    document.getElementById('dokumen-title').textContent = isAnonymous ? 'Chat Pengunjung' : 'Chat Admin';
+    
+    doc.querySelector('.dokumen-content-section').innerHTML = `
+        <div id="chatBox" class="chat-messages"></div>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <input type="text" id="chatInput" placeholder="Tulis pesan..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
+            <button onclick="sendChat('${chatId}')" class="btn-primary" style="width:auto; padding:0 15px;">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    `;
+
+    db.ref(`chats/${chatId}`).on('value', (snap) => {
         const box = document.getElementById('chatBox');
         if(!box) return;
         box.innerHTML = '';
-        snap.forEach(c => { const m = c.val(); box.innerHTML += `<div class="msg ${m.sender === 'admin' ? 'msg-admin' : 'msg-user'}">${m.text}</div>`; });
+        snap.forEach(c => { 
+            const m = c.val(); 
+            box.innerHTML += `<div class="msg ${m.sender === 'admin' ? 'msg-admin' : 'msg-user'}">${m.text}</div>`; 
+        });
         box.scrollTop = box.scrollHeight;
     });
 }
 
-function sendChat() {
+function sendChat(targetId) {
     const i = document.getElementById('chatInput');
     const t = i.value.trim();
     if(!t) return;
-    db.ref(`chats/${localUser.ID}`).push({ sender: 'user', text: t, timestamp: Date.now() });
+    
+    db.ref(`chats/${targetId}`).push({ 
+        sender: 'user', 
+        text: t, 
+        timestamp: Date.now(),
+        type: localUser.ID ? 'member' : 'anonymous'
+    });
     i.value = '';
 }
 
-function loadDynamicSponsors() {
+function loadDynamicKatalogs() {
     db.ref('sponsors_list').on('value', (snapshot) => {
         const container = document.getElementById('dynamic-sponsors');
         if (!container) return;
@@ -622,7 +1014,7 @@ function loadDynamicPartners() {
 
 $(document).ready(() => {
     showHome();
-    loadDynamicSponsors(); 
+    loadDynamicKatalogs(); 
     loadDynamicPartners();
     $('#tabPencapaian').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').show(); $('#contentPerbaikan').hide(); });
     $('#tabPerbaikan').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').hide(); $('#contentPerbaikan').show(); });
