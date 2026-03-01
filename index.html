@@ -33,7 +33,7 @@
                 <span class="balance-amount" id="KoinAmountDisplay">...</span> <i class="fas fa-mobile-alt balance-icon" onclick="showGudang()"></i>
             </div>
             
-            <a href="" target="_blank" class="all-accounts" style="text-decoration: none;">
+            <a href="" target="_self" class="all-accounts" style="text-decoration: none;">
                 <span></span>
                 <i class="fas fa-chevron-right"></i>
             </a>
@@ -41,11 +41,11 @@
 
         <div class="main-features">        
             
-            <div class="other-feature-item">
+            <div class="other-feature-item" onclick="window.location.href='https://nasukafoods.site/pustaka.html'" style="cursor: pointer;">
                 <div class="other-feature-icon top-up-icon">
-                    <img src="https://nasukafoods.site/image/logoisian.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/dokumen.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Unggulan</span>
+                <span>Pustaka</span>
             </div>
             
           <div class="other-feature-item" onclick="showChat()">
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <a href="https://nasukafoods.site/testimoni.html" target="_blank" class="banner" style="text-decoration: none; display: flex;">
+        <a href="https://nasukafoods.site/testimoni.html" target="_self" class="banner" style="text-decoration: none; display: flex;">
             <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
                 <span id="blinking-txt" style="display: block; width: 100%; white-space: normal;">
                     <strong>Interaksi Pelanggan</strong>
@@ -143,7 +143,7 @@
                     <span>Perlu Bantuan?</span>
                 </div>
                 
-                <a href="https://wa.me/62859109819017" class="wa-link-new">
+                <a href="https://wa.me/62859109819017" target="_self" class="wa-link-new">
                     Hubungi Kami (Chat Only)
                 </a>
 
@@ -196,7 +196,7 @@
                 <div class="rating-main">
                     <div class="rating-score" id="profilRatingScore"></div>
                     <div class="rating-label">
-                         <a href="https://nasukafoods.site/tukerkoin.html" target="_blank" style="text-decoration: none; color: inherit;">
+                         <a href="https://nasukafoods.site/tukerkoin.html" target="_self" style="text-decoration: none; color: inherit;">
                             <span>Tuker Koin</span>
                         </a>
                     </div>
@@ -348,7 +348,7 @@ function loginSuccess(user) {
     localStorage.setItem("PIN", user.PIN);
     
     const pesan = `Halo Admin, saya login/daftar Nasuka Foods. %0AHP: ${user.NomorHP}%0AID: ${user.ID}`;
-    window.open(`https://wa.me/62859109819017?text=${pesan}`, '_blank');
+    window.open(`https://wa.me/62859109819017?text=${pesan}`, '_self');
     location.reload();
 }
 
@@ -568,7 +568,7 @@ function loadDynamicKatalogs() {
         let htmlContent = '';
         snapshot.forEach((child) => {
             const data = child.val();
-            htmlContent += `<a href="${data.url}" target="_blank" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div><span style="font-weight: bold; color: #b38728;">${data.nama}</span></a>`;
+            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div><span style="font-weight: bold; color: #b38728;">${data.nama}</span></a>`;
         });
         container.innerHTML = htmlContent;
     });
@@ -581,7 +581,7 @@ function loadDynamicPartners() {
         let htmlContent = '';
         snapshot.forEach((child) => {
             const data = child.val();
-            htmlContent += `<a href="${data.url || '#'}" target="_blank" class="other-feature-item"><div class="other-feature-icon"><img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'"></div><span>${data.nama}</span></a>`;
+            htmlContent += `<a href="${data.url || '#'}" target="_self" class="other-feature-item"><div class="other-feature-icon"><img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'"></div><span>${data.nama}</span></a>`;
         });
         container.innerHTML = htmlContent;
     });
