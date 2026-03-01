@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Library Clone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f1ea;
+            --text-blue: #02598b;
+            --btn-blue: #0377b5;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            height: 30px;
+        }
+
+        .nav-icons i {
+            font-size: 20px;
+            margin-left: 15px;
+            color: #666;
+        }
+
+        /* Hero Banner */
+        .welcome-text {
+            color: var(--text-blue);
+            padding: 20px 15px 10px;
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        .hero-card {
+            background: white;
+            margin: 0 15px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            padding: 15px;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-icon {
+            width: 80px;
+            margin-right: 15px;
+        }
+
+        .hero-content h2 {
+            font-size: 16px;
+            margin: 0 0 5px 0;
+        }
+
+        .hero-content p {
+            font-size: 12px;
+            margin: 0;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Slider Section */
+        .section-container {
+            padding: 20px 0;
+        }
+
+        .section-title {
+            color: var(--text-blue);
+            text-decoration: underline;
+            margin: 0 15px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .slider-content {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            gap: 15px;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .slider-content::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .book-card {
+            flex: 0 0 auto;
+            width: 150px;
+            text-align: center;
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .btn-action {
+            background-color: var(--btn-blue);
+            color: white;
+            border: none;
+            padding: 8px 0;
+            width: 100%;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Slider Buttons */
+        .nav-btn {
+            background: rgba(165, 203, 230, 0.8);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            position: absolute;
+        }
+
+        .prev { left: 5px; }
+        .next { right: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://nasukafoods.site/image/cover3.jpg" alt="Open Library" class="logo">
+        <div class="nav-icons">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <h1 class="welcome-text">Selamat datang di Galeri</h1>
+
+    <div class="hero-card">
+        <img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="icon" class="hero-icon">
+        <div class="hero-content">
+            <h2>Galeri Umum</h2>
+            <p>Millions users through Controlled Digital Lending</p>
+        </div>
+    </div>
+
+    <div class="section-container">
+        <h3 class="section-title">Shelter 1</h3>
+        <div class="slider-wrapper">
+            <button class="nav-btn prev" onclick="scrollSlider('trending', -1)"><i class="fas fa-chevron-left"></i></button>
+            
+            <div class="slider-content" id="trending">
+                <div class="book-card">
+                    <img src="https://nasukafoods.site/image/48laws.jpg" alt="48laws" class="book-cover">
+                    <button class="btn-action">lihat</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://nasukafoods.site/image/cover1.jpg" alt="Book 2" class="book-cover">
+                    <button class="btn-action">Lihat</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://nasukafoods.site/image/cover2.jpg" alt="Book 3" class="book-cover">
+                    <button class="btn-action">Lihat</button>
+                </div>
+            </div>
+
+            <button class="nav-btn next" onclick="scrollSlider('trending', 1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <div class="section-container">
+        <h3 class="section-title">Shelter 2</h3>
+        <div class="slider-wrapper">
+            <button class="nav-btn prev" onclick="scrollSlider('classic', -1)"><i class="fas fa-chevron-left"></i></button>
+            
+            <div class="slider-content" id="classic">
+                <div class="book-card">
+                    <img src="https://nasukafoods.site/image/cover3.jpg" alt="Classic 1" class="book-cover">
+                    <button class="btn-action">Lihat</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://nasukafoods.site/image/cover4.jpg" alt="Classic 2" class="book-cover">
+                    <button class="btn-action">Lihat</button>
+                </div>
+                <div class="book-card">
+                    <img src="https://nasukafoods.site/image/cover5.jpg" alt="Classic 3" class="book-cover">
+                    <button class="btn-action">Lihat</button>
+                </div>
+            </div>
+
+            <button class="nav-btn next" onclick="scrollSlider('classic', 1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        function scrollSlider(id, direction) {
+            const container = document.getElementById(id);
+            const scrollAmount = 165; // Lebar buku + gap
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+</body>
+</html>
