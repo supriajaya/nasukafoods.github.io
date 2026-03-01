@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Foods - Professional Catering Service</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #000;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        .tiktok-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .tiktok-container::-webkit-scrollbar { display: none; }
+
+        .video-section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        video {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            max-width: 500px;
+            background-color: #111;
+        }
+
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            padding: 20px 20px 60px 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8) 40%, rgba(0,0,0,1));
+            color: white;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .channel-name, .description-container, .read-more-btn {
+            pointer-events: auto;
+        }
+
+        .channel-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .description-container {
+            max-height: 70px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding-right: 10px;
+            transition: max-height 0.3s ease;
+            white-space: pre-line;
+            text-align: left;
+        }
+
+        .description-container::-webkit-scrollbar { width: 3px; }
+        .description-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+
+        .video-overlay.expanded .description-container {
+            max-height: 350px;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .side-bar {
+            position: absolute;
+            right: 10px;
+            bottom: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            color: white;
+            z-index: 11;
+        }
+
+        .icon-btn { text-align: center; font-size: 26px; cursor: pointer; }
+        .icon-label { font-size: 12px; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="tiktok-container">
+
+    <div class="video-section">
+        <video loop onclick="togglePlay(this)" poster="https://nasukafoods.site/image/ads1.jpg">
+            <source src="https://nasukafoods.site/video/ads1.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay" id="ov1">
+            <span class="channel-name">Nasuka Foods - Layanan Kuliner Profesional</span>
+            <div class="description-container"><strong>Solusi Hidangan Berkualitas untuk Berbagai Acara Anda</strong>
+
+Nasuka Foods hadir sebagai solusi katering terpercaya yang berlokasi strategis di Ciparay Tengah, Cibaduyut. Kami berkomitmen menyajikan hidangan dengan cita rasa otentik dan standar kebersihan tinggi untuk memenuhi kebutuhan kuliner Anda.
+
+<strong>Layanan Kami:</strong>
+• Pesanan Harian: Nikmati kemudahan memesan menu favorit kami melalui platform GoFood, GrabFood, dan ShopeeFood.
+• Layanan Acara Khusus: Kami melayani pemesanan skala besar untuk pesta khitanan, khaul, acara keluarga, hingga kebutuhan korporasi.
+• Pemesanan Fleksibel: Hubungi kami langsung via WhatsApp untuk konsultasi menu dan penyesuaian anggaran acara Anda.
+
+Dedikasi kami adalah memberikan pengalaman berbelanja makanan yang praktis tanpa mengesampingkan kualitas rasa. Percayakan momen berharga Anda kepada Nasuka Foods.</div>
+            <button class="read-more-btn" onclick="toggleText('ov1', this)">Lihat selengkapnya</button>
+        </div>
+        <div class="side-bar">
+            <div class="icon-btn">❤️<div class="icon-label">1.2k</div></div>
+            <div class="icon-btn">💬<div class="icon-label">45</div></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleText(id, btn) {
+        const ov = document.getElementById(id);
+        ov.classList.toggle('expanded');
+        btn.innerText = ov.classList.contains('expanded') ? 'Sembunyikan' : 'Lihat selengkapnya';
+    }
+
+    function togglePlay(v) {
+        if (v.paused) {
+            v.play();
+        } else {
+            v.pause();
+        }
+    }
+
+    const videos = document.querySelectorAll('video');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.play().catch(() => {}); 
+            } else {
+                entry.target.pause();
+                entry.target.currentTime = 0;
+            }
+        });
+    }, { threshold: 0.6 });
+
+    videos.forEach(v => observer.observe(v));
+</script>
+
+</body>
+</html>
