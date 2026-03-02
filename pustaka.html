@@ -182,17 +182,25 @@
             
             <div class="slider-content" id="trending">
                 <div class="book-card">
-                    <img src="https://nasukafoods.site/image/48laws.jpg" alt="48laws" class="book-cover">
-                    <button class="btn-action">lihat</button>
+                    <img src="https://nasukafoods.site/image/ads1.jpg" alt="ads1" class="book-cover">
+                    <button class="btn-action" onclick="navigateTo('https://nasukafoods.site/ads1.html')">lihat</button>
                 </div>
                 <div class="book-card">
                     <img src="https://nasukafoods.site/image/cover1.jpg" alt="Book 2" class="book-cover">
-                    <button class="btn-action">Lihat</button>
+                    <button class="btn-action" onclick="navigateTo('https://nasukafoods.site/video1.html')">Lihat</button>
                 </div>
+                
                 <div class="book-card">
                     <img src="https://nasukafoods.site/image/cover2.jpg" alt="Book 3" class="book-cover">
-                    <button class="btn-action">Lihat</button>
+                    <button class="btn-action" onclick="navigateTo('https://nasukafoods.site/video2.html')">Lihat</button>
                 </div>
+                
+                  <div class="book-card">
+                    <img src="https://nasukafoods.site/image/cover3.jpg" alt="Book 3" class="book-cover">
+                    <button class="btn-action" onclick="navigateTo('https://nasukafoods.site/video3.html')">Lihat</button>
+                </div> 
+                
+                
             </div>
 
             <button class="nav-btn next" onclick="scrollSlider('trending', 1)"><i class="fas fa-chevron-right"></i></button>
@@ -207,15 +215,15 @@
             <div class="slider-content" id="classic">
                 <div class="book-card">
                     <img src="https://nasukafoods.site/image/cover3.jpg" alt="Classic 1" class="book-cover">
-                    <button class="btn-action">Lihat</button>
+                    <button class="btn-action" onclick="navigateTo('https://nasukafoods.site/url4')">Lihat</button>
                 </div>
                 <div class="book-card">
                     <img src="https://nasukafoods.site/image/cover4.jpg" alt="Classic 2" class="book-cover">
-                    <button class="btn-action">Lihat</button>
+                    <button class="btn-action" onclick="navigateTo('https://nasukafoods.site/url5')">Lihat</button>
                 </div>
                 <div class="book-card">
                     <img src="https://nasukafoods.site/image/cover5.jpg" alt="Classic 3" class="book-cover">
-                    <button class="btn-action">Lihat</button>
+                    <button class="btn-action" onclick="navigateTo('https://nasukafoods.site/url6')">Lihat</button>
                 </div>
             </div>
 
@@ -231,6 +239,10 @@
                 left: direction * scrollAmount,
                 behavior: 'smooth'
             });
+        }
+
+        function navigateTo(url) {
+            window.location.href = url;
         }
     </script>
 
