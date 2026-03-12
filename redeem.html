@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etalase Nasuka Foods</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://nasukafoods.site/lain.css">
+    <link rel="stylesheet" href="https://nasukafoods.site/index.css">
+    <style>
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; background: #f4f4f4; }
+        .product-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.95); }
+        .product-card img { width: 100%; height: 140px; object-fit: cover; }
+        .product-info { padding: 10px; }
+        .product-name { font-size: 14px; font-weight: 600; height: 35px; overflow: hidden; margin-bottom: 5px; color: #333; }
+        .product-price { color: #ee4d2d; font-weight: bold; font-size: 15px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; width: 90%; max-width: 400px; border-radius: 15px; padding: 20px; position: relative; }
+        .checkout-item { display: flex; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .info-box { background: #f9f9f9; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; }
+        .receipt-box { font-family: 'Courier New', Courier, monospace; background: #fff; padding: 15px; border: 1px solid #ddd; text-align: left; white-space: pre-wrap; font-size: 12px; }
+        .btn-primary { background: #27ae60; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-secondary { background: #bdc3c7; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 5px; cursor: pointer; }
+        .btn-primary:disabled { background: #95a5a6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-content">
+            <div class="top-nav">
+                <i class="fas fa-arrow-left" onclick="window.location.href='in.html'"></i>
+                <span class="welcome">Menu Nasuka</span>
+                <div id="displayNpayTop" style="font-weight:bold; color:#fff; background:rgba(0,0,0,0.2); padding:2px 8px; border-radius:10px;">0 Npay</div>
+            </div>
+        </div>
+    </div>
+    <div class="product-grid" id="productContainer"></div>
+</div>
+
+<div id="modalCheckout" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0;">Konfirmasi Pesanan</h3>
+        <div id="checkoutDetails" class="checkout-item"></div>
+        <div class="info-box">
+            <strong>Tujuan Pengiriman:</strong><br>
+            <span id="destNama"></span><br>
+            <span id="destHP"></span><br>
+            <span id="destAlamat"></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:18px; margin-bottom:20px;">
+            <span>Total Bayar:</span>
+            <span id="totalHarga" style="color:#ee4d2d;"></span>
+        </div>
+        <button onclick="eksekusiPembayaran()" id="btnBayar" class="btn-primary" style="width:100%;">Bayar Sekarang</button>
+        <button onclick="tutupModal('modalCheckout')" class="btn-secondary" style="width:100%;">Batal</button>
+    </div>
+</div>
+
+<div id="modalStruk" class="modal">
+    <div class="modal-content" style="text-align:center;">
+        <i class="fas fa-check-circle" style="color:#2ecc71; font-size:50px; margin-bottom:10px;"></i>
+        <h3 style="margin:0;">Pembayaran Berhasil</h3>
+        <p style="color:#666; font-size:13px;">Silakan simpan struk ini</p>
+        <div class="receipt-box" id="isiStruk"></div>
+        <button onclick="window.location.href='in.html'" class="btn-primary" style="width:100%; margin-top:20px;">Kembali ke Home</button>
+    </div>
+</div>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafoods1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const db = firebase.database();
+
+const userData = {
+    ID: localStorage.getItem("ID"),
+    Nama: localStorage.getItem("Nama"),
+    Npay: parseInt(localStorage.getItem("Npay")) || 0,
+    Alamat: localStorage.getItem("Alamat") || "Belum diatur",
+    HP: localStorage.getItem("NomorHP") || "Belum diatur"
+};
+
+// Kategori disesuaikan dengan folder stok_nita di database
+const listProduk = [
+    { id: 'P1', nama: 'Voucher Nita Cell 12jam', harga: 300, img: 'https://nasukafoods.site/image/paket.jpg', kategori: 'v_12h' },
+    { id: 'P2', nama: 'Voucher Nita Cell 24jam', harga: 500, img: 'https://nasukafoods.site/image/isia.jpg', kategori: 'v_24h' },
+    { id: 'P3', nama: 'Voucher Nita Cell 3D', harga: 2000, img: 'https://nasukafoods.site/image/isia.jpg', kategori: 'v_3d' },
+    { id: 'P4', nama: 'Voucher Nita Cell 7D', harga: 6000, img: 'https://nasukafoods.site/image/isia.jpg', kategori: 'v_7d' },
+];
+
+let itemTerpilih = null;
+
+function muatProduk() {
+    const container = document.getElementById('productContainer');
+    document.getElementById('displayNpayTop').textContent = userData.Npay.toLocaleString('id-ID') + ' Npay';
+    container.innerHTML = "";
+    listProduk.forEach(p => {
+        container.innerHTML += `
+            <div class="product-card" onclick="siapkanCheckout('${p.id}')">
+                <img src="${p.img}">
+                <div class="product-info">
+                    <div class="product-name">${p.nama}</div>
+                    <div class="product-price">${p.harga.toLocaleString('id-ID')} Npay</div>
+                </div>
+            </div>`;
+    });
+}
+
+function siapkanCheckout(id) {
+    if(!userData.ID) { alert("Harap login terlebih dahulu."); return; }
+    itemTerpilih = listProduk.find(x => x.id === id);
+    document.getElementById('checkoutDetails').innerHTML = `
+        <img src="${itemTerpilih.img}" style="width:70px; height:70px; border-radius:8px; object-fit:cover;">
+        <div>
+            <div style="font-weight:bold;">${itemTerpilih.nama}</div>
+            <div style="color:#666; font-size:13px;">Kuantitas: 1</div>
+        </div>`;
+    document.getElementById('destNama').textContent = userData.Nama;
+    document.getElementById('destHP').textContent = userData.HP;
+    document.getElementById('destAlamat').textContent = userData.Alamat;
+    document.getElementById('totalHarga').textContent = itemTerpilih.harga.toLocaleString('id-ID') + ' Npay';
+    document.getElementById('modalCheckout').style.display = 'flex';
+}
+
+async function eksekusiPembayaran() {
+    if (userData.Npay < itemTerpilih.harga) { alert("Npay Anda tidak mencukupi!"); return; }
+
+    const btn = document.getElementById('btnBayar');
+    btn.disabled = true; btn.innerText = "Memproses...";
+
+    let kodeVoucherTerambil = "-";
+    let nodeDB = `stok_nita/${itemTerpilih.kategori}`;
+
+    try {
+        // Ambil voucher tersedia
+        const snapshotVoucher = await db.ref(nodeDB).orderByChild('status').equalTo('tersedia').limitToFirst(1).once('value');
+        
+        if (!snapshotVoucher.exists()) {
+            alert(`Maaf, stok voucher sedang kosong.`);
+            btn.disabled = false; btn.innerText = "Bayar Sekarang";
+            return;
+        }
+
+        const keyVoucher = Object.keys(snapshotVoucher.val())[0];
+        kodeVoucherTerambil = snapshotVoucher.val()[keyVoucher].kode;
+
+        // Tandai sebagai terpakai
+        await db.ref(`${nodeDB}/${keyVoucher}`).update({
+            status: 'terpakai',
+            pembeli: userData.Nama,
+            tgl_beli: new Date().toLocaleString('id-ID')
+        });
+
+    } catch (e) {
+        alert("Gangguan koneksi database.");
+        btn.disabled = false; return;
+    }
+
+    // Transaksi Npay
+    db.ref(`users/${userData.ID}/Npay`).transaction((current) => {
+        return (current || 0) - itemTerpilih.harga;
+    }, (error, committed, snapshot) => {
+        if (committed) {
+            const tgl = new Date();
+            const dataRiwayat = {
+                invoice: "NSK" + tgl.getTime(),
+                produk: itemTerpilih.nama,
+                total: itemTerpilih.harga,
+                tanggal: tgl.toLocaleString('id-ID'),
+                status: "LUNAS",
+                voucher: kodeVoucherTerambil,
+                label: "KODE VOUCHER"
+            };
+
+            db.ref(`history/${userData.ID}`).push(dataRiwayat).then(() => {
+                localStorage.setItem("Npay", snapshot.val());
+                tampilkanStruk(dataRiwayat);
+            });
+        } else {
+            alert("Gagal memproses pembayaran.");
+            btn.disabled = false;
+        }
+    });
+}
+
+function tampilkanStruk(data) {
+    document.getElementById('modalCheckout').style.display = 'none';
+    const isi = document.getElementById('isiStruk');
+    
+    isi.innerHTML = `NO. INV : ${data.invoice}
+WAKTU   : ${data.tanggal}
+---------------------------
+ITEM    : ${data.produk}
+TOTAL   : ${data.total.toLocaleString('id-ID')} Npay
+KODE    : ${data.voucher}
+---------------------------
+METODE  : Npay NASUKA
+PENERIMA: ${userData.Nama}
+STATUS  : BERHASIL`;
+
+    document.getElementById('modalStruk').style.display = 'flex';
+}
+
+function tutupModal(id) { document.getElementById(id).style.display = 'none'; }
+$(document).ready(() => muatProduk());
+</script>
+</body>
+</html>
