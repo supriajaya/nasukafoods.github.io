@@ -57,26 +57,40 @@ let userSaldo = parseInt(localStorage.getItem("Saldo")) || 0;
 
 // Data Produk
 const products = [
-    { cat: "Pulsa & Data Axis", items: [
-        { id: "ax1", name: "Axis 5GB 30 Hari", price: 15000, img: "https://upload.wikimedia.org/wikipedia/commons/8/83/Axis_logo_2014.svg" },
-        { id: "ax2", name: "Axis 10GB 30 Hari", price: 28000, img: "https://upload.wikimedia.org/wikipedia/commons/8/83/Axis_logo_2014.svg" }
+    { cat: "Voucher Data", items: [
+        { id: "axis", name: "Axis", price: 11000, img: "https://nasukafoods.site/image/axis.jpg" },
+         { id: "ax1", name: "indosat", price: 15000, img: "https://nasukafoods.site/image/indosat.jpg" },
+          
+           { id: "smartfren", name: "smartfren", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
+        
+        
+        { id: "tsel", name: "Telkomsel", price: 28000, img: "https://nasukafoods.site/image/tsel.jpg" }
+        
+      
+        
     ]},
-    { cat: "Pulsa & Data Indosat", items: [
-        { id: "is1", name: "Indosat 3GB 30 Hari", price: 12000, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Indosat_Ooredoo_logo.svg" },
-        { id: "is2", name: "Indosat 12GB 30 Hari", price: 45000, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Indosat_Ooredoo_logo.svg" }
+    
+     { cat: "Voucher Wifi", items: [
+        { id: "axis", name: "Wifi Id", price: 45000, img: "https://nasukafoods.site/image/wifiid.png" },
+        
+           { id: "smartfren", name: "Nita Cell", price: 2000, img: "https://nasukafoods.site/image/nitacell.jpg" },
+        
+       
+      
+        
     ]},
-    { cat: "Pulsa & Data Telkomsel", items: [
-        { id: "ts1", name: "Tsel 2GB 30 Hari", price: 18000, img: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkomsel_2021_logo.svg" },
-        { id: "ts2", name: "Tsel 5GB 30 Hari", price: 35000, img: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkomsel_2021_logo.svg" }
+    
+    { cat: "Voucher Hiburan", items: [
+        { id: "axis", name: "Netflix", price: 15000, img: "https://nasukafoods.site/image/netflix.png" },
+         { id: "ax1", name: "GooglePlay", price: 15000, img: "https://nasukafoods.site/image/gplay.png" },
+          
+         
+      
+        
     ]},
-    { cat: "Smartfren & Lainnya", items: [
-        { id: "sf1", name: "Smartfren 10GB", price: 25000, img: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Smartfren_logo.svg" },
-        { id: "nc1", name: "Nitcell Promo", price: 5000, img: "https://nasukafoods.site/nasukafoods.jpg" }
-    ]},
-    { cat: "Entertainment & Games", items: [
-        { id: "nf1", name: "Netflix 1 Day Mobile", price: 5000, img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" },
-        { id: "gp1", name: "Google Play 20K", price: 21500, img: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg" }
-    ]}
+    
+    
+    
 ];
 
 function renderProducts() {
