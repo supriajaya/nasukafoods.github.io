@@ -22,6 +22,12 @@
         #historyModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .card-post { border-left: 4px solid #ef4444; }
         .card-reply { border-left: 3px solid #94a3b8; background-color: #f8fafc; }
+        
+        /* Style tambahan untuk Tabel Stok */
+        .badge-stok { padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
+        .bg-low { background: #ffc107; color: #000; }
+        .bg-ok { background: #e2f3e5; color: #1e7e34; }
+        .bg-empty { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-800">
@@ -35,6 +41,8 @@
         <div class="w-64 bg-white h-full p-5 overflow-y-auto" onclick="event.stopPropagation()">
             <h2 class="font-bold border-b pb-3 mb-4 text-slate-700 text-sm">Panel Kontrol</h2>
             <nav class="space-y-4">
+                <button onclick="openTab('tab-chat'); toggleSidebar()" class="flex items-center gap-3 w-full text-slate-600 font-bold"><i class="fas fa-comment-dots"></i> Inbox Chat</button>
+                <button onclick="openTab('tab-stok-input'); toggleSidebar()" class="flex items-center gap-3 w-full text-green-600 font-bold"><i class="fas fa-box-open"></i> Manajemen Stok</button>
                 <button onclick="openTab('tab-otoritas'); toggleSidebar()" class="flex items-center gap-3 w-full text-blue-700 font-bold"><i class="fas fa-user-shield"></i> Otoritas User</button>
                 <button onclick="openTab('tab-mod-post'); toggleSidebar()" class="flex items-center gap-3 w-full text-red-600 font-bold"><i class="fas fa-stream"></i> Moderasi Postingan</button>
                 <button onclick="openTab('tab-del'); toggleSidebar()" class="flex items-center gap-3 w-full text-red-500 font-bold"><i class="fas fa-trash-alt"></i> Kelola Hapus Chat</button>
@@ -50,6 +58,55 @@
 
     <main class="container mx-auto">
         
+        <div id="tab-stok-input" class="tab-content p-4">
+            <div class="bg-white p-5 rounded-2xl border shadow-sm mb-6">
+                <h2 class="font-bold text-green-600 mb-4 flex items-center gap-2"><i class="fas fa-plus-square"></i> Input Stok Voucher</h2>
+                
+                <label class="block text-xs font-bold text-gray-500 mb-1">Pilih Jenis Produk:</label>
+                <select id="productID" class="w-full p-3 bg-gray-50 border rounded-xl mb-4 text-sm outline-none">
+                    <optgroup label="Voucher Data">
+                        <option value="ax1">Axis 5GB (ax1)</option>
+                        <option value="is1">Indosat 3GB (is1)</option>
+                        <option value="ts1">Telkomsel 2GB (ts1)</option>
+                        <option value="sf1">Smartfren 10GB (sf1)</option>
+                    </optgroup>
+                    <optgroup label="Voucher Wifi">
+                        <option value="wf1">Wifi Id (wf1)</option>
+                        <option value="nc1">Nitcell Promo (nc1)</option>
+                    </optgroup>
+                    <optgroup label="Voucher Hiburan">
+                        <option value="nf1">Netflix 1 Day (nf1)</option>
+                        <option value="gp1">Google Play 20K (gp1)</option>
+                    </optgroup>
+                </select>
+
+                <label class="block text-xs font-bold text-gray-500 mb-1">Kode SN / Voucher:</label>
+                <textarea id="voucherCode" placeholder="Contoh: SN998822, SN998823" rows="4" class="w-full p-3 bg-gray-50 border rounded-xl mb-1 text-sm outline-none"></textarea>
+                <p class="text-[10px] text-gray-400 mb-4">*Pisahkan dengan koma untuk banyak kode sekaligus.</p>
+                
+                <button onclick="simpanVoucherDatabase()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold shadow-md active:scale-95 transition-transform">Tambah ke Database</button>
+            </div>
+
+            <div class="bg-white rounded-2xl border shadow-sm overflow-hidden">
+                <div class="p-4 border-b bg-gray-50">
+                    <h2 class="font-bold text-slate-700 flex items-center gap-2"><i class="fas fa-list-ul"></i> Ringkasan Sisa Stok</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-[11px] uppercase text-slate-500">
+                                <th class="p-3">Produk</th>
+                                <th class="p-3">ID</th>
+                                <th class="p-3">Sisa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockBodyRealtime" class="text-xs">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <div id="tab-otoritas" class="tab-content p-4">
             <div class="mb-4">
                 <input type="text" id="adminSearch" placeholder="Cari Nama, Username, HP, atau Alamat..." class="w-full p-3 border rounded-xl shadow-sm outline-none text-sm">
@@ -140,25 +197,6 @@
             </div>
         </div>
 
-        <div id="tab-wifi" class="tab-content p-4">
-            <div class="bg-white p-4 rounded-2xl border mb-4">
-                <h2 class="font-bold text-green-600 mb-2">Voucher WiFi (Stok: <span id="stokWifi">0</span>)</h2>
-                <div class="flex gap-2">
-                    <input type="text" id="vCodeWifi" class="flex-1 p-3 border rounded-xl text-sm outline-none" placeholder="Kode WiFi">
-                    <button onclick="simpanWifi()" class="bg-green-600 text-white px-4 rounded-xl"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="listWifi" class="mt-3 flex flex-wrap gap-1"></div>
-            </div>
-            <div class="bg-white p-4 rounded-2xl border">
-                <h2 class="font-bold text-slate-700 mb-2">Nitacell (Stok: <span id="stokNitacell">0</span>)</h2>
-                <div class="flex gap-2">
-                    <input type="text" id="pCodeNitacell" class="flex-1 p-3 border rounded-xl text-sm outline-none" placeholder="Kode Nita">
-                    <button onclick="addNitacellVoucher()" class="bg-slate-700 text-white px-4 rounded-xl"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="listNitacell" class="mt-3 space-y-1"></div>
-            </div>
-        </div>
-
         <div id="tab-post" class="tab-content p-4">
             <div class="bg-white p-5 rounded-2xl border shadow-sm">
                 <h2 class="font-bold text-slate-800 mb-4">Pemulihan Kenangan</h2>
@@ -197,6 +235,10 @@
             <i class="fas fa-comment-dots text-lg"></i>
             <span class="text-[10px] font-bold">Chat</span>
         </button>
+        <button onclick="openTab('tab-stok-input')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-stok-input">
+            <i class="fas fa-box-open text-lg"></i>
+            <span class="text-[10px] font-bold">Stok</span>
+        </button>
         <button onclick="openTab('tab-topup')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-topup">
             <i class="fas fa-wallet text-lg"></i>
             <span class="text-[10px] font-bold">Saldo</span>
@@ -212,7 +254,6 @@
     </nav>
 
     <script>
-        // CONFIG FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
             authDomain: "nasukafoods1.firebaseapp.com",
@@ -224,17 +265,65 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
-        // UI HELPERS
         function toggleSidebar() { $('#sidebar').toggleClass('hidden'); }
         function openTab(tabId) {
             $('.tab-content').removeClass('active');
             $('.nav-btn').removeClass('nav-active');
             $('#' + tabId).addClass('active');
-            $(`[onclick="openTab('${tabId}')"]`).addClass('nav-active');
+            $(`[data-tab="${tabId}"]`).addClass('nav-active');
             window.scrollTo(0,0);
         }
 
-        // --- 1. OTORITAS USER LOGIC (ALAMAT & HP) ---
+        // --- FUNGSI INPUT STOK (DARI INPUT.HTML) ---
+        function simpanVoucherDatabase() {
+            const id = document.getElementById('productID').value;
+            const codes = document.getElementById('voucherCode').value;
+
+            if (!codes.trim()) {
+                alert("Silahkan masukkan kode voucher!");
+                return;
+            }
+
+            const codeArray = codes.split(',').map(item => item.trim()).filter(item => item !== "");
+
+            codeArray.forEach(code => {
+                db.ref(`stok_voucher/${id}`).push(code);
+            });
+
+            alert("Berhasil! " + codeArray.length + " stok ditambahkan.");
+            document.getElementById('voucherCode').value = "";
+        }
+
+        function monitorStokRealtime() {
+            const options = document.querySelectorAll('#productID option');
+            const stockBody = document.getElementById('stockBodyRealtime');
+
+            db.ref('stok_voucher').on('value', (snapshot) => {
+                const allData = snapshot.val() || {};
+                stockBody.innerHTML = ""; 
+
+                options.forEach(opt => {
+                    const pID = opt.value;
+                    const pName = opt.text.split('(')[0];
+                    const currentStock = allData[pID] ? Object.keys(allData[pID]).length : 0;
+                    
+                    let statusClass = "bg-ok";
+                    if (currentStock === 0) statusClass = "bg-empty";
+                    else if (currentStock < 5) statusClass = "bg-low";
+
+                    const row = `
+                        <tr class="border-b">
+                            <td class="p-3 font-medium">${pName}</td>
+                            <td class="p-3 text-gray-400">${pID}</td>
+                            <td class="p-3"><span class="badge-stok ${statusClass}">${currentStock} Pcs</span></td>
+                        </tr>
+                    `;
+                    stockBody.innerHTML += row;
+                });
+            });
+        }
+
+        // --- FUNGSI EXISTING SUPERADMIN ---
         function loadUsers() {
             db.ref('users').on('value', (snap) => {
                 const container = document.getElementById('userListOtoritas');
@@ -302,7 +391,7 @@
         }
         function closeModal() { $('#historyModal').hide(); }
 
-        // --- 2. CHAT & MODERASI CHAT ---
+        // --- CHAT LOGIC ---
         db.ref('admin_inbox').on('value', (snap) => {
             const list = document.getElementById('userListChat');
             const listDel = document.getElementById('userListDel');
@@ -345,97 +434,13 @@
             $('#adminInput').val('');
         }
 
-        let activeDelUserID = null;
-        function loadUserMessages(userId, userName) {
-            activeDelUserID = userId;
-            $('#messageManageArea').removeClass('hidden');
-            $('#targetNameDel').text(`User: ${userName}`);
-            db.ref(`chats/${userId}`).on('value', (snapshot) => {
-                const msgList = document.getElementById('messageList');
-                msgList.innerHTML = '';
-                snapshot.forEach(child => {
-                    const data = child.val();
-                    msgList.innerHTML += `<div class="flex justify-between items-center p-2 border-b gap-2 text-[11px]">
-                        <div class="flex-1"><span class="${data.sender === 'admin' ? 'tag-admin' : 'tag-user'}">${data.sender}</span> ${data.text}</div>
-                        <button onclick="deleteSingleMessage('${child.key}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                    </div>`;
-                });
-            });
-        }
-        function deleteSingleMessage(msgId) { if(confirm('Hapus pesan?')) db.ref(`chats/${activeDelUserID}/${msgId}`).remove(); }
-        function deleteAllChat() {
-            if(confirm('Hapus seluruh chat user?')) {
-                db.ref(`chats/${activeDelUserID}`).remove();
-                db.ref(`admin_inbox/${activeDelUserID}`).remove();
-                $('#messageManageArea').addClass('hidden');
-            }
-        }
-
-        // --- 3. MODERASI POSTINGAN ---
-        db.ref('testimoni_publik').on('value', (snapshot) => {
-            const container = document.getElementById('containerPostingan');
-            container.innerHTML = "";
-            snapshot.forEach((child) => {
-                const post = child.val();
-                let balasanHtml = "";
-                if (post.balasan) {
-                    Object.keys(post.balasan).forEach((replyKey) => {
-                        const r = post.balasan[replyKey];
-                        balasanHtml += `
-                            <div class="card-reply p-2 rounded mb-2 flex justify-between items-start">
-                                <div class="text-[11px] leading-tight"><b class="text-slate-600">${r.nama}:</b> ${r.teks}</div>
-                                <button onclick="hapusBalasan('${child.key}', '${replyKey}')" class="text-red-500 text-[10px] font-bold">HAPUS</button>
-                            </div>`;
-                    });
-                }
-                container.innerHTML += `
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border card-post">
-                        <div class="flex justify-between items-start mb-2">
-                            <div><h3 class="font-bold text-xs">${post.nama}</h3><p class="text-[9px] text-gray-400">${new Date(post.timestamp).toLocaleString('id-ID')}</p></div>
-                            <button onclick="hapusPostingan('${child.key}')" class="text-red-600 text-[10px] font-bold">HAPUS POST</button>
-                        </div>
-                        <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-xl mb-3 border border-slate-100">${post.pesan}</p>
-                        <div class="border-t pt-2">${balasanHtml || '<p class="text-[10px] text-gray-300 italic">Tidak ada balasan</p>'}</div>
-                    </div>`;
-            });
-        });
-        function hapusPostingan(key) { if(confirm("Hapus postingan?")) db.ref(`testimoni_publik/${key}`).remove(); }
-        function hapusBalasan(postK, replyK) { if(confirm("Hapus balasan?")) db.ref(`testimoni_publik/${postK}/balasan/${replyK}`).remove(); }
-
-        // --- 4. LAIN-LAIN (PARTNER, SPONSOR, VOUCHER) ---
+        // --- LAIN-LAIN ---
         function savePartner() {
             const n = $('#pNama').val(), i = $('#pImage').val(), u = $('#pUrl').val();
             if(n && i) db.ref('partners_list').push({ nama: n, image: i, url: u }).then(() => { $('#pNama').val(''); $('#pImage').val(''); $('#pUrl').val(''); });
         }
-        db.ref('partners_list').on('value', (snap) => {
-            const container = document.getElementById('listPartner');
-            container.innerHTML = '';
-            snap.forEach(child => {
-                const d = child.val();
-                container.innerHTML += `<div class="bg-white p-3 rounded-xl border flex items-center justify-between">
-                    <div class="flex items-center gap-3"><img src="${d.image}" class="w-10 h-10 rounded object-cover">
-                    <div><div class="font-bold text-xs">${d.nama}</div></div></div>
-                    <button onclick="hapusData('partners_list/${child.key}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                </div>`;
-            });
-        });
 
-        function saveSponsor() {
-            const n = $('#spName').val(), u = $('#spUrl').val(), i = $('#spImg').val();
-            if(n && u && i) db.ref('sponsors_list').push({ nama: n, url: u, image: i }).then(() => { $('#spName').val(''); $('#spUrl').val(''); $('#spImg').val(''); });
-        }
-        db.ref('sponsors_list').on('value', snap => {
-            const list = document.getElementById('sponsorList'); list.innerHTML = '';
-            snap.forEach(c => {
-                const d = c.val();
-                list.innerHTML += `<div class="flex items-center gap-2 p-2 bg-white border rounded-lg text-xs">
-                    <img src="${d.image}" class="w-6 h-6 rounded"><span class="flex-1 font-bold">${d.nama}</span>
-                    <button onclick="hapusData('sponsors_list/${c.key}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                </div>`;
-            });
-        });
-
-        function processesTopUpManual() {
+        function prosesTopUpManual() {
             const u = $('#targetUsername').val().trim(), a = parseInt($('#topupAmount').val());
             if(!u || isNaN(a)) return;
             db.ref("users").orderByChild("Username").equalTo(u).once("value").then(snap => {
@@ -445,11 +450,6 @@
                     alert("Saldo Berhasil Dikirim!");
                 } else alert("User tidak ditemukan");
             });
-        }
-
-        function addSaldoVoucher() {
-            const c = $('#sCode').val(), v = parseInt($('#sValue').val());
-            if(c.length === 6 && v) db.ref('vouchers/'+c).set(v).then(() => alert("Voucher Aktif!"));
         }
 
         function monitor(path, listId, countId) {
@@ -467,40 +467,11 @@
                 if(count) count.innerText = i;
             });
         }
+
+        // Inisialisasi Monitor
         monitor('vouchers_tsel', 'listTsel', 'stokTsel');
         monitor('vouchers_axis', 'listAxis', 'stokAxis');
-        monitor('vouchers', 'listWifi', 'stokWifi');
-        monitor('Nitacell_vouchers', 'listNitacell', 'stokNitacell');
-        monitor('vouchers', 'sList', null);
-
-        function simpanVoucherPath(path, id) {
-            const val = document.getElementById(id).value.trim();
-            if(!val) return;
-            val.split('\n').forEach(k => { if(k.trim()) db.ref(path).push({ kode: k.trim(), status: 'tersedia' }); });
-            document.getElementById(id).value = ''; alert("Tersimpan!");
-        }
-        function simpanWifi() {
-            const c = $('#vCodeWifi').val();
-            if(c) db.ref('vouchers').push({ kode: c, status: 'tersedia' }); $('#vCodeWifi').val('');
-        }
-        function addNitacellVoucher() {
-            const c = $('#pCodeNitacell').val();
-            if(c) db.ref('Nitacell_vouchers').push({ code: c }); $('#pCodeNitacell').val('');
-        }
-
-        function postSebagaiAdmin() {
-            const n = $('#adminNama').val(), p = $('#adminPesan').val(), t = $('#adminTanggal').val();
-            if(!n || !p || !t) return alert("Isi Lengkap!");
-            db.ref('testimoni_publik').push({ nama: n, pesan: p, timestamp: new Date(t).getTime(), userID: "ADMIN-RECOVERY" }).then(() => alert("Kenangan Dipulihkan!"));
-        }
-
-        function hapusData(path) { if(confirm("Hapus data?")) db.ref(path).remove(); }
-
-        // --- SEARCH ENGINE ---
-        $("#adminSearch").on("keyup", function() {
-            const val = $(this).val().toLowerCase();
-            $(".user-card").each(function() { $(this).toggle($(this).data("search").indexOf(val) > -1); });
-        });
+        monitorStokRealtime();
 
         $(document).ready(() => loadUsers());
     </script>
