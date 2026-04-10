@@ -100,6 +100,9 @@ function renderProducts() {
     container.innerHTML = html;
 }
 
+
+
+
 function prosesBeli(id, nama, harga) {
     if (!userID) {
         alert("Silahkan login terlebih dahulu di halaman utama.");
@@ -112,33 +115,52 @@ function prosesBeli(id, nama, harga) {
     }
 
     if (confirm(`Beli ${nama} seharga Rp ${harga.toLocaleString('id-ID')}?`)) {
-        const generateSN = "SN-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-        const tgl = new Date().toLocaleString('id-ID');
+        
+        // Cek Stok Voucher terlebih dahulu
+        db.ref(`stok_voucher/${id}`).limitToFirst(1).once('value', (snapshot) => {
+            if (!snapshot.exists()) {
+                alert("Maaf, stok voucher ini sedang habis. Silahkan hubungi admin.");
+                return;
+            }
 
-        // 1. Kurangi Saldo User
-        const newSaldo = userSaldo - harga;
-        db.ref(`users/${userID}/Saldo`).set(newSaldo).then(() => {
-            
-            // 2. Catat di Riwayat
-            const historyRef = db.ref(`history/${userID}`).push();
-            historyRef.set({
-                produk: nama,
-                total: harga,
-                tanggal: tgl,
-                status: "Berhasil",
-                voucher: generateSN
-            }).then(() => {
-                alert("Pembelian Berhasil!\nKode Voucher: " + generateSN);
-                localStorage.setItem("Saldo", newSaldo);
-                userSaldo = newSaldo;
-                renderProducts();
+            // Ambil data voucher pertama
+            const key = Object.keys(snapshot.val())[0];
+            const voucherSN = snapshot.val()[key];
+            const tgl = new Date().toLocaleString('id-ID');
+
+            // 1. Kurangi Saldo
+            const newSaldo = userSaldo - harga;
+            db.ref(`users/${userID}/Saldo`).set(newSaldo).then(() => {
+                
+                // 2. Hapus voucher dari stok (karena sudah dibeli)
+                db.ref(`stok_voucher/${id}/${key}`).remove();
+
+                // 3. Catat di Riwayat User
+                const historyRef = db.ref(`history/${userID}`).push();
+                historyRef.set({
+                    produk: nama,
+                    total: harga,
+                    tanggal: tgl,
+                    status: "Berhasil",
+                    voucher: voucherSN
+                }).then(() => {
+                    alert("Pembelian Berhasil!\nKode Voucher: " + voucherSN);
+                    localStorage.setItem("Saldo", newSaldo);
+                    userSaldo = newSaldo;
+                    renderProducts();
+                });
+            }).catch(err => {
+                alert("Terjadi kesalahan transaksi.");
+                console.error(err);
             });
-        }).catch(err => {
-            alert("Terjadi kesalahan sistem.");
-            console.error(err);
         });
     }
 }
+
+
+
+
+
 
 // Pantau saldo secara real-time
 if (userID) {
