@@ -18,9 +18,91 @@
         .v-name { font-size: 13px; font-weight: bold; display: block; height: 35px; overflow: hidden; }
         .v-price { color: #ee4d2d; font-weight: bold; font-size: 14px; margin: 5px 0; display: block; }
         .btn-beli { background: #ee4d2d; color: white; border: none; padding: 8px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%; font-weight: bold; }
+        
         .header-beli { background: white; padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .header-beli i { margin-right: 15px; font-size: 18px; cursor: pointer; }
+        
         .user-balance-info { background: #fff8e1; padding: 15px; margin: 10px; border-radius: 8px; border: 1px solid #ffecb3; display: flex; justify-content: space-between; align-items: center; }
+
+        /* --- MODAL INVOICE STYLE --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .invoice-box {
+            background: #fff;
+            width: 85%;
+            max-width: 320px;
+            padding: 25px;
+            border-radius: 2px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            font-family: 'Courier New', Courier, monospace;
+            color: #222;
+            position: relative;
+        }
+
+        .invoice-header {
+            text-align: center;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .invoice-header h2 { margin: 0; font-size: 18px; letter-spacing: 2px; font-weight: bold; }
+        .invoice-header small { font-size: 10px; color: #666; display: block; margin-top: 5px; }
+
+        .invoice-body { font-size: 13px; line-height: 1.6; }
+        .invoice-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+
+        .invoice-footer {
+            border-top: 2px dashed #ccc;
+            margin-top: 15px;
+            padding-top: 15px;
+            text-align: center;
+        }
+
+        .btn-invoice {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: #999;
+            border: none;
+            margin-top: 12px;
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: underline;
+            width: 100%;
+        }
+
+        .success-code {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 12px;
+            margin: 10px 0;
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+            text-align: center;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
@@ -39,6 +121,21 @@
     <div id="voucher-list"></div>
 </div>
 
+<div id="invoiceModal" class="modal-overlay">
+    <div class="invoice-box">
+        <div class="invoice-header">
+            <h2 id="invTitle">INVOICE</h2>
+            <small id="invDate"></small>
+        </div>
+        <div class="invoice-body" id="invBody">
+            </div>
+        <div class="invoice-footer">
+            <button class="btn-invoice" id="invActionBtn">KONFIRMASI</button>
+            <button class="btn-cancel" id="invCancelBtn" onclick="closeModal()">TUTUP</button>
+        </div>
+    </div>
+</div>
+
 <script>
 const firebaseConfig = {
     apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
@@ -55,7 +152,6 @@ const db = firebase.database();
 const userID = localStorage.getItem("ID");
 let userSaldo = 0;
 
-// Data Produk (ID harus sama dengan value di input.html)
 const products = [
     { cat: "Voucher Data", items: [
         { id: "ax1", name: "Axis 5GB", price: 11000, img: "https://nasukafoods.site/image/axis.jpg" },
@@ -92,22 +188,58 @@ function renderProducts() {
     container.innerHTML = html;
 }
 
+// Fungsi Modal Kustom
+function showModal(content, title = "INVOICE", showAction = true, actionFn = null) {
+    document.getElementById('invTitle').innerText = title;
+    document.getElementById('invDate').innerText = new Date().toLocaleString('id-ID');
+    document.getElementById('invBody').innerHTML = content;
+    
+    const actionBtn = document.getElementById('invActionBtn');
+    if (showAction) {
+        actionBtn.style.display = "block";
+        actionBtn.onclick = () => {
+            actionBtn.innerHTML = "MEMPROSES...";
+            actionBtn.disabled = true;
+            actionFn();
+        };
+    } else {
+        actionBtn.style.display = "none";
+    }
+    
+    document.getElementById('invoiceModal').style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById('invoiceModal').style.display = "none";
+    // Reset button state
+    const actionBtn = document.getElementById('invActionBtn');
+    actionBtn.innerHTML = "KONFIRMASI";
+    actionBtn.disabled = false;
+}
+
 function prosesBeli(id, nama, harga) {
     if (!userID) {
-        alert("Silahkan login terlebih dahulu.");
+        showModal("<p style='text-align:center'>Silahkan login untuk bertransaksi.</p>", "AUTH REQUIRED", false);
         return;
     }
 
     if (userSaldo < harga) {
-        alert("Saldo tidak cukup!");
+        showModal("<p style='text-align:center'>Saldo Anda tidak mencukupi.</p>", "SALDO KURANG", false);
         return;
     }
 
-    if (confirm(`Beli ${nama} seharga Rp ${harga.toLocaleString('id-ID')}?`)) {
-        // Cek Stok
+    const confirmHtml = `
+        <div class="invoice-row"><span>PRODUK</span> <span>${nama}</span></div>
+        <div class="invoice-row"><span>HARGA</span> <span>Rp ${harga.toLocaleString('id-ID')}</span></div>
+        <div class="invoice-row" style="font-weight:bold; margin-top:10px; border-top:1px solid #eee; padding-top:5px;">
+            <span>TOTAL</span> <span>Rp ${harga.toLocaleString('id-ID')}</span>
+        </div>
+    `;
+
+    showModal(confirmHtml, "CONFIRMATION", true, () => {
         db.ref(`stok_voucher/${id}`).limitToFirst(1).once('value', (snapshot) => {
             if (!snapshot.exists()) {
-                alert("Maaf, stok sedang habis.");
+                showModal("<p style='text-align:center'>Maaf, stok baru saja habis.</p>", "OUT OF STOCK", false);
                 return;
             }
 
@@ -115,12 +247,9 @@ function prosesBeli(id, nama, harga) {
             const voucherSN = snapshot.val()[key];
             const tgl = new Date().toLocaleString('id-ID');
 
-            // 1. Potong Saldo
             const newSaldo = userSaldo - harga;
             db.ref(`users/${userID}/Saldo`).set(newSaldo).then(() => {
-                // 2. Hapus Stok
                 db.ref(`stok_voucher/${id}/${key}`).remove();
-                // 3. Catat Riwayat
                 db.ref(`history/${userID}`).push({
                     produk: nama,
                     total: harga,
@@ -128,11 +257,16 @@ function prosesBeli(id, nama, harga) {
                     status: "Berhasil",
                     voucher: voucherSN
                 }).then(() => {
-                    alert("Berhasil!\nKode: " + voucherSN);
+                    const successHtml = `
+                        <p style="text-align:center; margin-bottom:5px;">TRANSAKSI BERHASIL</p>
+                        <div class="success-code">${voucherSN}</div>
+                        <p style="font-size:9px; text-align:center; color:#777; line-height:1.2;">Terima kasih telah memilih Nasuka Foods. Kode di atas adalah voucher Anda.</p>
+                    `;
+                    showModal(successHtml, "OFFICIAL RECEIPT", false);
                 });
             });
         });
-    }
+    });
 }
 
 if (userID) {
