@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beli Voucher - Nasuka Foods</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <link rel="stylesheet" href="https://nasukafoods.site/index.css">
+    <style>
+        body { background-color: #f4f4f4; font-family: sans-serif; }
+        .voucher-container { padding: 15px; padding-bottom: 80px; }
+        .category-title { font-weight: bold; margin: 15px 0 10px; color: #333; border-left: 4px solid #ee4d2d; padding-left: 10px; }
+        .voucher-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .voucher-card { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; border: 1px solid #eee; }
+        .voucher-card img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px; }
+        .v-name { font-size: 13px; font-weight: bold; display: block; height: 35px; overflow: hidden; }
+        .v-price { color: #ee4d2d; font-weight: bold; font-size: 14px; margin: 5px 0; display: block; }
+        .btn-beli { background: #ee4d2d; color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%; }
+        .header-beli { background: white; padding: 15px; display: flex; align-items: center; sticky: top; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .header-beli i { margin-right: 15px; font-size: 18px; }
+        .user-balance-info { background: #fff8e1; padding: 10px; margin: 10px; border-radius: 8px; border: 1px solid #ffecb3; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+
+<div class="header-beli">
+    <i class="fas fa-arrow-left" onclick="window.close()"></i>
+    <h3 style="margin:0;">Beli Voucher & Data</h3>
+</div>
+
+<div class="user-balance-info">
+    <span>Saldo Anda:</span>
+    <strong id="displaySaldo">Rp 0</strong>
+</div>
+
+<div class="voucher-container">
+    <div id="voucher-list"></div>
+</div>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafoods1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const db = firebase.database();
+
+const userID = localStorage.getItem("ID");
+let userSaldo = parseInt(localStorage.getItem("Saldo")) || 0;
+
+// Data Produk
+const products = [
+    { cat: "Pulsa & Data Axis", items: [
+        { id: "ax1", name: "Axis 5GB 30 Hari", price: 15000, img: "https://upload.wikimedia.org/wikipedia/commons/8/83/Axis_logo_2014.svg" },
+        { id: "ax2", name: "Axis 10GB 30 Hari", price: 28000, img: "https://upload.wikimedia.org/wikipedia/commons/8/83/Axis_logo_2014.svg" }
+    ]},
+    { cat: "Pulsa & Data Indosat", items: [
+        { id: "is1", name: "Indosat 3GB 30 Hari", price: 12000, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Indosat_Ooredoo_logo.svg" },
+        { id: "is2", name: "Indosat 12GB 30 Hari", price: 45000, img: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Indosat_Ooredoo_logo.svg" }
+    ]},
+    { cat: "Pulsa & Data Telkomsel", items: [
+        { id: "ts1", name: "Tsel 2GB 30 Hari", price: 18000, img: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkomsel_2021_logo.svg" },
+        { id: "ts2", name: "Tsel 5GB 30 Hari", price: 35000, img: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkomsel_2021_logo.svg" }
+    ]},
+    { cat: "Smartfren & Lainnya", items: [
+        { id: "sf1", name: "Smartfren 10GB", price: 25000, img: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Smartfren_logo.svg" },
+        { id: "nc1", name: "Nitcell Promo", price: 5000, img: "https://nasukafoods.site/nasukafoods.jpg" }
+    ]},
+    { cat: "Entertainment & Games", items: [
+        { id: "nf1", name: "Netflix 1 Day Mobile", price: 5000, img: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" },
+        { id: "gp1", name: "Google Play 20K", price: 21500, img: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg" }
+    ]}
+];
+
+function renderProducts() {
+    const container = document.getElementById('voucher-list');
+    document.getElementById('displaySaldo').textContent = 'Rp ' + userSaldo.toLocaleString('id-ID');
+    
+    let html = '';
+    products.forEach(group => {
+        html += `<div class="category-title">${group.cat}</div><div class="voucher-grid">`;
+        group.items.forEach(p => {
+            html += `
+                <div class="voucher-card">
+                    <img src="${p.img}" alt="logo">
+                    <span class="v-name">${p.name}</span>
+                    <span class="v-price">Rp ${p.price.toLocaleString('id-ID')}</span>
+                    <button class="btn-beli" onclick="prosesBeli('${p.id}', '${p.name}', ${p.price})">Beli</button>
+                </div>`;
+        });
+        html += `</div>`;
+    });
+    container.innerHTML = html;
+}
+
+function prosesBeli(id, nama, harga) {
+    if (!userID) {
+        alert("Silahkan login terlebih dahulu di halaman utama.");
+        return;
+    }
+
+    if (userSaldo < harga) {
+        alert("Saldo tidak cukup! Silahkan isi saldo melalui admin.");
+        return;
+    }
+
+    if (confirm(`Beli ${nama} seharga Rp ${harga.toLocaleString('id-ID')}?`)) {
+        const generateSN = "SN-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+        const tgl = new Date().toLocaleString('id-ID');
+
+        // 1. Kurangi Saldo User
+        const newSaldo = userSaldo - harga;
+        db.ref(`users/${userID}/Saldo`).set(newSaldo).then(() => {
+            
+            // 2. Catat di Riwayat
+            const historyRef = db.ref(`history/${userID}`).push();
+            historyRef.set({
+                produk: nama,
+                total: harga,
+                tanggal: tgl,
+                status: "Berhasil",
+                voucher: generateSN
+            }).then(() => {
+                alert("Pembelian Berhasil!\nKode Voucher: " + generateSN);
+                localStorage.setItem("Saldo", newSaldo);
+                userSaldo = newSaldo;
+                renderProducts();
+            });
+        }).catch(err => {
+            alert("Terjadi kesalahan sistem.");
+            console.error(err);
+        });
+    }
+}
+
+// Pantau saldo secara real-time
+if (userID) {
+    db.ref(`users/${userID}/Saldo`).on('value', (snap) => {
+        userSaldo = snap.val() || 0;
+        document.getElementById('displaySaldo').textContent = 'Rp ' + userSaldo.toLocaleString('id-ID');
+    });
+}
+
+renderProducts();
+</script>
+</body>
+</html>
