@@ -21,6 +21,13 @@
             padding: 20px; box-sizing: border-box; font-family: sans-serif;
             overflow-y: auto;
         }
+        /* Tambahan CSS agar gambar memenuhi container karena teks dihilangkan */
+        .other-feature-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
     </style>
 </head>
 
@@ -548,7 +555,8 @@ function loadDynamicKatalogs() {
         let htmlContent = '';
         snapshot.forEach((child) => {
             const data = child.val();
-            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div><span style="font-weight: bold; color: #b38728;">${data.nama}</span></a>`;
+            // Menghapus elemen <span> yang berisi teks nama
+            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div></a>`;
         });
         container.innerHTML = htmlContent;
     });
@@ -561,7 +569,8 @@ function loadDynamicPartners() {
         let htmlContent = '';
         snapshot.forEach((child) => {
             const data = child.val();
-            htmlContent += `<a href="${data.url || '#'}" target="_self" class="other-feature-item"><div class="other-feature-icon"><img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'"></div><span>${data.nama}</span></a>`;
+            // Menghapus elemen <span> yang berisi teks nama
+            htmlContent += `<a href="${data.url || '#'}" target="_self" class="other-feature-item"><div class="other-feature-icon"><img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'"></div></a>`;
         });
         container.innerHTML = htmlContent;
     });
@@ -577,4 +586,3 @@ $(document).ready(() => {
 </script>
 </body>
 </html>
-a
