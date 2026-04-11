@@ -24,7 +24,6 @@
         
         .user-balance-info { background: #fff8e1; padding: 15px; margin: 10px; border-radius: 8px; border: 1px solid #ffecb3; display: flex; justify-content: space-between; align-items: center; }
 
-        /* --- MODAL INVOICE STYLE --- */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -108,13 +107,13 @@
 <body>
 
 <div class="header-beli">
-    <i class="fas fa-arrow-left" onclick="history.back()"></i>
+    <i class="fas fa-arrow-left" onclick="window.location.href='index.html'"></i>
     <h3 style="margin:0;">Voucher Data & Hiburan</h3>
 </div>
 
 <div class="user-balance-info">
     <span>Saldo Anda:</span>
-    <strong id="displaySaldo">Rp 0</strong>
+    <strong id="displaySaldo">Memuat...</strong>
 </div>
 
 <div class="voucher-container">
@@ -127,8 +126,7 @@
             <h2 id="invTitle">INVOICE</h2>
             <small id="invDate"></small>
         </div>
-        <div class="invoice-body" id="invBody">
-            </div>
+        <div class="invoice-body" id="invBody"></div>
         <div class="invoice-footer">
             <button class="btn-invoice" id="invActionBtn">KONFIRMASI</button>
             <button class="btn-cancel" id="invCancelBtn" onclick="closeModal()">TUTUP</button>
@@ -152,6 +150,21 @@ const db = firebase.database();
 const userID = localStorage.getItem("ID");
 let userSaldo = 0;
 
+// REVISI: Mengambil saldo secara real-time dari database
+if (userID) {
+    db.ref(`users/${userID}`).on('value', (snapshot) => {
+        const userData = snapshot.val();
+        if (userData) {
+            userSaldo = userData.Saldo || 0;
+            document.getElementById('displaySaldo').textContent = 'Rp ' + userSaldo.toLocaleString('id-ID');
+            // Sinkronkan ke localStorage agar index.html mendapatkan data terbaru
+            localStorage.setItem("Saldo", userSaldo);
+        }
+    });
+} else {
+    document.getElementById('displaySaldo').textContent = 'Silahkan Login';
+}
+
 const products = [
     { cat: "Voucher Data", items: [
         { id: "ax1", name: "Axis 5GB", price: 11000, img: "https://nasukafoods.site/image/axis.jpg" },
@@ -159,9 +172,9 @@ const products = [
         { id: "sf1", name: "Smartfren 10GB", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
         { id: "ts1", name: "Telkomsel 2GB", price: 28000, img: "https://nasukafoods.site/image/tsel.jpg" }
     ]},
-    { cat: "Voucher Wifi Nits Cell", items: [
-        { id: "wf1", name: "12 Jam", price: 3000, img: "https://nasukafoods.site/image/nitacell.jpg" },
-        { id: "nc1", name: "6 jam", price: 2000, img: "https://nasukafoods.site/image/nitacell.jpg" }
+    { cat: "Voucher Wifi", items: [
+        { id: "wf1", name: "Wifi Id", price: 45000, img: "https://nasukafoods.site/image/wifiid.png" },
+        { id: "nc1", name: "Nita Cell", price: 2000, img: "https://nasukafoods.site/image/nitacell.jpg" }
     ]},
     { cat: "Voucher Hiburan", items: [
         { id: "nf1", name: "Netflix 1 Day", price: 60000, img: "https://nasukafoods.site/image/netflix.png" },
@@ -188,7 +201,6 @@ function renderProducts() {
     container.innerHTML = html;
 }
 
-// Fungsi Modal Kustom
 function showModal(content, title = "INVOICE", showAction = true, actionFn = null) {
     document.getElementById('invTitle').innerText = title;
     document.getElementById('invDate').innerText = new Date().toLocaleString('id-ID');
@@ -205,13 +217,11 @@ function showModal(content, title = "INVOICE", showAction = true, actionFn = nul
     } else {
         actionBtn.style.display = "none";
     }
-    
     document.getElementById('invoiceModal').style.display = "flex";
 }
 
 function closeModal() {
     document.getElementById('invoiceModal').style.display = "none";
-    // Reset button state
     const actionBtn = document.getElementById('invActionBtn');
     actionBtn.innerHTML = "KONFIRMASI";
     actionBtn.disabled = false;
@@ -247,6 +257,7 @@ function prosesBeli(id, nama, harga) {
             const voucherSN = snapshot.val()[key];
             const tgl = new Date().toLocaleString('id-ID');
 
+            // Proses Pengurangan Saldo
             const newSaldo = userSaldo - harga;
             db.ref(`users/${userID}/Saldo`).set(newSaldo).then(() => {
                 db.ref(`stok_voucher/${id}/${key}`).remove();
@@ -255,7 +266,8 @@ function prosesBeli(id, nama, harga) {
                     total: harga,
                     tanggal: tgl,
                     status: "Berhasil",
-                    voucher: voucherSN
+                    voucher: voucherSN,
+                    invoice: "INV-" + Date.now()
                 }).then(() => {
                     const successHtml = `
                         <p style="text-align:center; margin-bottom:5px;">TRANSAKSI BERHASIL</p>
@@ -266,13 +278,6 @@ function prosesBeli(id, nama, harga) {
                 });
             });
         });
-    });
-}
-
-if (userID) {
-    db.ref(`users/${userID}/Saldo`).on('value', (snap) => {
-        userSaldo = snap.val() || 0;
-        document.getElementById('displaySaldo').textContent = 'Rp ' + userSaldo.toLocaleString('id-ID');
     });
 }
 
