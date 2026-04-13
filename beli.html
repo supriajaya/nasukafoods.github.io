@@ -9,111 +9,233 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">
     <style>
-        body { background-color: #f4f4f4; font-family: sans-serif; margin: 0; }
-        .voucher-container { padding: 15px; padding-bottom: 80px; }
-        .category-title { font-weight: bold; margin: 15px 0 10px; color: #333; border-left: 4px solid #ee4d2d; padding-left: 10px; }
-        .voucher-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .voucher-card { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; border: 1px solid #eee; }
-        .voucher-card img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px; }
-        .v-name { font-size: 13px; font-weight: bold; display: block; height: 35px; overflow: hidden; }
-        .v-price { color: #ee4d2d; font-weight: bold; font-size: 14px; margin: 5px 0; display: block; }
-        .btn-beli { background: #ee4d2d; color: white; border: none; padding: 8px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; width: 100%; font-weight: bold; }
-        
-        .header-beli { background: white; padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .header-beli i { margin-right: 15px; font-size: 18px; cursor: pointer; }
-        
-        .user-balance-info { background: #fff8e1; padding: 15px; margin: 10px; border-radius: 8px; border: 1px solid #ffecb3; display: flex; justify-content: space-between; align-items: center; }
+        :root {
+            /* Palette Biru Elegan */
+            --primary: #0061ff;
+            --primary-dark: #0046b8;
+            --primary-light: #e6efff;
+            --bg-body: #f4f7fa;
+            --glass: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 20px rgba(0, 97, 255, 0.06);
+            --text-main: #2c3e50;
+        }
 
+        body { 
+            background-color: var(--bg-body); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            margin: 0; 
+            color: var(--text-main);
+        }
+
+        /* Modern Header */
+        .header-beli { 
+            background: white; 
+            padding: 18px 20px; 
+            display: flex; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+        }
+        .header-beli i { 
+            margin-right: 15px; 
+            font-size: 20px; 
+            color: var(--primary);
+            cursor: pointer; 
+        }
+        .header-beli h3 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+
+        /* Balance Card - Gradasi Biru Deep */
+        .user-balance-info { 
+            background: linear-gradient(135deg, #0061ff, #60efff); 
+            padding: 24px; 
+            margin: 15px; 
+            border-radius: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            color: white;
+            box-shadow: 0 10px 25px rgba(0, 97, 255, 0.2);
+        }
+        .user-balance-info span { font-size: 13px; opacity: 0.85; text-transform: uppercase; letter-spacing: 1px; }
+        .user-balance-info strong { font-size: 22px; font-weight: 800; display: block; margin-top: 4px; }
+
+        /* Voucher Section */
+        .voucher-container { padding: 5px 15px 100px; }
+        .category-title { 
+            font-weight: 800; 
+            margin: 30px 0 15px; 
+            color: #1a2a3a; 
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .category-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--primary);
+            margin-right: 12px;
+            border-radius: 10px;
+        }
+
+        .voucher-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+        }
+
+        /* Modern Card Design */
+        .voucher-card { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 20px 16px; 
+            text-align: center; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .voucher-card:active { transform: scale(0.95); }
+        .voucher-card img { 
+            width: 50px; 
+            height: 50px; 
+            object-fit: contain; 
+            margin: 0 auto 15px;
+            filter: grayscale(10%) contrast(110%);
+        }
+        .v-name { 
+            font-size: 13px; 
+            font-weight: 600; 
+            color: #445;
+            height: 38px;
+            line-height: 1.4;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .v-price { 
+            color: var(--primary); 
+            font-weight: 800; 
+            font-size: 15px; 
+            margin: 10px 0 15px; 
+            display: block; 
+        }
+        .btn-beli { 
+            background: var(--primary-light); 
+            color: var(--primary); 
+            border: none; 
+            padding: 11px; 
+            border-radius: 12px; 
+            font-size: 12px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: 700; 
+            transition: 0.3s;
+        }
+        .btn-beli:hover { background: var(--primary); color: white; }
+
+        /* Modern Invoice Modal */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(15, 23, 42, 0.7);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(10px);
         }
 
         .invoice-box {
-            background: #fff;
+            background: white;
             width: 85%;
-            max-width: 320px;
-            padding: 25px;
-            border-radius: 2px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            font-family: 'Courier New', Courier, monospace;
-            color: #222;
+            max-width: 350px;
+            padding: 30px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             position: relative;
         }
 
         .invoice-header {
             text-align: center;
-            border-bottom: 2px dashed #ccc;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
         }
+        .invoice-header h2 { font-size: 20px; font-weight: 800; margin: 0; color: #1e293b; }
+        .invoice-header small { color: #94a3b8; font-size: 11px; margin-top: 5px; display: block; }
 
-        .invoice-header h2 { margin: 0; font-size: 18px; letter-spacing: 2px; font-weight: bold; }
-        .invoice-header small { font-size: 10px; color: #666; display: block; margin-top: 5px; }
-
-        .invoice-body { font-size: 13px; line-height: 1.6; }
-        .invoice-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-
-        .invoice-footer {
-            border-top: 2px dashed #ccc;
-            margin-top: 15px;
-            padding-top: 15px;
+        .invoice-body { font-size: 14px; margin: 25px 0; }
+        .invoice-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 14px; 
+            color: #64748b;
+        }
+        
+        .success-code {
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            padding: 18px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--primary);
             text-align: center;
+            border-radius: 16px;
+            letter-spacing: 1px;
         }
 
         .btn-invoice {
-            background: #222;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 12px;
+            padding: 15px;
             width: 100%;
+            border-radius: 14px;
             cursor: pointer;
-            font-family: sans-serif;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 8px 15px rgba(0, 97, 255, 0.2);
         }
 
         .btn-cancel {
-            background: transparent;
-            color: #999;
+            background: none;
+            color: #94a3b8;
             border: none;
-            margin-top: 12px;
-            font-size: 11px;
+            margin-top: 18px;
+            font-size: 13px;
             cursor: pointer;
-            text-decoration: underline;
             width: 100%;
+            font-weight: 600;
         }
 
-        .success-code {
-            background: #fdfdfd;
-            border: 1px solid #eee;
-            padding: 12px;
-            margin: 10px 0;
-            font-weight: bold;
-            font-size: 18px;
-            color: #000;
-            text-align: center;
-            letter-spacing: 1px;
+        /* Loading Animation */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
+        .loading { animation: pulse 1.8s infinite; }
     </style>
 </head>
 <body>
 
 <div class="header-beli">
     <i class="fas fa-arrow-left" onclick="window.location.href='index.html'"></i>
-    <h3 style="margin:0;">Voucher Data & Hiburan</h3>
+    <h3>Voucher & Hiburan</h3>
 </div>
 
 <div class="user-balance-info">
-    <span>Saldo Anda:</span>
-    <strong id="displaySaldo">Memuat...</strong>
+    <div>
+        <span>Saldo Anda</span>
+        <strong id="displaySaldo" class="loading">Rp 0</strong>
+    </div>
+    <i class="fas fa-shield-alt fa-2x" style="opacity: 0.3;"></i>
 </div>
 
 <div class="voucher-container">
@@ -129,12 +251,13 @@
         <div class="invoice-body" id="invBody"></div>
         <div class="invoice-footer">
             <button class="btn-invoice" id="invActionBtn">KONFIRMASI</button>
-            <button class="btn-cancel" id="invCancelBtn" onclick="closeModal()">TUTUP</button>
+            <button class="btn-cancel" id="invCancelBtn" onclick="closeModal()">Nanti Saja</button>
         </div>
     </div>
 </div>
 
 <script>
+// Konfigurasi Firebase tetap sama
 const firebaseConfig = {
     apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
     authDomain: "nasukafoods1.firebaseapp.com",
@@ -150,14 +273,14 @@ const db = firebase.database();
 const userID = localStorage.getItem("ID");
 let userSaldo = 0;
 
-// REVISI: Mengambil saldo secara real-time dari database
 if (userID) {
     db.ref(`users/${userID}`).on('value', (snapshot) => {
         const userData = snapshot.val();
         if (userData) {
             userSaldo = userData.Saldo || 0;
-            document.getElementById('displaySaldo').textContent = 'Rp ' + userSaldo.toLocaleString('id-ID');
-            // Sinkronkan ke localStorage agar index.html mendapatkan data terbaru
+            const el = document.getElementById('displaySaldo');
+            el.textContent = 'Rp ' + userSaldo.toLocaleString('id-ID');
+            el.classList.remove('loading');
             localStorage.setItem("Saldo", userSaldo);
         }
     });
@@ -169,12 +292,12 @@ const products = [
     { cat: "Voucher Data", items: [
         { id: "ax1", name: "Axis 5GB", price: 11000, img: "https://nasukafoods.site/image/axis.jpg" },
         { id: "is1", name: "Indosat 3GB", price: 15000, img: "https://nasukafoods.site/image/indosat.jpg" },
-        { id: "sf1", name: "Smartfren 10GB", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
+        { id: "sf1", name: "XL 10GB", price: 15000, img: "https://nasukafoods.site/image/xl.jpg" },
         { id: "ts1", name: "Telkomsel 2GB", price: 28000, img: "https://nasukafoods.site/image/tsel.jpg" }
     ]},
     { cat: "Voucher Wifi Nits Cell", items: [
-        { id: "wf1", name: "Nits Cell 12 Jam", price: 3000, img: "https://nasukafoods.site/image/nitacell.jpg" },
-        { id: "nc1", name: "Nits Cell 6 Jam", price: 2000, img: "https://nasukafoods.site/image/nitacell.jpg" }
+        { id: "wf1", name: "Nits Cell 12 Jam", price: 3000, img: "https://nasukafoods.site/image/nitscell.jpg" },
+        { id: "nc1", name: "Nits Cell 6 Jam", price: 2000, img: "https://nasukafoods.site/image/nitscell.jpg" }
     ]},
     { cat: "Voucher Hiburan", items: [
         { id: "nf1", name: "Netflix 1 Day", price: 60000, img: "https://nasukafoods.site/image/netflix.png" },
@@ -191,9 +314,11 @@ function renderProducts() {
             html += `
                 <div class="voucher-card">
                     <img src="${p.img}" alt="logo">
-                    <span class="v-name">${p.name}</span>
-                    <span class="v-price">Rp ${p.price.toLocaleString('id-ID')}</span>
-                    <button class="btn-beli" onclick="prosesBeli('${p.id}', '${p.name}', ${p.price})">Beli</button>
+                    <div>
+                        <span class="v-name">${p.name}</span>
+                        <span class="v-price">Rp ${p.price.toLocaleString('id-ID')}</span>
+                    </div>
+                    <button class="btn-beli" onclick="prosesBeli('${p.id}', '${p.name}', ${p.price})">BELI</button>
                 </div>`;
         });
         html += `</div>`;
@@ -207,15 +332,19 @@ function showModal(content, title = "INVOICE", showAction = true, actionFn = nul
     document.getElementById('invBody').innerHTML = content;
     
     const actionBtn = document.getElementById('invActionBtn');
+    const cancelBtn = document.getElementById('invCancelBtn');
+    
     if (showAction) {
         actionBtn.style.display = "block";
+        cancelBtn.innerText = "BATAL";
         actionBtn.onclick = () => {
-            actionBtn.innerHTML = "MEMPROSES...";
+            actionBtn.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
             actionBtn.disabled = true;
             actionFn();
         };
     } else {
         actionBtn.style.display = "none";
+        cancelBtn.innerText = "TUTUP";
     }
     document.getElementById('invoiceModal').style.display = "flex";
 }
@@ -229,27 +358,27 @@ function closeModal() {
 
 function prosesBeli(id, nama, harga) {
     if (!userID) {
-        showModal("<p style='text-align:center'>Silahkan login untuk bertransaksi.</p>", "AUTH REQUIRED", false);
+        showModal("<p style='text-align:center'>Anda harus masuk ke akun terlebih dahulu.</p>", "AUTH REQUIRED", false);
         return;
     }
 
     if (userSaldo < harga) {
-        showModal("<p style='text-align:center'>Saldo Anda tidak mencukupi.</p>", "SALDO KURANG", false);
+        showModal("<p style='text-align:center'>Saldo tidak mencukupi untuk transaksi ini.</p>", "SALDO KURANG", false);
         return;
     }
 
     const confirmHtml = `
-        <div class="invoice-row"><span>PRODUK</span> <span>${nama}</span></div>
-        <div class="invoice-row"><span>HARGA</span> <span>Rp ${harga.toLocaleString('id-ID')}</span></div>
-        <div class="invoice-row" style="font-weight:bold; margin-top:10px; border-top:1px solid #eee; padding-top:5px;">
+        <div class="invoice-row"><span>Item</span> <span style="font-weight:700; color:#1e293b">${nama}</span></div>
+        <div class="invoice-row"><span>Harga</span> <span>Rp ${harga.toLocaleString('id-ID')}</span></div>
+        <div class="invoice-row" style="font-weight:800; border-top:1px solid #f1f5f9; padding-top:15px; margin-top:10px; color:#1e293b; font-size:16px;">
             <span>TOTAL</span> <span>Rp ${harga.toLocaleString('id-ID')}</span>
         </div>
     `;
 
-    showModal(confirmHtml, "CONFIRMATION", true, () => {
+    showModal(confirmHtml, "KONFIRMASI", true, () => {
         db.ref(`stok_voucher/${id}`).limitToFirst(1).once('value', (snapshot) => {
             if (!snapshot.exists()) {
-                showModal("<p style='text-align:center'>Maaf, stok baru saja habis.</p>", "OUT OF STOCK", false);
+                showModal("<p style='text-align:center'>Produk ini baru saja habis terjual.</p>", "STOK HABIS", false);
                 return;
             }
 
@@ -257,7 +386,6 @@ function prosesBeli(id, nama, harga) {
             const voucherSN = snapshot.val()[key];
             const tgl = new Date().toLocaleString('id-ID');
 
-            // Proses Pengurangan Saldo
             const newSaldo = userSaldo - harga;
             db.ref(`users/${userID}/Saldo`).set(newSaldo).then(() => {
                 db.ref(`stok_voucher/${id}/${key}`).remove();
@@ -270,11 +398,14 @@ function prosesBeli(id, nama, harga) {
                     invoice: "INV-" + Date.now()
                 }).then(() => {
                     const successHtml = `
-                        <p style="text-align:center; margin-bottom:5px;">TRANSAKSI BERHASIL</p>
-                        <div class="success-code">${voucherSN}</div>
-                        <p style="font-size:9px; text-align:center; color:#777; line-height:1.2;">Terima kasih telah memilih Nasuka Foods. Kode di atas adalah voucher Anda.</p>
+                        <div style="text-align:center">
+                            <i class="fas fa-check-circle" style="color:#10b981; font-size:48px; margin-bottom:15px;"></i>
+                            <p style="margin:0; font-weight:700; color:#1e293b;">Pembayaran Berhasil</p>
+                            <div class="success-code">${voucherSN}</div>
+                            <p style="font-size:11px; color:#94a3b8;">Simpan kode voucher ini untuk aktivasi layanan Anda.</p>
+                        </div>
                     `;
-                    showModal(successHtml, "OFFICIAL RECEIPT", false);
+                    showModal(successHtml, "BERHASIL", false);
                 });
             });
         });
