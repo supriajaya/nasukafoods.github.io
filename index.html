@@ -417,29 +417,84 @@ function showProfil() {
 
 function logoutUser() { localStorage.clear(); location.reload(); }
 
+
 function showEditProfil() {
     hideAllContainers();
     const editContainer = document.getElementById('editprofil-container');
     editContainer.style.display = 'flex';
+    
+    // Validasi agar tidak muncul NULL
+    const displayUsername = localUser.Username && localUser.Username !== "null" 
+                            ? localUser.Username 
+                            : (localUser.ID || "Belum ada ID");
+
     editContainer.innerHTML = `
-        <div class="edit-header"><i class="fas fa-arrow-left" onclick="showProfil()"></i><h1>Edit profil</h1></div>
-        <div class="images-container"><div class="cover-photo"></div><div class="profile-wrapper"><div class="profile-pic-edit" style="background-image: url('${localUser.Foto}')"></div></div></div>
+        <div class="edit-header">
+            <i class="fas fa-arrow-left" onclick="showProfil()"></i>
+            <h1>Edit profil</h1>
+        </div>
+        <div class="images-container">
+            <div class="cover-photo"></div>
+            <div class="profile-wrapper">
+                <div class="profile-pic-edit" style="background-image: url('${localUser.Foto}')"></div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+            <div style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Username Anda</div>
+            <div style="font-size: 18px; font-weight: bold; color: #000; background: #f0f0f0; display: inline-block; padding: 5px 25px; border-radius: 20px; margin-top: 5px; border: 1px solid #ddd;">
+                ${displayUsername}
+            </div>
+          
+        </div>
+
         <div class="section-edit">
             <div class="section-header-edit"><span class="section-title-edit">Akun</span></div>
-            <div class="item-row-edit"><div class="item-icon-edit"><i class="fas fa-user"></i></div><div class="item-content-edit"><div class="item-label-edit">Nama</div><input type="text" id="enama" class="edit-input" value="${localUser.Nama}"></div></div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fas fa-user"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">Nama</div>
+                    <input type="text" id="enama" class="edit-input" value="${localUser.Nama}">
+                </div>
+            </div>
         </div>
         <div class="section-edit">
             <div class="section-header-edit"><span class="section-title-edit">Akses Keamanan</span></div>
-            <div class="item-row-edit"><div class="item-icon-edit"><i class="fab fa-whatsapp"></i></div><div class="item-content-edit"><div class="item-label-edit">Nomor Whatsapp</div><input type="number" id="ewa" class="edit-input" value="${localUser.NomorHP}"></div></div>
-            <div class="item-row-edit"><div class="item-icon-edit"><i class="fas fa-key"></i></div><div class="item-content-edit"><div class="item-label-edit">PIN Keamanan (6 Digit)</div><input type="password" id="epin" class="edit-input" value="${localUser.PIN}" maxlength="6" inputmode="numeric"></div></div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fab fa-whatsapp"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">Nomor Whatsapp</div>
+                    <input type="number" id="ewa" class="edit-input" value="${localUser.NomorHP}">
+                </div>
+            </div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fas fa-key"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">PIN Keamanan (6 Digit)</div>
+                    <input type="password" id="epin" class="edit-input" value="${localUser.PIN}" maxlength="6" inputmode="numeric">
+                </div>
+            </div>
         </div>
         <div class="section-edit">
             <div class="section-header-edit"><span class="section-title-edit">Detail pengiriman</span></div>
-            <div class="item-row-edit"><div class="item-icon-edit"><i class="fas fa-map-marker-alt"></i></div><div class="item-content-edit"><div class="item-label-edit">Alamat Lengkap</div><textarea id="ealamat" style="width:100%; border:1px solid #eee; border-radius:4px; padding:5px; font-size:14px;">${localUser.Alamat}</textarea></div></div>
+            <div class="item-row-edit">
+                <div class="item-icon-edit"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="item-content-edit">
+                    <div class="item-label-edit">Alamat Lengkap</div>
+                    <textarea id="ealamat" style="width:100%; border:1px solid #eee; border-radius:4px; padding:5px; font-size:14px;">${localUser.Alamat}</textarea>
+                </div>
+            </div>
         </div>
-        <div class="save-btn-container"><button onclick="saveProfil()" class="btn-save-new">SIMPAN PERUBAHAN</button></div>
+        <div class="save-btn-container">
+            <button onclick="saveProfil()" class="btn-save-new">SIMPAN PERUBAHAN</button>
+        </div>
     `;
 }
+
+
+
+
+
 
 function saveProfil() {
     const n = document.getElementById('enama').value.trim();
