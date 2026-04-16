@@ -10,15 +10,27 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>     
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">   
     <style>
+        /* Existing Styles */
         .msg-user { background: #e1f5fe; color: #000; align-self: flex-end; margin-left: auto; }
         .msg-admin { background: #f5f5f5; color: #000; align-self: flex-start; }
         .msg { padding: 10px; margin: 5px; border-radius: 10px; max-width: 80%; word-wrap: break-word; }
         .chat-messages { display: flex; flex-direction: column; height: 300px; overflow-y: auto; padding: 10px; background: #fff; border: 1px solid #eee; border-radius: 8px; }
         #detail-overlay, #success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; font-family: sans-serif; overflow-y: auto; }
         .other-feature-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-        .input-kirim { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-        .btn-kirim-action { width: 100%; padding: 15px; background: #000; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-kirim-action:disabled { background: #ccc; cursor: not-allowed; }
+        
+        /* New Professional Transfer Styles */
+        .transfer-container { padding: 10px; background: #ffffff; }
+        .transfer-card { background: #f8f9fa; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px; }
+        .input-label { display: block; text-align: left; font-size: 11px; font-weight: bold; color: #4a5568; margin-bottom: 8px; margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-wrapper { position: relative; margin-bottom: 20px; }
+        .input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a0aec0; }
+        .input-kirim-new { width: 100%; padding: 12px 12px 12px 40px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; font-size: 15px; transition: all 0.3s ease; background: #fff; outline: none; }
+        .input-kirim-new:focus { border-color: #000; box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+        .amount-input { font-size: 22px; font-weight: bold; text-align: center; padding-left: 12px !important; color: #2d3748; }
+        .btn-transfer-action { width: 100%; padding: 16px; background: #000; color: #fff; border: none; border-radius: 12px; font-weight: 800; font-size: 15px; letter-spacing: 1px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-transfer-action:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Receipt Styles */
         .receipt-card { width: 100%; max-width: 400px; background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border-top: 8px solid #27ae60; }
         .receipt-icon { font-size: 60px; color: #27ae60; margin-bottom: 15px; }
         .receipt-amount { font-size: 32px; font-weight: 800; color: #333; margin: 20px 0; }
@@ -297,14 +309,43 @@ function showKirim() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
-    document.getElementById('dokumen-title').textContent = 'Kirim Saldo';
+    document.getElementById('dokumen-title').textContent = 'Transfer Saldo';
+    
     doc.querySelector('.dokumen-content-section').innerHTML = `
-        <div style="padding: 20px; text-align: center;">
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Kirim ke sesama pengguna via Nomor WA</p>
-            <input type="number" id="targetWA" class="input-kirim" placeholder="Nomor WA Tujuan (Contoh: 08123456xxx)">
-            <input type="number" id="nominalKirim" class="input-kirim" placeholder="Nominal Saldo">
-            <input type="password" id="confirmPIN" class="input-kirim" placeholder="PIN 6-Digit Anda" maxlength="6" inputmode="numeric" style="text-align:center;">
-            <button onclick="prosesKirimSaldo()" class="btn-kirim-action">KIRIM SEKARANG</button>
+        <div class="transfer-container">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div style="width: 60px; height: 60px; background: #f0fdf4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                    <i class="fas fa-paper-plane" style="color: #22c55e; font-size: 24px;"></i>
+                </div>
+                <h2 style="margin: 0; font-size: 18px; color: #333;">Kirim Saldo Nasuka</h2>
+                <p style="font-size: 13px; color: #718096;">Transfer instan ke sesama pelanggan</p>
+            </div>
+
+            <div class="transfer-card">
+                <label class="input-label">WhatsApp Tujuan</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone"></i>
+                    <input type="number" id="targetWA" class="input-kirim-new" placeholder="0812xxxx">
+                </div>
+
+                <label class="input-label">Nominal Transfer (Rp)</label>
+                <div class="input-wrapper">
+                    <input type="number" id="nominalKirim" class="input-kirim-new amount-input" placeholder="0">
+                </div>
+
+                <label class="input-label">PIN Keamanan</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPIN" class="input-kirim-new" placeholder="******" maxlength="6" inputmode="numeric" style="letter-spacing: 5px; text-align: center; padding-left: 12px;">
+                </div>
+            </div>
+
+            <div style="padding: 0 5px;">
+                <button onclick="prosesKirimSaldo()" class="btn-transfer-action">KONFIRMASI TRANSFER</button>
+                <p style="font-size: 11px; color: #a0aec0; margin-top: 15px; text-align: center;">
+                    <i class="fas fa-info-circle"></i> Pastikan nomor tujuan terdaftar di Nasuka Food.
+                </p>
+            </div>
         </div>
     `;
 }
@@ -317,7 +358,7 @@ async function prosesKirimSaldo() {
     if (!targetWA || !nominal || nominal < 100) return alert("Lengkapi data dengan benar (Min. 100)");
     if (targetWA === localUser.NomorHP) return alert("Tidak bisa kirim ke nomor HP sendiri");
     
-    const btnKirim = document.querySelector('.btn-kirim-action');
+    const btnKirim = document.querySelector('.btn-transfer-action');
     const originalText = btnKirim.innerText;
     btnKirim.innerText = "MEMPROSES...";
     btnKirim.disabled = true;
@@ -399,7 +440,7 @@ function showSuccessReceipt(nama, wa, nominal, invoice) {
                     <div class="receipt-line"><span>Status:</span><b style="color: #27ae60;">SUKSES</b></div>
                 </div>
             </div>
-            <button onclick="window.location.reload()" class="btn-kirim-action" style="margin-top: 30px; width: 100%; max-width: 400px;">SELESAI</button>
+            <button onclick="window.location.reload()" class="btn-transfer-action" style="margin-top: 30px; width: 100%; max-width: 400px;">SELESAI</button>
         </div>
     `;
     document.body.appendChild(overlay);
@@ -481,7 +522,6 @@ function showHistory() {
                 `;
             }
 
-            // LOGIKA UPDATE: Menentukan Tampilan (+) untuk masuk dan (-) untuk keluar
             const isPemasukan = d.total < 0; 
             const displayAmount = Math.abs(d.total || 0).toLocaleString('id-ID');
             const statusSymbol = isPemasukan ? "+" : "-";
@@ -542,7 +582,7 @@ function showDetailTransaksi(data) {
             <hr style="border: 0; border-top: 1px dashed #ccc;">
             <div style="display: flex; justify-content: space-between; margin: 15px 0; font-size: 18px;"><span>Total</span><b style="color: #e67e22;">Rp ${Math.abs(data.total || 0).toLocaleString()}</b></div>
         </div>
-        <button onclick="document.getElementById('detail-overlay').remove()" class="btn-kirim-action" style="margin-top:20px;">TUTUP</button>
+        <button onclick="document.getElementById('detail-overlay').remove()" class="btn-transfer-action" style="margin-top:20px;">TUTUP</button>
     `;
     document.body.appendChild(overlay);
 }
@@ -563,20 +603,25 @@ function showChat() {
     doc.style.display = 'flex';
     document.getElementById('dokumen-title').textContent = isAnonymous ? 'Chat Pengunjung' : 'Chat Admin';
     doc.querySelector('.dokumen-content-section').innerHTML = `
-        <div id="chatBox" class="chat-messages" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        <div id="chatBox" class="chat-messages"></div>
         <div style="display:flex; gap:5px; margin-top:10px;">
             <input type="text" id="chatInput" placeholder="Tulis pesan..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
-            <button onclick="sendChat('${chatId}')" class="btn-primary" style="width:auto; padding:0 15px; background:#000; color:#fff; border-radius:5px;"><i class="fas fa-paper-plane"></i></button>
+            <button onclick="sendChat('${chatId}')" class="btn-primary" style="width:auto; padding:0 15px;"><i class="fas fa-paper-plane"></i></button>
         </div>
     `;
+
     db.ref(`chats/${chatId}`).on('value', (snap) => {
         const box = document.getElementById('chatBox');
         if(!box) return;
         box.innerHTML = '';
         snap.forEach(c => { 
             const m = c.val(); 
-            const alignment = m.sender === 'admin' ? 'msg-admin' : 'msg-user';
-            box.innerHTML += `<div class="msg ${alignment}">${m.text}</div>`; 
+            let content = m.text;
+            const isImage = m.text.match(/\.(jpeg|jpg|gif|png)$/) != null || m.text.includes('drive.google.com');
+            if (isImage) {
+                content = `<img src="${m.text}" style="width:100%; border-radius:8px; display:block; margin-bottom:5px;" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">`;
+            }
+            box.innerHTML += `<div class="msg ${m.sender === 'admin' ? 'msg-admin' : 'msg-user'}">${content}</div>`; 
         });
         box.scrollTop = box.scrollHeight;
     });
