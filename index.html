@@ -322,13 +322,13 @@ function showKirim() {
             </div>
 
             <div class="transfer-card">
-                <label class="input-label">WhatsApp Tujuan</label>
+                <label class="input-label">Nomor HP Tujuan</label>
                 <div class="input-wrapper">
                     <i class="fas fa-phone"></i>
                     <input type="number" id="targetWA" class="input-kirim-new" placeholder="0812xxxx">
                 </div>
 
-                <label class="input-label">Nominal Transfer (Rp)</label>
+                <label class="input-label">Nominal (Rp)</label>
                 <div class="input-wrapper">
                     <input type="number" id="nominalKirim" class="input-kirim-new amount-input" placeholder="0">
                 </div>
@@ -485,13 +485,45 @@ function saveProfil() {
     db.ref(`users/${localUser.ID}`).update({ Nama: n, Alamat: a, NomorHP: w, PIN: p }).then(() => { alert("Profil berhasil diperbarui"); showProfil(); }).catch(err => { alert("Gagal menyimpan: " + err.message); });
 }
 
+
 function showDokumen() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
     document.getElementById('dokumen-title').textContent = 'Informasi';
-    doc.querySelector('.dokumen-content-section').innerHTML = `<div class="dokumen-item"><h4>✨ Nasuka Food</h4><p>Sistem Cilok Premium Berbasis Digital.</p></div>`;
+    
+    let contentHtml = `
+        <div class="dokumen-item">
+            <h4>✨ Nasuka Food</h4>
+            <p>Sistem Cilok Premium Berbasis Digital. Nikmati kemudahan transaksi dan kualitas rasa terbaik dari kami.</p>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px 10px; border-top: 1px solid #eee; text-align: center;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                <div onclick="showTentang()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <i class="fas fa-info-circle"></i><br>Tentang Kami
+                </div>
+                <div onclick="showRefund()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <i class="fas fa-undo"></i><br>Refund Policy
+                </div>
+                <div onclick="showPrivacy()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <i class="fas fa-user-shield"></i><br>Privacy Policy
+                </div>
+                <div onclick="showTerms()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <i class="fas fa-file-contract"></i><br>Terms & Condition
+                </div>
+            </div>
+            
+            <div style="color: #a0aec0; font-size: 11px; margin-top: 10px;">
+                <p>&copy; 2026 Nasuka Food. All Rights Reserved.</p>
+                <p style="margin-top: 5px; font-style: italic;">"Tentang rasa yang dulu pernah ada"</p>
+            </div>
+        </div>
+    `;
+    
+    doc.querySelector('.dokumen-content-section').innerHTML = contentHtml;
 }
+
 
 function showHistory() {
     hideAllContainers();
@@ -528,12 +560,18 @@ function showHistory() {
             const statusColor = isPemasukan ? "#27ae60" : "#ee4d2d"; 
             const borderSideColor = isPemasukan ? "#27ae60" : "#ee4d2d";
 
+            // LOGIKA PENGECUALIAN UNTUK ADMIN
+            let namaProduk = d.produk;
+            if (isPemasukan && d.produk.includes("0859109819017")) {
+                namaProduk = "Top Up Berhasil";
+            }
+
             h += `
                 <div class="dokumen-item" 
                      onclick="showDetailTransaksi(${JSON.stringify(d).replace(/"/g, '&quot;')})"
                      style="border-left:4px solid ${borderSideColor}; margin-bottom:15px; background: #fff; padding: 12px; border-radius: 0 8px 8px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <b style="font-size: 14px; color: #333;">${d.produk}</b>
+                        <b style="font-size: 14px; color: #333;">${namaProduk}</b>
                         <span style="color: ${statusColor}; font-weight: bold; font-size: 13px;">${statusSymbol} Rp ${displayAmount}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-top: 5px;">
@@ -549,6 +587,9 @@ function showHistory() {
         doc.querySelector('.dokumen-content-section').innerHTML = '<p style="text-align:center; color: red;">Gagal memuat riwayat.</p>';
     });
 }
+
+
+
 
 function toggleVoucher(element, realCode) {
     const textEl = element.querySelector('.voucher-text');
@@ -672,6 +713,61 @@ $(document).ready(() => {
     $('#tabPencapaian').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').show(); $('#contentPerbaikan').hide(); });
     $('#tabPerbaikan').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').hide(); $('#contentPerbaikan').show(); });
 });
+
+function showTentang() {
+    document.getElementById('dokumen-title').textContent = 'Tentang Kami';
+    document.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Filosofi Nasuka Food</h4>
+            <p>Nasuka Food (Nasihat Sumber Karya) adalah usaha kuliner yang berfokus pada hidangan Cilok Premium. Kami percaya bahwa kualitas bahan adalah kunci utama untuk menciptakan "Rasa yang dulu pernah ada".</p>
+            <p>Berawal dari gerobak keliling di area Ciparay dan Cibaduyut, kini kami mengintegrasikan teknologi digital untuk mempermudah pelanggan dalam bertransaksi dan mendapatkan informasi produk kami.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showRefund() {
+    document.getElementById('dokumen-title').textContent = 'Refund Policy';
+    document.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Kebijakan Pengembalian Dana</h4>
+            <p>1. Refund hanya berlaku jika produk yang diterima dalam keadaan rusak atau tidak layak konsumsi saat pengiriman.</p>
+            <p>2. Pelanggan wajib melampirkan foto atau video unboxing sebagai bukti melalui Customer Service.</p>
+            <p>3. Untuk kesalahan transfer saldo, harap segera hubungi admin dalam waktu maksimal 1x24 jam.</p>
+            <p>4. Dana akan dikembalikan dalam bentuk saldo Nasuka atau transfer bank sesuai kesepakatan.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showPrivacy() {
+    document.getElementById('dokumen-title').textContent = 'Privacy Policy';
+    document.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Keamanan Data Anda</h4>
+            <p>Nasuka Food berkomitmen melindungi data pribadi pelanggan. Nomor WhatsApp dan PIN Anda digunakan hanya untuk kepentingan akses akun dan keamanan transaksi saldo.</p>
+            <p>Kami tidak akan membagikan informasi pribadi Anda kepada pihak ketiga tanpa izin, kecuali untuk keperluan hukum yang berlaku.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showTerms() {
+    document.getElementById('dokumen-title').textContent = 'Terms & Condition';
+    document.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Syarat & Ketentuan</h4>
+            <p>1. Akun Nasuka Food adalah tanggung jawab penuh pemilik nomor WhatsApp yang terdaftar.</p>
+            <p>2. Penggunaan PIN bersifat rahasia. Kehilangan saldo akibat kelalaian menjaga kerahasiaan PIN bukan tanggung jawab kami.</p>
+            <p>3. Saldo Nasuka tidak dapat diuangkan kembali secara instan tanpa melalui prosedur administrasi resmi.</p>
+            <p>4. Nasuka Food berhak menonaktifkan akun jika ditemukan indikasi kecurangan atau penyalahgunaan sistem.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+
+
 </script>
 </body>
 </html>
