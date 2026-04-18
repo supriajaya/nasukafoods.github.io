@@ -58,6 +58,31 @@
         .user-balance-info span { font-size: 13px; opacity: 0.85; text-transform: uppercase; letter-spacing: 1px; }
         .user-balance-info strong { font-size: 22px; font-weight: 800; display: block; margin-top: 4px; }
 
+        /* Style Teks Berjalan */
+        .marquee-container {
+            background: #fff5f5;
+            margin: 0 15px 15px;
+            padding: 8px 15px;
+            border-radius: 12px;
+            border: 1px solid #fee2e2;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            color: #e11d48;
+            font-size: 12px;
+            font-weight: 600;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
         .voucher-container { padding: 5px 15px 100px; }
         .category-title { 
             font-weight: 800; 
@@ -113,7 +138,6 @@
             -webkit-box-orient: vertical;
         }
 
-        /* Styling Harga Coret */
         .v-price-old {
             text-decoration: line-through;
             color: #94a3b8;
@@ -228,6 +252,12 @@
     <i class="fas fa-shield-alt fa-2x" style="opacity: 0.3;"></i>
 </div>
 
+<div class="marquee-container">
+    <div class="marquee-text">
+        Server sedang dalam perbaikan, Hubungi costumers service untuk complain atau ide
+    </div>
+</div>
+
 <div class="voucher-container">
     <div id="voucher-list"></div>
 </div>
@@ -277,7 +307,6 @@ if (userID) {
     document.getElementById('displaySaldo').textContent = 'Silahkan Login';
 }
 
-// Data Produk dengan penambahan oldPrice (Harga Coret)
 const products = [
     { cat: "Voucher NITS CELL", items: [
         { id: "wf1", name: "Nits Cell 12 Jam", price: 2775, oldPrice: 3000, img: "https://nasukafoods.site/image/nitscell.jpg" },
@@ -286,12 +315,8 @@ const products = [
     { cat: "Voucher Data", items: [
         { id: "ax1", name: "Axis 500MB 30hari", price: 10000, oldPrice: 11000, img: "https://nasukafoods.site/image/axis.jpg" },
         { id: "ax2", name: "Axis 5GB 1hari", price: 8000, oldPrice: 9000, img: "https://nasukafoods.site/image/axis.jpg" },   
-     { id: "ax3", name: "Axis 3GB 3hari", price: 12000, oldPrice: 13000, img: "https://nasukafoods.site/image/axis.jpg" },
+        { id: "ax3", name: "Axis 3GB 3hari", price: 12000, oldPrice: 13000, img: "https://nasukafoods.site/image/axis.jpg" },
         { id: "ax4", name: "Axis 50GB+ kuota lokal 60hari", price: 130000, oldPrice: 150000, img: "https://nasukafoods.site/image/axis.jpg" },   
-             
-        
-        
-        
         { id: "is1", name: "Indosat 5GB 2hari", price: 10500, oldPrice: 14000, img: "https://nasukafoods.site/image/indosat.jpg" },
         { id: "is2", name: "Indosat 40GB 28hari", price: 90000, oldPrice: 97000, img: "https://nasukafoods.site/image/indosat.jpg" },
         { id: "xl1", name: "XL 0.75GB+ 3hari", price: 9300, oldPrice: 12000, img: "https://nasukafoods.site/image/xl.jpg" },
@@ -315,9 +340,7 @@ function renderProducts() {
     products.forEach(group => {
         html += `<div class="category-title">${group.cat}</div><div class="voucher-grid">`;
         group.items.forEach(p => {
-            // Cek apakah ada harga lama untuk ditampilkan sebagai harga coret
             const oldPriceHtml = p.oldPrice ? `<span class="v-price-old">Rp ${p.oldPrice.toLocaleString('id-ID')}</span>` : '';
-            
             html += `
                 <div class="voucher-card">
                     <img src="${p.img}" alt="logo">
@@ -340,10 +363,8 @@ function showModal(content, title = "INVOICE", showAction = true, actionFn = nul
     document.getElementById('invTitle').innerText = title;
     document.getElementById('invDate').innerText = new Date().toLocaleString('id-ID');
     document.getElementById('invBody').innerHTML = content;
-    
     const actionBtn = document.getElementById('invActionBtn');
     const cancelBtn = document.getElementById('invCancelBtn');
-    
     if (showAction) {
         actionBtn.style.display = "block";
         cancelBtn.innerText = "BATAL";
@@ -371,12 +392,10 @@ function prosesBeli(id, nama, harga) {
         showModal("<p style='text-align:center'>Anda harus masuk ke akun terlebih dahulu.</p>", "AUTH REQUIRED", false);
         return;
     }
-
     if (userSaldo < harga) {
         showModal("<p style='text-align:center'>Saldo tidak mencukupi untuk transaksi ini.</p>", "SALDO KURANG", false);
         return;
     }
-
     const confirmHtml = `
         <div class="invoice-row"><span>Item</span> <span style="font-weight:700; color:#1e293b">${nama}</span></div>
         <div class="invoice-row"><span>Harga</span> <span>Rp ${harga.toLocaleString('id-ID')}</span></div>
@@ -384,18 +403,15 @@ function prosesBeli(id, nama, harga) {
             <span>TOTAL</span> <span>Rp ${harga.toLocaleString('id-ID')}</span>
         </div>
     `;
-
     showModal(confirmHtml, "KONFIRMASI", true, () => {
         db.ref(`stok_voucher/${id}`).limitToFirst(1).once('value', (snapshot) => {
             if (!snapshot.exists()) {
                 showModal("<p style='text-align:center'>Produk ini baru saja habis terjual.</p>", "STOK HABIS", false);
                 return;
             }
-
             const key = Object.keys(snapshot.val())[0];
             const voucherSN = snapshot.val()[key];
             const tgl = new Date().toLocaleString('id-ID');
-
             const newSaldo = userSaldo - harga;
             db.ref(`users/${userID}/Saldo`).set(newSaldo).then(() => {
                 db.ref(`stok_voucher/${id}/${key}`).remove();
@@ -421,7 +437,6 @@ function prosesBeli(id, nama, harga) {
         });
     });
 }
-
 renderProducts();
 </script>
 </body>
