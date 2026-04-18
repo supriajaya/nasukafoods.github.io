@@ -11,24 +11,47 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body { font-size: 14px; -webkit-tap-highlight-color: transparent; }
+        body.locked { overflow: hidden; }
         .tab-content { display: none; height: calc(100vh - 120px); overflow-y: auto; padding-bottom: 80px; }
         .tab-content.active { display: block; }
         .nav-active { color: #ee4d2d !important; }
         .nav-active i { transform: translateY(-5px); color: #ee4d2d; }
         #chatDisplay { height: 60vh; }
         .msg-bubble { max-width: 85%; padding: 8px 12px; border-radius: 15px; font-size: 13px; line-height: 1.4; }
-        .tag-admin { background: #ffebee; color: #c62828; font-size: 9px; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
-        .tag-user { background: #e3f2fd; color: #1565c0; font-size: 9px; padding: 2px 4px; border-radius: 4px; font-weight: bold; }
         #historyModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
-        .card-post { border-left: 4px solid #ef4444; }
-        .card-reply { border-left: 3px solid #94a3b8; background-color: #f8fafc; }
         .badge-stok { padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
         .bg-low { background: #ffc107; color: #000; }
         .bg-ok { background: #e2f3e5; color: #1e7e34; }
         .bg-empty { background: #f8d7da; color: #721c24; }
+        .reply-item { border-left: 2px solid #ef4444; margin-top: 8px; padding-left: 8px; }
+        
+        /* Lock Screen Overlay */
+        #lockScreen { 
+            position: fixed; inset: 0; background: #0f172a; z-index: 9999; 
+            display: flex; items-center; justify-content: center; padding: 20px;
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-800">
+<body class="bg-gray-50 text-slate-800 locked">
+
+    <div id="lockScreen">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl text-center">
+            <div class="w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-user-shield text-3xl"></i>
+            </div>
+            <h2 class="font-bold text-xl text-slate-800 mb-2">VIP ROOM</h2>
+            <p class="text-sm text-gray-500 mb-6">Fitur lengkap akun yang terverifikasi, Status Ekslusif Super Customers.</p>
+            
+            <input type="password" id="adminPass" placeholder="Masukkan Kode ID VIP" 
+                class="w-full p-4 bg-gray-100 border-2 border-transparent focus:border-orange-500 rounded-2xl mb-4 text-center font-bold tracking-widest outline-none transition-all">
+            
+            <button onclick="checkAccess()" 
+                class="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition-transform">
+                Masuk
+            </button>
+            <p id="errPass" class="text-red-500 text-xs mt-4 font-bold hidden">Password salah! Akses ditolak.</p>
+        </div>
+    </div>
 
     <header class="bg-slate-800 text-white p-4 sticky top-0 z-50 flex justify-between items-center shadow-md">
         <h1 class="font-bold tracking-tight">NASUKA <span class="text-orange-500">ADMIN</span></h1>
@@ -59,14 +82,21 @@
         <div id="tab-stok-input" class="tab-content p-4">
             <div class="bg-white p-5 rounded-2xl border shadow-sm mb-6">
                 <h2 class="font-bold text-green-600 mb-4 flex items-center gap-2"><i class="fas fa-plus-square"></i> Input Stok Voucher</h2>
-                
                 <label class="block text-xs font-bold text-gray-500 mb-1">Pilih Jenis Produk:</label>
                 <select id="productID" class="w-full p-3 bg-gray-50 border rounded-xl mb-4 text-sm outline-none">
                     <optgroup label="Voucher Data">
-                        <option value="ax1">Axis 5GB (ax1)</option>
+                        <option value="ax1">Axis 500MB 28hari(ax1)</option>
+                        <option value="ax2">Axis 5GB 1hari (ax2)</option>       
+                        <option value="ax3">Axis 3GB 3hari(ax3)</option>
+                        <option value="ax4">Axis 50GB+ kuota lokal 60hari(ax4)</option>                         
                         <option value="is1">Indosat 3GB (is1)</option>
+                        <option value="is2">IM3 3GB (is2)</option>               
                         <option value="ts1">Telkomsel 2GB (ts1)</option>
-                        <option value="sf1">Smartfren 10GB (sf1)</option>
+                        <option value="ts2">Telkomsel 20GB (ts2)</option>              
+                        <option value="xl1">XL 0,75GB (xl1)</option>
+                        <option value="xl2">XL 100GB (xl2)</option>  
+                        <option value="sf1">Smartfren 10GB (sf1)</option>                       
+                        <option value="sf2">Smartfren 100GB (sf2)</option>                    
                     </optgroup>
                     <optgroup label="Voucher Wifi Nits Cell">
                         <option value="wf1">Nits Cell 12 Jam (wf1)</option>
@@ -74,41 +104,24 @@
                     </optgroup>
                     <optgroup label="Voucher Hiburan">
                         <option value="nf1">Netflix 1 Day (nf1)</option>
+                        <option value="nf2">Netflix 10 Day (nf2)</option>                 
                         <option value="gp1">Google Play 20K (gp1)</option>
+                        <option value="gp2">Google Play 100K (gp2)</option>              
                     </optgroup>
                 </select>
-
                 <label class="block text-xs font-bold text-gray-500 mb-1">Kode SN / Voucher:</label>
                 <textarea id="voucherCode" placeholder="Contoh: SN998822, SN998823" rows="4" class="w-full p-3 bg-gray-50 border rounded-xl mb-1 text-sm outline-none"></textarea>
                 <p class="text-[10px] text-gray-400 mb-4">*Pisahkan dengan koma untuk banyak kode sekaligus.</p>
-                
                 <button onclick="simpanVoucherDatabase()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold shadow-md active:scale-95 transition-transform">Tambah ke Database</button>
             </div>
-
             <div class="bg-white rounded-2xl border shadow-sm overflow-hidden">
-                <div class="p-4 border-b bg-gray-50">
-                    <h2 class="font-bold text-slate-700 flex items-center gap-2"><i class="fas fa-list-ul"></i> Ringkasan Sisa Stok</h2>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-100 text-[11px] uppercase text-slate-500">
-                                <th class="p-3">Produk</th>
-                                <th class="p-3">ID</th>
-                                <th class="p-3">Sisa</th>
-                            </tr>
-                        </thead>
-                        <tbody id="stockBodyRealtime" class="text-xs">
-                        </tbody>
-                    </table>
-                </div>
+                <div class="p-4 border-b bg-gray-50"><h2 class="font-bold text-slate-700 flex items-center gap-2"><i class="fas fa-list-ul"></i> Ringkasan Sisa Stok</h2></div>
+                <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead class="bg-slate-100 text-[11px] uppercase text-slate-500"><tr><th class="p-3">Produk</th><th class="p-3">ID</th><th class="p-3">Sisa</th></tr></thead><tbody id="stockBodyRealtime" class="text-xs"></tbody></table></div>
             </div>
         </div>
 
         <div id="tab-otoritas" class="tab-content p-4">
-            <div class="mb-4">
-                <input type="text" id="adminSearch" placeholder="Cari Nama, Username, HP, atau Alamat..." class="w-full p-3 border rounded-xl shadow-sm outline-none text-sm">
-            </div>
+            <div class="mb-4"><input type="text" id="adminSearch" onkeyup="searchUser()" placeholder="Cari Nama, Username, HP..." class="w-full p-3 border rounded-xl shadow-sm outline-none text-sm"></div>
             <div id="userListOtoritas" class="space-y-3"></div>
         </div>
 
@@ -117,6 +130,7 @@
                 <div class="bg-white rounded-xl shadow-sm border p-4 mb-2 font-bold text-center">Inbox Pelanggan</div>
                 <div id="userListChat" class="space-y-2"></div>
             </div>
+            
             <div id="chatRoom" class="fixed inset-0 bg-white z-[55] hidden flex flex-col">
                 <div class="p-4 bg-slate-100 border-b flex items-center gap-3">
                     <button onclick="closeChat()" class="text-lg"><i class="fas fa-arrow-left"></i></button>
@@ -131,7 +145,7 @@
         </div>
 
         <div id="tab-mod-post" class="tab-content p-4">
-            <h2 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-shield-alt text-red-500"></i> Kelola Postingan Publik</h2>
+            <h2 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-shield-alt text-red-500"></i> Moderasi Diskusi Publik</h2>
             <div id="containerPostingan" class="space-y-4"></div>
         </div>
 
@@ -146,36 +160,24 @@
             <div id="listPartner" class="space-y-3"></div>
         </div>
 
-        <div id="tab-del" class="tab-content p-4">
-            <div class="bg-white p-4 rounded-2xl border mb-4">
-                <h2 class="font-bold text-red-600 mb-2 flex items-center gap-2"><i class="fas fa-user-shield"></i> Moderasi Chat</h2>
-                <div id="userListDel" class="space-y-2 max-h-40 overflow-y-auto border-b pb-4"></div>
+        <div id="tab-sponsor" class="tab-content p-4">
+            <div class="bg-white p-4 rounded-2xl border shadow-sm mb-4">
+                <h2 class="font-bold text-orange-600 mb-3 flex items-center gap-2"><i class="fas fa-ad"></i> Input Sponsor</h2>
+                <input type="text" id="spName" placeholder="Nama Sponsor" class="w-full p-3 bg-gray-50 border rounded-xl mb-2 text-sm outline-none">
+                <input type="text" id="spUrl" placeholder="Link Tujuan (http://...)" class="w-full p-3 bg-gray-50 border rounded-xl mb-2 text-sm outline-none">
+                <input type="text" id="spImg" placeholder="Link Icon/Gambar" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 text-sm outline-none">
+                <button onclick="saveSponsor()" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold shadow-md">Simpan Sponsor</button>
             </div>
-            <div id="messageManageArea" class="hidden">
-                <div class="flex justify-between items-center mb-3">
-                    <div id="targetNameDel" class="font-bold text-xs truncate max-w-[150px]"></div>
-                    <button onclick="deleteAllChat()" class="bg-red-600 text-white text-[10px] px-3 py-1 rounded-full font-bold">HAPUS SEMUA</button>
-                </div>
-                <div id="messageList" class="space-y-2 bg-white p-3 rounded-xl border"></div>
-            </div>
+            <div id="sponsorList" class="space-y-3"></div>
         </div>
 
         <div id="tab-topup" class="tab-content p-4">
-            <div class="bg-white p-4 rounded-2xl border mb-4">
+            <div class="bg-white p-4 rounded-2xl border mb-4 shadow-sm">
                 <h2 class="font-bold mb-3 text-blue-600">Top Up Manual</h2>
                 <input type="text" id="targetUsername" placeholder="Username" class="w-full p-3 bg-gray-50 border rounded-xl mb-2 text-sm outline-none">
                 <input type="number" id="topupAmount" placeholder="Nominal Rp" class="w-full p-3 bg-gray-50 border rounded-xl mb-3 text-sm outline-none">
                 <button onclick="prosesTopUpManual()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Kirim Saldo</button>
             </div>
-            <div class="bg-white p-4 rounded-2xl border mb-4">
-                <h2 class="font-bold mb-3 text-green-600">Voucher Saldo</h2>
-                <div class="flex gap-2 mb-2">
-                    <input type="number" id="sCode" placeholder="6-Digit" class="w-1/2 p-3 bg-gray-50 border rounded-xl text-sm outline-none">
-                    <input type="number" id="sValue" placeholder="Nilai Rp" class="w-1/2 p-3 bg-gray-50 border rounded-xl text-sm outline-none">
-                </div>
-                <button onclick="addSaldoVoucher()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold">Buat Voucher</button>
-            </div>
-            <div id="sList" class="grid grid-cols-2 gap-2"></div>
         </div>
 
         <div id="tab-post" class="tab-content p-4">
@@ -188,14 +190,10 @@
             </div>
         </div>
 
-        <div id="tab-sponsor" class="tab-content p-4">
-            <div class="bg-white p-4 rounded-2xl border">
-                <h2 class="font-bold text-orange-600 mb-3">Input Sponsor</h2>
-                <input type="text" id="spName" placeholder="Nama" class="w-full p-2 border rounded mb-2 outline-none text-sm">
-                <input type="text" id="spUrl" placeholder="Link (http)" class="w-full p-2 border rounded mb-2 outline-none text-sm">
-                <input type="text" id="spImg" placeholder="Link Icon" class="w-full p-2 border rounded mb-3 outline-none text-sm">
-                <button onclick="saveSponsor()" class="w-full bg-orange-600 text-white py-2 rounded-lg font-bold mb-4">Simpan</button>
-                <div id="sponsorList" class="space-y-2"></div>
+        <div id="tab-del" class="tab-content p-4">
+            <div class="bg-white p-4 rounded-2xl border mb-4 shadow-sm">
+                <h2 class="font-bold text-red-600 mb-2 flex items-center gap-2"><i class="fas fa-user-shield"></i> Moderasi Chat</h2>
+                <div id="userListDel" class="space-y-2 max-h-60 overflow-y-auto border-b pb-4"></div>
             </div>
         </div>
 
@@ -203,41 +201,37 @@
 
     <div id="historyModal" onclick="closeModal()">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 overflow-hidden flex flex-col max-h-[80vh]" onclick="event.stopPropagation()">
-            <h3 class="font-bold border-b pb-3 mb-4 flex justify-between">
-                Riwayat Transaksi
-                <button onclick="closeModal()" class="text-gray-400">&times;</button>
-            </h3>
+            <h3 class="font-bold border-b pb-3 mb-4 flex justify-between">Riwayat Transaksi <button onclick="closeModal()" class="text-gray-400">&times;</button></h3>
             <div id="historyContent" class="overflow-y-auto space-y-3 text-xs"></div>
         </div>
     </div>
 
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center p-2 z-50 shadow-md">
-        <button onclick="openTab('tab-chat')" class="nav-btn flex flex-col items-center gap-1 text-gray-400 nav-active" data-tab="tab-chat">
-            <i class="fas fa-comment-dots text-lg"></i>
-            <span class="text-[10px] font-bold">Chat</span>
-        </button>
-        <button onclick="openTab('tab-stok-input')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-stok-input">
-            <i class="fas fa-box-open text-lg"></i>
-            <span class="text-[10px] font-bold">Stok</span>
-        </button>
-        <button onclick="openTab('tab-topup')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-topup">
-            <i class="fas fa-wallet text-lg"></i>
-            <span class="text-[10px] font-bold">Saldo</span>
-        </button>
-        <button onclick="openTab('tab-otoritas')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-otoritas">
-            <i class="fas fa-users-cog text-lg"></i>
-            <span class="text-[10px] font-bold">User</span>
-        </button>
-        <button onclick="openTab('tab-part')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-part">
-            <i class="fas fa-handshake text-lg"></i>
-            <span class="text-[10px] font-bold">Partner</span>
-        </button>
+        <button onclick="openTab('tab-chat')" class="nav-btn flex flex-col items-center gap-1 text-gray-400 nav-active" data-tab="tab-chat"><i class="fas fa-comment-dots text-lg"></i><span class="text-[10px] font-bold">Chat</span></button>
+        <button onclick="openTab('tab-stok-input')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-stok-input"><i class="fas fa-box-open text-lg"></i><span class="text-[10px] font-bold">Stok</span></button>
+        <button onclick="openTab('tab-topup')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-topup"><i class="fas fa-wallet text-lg"></i><span class="text-[10px] font-bold">Saldo</span></button>
+        <button onclick="openTab('tab-otoritas')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-otoritas"><i class="fas fa-users-cog text-lg"></i><span class="text-[10px] font-bold">User</span></button>
+        <button onclick="openTab('tab-part')" class="nav-btn flex flex-col items-center gap-1 text-gray-400" data-tab="tab-part"><i class="fas fa-handshake text-lg"></i><span class="text-[10px] font-bold">Partner</span></button>
     </nav>
 
     <script>
+        // --- SISTEM LOGIN PASSWORD ---
+        function checkAccess() {
+            const pass = document.getElementById('adminPass').value;
+            const errorMsg = document.getElementById('errPass');
+            if (pass === "2111985") {
+                sessionStorage.setItem('nasuka_auth', 'true');
+                document.getElementById('lockScreen').style.display = 'none';
+                document.body.classList.remove('locked');
+            } else {
+                errorMsg.classList.remove('hidden');
+                document.getElementById('adminPass').value = "";
+            }
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
-            authDomain: "nasukafoods1.firebaseapp.com",
+            authDomain: "nasukafoods1.firebaseapp.app",
             databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "nasukafoods1",
             messagingSenderId: "84287800896",
@@ -255,6 +249,7 @@
             window.scrollTo(0,0);
         }
 
+        // --- MANAJEMEN VOUCHER ---
         function simpanVoucherDatabase() {
             const id = document.getElementById('productID').value;
             const codes = document.getElementById('voucherCode').value;
@@ -288,6 +283,7 @@
             });
         }
 
+        // --- MANAJEMEN USER ---
         function loadUsers() {
             db.ref('users').on('value', (snap) => {
                 const container = document.getElementById('userListOtoritas');
@@ -295,25 +291,22 @@
                 snap.forEach((child) => {
                     const u = child.val();
                     const uID = child.key;
-                    const alamat = u.Alamat || "Alamat belum diatur";
-                    const nomorhp = u.NomorHP || u.Phone || "Tidak ada nomor";
-                    const searchData = `${u.Nama} ${u.Username} ${nomorhp} ${alamat}`.toLowerCase();
+                    const searchData = `${u.Nama} ${u.Username} ${u.NomorHP || ''}`.toLowerCase();
                     container.innerHTML += `
                         <div class="user-card bg-white p-4 rounded-2xl border shadow-sm" data-search="${searchData}">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex-1">
                                     <div class="font-bold text-slate-800 text-sm">${u.Nama} <span class="text-[10px] text-gray-400 font-normal">(@${u.Username})</span></div>
-                                    <div class="text-[11px] text-blue-600 font-bold mt-1"><i class="fas fa-phone-alt"></i> ${nomorhp}</div>
-                                    <div class="text-[11px] text-gray-500 mt-1 leading-tight"><i class="fas fa-map-marker-alt text-red-400"></i> ${alamat}</div>
+                                    <div class="text-[11px] text-blue-600 font-bold mt-1"><i class="fas fa-phone-alt"></i> ${u.NomorHP || '-'}</div>
                                 </div>
                                 <div class="text-right ml-2">
                                     <div class="text-xs font-bold text-orange-600">Rp ${u.Saldo ? u.Saldo.toLocaleString('id-ID') : 0}</div>
-                                    <button onclick="editSaldo('${uID}', ${u.Saldo || 0})" class="text-[9px] bg-slate-100 px-2 py-1 rounded font-bold uppercase mt-1">Ubah Saldo</button>
+                                    <button onclick="editSaldo('${uID}', ${u.Saldo || 0})" class="text-[9px] bg-slate-100 px-2 py-1 rounded font-bold uppercase mt-1">Isi Saldo</button>
                                 </div>
                             </div>
                             <div class="flex gap-2 border-t pt-3">
-                                <button onclick="viewHistory('${uID}')" class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg text-[10px] font-bold"><i class="fas fa-history"></i> RIWAYAT BELANJA</button>
-                                <button onclick="deleteAccount('${uID}', '${u.Username}')" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-[10px] font-bold"><i class="fas fa-user-times"></i> HAPUS</button>
+                                <button onclick="viewHistory('${uID}')" class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg text-[10px] font-bold">HISTORY</button>
+                                <button onclick="deleteAccount('${uID}', '${u.Username}')" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-[10px] font-bold">HAPUS</button>
                             </div>
                         </div>`;
                 });
@@ -321,39 +314,31 @@
         }
 
         function editSaldo(userId, oldSaldo) {
-            const val = prompt("Input Nominal Saldo Baru:", oldSaldo);
-            if (val !== null && val !== "") db.ref(`users/${userId}`).update({ Saldo: parseInt(val) });
+            const tambah = prompt(`Saldo saat ini: Rp ${oldSaldo.toLocaleString('id-ID')}\nTambah nominal:`, "0");
+            if (tambah) {
+                const nominal = parseInt(tambah);
+                if (!isNaN(nominal)) db.ref(`users/${userId}/Saldo`).transaction(s => (s || 0) + nominal);
+            }
         }
 
         function viewHistory(userId) {
             $('#historyModal').css('display', 'flex');
-            $('#historyContent').html('<p class="text-center py-10">Memuat riwayat...</p>');
+            $('#historyContent').html('<p class="text-center py-10">Memuat...</p>');
             db.ref(`history/${userId}`).once('value', (snap) => {
-                const content = document.getElementById('historyContent');
-                content.innerHTML = "";
-                if (snap.exists()) {
-                    snap.forEach((child) => {
-                        const d = child.val();
-                        content.innerHTML += `
-                            <div class="p-3 bg-gray-50 rounded-xl border-l-4 border-orange-500">
-                                <div class="flex justify-between font-bold text-slate-700"><span>${d.produk}</span> <span class="text-red-600">-Rp ${d.total ? d.total.toLocaleString('id-ID') : 0}</span></div>
-                                <div class="text-[10px] text-gray-400 mt-1">${d.tanggal} | ${d.status}</div>
-                            </div>`;
-                    });
-                } else content.innerHTML = '<p class="text-center text-gray-400 py-10">Belum ada transaksi.</p>';
+                let html = "";
+                snap.forEach(c => {
+                    const d = c.val();
+                    html += `<div class="p-3 bg-gray-50 rounded-xl border-l-4 border-orange-500">
+                        <div class="flex justify-between font-bold"><span>${d.produk}</span> <span class="text-red-600">-Rp ${d.total.toLocaleString('id-ID')}</span></div>
+                        <div class="text-[10px] text-gray-400">${d.tanggal}</div>
+                    </div>`;
+                });
+                $('#historyContent').html(html || '<p class="text-center text-gray-400 py-10">Kosong</p>');
             });
-        }
-
-        function deleteAccount(id, name) {
-            if (confirm(`Hapus akun ${name}? Semua data akan hilang.`)) {
-                db.ref(`users/${id}`).remove();
-                db.ref(`history/${id}`).remove();
-                db.ref(`chats/${id}`).remove();
-                db.ref(`admin_inbox/${id}`).remove();
-            }
         }
         function closeModal() { $('#historyModal').hide(); }
 
+        // --- MANAJEMEN CHAT ---
         db.ref('admin_inbox').on('value', (snap) => {
             const list = document.getElementById('userListChat');
             const listDel = document.getElementById('userListDel');
@@ -364,8 +349,8 @@
                     <div class="truncate"><div class="font-bold text-sm">${u.nama}</div><div class="text-xs text-gray-400 truncate">${u.lastMsg}</div></div>
                     ${u.unread ? '<div class="w-2 h-2 bg-red-500 rounded-full"></div>' : ''}
                 </div>`;
-                listDel.innerHTML += `<div class="p-2 bg-slate-50 border rounded-lg text-xs font-bold flex justify-between items-center" onclick="loadUserMessages('${child.key}', '${u.nama}')">
-                    ${u.nama} <i class="fas fa-chevron-right text-gray-400"></i>
+                listDel.innerHTML += `<div class="p-2 bg-slate-50 border rounded-lg text-xs font-bold flex justify-between items-center" onclick="deleteChatUser('${child.key}')">
+                    ${u.nama} <i class="fas fa-trash text-red-400"></i>
                 </div>`;
             });
         });
@@ -396,13 +381,63 @@
             $('#adminInput').val('');
         }
 
+        // --- MANAJEMEN MODERASI TESTIMONI ---
+        function loadModerasiPostingan() {
+            db.ref('testimoni_publik').on('value', (snap) => {
+                const container = document.getElementById('containerPostingan');
+                container.innerHTML = "";
+                if (!snap.exists()) {
+                    container.innerHTML = "<p class='text-center text-gray-400 text-xs py-10'>Tidak ada diskusi publik.</p>";
+                    return;
+                }
+                let dataArray = [];
+                snap.forEach(child => {
+                    let val = child.val();
+                    val.id = child.key;
+                    dataArray.push(val);
+                });
+                dataArray.reverse();
+                dataArray.forEach((post) => {
+                    const tanggal = post.timestamp ? new Date(post.timestamp).toLocaleString('id-ID') : '-';
+                    let balasanHtml = "";
+                    if (post.balasan) {
+                        Object.keys(post.balasan).forEach(replyKey => {
+                            const reply = post.balasan[replyKey];
+                            balasanHtml += `
+                                <div class="reply-item text-[11px] bg-red-50 p-2 rounded flex justify-between items-start">
+                                    <div><span class="font-bold">@${reply.nama}:</span> ${reply.pesan}</div>
+                                    <button onclick="hapusBalasan('${post.id}', '${replyKey}')" class="text-red-500 ml-2"><i class="fas fa-times"></i></button>
+                                </div>`;
+                        });
+                    }
+                    container.innerHTML += `
+                        <div class="bg-white p-4 rounded-2xl border shadow-sm border-l-4 border-orange-400">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-2">
+                                    <img src="${post.foto}" class="w-6 h-6 rounded-full object-cover">
+                                    <div>
+                                        <span class="font-bold text-slate-800 text-xs">${post.nama}</span>
+                                        <p class="text-[9px] text-gray-400">${tanggal}</p>
+                                    </div>
+                                </div>
+                                <button onclick="hapusPostingan('${post.id}')" class="text-red-500 bg-red-50 px-3 py-1 rounded-lg text-[10px] font-bold">HAPUS POST</button>
+                            </div>
+                            <div class="text-xs text-slate-600 bg-gray-50 p-2 rounded-lg italic mb-2">"${post.pesan}"</div>
+                            <div class="space-y-1">${balasanHtml}</div>
+                        </div>`;
+                });
+            });
+        }
+
+        function hapusPostingan(id) { if (confirm("Hapus postingan ini?")) db.ref(`testimoni_publik/${id}`).remove(); }
+        function hapusBalasan(postId, replyId) { if (confirm("Hapus balasan ini?")) db.ref(`testimoni_publik/${postId}/balasan/${replyId}`).remove(); }
+
         // --- MANAJEMEN PARTNER ---
         function savePartner() {
             const n = $('#pNama').val(), i = $('#pImage').val(), u = $('#pUrl').val();
             if(n && i) db.ref('partners_list').push({ nama: n, image: i, url: u }).then(() => { $('#pNama').val(''); $('#pImage').val(''); $('#pUrl').val(''); });
         }
         function deletePartner(key) { if(confirm("Hapus partner ini?")) db.ref('partners_list/' + key).remove(); }
-        
         db.ref('partners_list').on('value', (snap) => {
             const list = document.getElementById('listPartner');
             list.innerHTML = "";
@@ -410,11 +445,11 @@
                 const p = child.val();
                 list.innerHTML += `
                     <div class="bg-white p-3 rounded-xl border flex justify-between items-center shadow-sm">
-                        <div class="flex items-center gap-3">
-                            <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover">
-                            <div class="font-bold text-sm">${p.nama}</div>
+                        <div class="flex items-center gap-3 overflow-hidden">
+                            <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover bg-gray-100" onerror="this.src='https://via.placeholder.com/40'">
+                            <div class="truncate"><div class="font-bold text-sm truncate">${p.nama}</div><div class="text-[10px] text-blue-500 truncate">${p.url || 'No Link'}</div></div>
                         </div>
-                        <button onclick="deletePartner('${child.key}')" class="text-red-500 p-2"><i class="fas fa-trash-alt"></i></button>
+                        <button onclick="deletePartner('${child.key}')" class="text-red-500 p-2 hover:bg-red-50 rounded-full"><i class="fas fa-trash-alt"></i></button>
                     </div>`;
             });
         });
@@ -425,16 +460,18 @@
             if(n) db.ref('sponsors').push({ nama: n, url: u, image: i }).then(() => { $('#spName').val(''); $('#spUrl').val(''); $('#spImg').val(''); });
         }
         function deleteSponsor(key) { if(confirm("Hapus sponsor ini?")) db.ref('sponsors/' + key).remove(); }
-
         db.ref('sponsors').on('value', (snap) => {
             const list = document.getElementById('sponsorList');
             list.innerHTML = "";
             snap.forEach((child) => {
                 const s = child.val();
                 list.innerHTML += `
-                    <div class="bg-gray-50 p-2 rounded-lg border flex justify-between items-center text-sm">
-                        <span>${s.nama}</span>
-                        <button onclick="deleteSponsor('${child.key}')" class="text-red-400 p-2"><i class="fas fa-times-circle"></i></button>
+                    <div class="bg-white p-3 rounded-xl border flex justify-between items-center shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <img src="${s.image}" class="w-8 h-8 rounded-lg object-cover" onerror="this.style.display='none'">
+                            <span class="text-sm font-bold text-slate-700">${s.nama}</span>
+                        </div>
+                        <button onclick="deleteSponsor('${child.key}')" class="text-red-400 p-2"><i class="fas fa-times-circle text-lg"></i></button>
                     </div>`;
             });
         });
@@ -451,9 +488,32 @@
             });
         }
 
+        function postSebagaiAdmin() {
+            const n = $('#adminNama').val(), p = $('#adminPesan').val(), t = $('#adminTanggal').val();
+            if(n && p) {
+                db.ref('testimoni_publik').push({ 
+                    nama: n, 
+                    pesan: p, 
+                    foto: "https://nasukafoods.site/gambarkosong.jpg",
+                    timestamp: t ? new Date(t).getTime() : firebase.database.ServerValue.TIMESTAMP 
+                });
+                alert("Berhasil diposting!");
+                $('#adminNama').val(''); $('#adminPesan').val('');
+            }
+        }
+
         $(document).ready(() => {
+            // Cek status login saat reload
+            if (sessionStorage.getItem('nasuka_auth') === 'true') {
+                document.getElementById('lockScreen').style.display = 'none';
+                document.body.classList.remove('locked');
+            }
+            // Listener Enter Key
+            document.getElementById('adminPass').addEventListener("keyup", (e) => { if(e.key === "Enter") checkAccess(); });
+
             loadUsers();
             monitorStokRealtime();
+            loadModerasiPostingan();
         });
     </script>
 </body>
