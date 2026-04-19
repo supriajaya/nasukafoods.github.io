@@ -10,6 +10,93 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>     
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">   
     <style>
+        
+        /* Styling Album & Quotes Baru */
+.section-header-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5px 10px;
+}
+
+.section-title-new {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.see-all {
+    font-size: 13px;
+    color: #ee4d2d;
+    text-decoration: none;
+}
+
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 5px;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.album-card {
+    min-width: 160px;
+    height: 240px;
+    background: #000;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.album-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 30px;
+    opacity: 0.9;
+}
+
+.album-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.quote-card {
+    min-width: 200px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.quote-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+        
+        
         /* Existing Styles */
         .msg-user { background: #e1f5fe; color: #000; align-self: flex-end; margin-left: auto; }
         .msg-admin { background: #f5f5f5; color: #000; align-self: flex-start; }
@@ -81,22 +168,83 @@
             </div>
             <div class="banner-button">Lihat</div>
         </a>
-
-        <div class="other-features">
-            <div id="dynamic-sponsors" style="display: contents;"></div>
+        
+        
+                <div class="section-header-new">
+           
+            </div>
+            
+            
+            
+            
+            
         </div>
+        
+        
+            
+        
 
-        <div class="search-bar" id="marquee-search-bar">
-            <i class="">Nasuka Food Partner</i>
+              <div class="search-bar" id="marquee-search-bar">
+            <i class="">Nasuka Foods Partner</i>
             <div class="marquee-content">
                 <span id="running-text"></span>
             </div>
         </div>
 
+    
+
         <div class="other-features" style="margin-top: 20px;">
             <div id="dynamic-partners" style="display: contents;"></div>
         </div>
+ <div class="horizontal-scroll" style="margin-bottom: 80px;">
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/ceritanasuka1.mp4')">
+        <img src="https://nasukafoods.site/image/nasukaroom.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="('https://nasukafoods.site/supercustomers.html')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video3.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video4.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video5.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video6.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video7.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video8.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video9.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video10.mp4')">
+        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
+    </div>
+</div>
 
+           <div class="other-features">
+            <div id="dynamic-sponsors" style="display: contents;"></div>
+        </div>
+
+        <div class="search-bar" id="marquee-search-bar" onclick="window.location.href='https://nasukafoods.site/supercustomers.html'" style="cursor: pointer;">
+    <i class="">VIP ROOM</i>
+    <div class="marquee-content">
+        <span id="running-text"></span>
+    </div>
+</div>
+
+           
+            
+            
+            
+            
         <div class="bottom-nav">
             <div class="nav-item" id="nav-dokumen" onclick="showDokumen()">
                 <i class="fas fa-list-alt"></i>
@@ -766,6 +914,28 @@ function showTerms() {
     `;
 }
 
+function showVideo(videoUrl) {
+    // Gunakan URL default jika parameter kosong
+    const finalUrl = videoUrl || 'https://nasukafoods.site/video/kisahnasuka.mp4';
+    
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Video Quote';
+    
+    doc.querySelector('.dokumen-content-section').innerHTML = `
+        <div style="width: 100%; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <video width="100%" controls autoplay style="display: block;">
+                <source src="${finalUrl}" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+        <div style="margin-top: 20px; text-align: center;">
+            <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">"Nikmati inspirasi dari Nasuka Food"</p>
+            <button onclick="showHome()" class="btn-transfer-action">KEMBALI KE BERANDA</button>
+        </div>
+    `;
+}
 
 
 </script>
