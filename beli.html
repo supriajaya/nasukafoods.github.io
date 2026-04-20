@@ -9,6 +9,36 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">
     <style>
+        /* Styling Banner Stok Habis */
+.sold-out-banner {
+    position: absolute;
+    top: 15px;
+    left: -30px;
+    background: #ef4444;
+    color: white;
+    padding: 5px 35px;
+    font-size: 10px;
+    font-weight: 800;
+    transform: rotate(-45deg);
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Mengubah tampilan tombol jika disabled */
+.btn-beli:disabled {
+    background: #e2e8f0;
+    color: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.voucher-card img {
+    transition: all 0.3s ease;
+}
+
+        
+        
+        
         :root {
             --primary: #0061ff;
             --primary-dark: #0046b8;
@@ -318,11 +348,16 @@ if (userID) {
 }
 
 const products = [
-    { cat: "Voucher NITS CELL", items: [
-        { id: "wf1", name: "Nits Cell 12 Jam", price: 2775, oldPrice: 3000, img: "https://nasukafoods.site/image/nitscell.jpg" },
-        { id: "nc1", name: "Nits Cell 6 Jam", price: 1850, oldPrice: 2000, img: "https://nasukafoods.site/image/nitscell.jpg" }
+    { cat: "Voucher NITS CELL (Khusus Warga Ciparay Tengah)", items: [
+        { id: "nc1", name: "Nits Cell 6jam", price: 1950, oldPrice: 2000, img: "https://nasukafoods.site/image/nitscell.jpg" },           
+        { id: "nc2", name: "Nits Cell 12Jam", price: 2900, oldPrice: 3000, img: "https://nasukafoods.site/image/nitscell.jpg" },
+        { id: "nc3", name: "Nits Cell 24Jam", price: 4850, oldPrice: 5000, img: "https://nasukafoods.site/image/nitscell.jpg" },
+        { id: "nc4", name: "Nits Cell 7hari", price: 19800, oldPrice: 20000, img: "https://nasukafoods.site/image/nitscell.jpg" }       
     ]},
-    { cat: "Voucher Data", items: [
+    
+    
+    
+    { cat: "Voucher Data : Berlaku Nasional", items: [
         { id: "ax1", name: "Axis 500MB 30hari", price: 10000, oldPrice: 11000, img: "https://nasukafoods.site/image/axis.jpg" },
         { id: "ax2", name: "Axis 5GB +Kuota lokal 1hari", price: 7500, oldPrice: 9000, img: "https://nasukafoods.site/image/axis.jpg" },   
         { id: "ax3", name: "Axis 5GB +Kuota lokal 2hari", price: 11000, oldPrice: 18000, img: "https://nasukafoods.site/image/axis.jpg" },
@@ -334,9 +369,14 @@ const products = [
         { id: "sf1", name: "smartfren 1GB 3hari", price: 7000, oldPrice: 13500, img: "https://nasukafoods.site/image/smartfren.jpg" },
         { id: "sf2", name: "smartfren 150GB 30hari", price: 150000, oldPrice: 155000, img: "https://nasukafoods.site/image/smartfren.jpg" },  
         { id: "ts1", name: "Telkomsel 1GB +Nasional 4GB 2hari", price: 10500, oldPrice: 14000, img: "https://nasukafoods.site/image/tsel.jpg" },
-        { id: "ts2", name: "Telkomsel 7GB +Nasional 19GB 30hari", price: 70000, oldPrice: 73500, img: "https://nasukafoods.site/image/tsel.jpg" }
+       
+        { id: "ts2", name: "Telkomsel 7GB +Nasional 19GB 30hari", price: 70000, oldPrice: 73500, img: "https://nasukafoods.site/image/tsel.jpg" },
+        
+          { id: "tr1", name: "Tri 2GB 1hari", price: 7200, oldPrice: 9500, img: "https://nasukafoods.site/image/kartutri.jpg" },  
+        { id: "tr2", name: "Tri 3GB 3hari", price: 10500, oldPrice: 14000, img: "https://nasukafoods.site/image/kartutri.jpg" }
+        
     ]},
-    { cat: "Voucher Hiburan", items: [
+    { cat: "Voucher Hiburan : Lokal & Internasional", items: [
         { id: "nf1", name: "Netflix 1 Day", price: 5000, oldPrice: 6000, img: "https://nasukafoods.site/image/netflix.png" },
         { id: "nf2", name: "Netflix 30 Day", price: 50000, oldPrice: 60000, img: "https://nasukafoods.site/image/netflix.png" },
         { id: "gp1", name: "Google Play 5K", price: 5000, oldPrice: 7000, img: "https://nasukafoods.site/image/gplay.png" },
@@ -344,20 +384,32 @@ const products = [
     ]}
 ];
 
-function renderProducts() {
+
+async function renderProducts() {
     const container = document.getElementById('voucher-list');
     let html = '';
-    products.forEach(group => {
+    
+    for (const group of products) {
         html += `<div class="category-title">${group.cat}</div><div class="voucher-grid">`;
-        group.items.forEach(p => {
-            const oldPriceHtml = p.oldPrice ? `<span class="v-price-old">Rp ${p.oldPrice.toLocaleString('id-ID')}</span>` : '';
+        
+        for (const p of group.items) {
+            // Cek ketersediaan stok di Firebase
+            const stockSnapshot = await db.ref(`stok_voucher/${p.id}`).once('value');
+            const hasStock = stockSnapshot.exists();
             
-            // LOGIKA BARU: Membuat teks jam/hari mencolok
+            const oldPriceHtml = p.oldPrice ? `<span class="v-price-old">Rp ${p.oldPrice.toLocaleString('id-ID')}</span>` : '';
             const highlightedName = p.name.replace(/(\d+\s?(hari|Day|Jam))/gi, '<span class="highlight-duration">$1</span>');
             
+            // Logika Banner dan Disable Tombol
+            const soldOutBanner = !hasStock ? `<div class="sold-out-banner">STOK HABIS</div>` : '';
+            const btnStatus = !hasStock ? 'disabled' : '';
+            const btnText = !hasStock ? 'HABIS' : 'BELI';
+            const imgOpacity = !hasStock ? 'style="opacity: 0.4; filter: grayscale(1);"' : '';
+
             html += `
-                <div class="voucher-card">
-                    <img src="${p.img}" alt="logo">
+                <div class="voucher-card" style="position: relative; overflow: hidden;">
+                    ${soldOutBanner}
+                    <img src="${p.img}" alt="logo" ${imgOpacity}>
                     <div>
                         <span class="v-name">${highlightedName}</span>
                         <div style="margin: 5px 0;">
@@ -365,13 +417,21 @@ function renderProducts() {
                             <span class="v-price">Rp ${p.price.toLocaleString('id-ID')}</span>
                         </div>
                     </div>
-                    <button class="btn-beli" onclick="prosesBeli('${p.id}', '${p.name}', ${p.price})">BELI</button>
+                    <button class="btn-beli" ${btnStatus} onclick="prosesBeli('${p.id}', '${p.name}', ${p.price})">
+                        ${btnText}
+                    </button>
                 </div>`;
-        });
+        }
         html += `</div>`;
-    });
+    }
     container.innerHTML = html;
 }
+
+
+
+
+
+
 
 function showModal(content, title = "INVOICE", showAction = true, actionFn = null) {
     document.getElementById('invTitle').innerText = title;
