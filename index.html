@@ -3,13 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nasuka Food</title>
+    <title>Nasuka Foods</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>     
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">   
     <style>
+        /* DANA Style for Voucher SPA */
+.dana-blue-gradient {
+    background: linear-gradient(135deg, #118EEA 0%, #005691 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(17, 142, 234, 0.3);
+}
+
+.voucher-grid-spa {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 10px;
+}
+
+.voucher-card-spa {
+    background: #fff;
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+}
+
+.voucher-card-spa img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin: 0 auto 10px;
+}
+
+.v-name-spa {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.v-price-spa {
+    color: #118EEA;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.btn-beli-spa {
+    background: #118EEA;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(17, 142, 234, 0.2);
+}
+
+/* Style Stok Habis */
+.voucher-out-of-stock {
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+
+.out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 2;
+    text-transform: uppercase;
+    width: 80%;
+}
+
+.btn-beli-spa:disabled {
+    background: #ccc;
+    box-shadow: none;
+}
+
+        
+        
         
         /* Styling Album & Quotes Baru */
 .section-header-new {
@@ -123,6 +218,15 @@
         .receipt-amount { font-size: 32px; font-weight: 800; color: #333; margin: 20px 0; }
         .receipt-line { display: flex; justify-content: space-between; margin: 8px 0; font-size: 14px; color: #666; }
         .receipt-line b { color: #000; }
+
+        /* SPA VOUCHER STYLES (LOGIKA BELI.HTML) */
+        .voucher-grid-spa { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
+        .voucher-card-spa { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .voucher-card-spa img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 8px; }
+        .v-name-spa { font-size: 12px; font-weight: bold; display: block; height: 32px; overflow: hidden; color: #333; }
+        .v-price-spa { color: #ee4d2d; font-weight: bold; font-size: 14px; margin: 5px 0; display: block; }
+        .btn-beli-spa { background: #ee4d2d; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .category-title-spa { font-weight: bold; margin: 15px 0 10px; color: #333; border-left: 4px solid #ee4d2d; padding-left: 10px; text-align: left; }
     </style>
 </head>
 
@@ -133,7 +237,7 @@
         <div class="header">
             <div class="header-content">
                 <div class="top-nav">
-                    <span class="welcome">Nasuka Food</span> 
+                    <span class="welcome">Nasuka Foods</span> 
                 </div>
             </div>
         </div>
@@ -145,18 +249,18 @@
                 <i class="fas fa-paper-plane balance-icon" onclick="showKirim()" title="Kirim Saldo"></i>
             </div>
             
-            <a href="https://nasukafoods.site/beli.html" target="_self" class="all-accounts" style="text-decoration: none;">
-                <span>Voucher</span>
+            <div onclick="showVoucher()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
+                <span>Beli Voucher Data</span>
                 <i class="fas fa-chevron-right"></i>
-            </a>
+            </div>
         </div>
 
         <div class="main-features">        
             <div class="other-feature-item" onclick="showChat()">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/image/customers.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/nasukaroom.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Customers Service</span>
+                <span>Chat Admin</span>
             </div>
         </div>
 
@@ -196,37 +300,7 @@
         <div class="other-features" style="margin-top: 20px;">
             <div id="dynamic-partners" style="display: contents;"></div>
         </div>
- <div class="horizontal-scroll" style="margin-bottom: 80px;">
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/ceritanasuka1.mp4')">
-        <img src="https://nasukafoods.site/image/nasukaroom.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="('https://nasukafoods.site/supercustomers.html')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video3.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video4.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video5.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video6.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video7.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video8.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video9.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
-    <div class="quote-card" onclick="showVideo('https://nasukafoods.site/video/video10.mp4')">
-        <img src="https://nasukafoods.site/image/cover1.jpg" class="quote-img">
-    </div>
+
 </div>
 
            <div class="other-features">
@@ -234,9 +308,7 @@
         </div>
 
         <div class="search-bar" id="marquee-search-bar" onclick="window.location.href='https://nasukafoods.site/supercustomers.html'" style="cursor: pointer;">
-    <i class="">VIP ROOM</i>
-    <div class="marquee-content">
-        <span id="running-text"></span>
+  
     </div>
 </div>
 
@@ -835,7 +907,7 @@ function loadDynamicKatalogs() {
         let htmlContent = '';
         snapshot.forEach((child) => {
             const data = child.val();
-            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div></a>`;
+            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div><span style="font-weight: bold; color: #b38728;">${data.nama}</span></a>`;
         });
         container.innerHTML = htmlContent;
     });
@@ -848,7 +920,7 @@ function loadDynamicPartners() {
         let htmlContent = '';
         snapshot.forEach((child) => {
             const data = child.val();
-            htmlContent += `<a href="${data.url || '#'}" target="_self" class="other-feature-item"><div class="other-feature-icon"><img src="${data.image}" class="product-icon-img"></div></a>`;
+            htmlContent += `<a href="${data.url || '#'}" target="_self" class="other-feature-item"><div class="other-feature-icon"><img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'"></div><span>${data.nama}</span></a>`;
         });
         container.innerHTML = htmlContent;
     });
@@ -937,6 +1009,190 @@ function showVideo(videoUrl) {
     `;
 }
 
+/* LOGIKA SPA VOUCHER DARI BELI.HTML (DITAMBAHKAN TANPA MENGURANGI) */
+
+const vProducts = [
+
+  { category: "Voucher NITS CELL ", items: [
+      
+        { id: "nc1", name: "Nits Cell 6Jam", price: 1850, img: "https://nasukafoods.site/image/nitscell.jpg" },
+           { id: "nc2", name: "Nits Cell 12Jam", price: 2800, img: "https://nasukafoods.site/image/nitscell.jpg" }
+        
+        
+        
+    ]},
+
+
+    { category: "Voucher AXIS", items: [
+    
+        { id: "ax2", name: "Axis 5GB 1hari", price: 7600, img: "https://nasukafoods.site/image/axis.jpg" },
+           { id: "ax3", name: "Axis 5GB 2hari", price: 11000, img: "https://nasukafoods.site/image/axis.jpg" }
+             ]},
+             
+             
+         { category: "Voucher INDOSAT", items: [
+        
+        { id: "is1", name: "Indosat 2GB 2hari", price: 10700, img: "https://nasukafoods.site/image/indosat.jpg" },
+           { id: "is2", name: "Indosat 100GB", price: 150000, img: "https://nasukafoods.site/image/indosat.jpg" },
+           ]},
+           
+           
+         { category: "Voucher SMARTFREN", items: [
+        
+        
+        
+        { id: "sf1", name: "Smartfren 1GB 3hari", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
+          { id: "sf2", name: "Smartfren 10GB", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
+        
+           ]},
+         { category: "Voucher TELKOMSEL", items: [
+        
+        
+        { id: "ts1", name: "Telkomsel 1GB +4GB 2hari", price: 11000, img: "https://nasukafoods.site/image/tsel.jpg" },
+          { id: "ts2", name: "Telkomsel 0.5GB +2.5GB 5hari", price: 14000, img: "https://nasukafoods.site/image/tsel.jpg" }
+        
+    ]},
+    
+    
+    
+    { category: "Voucher XL", items: [
+      
+        { id: "xl1", name: "XL 0.75GB 3hari", price: 9400, img: "https://nasukafoods.site/image/xl.jpg" },
+           { id: "xl2", name: "XL 5GB 3hari", price: 20000, img: "https://nasukafoods.site/image/xl.jpg" }
+        
+        
+        
+    ]},
+    
+      { category: "Voucher TREE", items: [
+      
+        { id: "tr1", name: "Tree 2GB 1hari", price: 7500, img: "https://nasukafoods.site/image/kartutri.jpg" },
+           { id: "tr2", name: "Tree 3GB 3hari", price: 11000, img: "https://nasukafoods.site/image/kartutri.jpg" }
+        
+        
+        
+    ]},
+    
+    
+   
+];
+
+
+
+
+
+
+async function showVoucher() {
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Pembelian Voucher Internet';
+    
+    const contentSection = doc.querySelector('.dokumen-content-section');
+    contentSection.innerHTML = '<p style="text-align:center; padding:20px;">Mengecek ketersediaan stok...</p>';
+    
+    let html = `
+        <div class="dana-blue-gradient">
+            <small style="opacity:0.9;">Saldo</small><br>
+            <strong style="font-size:24px;">Rp ${localUser.Saldo.toLocaleString('id-ID')}</strong>
+        </div>
+    `;
+
+    // Ambil semua data stok sekaligus untuk efisiensi
+    const stockSnapshot = await db.ref('stok_voucher').once('value');
+    const allStock = stockSnapshot.val() || {};
+
+    vProducts.forEach(cat => {
+        html += `<div class="category-title-spa" style="border-left-color: #118EEA;">${cat.category}</div><div class="voucher-grid-spa">`;
+        
+        cat.items.forEach(p => {
+            // Cek apakah ada data di dalam stok_voucher/[id_produk]
+            const hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
+            const cardClass = hasStock ? "" : "voucher-out-of-stock";
+            const btnState = hasStock ? "" : "disabled";
+            const badgeStock = hasStock ? "" : `<div class="out-of-stock-label">Stok Habis</div>`;
+
+            html += `
+                <div class="voucher-card-spa ${cardClass}">
+                    ${badgeStock}
+                    <div>
+                        <img src="${p.img}">
+                        <span class="v-name-spa">${p.name}</span>
+                    </div>
+                    <div>
+                        <span class="v-price-spa">Rp ${p.price.toLocaleString('id-ID')}</span>
+                        <button class="btn-beli-spa" ${btnState} onclick="prosesBeliVoucher('${p.id}', '${p.name}', ${p.price})">
+                            ${hasStock ? 'BELI' : 'HABIS'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    });
+    
+    contentSection.innerHTML = html;
+}
+
+
+
+
+
+async function prosesBeliVoucher(id, nama, harga) {
+    if (!localUser.ID) return showLogin();
+    if (localUser.Saldo < harga) return alert("Saldo tidak mencukupi!");
+
+    if (!confirm(`Beli ${nama} seharga Rp ${harga.toLocaleString()}?`)) return;
+
+    try {
+        const snapshot = await db.ref(`stok_voucher/${id}`).limitToFirst(1).once('value');
+        if (!snapshot.exists()) return alert("Maaf, stok sedang habis.");
+
+        const key = Object.keys(snapshot.val())[0];
+        const sn = snapshot.val()[key];
+        const timestamp = new Date().toLocaleString('id-ID');
+
+        await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) - harga);
+        await db.ref(`stok_voucher/${id}/${key}`).remove();
+        
+        const invID = "VCH" + Date.now();
+        await db.ref(`history/${localUser.ID}`).push({
+            produk: nama,
+            total: harga,
+            tanggal: timestamp,
+            status: "BERHASIL",
+            voucher: sn,
+            invoice: invID
+        });
+
+        // Tampilkan Bukti Berhasil (Gunakan Receipt yang sudah ada)
+        document.getElementById('dokumen-container').style.display = 'none';
+        const overlay = document.createElement('div');
+        overlay.id = 'success-overlay';
+        overlay.innerHTML = `
+            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #f9f9f9; padding: 20px;">
+                <div class="receipt-card">
+                    <i class="fas fa-check-circle receipt-icon"></i>
+                    <h2 style="margin: 0; color: #333; font-size: 22px;">Pembelian Berhasil</h2>
+                    <div class="receipt-amount">Rp ${harga.toLocaleString('id-ID')}</div>
+                    <div style="background: #fff8e1; border: 2px dashed #ff9800; padding: 15px; margin: 15px 0; border-radius: 8px;">
+                        <small style="color: #666; display: block;">KODE VOUCHER:</small>
+                        <strong style="font-size: 20px; font-family: monospace; letter-spacing: 2px;">${sn}</strong>
+                    </div>
+                    <div style="text-align: left; background: #fcfcfc; border-radius: 12px; padding: 15px; border: 1px solid #f0f0f0;">
+                        <div class="receipt-line"><span>Produk:</span><b>${nama}</b></div>
+                        <div class="receipt-line"><span>Invoice:</span><b>${invID}</b></div>
+                    </div>
+                </div>
+                <button onclick="window.location.reload()" class="btn-transfer-action" style="margin-top: 30px; width: 100%; max-width: 400px;">SELESAI</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+    } catch (e) {
+        alert("Terjadi kesalahan sistem.");
+    }
+}
 
 </script>
 </body>
