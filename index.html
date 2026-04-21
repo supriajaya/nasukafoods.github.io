@@ -236,19 +236,31 @@
                 <i class="fas fa-paper-plane balance-icon" onclick="showKirim()" title="Kirim Saldo"></i>
             </div>
             
-            <div onclick="showVoucher()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
-                <span>Voucher Digital</span>
+            <div onclick="showChat()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
+                <span>Chat</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
 
-        <div class="main-features">        
-            <div class="other-feature-item" onclick="showChat()">
+        <div class="main-features">     
+               
+            <div class="other-feature-item" onclick="showVoucher()">
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/image/nasukaroom.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Customers Service</span>
+                <span>Beli Voucher</span>
             </div>
+            
+            <div class="other-feature-item" onclick="showPesancilok()">
+                <div class="other-feature-icon setor-tarik-icon">
+                    <img src="https://nasukafoods.site/image/nasukaroom.jpg" alt="" class="product-icon-img">
+                </div>
+                <span>Pesan Cilok</span>
+            </div>
+               
+            
+            
+            
         </div>
 
         <div onclick="showTestimoni()" class="banner" style="cursor: pointer; display: flex;">
@@ -676,31 +688,37 @@ function saveProfil() {
     db.ref(`users/${localUser.ID}`).update({ Nama: n, Alamat: a, NomorHP: w, PIN: p }).then(() => { alert("Profil berhasil diperbarui"); showProfil(); }).catch(err => { alert("Gagal menyimpan: " + err.message); });
 }
 
+
+// GANTI FUNGSI showDokumen LAMA DENGAN INI
 function showDokumen() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
     document.getElementById('dokumen-title').textContent = 'Informasi';
     
-    let contentHtml = `
+    // Gunakan innerHTML terlebih dahulu untuk memastikan elemen ada
+    const contentSection = doc.querySelector('.dokumen-content-section');
+    contentSection.scrollTop = 0;
+
+    contentSection.innerHTML = `
         <div class="dokumen-item">
-            <h4>✨ Nasuka Food</h4>
-            <p>Sistem Cilok Premium Berbasis Digital. Nikmati kemudahan transaksi dan kualitas rasa terbaik dari kami.</p>
+            <h4>✨ Nasuka Foods</h4>
+            <p>Sistem Nasuka Foods Berbasis Digital dari Nasuka Wireless sebagai vendor developer android app.</p>
         </div>
         
         <div style="margin-top: 30px; padding: 20px 10px; border-top: 1px solid #eee; text-align: center;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                <div onclick="showTentang()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                    <i class="fas fa-info-circle"></i><br>Tentang Kami
+                <div onclick="showTentang()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
+                    <i class="fas fa-info-circle" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Tentang Kami</span>
                 </div>
-                <div onclick="showRefund()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                    <i class="fas fa-undo"></i><br>Refund Policy
+                <div onclick="showRefund()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
+                    <i class="fas fa-undo" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Refund Policy</span>
                 </div>
-                <div onclick="showPrivacy()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                    <i class="fas fa-user-shield"></i><br>Privacy Policy
+                <div onclick="showPrivacy()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
+                    <i class="fas fa-user-shield" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Privacy Policy</span>
                 </div>
-                <div onclick="showTerms()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
-                    <i class="fas fa-file-contract"></i><br>Terms & Condition
+                <div onclick="showTerms()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
+                    <i class="fas fa-file-contract" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Terms & Condition</span>
                 </div>
             </div>
             
@@ -710,9 +728,42 @@ function showDokumen() {
             </div>
         </div>
     `;
-    
-    doc.querySelector('.dokumen-content-section').innerHTML = contentHtml;
 }
+
+// PASTIKAN FUNGSI-FUNGSI INI ADA DAN TIDAK TERTIMPA
+function showTentang() {
+    document.getElementById('dokumen-title').textContent = 'Tentang Kami';
+    const section = document.querySelector('.dokumen-content-section');
+    section.scrollTop = 0;
+    section.innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Filosofi Nasuka Food</h4>
+            <p>Nasuka Food (Nasihat Sumber Karya) adalah usaha kuliner yang berfokus pada hidangan Cilok Premium. Kami percaya bahwa kualitas bahan adalah kunci utama untuk menciptakan "Rasa yang dulu pernah ada".</p>
+            <p>Berawal dari gerobak keliling di area Ciparay dan Cibaduyut, kini kami mengintegrasikan teknologi digital untuk mempermudah pelanggan dalam bertransaksi.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showRefund() {
+    document.getElementById('dokumen-title').textContent = 'Refund Policy';
+    const section = document.querySelector('.dokumen-content-section');
+    section.scrollTop = 0;
+    section.innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Kebijakan Pengembalian Dana</h4>
+            <p>1. Refund hanya berlaku jika produk yang diterima dalam keadaan rusak atau tidak layak konsumsi saat pengiriman.</p>
+            <p>2. Pelanggan wajib melampirkan foto atau video unboxing sebagai bukti melalui Customer Service.</p>
+            <p>3. Untuk kesalahan transfer saldo, harap segera hubungi admin dalam waktu maksimal 1x24 jam.</p>
+            <p>4. Dana akan dikembalikan dalam bentuk saldo Nasuka atau transfer bank sesuai kesepakatan.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+// Tambahkan showPrivacy dan showTerms dengan pola yang sama (innerHTML ke section)
+
+
 
 function showHistory() {
     hideAllContainers();
@@ -899,17 +950,25 @@ $(document).ready(() => {
     $('#tabPerbaikan').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').hide(); $('#contentPerbaikan').show(); });
 });
 
+
 function showTentang() {
     document.getElementById('dokumen-title').textContent = 'Tentang Kami';
-    document.querySelector('.dokumen-content-section').innerHTML = `
+    const section = document.querySelector('.dokumen-content-section');
+    section.scrollTop = 0; // Reset scroll ke atas
+    section.innerHTML = `
         <div class="dokumen-item">
             <h4 style="color:#000;">Filosofi Nasuka Food</h4>
             <p>Nasuka Food (Nasihat Sumber Karya) adalah usaha kuliner yang berfokus pada hidangan Cilok Premium. Kami percaya bahwa kualitas bahan adalah kunci utama untuk menciptakan "Rasa yang dulu pernah ada".</p>
-            <p>Berawal dari gerobak keliling di area Ciparay dan Cibaduyut, kini kami mengintegrasikan teknologi digital untuk mempermudah pelanggan dalam bertransaksi dan mendapatkan informasi produk kami.</p>
+            <p>Berawal dari gerobak keliling di area Ciparay dan Cibaduyut, kini kami mengintegrasikan teknologi digital untuk mempermudah pelanggan dalam bertransaksi.</p>
             <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
         </div>
     `;
 }
+
+
+
+
+
 
 function showRefund() {
     document.getElementById('dokumen-title').textContent = 'Refund Policy';
@@ -1180,6 +1239,83 @@ function kirimTestimoni() {
         btnKirim.style.opacity = "1";
     });
 }
+
+
+function showPesancilok() {
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Katalog Cilok Premium';
+    
+    const contentSection = doc.querySelector('.dokumen-content-section');
+    contentSection.scrollTop = 0;
+
+    // Data Produk Nasuka Foods
+    const produkCilok = [
+        {
+            nama: "Cilok Isian Gajih",
+            desc: "Sensasi lumer di mulut dengan isian lemak sapi (gajih) pilihan yang gurih dan juicy.",
+            img: "https://nasukafoods.site/image/cilok_gajih.jpg" // Ganti dengan URL foto asli Anda
+        },
+        {
+            nama: "Cilok Isian Ayam Suwir",
+            desc: "Cilok kenyal dengan isian ayam suwir bumbu rempah rahasia yang melimpah.",
+            img: "https://nasukafoods.site/image/cilok_ayam.jpg"
+        },
+        {
+            nama: "Cilok Isian Telor Puyuh",
+            desc: "Isian telur puyuh utuh yang memberikan rasa premium dan mengenyangkan di setiap gigitan.",
+            img: "https://nasukafoods.site/image/cilok_puyuh.jpg"
+        },
+        {
+            nama: "Cilok Polos Original",
+            desc: "Cilok tanpa isian dengan tekstur paling kenyal, sangat nikmat dipadukan dengan bumbu kacang 100% murni.",
+            img: "https://nasukafoods.site/image/cilok_polos.jpg"
+        },
+        {
+            nama: "Paket Mix Nasuka",
+            desc: "Kombinasi semua varian isian dalam satu kemasan. Cocok untuk yang ingin mencoba semua rasa.",
+            img: "https://nasukafoods.site/image/cilok_mix.jpg"
+        }
+    ];
+
+    let html = `
+        <div style="background: #fff8e1; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffe082;">
+            <p style="font-size: 13px; color: #795548; margin: 0; line-height: 1.5;">
+                <i class="fas fa-info-circle"></i> <b>Informasi Pemesanan:</b><br>
+                Pesanan dilakukan <b>H-2 (2 hari sebelumnya)</b>. <br>
+                🚚 <b>Gratis Ongkir</b> khusus wilayah Cibaduyut Raya!
+            </p>
+        </div>
+    `;
+
+    produkCilok.forEach(p => {
+        const pesanWA = encodeURIComponent(`Halo Nasuka Foods, saya ingin pesan *${p.nama}*.\n\nAlamat Pengiriman: ${localUser.Alamat}`);
+        
+        html += `
+            <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee;">
+                <img src="${p.img}" onerror="this.src='https://nasukafoods.site/image/nasukaroom.jpg'" style="width: 100%; height: 180px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h4 style="margin: 0 0 8px 0; color: #333; font-size: 17px;">${p.nama}</h4>
+                    <p style="font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 15px;">${p.desc}</p>
+                    <a href="https://wa.me/62859109819017?text=${pesanWA}" target="_blank" 
+                       style="display: flex; align-items: center; justify-content: center; background: #25D366; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px;">
+                        <i class="fab fa-whatsapp" style="margin-right: 8px; font-size: 18px;"></i> PESAN SEKARANG
+                    </a>
+                </div>
+            </div>
+        `;
+    });
+
+    html += `
+        <div style="text-align: center; padding: 10px 0 30px;">
+            <button onclick="showHome()" class="btn-transfer-action" style="background: #555;">KEMBALI KE BERANDA</button>
+        </div>
+    `;
+
+    contentSection.innerHTML = html;
+}
+
 </script>
 </body>
 </html>
