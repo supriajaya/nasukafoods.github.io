@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>     
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">   
     <style>
+        
         /* DANA Style for Voucher SPA */
 .dana-blue-gradient {
     background: linear-gradient(135deg, #118EEA 0%, #005691 100%);
@@ -103,7 +104,6 @@
     box-shadow: none;
 }
 
-        
         
         
         /* Styling Album & Quotes Baru */
@@ -250,7 +250,7 @@
             </div>
             
             <div onclick="showVoucher()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
-                <span>Beli Voucher Data</span>
+                <span>Voucher Digital</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
         </div>
@@ -260,18 +260,22 @@
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/image/nasukaroom.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Chat Admin</span>
+                <span>Customers Service</span>
             </div>
         </div>
 
-        <a href="https://nasukafoods.site/testimoni.html" target="_self" class="banner" style="text-decoration: none; display: flex;">
-            <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
-                <span id="blinking-txt" style="display: block; width: 100%; white-space: normal;">
-                    <strong>Postingan Pelanggan</strong>
-                </span>
-            </div>
-            <div class="banner-button">Lihat</div>
-        </a>
+        
+        <div onclick="showTestimoni()" class="banner" style="cursor: pointer; display: flex;">
+    <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
+        <span id="blinking-txt" style="display: block; width: 100%; white-space: normal;">
+            <strong>Testimoni Pelanggan</strong>
+        </span>
+    </div>
+    <div class="banner-button">Lihat</div>
+</div>
+
+        
+        
         
         
                 <div class="section-header-new">
@@ -285,7 +289,17 @@
         </div>
         
         
-            
+            <div id="testimoni-container" class="auth-container" style="display: none; background: #f9fafb;">
+    <div class="dokumen-card-modified" style="max-width: 100%; height: 100vh; border-radius: 0;">
+        <div class="dokumen-header">
+            <i class="fas fa-arrow-left" onclick="showHome()"></i>
+            <h3>Suara Pelanggan</h3>
+        </div>
+        <div id="testimoni-content" class="dokumen-content-section" style="padding: 10px;">
+            </div>
+    </div>
+</div>
+
         
 
               <div class="search-bar" id="marquee-search-bar">
@@ -477,11 +491,14 @@ if (localUser.ID) {
     });
 }
 
+
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #profil-container, #editprofil-container, #dokumen-container').forEach(el => { 
+    document.querySelectorAll('#home-container, #login-container, #profil-container, #editprofil-container, #dokumen-container, #testimoni-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
+
+
 
 function updateHomeDisplay() {
     const SaldoEl = document.getElementById('SaldoAmountDisplay');
@@ -1079,21 +1096,18 @@ const vProducts = [
 
 
 
-
-
-
 async function showVoucher() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
-    document.getElementById('dokumen-title').textContent = 'Pembelian Voucher Internet';
+    document.getElementById('dokumen-title').textContent = 'Pembelian Voucher Data Internet';
     
     const contentSection = doc.querySelector('.dokumen-content-section');
     contentSection.innerHTML = '<p style="text-align:center; padding:20px;">Mengecek ketersediaan stok...</p>';
     
     let html = `
         <div class="dana-blue-gradient">
-            <small style="opacity:0.9;">Saldo</small><br>
+            <small style="opacity:0.9;">Saldo Nasuka Anda</small><br>
             <strong style="font-size:24px;">Rp ${localUser.Saldo.toLocaleString('id-ID')}</strong>
         </div>
     `;
@@ -1110,7 +1124,7 @@ async function showVoucher() {
             const hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
             const cardClass = hasStock ? "" : "voucher-out-of-stock";
             const btnState = hasStock ? "" : "disabled";
-            const badgeStock = hasStock ? "" : `<div class="out-of-stock-label">Stok Habis</div>`;
+            const badgeStock = hasStock ? "" : `<div class="out-of-stock-label">Stok Habis Terjual</div>`;
 
             html += `
                 <div class="voucher-card-spa ${cardClass}">
@@ -1194,6 +1208,70 @@ async function prosesBeliVoucher(id, nama, harga) {
     }
 }
 
+
+function showTestimoni() {
+    hideAllContainers();
+    const container = document.getElementById('testimoni-container');
+    container.style.display = 'flex';
+    
+    // Render Struktur Input dan Filter
+    document.getElementById('testimoni-content').innerHTML = `
+        <div class="bg-white p-4 rounded-2xl shadow-sm mb-6">
+            <textarea id="testiText" placeholder="Bagikan ceritamu hari ini..." 
+                style="width:100%; height:80px; padding:10px; border:1px solid #eee; border-radius:12px; font-size:14px;"></textarea>
+            <button onclick="kirimTestimoni()" style="width:100%; margin-top:10px; background:#ff9800; color:white; font-weight:bold; padding:12px; border:none; border-radius:12px;">KIRIM POSTINGAN</button>
+        </div>
+        <div id="containerList" class="space-y-6">
+            <p style="text-align:center; color:#999;">Memuat obrolan...</p>
+        </div>
+    `;
+
+    // Ambil data dari Firebase
+    db.ref('testimoni_publik').on('value', (snapshot) => {
+        const listDiv = document.getElementById('containerList');
+        if (!listDiv) return;
+        listDiv.innerHTML = "";
+        let dataArray = [];
+        snapshot.forEach(c => { 
+            let val = c.val(); val.key = c.key; 
+            dataArray.push(val); 
+        });
+        dataArray.reverse().forEach(data => {
+            const d = new Date(data.timestamp);
+            const tgl = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+            
+            listDiv.innerHTML += `
+                <div style="background:white; padding:15px; border-radius:15px; border-left:5px solid #ff9800; margin-bottom:15px; shadow:0 2px 5px rgba(0,0,0,0.05);">
+                    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                        <img src="${data.foto}" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+                        <div>
+                            <b style="font-size:13px;">${data.nama}</b><br>
+                            <small style="color:#aaa; font-size:10px;">${tgl} • Pelanggan</small>
+                        </div>
+                    </div>
+                    <p style="font-size:14px; color:#444; margin:0;">"${data.pesan}"</p>
+                </div>
+            `;
+        });
+    });
+}
+
+function kirimTestimoni() {
+    const pesan = document.getElementById('testiText').value.trim();
+    if (!localUser.ID) return alert("Yuk, login dulu!");
+    if (!pesan) return;
+    db.ref('testimoni_publik').push({
+        userID: localUser.ID, 
+        nama: localUser.Nama, 
+        foto: localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg", 
+        pesan: pesan, 
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).then(() => { document.getElementById('testiText').value = ""; });
+}
+
+
 </script>
 </body>
 </html>
+
+
