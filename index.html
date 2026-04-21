@@ -10,9 +10,43 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>     
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">   
     <style>
+        
+        /* Mengatur kontainer utama agar menggunakan Flexbox */
+.other-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Item berjejer dari kiri */
+    gap: 10px; /* Jarak antar item */
+    padding: 10px;
+}
+
+/* Mengatur lebar tiap item agar muat 6 per baris */
+.other-features .other-feature-item {
+    flex: 0 0 calc(16.66% - 10px); /* 100% / 6 = 16.66% */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+/* Memastikan gambar/ikon menyesuaikan lebar item */
+.other-feature-icon {
+    width: 100%;
+    max-width: 60px; /* Sesuaikan ukuran ikon agar tidak terlalu besar/kecil */
+    aspect-ratio: 1 / 1
+
+.product-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+        
 .dana-blue-gradient {
     background: linear-gradient(135deg, #118EEA 0%, #005691 100%);
-    color: white;
+    color: white;c
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 20px;
@@ -237,23 +271,26 @@
             </div>
             
             <div onclick="showChat()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
-                <span>Chat</span>
+                <span>Kontak admin</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
+            
+            
+            
         </div>
 
         <div class="main-features">     
                
             <div class="other-feature-item" onclick="showVoucher()">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/image/nasukaroom.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/paketdata.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Beli Voucher</span>
             </div>
             
             <div class="other-feature-item" onclick="showPesancilok()">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/image/nasukaroom.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/isiangajih.jpg" alt="" class="product-icon-img">
                 </div>
                 <span>Pesan Cilok</span>
             </div>
@@ -287,9 +324,9 @@
     </div>
 
     <div class="search-bar" id="marquee-search-bar">
-        <i class="">Nasuka Foods Partner</i>
+        <i class="">Power & Partner</i>
         <div class="marquee-content">
-            <span id="running-text"></span>
+            <span id="running-text"></spaon>
         </div>
     </div>
 
@@ -936,7 +973,13 @@ function loadDynamicPartners() {
         let htmlContent = '';
         snapshot.forEach((child) => {
             const data = child.val();
-            htmlContent += `<a href="${data.url || '#'}" target="_self" class="other-feature-item"><div class="other-feature-icon"><img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'"></div><span>${data.nama}</span></a>`;
+            // Menghapus tag <span>${data.nama}</span> agar hanya menampilkan ikon
+            htmlContent += `
+                <a href="${data.url || '#'}" target="_self" class="other-feature-item">
+                    <div class="other-feature-icon">
+                        <img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">
+                    </div>
+                </a>`;
         });
         container.innerHTML = htmlContent;
     });
@@ -1255,7 +1298,7 @@ function showPesancilok() {
         {
             nama: "Cilok Isian Gajih",
             desc: "Sensasi lumer di mulut dengan isian lemak sapi (gajih) pilihan yang gurih dan juicy.",
-            img: "https://nasukafoods.site/image/cilok_gajih.jpg" // Ganti dengan URL foto asli Anda
+            img: "https://nasukafoods.site/image/isiangajih.jpg" // Ganti dengan URL foto asli Anda
         },
         {
             nama: "Cilok Isian Ayam Suwir",
