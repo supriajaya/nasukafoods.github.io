@@ -25,10 +25,9 @@
         .bg-empty { background: #f8d7da; color: #721c24; }
         .reply-item { border-left: 2px solid #ef4444; margin-top: 8px; padding-left: 8px; }
         
-        /* Lock Screen Overlay */
         #lockScreen { 
             position: fixed; inset: 0; background: #0f172a; z-index: 9999; 
-            display: flex; items-center; justify-content: center; padding: 20px;
+            display: flex; align-items: center; justify-content: center; padding: 20px;
         }
     </style>
 </head>
@@ -91,28 +90,21 @@
                         <option value="ax4">Axis 50GB+ kuota lokal 60hari(ax4)</option>                         
                         <option value="is1">Indosat 5GB 2hari(is1)</option>
                         <option value="is2">IM3 3GB (is2)</option>               
-                        <option value="ts1">Telkomsel 0,5GB + 2,5GB lokal(ts1)</option>
-                        <option value="ts2">Telkomsel 20GB (ts2)</option>              
+                        <option value="ts1">Telkomsel B + GB Bandung(ts1)</option>
+                        <option value="ts2">Telkomsel 0.5GB +2.5GB Bandung 5hari (ts2)</option>              
                         <option value="xl1">XL 0,75GB (xl1)</option>
                         <option value="xl2">XL 100GB (xl2)</option>  
                         <option value="sf1">Smartfren 1GB 3hari(sf1)</option>                       
                         <option value="sf2">Smartfren 100GB 28hari (sf2)</option>                    
-                    
-     <option value="tr1">Tri 2GB 1hari(tr1)</option>                       
-     <option value="tr2">Tri 3GB 3hari (tr2)</option>                    
-                                     
-                    
-                    
-                    
+                        <option value="tr1">Tri 2GB 1hari(tr1)</option>                       
+                        <option value="tr2">Tri 3GB 3hari (tr2)</option>                    
+                    </optgroup>
                     <optgroup label="Voucher Wifi Nits Cell">
                         <option value="nc1">Nits Cell 6Jam (nc1)</option>
                         <option value="nc2">Nitscell 12Jam (nc2)</option>                 
                         <option value="nc3">Nits Cell 24Jam (nc3)</option>
                         <option value="nc4">Nitscell 7hari (nc4)</option>
                     </optgroup>                 
-                    
-                    
-                    
                     <optgroup label="Voucher Hiburan">
                         <option value="nf1">Netflix 1 Day (nf1)</option>
                         <option value="nf2">Netflix 10 Day (nf2)</option>                 
@@ -226,14 +218,18 @@
     </nav>
 
     <script>
-        // --- SISTEM LOGIN PASSWORD ---
+        // --- SISTEM AKSES OTOMATIS & PASSWORD ---
+        function unlockSystem() {
+            document.getElementById('lockScreen').style.display = 'none';
+            document.body.classList.remove('locked');
+            sessionStorage.setItem('nasuka_auth', 'true');
+        }
+
         function checkAccess() {
             const pass = document.getElementById('adminPass').value;
             const errorMsg = document.getElementById('errPass');
             if (pass === "2111985") {
-                sessionStorage.setItem('nasuka_auth', 'true');
-                document.getElementById('lockScreen').style.display = 'none';
-                document.body.classList.remove('locked');
+                unlockSystem();
             } else {
                 errorMsg.classList.remove('hidden');
                 document.getElementById('adminPass').value = "";
@@ -260,7 +256,6 @@
             window.scrollTo(0,0);
         }
 
-        // --- MANAJEMEN VOUCHER ---
         function simpanVoucherDatabase() {
             const id = document.getElementById('productID').value;
             const codes = document.getElementById('voucherCode').value;
@@ -294,7 +289,6 @@
             });
         }
 
-        // --- MANAJEMEN USER ---
         function loadUsers() {
             db.ref('users').on('value', (snap) => {
                 const container = document.getElementById('userListOtoritas');
@@ -349,7 +343,6 @@
         }
         function closeModal() { $('#historyModal').hide(); }
 
-        // --- MANAJEMEN CHAT ---
         db.ref('admin_inbox').on('value', (snap) => {
             const list = document.getElementById('userListChat');
             const listDel = document.getElementById('userListDel');
@@ -392,7 +385,6 @@
             $('#adminInput').val('');
         }
 
-        // --- MANAJEMEN MODERASI TESTIMONI ---
         function loadModerasiPostingan() {
             db.ref('testimoni_publik').on('value', (snap) => {
                 const container = document.getElementById('containerPostingan');
@@ -443,7 +435,6 @@
         function hapusPostingan(id) { if (confirm("Hapus postingan ini?")) db.ref(`testimoni_publik/${id}`).remove(); }
         function hapusBalasan(postId, replyId) { if (confirm("Hapus balasan ini?")) db.ref(`testimoni_publik/${postId}/balasan/${replyId}`).remove(); }
 
-        // --- MANAJEMEN PARTNER ---
         function savePartner() {
             const n = $('#pNama').val(), i = $('#pImage').val(), u = $('#pUrl').val();
             if(n && i) db.ref('partners_list').push({ nama: n, image: i, url: u }).then(() => { $('#pNama').val(''); $('#pImage').val(''); $('#pUrl').val(''); });
@@ -465,7 +456,6 @@
             });
         });
 
-        // --- MANAJEMEN SPONSOR ---
         function saveSponsor() {
             const n = $('#spName').val(), u = $('#spUrl').val(), i = $('#spImg').val();
             if(n) db.ref('sponsors').push({ nama: n, url: u, image: i }).then(() => { $('#spName').val(''); $('#spUrl').val(''); $('#spImg').val(''); });
@@ -514,13 +504,19 @@
         }
 
         $(document).ready(() => {
-            // Cek status login saat reload
-            if (sessionStorage.getItem('nasuka_auth') === 'true') {
-                document.getElementById('lockScreen').style.display = 'none';
-                document.body.classList.remove('locked');
+            // DETEKSI OTOMATIS: Berdasarkan Sesi atau Nomor HP VIP
+            const isAuth = sessionStorage.getItem('nasuka_auth') === 'true';
+            const savedPhone = localStorage.getItem('userPhone'); // Ganti 'userPhone' sesuai kunci di aplikasi Anda
+            const isVIP = (savedPhone === "0859109819017");
+
+            if (isAuth || isVIP) {
+                unlockSystem();
             }
+
             // Listener Enter Key
-            document.getElementById('adminPass').addEventListener("keyup", (e) => { if(e.key === "Enter") checkAccess(); });
+            document.getElementById('adminPass').addEventListener("keyup", (e) => { 
+                if(e.key === "Enter") checkAccess(); 
+            });
 
             loadUsers();
             monitorStokRealtime();
