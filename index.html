@@ -1284,6 +1284,8 @@ function kirimTestimoni() {
 }
 
 
+
+
 function showKatalog() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
@@ -1325,30 +1327,37 @@ function showKatalog() {
     let html = `
         <div style="background: #fff8e1; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffe082;">
             <p style="font-size: 13px; color: #795548; margin: 0; line-height: 1.5;">
-                <i class="fas fa-info-circle"></i> <b>Informasi Pemesanan:</b><br>
-                Pesanan dilakukan <b>H-2 (2 hari sebelumnya)</b>. <br>
-                🚚 <b>Gratis Ongkir</b> khusus wilayah Cibaduyut Raya!
+                <i class="fas fa-info-circle"></i> <b>Informasi tentang kami:</b><br>
+                Nasuka foods adalah anak perusahaan <strong>Nasuka Karya Abadi</stron></b>. <br>
+                Saat ini Nasuka Foods beroperasi di wilayah Cibaduyut - Kota bandung
             </p>
         </div>
     `;
 
+
+
+
     produkCilok.forEach(p => {
         const pesanWA = encodeURIComponent(`Halo Nasuka Foods, saya ingin pesan *${p.nama}*.\n\nAlamat Pengiriman: ${localUser.Alamat}`);
         
-        html += `
-            <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee;">
-                <img src="${p.img}" onerror="this.src='https://nasukafoods.site/image/nasukaroom.jpg'" style="width: 100%; height: 180px; object-fit: cover;">
-                <div style="padding: 15px;">
-                    <h4 style="margin: 0 0 8px 0; color: #333; font-size: 17px;">${p.nama}</h4>
-                    <p style="font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 15px;">${p.desc}</p>
-                    <a href="https://wa.me/62859109819017?text=${pesanWA}" target="_blank" 
-                       style="display: flex; align-items: center; justify-content: center; background: #25D366; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px;">
-                        <i class="fab fa-whatsapp" style="margin-right: 8px; font-size: 18px;"></i> PESAN SEKARANG
-                    </a>
-                </div>
-            </div>
-        `;
-    });
+       
+html += `
+    <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee;">
+        <img src="${p.img}" onerror="this.src='https://nasukafoods.site/image/nasukaroom.jpg'" style="width: 100%; height: 180px; object-fit: cover;">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 8px 0; color: #333; font-size: 17px;">${p.nama}</h4>
+            <p style="font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 15px;">${p.desc}</p>
+            
+            <button onclick="showChat()" 
+               style="width: 100%; display: flex; align-items: center; justify-content: center; background: #118EEA; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer;">
+                <i class="fas fa-comments" style="margin-right: 8px; font-size: 18px;"></i> CHAT ADMIN
+            </button>
+        </div>
+    </div>
+`;
+
+      });
+    
 
     html += `
         <div style="text-align: center; padding: 10px 0 30px;">
@@ -1358,6 +1367,19 @@ function showKatalog() {
 
     contentSection.innerHTML = html;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 </body>
