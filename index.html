@@ -288,11 +288,11 @@
                 <span>Beli Voucher</span>
             </div>
             
-            <div class="other-feature-item" onclick="showPesancilok()">
+            <div class="other-feature-item" onclick="showKatalog()">
                 <div class="other-feature-icon setor-tarik-icon">
-                    <img src="https://nasukafoods.site/image/isiangajih.jpg" alt="" class="product-icon-img">
+                    <img src="https://nasukafoods.site/image/nasukaroom.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Pesan Cilok</span>
+                <span>Tentang Kami</span>
             </div>
                
             
@@ -1080,7 +1080,7 @@ const vProducts = [
         { id: "nc2", name: "Nits Cell 12Jam", price: 2800, img: "https://nasukafoods.site/image/nitscell.jpg" }
     ]},
     { category: "Voucher AXIS", items: [
-        { id: "ax2", name: "Axis 5GB 1hari", price: 7600, img: "https://nasukafoods.site/image/axis.jpg" },
+        { id: "ax2", name: "Axis 5GB 1hari", price: 7250, img: "https://nasukafoods.site/image/axis.jpg" },
         { id: "ax3", name: "Axis 5GB 2hari", price: 11000, img: "https://nasukafoods.site/image/axis.jpg" }
     ]},
     { category: "Voucher INDOSAT", items: [
@@ -1284,11 +1284,11 @@ function kirimTestimoni() {
 }
 
 
-function showPesancilok() {
+function showKatalog() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
-    document.getElementById('dokumen-title').textContent = 'Katalog Cilok Premium';
+    document.getElementById('dokumen-title').textContent = 'Katalog Kami';
     
     const contentSection = doc.querySelector('.dokumen-content-section');
     contentSection.scrollTop = 0;
@@ -1296,29 +1296,29 @@ function showPesancilok() {
     // Data Produk Nasuka Foods
     const produkCilok = [
         {
-            nama: "Cilok Isian Gajih",
-            desc: "Sensasi lumer di mulut dengan isian lemak sapi (gajih) pilihan yang gurih dan juicy.",
-            img: "https://nasukafoods.site/image/isiangajih.jpg" // Ganti dengan URL foto asli Anda
+            nama: "Cita Rasa Autentik, Kualitas Tanpa Kompromi. ",
+            desc: "Nasuka Foods adalah pilar yang bergerak di bidang kuliner, dengan spesialisasi pada jajanan khas nusantara seperti Cilok dan Pempek. Kami memegang teguh filosofi Premium Soul, di mana kualitas bahan baku adalah prioritas mutlak. Kami menjamin penggunaan 100% saus kacang murni tanpa bahan pengisi (filler) seperti kedelai atau tepung berlebih, guna menghadirkan rasa yang jujur dan berkelas. ​Saat ini, Nasuka Foods telah merambah pasar Ready-to-Cook dengan teknologi vacuum-sealed untuk memastikan kesegaran produk hingga ke tangan konsumen di luar wilayah operasional harian kami di Bandung.",
+            img: "https://nasukafoods.site/image/nasukaroom.jpg" // Ganti dengan URL foto asli Anda
         },
         {
-            nama: "Cilok Isian Ayam Suwir",
-            desc: "Cilok kenyal dengan isian ayam suwir bumbu rempah rahasia yang melimpah.",
+            nama: "Konektivitas Tanpa Batas untuk Masa Depan.",
+            desc: "Nasuka Wireless berfokus pada penyediaan solusi infrastruktur jaringan dan distribusi konektivitas digital. Kami memahami bahwa di era digital ini, akses internet yang stabil adalah kebutuhan primer. Divisi ini melayani instalasi, manajemen jaringan, hingga pengembangan sistem voucer berbasis mikrotik yang efisien untuk kebutuhan UMKM maupun lingkungan residensial. Kami hadir untuk memastikan transisi digital usaha Anda berjalan mulus dengan dukungan teknis yang andal.",
             img: "https://nasukafoods.site/image/cilok_ayam.jpg"
         },
         {
-            nama: "Cilok Isian Telor Puyuh",
-            desc: "Isian telur puyuh utuh yang memberikan rasa premium dan mengenyangkan di setiap gigitan.",
+            nama: "Estetika dan Presisi dalam Arsitektur Modern.",
+            desc: "Nasuka Karya Facade adalah divisi yang bergerak di bidang jasa konstruksi dan spesialis eksterior bangunan. Kami fokus pada pengerjaan fasad yang menggabungkan nilai estetika tinggi dengan ketahanan struktural. Dengan pendekatan desain yang minimalis namun kokoh, kami melayani transformasi tampilan bangunan komersial maupun hunian agar memiliki karakter yang kuat dan profesional. Presisi adalah standar kerja kami dalam setiap proyek yang dipercayakan.",
             img: "https://nasukafoods.site/image/cilok_puyuh.jpg"
         },
         {
-            nama: "Cilok Polos Original",
-            desc: "Cilok tanpa isian dengan tekstur paling kenyal, sangat nikmat dipadukan dengan bumbu kacang 100% murni.",
+            nama: "Inovasi Teknis dan Performa Tinggi.",
+            desc: "Nasuka Kawasaki Labs merupakan wadah dedikasi kami terhadap dunia otomotif, khususnya performa tinggi dan modifikasi teknis. Divisi ini mengkhususkan diri pada riset pengembangan, kustomisasi komponen, dan optimasi kendaraan sport. Dengan basis keahlian pada kendaraan berperforma tinggi seperti seri Kawasaki Ninja, kami menawarkan solusi modifikasi yang tidak hanya mengedepankan visual yang tajam, tetapi juga fungsionalitas dan keamanan berkendara yang optimal..",
             img: "https://nasukafoods.site/image/cilok_polos.jpg"
         },
         {
-            nama: "Paket Mix Nasuka",
-            desc: "Kombinasi semua varian isian dalam satu kemasan. Cocok untuk yang ingin mencoba semua rasa.",
-            img: "https://nasukafoods.site/image/cilok_mix.jpg"
+            nama: "Sinergi Multi-Sektor untuk Pertumbuhan Berkelanjutan.",
+            desc: "Sebagai perusahaan induk, Nasuka Karya Abadi menjadi pusat komando yang mengintegrasikan berbagai unit bisnis mulai dari sektor kuliner, teknologi informasi, hingga konstruksi dan otomotif. Kami percaya bahwa diversifikasi adalah kunci ketahanan bisnis. Melalui manajemen yang terpusat, kami memastikan setiap divisi beroperasi dengan standar keunggulan yang sama. Nasuka Karya Abadi adalah simbol dari semangat kewirausahaan yang adaptif, inovatif, dan terus berkembang untuk memberikan nilai tambah bagi masyarakat luas.",
+            img: "https://nasukafoods.site/image/nasukaroom.jpg"
         }
     ];
 
