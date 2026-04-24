@@ -267,7 +267,7 @@
             <div class="balance-title">Selamat Datang,</div>
             <div class="balance-details">
                 <span class="balance-amount" id="SaldoAmountDisplay" style="font-size: 22px;">...</span> 
-                <i class="fas fa-paper-plane balance-icon" onclick="showKirim()" title="Kirim Saldo"></i>
+                <i class="fas fa-paper-plane balance-icon" onclick="kirimsaldonasuka()" title="Kirim Saldo"></i>
             </div>
             
             <div onclick="showNews()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
@@ -1084,7 +1084,7 @@ const vProducts = [
   { category: "voucher Nits Cell ", items: [
         { id: "nc1", name: "Nits Cell 6Jam", desc: "Akses internet unlimited khusus warga ciparay tengah durasi 6 jam <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 1750, img: "https://nasukafoods.site/image/nitscell.jpg" },
         
-          { id: "rw", name: "Saldo 10.000", desc: "Reward pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 0, img: "https://nasukafoods.site/image/saldo10rb.jpg" }
+          { id: "rw", name: "Saldo Gratis 100.000", desc: "Reward pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 0, img: "https://nasukafoods.site/image/saldo100rb.jpg" }
         
         
     ]},
@@ -1121,7 +1121,7 @@ async function showVoucher() {
 
         if (historySnap) {
             historySnap.forEach(child => {
-                if (child.val().produk === "Reward 100 Transaksi") sudahKlaimReward = true;
+                if (child.val().produk === "Reward 1000 Transaksi") sudahKlaimReward = true;
             });
         }
 
@@ -1137,7 +1137,7 @@ async function showVoucher() {
             
             cat.items.forEach(p => {
                 let isReward = p.id === "rw";
-                let isLocked = isReward && totalTransaksi < 100;
+                let isLocked = isReward && totalTransaksi < 1000;
                 let hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
 
                 let labelText = "";
@@ -1145,7 +1145,7 @@ async function showVoucher() {
                 
                 if (isReward) {
                     if (sudahKlaimReward) { labelText = "SUDAH DIKLAIM"; labelStyle = "background: #27ae60;"; }
-                    else if (isLocked) { labelText = `TERKUNCI (${totalTransaksi}/100)`; labelStyle = "background: orange;"; }
+                    else if (isLocked) { labelText = `Buka (${totalTransaksi}/1000)`; labelStyle = "background: orange;"; }
                 } else if (!hasStock) {
                     labelText = "STOK HABIS";
                     labelStyle = "background: rgba(255, 0, 0, 0.8);";
@@ -1164,7 +1164,7 @@ async function showVoucher() {
                             <img src="${p.img}" style="width: 40px; height: 40px; margin-bottom: 5px;">
                             <span class="v-name-spa" style="height: auto; margin-bottom: 2px;">${p.name}</span>
                             <div style="font-size: 10px; color: #888; line-height: 1.2; margin-bottom: 10px; min-height: 24px;">
-                                ${isReward ? (sudahKlaimReward ? `<b style="color:#27ae60;">Event selesai.</b>` : (isLocked ? `<b style="color:#ee4d2d;">Butuh ${100 - totalTransaksi} transaksi lagi.</b>` : `<b style="color:#27ae60;">Siap diklaim!</b>`)) : (p.desc || 'Voucher internet')}
+                                ${isReward ? (sudahKlaimReward ? `<b style="color:#27ae60;">Event selesai.</b>` : (isLocked ? `<b style="color:#ee4d2d;">Lakukan ${1000 - totalTransaksi} transaksi lagi untuk membuka kunci.</b>` : `<b style="color:#27ae60;">Siap diklaim!</b>`)) : (p.desc || 'Voucher internet')}
                             </div>
                         </div>
                         <div>
@@ -1196,21 +1196,21 @@ async function prosesBeliVoucher(id, nama, harga) {
         // Cek Double Klaim
         let doubleCheck = false;
         hSnap.forEach(child => {
-            if (child.val().produk === "Reward 100 Transaksi") doubleCheck = true;
+            if (child.val().produk === "Reward 1000 Transaksi") doubleCheck = true;
         });
         if (doubleCheck) return alert("Anda sudah pernah mengklaim reward ini.");
 
         // Cek Syarat 100 Transaksi
-        if (hSnap.numChildren() < 100) return alert("Ups! Kamu butuh 100 transaksi untuk mengklaim ini.");
+        if (hSnap.numChildren() < 1000) return alert("Ups! Kamu butuh 1000 transaksi untuk mengklaim ini.");
         
-        const hadiah = 10000;
+        const hadiah = 100000;
         const timestamp = new Date().toLocaleString('id-ID');
         const invID = "RW" + Date.now();
 
         try {
             await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) + hadiah);
             await db.ref(`history/${localUser.ID}`).push({
-                produk: "Reward 100 Transaksi",
+                produk: "Reward 1000 Transaksi",
                 total: -hadiah, 
                 tanggal: timestamp,
                 status: "BERHASIL",
@@ -1237,23 +1237,23 @@ async function prosesBeliVoucher(id, nama, harga) {
     // VALIDASI KHUSUS REWARD 100 TRANSAKSI
     if (id === "rw") {
         const hSnap = await db.ref(`history/${localUser.ID}`).once('value');
-        if (hSnap.numChildren() < 100) return alert("Ups! Kamu butuh 100 transaksi untuk mengklaim ini.");
+        if (hSnap.numChildren() < 1000) return alert("Ups! Kamu butuh 1000 transaksi untuk mengklaim ini.");
         
         // LOGIKA KLAIM HADIAH (SALDO +10.000)
-        const hadiah = 10000;
+        const hadiah = 100000;
         const timestamp = new Date().toLocaleString('id-ID');
         const invID = "RW" + Date.now();
 
         try {
             await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) + hadiah);
             await db.ref(`history/${localUser.ID}`).push({
-                produk: "Reward 100 Transaksi",
+                produk: "Reward 1000 Transaksi",
                 total: -hadiah, // Biar terbaca sebagai pemasukan di history
                 tanggal: timestamp,
                 status: "BERHASIL",
                 invoice: invID
             });
-            alert("Selamat! Reward Saldo Rp 10.000 berhasil masuk ke akun Anda.");
+            alert("Selamat! Reward Saldo Rp 100.000 berhasil masuk ke akun Anda.");
             window.location.reload();
             return;
         } catch(e) {
