@@ -46,7 +46,7 @@
         
 .dana-blue-gradient {
     background: linear-gradient(135deg, #118EEA 0%, #005691 100%);
-    color: white;c
+    color: white;
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 20px;
@@ -291,7 +291,7 @@
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/image/paketdata.jpg" alt="" class="product-icon-img">
                 </div>
-                <span>Beli Voucher</span>
+                <span></span>
             </div>
             
             <div class="other-feature-item" onclick="showKatalog()">
@@ -1081,8 +1081,12 @@ function showVideo(videoUrl) {
 }
 
 const vProducts = [
-  { category: "Voucher NITS CELL ", items: [
-        { id: "nc1", name: "Nits Cell 6Jam", desc: "Akses internet unlimited khusus warga ciparay tengah durasi 6 jam <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 1750, img: "https://nasukafoods.site/image/nitscell.jpg" }
+  { category: "voucher Nits Cell ", items: [
+        { id: "nc1", name: "Nits Cell 6Jam", desc: "Akses internet unlimited khusus warga ciparay tengah durasi 6 jam <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 1750, img: "https://nasukafoods.site/image/nitscell.jpg" },
+        
+          { id: "rw", name: "Saldo 10.000", desc: "Reward pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 0, img: "https://nasukafoods.site/image/saldo10rb.jpg" }
+        
+        
     ]},
     { category: "Voucher Data", items: [
         { id: "ax3", name: "Axis 5GB 2hari", desc: "Kuota utama 5GB berlaku di semua jaringan <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 10900, img: "https://nasukafoods.site/image/axis.jpg" },
@@ -1090,7 +1094,7 @@ const vProducts = [
         { id: "sf2", name: "Smartfren 10GB", desc: "Kuota 10GB (5GB Utama + 5GB Malam)<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
         { id: "ts2", name: "Telkomsel 0.5GB +2.5GB", desc: "Lokal data khusus area Jawa Barat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 14000, img: "https://nasukafoods.site/image/tsel.jpg" },
         { id: "xl1", name: "XL 0.75GB 3hari", desc: "Xtra Combo Mini masa aktif hemat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 9400, img: "https://nasukafoods.site/image/xl.jpg" },
-        { id: "by1", name: "By.u 75GB 3hari", desc: "Kuota gila-gilaan khusus pelanggan By.u <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 4000, img: "https://nasukafoods.site/image/byu.jpg" },
+       
         { id: "tr1", name: "Tree 2GB 1hari", desc: "Kuota Happy harian super cepat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 7500, img: "https://nasukafoods.site/image/kartutri.jpg" }
     ]},
 ];
@@ -1104,50 +1108,124 @@ async function showVoucher() {
     const contentSection = doc.querySelector('.dokumen-content-section');
     contentSection.innerHTML = '<p style="text-align:center; padding:20px;">Mengecek ketersediaan stok...</p>';
     
-    let html = `
-        <div class="dana-blue-gradient">
-            <small style="opacity:0.9;">Saldo Nasuka Anda</small><br>
-            <strong style="font-size:24px;">Rp ${localUser.Saldo.toLocaleString('id-ID')}</strong>
-        </div>
-    `;
+    try {
+        // OPTIMASI: Mengambil data stok dan history secara bersamaan
+        const [stockSnapshot, historySnap] = await Promise.all([
+            db.ref('stok_voucher').once('value'),
+            localUser.ID ? db.ref(`history/${localUser.ID}`).once('value') : Promise.resolve(null)
+        ]);
 
-    const stockSnapshot = await db.ref('stok_voucher').once('value');
-    const allStock = stockSnapshot.val() || {};
+        const allStock = stockSnapshot.val() || {};
+        let totalTransaksi = historySnap ? historySnap.numChildren() : 0;
+        let sudahKlaimReward = false;
 
-    vProducts.forEach(cat => {
-        html += `<div class="category-title-spa" style="border-left-color: #118EEA;">${cat.category}</div><div class="voucher-grid-spa">`;
-        
-        cat.items.forEach(p => {
-            const hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
-            const cardClass = hasStock ? "" : "voucher-out-of-stock";
-            const btnState = hasStock ? "" : "disabled";
-            const badgeStock = hasStock ? "" : `<div class="out-of-stock-label">Stok Habis</div>`;
+        if (historySnap) {
+            historySnap.forEach(child => {
+                if (child.val().produk === "Reward 100 Transaksi") sudahKlaimReward = true;
+            });
+        }
 
-            html += `
-                <div class="voucher-card-spa ${cardClass}" style="padding: 12px; height: auto; min-height: 210px;">
-                    ${badgeStock}
-                    <div style="flex-grow: 1;">
-                        <img src="${p.img}" style="width: 40px; height: 40px; margin-bottom: 5px;">
-                        <span class="v-name-spa" style="height: auto; margin-bottom: 2px;">${p.name}</span>
-                        <div style="font-size: 10px; color: #888; line-height: 1.2; margin-bottom: 10px; min-height: 24px;">
-                            ${p.desc || 'Voucher internet fisik/digital'}
+        let html = `
+            <div class="dana-blue-gradient">
+                <small style="opacity:0.9;">Saldo Nasuka Anda</small><br>
+                <strong style="font-size:24px;">Rp ${localUser.Saldo.toLocaleString('id-ID')}</strong>
+            </div>
+        `;
+
+        vProducts.forEach(cat => {
+            html += `<div class="category-title-spa" style="border-left-color: #118EEA;">${cat.category}</div><div class="voucher-grid-spa">`;
+            
+            cat.items.forEach(p => {
+                let isReward = p.id === "rw";
+                let isLocked = isReward && totalTransaksi < 100;
+                let hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
+
+                let labelText = "";
+                let labelStyle = "";
+                
+                if (isReward) {
+                    if (sudahKlaimReward) { labelText = "SUDAH DIKLAIM"; labelStyle = "background: #27ae60;"; }
+                    else if (isLocked) { labelText = `TERKUNCI (${totalTransaksi}/100)`; labelStyle = "background: orange;"; }
+                } else if (!hasStock) {
+                    labelText = "STOK HABIS";
+                    labelStyle = "background: rgba(255, 0, 0, 0.8);";
+                }
+
+                const cardClass = (isReward ? (!isLocked && !sudahKlaimReward) : hasStock) ? "" : "voucher-out-of-stock";
+                const btnState = (isReward ? (!isLocked && !sudahKlaimReward) : hasStock) ? "" : "disabled";
+                const finalBadge = labelText ? `<div class="out-of-stock-label" style="${labelStyle}">${labelText}</div>` : "";
+
+                let btnText = isReward ? (sudahKlaimReward ? "SELESAI" : (isLocked ? "TERKUNCI" : "KLAIM")) : (hasStock ? "BELI" : "HABIS");
+
+                html += `
+                    <div class="voucher-card-spa ${cardClass}" style="padding: 12px; height: auto; min-height: 210px;">
+                        ${finalBadge}
+                        <div style="flex-grow: 1;">
+                            <img src="${p.img}" style="width: 40px; height: 40px; margin-bottom: 5px;">
+                            <span class="v-name-spa" style="height: auto; margin-bottom: 2px;">${p.name}</span>
+                            <div style="font-size: 10px; color: #888; line-height: 1.2; margin-bottom: 10px; min-height: 24px;">
+                                ${isReward ? (sudahKlaimReward ? `<b style="color:#27ae60;">Event selesai.</b>` : (isLocked ? `<b style="color:#ee4d2d;">Butuh ${100 - totalTransaksi} transaksi lagi.</b>` : `<b style="color:#27ae60;">Siap diklaim!</b>`)) : (p.desc || 'Voucher internet')}
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <span class="v-price-spa" style="font-size: 14px;">Rp ${p.price.toLocaleString('id-ID')}</span>
-                        <button class="btn-beli-spa" ${btnState} onclick="prosesBeliVoucher('${p.id}', '${p.name}', ${p.price})" style="margin-top: 5px;">
-                            ${hasStock ? 'BELI' : 'HABIS'}
-                        </button>
-                    </div>
-                </div>
-            `;
+                        <div>
+                            <span class="v-price-spa" style="font-size: 14px;">Rp ${p.price.toLocaleString('id-ID')}</span>
+                            <button class="btn-beli-spa" ${btnState} onclick="prosesBeliVoucher('${p.id}', '${p.name}', ${p.price})" style="margin-top: 5px;">
+                                ${btnText}
+                            </button>
+                        </div>
+                    </div>`;
+            });
+            html += `</div>`;
         });
-        html += `</div>`;
-    });
-    
-    contentSection.innerHTML = html;
+        
+        contentSection.innerHTML = html;
+    } catch (error) {
+        contentSection.innerHTML = '<p style="text-align:center; color:red;">Gagal memuat data. Periksa koneksi.</p>';
+    }
 }
 
+
+
+async function prosesBeliVoucher(id, nama, harga) {
+    if (!localUser.ID) return showLogin();
+    
+    // VALIDASI KHUSUS REWARD 100 TRANSAKSI
+    if (id === "rw") {
+        const hSnap = await db.ref(`history/${localUser.ID}`).once('value');
+        
+        // Cek Double Klaim
+        let doubleCheck = false;
+        hSnap.forEach(child => {
+            if (child.val().produk === "Reward 100 Transaksi") doubleCheck = true;
+        });
+        if (doubleCheck) return alert("Anda sudah pernah mengklaim reward ini.");
+
+        // Cek Syarat 100 Transaksi
+        if (hSnap.numChildren() < 100) return alert("Ups! Kamu butuh 100 transaksi untuk mengklaim ini.");
+        
+        const hadiah = 10000;
+        const timestamp = new Date().toLocaleString('id-ID');
+        const invID = "RW" + Date.now();
+
+        try {
+            await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) + hadiah);
+            await db.ref(`history/${localUser.ID}`).push({
+                produk: "Reward 100 Transaksi",
+                total: -hadiah, 
+                tanggal: timestamp,
+                status: "BERHASIL",
+                invoice: invID
+            });
+            alert("Selamat! Reward Saldo Rp 10.000 berhasil diklaim (1x kesempatan).");
+            window.location.reload();
+            return;
+        } catch(e) {
+            return alert("Gagal mengklaim reward.");
+        }
+    }
+    
+    // ... (logika pembelian voucher biasa tetap sama seperti sebelumnya)
+}
 
 
 
@@ -1155,6 +1233,34 @@ async function showVoucher() {
 
 async function prosesBeliVoucher(id, nama, harga) {
     if (!localUser.ID) return showLogin();
+    
+    // VALIDASI KHUSUS REWARD 100 TRANSAKSI
+    if (id === "rw") {
+        const hSnap = await db.ref(`history/${localUser.ID}`).once('value');
+        if (hSnap.numChildren() < 100) return alert("Ups! Kamu butuh 100 transaksi untuk mengklaim ini.");
+        
+        // LOGIKA KLAIM HADIAH (SALDO +10.000)
+        const hadiah = 10000;
+        const timestamp = new Date().toLocaleString('id-ID');
+        const invID = "RW" + Date.now();
+
+        try {
+            await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) + hadiah);
+            await db.ref(`history/${localUser.ID}`).push({
+                produk: "Reward 100 Transaksi",
+                total: -hadiah, // Biar terbaca sebagai pemasukan di history
+                tanggal: timestamp,
+                status: "BERHASIL",
+                invoice: invID
+            });
+            alert("Selamat! Reward Saldo Rp 10.000 berhasil masuk ke akun Anda.");
+            window.location.reload();
+            return;
+        } catch(e) {
+            return alert("Gagal mengklaim reward.");
+        }
+    }
+
     if (localUser.Saldo < harga) return alert("Saldo tidak mencukupi!");
     if (!confirm(`Beli ${nama} seharga Rp ${harga.toLocaleString()}?`)) return;
 
@@ -1307,7 +1413,7 @@ function showKatalog() {
         },
         {
             nama: "Estetika dan Presisi dalam Arsitektur Modern.",
-            desc: "Nasuka Karya Facade adalah divisi yang bergerak di bidang jasa konstruksi dan spesialis eksterior bangunan. Kami fokus pada pengerjaan fasad yang menggabungkan nilai estetika tinggi dengan ketahanan struktural. Dengan pendekatan desain yang minimalis namun kokoh, kami melayani transformasi tampilan bangunan komersial maupun hunian agar memiliki karakter yang kuat dan profesional. Presisi adalah standar kerja kami dalam setiap proyek yang dipercayakan.",
+            desc: "Nasuka Karya Facade adalah divisi yang bergerak di bidang jasa konstruksi and spesialis eksterior bangunan. Kami fokus pada pengerjaan fasad yang menggabungkan nilai estetika tinggi dengan ketahanan struktural. Dengan pendekatan desain yang minimalis namun kokoh, kami melayani transformasi tampilan bangunan komersial maupun hunian agar memiliki karakter yang kuat dan profesional. Presisi adalah standar kerja kami dalam setiap proyek yang dipercayakan.",
             img: "https://nasukafoods.site/image/cilok_puyuh.jpg"
         },
         {
