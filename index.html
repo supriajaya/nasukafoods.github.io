@@ -1082,25 +1082,16 @@ function showVideo(videoUrl) {
 
 const vProducts = [
   { category: "Voucher NITS CELL ", items: [
-        { id: "nc1", name: "Nits Cell 6Jam", price: 1750, img: "https://nasukafoods.site/image/nitscell.jpg" }
-     
-        
+        { id: "nc1", name: "Nits Cell 6Jam", desc: "Akses internet unlimited khusus warga ciparay tengah durasi 6 jam <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 1750, img: "https://nasukafoods.site/image/nitscell.jpg" }
     ]},
     { category: "Voucher Data", items: [
-    
-     { id: "ax3", name: "Axis 5GB 2hari", price: 10900, img: "https://nasukafoods.site/image/axis.jpg" },
-        { id: "is1", name: "Indosat 2GB 2hari", price: 10700, img: "https://nasukafoods.site/image/indosat.jpg" },
-       
-        { id: "sf2", name: "Smartfren 10GB", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
-   
-     
-        { id: "ts2", name: "Telkomsel 0.5GB +2.5GB 5hari", price: 14000, img: "https://nasukafoods.site/image/tsel.jpg" },
-   
-        { id: "xl1", name: "XL 0.75GB 3hari", price: 9400, img: "https://nasukafoods.site/image/xl.jpg" },
-     
-    
-        { id: "tr1", name: "Tree 2GB 1hari", price: 7500, img: "https://nasukafoods.site/image/kartutri.jpg" }
-      
+        { id: "ax3", name: "Axis 5GB 2hari", desc: "Kuota utama 5GB berlaku di semua jaringan <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 10900, img: "https://nasukafoods.site/image/axis.jpg" },
+        { id: "is1", name: "Indosat 2GB 2hari", desc: "Kuota nasional 2GB masa aktif 2 hari<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>  ", price: 10700, img: "https://nasukafoods.site/image/indosat.jpg" },
+        { id: "sf2", name: "Smartfren 10GB", desc: "Kuota 10GB (5GB Utama + 5GB Malam)<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
+        { id: "ts2", name: "Telkomsel 0.5GB +2.5GB", desc: "Lokal data khusus area Jawa Barat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 14000, img: "https://nasukafoods.site/image/tsel.jpg" },
+        { id: "xl1", name: "XL 0.75GB 3hari", desc: "Xtra Combo Mini masa aktif hemat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 9400, img: "https://nasukafoods.site/image/xl.jpg" },
+        { id: "by1", name: "By.u 75GB 3hari", desc: "Kuota gila-gilaan khusus pelanggan By.u <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 4000, img: "https://nasukafoods.site/image/byu.jpg" },
+        { id: "tr1", name: "Tree 2GB 1hari", desc: "Kuota Happy harian super cepat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 7500, img: "https://nasukafoods.site/image/kartutri.jpg" }
     ]},
 ];
 
@@ -1130,18 +1121,21 @@ async function showVoucher() {
             const hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
             const cardClass = hasStock ? "" : "voucher-out-of-stock";
             const btnState = hasStock ? "" : "disabled";
-            const badgeStock = hasStock ? "" : `<div class="out-of-stock-label">Stok Habis Terjual</div>`;
+            const badgeStock = hasStock ? "" : `<div class="out-of-stock-label">Stok Habis</div>`;
 
             html += `
-                <div class="voucher-card-spa ${cardClass}">
+                <div class="voucher-card-spa ${cardClass}" style="padding: 12px; height: auto; min-height: 210px;">
                     ${badgeStock}
-                    <div>
-                        <img src="${p.img}">
-                        <span class="v-name-spa">${p.name}</span>
+                    <div style="flex-grow: 1;">
+                        <img src="${p.img}" style="width: 40px; height: 40px; margin-bottom: 5px;">
+                        <span class="v-name-spa" style="height: auto; margin-bottom: 2px;">${p.name}</span>
+                        <div style="font-size: 10px; color: #888; line-height: 1.2; margin-bottom: 10px; min-height: 24px;">
+                            ${p.desc || 'Voucher internet fisik/digital'}
+                        </div>
                     </div>
                     <div>
-                        <span class="v-price-spa">Rp ${p.price.toLocaleString('id-ID')}</span>
-                        <button class="btn-beli-spa" ${btnState} onclick="prosesBeliVoucher('${p.id}', '${p.name}', ${p.price})">
+                        <span class="v-price-spa" style="font-size: 14px;">Rp ${p.price.toLocaleString('id-ID')}</span>
+                        <button class="btn-beli-spa" ${btnState} onclick="prosesBeliVoucher('${p.id}', '${p.name}', ${p.price})" style="margin-top: 5px;">
                             ${hasStock ? 'BELI' : 'HABIS'}
                         </button>
                     </div>
@@ -1153,6 +1147,11 @@ async function showVoucher() {
     
     contentSection.innerHTML = html;
 }
+
+
+
+
+
 
 async function prosesBeliVoucher(id, nama, harga) {
     if (!localUser.ID) return showLogin();
