@@ -2,35 +2,78 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nasuka Custom Map Creator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Peta Jejak Mandiri Nasuka</title>
     <style>
-        body { margin: 0; background: #1a1a1a; color: white; font-family: sans-serif; overflow: hidden; }
-        #mapCanvas { width: 100vw; height: 100vh; display: block; }
-        
-        .ui-panel {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(44, 62, 80, 0.9);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #34495e;
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: #ffffff; 
+            font-family: sans-serif; 
+            overflow: hidden; 
+            touch-action: none;
         }
 
-        .stats { font-size: 12px; color: #bdc3c7; margin-bottom: 10px; }
-        button { 
-            background: #27ae60; border: none; color: white; 
-            padding: 10px; border-radius: 5px; cursor: pointer; width: 100%;
+        /* Kanvas Utama */
+        #mapCanvas { 
+            display: block; 
+            background: #ffffff; 
+        }
+
+        /* Panel Status */
+        .info-panel {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            z-index: 10;
+        }
+
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .active { background-color: #2ecc71; }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        button {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<div class="ui-panel">
-    <strong>Nasuka Map Builder</strong>
-    <div class="stats" id="info">Menunggu GPS...</div>
-    <button onclick="downloadMapData()">Simpan Data Peta</button>
+<div class="info-panel">
+    <div style="font-weight: bold; margin-bottom: 5px;">Peta Jejak Ciparay Tengah</div>
+    <div style="font-size: 12px; color: #666;">
+        <span id="gps-dot" class="status-dot"></span>
+        <span id="gps-text">Mencari GPS...</span>
+    </div>
+</div>
+
+<div class="controls">
+    <button onclick="downloadData()">Unduh Jejak (.json)</button>
 </div>
 
 <canvas id="mapCanvas"></canvas>
@@ -38,86 +81,97 @@
 <script>
     const canvas = document.getElementById('mapCanvas');
     const ctx = canvas.getContext('2d');
-    const info = document.getElementById('info');
+    const gpsText = document.getElementById('gps-text');
+    const gpsDot = document.getElementById('gps-dot');
     
-    let pathData = [];
-    let scale = 50000; // Skala zoom untuk merubah koordinat GPS ke Pixel
-    let offset = { x: 0, y: 0 };
+    let track = [];
+    let scale = 150000; // Sensitivitas garis terhadap langkah kaki
+    let centerPos = null;
 
-    // Inisialisasi Ukuran Canvas
     function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        render();
+        draw();
     }
-    window.onresize = resize;
+
+    window.addEventListener('resize', resize);
     resize();
 
-    function lacak() {
+    function startTracking() {
         if ("geolocation" in navigator) {
             navigator.geolocation.watchPosition((pos) => {
                 const lat = pos.coords.latitude;
                 const lng = pos.coords.longitude;
-                
-                // Simpan koordinat mentah
-                const point = { lat: lat, lng: lng, time: new Date().getTime() };
-                pathData.push(point);
-                
-                // Set offset pertama kali agar posisi Anda ada di tengah layar
-                if (pathData.length === 1) {
-                    offset.x = lng;
-                    offset.y = lat;
+                const accuracy = pos.coords.accuracy;
+
+                // Update UI Status
+                gpsText.innerText = `Akurasi: ${accuracy.toFixed(1)}m`;
+                gpsDot.classList.add('active');
+
+                const currentPoint = { lat: lat, lng: lng };
+                track.push(currentPoint);
+
+                // Set titik tengah pertama kali
+                if (!centerPos) {
+                    centerPos = { lat: lat, lng: lng };
                 }
 
-                info.innerHTML = `Titik tercatat: ${pathData.length}<br>Akurasi: ${pos.coords.accuracy.toFixed(1)}m`;
-                render();
-            }, null, { enableHighAccuracy: true });
+                draw();
+            }, (err) => {
+                gpsText.innerText = "GPS Error";
+                gpsDot.classList.remove('active');
+            }, {
+                enableHighAccuracy: true,
+                maximumAge: 0
+            });
         }
     }
 
-    function render() {
+    function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        if (pathData.length < 2) return;
+        if (track.length < 2) return;
 
         ctx.beginPath();
-        ctx.strokeStyle = "#00ff00"; // Warna jalur hijau neon
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#000000"; // Garis Hitam
+        ctx.lineWidth = 2.5;
         ctx.lineJoin = "round";
+        ctx.lineCap = "round";
 
-        pathData.forEach((p, index) => {
-            // Konversi Koordinat ke Posisi Layar
-            const x = canvas.width / 2 + (p.lng - offset.x) * scale;
-            const y = canvas.height / 2 - (p.lat - offset.y) * scale;
+        track.forEach((point, i) => {
+            // Transformasi koordinat GPS ke posisi layar (X, Y)
+            const x = canvas.width / 2 + (point.lng - centerPos.lng) * scale;
+            const y = canvas.height / 2 - (point.lat - centerPos.lat) * scale;
 
-            if (index === 0) ctx.moveTo(x, y);
+            if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
         });
 
         ctx.stroke();
 
-        // Gambar posisi saat ini (dot merah)
-        const last = pathData[pathData.length - 1];
-        const lastX = canvas.width / 2 + (last.lng - offset.x) * scale;
-        const lastY = canvas.height / 2 - (last.lat - offset.y) * scale;
+        // Penanda posisi saat ini (Titik kecil)
+        const last = track[track.length - 1];
+        const lastX = canvas.width / 2 + (last.lng - centerPos.lng) * scale;
+        const lastY = canvas.height / 2 - (last.lat - centerPos.lat) * scale;
         
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "black";
         ctx.beginPath();
-        ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+        ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
         ctx.fill();
     }
 
-    function downloadMapData() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pathData));
+    function downloadData() {
+        if (track.length === 0) return alert("Belum ada jejak.");
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(track));
         const downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "jalur_nasuka_custom.json");
+        downloadAnchorNode.setAttribute("download", "jejak_gerobak_ciparay.json");
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
     }
 
-    lacak();
+    startTracking();
 </script>
 
 </body>
