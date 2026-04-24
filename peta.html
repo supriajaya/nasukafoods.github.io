@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Custom Map Creator</title>
+    <style>
+        body { margin: 0; background: #1a1a1a; color: white; font-family: sans-serif; overflow: hidden; }
+        #mapCanvas { width: 100vw; height: 100vh; display: block; }
+        
+        .ui-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #34495e;
+        }
+
+        .stats { font-size: 12px; color: #bdc3c7; margin-bottom: 10px; }
+        button { 
+            background: #27ae60; border: none; color: white; 
+            padding: 10px; border-radius: 5px; cursor: pointer; width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="ui-panel">
+    <strong>Nasuka Map Builder</strong>
+    <div class="stats" id="info">Menunggu GPS...</div>
+    <button onclick="downloadMapData()">Simpan Data Peta</button>
+</div>
+
+<canvas id="mapCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('mapCanvas');
+    const ctx = canvas.getContext('2d');
+    const info = document.getElementById('info');
+    
+    let pathData = [];
+    let scale = 50000; // Skala zoom untuk merubah koordinat GPS ke Pixel
+    let offset = { x: 0, y: 0 };
+
+    // Inisialisasi Ukuran Canvas
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        render();
+    }
+    window.onresize = resize;
+    resize();
+
+    function lacak() {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.watchPosition((pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                
+                // Simpan koordinat mentah
+                const point = { lat: lat, lng: lng, time: new Date().getTime() };
+                pathData.push(point);
+                
+                // Set offset pertama kali agar posisi Anda ada di tengah layar
+                if (pathData.length === 1) {
+                    offset.x = lng;
+                    offset.y = lat;
+                }
+
+                info.innerHTML = `Titik tercatat: ${pathData.length}<br>Akurasi: ${pos.coords.accuracy.toFixed(1)}m`;
+                render();
+            }, null, { enableHighAccuracy: true });
+        }
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (pathData.length < 2) return;
+
+        ctx.beginPath();
+        ctx.strokeStyle = "#00ff00"; // Warna jalur hijau neon
+        ctx.lineWidth = 3;
+        ctx.lineJoin = "round";
+
+        pathData.forEach((p, index) => {
+            // Konversi Koordinat ke Posisi Layar
+            const x = canvas.width / 2 + (p.lng - offset.x) * scale;
+            const y = canvas.height / 2 - (p.lat - offset.y) * scale;
+
+            if (index === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+
+        ctx.stroke();
+
+        // Gambar posisi saat ini (dot merah)
+        const last = pathData[pathData.length - 1];
+        const lastX = canvas.width / 2 + (last.lng - offset.x) * scale;
+        const lastY = canvas.height / 2 - (last.lat - offset.y) * scale;
+        
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function downloadMapData() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pathData));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "jalur_nasuka_custom.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    lacak();
+</script>
+
+</body>
+</html>
