@@ -11,7 +11,244 @@
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">   
     <style>
         
+        /* Mengatur kontainer utama agar menggunakan Flexbox */
+.other-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Item berjejer dari kiri */
+    gap: 10px; /* Jarak antar item */
+    padding: 10px;
+}
+
+/* Mengatur lebar tiap item agar muat 6 per baris */
+.other-features .other-feature-item {
+    flex: 0 0 calc(16.66% - 10px); /* 100% / 6 = 16.66% */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+/* Memastikan gambar/ikon menyesuaikan lebar item */
+.other-feature-icon {
+    width: 100%;
+    max-width: 60px; /* Sesuaikan ukuran ikon agar tidak terlalu besar/kecil */
+    aspect-ratio: 1 / 1}
+
+.product-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
         
+.dana-blue-gradient {
+    background: linear-gradient(135deg, #118EEA 0%, #005691 100%);
+    color: white;c
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(17, 142, 234, 0.3);
+}
+
+.voucher-grid-spa {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 10px;
+}
+
+.voucher-card-spa {
+    background: #fff;
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+}
+
+.voucher-card-spa img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin: 0 auto 10px;
+}
+
+.v-name-spa {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.v-price-spa {
+    color: #118EEA;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.btn-beli-spa {
+    background: #118EEA;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(17, 142, 234, 0.2);
+}
+
+.voucher-out-of-stock {
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+
+.out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 2;
+    text-transform: uppercase;
+    width: 80%;
+}
+
+.btn-beli-spa:disabled {
+    background: #ccc;
+    box-shadow: none;
+}
+
+.section-header-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5px 10px;
+}
+
+.section-title-new {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.see-all {
+    font-size: 13px;
+    color: #ee4d2d;
+    text-decoration: none;
+}
+
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 5px;
+    scrollbar-width: none; 
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none; 
+}
+
+.album-card {
+    min-width: 160px;
+    height: 240px;
+    background: #000;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.album-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 30px;
+    opacity: 0.9;
+}
+
+.album-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.quote-card {
+    min-width: 200px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.quote-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+        .msg-user { background: #e1f5fe; color: #000; align-self: flex-end; margin-left: auto; }
+        .msg-admin { background: #f5f5f5; color: #000; align-self: flex-start; }
+        .msg { padding: 10px; margin: 5px; border-radius: 10px; max-width: 80%; word-wrap: break-word; }
+        .chat-messages { display: flex; flex-direction: column; height: 300px; overflow-y: auto; padding: 10px; background: #fff; border: 1px solid #eee; border-radius: 8px; }
+        #detail-overlay, #success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; font-family: sans-serif; overflow-y: auto; }
+        .other-feature-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+        
+        .transfer-container { padding: 10px; background: #ffffff; }
+        .transfer-card { background: #f8f9fa; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px; }
+        .input-label { display: block; text-align: left; font-size: 11px; font-weight: bold; color: #4a5568; margin-bottom: 8px; margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-wrapper { position: relative; margin-bottom: 20px; }
+        .input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a0aec0; }
+        .input-kirim-new { width: 100%; padding: 12px 12px 12px 40px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; font-size: 15px; transition: all 0.3s ease; background: #fff; outline: none; }
+        .input-kirim-new:focus { border-color: #000; box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+        .amount-input { font-size: 22px; font-weight: bold; text-align: center; padding-left: 12px !important; color: #2d3748; }
+        .btn-transfer-action { width: 100%; padding: 16px; background: #000; color: #fff; border: none; border-radius: 12px; font-weight: 800; font-size: 15px; letter-spacing: 1px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-transfer-action:disabled { background: #ccc; cursor: not-allowed; }
+
+        .receipt-card { width: 100%; max-width: 400px; background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border-top: 8px solid #27ae60; }
+        .receipt-icon { font-size: 60px; color: #27ae60; margin-bottom: 15px; }
+        .receipt-amount { font-size: 32px; font-weight: 800; color: #333; margin: 20px 0; }
+        .receipt-line { display: flex; justify-content: space-between; margin: 8px 0; font-size: 14px; color: #666; }
+        .receipt-line b { color: #000; }
+
+        .voucher-grid-spa { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
+        .voucher-card-spa { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .voucher-card-spa img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 8px; }
+        .v-name-spa { font-size: 12px; font-weight: bold; display: block; height: 32px; overflow: hidden; color: #333; }
+        .v-price-spa { color: #ee4d2d; font-weight: bold; font-size: 14px; margin: 5px 0; display: block; }
+        .btn-beli-spa { background: #ee4d2d; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .category-title-spa { font-weight: bold; margin: 15px 0 10px; color: #333; border-left: 4px solid #ee4d2d; padding-left: 10px; text-align: left; }
     </style>
 </head>
 
@@ -33,13 +270,23 @@
                 <i class="fas fa-paper-plane balance-icon" onclick="showKirim()" title="Kirim Saldo"></i>
             </div>
             
-            <div onclick="showChat()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
-                <span>Kontak admin</span>
+            <div onclick="showNews()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
+                <span>Berita</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
+           <div onclick="showNews()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
+                <span>Riset Jalanan</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>   
+           <div onclick="showNews()" class="all-accounts" style="text-decoration: none; cursor: pointer;">
+                <span>Riset Peta Rute</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>     
+            
         </div>
 
         <div class="main-features">     
+               
             <div class="other-feature-item" onclick="showVoucher()">
                 <div class="other-feature-icon setor-tarik-icon">
                     <img src="https://nasukafoods.site/image/paketdata.jpg" alt="" class="product-icon-img">
@@ -53,14 +300,48 @@
                 </div>
                 <span>Tentang Kami</span>
             </div>
+               
+            
+            
+            
         </div>
 
+        <div onclick="showChat()" class="banner" style="cursor: pointer; display: flex;">
+            <div class="banner-text" style="padding: 0; text-align: center; flex-grow: 1;">
+                <span id="blinking-txt" style="display: block; width: 100%; white-space: normal;">
+                    <strong>Kontak Langsung</strong>
+                </span>
+            </div>
+            <div class="banner-button">Chat</div>
+        </div>
+        
         <div class="section-header-new"></div>
+            
     </div>
         
+    <div id="testimoni-container" class="auth-container" style="display: none; background: #f9fafb;">
+        <div class="dokumen-card-modified" style="max-width: 100%; height: 100vh; border-radius: 0;">
+            <div class="dokumen-header">
+                <i class="fas fa-arrow-left" onclick="showHome()"></i>
+                <h3>Suara Pelanggan</h3>
+            </div>
+            <div id="testimoni-content" class="dokumen-content-section" style="padding: 10px;"></div>
+        </div>
+    </div>
+
     <div class="search-bar" id="marquee-search-bar">
         <i class="">Power & Partner</i>
-      
+        <div class="marquee-content">
+            <span id="running-text"></spaon>
+        </div>
+    </div>
+
+    <div class="other-features" style="margin-top: 20px;">
+        <div id="dynamic-partners" style="display: contents;"></div>
+    </div>
+
+    <div class="other-features">
+        <div id="dynamic-sponsors" style="display: contents;"></div>
     </div>
 
     <div class="bottom-nav">
@@ -151,7 +432,7 @@
             <div class="profil-tab-item active" id="tabPencapaian">Umum</div>
             <div class="profil-tab-item" id="tabPerbaikan">Keluar</div>
         </div>
-        <div id="contentPencapaian" muclass="tab-content-section">
+        <div id="contentPencapaian" class="tab-content-section">
             <div class="badge-section">
                 <h4>Informasi Pengiriman</h4>
                 <div class="badge-card">
@@ -176,7 +457,7 @@
     <div class="dokumen-card-modified">
         <div class="dokumen-header">
             <i class="fas fa-arrow-left" onclick="showHome()"></i>
-            <h3 id="dokumen-title"></h3>
+            <h3 id="dokumen-title">Informasi</h3>
         </div>
         <div class="dokumen-content-section"></div>
     </div>
@@ -223,7 +504,7 @@ if (localUser.ID) {
 }
 
 function hideAllContainers() {
-    document.querySelectorAll('#home-container, #login-container, #profil-container, #editprofil-container, #dokumen-container').forEach(el => { 
+    document.querySelectorAll('#home-container, #login-container, #profil-container, #editprofil-container, #dokumen-container, #testimoni-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
@@ -269,6 +550,148 @@ function loginSuccess(user) {
     location.reload();
 }
 
+function showKirim() {
+    if(!localUser.ID) return showLogin();
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Transfer Saldo';
+    
+    doc.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="transfer-container">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div style="width: 60px; height: 60px; background: #f0fdf4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                    <i class="fas fa-paper-plane" style="color: #22c55e; font-size: 24px;"></i>
+                </div>
+                <h2 style="margin: 0; font-size: 18px; color: #333;">Kirim Saldo Nasuka</h2>
+                <p style="font-size: 13px; color: #718096;">Transfer instan ke sesama pelanggan</p>
+            </div>
+
+            <div class="transfer-card">
+                <label class="input-label">Nomor HP Tujuan</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone"></i>
+                    <input type="number" id="targetWA" class="input-kirim-new" placeholder="0812xxxx">
+                </div>
+
+                <label class="input-label">Nominal (Rp)</label>
+                <div class="input-wrapper">
+                    <input type="number" id="nominalKirim" class="input-kirim-new amount-input" placeholder="0">
+                </div>
+
+                <label class="input-label">PIN Keamanan</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPIN" class="input-kirim-new" placeholder="******" maxlength="6" inputmode="numeric" style="letter-spacing: 5px; text-align: center; padding-left: 12px;">
+                </div>
+            </div>
+
+            <div style="padding: 0 5px;">
+                <button onclick="prosesKirimSaldo()" class="btn-transfer-action">KONFIRMASI TRANSFER</button>
+                <p style="font-size: 11px; color: #a0aec0; margin-top: 15px; text-align: center;">
+                    <i class="fas fa-info-circle"></i> Pastikan nomor tujuan terdaftar di Nasuka Food.
+                </p>
+            </div>
+        </div>
+    `;
+}
+
+async function prosesKirimSaldo() {
+    const targetWA = document.getElementById('targetWA').value.trim();
+    const nominal = parseInt(document.getElementById('nominalKirim').value);
+    const pin = document.getElementById('confirmPIN').value;
+
+    if (!targetWA || !nominal || nominal < 100) return alert("Lengkapi data dengan benar (Min. 100)");
+    if (targetWA === localUser.NomorHP) return alert("Tidak bisa kirim ke nomor HP sendiri");
+    
+    const btnKirim = document.querySelector('.btn-transfer-action');
+    const originalText = btnKirim.innerText;
+    btnKirim.innerText = "MEMPROSES...";
+    btnKirim.disabled = true;
+
+    try {
+        const userSnap = await db.ref(`users/${localUser.ID}`).once('value');
+        const currentUserData = userSnap.val();
+
+        if (pin !== currentUserData.PIN) {
+            btnKirim.innerText = originalText;
+            btnKirim.disabled = false;
+            return alert("PIN ANDA SALAH!");
+        }
+
+        if (currentUserData.Saldo < nominal) {
+            btnKirim.innerText = originalText;
+            btnKirim.disabled = false;
+            return alert("Saldo tidak mencukupi!");
+        }
+
+        const targetQuery = await db.ref("users").orderByChild("NomorHP").equalTo(targetWA).once("value");
+        
+        if (!targetQuery.exists()) {
+            btnKirim.innerText = originalText;
+            btnKirim.disabled = false;
+            return alert("Nomor WhatsApp tujuan tidak terdaftar!");
+        }
+
+        const targetID = Object.keys(targetQuery.val())[0];
+        const targetData = targetQuery.val()[targetID];
+
+        await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) - nominal);
+        await db.ref(`users/${targetID}/Saldo`).transaction(s => (s || 0) + nominal);
+
+        const timestamp = new Date().toLocaleString('id-ID');
+        const invoiceID = "TRF" + Date.now();
+
+        await db.ref(`history/${localUser.ID}`).push({
+            produk: `Kirim ke ${targetWA} (${targetData.Nama})`,
+            total: nominal,
+            tanggal: timestamp,
+            status: "BERHASIL",
+            invoice: invoiceID
+        });
+
+        await db.ref(`history/${targetID}`).push({
+            produk: `Terima dari ${localUser.NomorHP} (${localUser.Nama})`,
+            total: -nominal,
+            tanggal: timestamp,
+            status: "BERHASIL",
+            invoice: invoiceID
+        });
+
+        showSuccessReceipt(targetData.Nama, targetWA, nominal, invoiceID);
+
+    } catch (e) {
+        btnKirim.innerText = originalText;
+        btnKirim.disabled = false;
+        alert("Gagal memproses transaksi. Silakan coba lagi.");
+    }
+}
+
+function showSuccessReceipt(nama, wa, nominal, invoice) {
+    document.getElementById('dokumen-container').style.display = 'none';
+    const overlay = document.createElement('div');
+    overlay.id = 'success-overlay';
+    overlay.innerHTML = `
+        <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #f9f9f9; padding: 20px;">
+            <div class="receipt-card">
+                <i class="fas fa-check-circle receipt-icon"></i>
+                <h2 style="margin: 0; color: #333; font-size: 22px;">Transfer Berhasil</h2>
+                <p style="color: #888; font-size: 14px; margin-top: 5px;">Bukti transfer Nasuka Food</p>
+                <div class="receipt-amount">Rp ${nominal.toLocaleString('id-ID')}</div>
+                <div style="text-align: left; background: #fcfcfc; border-radius: 12px; padding: 15px; border: 1px solid #f0f0f0;">
+                    <div class="receipt-line"><span>Penerima:</span><b>${nama}</b></div>
+                    <div class="receipt-line"><span>No. WA:</span><b>${wa}</b></div>
+                    <div class="receipt-line"><span>Ref ID:</span><b style="font-family:monospace;">${invoice}</b></div>
+                    <div class="receipt-line"><span>Waktu:</span><b>${new Date().toLocaleTimeString('id-ID')}</b></div>
+                    <div class="receipt-line"><span>Status:</span><b style="color: #27ae60;">SUKSES</b></div>
+                </div>
+            </div>
+            <button onclick="window.location.reload()" class="btn-transfer-action" style="margin-top: 30px; width: 100%; max-width: 400px;">SELESAI</button>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+}
+
 function showProfil() {
     hideAllContainers();
     document.getElementById('profil-container').style.display = 'block';
@@ -308,18 +731,24 @@ function saveProfil() {
     db.ref(`users/${localUser.ID}`).update({ Nama: n, Alamat: a, NomorHP: w, PIN: p }).then(() => { alert("Profil berhasil diperbarui"); showProfil(); }).catch(err => { alert("Gagal menyimpan: " + err.message); });
 }
 
+
+// GANTI FUNGSI showDokumen LAMA DENGAN INI
 function showDokumen() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
-    document.getElementById('dokumen-title').textContent = '';
+    document.getElementById('dokumen-title').textContent = 'Informasi';
+    
+    // Gunakan innerHTML terlebih dahulu untuk memastikan elemen ada
     const contentSection = doc.querySelector('.dokumen-content-section');
     contentSection.scrollTop = 0;
+
     contentSection.innerHTML = `
         <div class="dokumen-item">
             <h4>✨ Nasuka Foods</h4>
-            <p>Sistem Nasuka Foods Berbasis Digital Powered by Nasuka Wireless.</p>
+            <p>Sistem Nasuka Foods Berbasis Digital dari Nasuka Wireless sebagai vendor developer android app.</p>
         </div>
+        
         <div style="margin-top: 30px; padding: 20px 10px; border-top: 1px solid #eee; text-align: center;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
                 <div onclick="showTentang()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
@@ -334,39 +763,50 @@ function showDokumen() {
                 <div onclick="showTerms()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
                     <i class="fas fa-file-contract" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Terms & Condition</span>
                 </div>
-                
-         
             </div>
-           
-             <div onclick="showTerms()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
-                    <i class="fas fa-file-contract" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Terms & Condition</span>
-                </div> 
             
-        
-        
-        
-        <div style="margin-top: 30px; padding: 20px 10px; border-top: 1px solid #eee; text-align: center;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-              
-                
-         <div onclick="showApk()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
-                    <i class="fas fa-file-contract" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Apk</span>
-                </div>         
-              <div onclick="showTopup()" style="cursor:pointer; color: #4a5568; font-size: 13px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #edf2f7;">
-                    <i class="fas fa-file-contract" style="font-size: 18px; color: #118EEA;"></i><br><span style="margin-top:5px; display:inline-block;">Topup</span>
-                </div>    
-                
-            </div>
             <div style="color: #a0aec0; font-size: 11px; margin-top: 10px;">
-                <p>&copy; 2026 Nasuka Foods. All Rights Reserved.</p>
+                <p>&copy; 2026 Nasuka Food. All Rights Reserved.</p>
                 <p style="margin-top: 5px; font-style: italic;">"Tentang rasa yang dulu pernah ada"</p>
             </div>
-            
-           
-            
         </div>
     `;
 }
+
+// PASTIKAN FUNGSI-FUNGSI INI ADA DAN TIDAK TERTIMPA
+function showTentang() {
+    document.getElementById('dokumen-title').textContent = 'Tentang Kami';
+    const section = document.querySelector('.dokumen-content-section');
+    section.scrollTop = 0;
+    section.innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Filosofi Nasuka Food</h4>
+            <p>Nasuka Food (Nasihat Sumber Karya) adalah usaha kuliner yang berfokus pada hidangan Cilok Premium. Kami percaya bahwa kualitas bahan adalah kunci utama untuk menciptakan "Rasa yang dulu pernah ada".</p>
+            <p>Berawal dari gerobak keliling di area Ciparay dan Cibaduyut, kini kami mengintegrasikan teknologi digital untuk mempermudah pelanggan dalam bertransaksi.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showRefund() {
+    document.getElementById('dokumen-title').textContent = 'Refund Policy';
+    const section = document.querySelector('.dokumen-content-section');
+    section.scrollTop = 0;
+    section.innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Kebijakan Pengembalian Dana</h4>
+            <p>1. Refund hanya berlaku jika produk yang diterima dalam keadaan rusak atau tidak layak konsumsi saat pengiriman.</p>
+            <p>2. Pelanggan wajib melampirkan foto atau video unboxing sebagai bukti melalui Customer Service.</p>
+            <p>3. Untuk kesalahan transfer saldo, harap segera hubungi admin dalam waktu maksimal 1x24 jam.</p>
+            <p>4. Dana akan dikembalikan dalam bentuk saldo Nasuka atau transfer bank sesuai kesepakatan.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+// Tambahkan showPrivacy dan showTerms dengan pola yang sama (innerHTML ke section)
+
+
 
 function showHistory() {
     hideAllContainers();
@@ -374,6 +814,7 @@ function showHistory() {
     doc.style.display = 'flex';
     document.getElementById('dokumen-title').textContent = 'Riwayat Transaksi';
     doc.querySelector('.dokumen-content-section').innerHTML = '<p style="text-align:center;">Memuat riwayat...</p>';
+
     db.ref(`history/${localUser.ID}`).once('value').then(snap => {
         let h = '';
         const data = [];
@@ -383,6 +824,7 @@ function showHistory() {
             data.push(item); 
         });
         data.reverse(); 
+
         data.forEach((d) => {
             let infoVoucher = "";
             if (d.voucher && d.voucher !== "-") {
@@ -394,15 +836,18 @@ function showHistory() {
                     </div>
                 `;
             }
+
             const isPemasukan = d.total < 0; 
             const displayAmount = Math.abs(d.total || 0).toLocaleString('id-ID');
             const statusSymbol = isPemasukan ? "+" : "-";
             const statusColor = isPemasukan ? "#27ae60" : "#ee4d2d"; 
             const borderSideColor = isPemasukan ? "#27ae60" : "#ee4d2d";
+
             let namaProduk = d.produk;
             if (isPemasukan && d.produk.includes("0859109819017")) {
                 namaProduk = "Top Up Berhasil";
             }
+
             h += `
                 <div class="dokumen-item" 
                      onclick="showDetailTransaksi(${JSON.stringify(d).replace(/"/g, '&quot;')})"
@@ -462,8 +907,6 @@ function showDetailTransaksi(data) {
     document.body.appendChild(overlay);
 }
 
-
-
 function showChat() {
     let chatId = localUser.ID;
     let isAnonymous = false;
@@ -478,34 +921,14 @@ function showChat() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
-    
-
-    const contentSection = doc.querySelector('.dokumen-content-section');
-    contentSection.style.padding = "0";
-    
-    contentSection.innerHTML = `
-        <div class="chat-header-wa">
-            <img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="Admin">
-            <div class="chat-header-info">
-                <h4>Nasuka Support</h4>
-                <span>Ciparay tengah</span>
-            </div>
-        </div>
+    document.getElementById('dokumen-title').textContent = isAnonymous ? 'Chat Pengunjung' : 'Chat Admin';
+    doc.querySelector('.dokumen-content-section').innerHTML = `
         <div id="chatBox" class="chat-messages"></div>
-        <div class="chat-input-container">
-            <input type="text" id="chatInput" class="chat-input-wa" placeholder="Ketik pesan...">
-            <button onclick="sendChat('${chatId}')" class="btn-send-wa">
-                <i class="fas fa-paper-plane"></i>
-            </button>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <input type="text" id="chatInput" placeholder="Tulis pesan..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
+            <button onclick="sendChat('${chatId}')" class="btn-primary" style="width:auto; padding:0 15px;"><i class="fas fa-paper-plane"></i></button>
         </div>
     `;
-
-   
-    document.getElementById("chatInput").addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            sendChat(chatId);
-        }
-    });
 
     db.ref(`chats/${chatId}`).on('value', (snap) => {
         const box = document.getElementById('chatBox');
@@ -515,25 +938,14 @@ function showChat() {
             const m = c.val(); 
             let content = m.text;
             const isImage = m.text.match(/\.(jpeg|jpg|gif|png)$/) != null || m.text.includes('drive.google.com');
-            
             if (isImage) {
-                content = `<img src="${m.text}" style="width:100%; border-radius:8px; display:block;" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">`;
+                content = `<img src="${m.text}" style="width:100%; border-radius:8px; display:block; margin-bottom:5px;" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">`;
             }
-            
-            box.innerHTML += `
-                <div class="msg ${m.sender === 'admin' ? 'msg-admin' : 'msg-user'}">
-                    ${content}
-                    <div style="font-size:9px; text-align:right; opacity:0.5; margin-top:4px;">
-                        ${new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                    </div>
-                </div>`; 
+            box.innerHTML += `<div class="msg ${m.sender === 'admin' ? 'msg-admin' : 'msg-user'}">${content}</div>`; 
         });
         box.scrollTop = box.scrollHeight;
     });
 }
-
-
-
 
 function sendChat(targetId) {
     const input = document.getElementById('chatInput');
@@ -547,11 +959,126 @@ function sendChat(targetId) {
     });
 }
 
+function loadDynamicKatalogs() {
+    db.ref('sponsors_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-sponsors');
+        if (!container) return;
+        let htmlContent = '';
+        snapshot.forEach((child) => {
+            const data = child.val();
+            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div><span style="font-weight: bold; color: #b38728;">${data.nama}</span></a>`;
+        });
+        container.innerHTML = htmlContent;
+    });
+}
+
+function loadDynamicPartners() {
+    db.ref('partners_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-partners');
+        if (!container) return;
+        let htmlContent = '';
+        snapshot.forEach((child) => {
+            const data = child.val();
+            // Menghapus tag <span>${data.nama}</span> agar hanya menampilkan ikon
+            htmlContent += `
+                <a href="${data.url || '#'}" target="_self" class="other-feature-item">
+                    <div class="other-feature-icon">
+                        <img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">
+                    </div>
+                </a>`;
+        });
+        container.innerHTML = htmlContent;
+    });
+}
+
 $(document).ready(() => {
     showHome();
+    loadDynamicKatalogs(); 
+    loadDynamicPartners();
     $('#tabPencapaian').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').show(); $('#contentPerbaikan').hide(); });
     $('#tabPerbaikan').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').hide(); $('#contentPerbaikan').show(); });
 });
+
+
+function showTentang() {
+    document.getElementById('dokumen-title').textContent = 'Tentang Kami';
+    const section = document.querySelector('.dokumen-content-section');
+    section.scrollTop = 0; // Reset scroll ke atas
+    section.innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Filosofi Nasuka Food</h4>
+            <p>Nasuka Food (Nasihat Sumber Karya) adalah usaha kuliner yang berfokus pada hidangan Cilok Premium. Kami percaya bahwa kualitas bahan adalah kunci utama untuk menciptakan "Rasa yang dulu pernah ada".</p>
+            <p>Berawal dari gerobak keliling di area Ciparay dan Cibaduyut, kini kami mengintegrasikan teknologi digital untuk mempermudah pelanggan dalam bertransaksi.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+
+
+
+
+
+function showRefund() {
+    document.getElementById('dokumen-title').textContent = 'Refund Policy';
+    document.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Kebijakan Pengembalian Dana</h4>
+            <p>1. Refund hanya berlaku jika produk yang diterima dalam keadaan rusak atau tidak layak konsumsi saat pengiriman.</p>
+            <p>2. Pelanggan wajib melampirkan foto atau video unboxing sebagai bukti melalui Customer Service.</p>
+            <p>3. Untuk kesalahan transfer saldo, harap segera hubungi admin dalam waktu maksimal 1x24 jam.</p>
+            <p>4. Dana akan dikembalikan dalam bentuk saldo Nasuka atau transfer bank sesuai kesepakatan.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showPrivacy() {
+    document.getElementById('dokumen-title').textContent = 'Privacy Policy';
+    document.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Keamanan Data Anda</h4>
+            <p>Nasuka Food berkomitmen melindungi data pribadi pelanggan. Nomor WhatsApp dan PIN Anda digunakan hanya untuk kepentingan akses akun dan keamanan transaksi saldo.</p>
+            <p>Kami tidak akan membagikan informasi pribadi Anda kepada pihak ketiga tanpa izin, kecuali untuk keperluan hukum yang berlaku.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showTerms() {
+    document.getElementById('dokumen-title').textContent = 'Terms & Condition';
+    document.querySelector('.dokumen-content-section').innerHTML = `
+        <div class="dokumen-item">
+            <h4 style="color:#000;">Syarat & Ketentuan</h4>
+            <p>1. Akun Nasuka Food adalah tanggung jawab penuh pemilik nomor WhatsApp yang terdaftar.</p>
+            <p>2. Penggunaan PIN bersifat rahasia. Kehilangan saldo akibat kelalaian menjaga kerahasiaan PIN bukan tanggung jawab kami.</p>
+            <p>3. Saldo Nasuka tidak dapat diuangkan kembali secara instan tanpa melalui prosedur administrasi resmi.</p>
+            <p>4. Nasuka Food berhak menonaktifkan akun jika ditemukan indikasi kecurangan atau penyalahgunaan sistem.</p>
+            <button onclick="showDokumen()" class="btn-transfer-action" style="margin-top:20px;">KEMBALI</button>
+        </div>
+    `;
+}
+
+function showVideo(videoUrl) {
+    const finalUrl = videoUrl || 'https://nasukafoods.site/video/kisahnasuka.mp4';
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Video Quote';
+    
+    doc.querySelector('.dokumen-content-section').innerHTML = `
+        <div style="width: 100%; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+            <video width="100%" controls autoplay style="display: block;">
+                <source src="${finalUrl}" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+        <div style="margin-top: 20px; text-align: center;">
+            <p style="font-size: 14px; color: #666; font-style: italic; margin-bottom: 20px;">"Nikmati inspirasi dari Nasuka Food"</p>
+            <button onclick="showHome()" class="btn-transfer-action">KEMBALI KE BERANDA</button>
+        </div></div>
+    `;
+}
 
 const vProducts = [
   { category: "Voucher NITS CELL ", items: [
@@ -589,23 +1116,29 @@ async function showVoucher() {
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
     document.getElementById('dokumen-title').textContent = 'Pembelian Voucher Data Internet';
+    
     const contentSection = doc.querySelector('.dokumen-content-section');
     contentSection.innerHTML = '<p style="text-align:center; padding:20px;">Mengecek ketersediaan stok...</p>';
+    
     let html = `
         <div class="dana-blue-gradient">
             <small style="opacity:0.9;">Saldo Nasuka Anda</small><br>
             <strong style="font-size:24px;">Rp ${localUser.Saldo.toLocaleString('id-ID')}</strong>
         </div>
     `;
+
     const stockSnapshot = await db.ref('stok_voucher').once('value');
     const allStock = stockSnapshot.val() || {};
+
     vProducts.forEach(cat => {
         html += `<div class="category-title-spa" style="border-left-color: #118EEA;">${cat.category}</div><div class="voucher-grid-spa">`;
+        
         cat.items.forEach(p => {
             const hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
             const cardClass = hasStock ? "" : "voucher-out-of-stock";
             const btnState = hasStock ? "" : "disabled";
             const badgeStock = hasStock ? "" : `<div class="out-of-stock-label">Stok Habis Terjual</div>`;
+
             html += `
                 <div class="voucher-card-spa ${cardClass}">
                     ${badgeStock}
@@ -624,6 +1157,7 @@ async function showVoucher() {
         });
         html += `</div>`;
     });
+    
     contentSection.innerHTML = html;
 }
 
@@ -631,14 +1165,18 @@ async function prosesBeliVoucher(id, nama, harga) {
     if (!localUser.ID) return showLogin();
     if (localUser.Saldo < harga) return alert("Saldo tidak mencukupi!");
     if (!confirm(`Beli ${nama} seharga Rp ${harga.toLocaleString()}?`)) return;
+
     try {
         const snapshot = await db.ref(`stok_voucher/${id}`).limitToFirst(1).once('value');
         if (!snapshot.exists()) return alert("Maaf, stok sedang habis.");
+
         const key = Object.keys(snapshot.val())[0];
         const sn = snapshot.val()[key];
         const timestamp = new Date().toLocaleString('id-ID');
+
         await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) - harga);
         await db.ref(`stok_voucher/${id}/${key}`).remove();
+        
         const invID = "VCH" + Date.now();
         await db.ref(`history/${localUser.ID}`).push({
             produk: nama,
@@ -648,6 +1186,7 @@ async function prosesBeliVoucher(id, nama, harga) {
             voucher: sn,
             invoice: invID
         });
+
         document.getElementById('dokumen-container').style.display = 'none';
         const overlay = document.createElement('div');
         overlay.id = 'success-overlay';
@@ -670,23 +1209,104 @@ async function prosesBeliVoucher(id, nama, harga) {
             </div>
         `;
         document.body.appendChild(overlay);
+
     } catch (e) {
         alert("Terjadi kesalahan sistem.");
     }
 }
 
+function showTestimoni() {
+    hideAllContainers();
+    const container = document.getElementById('testimoni-container');
+    container.style.display = 'flex';
+    
+    document.getElementById('testimoni-content').innerHTML = `
+        <div class="bg-white p-4 rounded-2xl shadow-sm mb-6">
+            <textarea id="testiText" placeholder="Bagikan ceritamu hari ini..." 
+                style="width:100%; height:80px; padding:10px; border:1px solid #eee; border-radius:12px; font-size:14px;"></textarea>
+            <button onclick="kirimTestimoni()" style="width:100%; margin-top:10px; background:#ff9800; color:white; font-weight:bold; padding:12px; border:none; border-radius:12px;">KIRIM POSTINGAN</button>
+        </div>
+        <div id="containerList" class="space-y-6">
+            <p style="text-align:center; color:#999;">Memuat obrolan...</p>
+        </div>
+    `;
+
+    db.ref('testimoni_publik').on('value', (snapshot) => {
+        const listDiv = document.getElementById('containerList');
+        if (!listDiv) return;
+        listDiv.innerHTML = "";
+        let dataArray = [];
+        snapshot.forEach(c => { 
+            let val = c.val(); val.key = c.key; 
+            dataArray.push(val); 
+        });
+        dataArray.reverse().forEach(data => {
+            const d = new Date(data.timestamp);
+            const tgl = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+            
+            listDiv.innerHTML += `
+                <div style="background:white; padding:15px; border-radius:15px; border-left:5px solid #ff9800; margin-bottom:15px; shadow:0 2px 5px rgba(0,0,0,0.05);">
+                    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                        <img src="${data.foto}" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+                        <div>
+                            <b style="font-size:13px;">${data.nama}</b><br>
+                            <small style="color:#aaa; font-size:10px;">${tgl} • Pelanggan</small>
+                        </div>
+                    </div>
+                    <p style="font-size:14px; color:#444; margin:0;">"${data.pesan}"</p>
+                </div>
+            `;
+        });
+    });
+}
+
+function kirimTestimoni() {
+    const pesan = document.getElementById('testiText').value.trim();
+    const btnKirim = document.querySelector('button[onclick="kirimTestimoni()"]');
+
+    if (!localUser.ID) return alert("Yuk, login dulu!");
+    if (!pesan) return;
+
+    btnKirim.disabled = true;
+    const originalText = btnKirim.innerText;
+    btnKirim.innerText = "MENGIRIM...";
+    btnKirim.style.opacity = "0.7";
+
+    db.ref('testimoni_publik').push({
+        userID: localUser.ID, 
+        nama: localUser.Nama, 
+        foto: localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg", 
+        pesan: pesan, 
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).then(() => { 
+        document.getElementById('testiText').value = ""; 
+    }).catch((error) => {
+        alert("Gagal mengirim postingan: " + error.message);
+    }).finally(() => {
+        btnKirim.disabled = false;
+        btnKirim.innerText = originalText;
+        btnKirim.style.opacity = "1";
+    });
+}
+
+
+
+
 function showKatalog() {
     hideAllContainers();
     const doc = document.getElementById('dokumen-container');
     doc.style.display = 'flex';
-    document.getElementById('dokumen-title').textContent = '';
+    document.getElementById('dokumen-title').textContent = 'Katalog Kami';
+    
     const contentSection = doc.querySelector('.dokumen-content-section');
     contentSection.scrollTop = 0;
+
+    // Data Produk Nasuka Foods
     const produkCilok = [
         {
             nama: "Cita Rasa Autentik, Kualitas Tanpa Kompromi. ",
-            desc: "Nasuka Foods adalah pilar yang bergerak di bidang kuliner, dengan spesialisasi pada jajanan khas nusantara seperti Cilok dan Pempek. Kami memegang teguh filosofi Premium Soul, di mana kualitas bahan baku adalah prioritas mutlak. Kami menjamin penggunaan 100% saus kacang murni tanpa bahan pengisi (filler) seperti kedelai atau tepung berlebih, guna menghadirkan rasa yang jujur dan berkelas. Saat ini, Nasuka Foods telah merambah pasar Ready-to-Cook dengan teknologi vacuum-sealed untuk memastikan kesegaran produk hingga ke tangan konsumen di luar wilayah operasional harian kami di Bandung.",
-            img: "https://nasukafoods.site/image/nasukaroom.jpg"
+            desc: "Nasuka Foods adalah pilar yang bergerak di bidang kuliner, dengan spesialisasi pada jajanan khas nusantara seperti Cilok dan Pempek. Kami memegang teguh filosofi Premium Soul, di mana kualitas bahan baku adalah prioritas mutlak. Kami menjamin penggunaan 100% saus kacang murni tanpa bahan pengisi (filler) seperti kedelai atau tepung berlebih, guna menghadirkan rasa yang jujur dan berkelas. ​Saat ini, Nasuka Foods telah merambah pasar Ready-to-Cook dengan teknologi vacuum-sealed untuk memastikan kesegaran produk hingga ke tangan konsumen di luar wilayah operasional harian kami di Bandung.",
+            img: "https://nasukafoods.site/image/nasukaroom.jpg" // Ganti dengan URL foto asli Anda
         },
         {
             nama: "Konektivitas Tanpa Batas untuk Masa Depan.",
@@ -709,36 +1329,65 @@ function showKatalog() {
             img: "https://nasukafoods.site/image/nasukaroom.jpg"
         }
     ];
+
     let html = `
         <div style="background: #fff8e1; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffe082;">
             <p style="font-size: 13px; color: #795548; margin: 0; line-height: 1.5;">
                 <i class="fas fa-info-circle"></i> <b>Informasi tentang kami:</b>
                 <br>
-               Nasuka foods, Powered by : <strong>PT. Nasuka Karya Abadi</strong></b>.
+               Nasuka foods adalah sub dari <strong>PT. Nasuka Karya Abadi</strong></b>.
+                
+            
         </div>
     `;
+
+
+
+
     produkCilok.forEach(p => {
-        html += `
-            <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee;">
-                <img src="${p.img}" onerror="this.src='https://nasukafoods.site/image/nasukaroom.jpg'" style="width: 100%; height: 180px; object-fit: cover;">
-                <div style="padding: 15px;">
-                    <h4 style="margin: 0 0 8px 0; color: #333; font-size: 17px;">${p.nama}</h4>
-                    <p style="font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 15px;">${p.desc}</p>
-                    <button onclick="showChat()" 
-                       style="width: 100%; display: flex; align-items: center; justify-content: center; background: #118EEA; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer;">
-                        <i class="fas fa-comments" style="margin-right: 8px; font-size: 18px;"></i> CHAT ADMIN
-                    </button>
-                </div>
-            </div>
-        `;
+        const pesanWA = encodeURIComponent(`Halo Nasuka Foods, saya ingin pesan *${p.nama}*.\n\nAlamat Pengiriman: ${localUser.Alamat}`);
+        
+       
+html += `
+    <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee;">
+        <img src="${p.img}" onerror="this.src='https://nasukafoods.site/image/nasukaroom.jpg'" style="width: 100%; height: 180px; object-fit: cover;">
+        <div style="padding: 15px;">
+            <h4 style="margin: 0 0 8px 0; color: #333; font-size: 17px;">${p.nama}</h4>
+            <p style="font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 15px;">${p.desc}</p>
+            
+            <button onclick="showChat()" 
+               style="width: 100%; display: flex; align-items: center; justify-content: center; background: #118EEA; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer;">
+                <i class="fas fa-comments" style="margin-right: 8px; font-size: 18px;"></i> CHAT ADMIN
+            </button>
+        </div>
+    </div>
+`;
+
       });
+    
+
     html += `
         <div style="text-align: center; padding: 10px 0 30px;">
             <button onclick="showHome()" class="btn-transfer-action" style="background: #555;">KEMBALI KE BERANDA</button>
         </div>
     `;
+
     contentSection.innerHTML = html;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>
