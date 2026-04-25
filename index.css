@@ -1,4 +1,241 @@
+ /* Mengatur kontainer utama agar menggunakan Flexbox */
+.other-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Item berjejer dari kiri */
+    gap: 10px; /* Jarak antar item */
+    padding: 10px;
+}
 
+/* Mengatur lebar tiap item agar muat 6 per baris */
+.other-features .other-feature-item {
+    flex: 0 0 calc(16.66% - 10px); /* 100% / 6 = 16.66% */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+/* Memastikan gambar/ikon menyesuaikan lebar item */
+.other-feature-icon {
+    width: 100%;
+    max-width: 60px; /* Sesuaikan ukuran ikon agar tidak terlalu besar/kecil */
+    aspect-ratio: 1 / 1}
+
+.product-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+        
+.dana-blue-gradient {
+    background: linear-gradient(135deg, #118EEA 0%, #005691 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(17, 142, 234, 0.3);
+}
+
+.voucher-grid-spa {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 10px;
+}
+
+.voucher-card-spa {
+    background: #fff;
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    position: relative;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+}
+
+.voucher-card-spa img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin: 0 auto 10px;
+}
+
+.v-name-spa {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.v-price-spa {
+    color: #118EEA;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.btn-beli-spa {
+    background: #118EEA;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 25px;
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(17, 142, 234, 0.2);
+}
+
+.voucher-out-of-stock {
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+
+.out-of-stock-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 2;
+    text-transform: uppercase;
+    width: 80%;
+}
+
+.btn-beli-spa:disabled {
+    background: #ccc;
+    box-shadow: none;
+}
+
+.section-header-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5px 10px;
+}
+
+.section-title-new {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.see-all {
+    font-size: 13px;
+    color: #ee4d2d;
+    text-decoration: none;
+}
+
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 5px;
+    scrollbar-width: none; 
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    display: none; 
+}
+
+.album-card {
+    min-width: 160px;
+    height: 240px;
+    background: #000;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.album-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 30px;
+    opacity: 0.9;
+}
+
+.album-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.quote-card {
+    min-width: 200px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.quote-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+        .msg-user { background: #e1f5fe; color: #000; align-self: flex-end; margin-left: auto; }
+        .msg-admin { background: #f5f5f5; color: #000; align-self: flex-start; }
+        .msg { padding: 10px; margin: 5px; border-radius: 10px; max-width: 80%; word-wrap: break-word; }
+        .chat-messages { display: flex; flex-direction: column; height: 300px; overflow-y: auto; padding: 10px; background: #fff; border: 1px solid #eee; border-radius: 8px; }
+        #detail-overlay, #success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; font-family: sans-serif; overflow-y: auto; }
+        .other-feature-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+        
+        .transfer-container { padding: 10px; background: #ffffff; }
+        .transfer-card { background: #f8f9fa; border-radius: 15px; padding: 20px; border: 1px solid #edf2f7; margin-bottom: 20px; }
+        .input-label { display: block; text-align: left; font-size: 11px; font-weight: bold; color: #4a5568; margin-bottom: 8px; margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-wrapper { position: relative; margin-bottom: 20px; }
+        .input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a0aec0; }
+        .input-kirim-new { width: 100%; padding: 12px 12px 12px 40px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; font-size: 15px; transition: all 0.3s ease; background: #fff; outline: none; }
+        .input-kirim-new:focus { border-color: #000; box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+        .amount-input { font-size: 22px; font-weight: bold; text-align: center; padding-left: 12px !important; color: #2d3748; }
+        .btn-transfer-action { width: 100%; padding: 16px; background: #000; color: #fff; border: none; border-radius: 12px; font-weight: 800; font-size: 15px; letter-spacing: 1px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-transfer-action:disabled { background: #ccc; cursor: not-allowed; }
+
+        .receipt-card { width: 100%; max-width: 400px; background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border-top: 8px solid #27ae60; }
+        .receipt-icon { font-size: 60px; color: #27ae60; margin-bottom: 15px; }
+        .receipt-amount { font-size: 32px; font-weight: 800; color: #333; margin: 20px 0; }
+        .receipt-line { display: flex; justify-content: space-between; margin: 8px 0; font-size: 14px; color: #666; }
+        .receipt-line b { color: #000; }
+
+        .voucher-grid-spa { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
+        .voucher-card-spa { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .voucher-card-spa img { width: 45px; height: 45px; object-fit: contain; margin-bottom: 8px; }
+        .v-name-spa { font-size: 12px; font-weight: bold; display: block; height: 32px; overflow: hidden; color: #333; }
+        .v-price-spa { color: #ee4d2d; font-weight: bold; font-size: 14px; margin: 5px 0; display: block; }
+        .btn-beli-spa { background: #ee4d2d; color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .category-title-spa { font-weight: bold; margin: 15px 0 10px; color: #333; border-left: 4px solid #ee4d2d; padding-left: 10px; text-align: left; }
   .other-features {
             display: flex;
             flex-wrap: wrap;
