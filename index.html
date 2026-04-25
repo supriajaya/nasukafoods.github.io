@@ -11,7 +11,45 @@
     <link rel="stylesheet" href="https://nasukafoods.site/index.css">   
     <style>
         
-        
+       
+ #login-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .auth-card-new {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Senter semua konten kartu */
+            text-align: center;
+        }
+
+        .logo-circle-new {
+            width: 90px;
+            height: 90px;
+            background: #fff;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 2px solid #f0f0f0;
+            overflow: hidden;
+        }
+
+
         .rencang-scroll-wrapper, .Bala-scroll-wrapper {
     display: flex;
     justify-content: space-between;
@@ -319,36 +357,50 @@
     </div>
 </div> 
    
-<div id="login-container" style="display:none;">
+   
+   <div id="login-container" style="display:none;">
     <div class="auth-card-new">
-        <div class="header-text-new">SELAMAT DATANG</div>
+        <div class="header-text-new">MASUK</div>
+        
         <div class="logo-circle-new">
             <img src="https://nasukafoods.site/image/cover1.jpg" alt="Logo" class="logo-image-new">
         </div>
-        <div class="company-name-new">Rasa yang dulu pernah ada</div>
+        <div class="company-name-new">"Tentang rasa yang dulu pernah ada"</div>
+
         <div class="input-group-new">
-            <span class="icon-new">📞</span>
+            <span class="icon-new"><i class="fas fa-phone-alt"></i></span>
             <input type="number" id="authWA" placeholder="Nomor WhatsApp" required>
         </div>
+        
         <div class="input-group-new">
-            <span class="icon-new">🔐</span>
-            <input type="password" id="authPIN" placeholder="Masukkan PIN" maxlength="6" inputmode="numeric">
+            <span class="icon-new"><i class="fas fa-lock"></i></span>
+            <input type="password" id="authPIN" placeholder="PIN Keamanan (6 Digit)" maxlength="6" inputmode="numeric">
         </div>
+
         <div class="terms-container-new">
-            <input type="checkbox" checked>
-            <span>Simpan dan ingat PIN anda untuk masuk selanjutnya</span>
+            <input type="checkbox" checked style="accent-color: #118EEA;">
+            <span>Ingat akun saya di perangkat ini</span>
         </div>
-        <button onclick="handleAuth()" class="login-btn-new">MASUK</button>
-        <div id="authStatus" style="margin-top:10px; font-weight:bold; color:#000;"></div>
-        <button onclick="showHome()" style="background:none; border:none; color:#000; margin-top:10px; cursor:pointer; font-size:12px;">Kembali ke Beranda</button>
-        <div class="register-text-new">Mode cepat register / login dengan 1 klik</div>
+
+        <button onclick="handleAuth()" class="login-btn-new">MASUK SEKARANG</button>
+        
+        <div id="authStatus" style="margin-top:15px; font-size:13px;"></div>
+
         <div class="footer-section-new">
-            <div class="help-divider-new"><span>Perlu Bantuan?</span></div>
-            <a href="https://wa.me/62859109819017" target="_self" class="wa-link-new">Hubungi Kami (Chat Only)</a>
-            <div class="priority-text-new">Speed is our priority</div>
+            <button onclick="showHome()" style="background:none; border:none; color:#118EEA; font-weight:600; cursor:pointer; font-size:13px; margin-bottom:15px;">
+                <i class="fas fa-home"></i> Kembali ke Beranda
+            </button>
+            
+            <div class="help-divider-new"><span>Login / signup dalam 1 Klik</span></div>
+          
+                <i class="fab fa-whatsapp"></i> Nasuka Foods
+            </a>
+            <div class="priority-text-new"> Professional Digital Service</div>
         </div>
     </div>
 </div>
+
+
 
 <div id="profil-container">
     <div class="profil-card">
