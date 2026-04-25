@@ -1084,12 +1084,20 @@ const vProducts = [
   { category: "voucher Nits Cell ", items: [
         { id: "nc1", name: "Nits Cell 6Jam", desc: "Akses internet unlimited khusus warga ciparay tengah durasi 6 jam <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 1750, img: "https://nasukafoods.site/image/nitscell.jpg" },
         
+          { id: "nc2", name: "Nits Cell 24jam", desc: "Reward pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 4900, img: "https://nasukafoods.site/image/nitscell.jpg" }
+        
+        
+    ]},
+    
+      { category: "Hadiah Transaksi", items: [
+     
           { id: "rw", name: "Saldo Gratis 100.000", desc: "Reward pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 0, img: "https://nasukafoods.site/image/saldo100rb.jpg" }
         
         
     ]},
+    
     { category: "Voucher Data", items: [
-        { id: "ax3", name: "Axis 5GB 2hari", desc: "Kuota utama 5GB berlaku di semua jaringan <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 10900, img: "https://nasukafoods.site/image/axis.jpg" },
+        { id: "ax2", name: "Axis 5GB 1hari", desc: "Kuota utama 5GB berlaku di semua jaringan <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 7150, img: "https://nasukafoods.site/image/axis.jpg" },
         { id: "is1", name: "Indosat 2GB 2hari", desc: "Kuota nasional 2GB masa aktif 2 hari<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>  ", price: 10700, img: "https://nasukafoods.site/image/indosat.jpg" },
         { id: "sf2", name: "Smartfren 10GB", desc: "Kuota 10GB (5GB Utama + 5GB Malam)<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
         { id: "ts2", name: "Telkomsel 0.5GB +2.5GB", desc: "Lokal data khusus area Jawa Barat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 14000, img: "https://nasukafoods.site/image/tsel.jpg" },
@@ -1109,7 +1117,6 @@ async function showVoucher() {
     contentSection.innerHTML = '<p style="text-align:center; padding:20px;">Mengecek ketersediaan stok...</p>';
     
     try {
-        // OPTIMASI: Mengambil data stok dan history secara bersamaan
         const [stockSnapshot, historySnap] = await Promise.all([
             db.ref('stok_voucher').once('value'),
             localUser.ID ? db.ref(`history/${localUser.ID}`).once('value') : Promise.resolve(null)
@@ -1121,7 +1128,7 @@ async function showVoucher() {
 
         if (historySnap) {
             historySnap.forEach(child => {
-                if (child.val().produk === "Reward 1000 Transaksi") sudahKlaimReward = true;
+                if (child.val().produk === "Reward 999 Transaksi") sudahKlaimReward = true;
             });
         }
 
@@ -1133,11 +1140,17 @@ async function showVoucher() {
         `;
 
         vProducts.forEach(cat => {
-            html += `<div class="category-title-spa" style="border-left-color: #118EEA;">${cat.category}</div><div class="voucher-grid-spa">`;
+            // LOGIKA CENTER: Jika kategori adalah hadiah, gunakan Flexbox Center. Jika bukan, gunakan Grid.
+            const isHadiah = cat.category.includes("Hadiah");
+            const containerStyle = isHadiah ? 'display: flex; justify-content: center; gap: 10px; padding: 10px;' : '';
+            const containerClass = isHadiah ? '' : 'voucher-grid-spa';
+
+            html += `<div class="category-title-spa" style="border-left-color: #118EEA;">${cat.category}</div>
+                     <div class="${containerClass}" style="${containerStyle}">`;
             
             cat.items.forEach(p => {
                 let isReward = p.id === "rw";
-                let isLocked = isReward && totalTransaksi < 1000;
+                let isLocked = isReward && totalTransaksi < 999;
                 let hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
 
                 let labelText = "";
@@ -1145,7 +1158,7 @@ async function showVoucher() {
                 
                 if (isReward) {
                     if (sudahKlaimReward) { labelText = "SUDAH DIKLAIM"; labelStyle = "background: #27ae60;"; }
-                    else if (isLocked) { labelText = `Buka (${totalTransaksi}/1000)`; labelStyle = "background: orange;"; }
+                    else if (isLocked) { labelText = `Buka (${totalTransaksi}/999)`; labelStyle = "background: orange;"; }
                 } else if (!hasStock) {
                     labelText = "STOK HABIS";
                     labelStyle = "background: rgba(255, 0, 0, 0.8);";
@@ -1157,14 +1170,17 @@ async function showVoucher() {
 
                 let btnText = isReward ? (sudahKlaimReward ? "SELESAI" : (isLocked ? "TERKUNCI" : "KLAIM")) : (hasStock ? "BELI" : "HABIS");
 
+                // Jika kategori hadiah, batasi lebar kartu agar tidak melebar memenuhi layar
+                const cardWidthStyle = isHadiah ? 'width: 170px; flex: none;' : '';
+
                 html += `
-                    <div class="voucher-card-spa ${cardClass}" style="padding: 12px; height: auto; min-height: 210px;">
+                    <div class="voucher-card-spa ${cardClass}" style="padding: 12px; height: auto; min-height: 210px; ${cardWidthStyle}">
                         ${finalBadge}
                         <div style="flex-grow: 1;">
                             <img src="${p.img}" style="width: 40px; height: 40px; margin-bottom: 5px;">
                             <span class="v-name-spa" style="height: auto; margin-bottom: 2px;">${p.name}</span>
                             <div style="font-size: 10px; color: #888; line-height: 1.2; margin-bottom: 10px; min-height: 24px;">
-                                ${isReward ? (sudahKlaimReward ? `<b style="color:#27ae60;">Event selesai.</b>` : (isLocked ? `<b style="color:#ee4d2d;">Lakukan ${1000 - totalTransaksi} transaksi lagi untuk membuka kunci.</b>` : `<b style="color:#27ae60;">Siap diklaim!</b>`)) : (p.desc || 'Voucher internet')}
+                                ${isReward ? (sudahKlaimReward ? `<b style="color:#27ae60;">Event selesai.</b>` : (isLocked ? `<b style="color:#ee4d2d;">Butuh ${999 - totalTransaksi} transaksi lagi.</b>` : `<b style="color:#27ae60;">Siap diklaim!</b>`)) : (p.desc || 'Voucher internet')}
                             </div>
                         </div>
                         <div>
@@ -1180,10 +1196,10 @@ async function showVoucher() {
         
         contentSection.innerHTML = html;
     } catch (error) {
+        console.error(error);
         contentSection.innerHTML = '<p style="text-align:center; color:red;">Gagal memuat data. Periksa koneksi.</p>';
     }
 }
-
 
 
 async function prosesBeliVoucher(id, nama, harga) {
@@ -1196,12 +1212,12 @@ async function prosesBeliVoucher(id, nama, harga) {
         // Cek Double Klaim
         let doubleCheck = false;
         hSnap.forEach(child => {
-            if (child.val().produk === "Reward 1000 Transaksi") doubleCheck = true;
+            if (child.val().produk === "Reward 999 Transaksi") doubleCheck = true;
         });
         if (doubleCheck) return alert("Anda sudah pernah mengklaim reward ini.");
 
-        // Cek Syarat 100 Transaksi
-        if (hSnap.numChildren() < 1000) return alert("Ups! Kamu butuh 1000 transaksi untuk mengklaim ini.");
+       
+        if (hSnap.numChildren() < 999) return alert("Ups! Kamu butuh 999 transaksi untuk mengklaim ini.");
         
         const hadiah = 100000;
         const timestamp = new Date().toLocaleString('id-ID');
@@ -1210,7 +1226,7 @@ async function prosesBeliVoucher(id, nama, harga) {
         try {
             await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) + hadiah);
             await db.ref(`history/${localUser.ID}`).push({
-                produk: "Reward 1000 Transaksi",
+                produk: "Reward 999 Transaksi",
                 total: -hadiah, 
                 tanggal: timestamp,
                 status: "BERHASIL",
@@ -1234,12 +1250,12 @@ async function prosesBeliVoucher(id, nama, harga) {
 async function prosesBeliVoucher(id, nama, harga) {
     if (!localUser.ID) return showLogin();
     
-    // VALIDASI KHUSUS REWARD 100 TRANSAKSI
+    
     if (id === "rw") {
         const hSnap = await db.ref(`history/${localUser.ID}`).once('value');
-        if (hSnap.numChildren() < 1000) return alert("Ups! Kamu butuh 1000 transaksi untuk mengklaim ini.");
+        if (hSnap.numChildren() < 999) return alert("Ups! Kamu butuh 999 transaksi untuk mengklaim ini.");
         
-        // LOGIKA KLAIM HADIAH (SALDO +10.000)
+       
         const hadiah = 100000;
         const timestamp = new Date().toLocaleString('id-ID');
         const invID = "RW" + Date.now();
@@ -1247,7 +1263,7 @@ async function prosesBeliVoucher(id, nama, harga) {
         try {
             await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) + hadiah);
             await db.ref(`history/${localUser.ID}`).push({
-                produk: "Reward 1000 Transaksi",
+                produk: "Reward 999 Transaksi",
                 total: -hadiah, // Biar terbaca sebagai pemasukan di history
                 tanggal: timestamp,
                 status: "BERHASIL",
