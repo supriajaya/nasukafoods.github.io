@@ -330,7 +330,7 @@
   
     
      <div class="search-bar" id="marquee-search-bar">
-        <i class="">Power & Warta</i>
+        <i class="">Warta Notified</i>
         <div class="marquee-content">
             <span id="running-text"></spaon>
         </div>
@@ -540,21 +540,51 @@ async function handleAuth() {
     const noWA = document.getElementById('authWA').value.trim();
     const pin = document.getElementById('authPIN').value.trim();
     const statusDiv = document.getElementById('authStatus');
+
     if (noWA.length < 10) return alert("Nomor WA tidak valid");
     if (pin.length !== 6) return alert("PIN harus 6 digit");
+
     statusDiv.innerHTML = "Memproses...";
-    const snapshot = await db.ref("users").orderByChild("NomorHP").equalTo(noWA).once("value");
-    if (snapshot.exists()) {
-        const user = Object.values(snapshot.val())[0];
-        if (user.PIN === pin) { loginSuccess(user); } else { statusDiv.innerHTML = "PIN SALAH!"; }
-    } else {
-        const newID = "NSK" + Math.floor(1000 + Math.random() * 9000);
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        const newUser = { ID: newID, NomorHP: noWA, PIN: pin, Nama: "Pelanggan Baru", Username: "NS-" + randomNum, Saldo: 0, Alamat: "Belum diatur", TanggalJoin: new Date().toISOString() };
-        await db.ref(`users/${newID}`).set(newUser);
-        loginSuccess(newUser);
+
+    try {
+        // 1. Cari apakah nomor WA sudah ada di database
+        const snapshot = await db.ref("users").orderByChild("NomorHP").equalTo(noWA).once("value");
+
+        if (snapshot.exists()) {
+            // Jika nomor ditemukan, ambil data user pertama (karena hasil query adalah objek/list)
+            const userData = Object.values(snapshot.val())[0];
+
+            // 2. Cek apakah PIN cocok
+            if (userData.PIN === pin) {
+                loginSuccess(userData);
+            } else {
+                statusDiv.innerHTML = "<span style='color:red;'>PIN SALAH!</span>";
+            }
+        } else {
+            // 3. Jika nomor TIDAK ditemukan, baru buat akun baru (Auto-Register)
+            const newID = "NSK" + Math.floor(1000 + Math.random() * 9000);
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            
+            const newUser = { 
+                ID: newID, 
+                NomorHP: noWA, 
+                PIN: pin, 
+                Nama: "Pelanggan Baru", 
+                Username: "NS-" + randomNum, 
+                Saldo: 0, 
+                Alamat: "Belum diatur", 
+                TanggalJoin: new Date().toISOString() 
+            };
+
+            await db.ref(`users/${newID}`).set(newUser);
+            loginSuccess(newUser);
+        }
+    } catch (error) {
+        console.error(error);
+        statusDiv.innerHTML = "<span style='color:red;'>Terjadi kesalahan koneksi.</span>";
     }
 }
+
 
 function loginSuccess(user) {
     localStorage.setItem("ID", user.ID);
@@ -579,6 +609,8 @@ function showProfil() {
 
 function logoutUser() { localStorage.clear(); location.reload(); }
 
+
+
 function showEditProfil() {
     hideAllContainers();
     const editContainer = document.getElementById('editprofil-container');
@@ -595,17 +627,41 @@ function showEditProfil() {
     `;
 }
 
-function saveProfil() {
+
+async function saveProfil() {
     const n = document.getElementById('enama').value.trim();
     const a = document.getElementById('ealamat').value.trim();
     const w = document.getElementById('ewa').value.trim();
     const p = document.getElementById('epin').value.trim();
+
     if (w.length < 10) return alert("Nomor WhatsApp tidak valid");
     if (p.length !== 6) return alert("PIN harus 6 digit");
-    db.ref(`users/${localUser.ID}`).update({ Nama: n, Alamat: a, NomorHP: w, PIN: p }).then(() => { alert("Profil berhasil diperbarui"); showProfil(); }).catch(err => { alert("Gagal menyimpan: " + err.message); });
+
+    try {
+        // 1. Cek apakah nomor WhatsApp berubah dari nomor lama
+        if (w !== localUser.NomorHP) {
+            // 2. Jika berubah, cek apakah nomor baru tersebut sudah dipakai akun lain
+            const snapshot = await db.ref("users").orderByChild("NomorHP").equalTo(w).once("value");
+            
+            if (snapshot.exists()) {
+                return alert("Gagal: Nomor WhatsApp sudah terdaftar dengan akun lain!");
+            }
+        }
+
+        // 3. Jika nomor tetap atau nomor baru belum ada yang pakai, lakukan update
+        await db.ref(`users/${localUser.ID}`).update({
+            Nama: n,
+            Alamat: a,
+            NomorHP: w,
+            PIN: p
+        });
+
+        alert("Profil berhasil diperbarui");
+        showProfil();
+    } catch (err) {
+        alert("Gagal menyimpan: " + err.message);
+    }
 }
-
-
 
 
 
