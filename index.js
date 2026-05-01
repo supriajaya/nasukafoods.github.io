@@ -1,5 +1,3 @@
-
-    
 const firebaseConfig = {
     apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
     authDomain: "nasukafoods1.firebaseapp.com",
@@ -8,11 +6,9 @@ const firebaseConfig = {
     messagingSenderId: "84287800896",
     appId: "1:84287800896:web:83189d6766997b00f701a5"
 };
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const userRef = db.ref(`users/${localStorage.getItem("ID")}`); 
 
 const localUser = {
   Username: localStorage.getItem("Username"),
@@ -20,1253 +16,843 @@ const localUser = {
   ID: localStorage.getItem("ID"),
   Saldo: parseInt(localStorage.getItem("Saldo")) || 0,
   Alamat: localStorage.getItem("Alamat") || "Alamat belum diatur",
-  NomorHP: localStorage.getItem("NomorHP") || "Nomor HP belum diatur",
+  NomorHP: localStorage.getItem("NomorHP") || "Belum diatur",
+  PIN: localStorage.getItem("PIN") || "",
   Foto: localStorage.getItem("Foto") || "https://nasukafoods.site/gambarkosong.jpg", 
-  TotalPengeluaran: parseInt(localStorage.getItem("TotalPengeluaran")) || 0,
-  Poin: parseInt(localStorage.getItem("Poin")) || 0,
 };
 
 if (localUser.ID) {
-    const userRef = db.ref(`users/${localUser.ID}`);
-    userRef.on('value', (snapshot) => {
+    db.ref(`users/${localUser.ID}`).on('value', (snapshot) => {
       const userData = snapshot.val();
-      if (userData !== null) {
-        localUser.Saldo = userData.Saldo || 0;
-        localUser.Alamat = userData.Alamat || "Alamat belum diatur";
-        localUser.NomorHP = userData.NomorHP || "Nomor HP belum diatur";
-        localUser.Foto = userData.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
-        localUser.Nama = userData.Nama || localUser.Nama;
-        localUser.TotalPengeluaran = userData.TotalPengeluaran || 0; 
-        localUser.Poin = userData.Poin || 0;
-        
+      if (userData) {
+        Object.assign(localUser, userData);
         localStorage.setItem("Saldo", localUser.Saldo);
         localStorage.setItem("Alamat", localUser.Alamat);
         localStorage.setItem("NomorHP", localUser.NomorHP);
-        localStorage.setItem("Foto", localUser.Foto);
         localStorage.setItem("Nama", localUser.Nama);
-        localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran); 
-        localStorage.setItem("Poin", localUser.Poin);
-        
-        updateSaldoDisplay();
+        localStorage.setItem("Username", localUser.Username);
+        localStorage.setItem("PIN", localUser.PIN);
+        updateHomeDisplay();
       }
     });
 }
 
-function updateHomeDisplay() {
-    const userNameEl = document.getElementById('userNameDisplay');
-    const SaldoEl = document.getElementById('SaldoAmountDisplay');
-    const welcomeEl = document.querySelector('.welcome');
-    const isLoggedIn = !!localUser.ID;
-    
-    const navHome = document.getElementById('nav-home');
-    const navLeaderboard = document.getElementById('nav-leaderboard');
-    const navDokumen = document.getElementById('nav-dokumen');
-    
-    if (navHome) navHome.classList.add('active');
-    if (navLeaderboard) navLeaderboard.classList.remove('active');
-    if (navDokumen) navDokumen.classList.remove('active');
-
-    if (!userNameEl || !SaldoEl || !welcomeEl) return;
-    
-    
-    welcomeEl.textContent = 'Nasuka Foods'; 
-
-    if (isLoggedIn) {
-        const displayName = localUser.Nama ? localUser.Nama.split(' ')[0] : localUser.Username || 'Pengguna';
-        
-        
-        userNameEl.textContent = displayName;
-        
-        
-        SaldoEl.textContent = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID'); 
-        
-    } else {
-     
-        
-        SaldoEl.textContent = "Rp 0"; 
-    }
-}
-
-function updateSaldoDisplay() {
-    updateHomeDisplay();
-}
-
-
-function initializeHome() {
-  initializeUserProfile();
-  updateHomeDisplay();
-  
-  const runningTextEl = document.getElementById('running-text');
-  if (runningTextEl) {
-    const marqueeEl = document.createElement('marquee');
-    marqueeEl.setAttribute('behavior', 'scroll');
-    marqueeEl.setAttribute('direction', 'left');
-    marqueeEl.setAttribute('scrollamount', '8'); 
-    marqueeEl.textContent = '';
-    
-    runningTextEl.parentNode.replaceChild(marqueeEl, runningTextEl);
-  }
-}
-
-function initializeUserProfile() {
-  const userID = localStorage.getItem("ID") || "";
-  const profilLink = document.getElementById("Profil");
-  
-  
-  if (!userID) {
-    if (profilLink) {
-      profilLink.href = "#";
-      profilLink.onclick = () => { if (!localStorage.getItem('ID')) showLogin(); else showProfil(); };
-    }
-    return;
-  }
-  
-  if (profilLink) {
-    profilLink.href = "#";
-    profilLink.onclick = showProfil;
-  }
-
-  if (!localUser.Nama) {
-      fetchUserProfileFromDB(userID);
-  } else {
-      updateProfileDisplay(localUser.Nama, localUser.Foto, userID);
-  }
-}
-
-function updateProfileDisplay(nama, foto, userID) {
-  const profilLink = document.getElementById("Profil");
-  if (profilLink) {
-    profilLink.onclick = showProfil;
-  }
-  updateHomeDisplay();
-}
-
-function fetchUserProfileFromDB(userID) {
-  db.ref(`users/${userID}`).once("value").then(snapshot => {
-    const val = snapshot.val();
-    if (val) {
-      const nama = val.Nama || "Tanpa Nama";
-      const foto = val.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
-      
-      localUser.Nama = nama;
-      localUser.Foto = foto;
-      localUser.Alamat = val.Alamat || "Alamat belum diatur";
-      localUser.NomorHP = val.NomorHP || "Nomor HP belum diatur";
-      localUser.Saldo = val.Saldo || 0;
-      localUser.TotalPengeluaran = val.TotalPengeluaran || 0; 
-      localUser.Poin = val.Poin || 0;
-      
-      localStorage.setItem("Nama", nama);
-      localStorage.setItem("Foto", foto);
-      localStorage.setItem("Alamat", localUser.Alamat);
-      localStorage.setItem("NomorHP", localUser.NomorHP);
-      localStorage.setItem("Saldo", localUser.Saldo);
-      localStorage.setItem("TotalPengeluaran", localUser.TotalPengeluaran); 
-      localStorage.setItem("Poin", localUser.Poin);
-
-      updateProfileDisplay(nama, foto, userID);
-    } else {
-      localUser.ID = null;
-      localStorage.clear();
-      updateHomeDisplay(); 
-    }
-  }).catch(error => {
-      console.error("Error fetching user profile:", error);
-      updateHomeDisplay();
-  });
-}
-
-
-
 function hideAllContainers() {
-    
-    document.querySelectorAll('#home-container, #login-container, #signup-container, #profil-container, #payment-container, #editprofil-container, #receipt-popup, #video-container, #download-container, #leaderboard-container, #formal-confirmation-modal, #dokumen-container, #free-shipping-container, #produk-detail-container').forEach(el => { 
+    document.querySelectorAll('#home-container, #login-container, #profil-container, #editprofil-container, #dokumen-container, #testimoni-container').forEach(el => { 
         if (el) el.style.display = 'none';
     });
 }
 
-
-
-function showHome() {
-    hideAllContainers();
-    const homeContainer = document.getElementById('home-container');
-    if (homeContainer) {
-        homeContainer.style.display = 'block';
-        initializeHome();
-    }
-    
-    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    const navHome = document.getElementById('nav-home');
-    if (navHome) navHome.classList.add('active');
-}
-
-function showLogin() {
-    hideAllContainers();
-    document.getElementById('login-container').style.display = 'flex';
-    document.getElementById('loginStatus').innerHTML = '';
-    document.getElementById('loginForm').reset();
-}
-
-function showSignup() {
-    hideAllContainers();
-    document.getElementById('signup-container').style.display = 'flex';
-    document.getElementById('signupStatus').innerHTML = '';
-    document.getElementById('signupForm').reset();
-}
-
-function showDownload() {
-    hideAllContainers();
-    const downloadContainer = document.getElementById('download-container');
-    if (downloadContainer) {
-        downloadContainer.style.display = 'block'; 
-        downloadContainer.scrollTop = 0; 
+function updateHomeDisplay() {
+    const SaldoEl = document.getElementById('SaldoAmountDisplay');
+    if (localUser.ID) {
+        if (SaldoEl) SaldoEl.textContent = localUser.Nama || "Pelanggan";
+    } else {
+        if (SaldoEl) SaldoEl.textContent = "Tamu";
     }
 }
 
+function showHome() { hideAllContainers(); document.getElementById('home-container').style.display = 'block'; updateHomeDisplay(); }
+function showLogin() { hideAllContainers(); document.getElementById('login-container').style.display = 'flex'; }
 
-function showDokumen() {
-    hideAllContainers();
-    const dokumenContainer = document.getElementById('dokumen-container');
-    
-    if (dokumenContainer) {
-        dokumenContainer.style.display = 'flex';
-        dokumenContainer.scrollTop = 0; 
-    }
-    
-    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    const navDokumen = document.getElementById('nav-dokumen');
-    if(navDokumen) navDokumen.classList.add('active');
-}
+async function handleAuth() {
+    const noWA = document.getElementById('authWA').value.trim();
+    const pin = document.getElementById('authPIN').value.trim();
+    const statusDiv = document.getElementById('authStatus');
 
+    if (noWA.length < 10) return alert("Nomor WA tidak valid");
+    if (pin.length !== 6) return alert("PIN harus 6 digit");
 
+    statusDiv.innerHTML = "Memproses...";
 
-function showLeaderboard() {
-    hideAllContainers();
-    const leaderboardContainer = document.getElementById('leaderboard-container');
-    
-    if (leaderboardContainer) {
-        leaderboardContainer.style.display = 'flex';
-        leaderboardContainer.scrollTop = 0;
-    }
-    
-    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    const navLeaderboard = document.getElementById('nav-leaderboard');
-    if (navLeaderboard) navLeaderboard.classList.add('active');
+    try {
+        // 1. Cari apakah nomor WA sudah ada di database
+        const snapshot = await db.ref("users").orderByChild("NomorHP").equalTo(noWA).once("value");
 
-    const leaderboardListEl = document.getElementById('leaderboard-list');
-    if (!leaderboardListEl) return;
+        if (snapshot.exists()) {
+            // Jika nomor ditemukan, ambil data user pertama (karena hasil query adalah objek/list)
+            const userData = Object.values(snapshot.val())[0];
 
-    
-    const contentSection = document.querySelector('.leaderboard-content-section');
-    if (contentSection) {
-        
-        let staticHeader = contentSection.querySelector('div[style*="background-color: white"]');
-        if (staticHeader) {
-            contentSection.removeChild(staticHeader);
+            // 2. Cek apakah PIN cocok
+            if (userData.PIN === pin) {
+                loginSuccess(userData);
+            } else {
+                statusDiv.innerHTML = "<span style='color:red;'>PIN SALAH!</span>";
+            }
+        } else {
+            // 3. Jika nomor TIDAK ditemukan, baru buat akun baru (Auto-Register)
+            const newID = "NSK" + Math.floor(1000 + Math.random() * 9000);
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            
+            const newUser = { 
+                ID: newID, 
+                NomorHP: noWA, 
+                PIN: pin, 
+                Nama: "Pelanggan Baru", 
+                Username: "NS-" + randomNum, 
+                Saldo: 0, 
+                Alamat: "Belum diatur", 
+                TanggalJoin: new Date().toISOString() 
+            };
+
+            await db.ref(`users/${newID}`).set(newUser);
+            loginSuccess(newUser);
         }
-    }
-
-
-    leaderboardListEl.innerHTML = '<p style="text-align: center; color: #007bff;"><i class="fas fa-spinner fa-spin"></i> Memuat List Leaderboard ..</p>';
-    
-    const userID = localUser.ID;
-    
-    
-    const leaderboardHeaderContent = `
-        <div style="background-color: white; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
-            <img src="https://nasukafoods.site/wingbiru.gif" alt="" style="width: 50px; height: 50px; margin-bottom: 10px;">
-           
-            <p class="blinking-glowing-text">Best Customers</p>
-            <p id="rank-one-display" style="font-size: 24px; font-weight: 800; color: #f44336; margin: 5px 0;">
-                <i class="fas fa-gem" style="margin-right: 5px;"></i> Memuat Juara...
-            </p>
-            <p>---------</p>
-        </div>
-    `;
-    
-    
-    $(leaderboardHeaderContent).insertBefore(leaderboardListEl);
-    
-    const rankOneDisplayEl = document.getElementById('rank-one-display');
-
-
-    db.ref("users").orderByChild("Poin").limitToLast(10).once("value")
-        .then(top10Snapshot => {
-            let top10Users = [];
-            top10Snapshot.forEach(childSnapshot => {
-                top10Users.push({
-                    ID: childSnapshot.key,
-                    ...childSnapshot.val()
-                });
-            });
-
-            
-            top10Users.reverse(); 
-
-            let listHTML = '';
-            let isUserInTop10 = false;
-            
-            
-            if (top10Users.length > 0) {
-                const rankOneUser = top10Users[0];
-                const rankOneName = rankOneUser.Nama || rankOneUser.Username || 'Pengguna Anonim';
-                
-                if (rankOneDisplayEl) {
-                    rankOneDisplayEl.innerHTML = `<i class="fas fa-crown" style="color: #ffc107; margin-right: 5px;"></i> ${rankOneName} <i class="fas fa-crown" style="color: #ffc107; margin-left: 5px;"></i>`;
-                }
-            } else if (rankOneDisplayEl) {
-                 rankOneDisplayEl.textContent = 'Belum Ada Data Poin';
-            }
-            
-            
-            
-            top10Users.forEach((user, index) => {
-                const rank = index + 1;
-                const isMe = userID && user.ID === userID;
-                
-                if (isMe) {
-                    isUserInTop10 = true;
-                }
-                
-                const displayName = user.Nama || user.Username || 'Pengguna Anonim';
-                
-                
-                const scoreDisplay = `${(user.Poin || 0).toLocaleString('id-ID')} Poin`;
-                
-                listHTML += `
-                    <div class="leaderboard-item" style="${isMe ? 'border: 2px solid #007bff; background-color: #e6f7ff;' : ''}">
-                        <span class="leaderboard-rank">${rank}</span>
-                        <span class="leaderboard-name" style="${isMe ? 'font-weight: 700; color: #007bff;' : ''}">${displayName} ${isMe ? '(Anda)' : ''}</span>
-                        <span class="leaderboard-score" style="color: #ff9800;">${scoreDisplay}</span>
-                    </div>
-                `;
-            });
-
-            if (top10Users.length > 0) {
-                leaderboardListEl.innerHTML = listHTML;
-            } else {
-                 leaderboardListEl.innerHTML = '<p style="text-align: center; color: #666; margin-top: 20px;">Belum ada data Leaderboard.</p>';
-            }
-            
-            
-            if (userID && !isUserInTop10) {
-                
-                const userPoin = localUser.Poin || 0;
-                
-                
-                db.ref("users").orderByChild("Poin").startAt(userPoin + 1).once("value")
-                    .then(rankSnapshot => {
-                        let rank = 1;
-                        rankSnapshot.forEach(childSnapshot => {
-                            rank++;
-                        });
-                        
-                        const rankAndaHTML = `
-                            <div style="margin-top: 20px; padding: 15px; border: 2px solid #ff9800; background-color: #fff3e0; border-radius: 8px; text-align: center;">
-                                <p style="margin: 0; font-size: 16px; font-weight: 600; color: #ff9800;">🏆 Dominasi Sultan<p>Peringkat Anda :</p>
-                                <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: 700; color: #333;">${rank}</p>
-                                <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Total Poin: ${userPoin.toLocaleString('id-ID')}</p>
-                            </div>
-                        `;
-                        leaderboardListEl.innerHTML += rankAndaHTML;
-                    })
-                    .catch(error => {
-                        console.error("Gagal mengambil peringkat pengguna:", error);
-                        leaderboardListEl.innerHTML += `<p style="text-align: center; color: red; margin-top: 10px;">Gagal mengambil peringkat Anda.</p>`;
-                    });
-            } else if (!userID) {
-                leaderboardListEl.innerHTML += `<p style="text-align: center; color: #666; margin-top: 10px;">Silakan login untuk melihat peringkat Anda.</p>`;
-            }
-
-        })
-        .catch(error => {
-            console.error("Gagal memuat Leaderboard:", error);
-            leaderboardListEl.innerHTML = `<p style="text-align: center; color: red; margin-top: 20px;">Gagal memuat Leaderboard: ${error.message}</p>`;
-        });
-}
-
-
-function loginUser() {
-    const username = document.getElementById('loginUsername').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
-    const statusDiv = document.getElementById('loginStatus');
-    statusDiv.className = 'auth-status';
-    statusDiv.innerHTML = 'Memproses...';
-    if (!username || !password) {
-        statusDiv.innerHTML = 'Username dan Password wajib diisi.';
-        statusDiv.classList.add('error');
-        return;
-    }
-    db.ref("users").orderByChild("Username").equalTo(username).once("value")
-        .then(snapshot => {
-            const userData = snapshot.val();
-            if (userData) {
-                const userKey = Object.keys(userData)[0];
-                const user = userData[userKey];
-                if (user.Password === password) {
-                    localStorage.setItem("ID", user.ID);
-                    localStorage.setItem("Username", user.Username);
-                    localStorage.setItem("Nama", user.Nama || 'Tanpa Nama');
-                    localStorage.setItem("Saldo", user.Saldo || 0);
-                    localStorage.setItem("Foto", user.Foto || "https://nasukafoods.site/gambarkosong.jpg"); 
-                    localStorage.setItem("Alamat", user.Alamat || "Alamat belum diatur");
-                    localStorage.setItem("NomorHP", user.NomorHP || "Nomor HP belum diatur");
-                    localStorage.setItem("TanggalJoin", user.TanggalJoin || new Date().toISOString());
-                    localStorage.setItem("TotalPengeluaran", user.TotalPengeluaran || 0);
-                    localStorage.setItem("Poin", user.Poin || 0);
-
-                    localUser.ID = user.ID;
-                    localUser.Username = user.Username;
-                    localUser.Nama = user.Nama || 'Tanpa Nama';
-                    localUser.Saldo = user.Saldo || 0;
-                    localUser.Foto = user.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
-                    localUser.Alamat = user.Alamat || "Alamat belum diatur";
-                    localUser.NomorHP = user.NomorHP || "Nomor HP belum diatur";
-                    localUser.TotalPengeluaran = user.TotalPengeluaran || 0; 
-                    localUser.Poin = user.Poin || 0;
-                    
-                    statusDiv.innerHTML = 'Lading...';
-                    statusDiv.classList.add('success');
-                    setTimeout(showHome, 1500);
-                } else {
-                    statusDiv.innerHTML = 'Password salah.';
-                    statusDiv.classList.add('error');
-                }
-            } else {
-                statusDiv.innerHTML = 'Username tidak ditemukan.';
-                statusDiv.classList.add('error');
-            }
-        })
-        .catch(error => {
-            statusDiv.innerHTML = 'Terjadi kesalahan saat login.';
-            statusDiv.classList.add('error');
-        });
-}
-
-function signupUser() {
-    const username = document.getElementById('signupUsername').value.trim();
-    const nama = document.getElementById('signupNama').value.trim();
-    const password = document.getElementById('signupPassword').value.trim();
-    const statusDiv = document.getElementById('signupStatus');
-    statusDiv.className = 'auth-status';
-    statusDiv.innerHTML = 'Memproses...';
-    if (!username || !nama || !password) {
-        statusDiv.innerHTML = 'Semua field wajib diisi.';
-        statusDiv.classList.add('error');
-        return;
-    }
-    if (username.length < 5 || password.length < 5) {
-        statusDiv.innerHTML = 'Username dan Password harus minimal 5 karakter.';
-        statusDiv.classList.add('error');
-        return;
-    }
-    
-    
-    const generateRandomNumber = () => {
-        return Math.floor(100000 + Math.random() * 900000).toString();
-    };
-
-    
-    const newID = "NASUKA" + generateRandomNumber(); 
-    
-    
-    db.ref("users").orderByChild("Username").equalTo(username).once("value")
-        .then(snapshot => {
-            if (snapshot.exists()) {
-                statusDiv.innerHTML = 'Username sudah digunakan. Silakan pilih yang lain.';
-                statusDiv.classList.add('error');
-            } else {
-                
-                const newUser = {
-                    ID: newID, 
-                    Username: username,
-                    Nama: nama,
-                    Password: password,
-                    Saldo: 1,
-                    Foto: "https://nasukafoods.site/gambarkosong.jpg", 
-                    Jenis: "Member",
-                    Alamat: "Alamat belum diatur",
-                    NomorHP: "Nomor HP belum diatur",
-                    TanggalJoin: new Date().toISOString(),
-                    TotalPengeluaran: 0, 
-                    Poin: 0,
-                };
-                
-                
-                db.ref(`users/${newID}`).set(newUser)
-                    .then(() => {
-                        localStorage.setItem("ID", newUser.ID);
-                        localStorage.setItem("Username", newUser.Username);
-                        localStorage.setItem("Nama", newUser.Nama);
-                        localStorage.setItem("Saldo", newUser.Saldo);
-                        localStorage.setItem("Foto", newUser.Foto);
-                        localStorage.setItem("Alamat", newUser.Alamat);
-                        localStorage.setItem("NomorHP", newUser.NomorHP);
-                        localStorage.setItem("TanggalJoin", newUser.TanggalJoin);
-                        localStorage.setItem("TotalPengeluaran", newUser.TotalPengeluaran); 
-                        localStorage.setItem("Poin", newUser.Poin);
-                        
-                        localUser.ID = newUser.ID;
-                        localUser.Username = newUser.Username;
-                        localUser.Nama = newUser.Nama;
-                        localUser.Saldo = newUser.Saldo;
-                        localUser.Foto = newUser.Foto;
-                        localUser.Alamat = newUser.Alamat;
-                        localUser.NomorHP = newUser.NomorHP;
-                        localUser.TotalPengeluaran = newUser.TotalPengeluaran; 
-                        localUser.Poin = newUser.Poin;
-                        
-                        statusDiv.innerHTML = 'Pendaftaran Berhasil! Anda mendapatkan Saldo gratis 1 Rupiah';
-                        statusDiv.classList.add('success');
-                        setTimeout(showHome, 1500);
-                    })
-                    .catch(error => {
-                        statusDiv.innerHTML = 'Gagal mendaftar. Silakan coba lagi.';
-                        statusDiv.classList.add('error');
-                    });
-            }
-        })
-        .catch(error => {
-            statusDiv.innerHTML = 'Terjadi kesalahan sistem. Silakan coba lagi.';
-            statusDiv.classList.add('error');
-        });
-}
-
-function logoutUser() {
-    if (confirm("Anda yakin ingin keluar?")) {
-        localStorage.clear(); 
-        
-        localUser.ID = null;
-        localUser.Username = null;
-        localUser.Nama = null;
-        localUser.Saldo = 0;
-        localUser.Alamat = "Alamat belum diatur";
-        localUser.NomorHP = "Nomor HP belum diatur";
-        localUser.Foto = "https://nasukafoods.site/gambarkosong.jpg"; 
-        localUser.TotalPengeluaran = 0;
-        localUser.Poin = 0;
-        
-        alert("Anda telah keluar.");
-        showHome();
+    } catch (error) {
+        console.error(error);
+        statusDiv.innerHTML = "<span style='color:red;'>Terjadi kesalahan koneksi.</span>";
     }
 }
+
+
+function loginSuccess(user) {
+    localStorage.setItem("ID", user.ID);
+    localStorage.setItem("Username", user.Username || user.ID);
+    localStorage.setItem("Nama", user.Nama);
+    localStorage.setItem("NomorHP", user.NomorHP);
+    localStorage.setItem("PIN", user.PIN);
+    location.reload();
+}
+
 
 function showProfil() {
     hideAllContainers();
-    const userID = localStorage.getItem("ID");
-    if (!userID) {
-        alert("Silahkan login terlebih dahulu.");
-        showLogin();
-        return;
-    }
-    
-    const profilContainer = document.getElementById('profil-container');
-    profilContainer.style.display = 'block'; 
-    
-    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    const navAkun = document.querySelector('.bottom-nav').lastElementChild;
-    if(navAkun) navAkun.classList.add('active');
-
-
-    const renderProfil = () => {
-        const nama = localUser.Nama || 'Nama belum diatur';
-        const foto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
-        const Saldo = 'Rp ' + (localUser.Saldo || 0).toLocaleString('id-ID');
-        
-        const Poin = (localUser.Poin || 0).toLocaleString('id-ID') + ' Poin';
-        
-        const tanggalJoinISO = localStorage.getItem("TanggalJoin") || new Date().toISOString();
-        const tanggalObj = new Date(tanggalJoinISO);
-        const bulanJoin = tanggalObj.toLocaleString('id-ID', { month: 'short', year: 'numeric' });
-        
-        const displayNomorHP = localUser.NomorHP || 'Nomor HP belum diatur'; 
-        
-        
-        document.getElementById('profilFoto').src = foto;
-        document.getElementById('profilNamaDriver').textContent = nama;
-        document.getElementById('profilBulanJoin').textContent = bulanJoin;
-        
-        
-        document.getElementById('profilIDPlat').textContent = 'Nomor HP: ' + displayNomorHP; 
-        
-        
-        document.getElementById('profilSaldoDisplay').textContent = Saldo; 
-        
-        const profilPoinDisplayEl = document.getElementById('profilPoinDisplay');
-        if (profilPoinDisplayEl) {
-            profilPoinDisplayEl.textContent = Poin;
-        }
-        
-        const alamatPengirimanEl = document.getElementById('profilAlamatPengiriman');
-        if (alamatPengirimanEl) {
-            alamatPengirimanEl.textContent = localUser.Alamat || "Alamat belum diatur";
-        }
-        
-        const safetyReport = document.querySelector('.safety-report');
-        if (safetyReport) {
-             safetyReport.onclick = showHistory;
-        }
-
-        // START: PERUBAHAN FOKUS KE DONATUR
-        document.getElementById('profilRatingScore').textContent = ''; // Ubah teks utama
-        
-        // Ganti elemen-elemen rating bintang dengan daftar kontributor statis
-        const contributorListEl = document.getElementById('contributor-list');
-        if (contributorListEl) {
-            contributorListEl.innerHTML = `
-                <div class="contributor-rating-row">
-                    <span class="contributor-name">Doni Prasetyo</span>
-                    <span class="contributor-donation">Rp 50.000</span>
-                </div>
-                <div class="contributor-rating-row">
-                    <span class="contributor-name">Siti Fatimah</span>
-                    <span class="contributor-donation">Rp 30.000</span>
-                </div>
-                <div class="contributor-rating-row">
-                    <span class="contributor-name">Budi Hartono</span>
-                    <span class="contributor-donation">Rp 20.000</span>
-                </div>
-                <div class="contributor-rating-row">
-                    <span class="contributor-name">Aulia Zahra</span>
-                    <span class="contributor-donation">Rp 15.000</span>
-                </div>
-                <div class="contributor-rating-row">
-                    <span class="contributor-name">Fajar Gemilang</span>
-                    <span class="contributor-donation">Rp 10.000</span>
-                </div>
-                
-            `;
-        }
-
-        // Tambahkan event listener untuk tautan Kontributor
-        const ratingLabelEl = document.querySelector('.rating-label a');
-        if (ratingLabelEl) {
-            ratingLabelEl.href = 'https://nasukafoods.site/kontributor-saldo-publik.html';
-        }
-        // END: PERUBAHAN FOKUS KE DONATUR
-        
-        updateHomeDisplay();
-    };
-    
-    renderProfil(); 
-    
-    const tabPencapaian = document.getElementById('tabPencapaian');
-    const tabPerbaikan = document.getElementById('tabPerbaikan');
-    const contentPencapaian = document.getElementById('contentPencapaian');
-    const contentPerbaikan = document.getElementById('contentPerbaikan');
-    
-    const switchTab = (activeTab) => {
-        tabPencapaian.classList.remove('active');
-        tabPerbaikan.classList.remove('active');
-        contentPencapaian.style.display = 'none';
-        contentPerbaikan.style.display = 'none';
-
-        if (activeTab === 'pencapaian') {
-            tabPencapaian.classList.add('active');
-            contentPencapaian.style.display = 'block';
-             if (contentPencapaian.querySelector('#history-list')) {
-                contentPencapaian.innerHTML = `
-                    <div class="badge-section">
-                        <h4>Informasi</h4>
-                        <div class="badge-card">
-                            <img src="https://nasukafoods.site/sayapunggu.gif" alt="Lencana" class="badge-image">
-                            <div class="badge-text">
-                                <strong>Alamat pengiriman</strong>
-                                <span id="profilAlamatPengiriman">${localUser.Alamat || "Alamat belum diatur"}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="passenger-comments">
-                        <h4>Apa Kata Anda</h4>
-                        <img src="https://nasukafoods.site/pitasebar.gif" alt="Mencari Komentar" class="magnifying-glass">
-                        <p style="text-align: center; color: #666; margin-top: 10px;">Belum ada kata kata untuk ditampilkan</p>
-                    </div>
-                `;
-            }
-        } else {
-            tabPerbaikan.classList.add('active');
-            contentPerbaikan.style.display = 'block';
-        }
-    };
-    
-    tabPencapaian.onclick = () => switchTab('pencapaian');
-    tabPerbaikan.onclick = () => switchTab('perbaikan');
-    
-    switchTab('pencapaian');
+    document.getElementById('profil-container').style.display = 'block';
+    document.getElementById('profilNamaDriver').textContent = localUser.Nama;
+    document.getElementById('profilSaldoDisplay').textContent = localUser.Saldo.toLocaleString('id-ID');
+    document.getElementById('profilAlamatPengiriman').textContent = localUser.Alamat;
+    document.getElementById('profilIDPlat').textContent = 'HP: ' + localUser.NomorHP;
+    const tgl = new Date(localStorage.getItem("TanggalJoin") || new Date());
+    document.getElementById('profilBulanJoin').textContent = tgl.toLocaleString('id-ID', { month: 'short', year: 'numeric' });
 }
 
+function logoutUser() { localStorage.clear(); location.reload(); }
 
-
-
-
-function showHistory() {
-    const contentPencapaian = document.getElementById('contentPencapaian');
-    
-    
-    document.getElementById('tabPencapaian').classList.add('active');
-    document.getElementById('tabPerbaikan').classList.remove('active');
-
-    
-    contentPencapaian.innerHTML = `
-        <div style="text-align: center; padding: 20px;">
-            <h4 style="margin-top: 0; color: #333; font-size: 16px; font-weight: 600;">Riwayat Pembelian</h4>
-            <div id="history-list" style="margin-top: 15px; background-color: white; padding: 10px; border-radius: 8px;">
-                <p style="color: #007bff;"><i class="fas fa-spinner fa-spin"></i> Memuat riwayat...</p>
-            </div>
-            <button onclick="showProfil()" style="margin-top: 20px; padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">
-                Kembali ke Profil
-            </button>
-        </div>
-    `;
-    
-    
-    db.ref(`transactions/${localUser.ID}`).orderByChild('timestamp').limitToLast(20).once('value')
-        .then(snapshot => {
-            const historyListEl = document.getElementById('history-list');
-            historyListEl.innerHTML = ''; 
-            const transactions = [];
-            snapshot.forEach(childSnapshot => {
-                transactions.push(childSnapshot.val());
-            });
-            
-            if (transactions.length === 0) {
-                historyListEl.innerHTML = '<p style="color: #666; font-style: italic;">Belum ada riwayat pembelian.</p>';
-                return;
-            }
-
-            transactions.reverse();
-
-            transactions.forEach(tx => {
-                const date = new Date(tx.timestamp).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-                const txItem = document.createElement('div');
-                txItem.style.cssText = `
-                    padding: 10px 0;
-                    border-bottom: 1px solid #eee;
-                    text-align: left;
-                    cursor: pointer;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    transition: background-color 0.1s;
-                `;
-                txItem.onmouseover = function() { this.style.backgroundColor = '#f9f9f9'; };
-                txItem.onmouseout = function() { this.style.backgroundColor = 'white'; };
-                
-                
-                txItem.onclick = () => {
-                    alert("Fungsi melihat detail resi telah dihapus.");
-                };
-                
-                
-                const pointsDisplay = tx.pointsEarned ? `<span style="font-size: 12px; color: #ff9800; margin-left: 10px;">(+${tx.pointsEarned} Poin)</span>` : '';
-
-                txItem.innerHTML = `
-                    <div>
-                        <strong style="color: ${tx.status === 'Success' ? '#28a745' : '#f44336'};">${tx.productName}</strong><br>
-                        <span style="font-size: 12px; color: #666;">${date} | ID: ${tx.transactionID.substring(0, 8)}...</span><br>
-                        <span style="font-size: 14px; font-weight: 500;">Total: -Rp ${tx.amount.toLocaleString('id-ID')} ${pointsDisplay}</span>
-                    </div>
-                    <i class="fas fa-chevron-right" style="font-size: 12px; color: #999;"></i>
-                `;
-                historyListEl.appendChild(txItem);
-            });
-        })
-        .catch(error => {
-            document.getElementById('history-list').innerHTML = `<p style="color: red;">Gagal memuat riwayat: ${error.message}</p>`;
-        });
-}
 
 
 function showEditProfil() {
     hideAllContainers();
     const editContainer = document.getElementById('editprofil-container');
-    editContainer.style.display = 'flex'; 
-
-    const currentUsername = localUser.Username || '';
-    const currentNama = localUser.Nama || '';
-    const currentNomorHP = localUser.NomorHP === 'Nomor HP belum diatur' ? '' : localUser.NomorHP; 
-    const currentAlamat = localUser.Alamat === 'Alamat belum diatur' ? '' : localUser.Alamat; 
-    const currentFoto = localUser.Foto || "https://nasukafoods.site/gambarkosong.jpg"; 
-    
-    editContainer.style.position = 'fixed';
-    editContainer.style.top = '0';
-    editContainer.style.left = '0';
-    editContainer.style.width = '100%';
-    editContainer.style.height = '100%';
-    editContainer.style.zIndex = '200003';
-    editContainer.style.padding = '0';
-    editContainer.style.backgroundColor = '#f0f2f5'; 
-    editContainer.style.alignItems = 'flex-start'; 
-    editContainer.style.overflowY = 'auto'; 
-
+    editContainer.style.display = 'flex';
+    const displayUsername = localUser.Username && localUser.Username !== "null" ? localUser.Username : (localUser.ID || "Belum ada ID");
     editContainer.innerHTML = `
-        <div class="auth-card">
-            
-            <div class="edit-header-nav">
-                <i class="fas fa-arrow-left" onclick="showProfil()"></i>
-                <h3>Edit Profil</h3>
-                <i class="fas fa-question-circle"></i>
-            </div>
-            
-            <div class="edit-profile-photo-section">
-                <img id="editFotoProfil" class="edit-profile-photo" src="${currentFoto}" alt="Foto Profil">
-                <div class="change-photo-text" onclick="alert('Fitur ganti foto belum tersedia.')">Ubah foto profil</div>
-            </div>
+        <div class="edit-header"><i class="fas fa-arrow-left" onclick="showProfil()"></i><h1>Edit profil</h1></div>
+        <div class="images-container"><div class="cover-photo"></div><div class="profile-wrapper"><div class="profile-pic-edit" style="background-image: url('${localUser.Foto}')"></div></div></div>
+        <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;"><div style="font-size: 12px; color: #888; text-transform: uppercase;">Username Anda</div><div style="font-size: 18px; font-weight: bold; color: #000; background: #f0f0f0; display: inline-block; padding: 5px 25px; border-radius: 20px; margin-top: 5px; border: 1px solid #ddd;">${displayUsername}</div></div>
+        <div class="section-edit"><div class="section-header-edit"><span class="section-title-edit">Akun</span></div><div class="item-row-edit"><div class="item-icon-edit"><i class="fas fa-user"></i></div><div class="item-content-edit"><div class="item-label-edit">Nama</div><input type="text" id="enama" class="edit-input" value="${localUser.Nama}"></div></div></div>
+        <div class="section-edit"><div class="section-header-edit"><span class="section-title-edit">Akses Keamanan</span></div><div class="item-row-edit"><div class="item-icon-edit"><i class="fab fa-whatsapp"></i></div><div class="item-content-edit"><div class="item-label-edit">Nomor Whatsapp</div><input type="number" id="ewa" class="edit-input" value="${localUser.NomorHP}"></div></div><div class="item-row-edit"><div class="item-icon-edit"><i class="fas fa-key"></i></div><div class="item-content-edit"><div class="item-label-edit">PIN Keamanan (6 Digit)</div><input type="password" id="epin" class="edit-input" value="${localUser.PIN}" maxlength="6" inputmode="numeric"></div></div></div>
+        <div class="section-edit"><div class="section-header-edit"><span class="section-title-edit">Detail pengiriman</span></div><div class="item-row-edit"><div class="item-icon-edit"><i class="fas fa-map-marker-alt"></i></div><div class="item-content-edit"><div class="item-label-edit">Alamat Lengkap</div><textarea id="ealamat" style="width:100%; border:1px solid #eee; border-radius:4px; padding:5px; font-size:14px;">${localUser.Alamat}</textarea></div></div></div>
+        <div class="save-btn-container"><button onclick="saveProfil()" class="btn-save-new">SIMPAN PERUBAHAN</button></div>
+    `;
+}
 
-            <form id="editProfilForm">
-                <div class="edit-form-section">
-                    <h4>Informasi Kontak & Pengiriman</h4>
-                    
-                    
-                   
-                    
-                    <div class="form-group">
-                        <label for="editNama">Nama Lengkap</label>
-                        <input type="text" id="editNama" placeholder="Nama Lengkap" value="${currentNama}" required>
+
+async function saveProfil() {
+    const n = document.getElementById('enama').value.trim();
+    const a = document.getElementById('ealamat').value.trim();
+    const w = document.getElementById('ewa').value.trim();
+    const p = document.getElementById('epin').value.trim();
+
+    if (w.length < 10) return alert("Nomor WhatsApp tidak valid");
+    if (p.length !== 6) return alert("PIN harus 6 digit");
+
+    try {
+        // 1. Cek apakah nomor WhatsApp berubah dari nomor lama
+        if (w !== localUser.NomorHP) {
+            // 2. Jika berubah, cek apakah nomor baru tersebut sudah dipakai akun lain
+            const snapshot = await db.ref("users").orderByChild("NomorHP").equalTo(w).once("value");
+            
+            if (snapshot.exists()) {
+                return alert("Gagal: Nomor WhatsApp sudah terdaftar dengan akun lain!");
+            }
+        }
+
+        // 3. Jika nomor tetap atau nomor baru belum ada yang pakai, lakukan update
+        await db.ref(`users/${localUser.ID}`).update({
+            Nama: n,
+            Alamat: a,
+            NomorHP: w,
+            PIN: p
+        });
+
+        alert("Profil berhasil diperbarui");
+        showProfil();
+    } catch (err) {
+        alert("Gagal menyimpan: " + err.message);
+    }
+}
+
+
+
+function showHistory() {
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Riwayat Transaksi';
+    doc.querySelector('.dokumen-content-section').innerHTML = '<p style="text-align:center;">Memuat riwayat...</p>';
+
+    db.ref(`history/${localUser.ID}`).once('value').then(snap => {
+        let h = '';
+        const data = [];
+        snap.forEach(c => { 
+            let item = c.val();
+            item.key = c.key;
+            data.push(item); 
+        });
+        data.reverse(); 
+
+        data.forEach((d) => {
+            let infoVoucher = "";
+            if (d.voucher && d.voucher !== "-") {
+                infoVoucher = `
+                    <div style="margin-top: 8px; padding: 10px; background: #fffde7; border: 1px dashed #fbc02d; border-radius: 5px;" 
+                         onclick="event.stopPropagation(); toggleVoucher(this, '${d.voucher}')">
+                        <small style="color: #888; display: block; font-size: 10px; margin-bottom: 4px;">KODE VOUCHER (Klik untuk melihat):</small>
+                        <b class="voucher-text" style="color: #000; font-family: monospace; font-size: 15px; letter-spacing: 1px;">**** **** ****</b>
                     </div>
-                        <div class="form-group">
-                        <label for="editNomorHP">Nomor HP</label>
-                        <input type="text" id="editNomorHP" placeholder="Nomor HP" value="${currentNomorHP}" required>
+                `;
+            }
+
+            const isPemasukan = d.total < 0; 
+            const displayAmount = Math.abs(d.total || 0).toLocaleString('id-ID');
+            const statusSymbol = isPemasukan ? "+" : "-";
+            const statusColor = isPemasukan ? "#27ae60" : "#ee4d2d"; 
+            const borderSideColor = isPemasukan ? "#27ae60" : "#ee4d2d";
+
+            let namaProduk = d.produk;
+            if (isPemasukan && d.produk.includes("0859109819017")) {
+                namaProduk = "Top Up Berhasil";
+            }
+
+            h += `
+                <div class="dokumen-item" 
+                     onclick="showDetailTransaksi(${JSON.stringify(d).replace(/"/g, '&quot;')})"
+                     style="border-left:4px solid ${borderSideColor}; margin-bottom:15px; background: #fff; padding: 12px; border-radius: 0 8px 8px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <b style="font-size: 14px; color: #333;">${namaProduk}</b>
+                        <span style="color: ${statusColor}; font-weight: bold; font-size: 13px;">${statusSymbol} Rp ${displayAmount}</span>
                     </div>
-                     <div class="form-group">
-                        <label for="editAlamat">Alamat Pengiriman</label>
-                        <textarea id="editAlamat" placeholder="Alamat Pengiriman" rows="3" required>${currentAlamat}</textarea>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <small style="color: #aaa; font-size: 11px;">${d.tanggal}</small>
+                        <small style="color: #27ae60; font-weight: bold; font-size: 10px;">${d.status || 'BERHASIL'}</small>
                     </div>
-                    
-                  
-                    
+                    ${infoVoucher}
                 </div>
+            `;
+        });
+        doc.querySelector('.dokumen-content-section').innerHTML = h || '<div style="text-align:center; padding: 20px; color: #999;">Belum ada riwayat transaksi.</div>';
+    }).catch(err => {
+        doc.querySelector('.dokumen-content-section').innerHTML = '<p style="text-align:center; color: red;">Gagal memuat riwayat.</p>';
+    });
+}
 
-                <div class="edit-form-section">
-                    <h4>Informasi Akun</h4>
-                   
-                      
-                    <div class="form-group">
-                        <label for="editUsername">Username</label>
-                        <input type="text" id="editUsername" placeholder="Username" value="${currentUsername}" required>
-                    </div>
-                    
-                       <div class="form-group">
-                        <label for="editPassword">Password Baru (Kosongkan jika tidak ingin ganti)</label>
-                        <input type="password" id="editPassword" placeholder="Password Baru">
-                    </div>
-                    
-                    
-                </div>
+function toggleVoucher(element, realCode) {
+    const textEl = element.querySelector('.voucher-text');
+    if (textEl.textContent.includes('*')) {
+        textEl.textContent = realCode;
+        textEl.style.color = "#ee4d2d";
+    } else {
+        textEl.textContent = '**** **** ****';
+        textEl.style.color = "#000";
+    }
+}
 
-
-
-
-
-
-                <button type="submit">Simpan Perubahan</button>
-                <div id="editStatus" class="auth-status" style="margin-bottom: 10px; margin-top: 0;"></div>
-            </form>
-            
-            <div class="edit-footer-buttons" style="padding-bottom: 20px;">
-                <button onclick="showProfil()" class="btn-batal">Batal</button>
-               
+function showDetailTransaksi(data) {
+    const overlay = document.createElement('div');
+    overlay.id = 'detail-overlay';
+    overlay.innerHTML = `
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+            <i class="fas fa-arrow-left" onclick="document.getElementById('detail-overlay').remove()" style="font-size: 20px; cursor: pointer;"></i>
+            <h3 style="margin: 0 0 0 15px;">Detail Transaksi</h3>
+        </div>
+        <div style="border: 1px solid #eee; border-radius: 10px; padding: 15px; background: #fafafa; flex-grow: 1;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fas fa-check-circle" style="font-size: 48px; color: #27ae60;"></i>
+                <h2 style="margin: 10px 0 5px 0;">Sukses</h2>
+                <small style="color: #888;">${data.tanggal}</small>
             </div>
+            <hr style="border: 0; border-top: 1px dashed #ccc;">
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Produk</span><b>${data.produk}</b></div>
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Invoice</span><span style="font-family: monospace;">${data.invoice || '-'}</span></div>
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Metode</span><span>Saldo Nasuka</span></div>
+            <hr style="border: 0; border-top: 1px dashed #ccc;">
+            <div style="display: flex; justify-content: space-between; margin: 15px 0; font-size: 18px;"><span>Total</span><b style="color: #e67e22;">Rp ${Math.abs(data.total || 0).toLocaleString()}</b></div>
+        </div>
+        <button onclick="document.getElementById('detail-overlay').remove()" class="btn-transfer-action" style="margin-top:20px;">TUTUP</button>
+    `;
+    document.body.appendChild(overlay);
+}
+
+function showChat() {
+    let chatId = localUser.ID;
+    let isAnonymous = false;
+    if (!chatId) {
+        isAnonymous = true;
+        chatId = localStorage.getItem("AnonID");
+        if (!chatId) {
+            chatId = "ANON-" + Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem("AnonID", chatId);
+        }
+    }
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = isAnonymous ? 'Chat Pengunjung' : 'Chat Admin';
+    doc.querySelector('.dokumen-content-section').innerHTML = `
+        <div id="chatBox" class="chat-messages"></div>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <input type="text" id="chatInput" placeholder="Tulis pesan..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
+            <button onclick="sendChat('${chatId}')" class="btn-primary" style="width:auto; padding:0 15px;"><i class="fas fa-paper-plane"></i></button>
         </div>
     `;
-    document.getElementById('editProfilForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        updateProfile();
+
+    db.ref(`chats/${chatId}`).on('value', (snap) => {
+        const box = document.getElementById('chatBox');
+        if(!box) return;
+        box.innerHTML = '';
+        snap.forEach(c => { 
+            const m = c.val(); 
+            let content = m.text;
+            const isImage = m.text.match(/\.(jpeg|jpg|gif|png)$/) != null || m.text.includes('drive.google.com');
+            if (isImage) {
+                content = `<img src="${m.text}" style="width:100%; border-radius:8px; display:block; margin-bottom:5px;" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">`;
+            }
+            box.innerHTML += `<div class="msg ${m.sender === 'admin' ? 'msg-admin' : 'msg-user'}">${content}</div>`; 
+        });
+        box.scrollTop = box.scrollHeight;
     });
 }
 
-function updateProfile() {
-    const userID = localUser.ID;
-    const newUsername = document.getElementById('editUsername').value.trim();
-    const nama = document.getElementById('editNama').value.trim();
-    const nomorHP = document.getElementById('editNomorHP').value.trim();
-    const alamat = document.getElementById('editAlamat').value.trim();
-    const password = document.getElementById('editPassword').value.trim();
-    const statusDiv = document.getElementById('editStatus');
-    statusDiv.className = 'auth-status';
-    statusDiv.innerHTML = 'Menyimpan...';
-    
-    if (!newUsername || !nama || !nomorHP || !alamat) {
-        statusDiv.innerHTML = 'Username, Nama, Nomor HP, dan Alamat wajib diisi.';
-        statusDiv.classList.add('error');
-        return;
-    }
-    if (newUsername.length < 5) {
-        statusDiv.innerHTML = 'Username minimal 5 karakter.';
-        statusDiv.classList.add('error');
-        return;
-    }
-    if (password && password.length < 5) {
-        statusDiv.innerHTML = 'Password minimal 5 karakter.';
-        statusDiv.classList.add('error');
-        return;
-    }
-
-    const updates = {
-        Nama: nama,
-        NomorHP: nomorHP,
-        Alamat: alamat
-    };
-    if (password) {
-        updates.Password = password;
-    }
-
-    const processUpdate = () => {
-        db.ref(`users/${userID}`).update(updates)
-            .then(() => {
-                localUser.Username = newUsername;
-                localUser.Nama = nama;
-                localUser.NomorHP = nomorHP;
-                localUser.Alamat = alamat;
-                localStorage.setItem("Username", newUsername);
-                localStorage.setItem("Nama", nama);
-                localStorage.setItem("NomorHP", nomorHP);
-                localStorage.setItem("Alamat", alamat);
-                
-                statusDiv.innerHTML = 'Profil berhasil diperbarui!';
-                statusDiv.classList.add('success');
-                updateProfileDisplay(localUser.Nama, localUser.Foto, localUser.ID);
-                setTimeout(showProfil, 1500);
-            })
-            .catch(error => {
-                statusDiv.innerHTML = 'Gagal memperbarui profil. Silakan coba lagi.';
-                statusDiv.classList.add('error');
-            });
-    };
-
-    if (newUsername !== localUser.Username) {
-        db.ref("users").orderByChild("Username").equalTo(newUsername).once("value")
-            .then(snapshot => {
-                let isTaken = false;
-                snapshot.forEach(child => {
-                    if (child.val().ID !== userID) {
-                        isTaken = true;
-                    }
-                });
-                if (isTaken) {
-                    statusDiv.innerHTML = 'Username sudah digunakan oleh pengguna lain. Silakan pilih yang lain.';
-                    statusDiv.classList.add('error');
-                } else {
-                    updates.Username = newUsername;
-                    processUpdate();
-                }
-            })
-            .catch(error => {
-                statusDiv.innerHTML = 'Terjadi kesalahan saat memeriksa username.';
-                statusDiv.classList.add('error');
-            });
-    } else {
-        processUpdate();
-    }
+function sendChat(targetId) {
+    const input = document.getElementById('chatInput');
+    const pesan = input.value.trim();
+    if(!pesan) return;
+    const namaPengirim = localUser.Nama || "Pengunjung Anonim";
+    const timestamp = Date.now();
+    db.ref(`chats/${targetId}`).push({ sender: 'user', text: pesan, timestamp: timestamp, type: localUser.ID ? 'member' : 'anonymous' }).then(() => {
+        db.ref(`admin_inbox/${targetId}`).set({ nama: namaPengirim, lastMsg: pesan, timestamp: timestamp, unread: true });
+        input.value = '';
+    });
 }
 
+function loadDynamicKatalogs() {
+    db.ref('sponsors_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-sponsors');
+        if (!container) return;
+        let htmlContent = '';
+        snapshot.forEach((child) => {
+            const data = child.val();
+            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div><span style="font-weight: bold; color: #b38728;">${data.nama}</span></a>`;
+        });
+        container.innerHTML = htmlContent;
+    });
+}
 
-function logPurchaseToDB(productName, amount, newSaldo, pointsEarned) {
-    const userID = localUser.ID;
-    if (!userID) return; 
-
-    const transactionRef = db.ref(`transactions/${userID}`).push();
-    const transactionID = transactionRef.key;
-    const timestamp = new Date().toISOString();
-    
-    const transactionData = {
-        transactionID: transactionID,
-        userID: userID,
-        productName: productName,
-        amount: amount,
-        timestamp: timestamp,
-        status: 'Success',
-        initialSaldo: localUser.Saldo + amount, 
-        finalSaldo: newSaldo,
-        deliveryAddress: localUser.Alamat,
-        deliveryContact: localUser.NomorHP,
-        totalPengeluaranSaatIni: localUser.TotalPengeluaran,
-        pointsEarned: pointsEarned
-    };
-
-    transactionRef.set(transactionData)
-        .then(() => {
-            console.log("Transaction logged successfully with ID:", transactionID);
-        })
-        .catch(error => {
-            console.error("Failed to log transaction:", error);
+function loadDynamicWartas() {
+    db.ref('Wartas_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-Wartas');
+        if (!container) return;
+        
+        // Gunakan pembungkus grid yang sesuai dengan CSS Anda
+        let htmlContent = '<div class="Warta-grid-wrapper">'; 
+        
+        snapshot.forEach((child) => {
+            const data = child.val();
+            htmlContent += `
+                <a href="${data.url || '#'}" target="_self" class="Warta-item-mini">
+                    <div class="Warta-icon-box">
+                        <img src="${data.image}" class="Warta-img-fluid" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">
+                    </div>
+                </a>`;
         });
         
-    return transactionData;
+        htmlContent += '</div>';
+        container.innerHTML = htmlContent;
+    });
 }
 
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    loginUser();
-});
-document.getElementById('signupForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    signupUser();
-});
 
 
-// DATA PRODUK BARU
-const productData = {
-    polosan: {
-        name: 'Cilok Polosan Premium',
-        price: 'Rp 500',
-        image: 'https://nasukafoods.site/paketcilok.jpg',
-        article: `
-            <h4>Deskripsi Produk: Kesederhanaan Rasa Premium</h4>
-            <p><strong>Cilok Polosan Premium</strong> dari Nasuka Foods menawarkan cita rasa otentik yang tak tertandingi. Dibuat dari tepung tapioka pilihan dengan komposisi yang presisi, menghasilkan tekstur yang <strong>kenyal, lembut, dan tidak alot</strong>.</p>
-            <p>Produk ini sangat cocok bagi Anda yang menyukai Cilok murni, tanpa isian, dan ingin menikmati kelezatan bumbu kacang atau sambal goang Nasuka Foods secara maksimal. Ideal juga sebagai base untuk kreasi Cilok rumahan Anda.</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Tekstur Sempurna:</strong> Kenyal, lembut, dan empuk.</li>
-                <li><strong>Rasa Otentik:</strong> Kekuatan rasa aci dan bumbu yang gurih.</li>
-                <li><strong>Serbaguna:</strong> Cocok disajikan dengan berbagai saus.</li>
-            </ul>
-        `
-    },
-    gajih: {
-        name: 'Cilok Isian Gajih Sapi Pilihan',
-        price: 'Rp 1.000',
-        image: 'https://nasukafoods.site/isiangajih.jpg',
-        article: `
-            <h4>Deskripsi Produk: Kekayaan Rasa Gurih Alami</h4>
-            <p>Rasakan sensasi Cilok yang ditingkatkan dengan <strong>Isian Gajih Sapi Pilihan</strong>. Kami menggunakan gajih sapi kualitas terbaik yang telah diolah dan dibumbui secara khusus, menciptakan isian yang <strong>meleleh di mulut</strong> dengan aroma dan rasa gurih yang mendalam.</p>
-            <p>Kombinasi tekstur Cilok yang kenyal dengan ledakan rasa gajih yang kaya membuat produk ini menjadi favorit bagi penggemar rasa autentik dan "nendang". Produk ini menjanjikan pengalaman kuliner Cilok yang lebih mewah.</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Isian Premium:</strong> Menggunakan gajih sapi kualitas tinggi.</li>
-                <li><strong>Gurih Maksimal:</strong> Rasa kaldu dan gajih yang kuat.</li>
-                <li><strong>Pengalaman Rasa Unik:</strong> Meleleh dan kaya rasa.</li>
-            </ul>
-        `
-    },
-    telorPuyuh: {
-        name: 'Cilok Isi Telor Puyuh Spesial',
-        price: 'Rp 2.000',
-        image: 'https://nasukafoods.site/isitelorpuyuh.jpg',
-        article: `
-            <h4>Deskripsi Produk: Kejutan Lezat di Setiap Gigitan</h4>
-            <p><strong>Cilok Isi Telor Puyuh Spesial</strong> hadir sebagai pilihan Cilok yang mengenyangkan sekaligus memanjakan lidah. Setiap butir Cilok diisi dengan <strong>telur puyuh utuh</strong>, menawarkan kejutan protein yang lezat.</p>
-            <p>Produk ini merupakan pilihan cerdas untuk camilan bernutrisi atau pendamping hidangan utama. Kualitas Cilok yang kenyal berpadu sempurna dengan kelembutan telur puyuh yang sudah dibumbui, menjadikannya pilihan favorit keluarga.</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Isian Nutrisi:</strong> Telur puyuh utuh yang kaya protein.</li>
-                <li><strong>Porsi Mengenyangkan:</strong> Ideal sebagai camilan utama.</li>
-                <li><strong>Kualitas Terjamin:</strong> Telur puyuh segar dan Cilok yang empuk.</li>
-            </ul>
-        `
-    },
-    telorAyam: {
-        name: 'Cilok Isi Telor Ayam Premium',
-        price: 'Rp 5.000',
-        image: 'https://nasukafoods.site/isitelorayam.jpg',
-        article: `
-            <h4>Deskripsi Produk: Pilihan Eksklusif Penuh Rasa</h4>
-            <p>Nikmati <strong>Cilok Isi Telor Ayam Premium</strong>, varian Cilok eksklusif dengan isian <strong>potongan telur ayam rebus</strong> yang melimpah dan gurih. Telur ayam memberikan tekstur yang lebih padat dan rasa umami yang lebih kuat pada isian Cilok.</p>
-            <p>Produk ini disiapkan dengan standar kebersihan tertinggi dan bumbu rahasia Nasuka Foods, menjamin kualitas rasa dan keamanan pangan. Pilihan sempurna bagi Anda yang menginginkan Cilok dengan isian berkelas dan porsi yang memuaskan.</p>
-            <h4>Informasi Nilai Jual:</h4>
-            <ul>
-                <li><strong>Isian Melimpah:</strong> Potongan telur ayam rebus premium.</li>
-                <li><strong>Rasa Umami Kuat:</strong> Cita rasa gurih yang elegan.</li>
-                <li><strong>Standar Kebersihan:</strong> Diproduksi dengan protokol pangan yang ketat.</li>
-            </ul>
-        `
-    }
-};
 
-/**
- * Menampilkan detail produk berdasarkan ID.
- * @param {string} produkID - ID produk (polosan, gajih, telorPuyuh, telorAyam).
- */
-function showProduk(produkID) {
-    hideAllContainers(); 
 
-    const produk = productData[produkID];
-    const produkContainer = document.getElementById('produk-detail-container');
-    
-    if (!produk || !produkContainer) {
-        alert('Produk tidak ditemukan atau container belum siap.');
-        showHome();
-        return;
-    }
 
-    // Update elemen-elemen detail produk
-    document.getElementById('produk-title').textContent = produk.name;
-    document.getElementById('produk-name').textContent = produk.name;
-    document.getElementById('produk-price').textContent = produk.price;
-    document.getElementById('produk-image').src = produk.image;
-    document.getElementById('produk-article-container').innerHTML = produk.article;
-    
-    
-    const btnBeliSekarang = document.getElementById('btn-beli-sekarang');
-    if (btnBeliSekarang) {
-        // Hapus event listener lama
-        btnBeliSekarang.onclick = null; 
+const vProducts = [
+  { category: "voucher Nits Cell ", items: [
+        { id: "nc1", name: "Nits Cell 6Jam", desc: "Akses internet unlimited khusus warga ciparay tengah durasi 6 jam <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 1750, img: "https://nasukafoods.site/image/nitscell.jpg" },
         
-         
-        btnBeliSekarang.onclick = function() {
-            window.location.href = 'https://nasukafoods.site/belanja.html';
-        };
-    }
-    // --- END PERUBAHAN UNTUK MENGARAHKAN KE SERLOK.HTML ---
+          { id: "nc2", name: "Nits Cell 24jam", desc: "Reward pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 4900, img: "https://nasukafoods.site/image/nitscell.jpg" }
+        
+        
+    ]},
+    
+      { category: "Hadiah Transaksi", items: [
+     
+          { id: "rw", name: "Saldo Gratis 100.000", desc: "Reward pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 0, img: "https://nasukafoods.site/image/saldo100rb.jpg" }
+        
+        
+    ]},
+    
+    { category: "Voucher Data", items: [
+        { id: "ax2", name: "Axis 5GB 1hari", desc: "Kuota utama 5GB berlaku di semua jaringan <p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 7150, img: "https://nasukafoods.site/image/axis.jpg" },
+        { id: "is1", name: "Indosat 2GB 2hari", desc: "Kuota nasional 2GB masa aktif 2 hari<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>  ", price: 10700, img: "https://nasukafoods.site/image/indosat.jpg" },
+        { id: "sf2", name: "Smartfren 10GB", desc: "Kuota 10GB (5GB Utama + 5GB Malam)<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 15000, img: "https://nasukafoods.site/image/smartfren.jpg" },
+        { id: "ts2", name: "Telkomsel 0.5GB +2.5GB", desc: "Lokal data khusus area Jawa Barat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 14000, img: "https://nasukafoods.site/image/tsel.jpg" },
+        { id: "xl1", name: "XL 0.75GB 3hari", desc: "Xtra Combo Mini masa aktif hemat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 9400, img: "https://nasukafoods.site/image/xl.jpg" },
+       
+        { id: "tr1", name: "Tree 2GB 1hari", desc: "Kuota Happy harian super cepat<p>Subsidi Khusus untuk pelanggan Nasuka Foods : Cilok Isian Gajih</p>", price: 7500, img: "https://nasukafoods.site/image/kartutri.jpg" }
+    ]},
+];
 
-    produkContainer.style.display = 'flex';
-    produkContainer.scrollTop = 0; 
-}
-
-
-$(document).ready(function() {
-    showHome(); 
-});
-
-
-function showTopUp() {
+async function showVoucher() {
     hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Pembelian Voucher Data Internet';
     
-    const topupContainer = document.getElementById('dokumen-container');
+    const contentSection = doc.querySelector('.dokumen-content-section');
+    contentSection.innerHTML = '<p style="text-align:center; padding:20px;">Mengecek ketersediaan stok...</p>';
     
-    if (topupContainer) {
-        topupContainer.style.display = 'flex';
-        topupContainer.scrollTop = 0;
-        
-        const headerTitle = topupContainer.querySelector('.dokumen-header h3');
-        if(headerTitle) headerTitle.textContent = 'Isi Saldo';
+    try {
+        const [stockSnapshot, historySnap] = await Promise.all([
+            db.ref('stok_voucher').once('value'),
+            localUser.ID ? db.ref(`history/${localUser.ID}`).once('value') : Promise.resolve(null)
+        ]);
 
-        const contentSection = topupContainer.querySelector('.dokumen-content-section');
-        
-        const waBase = "https://wa.me/62859109819017";
-        const msg = encodeURIComponent(`Halo Admin Nasuka Foods,\n\nSaya ingin Top Up Saldo.\n\nDetail Akun:\n- ID: ${localUser.ID || '-'}\n- Nama: ${localUser.Nama || '-'}\n\nMohon informasi instruksi pembayarannya.`);
-        
-        contentSection.innerHTML = `
-            <div style="text-align: center; margin-bottom: 25px; padding: 20px 10px; background: linear-gradient(to bottom, #f0f7ff, #ffffff); border-radius: 15px;">
-                <div style="margin: 0 auto 15px; width: 65px; height: 65px; line-height: 65px; font-size: 26px; background: #007bff; color: white; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,123,255,0.3);">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <h3 style="margin: 0; color: #333; font-weight: 800; font-size: 20px;">Deposit</h3>
-                <p style="font-size: 13px; color: #666; margin-top: 5px;">Silakan masukan kode voucher  di bawah ini</p>
-            </div>
+        const allStock = stockSnapshot.val() || {};
+        let totalTransaksi = historySnap ? historySnap.numChildren() : 0;
+        let sudahKlaimReward = false;
 
-            <div style="background: #ffffff; border: 1px solid #e0e0e0; padding: 18px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <h4 style="margin: 0 0 12px 0; color: #333; font-size: 15px; display: flex; align-items: center;">
-                    <i class="fas fa-ticket-alt" style="color: #ff9800; margin-right: 10px;"></i> 
-                </h4>
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="inputVoucher" placeholder="Masukkan kode voucher" 
-                        oninput="if(this.value.length > 6) this.value = this.value.slice(0,6)"
-                        style="flex: 1; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; outline: none; transition: border-color 0.3s;">
-                    <button onclick="prosesVoucher6Digit()" 
-                        style="background: #333; color: white; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;">
-                        Ok
-                    </button>
-                </div>
-                <div id="statusVoucher" style="margin-top: 10px; font-size: 12px; font-weight: 600; text-align: center;"></div>
-            </div>
+        if (historySnap) {
+            historySnap.forEach(child => {
+                if (child.val().produk === "Reward 999 Transaksi") sudahKlaimReward = true;
+            });
+        }
 
-            <div style="background: #ffffff; border: 1px solid #e0e0e0; padding: 18px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <h4 style="margin: 0 0 10px 0; color: #333; font-size: 15px; display: flex; align-items: center;">
-                    <i class="fas fa-university" style="color: #007bff; margin-right: 10px;"></i> Transfer Bank / E-Wallet
-                </h4>
-                <p style="font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 15px;">
-                    Isi saldo secara manual melalui konfirmasi Admin via WhatsApp. Kami mempermudah pembayaran voucher dengan QRIS yang support untuk semua bank dan eWallet
-                </p>
-                <a href="${waBase}?text=${msg}" target="_blank" style="display: flex; align-items: center; justify-content: center; background-color: #25d366; color: white; padding: 14px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 14px; transition: transform 0.2s active;">
-                    <i class="fab fa-whatsapp" style="font-size: 20px; margin-right: 8px;"></i> Hubungi Admin Sekarang
-                </a>
+        let html = `
+            <div class="dana-blue-gradient">
+                <small style="opacity:0.9;">Saldo Nasuka Anda</small><br>
+                <strong style="font-size:24px;">Rp ${localUser.Saldo.toLocaleString('id-ID')}</strong>
             </div>
-
-            <div style="background: #fff8e1; border-left: 4px solid #ffc107; padding: 12px; border-radius: 4px;">
-                <p style="font-size: 11px; color: #856404; margin: 0; line-height: 1.4;">
-                    <strong>Catatan:</strong> Minimal pengisian saldo adalah <strong>Rp 1.000</strong>. Pastikan Anda mengirimkan bukti transfer yang jelas kepada Admin.
-                </p>
-            </div>
-            
-            <div style="height: 40px;"></div>
         `;
 
-        // Menambahkan sedikit efek focus pada input voucher
-        const inputVoucher = document.getElementById('inputVoucher');
-        if (inputVoucher) {
-            inputVoucher.addEventListener('focus', function() { this.style.borderColor = '#007bff'; });
-            inputVoucher.addEventListener('blur', function() { this.style.borderColor = '#eee'; });
-        }
+        vProducts.forEach(cat => {
+            const isHadiah = cat.category.includes("Hadiah");
+            const containerStyle = isHadiah ? 'display: flex; justify-content: center; gap: 10px; padding: 10px;' : '';
+            const containerClass = isHadiah ? '' : 'voucher-grid-spa';
+
+            html += `<div class="category-title-spa" style="border-left-color: #118EEA;">${cat.category}</div>
+                     <div class="${containerClass}" style="${containerStyle}">`;
+            
+            cat.items.forEach(p => {
+                let isReward = p.id === "rw";
+                let isLocked = isReward && totalTransaksi < 999;
+                let hasStock = allStock[p.id] && Object.keys(allStock[p.id]).length > 0;
+
+                let labelText = "";
+                let labelStyle = "";
+                
+                if (isReward) {
+                    if (sudahKlaimReward) { labelText = "SUDAH DIKLAIM"; labelStyle = "background: #27ae60;"; }
+                    else if (isLocked) { labelText = `Buka (${totalTransaksi}/999)`; labelStyle = "background: orange;"; }
+                } else if (!hasStock) {
+                    labelText = "STOK HABIS";
+                    labelStyle = "background: rgba(255, 0, 0, 0.8);";
+                }
+
+                const cardClass = (isReward ? (!isLocked && !sudahKlaimReward) : hasStock) ? "" : "voucher-out-of-stock";
+                const btnState = (isReward ? (!isLocked && !sudahKlaimReward) : hasStock) ? "" : "disabled";
+                const finalBadge = labelText ? `<div class="out-of-stock-label" style="${labelStyle}">${labelText}</div>` : "";
+
+                // Perubahan Teks Tombol
+                let btnText = isReward ? (sudahKlaimReward ? "SELESAI" : (isLocked ? "TERKUNCI" : "KLAIM SEKARANG")) : (hasStock ? "BELI" : "HABIS");
+
+                const cardWidthStyle = isHadiah ? 'width: 170px; flex: none;' : '';
+
+                html += `
+                    <div class="voucher-card-spa ${cardClass}" style="padding: 12px; height: auto; min-height: 210px; ${cardWidthStyle}">
+                        ${finalBadge}
+                        <div style="flex-grow: 1;">
+                            <img src="${p.img}" style="width: 40px; height: 40px; margin-bottom: 5px;">
+                            <span class="v-name-spa" style="height: auto; margin-bottom: 2px;">${p.name}</span>
+                            <div style="font-size: 10px; color: #888; line-height: 1.2; margin-bottom: 10px; min-height: 24px;">
+                                ${isReward ? (sudahKlaimReward ? `<b style="color:#27ae60;">Event selesai.</b>` : (isLocked ? `<b style="color:#ee4d2d;">Butuh ${999 - totalTransaksi} transaksi lagi.</b>` : `<b style="color:#27ae60;">Siap diklaim!</b>`)) : (p.desc || 'Voucher internet')}
+                            </div>
+                        </div>
+                        <div>
+                            ${!isReward ? `<span class="v-price-spa" style="font-size: 14px;">Rp ${p.price.toLocaleString('id-ID')}</span>` : ''}
+                            
+                            <button class="btn-beli-spa" ${btnState} onclick="prosesBeliVoucher('${p.id}', '${p.name}', ${p.price})" 
+                                style="margin-top: 5px; ${isReward && !isLocked && !sudahKlaimReward ? 'background: #27ae60;' : ''}">
+                                ${btnText}
+                            </button>
+                        </div>
+                    </div>`;
+            });
+            html += `</div>`;
+        });
+        
+        contentSection.innerHTML = html;
+    } catch (error) {
+        console.error(error);
+        contentSection.innerHTML = '<p style="text-align:center; color:red;">Gagal memuat data. Periksa koneksi.</p>';
     }
 }
 
 
+async function prosesBeliVoucher(id, nama, harga) {
+    if (!localUser.ID) return showLogin();
+    
+    // VALIDASI KHUSUS REWARD
+    if (id === "rw") {
+        const hSnap = await db.ref(`history/${localUser.ID}`).once('value');
+        
+        let doubleCheck = false;
+        hSnap.forEach(child => {
+            if (child.val().produk === "Reward 999 Transaksi") doubleCheck = true;
+        });
+        if (doubleCheck) return alert("Anda sudah pernah mengklaim reward ini.");
+        if (hSnap.numChildren() < 999) return alert("Ups! Kamu butuh 999 transaksi untuk mengklaim ini.");
+        
+        if (!confirm("Klaim Reward Saldo Rp 100.000 sekarang?")) return;
 
+        const hadiah = 100000;
+        const timestamp = new Date().toLocaleString('id-ID');
+        const invID = "RW" + Date.now();
 
-
-
-
-
-
-
-
-
-
-
-function prosesVoucher6Digit() {
-    const kode = document.getElementById('inputVoucher').value;
-    const statusDiv = document.getElementById('statusVoucher');
-    const userID = localUser.ID;
-
-    // Validasi Dasar
-    if (!userID) { alert("Login dulu yuk!"); return; }
-    if (kode.length !== 6) {
-        statusDiv.innerHTML = "❌ Kode harus 6 digit angka!";
-        statusDiv.style.color = "red";
-        return;
+        try {
+            await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) + hadiah);
+            await db.ref(`history/${localUser.ID}`).push({
+                produk: "Reward 999 Transaksi",
+                total: -hadiah, 
+                tanggal: timestamp,
+                status: "BERHASIL",
+                invoice: invID
+            });
+            alert("Selamat! Reward Saldo Rp 100.000 berhasil diklaim.");
+            window.location.reload();
+            return;
+        } catch(e) {
+            return alert("Gagal mengklaim reward.");
+        }
     }
 
-    statusDiv.innerHTML = "⏳ Menghubungkan ke server...";
-    statusDiv.style.color = "#666";
+    // LOGIKA PEMBELIAN VOUCHER BIASA
+    if (localUser.Saldo < harga) return alert("Saldo tidak mencukupi!");
+    if (!confirm(`Beli ${nama} seharga Rp ${harga.toLocaleString()}?`)) return;
 
-    // 1. Cari kode di tabel 'vouchers'
-    const vRef = db.ref(`vouchers/${kode}`);
-    
-    vRef.once('value').then(snapshot => {
-        if (snapshot.exists()) {
-            const nominal = snapshot.val();
+    try {
+        const snapshot = await db.ref(`stok_voucher/${id}`).limitToFirst(1).once('value');
+        if (!snapshot.exists()) return alert("Maaf, stok sedang habis.");
 
-            // 2. Gunakan transaction untuk mencegah dua orang klaim di detik yang sama
-            // Kita hapus kodenya dulu, jika berhasil baru tambah saldo
-            vRef.remove().then(() => {
-                
-                // 3. Update saldo user di database
-                const userSaldoRef = db.ref(`users/${userID}/Saldo`);
-                userSaldoRef.transaction((currentSaldo) => {
-                    return (currentSaldo || 0) + nominal;
-                }, (error, committed) => {
-                    if (committed) {
-                        // 4. Update tampilan lokal
-                        localUser.Saldo += nominal;
-                        localStorage.setItem("Saldo", localUser.Saldo);
-                        updateSaldoDisplay();
+        const key = Object.keys(snapshot.val())[0];
+        const sn = snapshot.val()[key];
+        const timestamp = new Date().toLocaleString('id-ID');
 
-                        statusDiv.innerHTML = `✅ Berhasil! Saldo Rp ${nominal.toLocaleString('id-ID')} telah ditambahkan.`;
-                        statusDiv.style.color = "green";
-                        document.getElementById('inputVoucher').value = "";
-                    } else {
-                        statusDiv.innerHTML = "❌ Gagal memperbarui saldo.";
-                        statusDiv.style.color = "red";
-                    }
-                });
-            }).catch(() => {
-                statusDiv.innerHTML = "❌ Kode ini baru saja diklaim orang lain!";
-                statusDiv.style.color = "red";
-            });
+        await db.ref(`users/${localUser.ID}/Saldo`).transaction(s => (s || 0) - harga);
+        await db.ref(`stok_voucher/${id}/${key}`).remove();
+        
+        const invID = "VCH" + Date.now();
+        await db.ref(`history/${localUser.ID}`).push({
+            produk: nama,
+            total: harga,
+            tanggal: timestamp,
+            status: "BERHASIL",
+            voucher: sn,
+            invoice: invID
+        });
 
-        } else {
-            statusDiv.innerHTML = "❌ Kode tidak ditemukan atau sudah hangus.";
-            statusDiv.style.color = "red";
-        }
+        document.getElementById('dokumen-container').style.display = 'none';
+        const overlay = document.createElement('div');
+        overlay.id = 'success-overlay';
+        overlay.innerHTML = `
+            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #f9f9f9; padding: 20px;">
+                <div class="receipt-card">
+                    <i class="fas fa-check-circle receipt-icon"></i>
+                    <h2 style="margin: 0; color: #333; font-size: 22px;">Pembelian Berhasil</h2>
+                    <div class="receipt-amount">Rp ${harga.toLocaleString('id-ID')}</div>
+                    <div style="background: #fff8e1; border: 2px dashed #ff9800; padding: 15px; margin: 15px 0; border-radius: 8px;">
+                        <small style="color: #666; display: block;">KODE VOUCHER:</small>
+                        <strong style="font-size: 20px; font-family: monospace; letter-spacing: 2px;">${sn}</strong>
+                    </div>
+                    <div style="text-align: left; background: #fcfcfc; border-radius: 12px; padding: 15px; border: 1px solid #f0f0f0;">
+                        <div class="receipt-line"><span>Produk:</span><b>${nama}</b></div>
+                        <div class="receipt-line"><span>Invoice:</span><b>${invID}</b></div>
+                    </div>
+                </div>
+                <button onclick="window.location.reload()" class="btn-transfer-action" style="margin-top: 30px; width: 100%; max-width: 400px;">SELESAI</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+    } catch (e) {
+        alert("Terjadi kesalahan sistem.");
+    }
+}
+
+function showHistory() {
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Riwayat Transaksi';
+    doc.querySelector('.dokumen-content-section').innerHTML = '<p style="text-align:center;">Memuat riwayat...</p>';
+
+    db.ref(`history/${localUser.ID}`).once('value').then(snap => {
+        let h = '';
+        const data = [];
+        snap.forEach(c => { 
+            let item = c.val();
+            item.key = c.key;
+            data.push(item); 
+        });
+        data.reverse(); 
+
+        data.forEach((d) => {
+            let infoVoucher = "";
+            if (d.voucher && d.voucher !== "-") {
+                infoVoucher = `
+                    <div style="margin-top: 8px; padding: 10px; background: #fffde7; border: 1px dashed #fbc02d; border-radius: 5px;" 
+                         onclick="event.stopPropagation(); toggleVoucher(this, '${d.voucher}')">
+                        <small style="color: #888; display: block; font-size: 10px; margin-bottom: 4px;">KODE VOUCHER (Klik untuk melihat):</small>
+                        <b class="voucher-text" style="color: #000; font-family: monospace; font-size: 15px; letter-spacing: 1px;">**** **** ****</b>
+                    </div>
+                `;
+            }
+
+            const isPemasukan = d.total < 0; 
+            const displayAmount = Math.abs(d.total || 0).toLocaleString('id-ID');
+            const statusSymbol = isPemasukan ? "+" : "-";
+            const statusColor = isPemasukan ? "#27ae60" : "#ee4d2d"; 
+            const borderSideColor = isPemasukan ? "#27ae60" : "#ee4d2d";
+
+            let namaProduk = d.produk;
+            if (isPemasukan && d.produk.includes("0859109819017")) {
+                namaProduk = "Top Up Berhasil";
+            }
+
+            h += `
+                <div class="dokumen-item" 
+                     onclick="showDetailTransaksi(${JSON.stringify(d).replace(/"/g, '&quot;')})"
+                     style="border-left:4px solid ${borderSideColor}; margin-bottom:15px; background: #fff; padding: 12px; border-radius: 0 8px 8px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <b style="font-size: 14px; color: #333;">${namaProduk}</b>
+                        <span style="color: ${statusColor}; font-weight: bold; font-size: 13px;">${statusSymbol} Rp ${displayAmount}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <small style="color: #aaa; font-size: 11px;">${d.tanggal}</small>
+                        <small style="color: #27ae60; font-weight: bold; font-size: 10px;">${d.status || 'BERHASIL'}</small>
+                    </div>
+                    ${infoVoucher}
+                </div>
+            `;
+        });
+        doc.querySelector('.dokumen-content-section').innerHTML = h || '<div style="text-align:center; padding: 20px; color: #999;">Belum ada riwayat transaksi.</div>';
+    }).catch(err => {
+        doc.querySelector('.dokumen-content-section').innerHTML = '<p style="text-align:center; color: red;">Gagal memuat riwayat.</p>';
     });
+}
+
+function toggleVoucher(element, realCode) {
+    const textEl = element.querySelector('.voucher-text');
+    if (textEl.textContent.includes('*')) {
+        textEl.textContent = realCode;
+        textEl.style.color = "#ee4d2d";
+    } else {
+        textEl.textContent = '**** **** ****';
+        textEl.style.color = "#000";
+    }
+}
+
+function showDetailTransaksi(data) {
+    const overlay = document.createElement('div');
+    overlay.id = 'detail-overlay';
+    overlay.innerHTML = `
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+            <i class="fas fa-arrow-left" onclick="document.getElementById('detail-overlay').remove()" style="font-size: 20px; cursor: pointer;"></i>
+            <h3 style="margin: 0 0 0 15px;">Detail Transaksi</h3>
+        </div>
+        <div style="border: 1px solid #eee; border-radius: 10px; padding: 15px; background: #fafafa; flex-grow: 1;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fas fa-check-circle" style="font-size: 48px; color: #27ae60;"></i>
+                <h2 style="margin: 10px 0 5px 0;">Sukses</h2>
+                <small style="color: #888;">${data.tanggal}</small>
+            </div>
+            <hr style="border: 0; border-top: 1px dashed #ccc;">
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Produk</span><b>${data.produk}</b></div>
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Invoice</span><span style="font-family: monospace;">${data.invoice || '-'}</span></div>
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Metode</span><span>Saldo Nasuka</span></div>
+            <hr style="border: 0; border-top: 1px dashed #ccc;">
+            <div style="display: flex; justify-content: space-between; margin: 15px 0; font-size: 18px;"><span>Total</span><b style="color: #e67e22;">Rp ${Math.abs(data.total || 0).toLocaleString()}</b></div>
+        </div>
+        <button onclick="document.getElementById('detail-overlay').remove()" class="btn-transfer-action" style="margin-top:20px;">TUTUP</button>
+    `;
+    document.body.appendChild(overlay);
+}
+
+function showChat() {
+    let chatId = localUser.ID;
+    let isAnonymous = false;
+    if (!chatId) {
+        isAnonymous = true;
+        chatId = localStorage.getItem("AnonID");
+        if (!chatId) {
+            chatId = "ANON-" + Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem("AnonID", chatId);
+        }
+    }
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = isAnonymous ? 'Chat Pengunjung' : 'Chat Admin';
+    doc.querySelector('.dokumen-content-section').innerHTML = `
+        <div id="chatBox" class="chat-messages"></div>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <input type="text" id="chatInput" placeholder="Tulis pesan..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
+            <button onclick="sendChat('${chatId}')" class="btn-primary" style="width:auto; padding:0 15px;"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    `;
+
+    db.ref(`chats/${chatId}`).on('value', (snap) => {
+        const box = document.getElementById('chatBox');
+        if(!box) return;
+        box.innerHTML = '';
+        snap.forEach(c => { 
+            const m = c.val(); 
+            let content = m.text;
+            const isImage = m.text.match(/\.(jpeg|jpg|gif|png)$/) != null || m.text.includes('drive.google.com');
+            if (isImage) {
+                content = `<img src="${m.text}" style="width:100%; border-radius:8px; display:block; margin-bottom:5px;" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">`;
+            }
+            box.innerHTML += `<div class="msg ${m.sender === 'admin' ? 'msg-admin' : 'msg-user'}">${content}</div>`; 
+        });
+        box.scrollTop = box.scrollHeight;
+    });
+}
+
+function sendChat(targetId) {
+    const input = document.getElementById('chatInput');
+    const pesan = input.value.trim();
+    if(!pesan) return;
+    const namaPengirim = localUser.Nama || "Pengunjung Anonim";
+    const timestamp = Date.now();
+    db.ref(`chats/${targetId}`).push({ sender: 'user', text: pesan, timestamp: timestamp, type: localUser.ID ? 'member' : 'anonymous' }).then(() => {
+        db.ref(`admin_inbox/${targetId}`).set({ nama: namaPengirim, lastMsg: pesan, timestamp: timestamp, unread: true });
+        input.value = '';
+    });
+}
+
+function loadDynamicKatalogs() {
+    db.ref('sponsors_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-sponsors');
+        if (!container) return;
+        let htmlContent = '';
+        snapshot.forEach((child) => {
+            const data = child.val();
+            htmlContent += `<a href="${data.url}" target="_self" class="other-feature-item"><div class="other-feature-icon sponsor-frame"><img src="${data.image}" class="product-icon-img"></div><span style="font-weight: bold; color: #b38728;">${data.nama}</span></a>`;
+        });
+        container.innerHTML = htmlContent;
+    });
+}
+
+function loadDynamicWartas() {
+    db.ref('Wartas_list').on('value', (snapshot) => {
+        const container = document.getElementById('dynamic-Wartas');
+        if (!container) return;
+        let htmlContent = '';
+        snapshot.forEach((child) => {
+            const data = child.val();
+            htmlContent += `
+                <a href="${data.url || '#'}" target="_self" class="other-feature-item">
+                    <div class="other-feature-icon">
+                        <img src="${data.image}" class="product-icon-img" onerror="this.src='https://nasukafoods.site/gambarkosong.jpg'">
+                    </div>
+                </a>`;
+        });
+        container.innerHTML = htmlContent;
+    });
+}
+
+$(document).ready(() => {
+    showHome();
+    loadDynamicKatalogs(); 
+    loadDynamicWartas();
+    $('#tabPencapaian').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').show(); $('#contentPerbaikan').hide(); });
+    $('#tabPerbaikan').on('click', function() { $('.profil-tab-item').removeClass('active'); $(this).addClass('active'); $('#contentPencapaian').hide(); $('#contentPerbaikan').show(); });
+});
+
+
+
+
+
+function showKatalog() {
+    hideAllContainers();
+    const doc = document.getElementById('dokumen-container');
+    doc.style.display = 'flex';
+    document.getElementById('dokumen-title').textContent = 'Katalog Kami';
+    
+    const contentSection = doc.querySelector('.dokumen-content-section');
+    contentSection.scrollTop = 0;
+
+    const produkCilok = [
+        {
+            nama: "Cita Rasa Autentik, Kualitas Tanpa Kompromi. ",
+            desc: "Nasuka Foods adalah pilar yang bergerak di bidang kuliner, dengan spesialisasi pada jajanan khas nusantara seperti Cilok dan Pempek. Kami memegang teguh filosofi Premium Soul, di mana kualitas bahan baku adalah prioritas mutlak. Kami menjamin penggunaan 100% saus kacang murni tanpa bahan pengisi (filler) seperti kedelai atau tepung berlebih, guna menghadirkan rasa yang jujur dan berkelas. ​Saat ini, Nasuka Foods telah merambah pasar Ready-to-Cook dengan teknologi vacuum-sealed untuk memastikan kesegaran produk hingga ke tangan konsumen di luar wilayah operasional harian kami di Bandung.",
+            img: "https://nasukafoods.site/image/nasukaroom.jpg" 
+        },
+        {
+            nama: "Konektivitas Tanpa Batas untuk Masa Depan.",
+            desc: "Nasuka Wireless berfokus pada penyediaan solusi infrastruktur jaringan dan distribusi konektivitas digital. Kami memahami bahwa di era digital ini, akses internet yang stabil adalah kebutuhan primer. Divisi ini melayani instalasi, manajemen jaringan, hingga pengembangan sistem voucer berbasis mikrotik yang efisien untuk kebutuhan UMKM maupun lingkungan residensial. Kami hadir untuk memastikan transisi digital usaha Anda berjalan mulus dengan dukungan teknis yang andal.",
+            img: "https://nasukafoods.site/image/cilok_ayam.jpg"
+        },
+        {
+            nama: "Estetika dan Presisi dalam Arsitektur Modern.",
+            desc: "Nasuka Karya Facade adalah divisi yang bergerak di bidang jasa konstruksi and spesialis eksterior bangunan. Kami fokus pada pengerjaan fasad yang menggabungkan nilai estetika tinggi dengan ketahanan struktural. Dengan pendekatan desain yang minimalis namun kokoh, kami melayani transformasi tampilan bangunan komersial maupun hunian agar memiliki karakter yang kuat dan profesional. Presisi adalah standar kerja kami dalam setiap proyek yang dipercayakan.",
+            img: "https://nasukafoods.site/image/cilok_puyuh.jpg"
+        },
+        {
+            nama: "Inovasi Teknis dan Performa Tinggi.",
+            desc: "Nasuka Kawasaki Labs merupakan wadah dedikasi kami terhadap dunia otomotif, khususnya performa tinggi dan modifikasi teknis. Divisi ini mengkhususkan diri pada riset pengembangan, kustomisasi komponen, dan optimasi kendaraan sport. Dengan basis keahlian pada kendaraan berperforma tinggi seperti seri Kawasaki Ninja, kami menawarkan solusi modifikasi yang tidak hanya mengedepankan visual yang tajam, tetapi juga fungsionalitas dan keamanan berkendara yang optimal..",
+            img: "https://nasukafoods.site/image/cilok_polos.jpg"
+        },
+        {
+            nama: "Sinergi Multi-Sektor untuk Pertumbuhan Berkelanjutan.",
+            desc: "Sebagai perusahaan induk, Nasuka Karya Abadi menjadi pusat komando yang mengintegrasikan berbagai unit bisnis mulai dari sektor kuliner, teknologi informasi, hingga konstruksi dan otomotif. Kami percaya bahwa diversifikasi adalah kunci ketahanan bisnis. Melalui manajemen yang terpusat, kami memastikan setiap divisi beroperasi dengan standar keunggulan yang sama. Nasuka Karya Abadi adalah simbol dari semangat kewirausahaan yang adaptif, inovatif, dan terus berkembang untuk memberikan nilai tambah bagi masyarakat luas.",
+            img: "https://nasukafoods.site/image/nasukaroom.jpg"
+        }
+    ];
+
+    let html = `
+        <div style="background: #fff8e1; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffe082;">
+            <p style="font-size: 13px; color: #795548; margin: 0; line-height: 1.5;">
+                <i class="fas fa-info-circle"></i> <b>Informasi tentang kami:</b>
+                <br>
+               Nasuka foods adalah sub dari <strong>PT. Nasuka Karya Abadi</strong></b>.
+            </p>
+        </div>
+    `;
+
+    produkCilok.forEach(p => {
+        html += `
+            <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee;">
+                <img src="${p.img}" onerror="this.src='https://nasukafoods.site/image/nasukaroom.jpg'" style="width: 100%; height: 180px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h4 style="margin: 0 0 8px 0; color: #333; font-size: 17px;">${p.nama}</h4>
+                    <p style="font-size: 13px; color: #666; line-height: 1.4; margin-bottom: 15px;">${p.desc}</p>
+                    <button onclick="showChat()" 
+                       style="width: 100%; display: flex; align-items: center; justify-content: center; background: #118EEA; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer;">
+                        <i class="fas fa-comments" style="margin-right: 8px; font-size: 18px;"></i> CHAT ADMIN
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+
+    html += `
+        <div style="text-align: center; padding: 10px 0 30px;">
+            <button onclick="showHome()" class="btn-transfer-action" style="background: #555;">KEMBALI KE BERANDA</button>
+        </div>
+    `;
+
+    contentSection.innerHTML = html;
 }
