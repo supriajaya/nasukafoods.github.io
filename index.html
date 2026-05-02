@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Store - Official Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+    <style>
+        body { font-family: 'Roboto', sans-serif; background-color: #ffffff; color: #202124; scroll-behavior: smooth; }
+        .google-green { background-color: #01875f; }
+        .google-green:hover { background-color: #016d4d; }
+        
+        /* Screenshot Slider */
+        .ss-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .ss-container::-webkit-scrollbar { display: none; }
+        
+        .ss-item {
+            flex: 0 0 auto;
+            width: 180px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            scroll-snap-align: start;
+        }
+
+        .category-pill {
+            border: 1px solid #dadce0;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #5f6368;
+        }
+        
+        .app-icon-nav {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #f0f0f0;
+            object-fit: cover;
+        }
+        .app-icon-nav:active { transform: scale(0.9); }
+        .nav-item.active img { border: 2px solid #01875f; padding: 2px; }
+        .nav-item.active p { color: #01875f; font-weight: bold; }
+
+        /* SPA Transition */
+        .page-content { display: none; }
+        .page-content.active { display: block; animation: fadeIn 0.3s ease-in; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="md:bg-gray-100">
+
+    <div class="max-w-screen-md mx-auto bg-white min-h-screen shadow-lg flex flex-col">
+        
+        <div class="flex items-center justify-between p-4 sticky top-0 bg-white z-20">
+            <i class="fas fa-arrow-left text-gray-600 cursor-pointer" onclick="openApp('home')"></i>
+            <div class="flex gap-5 text-gray-600">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </div>
+
+        <div id="main-container" class="flex-grow">
+            
+            <div id="showHome" class="page-content active">
+                <div class="px-6 py-2 flex gap-5">
+                    <div class="w-20 h-20 md:w-28 md:h-28 shadow-md rounded-2xl overflow-hidden border border-gray-100 flex-shrink-0">
+                        <img src="https://nasukafoods.site/image/paketdata.jpg" alt="Icon" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <h1 class="text-2xl font-bold text-gray-900 leading-tight">Nasuka Data</h1>
+                        <p class="text-google-green font-semibold text-sm">Nasuka Wireless</p>
+                        <p class="text-gray-500 text-xs">Tidak berisi iklan · Pembelian dalam aplikasi</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-around mt-6 border-b pb-4 overflow-x-auto">
+                    <div class="text-center px-4 border-r">
+                        <div class="flex items-center justify-center font-bold text-sm">4,8 <i class="fas fa-star text-[10px] ml-1"></i></div>
+                        <div class="text-[10px] text-gray-500">400 ulasan</div>
+                    </div>
+                    <div class="text-center px-4 border-r">
+                        <i class="fas fa-download text-sm mb-1 text-gray-700"></i>
+                        <div class="font-bold text-sm">7 MB</div>
+                        <div class="text-[10px] text-gray-500">Ukuran file</div>
+                    </div>
+                    <div class="text-center px-4">
+                        <div class="font-bold text-sm">900+</div>
+                        <div class="text-[10px] text-gray-500">Unduhan</div>
+                    </div>
+                </div>
+
+                <div class="px-6 py-6 flex flex-col gap-3">
+                    <a href="https://nasukafoods.site/nasukadata.apk" class="google-green text-white text-center py-2 rounded-lg font-semibold shadow-sm transition active:scale-95">
+                        Download
+                    </a>
+                </div>
+
+                <div class="px-6 py-4">
+                    <div class="ss-container">
+                        <img src="https://nasukafoods.site/image/ss1.jpg" class="ss-item" alt="SS 1">
+                        <img src="https://nasukafoods.site/image/ss2.jpg" class="ss-item" alt="SS 2">
+                        <img src="https://nasukafoods.site/image/ss3.jpg" class="ss-item" alt="SS 3">
+                        <img src="https://nasukafoods.site/image/ss4.jpg" class="ss-item" alt="SS 4">
+                    </div>
+                </div>
+
+                <div class="px-6 py-6">
+                    <h3 class="font-bold text-gray-800 mb-2">Tentang aplikasi ini</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Aplikasi resmi Nasuka untuk memudahkan pelanggan setia Nasuka Foods dalam melakukan top-up pulsa dan pembelian paket data non fisik.
+                    </p>
+                </div>
+            </div>
+
+            <div id="showOtherApps" class="page-content">
+                </div>
+
+            <div class="px-6 py-6 border-t">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-gray-800">Keamanan data</h3>
+                    <i class="fas fa-arrow-right text-gray-400 text-sm"></i>
+                </div>
+                <div class="border rounded-xl p-4 flex gap-4 items-start">
+                    <i class="fas fa-shield-alt text-blue-600 mt-1"></i>
+                    <div>
+                        <p class="text-sm text-gray-700 leading-snug">Tidak ada data yang dibagikan kepada pihak ketiga.</p>
+                        <p class="text-xs text-gray-500 mt-1 underline">Server khusus Nasuka</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-8 border-t bg-gray-50/50">
+                <h3 class="font-bold text-gray-800 mb-4 px-1">Layanan Nasuka Lainnya</h3>
+                <div class="flex justify-between items-start gap-2">
+                    <div onclick="openApp('home')" class="nav-item active text-center flex-1 cursor-pointer" id="nav-home">
+                        <img src="https://nasukafoods.site/image/paketdata.jpg" class="app-icon-nav mx-auto" alt="Data">
+                        <p class="text-[10px] mt-2 text-gray-600 leading-tight">Nasuka Data</p>
+                    </div>
+                    <div onclick="openApp('apk1')" class="nav-item text-center flex-1 cursor-pointer" id="nav-apk1">
+                        <img src="https://via.placeholder.com/100/01875f/ffffff?text=Pay" class="app-icon-nav mx-auto" alt="Pay">
+                        <p class="text-[10px] mt-2 text-gray-600 leading-tight">Nasuka Pay</p>
+                    </div>
+                    <div onclick="openApp('apk2')" class="nav-item text-center flex-1 cursor-pointer" id="nav-apk2">
+                        <img src="https://via.placeholder.com/100/4285F4/ffffff?text=Game" class="app-icon-nav mx-auto" alt="Game">
+                        <p class="text-[10px] mt-2 text-gray-600 leading-tight">Nasuka Game</p>
+                    </div>
+                    <div onclick="openApp('apk3')" class="nav-item text-center flex-1 cursor-pointer" id="nav-apk3">
+                        <img src="https://via.placeholder.com/100/EA4335/ffffff?text=Chat" class="app-icon-nav mx-auto" alt="Chat">
+                        <p class="text-[10px] mt-2 text-gray-600 leading-tight">Nasuka Chat</p>
+                    </div>
+                    <div onclick="openApp('apk4')" class="nav-item text-center flex-1 cursor-pointer" id="nav-apk4">
+                        <img src="https://via.placeholder.com/100/FBBC05/ffffff?text=Mart" class="app-icon-nav mx-auto" alt="Mart">
+                        <p class="text-[10px] mt-2 text-gray-600 leading-tight">Nasuka Mart</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="p-8 text-center bg-gray-50 text-[10px] text-gray-400 border-t">
+            © 2026 Nasuka Wireless Development · Indramayu
+        </footer>
+    </div>
+
+    <script>
+        const appDatabase = {
+            apk1: {
+                title: "Nasuka Pay",
+                dev: "Nasuka Finance",
+                icon: "https://via.placeholder.com/100/01875f/ffffff?text=Pay",
+                desc: "Kelola saldo Nasuka Anda dengan mudah. Bayar tagihan, kirim uang, dan kumpulkan poin reward dalam satu aplikasi finansial yang aman.",
+                size: "5 MB",
+                downloads: "500+",
+                link: "https://nasukafoods.site/nasukapay.apk",
+                screenshots: [
+                    "https://nasukafoods.site/image/ss1.jpg",
+                    "https://nasukafoods.site/image/ss1.jpg",
+                    "https://via.placeholder.com/180x320?text=Pay+3",
+                    "https://via.placeholder.com/180x320?text=Pay+4"
+                ]
+            },
+            apk2: {
+                title: "Nasuka Game",
+                dev: "Nasuka Entertainment",
+                icon: "https://via.placeholder.com/100/4285F4/ffffff?text=Game",
+                desc: "Koleksi mini-game seru bertema kota dan strategi. Mainkan game favoritmu dan tukarkan skor tinggi dengan voucher data Nasuka.",
+                size: "15 MB",
+                downloads: "1k+",
+                link: "https://nasukafoods.site/nasukagame.apk",
+                screenshots: [
+                    "https://nasukafoods.site/image/ss1.jpg",
+                    "https://via.placeholder.com/180x320?text=Game+2",
+                    "https://via.placeholder.com/180x320?text=Game+3",
+                    "https://via.placeholder.com/180x320?text=Game+4"
+                ]
+            },
+            apk3: {
+                title: "Nasuka Chat",
+                dev: "Nasuka Wireless",
+                icon: "https://via.placeholder.com/100/EA4335/ffffff?text=Chat",
+                desc: "Layanan pesan instan khusus ekosistem Nasuka. Hubungi dukungan pelanggan lebih cepat dan berinteraksi dengan sesama mitra Nasuka.",
+                size: "8 MB",
+                downloads: "300+",
+                link: "https://nasukafoods.site/nasukachat.apk",
+                screenshots: [
+                    "https://nasukafoods.site/image/ss1.jpg",
+                    "https://via.placeholder.com/180x320?text=Chat+2",
+                    "https://via.placeholder.com/180x320?text=Chat+3",
+                    "https://via.placeholder.com/180x320?text=Chat+4"
+                ]
+            },
+            apk4: {
+                title: "Nasuka Mart",
+                dev: "Nasuka Foods",
+                icon: "https://via.placeholder.com/100/FBBC05/ffffff?text=Mart",
+                desc: "Pesan produk fisik Nasuka Foods langsung dari ponsel Anda. Pengiriman cepat untuk wilayah Indramayu dan sekitarnya.",
+                size: "10 MB",
+                downloads: "2k+",
+                link: "https://nasukafoods.site/nasukamart.apk",
+                screenshots: [
+                    "https://nasukafoods.site/image/ss1.jpg",
+                    "https://via.placeholder.com/180x320?text=Mart+2",
+                    "https://via.placeholder.com/180x320?text=Mart+3",
+                    "https://via.placeholder.com/180x320?text=Mart+4"
+                ]
+            }
+        };
+
+        function openApp(appKey) {
+            const homePage = document.getElementById('showHome');
+            const otherPage = document.getElementById('showOtherApps');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            // Reset UI Navigasi
+            navItems.forEach(item => item.classList.remove('active'));
+            window.scrollTo({top: 0, behavior: 'smooth'});
+
+            if (appKey === 'home') {
+                homePage.classList.add('active');
+                otherPage.classList.remove('active');
+                document.getElementById('nav-home').classList.add('active');
+            } else {
+                const data = appDatabase[appKey];
+                homePage.classList.remove('active');
+                
+                // Buat HTML untuk screenshots secara dinamis
+                let ssHTML = '';
+                data.screenshots.forEach(url => {
+                    ssHTML += `<img src="${url}" class="ss-item" alt="Screenshot">`;
+                });
+
+                // Render konten dinamis termasuk slider screenshot
+                otherPage.innerHTML = `
+                    <div class="px-6 py-2 flex gap-5">
+                        <div class="w-20 h-20 shadow-md rounded-2xl overflow-hidden border border-gray-100 flex-shrink-0">
+                            <img src="${data.icon}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <h1 class="text-2xl font-bold text-gray-900 leading-tight">${data.title}</h1>
+                            <p class="text-google-green font-semibold text-sm">${data.dev}</p>
+                            <p class="text-gray-500 text-xs">Produk Resmi Nasuka Ecosystem</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-around mt-6 border-b pb-4 overflow-x-auto">
+                        <div class="text-center px-4 border-r">
+                            <div class="flex items-center justify-center font-bold text-sm">4,9 <i class="fas fa-star text-[10px] ml-1"></i></div>
+                            <div class="text-[10px] text-gray-500">Terpopuler</div>
+                        </div>
+                        <div class="text-center px-4 border-r">
+                            <i class="fas fa-download text-sm mb-1 text-gray-700"></i>
+                            <div class="font-bold text-sm">${data.size}</div>
+                            <div class="text-[10px] text-gray-500">Ukuran</div>
+                        </div>
+                        <div class="text-center px-4">
+                            <div class="font-bold text-sm">${data.downloads}</div>
+                            <div class="text-[10px] text-gray-500">Unduhan</div>
+                        </div>
+                    </div>
+
+                    <div class="px-6 py-6 flex flex-col gap-3">
+                        <a href="${data.link}" class="google-green text-white text-center py-2 rounded-lg font-semibold shadow-sm transition active:scale-95">
+                            Install
+                        </a>
+                    </div>
+
+                    <div class="px-6 py-4">
+                        <div class="ss-container">
+                            ${ssHTML}
+                        </div>
+                    </div>
+
+                    <div class="px-6 py-6">
+                        <h3 class="font-bold text-gray-800 mb-2">Tentang aplikasi ini</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">${data.desc}</p>
+                    </div>
+                `;
+                otherPage.classList.add('active');
+                document.getElementById('nav-' + appKey).classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
