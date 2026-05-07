@@ -1,432 +1,732 @@
-
-  );
-  grass.add(mesh);
-  return grass;
-}
-
-function Road(rowIndex) {
-  const road = new THREE.Group();
-  road.position.y = rowIndex * tileSize;
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(tileSize * 30, tileSize),
-    new THREE.MeshLambertMaterial({ color: 0x454a59 })
-  );
-  road.add(mesh);
-  return road;
-}
-
-function updateUI() {
-    const coinDisp = document.getElementById("coin-display");
-    const roadCount = document.getElementById("road-count");
-    if(coinDisp) coinDisp.innerText = `GEMS: ${userGems.toLocaleString()}`;
-    if(roadCount) roadCount.innerText = `JALAN DILEWATI: ${roadsPassed}`;
-}
-
-window.initializeMap = () => {
-    metadata.length = 0;
-    while(map.children.length > 0) map.remove(map.children[0]);
-    for (let i = -10; i <= 0; i++) map.add(Grass(i));
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nasuka Digital Ecosystem</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    position.currentRow = 0;
-    position.currentTile = 0;
-    player.position.set(0,0,0);
-    roadsPassed = 0;
-    lastRoadIndex = -1;
-    isGameOver = false;
-    movesQueue.length = 0;
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    addRows();
-    updateUI();
+    <style>
+        :root { 
+            --primary: #00529C; --secondary: #f37021; --bg-body: #f4f7fa; 
+            --text-main: #2c3e50; --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --danger: #ef4444; --success: #10b981; --gold: #FFD700;
+            --gold-bright: #FFF700; --tile-white: #fff; --tile-shadow: #ddd;
+            --retro-border: 3px solid #2c3e50; --retro-shadow: 4px 4px 0px #2c3e50;
+            --retro-shadow-active: 1px 1px 0px #2c3e50;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg-body); font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; color: var(--text-main); overflow-x: hidden; touch-action: manipulation;
+        }
+
+        /* --- LOADING OVERLAY --- */
+        #loading-screen {
+            position: fixed; inset: 0; background: var(--primary); z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 1s infinite linear; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- AUTH PAGE --- */
+        #login-page { position: fixed; inset: 0; background: white; z-index: 10000; padding: 40px 25px; display: none; text-align: center; }
+        .auth-container { max-width: 400px; margin: 0 auto; }
+        .auth-logo { width: 100px; height: 100px; border-radius: 25px; margin-bottom: 20px; box-shadow: var(--shadow); }
+        .auth-input { width: 100%; padding: 18px; border-radius: 15px; border: 2px solid #e2e8f0; margin-bottom: 15px; font-size: 16px; outline: none; transition: 0.3s; }
+        .auth-input:focus { border-color: var(--primary); }
+
+        /* --- DASHBOARD / HOME --- */
+        .hero-section { background: var(--primary); padding: 30px 20px 70px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .user-info h1 { margin: 5px 0; font-size: 24px; }
+        .top-avatar { width: 50px; height: 50px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover; }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 20px; background: white; margin: -40px 15px 20px; border-radius: 24px; box-shadow: var(--shadow); position: relative; z-index: 10; }
+        .menu-item { text-align: center; cursor: pointer; }
+        .menu-icon { width: 55px; height: 55px; background: #f0f7ff; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; transition: 0.2s; }
+        .menu-icon:active { transform: scale(0.9); background: #e0efff; }
+        .menu-icon img { width: 35px; height: 35px; object-fit: contain; }
+        .menu-item span { font-size: 12px; font-weight: 800; color: #475569; }
+
+        .balance-card { background: linear-gradient(135deg, #00529C 0%, #0076de 100%); padding: 25px; border-radius: 24px; color: white; margin: 0 15px 25px; position: relative; overflow: hidden; }
+        .balance-card::after { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+        .balance-label { font-size: 13px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+        .balance-value { font-size: 32px; font-weight: 900; margin: 10px 0; }
+        .gems-badge { display: inline-flex; align-items: center; background: rgba(0,0,0,0.2); padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+
+        /* --- PRODUCT LIST --- */
+        .section-title { padding: 0 20px; font-weight: 800; color: var(--primary); margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .voucher-container { padding: 0 15px; }
+        .voucher-card { background: white; border-radius: 20px; margin-bottom: 12px; box-shadow: var(--shadow); display: flex; align-items: center; padding: 15px; border: 1px solid #f1f5f9; }
+        .voucher-img { width: 65px; height: 65px; border-radius: 15px; object-fit: cover; margin-right: 15px; }
+        .voucher-info { flex: 1; }
+        .voucher-info b { font-size: 16px; color: #1e293b; }
+        .voucher-info p { margin: 4px 0 0; color: var(--secondary); font-weight: 900; font-size: 15px; }
+
+        .btn-beli { background: #6BCB77; color: #2c3e50; border: var(--retro-border); padding: 10px 20px; border-radius: 12px; font-weight: 900; cursor: pointer; box-shadow: var(--retro-shadow); transition: 0.1s; font-size: 14px; }
+        .btn-beli:active { transform: translate(2px, 2px); box-shadow: var(--retro-shadow-active); }
+
+        /* --- SLOT MACHINE PAGE --- */
+        #slot-page {
+            position: fixed; inset: 0; background: #000; z-index: 5000;
+            display: none; flex-direction: column;
+            background-image: url('https://nasukafoods.site/image/qris.jpg'); 
+            background-size: cover; background-position: center;
+        }
+        #slot-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.7); color: white; border-bottom: 2px solid var(--gold); }
+        
+        #multiplier-bar { display: flex; justify-content: space-around; padding: 15px; background: rgba(0,0,0,0.5); }
+        .mult-box { width: 55px; height: 35px; border: 2px solid #555; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #222; opacity: 0.4; transition: 0.3s; }
+        .mult-box.active { opacity: 1; border-color: var(--gold); box-shadow: 0 0 15px var(--gold); transform: scale(1.1); background: #000; }
+        .mult-box img { width: 80%; height: 80%; object-fit: contain; }
+
+        #grid-container {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px;
+            padding: 10px; margin: 20px auto; width: 95%; aspect-ratio: 1/1;
+            background: rgba(0,0,0,0.6); border: 4px solid #333; border-radius: 15px;
+            position: relative; overflow: hidden;
+        }
+        .tile { background: white; border-radius: 8px; display: flex; justify-content: center; align-items: center; position: relative; transition: 0.2s; }
+        .tile img { width: 85%; height: 85%; object-fit: contain; }
+        .tile.winning { animation: pulse-win 0.5s infinite alternate; z-index: 2; }
+        @keyframes pulse-win { from { transform: scale(1); filter: brightness(1); } to { transform: scale(1.1); filter: brightness(1.5); border: 2px solid gold; } }
+
+        #slot-controls { background: rgba(0,0,0,0.9); padding: 20px; border-top: 3px solid #444; border-top-left-radius: 30px; border-top-right-radius: 30px; margin-top: auto; }
+        .stat-row { display: flex; gap: 15px; margin-bottom: 20px; }
+        .stat-box { flex: 1; background: #1a1a1a; padding: 12px; border-radius: 15px; text-align: center; border: 1px solid #333; }
+        .stat-box small { color: #888; font-size: 10px; text-transform: uppercase; }
+        .stat-box div { font-weight: 900; font-size: 18px; }
+
+        .spin-btn { 
+            width: 80px; height: 80px; background: radial-gradient(circle, #ff4e50, #f9d423); 
+            border: 5px solid #fff; border-radius: 50%; font-size: 30px; color: #fff;
+            box-shadow: 0 0 20px rgba(255, 78, 80, 0.6); cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .spin-btn:disabled { filter: grayscale(1); opacity: 0.5; }
+
+        /* --- ANGKOT CROSSER 3D --- */
+        #angkot-page { position: fixed; inset: 0; background: #111; z-index: 6000; display: none; }
+        #angkot-canvas { width: 100%; height: 100%; display: block; }
+        #angkot-ui { position: absolute; top: 70px; left: 20px; color: white; pointer-events: none; z-index: 100; }
+        .angkot-btn-exit { position: absolute; top: 15px; left: 15px; padding: 10px 20px; background: var(--danger); color: white; border: none; border-radius: 30px; font-weight: bold; z-index: 100; }
+        
+        #angkot-controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; gap: 20px; z-index: 100; }
+        .ctrl-grid { display: grid; grid-template-columns: repeat(3, 70px); gap: 15px; }
+        .btn-ctrl { width: 70px; height: 70px; background: white; border-radius: 15px; border: none; font-size: 24px; box-shadow: 0 5px 0 #ccc; display: flex; align-items: center; justify-content: center; }
+        .btn-ctrl:active { transform: translateY(4px); box-shadow: 0 1px 0 #ccc; }
+
+        #game-over-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; color: white; z-index: 200; }
+
+        /* --- MODAL SYSTEM --- */
+        #nasuka-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 30000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: white; width: 100%; max-width: 350px; border-radius: 30px; padding: 35px 25px; text-align: center; position: relative; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes modalPop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-icon { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .modal-success { background: #ecfdf5; color: #10b981; }
+        .modal-error { background: #fef2f2; color: #ef4444; }
+
+        .page-content { display: none; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
+        .active { display: block !important; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div id="loading-screen">
+    <div class="spinner"></div>
+    <p style="margin-top:20px; font-weight:bold; letter-spacing:2px;">MEMUAT DATA...</p>
+</div>
+
+<div id="nasuka-modal-overlay">
+    <div class="modal-card">
+        <div id="m-icon" class="modal-icon"></div>
+        <h2 id="m-title" style="margin:0 0 10px;">Judul</h2>
+        <p id="m-msg" style="color:#64748b; margin-bottom:25px;">Pesan Anda di sini.</p>
+        <button onclick="closeModal()" class="btn-beli" style="width:100%; padding:15px;">MENGERTI</button>
+    </div>
+</div>
+
+<div id="login-page">
+    <div class="auth-container">
+        <img src="https://nasukafoods.site/image/profil.jpg" class="auth-logo">
+        <h1 style="margin-bottom:5px;">Nasuka Digital</h1>
+        <p style="color:#64748b; margin-bottom:30px;">Silakan login untuk mengakses aset digital Anda</p>
+        <input type="tel" id="login-wa" class="auth-input" placeholder="Nomor WhatsApp (08xxxx)">
+        <input type="password" id="login-pin" class="auth-input" placeholder="PIN Keamanan (4 Digit)">
+        <button onclick="processLogin()" class="btn-beli" style="width:100%; padding:18px; font-size:16px;">MASUK KE AKUN</button>
+        <p style="margin-top:20px; font-size:13px; color:#94a3b8;">Belum punya akun? Masukkan nomor baru untuk mendaftar otomatis.</p>
+    </div>
+</div>
+
+<div id="home-page" class="page-content">
+    <div class="hero-section">
+        <div class="user-info">
+            <span>Selamat Datang,</span>
+            <h1 id="user-display-name">Tamu</h1>
+        </div>
+        <img onclick="showPage('profile-page')" src="https://nasukafoods.site/image/profil.jpg" class="top-avatar">
+    </div>
+
+    <div class="menu-grid">
+        <div class="menu-item" onclick="showSlotGame()">
+            <div class="menu-icon"><img src="https://nasukafoods.site/image/m3.jpg"></div>
+            <span>SLOT</span>
+        </div>
+        <div class="menu-item" onclick="showAngkotGame()">
+            <div class="menu-icon"><img src="https://nasukafoods.site/image/angkotkanan.jpg"></div>
+            <span>ANGKOT</span>
+        </div>
+        <div class="menu-item" onclick="showModal('info', 'Layanan Nasuka', 'Hubungi WhatsApp Admin di 0859109819017 untuk bantuan.')">
+            <div class="menu-icon"><img src="https://nasukafoods.site/image/informasi.jpg"></div>
+            <span>INFO</span>
+        </div>
+        <div class="menu-item" onclick="showPage('history-page')">
+            <div class="menu-icon"><img src="https://nasukafoods.site/image/xl.jpg"></div>
+            <span>RIWAYAT</span>
+        </div>
+    </div>
+
+    <div class="balance-card">
+        <div class="balance-label">Total Saldo Rupiah</div>
+        <div class="balance-value" id="val-saldo">Rp 0</div>
+        <div class="gems-badge">💎 <span id="val-gems">0</span> GEMS</div>
+    </div>
+
+    <div class="section-title">
+        <span>PRODUK DIGITAL</span>
+        <span style="font-size:12px; color:#94a3b8; font-weight:normal;">Lihat Semua</span>
+    </div>
+    <div id="product-list" class="voucher-container"></div>
+</div>
+
+<div id="profile-page" class="page-content" style="padding:20px;">
+    <button onclick="showPage('home-page')" class="btn-beli" style="background:white; margin-bottom:20px;">← KEMBALI</button>
+    <div style="background:white; border-radius:24px; padding:30px; text-align:center; box-shadow:var(--shadow);">
+        <img src="https://nasukafoods.site/image/profil.jpg" style="width:100px; height:100px; border-radius:50%; margin-bottom:15px; border:4px solid var(--primary);">
+        <h2 id="p-name" style="margin:0;">-</h2>
+        <p id="p-phone" style="color:#64748b; margin-top:5px;">-</p>
+        <hr style="margin:20px 0; border:0; border-top:1px solid #f1f5f9;">
+        <button onclick="exchangeGems()" class="btn-beli" style="width:100%; background:var(--primary); color:white; margin-bottom:12px;">BELI 25.000 GEMS (Rp 500)</button>
+        <button onclick="logout()" class="btn-beli" style="width:100%; background:var(--danger); color:white;">KELUAR AKUN</button>
+    </div>
+</div>
+
+<div id="history-page" class="page-content" style="padding:20px;">
+    <button onclick="showPage('home-page')" class="btn-beli" style="background:white; margin-bottom:20px;">← KEMBALI</button>
+    <div id="history-items">
+        <div style="text-align:center; padding:50px; color:#94a3b8;">Belum ada riwayat transaksi.</div>
+    </div>
+</div>
+
+<div id="slot-page">
+    <div id="slot-header">
+        <div onclick="exitSlot()" style="font-weight:900; color:var(--gold); cursor:pointer;">← EXIT</div>
+        <div style="font-weight:900; letter-spacing:2px;">NASUKA PRAGMATIC</div>
+        <div><i class="fas fa-bars"></i></div>
+    </div>
+
+    <div id="multiplier-bar">
+        <div class="mult-box" id="m2x"><img src="https://nasukafoods.site/image/1x.png"></div>
+        <div class="mult-box" id="m3x"><img src="https://nasukafoods.site/image/2x.png"></div>
+        <div class="mult-box" id="m5x"><img src="https://nasukafoods.site/image/3x.png"></div>
+        <div class="mult-box" id="m10x"><img src="https://nasukafoods.site/image/5x.png"></div>
+    </div>
+
+    <div id="grid-container"></div>
+
+    <div id="slot-controls">
+        <div class="stat-row">
+            <div class="stat-box">
+                <small>MY GEMS</small>
+                <div id="slot-gems-display" style="color:cyan;">0</div>
+            </div>
+            <div class="stat-box">
+                <small>TOTAL WIN</small>
+                <div id="slot-win-display" style="color:var(--success);">0</div>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:15px; background:#1a1a1a; padding:10px 20px; border-radius:40px; border:1px solid #333;">
+                <button onclick="changeBet(-100)" style="background:none; border:none; color:white; font-size:24px;">-</button>
+                <div style="text-align:center; min-width:80px;">
+                    <small style="color:#888; font-size:9px;">TARUHAN</small>
+                    <div id="slot-bet-display" style="color:var(--gold); font-weight:900;">500</div>
+                </div>
+                <button onclick="changeBet(100)" style="background:none; border:none; color:white; font-size:24px;">+</button>
+            </div>
+
+            <button id="spin-trigger" onclick="startSpin()" class="spin-btn">⚡</button>
+
+            <div style="background:#1a1a1a; padding:15px; border-radius:15px; border:1px solid #333;">
+                <i class="fas fa-history" style="color:#888;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="angkot-page">
+    <button class="angkot-btn-exit" onclick="exitAngkot()">KELUAR</button>
+    <div id="angkot-ui">
+        <div style="font-size:24px; font-weight:900; color:var(--gold); text-shadow:2px 2px #000;">GEMS: <span id="angkot-gems">0</span></div>
+        <div style="background:rgba(0,0,0,0.5); padding:5px 15px; border-radius:10px; display:inline-block; margin-top:5px;">JALAN: <span id="angkot-score">0</span></div>
+    </div>
+
+    <div id="game-over-screen">
+        <h1 style="color:var(--danger); font-size:40px; margin-bottom:10px;">GAME OVER</h1>
+        <p id="final-score-text" style="font-size:18px; margin-bottom:30px;">Anda melewati 0 jalan</p>
+        <button onclick="restartAngkot()" class="btn-beli" style="padding:15px 40px; font-size:18px;">MAIN LAGI</button>
+    </div>
+
+    <div id="angkot-controls">
+        <div class="ctrl-grid">
+            <span></span><button class="btn-ctrl" id="btn-up">▲</button><span></span>
+            <button class="btn-ctrl" id="btn-left">◀</button><button class="btn-ctrl" id="btn-down">▼</button><button class="btn-ctrl" id="btn-right">▶</button>
+        </div>
+    </div>
+    <canvas id="angkot-canvas"></canvas>
+</div>
+
+<script>
+// --- FIREBASE INITIALIZATION ---
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafood1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    storageBucket: "nasukafoods1.appspot.com",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
 };
 
-function addRows() {
-    for (let i = 0; i < 20; i++) {
-        const type = Math.random() > 0.4 ? "car" : "forest";
-        const rowIndex = metadata.length + 1;
-        let row;
-        const rowData = { type, vehicles: [] };
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-        if (type === "forest") {
-            row = Grass(rowIndex);
-        } else {
-            row = Road(rowIndex);
-            rowData.direction = Math.random() > 0.5;
-            rowData.speed = 120 + Math.random() * 120;
-            for (let v = 0; v < 2; v++) {
-                const initialTileIndex = Math.floor(Math.random() * (maxTileIndex - minTileIndex)) + minTileIndex;
-                const vehicle = Car(initialTileIndex, rowData.direction);
-                row.add(vehicle);
-                rowData.vehicles.push({ ref: vehicle });
+// --- STATE MANAGEMENT ---
+let currentUser = null;
+let userID = localStorage.getItem('nasuka_uid');
+let userSaldo = 0;
+let userGems = 0;
+let currentBet = 500;
+let isSpinning = false;
+
+// --- CORE FUNCTIONS ---
+function showPage(pageId) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    window.scrollTo(0,0);
+}
+
+function showModal(type, title, msg) {
+    const overlay = document.getElementById('nasuka-modal-overlay');
+    const icon = document.getElementById('m-icon');
+    icon.className = 'modal-icon ' + (type === 'success' ? 'modal-success' : 'modal-error');
+    icon.innerHTML = (type === 'success' ? '✓' : '!');
+    document.getElementById('m-title').innerText = title;
+    document.getElementById('m-msg').innerText = msg;
+    overlay.style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('nasuka-modal-overlay').style.display = 'none';
+}
+
+// --- AUTH LOGIC ---
+async function processLogin() {
+    const wa = document.getElementById('login-wa').value.trim();
+    const pin = document.getElementById('login-pin').value.trim();
+
+    if(wa.length < 10 || pin.length < 4) {
+        return showModal('error', 'Gagal', 'Masukkan nomor WA dan PIN 4 digit dengan benar.');
+    }
+
+    document.getElementById('loading-screen').style.display = 'flex';
+
+    try {
+        const snapshot = await db.ref('users/' + wa).once('value');
+        if(snapshot.exists()) {
+            const data = snapshot.val();
+            if(data.PIN === pin) {
+                loginSuccess(wa);
+            } else {
+                showModal('error', 'PIN Salah', 'Kode PIN yang Anda masukkan tidak sesuai.');
+                document.getElementById('loading-screen').style.display = 'none';
             }
+        } else {
+            // Register User Baru
+            await db.ref('users/' + wa).set({
+                Nama: "Kawan Nasuka",
+                PIN: pin,
+                Saldo: 0,
+                Gems: 25000,
+                Phone: wa,
+                JoinDate: new Date().toISOString()
+            });
+            loginSuccess(wa);
         }
-        map.add(row);
-        metadata.push(rowData);
+    } catch (e) {
+        console.error(e);
+        document.getElementById('loading-screen').style.display = 'none';
     }
 }
 
-function queueMove(direction) {
-    if (isGameOver) return;
-    if (direction === "left") playerBody.scale.x = -32;
-    if (direction === "right") playerBody.scale.x = 32;
-    if (direction === "forward") movesQueue.push(direction);
-    if (direction === "backward" && position.currentRow > 0) movesQueue.push(direction);
-    if (direction === "left" && position.currentTile > minTileIndex) movesQueue.push(direction);
-    if (direction === "right" && position.currentTile < maxTileIndex) movesQueue.push(direction);
+function loginSuccess(uid) {
+    localStorage.setItem('nasuka_uid', uid);
+    userID = uid;
+    document.getElementById('login-page').style.display = 'none';
+    initUserData();
 }
 
-function stepCompleted() {
-    const dir = movesQueue.shift();
-    const prevRow = position.currentRow;
-
-    if (dir === "forward") position.currentRow++;
-    if (dir === "backward") position.currentRow--;
-    if (dir === "left") position.currentTile--;
-    if (dir === "right") position.currentTile++;
-    
-    const prevRowData = metadata[prevRow - 1]; 
-    if (prevRowData && prevRowData.type === "car" && prevRow > lastRoadIndex) {
-        roadsPassed++;
-        lastRoadIndex = prevRow;
-        giveGemsReward(10); 
-        updateUI();
-    }
-
-    if (position.currentRow > metadata.length - 15) addRows();
+function logout() {
+    localStorage.removeItem('nasuka_uid');
+    location.reload();
 }
 
-async function giveGemsReward(amount) {
-    if(!userID) return;
-    userGems += amount;
-    await window.db.ref(`users/${userID}/Gems`).set(userGems);
-}
-
-function showResult(message, type) {
-    isGameOver = true;
-    const container = document.getElementById("result-container");
-    const statusText = document.getElementById("result-status");
-    const descText = document.getElementById("result-desc");
-
-    statusText.innerText = message;
-    container.style.visibility = "visible";
-    statusText.style.color = "#ff4757";
-    descText.innerText = `Skor akhir: ${roadsPassed} jalan.`;
-}
-
-const camera = new THREE.OrthographicCamera(
-    window.innerWidth / -zoomLevel, window.innerWidth / zoomLevel, 
-    window.innerHeight / zoomLevel, window.innerHeight / -zoomLevel, 
-    1, 1000
-);
-camera.position.set(0, -200, 200); 
-camera.lookAt(0, 0, 0);
-
-const canvasAngkot = document.getElementById("angkotCanvas");
-const renderer = new THREE.WebGLRenderer({ canvas: canvasAngkot, antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-
-function animate() {
-    requestAnimationFrame(animate);
-    if (isGameOver || !gameInitialized) {
-        if(gameInitialized) renderer.render(scene, camera);
+// --- DATA SYNC ---
+function initUserData() {
+    if(!userID) {
+        document.getElementById('login-page').style.display = 'block';
+        document.getElementById('loading-screen').style.display = 'none';
         return;
     }
-    
-    const delta = clock.getDelta();
-    metadata.forEach(row => {
-        if (row.type === "car") {
-            row.vehicles.forEach(v => {
-                if (row.direction) {
-                    v.ref.position.x += row.speed * delta;
-                    if (v.ref.position.x > 400) v.ref.position.x = -400;
-                } else {
-                    v.ref.position.x -= row.speed * delta;
-                    if (v.ref.position.x < -400) v.ref.position.x = 400;
-                }
-            });
+
+    db.ref('users/' + userID).on('value', snap => {
+        const data = snap.val();
+        if(data) {
+            userSaldo = data.Saldo || 0;
+            userGems = data.Gems || 0;
+            
+            // Update UI Home
+            document.getElementById('user-display-name').innerText = data.Nama;
+            document.getElementById('val-saldo').innerText = "Rp " + userSaldo.toLocaleString();
+            document.getElementById('val-gems').innerText = userGems.toLocaleString();
+            
+            // Update UI Profile
+            document.getElementById('p-name').innerText = data.Nama;
+            document.getElementById('p-phone').innerText = data.Phone;
+
+            // Update UI Games
+            document.getElementById('slot-gems-display').innerText = userGems.toLocaleString();
+            document.getElementById('angkot-gems').innerText = userGems.toLocaleString();
+            
+            document.getElementById('loading-screen').style.display = 'none';
+            showPage('home-page');
         }
     });
-
-    if (movesQueue.length > 0) {
-        if (!moveClock.running) moveClock.start();
-        const progress = Math.min(1, moveClock.getElapsedTime() / 0.15);
-        const startX = position.currentTile * tileSize;
-        const startY = position.currentRow * tileSize;
-        let endX = startX, endY = startY;
-
-        if (movesQueue[0] === "forward") endY += tileSize;
-        if (movesQueue[0] === "backward") endY -= tileSize;
-        if (movesQueue[0] === "left") endX -= tileSize;
-        if (movesQueue[0] === "right") endX += tileSize;
-
-        player.position.x = THREE.MathUtils.lerp(startX, endX, progress);
-        player.position.y = THREE.MathUtils.lerp(startY, endY, progress);
-        playerBody.position.z = 16 + Math.sin(progress * Math.PI) * 20;
-
-        if (progress >= 1) {
-            stepCompleted();
-            moveClock.stop();
-        }
-    }
-
-    camera.position.y = player.position.y - 200;
-    camera.lookAt(0, player.position.y, 0);
-
-    const curRow = metadata[position.currentRow - 1];
-    if (curRow && curRow.type === "car") {
-        curRow.vehicles.forEach(v => {
-            if (Math.abs(v.ref.position.x - player.position.x) < 35) {
-                showResult("Hati hati nyebrang jalan ya!", "lose");
-            }
-        });
-    }
-    renderer.render(scene, camera);
 }
 
-// --- CORE UI FUNCTIONS ---
-window.hideAll = () => {
-    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-    document.getElementById('slot-page').style.display = 'none';
-    document.getElementById('angkot-page').style.display = 'none';
-    document.getElementById('login-page').style.display = 'none';
-};
-
-window.showHome = () => { 
-    hideAll(); 
-    document.getElementById('home-page').classList.add('active'); 
-    renderProducts(); 
-};
-
-window.showProfile = () => { if(!checkLogin()) return; hideAll(); document.getElementById('profile-page').classList.add('active'); };
-window.showHistory = () => { if(!checkLogin()) return; hideAll(); document.getElementById('history-page').classList.add('active'); };
-
-window.showSlot = () => {
-    if(!checkLogin()) return;
-    hideAll();
-    document.getElementById('slot-page').style.display = 'flex';
-    initSlotGrid();
-};
-
-window.showAngkotage = () => {
-    if(!checkLogin()) return;
-    hideAll();
-    document.getElementById('angkot-page').style.display = 'block';
-    gameInitialized = true;
-    window.initializeMap();
-};
-
-window.closeAngkot = () => {
-    gameInitialized = false;
-    showHome();
-};
-
-window.checkLogin = () => {
-    if(!userID) { 
-        hideAll(); 
-        document.getElementById('login-page').style.display = 'block'; 
-        return false; 
-    }
-    return true;
-};
-
-// --- AUTH & DATA ---
-window.initApp = () => {
-    renderProducts();
-    if(userID) {
-        if(userRef) userRef.off();
-        userRef = window.db.ref(`users/${userID}`);
-        userRef.on('value', snap => {
-            const data = snap.val();
-            if(data) {
-                userSaldo = data.Saldo || 0;
-                userGems = data.Gems || 0;
-                document.getElementById('header-user-name').innerText = data.Nama || "User";
-                document.getElementById('displaySaldo').innerText = "Rp " + userSaldo.toLocaleString();
-                document.getElementById('displayGems').innerText = "💎 " + userGems.toLocaleString();
-                document.getElementById('profile-name-view').innerText = data.Nama;
-                updateSlotUI();
-                updateUI();
-            }
-        });
-    } else {
-        document.getElementById('header-user-name').innerText = "Tamu";
-    }
-};
-
-window.handleAuth = () => {
-    const wa = document.getElementById('auth-wa').value;
-    const pin = document.getElementById('auth-pin').value;
-    if(wa.length < 10) return alert("Nomor WA tidak valid");
-    window.db.ref(`users/${wa}`).once('value', snap => {
-        if(snap.exists() && snap.val().PIN !== pin) return alert("PIN Salah");
-        if(!snap.exists()) {
-            window.db.ref(`users/${wa}`).set({ Nama: "Kawan", PIN: pin, Saldo: 0, Gems: 25000 });
-        }
-        localStorage.setItem("ID", wa);
-        userID = wa;
-        initApp();
-        showHome();
-    });
-};
-
-window.logout = () => { 
-    localStorage.removeItem("ID"); 
-    userID = null;
-    if(userRef) userRef.off();
-    userSaldo = 0;
-    userGems = 0;
-    document.getElementById('header-user-name').innerText = "Tamu";
-    document.getElementById('displaySaldo').innerText = "Rp 0";
-    document.getElementById('displayGems').innerText = "💎 0";
-    hideAll();
-    document.getElementById('login-page').style.display = 'block';
-};
-
-// --- SLOT SYSTEM ---
-const symbolImages = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg'];
-const betLevels = [100, 200, 500, 1000, 2000, 5000];
-let currentBetIdx = 2;
-let isSpinningSlot = false;
-let gridTiles = [];
-
-window.initSlotGrid = () => {
-    const container = document.getElementById('grid-container');
-    container.innerHTML = ''; gridTiles = [];
-    for(let i=0; i<25; i++) {
-        const div = document.createElement('div'); div.className = 'tile';
-        const img = symbolImages[Math.floor(Math.random()*4)];
-        div.innerHTML = `<img src="https://nasukafoods.site/image/${img}">`;
-        container.appendChild(div);
-        gridTiles.push({ el: div, symbol: img });
-    }
-};
-
-window.updateSlotUI = () => {
-    const gemEl = document.getElementById('slot-gems');
-    const betEl = document.getElementById('slot-bet');
-    if(gemEl) gemEl.innerText = "💎 " + (userGems || 0).toLocaleString();
-    if(betEl) betEl.innerText = "💎 " + betLevels[currentBetIdx].toLocaleString();
-};
-
-window.adjustBetSlot = (dir) => {
-    if(isSpinningSlot) return;
-    currentBetIdx = Math.max(0, Math.min(betLevels.length-1, currentBetIdx + dir));
-    updateSlotUI();
-};
-
-window.handleSpinSlot = async () => {
-    if(isSpinningSlot) return;
-    const bet = betLevels[currentBetIdx];
-    if(userGems < bet) return showNasukaModal('error', 'Gems Habis', 'Saldo Gems tidak cukup.');
-
-    isSpinningSlot = true;
-    userGems -= bet;
-    window.db.ref(`users/${userID}/Gems`).set(userGems);
-    
-    const roll = setInterval(() => {
-        gridTiles.forEach(t => {
-            const sym = symbolImages[Math.floor(Math.random()*4)];
-            t.el.innerHTML = `<img src="https://nasukafoods.site/image/${sym}">`;
-        });
-    }, 100);
-
-    setTimeout(() => {
-        clearInterval(roll);
-        finishSpin(bet);
-    }, 1200);
-};
-
-function finishSpin(bet) {
-    let win = Math.random() > 0.7;
-    if(win) {
-        let mult = [2, 3, 5][Math.floor(Math.random()*3)];
-        let winAmt = bet * mult;
-        userGems += winAmt;
-        window.db.ref(`users/${userID}/Gems`).set(userGems);
-        document.getElementById('win-amount-popup').innerText = "💎 " + winAmt.toLocaleString();
-        document.getElementById('win-announcement').classList.add('show-win');
-        setTimeout(() => document.getElementById('win-announcement').classList.remove('show-win'), 2000);
-    }
-    isSpinningSlot = false;
-    updateSlotUI();
-}
-
-// --- UTILS ---
-window.showNasukaModal = (type, title, msg) => {
-    const overlay = document.getElementById('nasuka-modal-overlay');
-    document.getElementById('modal-icon').className = `modal-icon-box modal-icon-${type === 'error' ? 'error' : 'success'}`;
-    document.getElementById('modal-icon').innerHTML = type === 'error' ? '×' : '✓';
-    document.getElementById('modal-title').innerText = title;
-    document.getElementById('modal-msg').innerText = msg;
-    overlay.classList.add('active');
-    document.getElementById('modal-btn-main').onclick = () => overlay.classList.remove('active');
-};
-
+// --- PRODUCT SYSTEM ---
 const products = [
-    { id: "ax1", name: "Axis 5GB 1hr", price: 7000, img: "https://nasukafoods.site/image/axis.jpg" },
-    { id: "xl1", name: "XL 10GB", price: 12000, img: "https://nasukafoods.site/image/xl.jpg" }
+    { id: 'v1', name: 'Axis 5GB 1 Hari', price: 7000, img: 'https://nasukafoods.site/image/axis.jpg' },
+    { id: 'v2', name: 'XL Extra Combo 10GB', price: 12000, img: 'https://nasukafoods.site/image/xl.jpg' },
+    { id: 'v3', name: 'Telkomsel Flash 2GB', price: 5000, img: 'https://nasukafoods.site/image/telkomsel.jpg' },
+    { id: 'v4', name: 'Indosat Freedom 3GB', price: 8000, img: 'https://nasukafoods.site/image/indosat.jpg' }
 ];
 
-window.renderProducts = () => {
-    const list = document.getElementById('voucher-list');
-    if(!list) return;
-    list.innerHTML = products.map(p => `
+function renderProducts() {
+    const container = document.getElementById('product-list');
+    container.innerHTML = products.map(p => `
         <div class="voucher-card">
             <img src="${p.img}" class="voucher-img">
-            <div style="flex:1"><b>${p.name}</b><br><span style="color:orange">Rp ${p.price.toLocaleString()}</span></div>
-            <button onclick="prosesBeli('${p.id}', '${p.name}', ${p.price})" class="btn-beli">BELI</button>
+            <div class="voucher-info">
+                <b>${p.name}</b>
+                <p>Rp ${p.price.toLocaleString()}</p>
+            </div>
+            <button onclick="buyProduct('${p.id}', ${p.price}, '${p.name}')" class="btn-beli">BELI</button>
         </div>
     `).join('');
-};
+}
 
-window.prosesBeli = async (id, nama, harga) => {
-    if(!checkLogin()) return;
-    if(userSaldo < harga) return showNasukaModal('error', 'Saldo Kurang', 'Silakan Topup Saldo Rp.');
-    if(confirm(`Beli ${nama}?`)) {
-        userSaldo -= harga;
-        await window.db.ref(`users/${userID}/Saldo`).set(userSaldo);
-        showNasukaModal('success', 'Berhasil', 'Pembelian sukses!');
+async function buyProduct(id, price, name) {
+    if(userSaldo < price) {
+        return showModal('error', 'Saldo Kurang', 'Silakan top up saldo Rupiah Anda terlebih dahulu.');
     }
-};
 
-window.tukarGems = async () => {
-    if(!checkLogin()) return;
-    const hargaGems = 500;
-    const dapatGems = 25000;
-    if(userSaldo < hargaGems) return alert("Saldo Rupiah tidak cukup!");
-    if(confirm(`Beli 25.000 Gems seharga Rp 500?`)) {
-        userSaldo -= hargaGems;
-        userGems += dapatGems;
-        await window.db.ref(`users/${userID}`).update({ Saldo: userSaldo, Gems: userGems });
-        alert("Berhasil membeli Gems!");
+    if(confirm(`Beli ${name} seharga Rp ${price.toLocaleString()}?`)) {
+        try {
+            const newSaldo = userSaldo - price;
+            await db.ref('users/' + userID).update({ Saldo: newSaldo });
+            
+            // Record History
+            await db.ref('history/' + userID).push({
+                product: name,
+                price: price,
+                date: new Date().toISOString(),
+                status: 'Sukses'
+            });
+
+            showModal('success', 'Berhasil', `Pembelian ${name} berhasil dilakukan.`);
+        } catch (e) {
+            showModal('error', 'Gagal', 'Terjadi kesalahan koneksi.');
+        }
     }
 }
 
-window.showInformasi = () => showNasukaModal('info', 'Info Admin', 'WhatsApp: 0859109819017');
+async function exchangeGems() {
+    const cost = 500;
+    const gain = 25000;
+    if(userSaldo < cost) return showModal('error', 'Saldo Kurang', 'Minimal saldo Rp 500 untuk tukar Gems.');
+    
+    if(confirm(`Tukar Rp 500 dengan 25.000 Gems?`)) {
+        await db.ref('users/' + userID).update({
+            Saldo: userSaldo - cost,
+            Gems: userGems + gain
+        });
+        showModal('success', 'Berhasil', 'Gems telah ditambahkan ke akun Anda.');
+    }
+}
 
-document.getElementById("forward").onclick = () => queueMove("forward");
-document.getElementById("backward").onclick = () => queueMove("backward");
-document.getElementById("left").onclick = () => queueMove("left");
-document.getElementById("right").onclick = () => queueMove("right");
-document.getElementById("retry").onclick = () => { 
-    document.getElementById("result-container").style.visibility = "hidden"; 
-    window.initializeMap(); 
+// --- SLOT LOGIC ---
+const slotSymbols = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg', 'qris.jpg'];
+let gridTiles = [];
+
+function initSlotGrid() {
+    const container = document.getElementById('grid-container');
+    container.innerHTML = '';
+    gridTiles = [];
+    for(let i=0; i<25; i++) {
+        const tile = document.createElement('div');
+        tile.className = 'tile';
+        const symbol = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+        tile.innerHTML = `<img src="https://nasukafoods.site/image/${symbol}">`;
+        container.appendChild(tile);
+        gridTiles.push({ el: tile, symbol: symbol });
+    }
+}
+
+function changeBet(amt) {
+    if(isSpinning) return;
+    currentBet = Math.max(100, Math.min(10000, currentBet + amt));
+    document.getElementById('slot-bet-display').innerText = currentBet.toLocaleString();
+}
+
+function showSlotGame() {
+    document.getElementById('slot-page').style.display = 'flex';
+    initSlotGrid();
+}
+
+function exitSlot() {
+    if(isSpinning) return;
+    document.getElementById('slot-page').style.display = 'none';
+}
+
+async function startSpin() {
+    if(isSpinning || userGems < currentBet) {
+        if(userGems < currentBet) showModal('error', 'Gems Habis', 'Saldo Gems tidak cukup untuk taruhan ini.');
+        return;
+    }
+
+    isSpinning = true;
+    document.getElementById('spin-trigger').disabled = true;
+    
+    // Potong Gems awal
+    userGems -= currentBet;
+    await db.ref('users/' + userID + '/Gems').set(userGems);
+
+    // Animasi Rolling
+    let duration = 0;
+    const rollEffect = setInterval(() => {
+        gridTiles.forEach(t => {
+            const sym = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            t.el.innerHTML = `<img src="https://nasukafoods.site/image/${sym}">`;
+            t.symbol = sym;
+        });
+        duration += 100;
+        if(duration >= 1500) {
+            clearInterval(rollEffect);
+            evaluateSlot();
+        }
+    }, 100);
+}
+
+function evaluateSlot() {
+    // Logika Gacor: 20% peluang menang besar
+    const isWin = Math.random() > 0.8;
+    let winAmount = 0;
+
+    if(isWin) {
+        const multipliers = [2, 3, 5, 10];
+        const mult = multipliers[Math.floor(Math.random() * multipliers.length)];
+        winAmount = currentBet * mult;
+        
+        // Animasi Win pada Grid
+        gridTiles.forEach((t, i) => {
+            if(i % 2 === 0) t.el.classList.add('winning');
+        });
+
+        // Update Multiplier Bar
+        const mId = 'm' + mult + 'x';
+        if(document.getElementById(mId)) document.getElementById(mId).classList.add('active');
+
+        setTimeout(() => {
+            gridTiles.forEach(t => t.el.classList.remove('winning'));
+            document.querySelectorAll('.mult-box').forEach(b => b.classList.remove('active'));
+        }, 2000);
+    }
+
+    userGems += winAmount;
+    db.ref('users/' + userID + '/Gems').set(userGems);
+    document.getElementById('slot-win-display').innerText = winAmount.toLocaleString();
+    
+    isSpinning = false;
+    document.getElementById('spin-trigger').disabled = false;
+}
+
+// --- ANGKOT CROSSER 3D LOGIC ---
+let a_scene, a_camera, a_renderer, a_player;
+let a_map = [];
+let a_enemies = [];
+let a_score = 0;
+let a_gameActive = false;
+const a_tileSize = 40;
+
+function showAngkotGame() {
+    document.getElementById('angkot-page').style.display = 'block';
+    initAngkotEngine();
+}
+
+function initAngkotEngine() {
+    const canvas = document.getElementById('angkot-canvas');
+    a_scene = new THREE.Scene();
+    a_camera = new THREE.OrthographicCamera(window.innerWidth/-2, window.innerWidth/2, window.innerHeight/2, window.innerHeight/-2, 1, 1000);
+    a_camera.position.set(0, -250, 250);
+    a_camera.lookAt(0,0,0);
+
+    a_renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    a_renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const light = new THREE.AmbientLight(0xffffff, 1);
+    a_scene.add(light);
+
+    // Player (Box)
+    const pGeo = new THREE.BoxGeometry(30, 30, 30);
+    const pMat = new THREE.MeshLambertMaterial({ color: 0x3b82f6 });
+    a_player = new THREE.Mesh(pGeo, pMat);
+    a_player.position.z = 15;
+    a_scene.add(a_player);
+
+    restartAngkot();
+    a_gameLoop();
+}
+
+function restartAngkot() {
+    a_score = 0;
+    a_enemies.forEach(e => a_scene.remove(e.mesh));
+    a_enemies = [];
+    a_player.position.set(0, 0, 15);
+    document.getElementById('angkot-score').innerText = "0";
+    document.getElementById('game-over-screen').style.display = 'none';
+    
+    // Generate Initial Map
+    for(let i=-5; i<15; i++) {
+        createRow(i * a_tileSize);
+    }
+    a_gameActive = true;
+}
+
+function createRow(y) {
+    const isRoad = Math.random() > 0.5;
+    const color = isRoad ? 0x334155 : 0x22c55e;
+    const rowGeo = new THREE.PlaneGeometry(2000, a_tileSize);
+    const rowMat = new THREE.MeshLambertMaterial({ color: color });
+    const row = new THREE.Mesh(rowGeo, rowMat);
+    row.position.y = y;
+    a_scene.add(row);
+
+    if(isRoad) {
+        const speed = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1);
+        const carGeo = new THREE.BoxGeometry(60, 30, 25);
+        const carMat = new THREE.MeshLambertMaterial({ color: 0xfacc15 });
+        const car = new THREE.Mesh(carGeo, carMat);
+        car.position.set(Math.random() * 400 - 200, y, 12.5);
+        a_scene.add(car);
+        a_enemies.push({ mesh: car, speed: speed, y: y });
+    }
+}
+
+function a_gameLoop() {
+    if(!a_renderer) return;
+    requestAnimationFrame(a_gameLoop);
+    
+    if(a_gameActive) {
+        a_enemies.forEach(e => {
+            e.mesh.position.x += e.speed;
+            if(e.mesh.position.x > 500) e.mesh.position.x = -500;
+            if(e.mesh.position.x < -500) e.mesh.position.x = 500;
+
+            // Collision Detection
+            const dx = e.mesh.position.x - a_player.position.x;
+            const dy = e.mesh.position.y - a_player.position.y;
+            if(Math.abs(dx) < 40 && Math.abs(dy) < 30) {
+                gameOverAngkot();
+            }
+        });
+
+        a_camera.position.y = a_player.position.y - 250;
+        a_camera.lookAt(0, a_player.position.y, 0);
+    }
+    a_renderer.render(a_scene, a_camera);
+}
+
+function movePlayer(dir) {
+    if(!a_gameActive) return;
+    if(dir === 'up') {
+        a_player.position.y += a_tileSize;
+        a_score++;
+        document.getElementById('angkot-score').innerText = a_score;
+        createRow(a_player.position.y + 15 * a_tileSize);
+        giveGemsReward(10);
+    }
+    if(dir === 'down' && a_player.position.y > 0) a_player.position.y -= a_tileSize;
+    if(dir === 'left') a_player.position.x -= a_tileSize;
+    if(dir === 'right') a_player.position.x += a_tileSize;
+}
+
+async function giveGemsReward(amt) {
+    userGems += amt;
+    await db.ref('users/' + userID + '/Gems').set(userGems);
+}
+
+function gameOverAngkot() {
+    a_gameActive = false;
+    document.getElementById('game-over-screen').style.display = 'flex';
+    document.getElementById('final-score-text').innerText = `Anda melewati ${a_score} jalan`;
+}
+
+function exitAngkot() {
+    a_gameActive = false;
+    document.getElementById('angkot-page').style.display = 'none';
+}
+
+// --- INITIALIZE ---
+document.getElementById('btn-up').onclick = () => movePlayer('up');
+document.getElementById('btn-down').onclick = () => movePlayer('down');
+document.getElementById('btn-left').onclick = () => movePlayer('left');
+document.getElementById('btn-right').onclick = () => movePlayer('right');
+
+window.onload = () => {
+    renderProducts();
+    initUserData();
 };
 
-window.addEventListener("resize", () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.left = window.innerWidth / -zoomLevel;
-    camera.right = window.innerWidth / zoomLevel;
-    camera.top = window.innerHeight / zoomLevel;
-    camera.bottom = window.innerHeight / -zoomLevel;
-    camera.updateProjectionMatrix();
-});
-
-window.addEventListener('load', () => {
-    window.initApp();
-    animate();
-});
+window.onresize = () => {
+    if(a_renderer) {
+        a_renderer.setSize(window.innerWidth, window.innerHeight);
+        a_camera.left = window.innerWidth/-2;
+        a_camera.right = window.innerWidth/2;
+        a_camera.top = window.innerHeight/2;
+        a_camera.bottom = window.innerHeight/-2;
+        a_camera.updateProjectionMatrix();
+    }
+};
 </script>
 </body>
 </html>
