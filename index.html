@@ -20,67 +20,37 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: white;
-            overflow: hidden;
+            margin: 0; padding: 0; background-color: #000;
+            font-family: 'Arial', sans-serif; display: flex;
+            justify-content: center; align-items: center;
+            height: 100vh; color: white; overflow: hidden;
         }
 
         #game-view {
-            width: 100%;
-            height: 100vh;
-            max-width: 450px;
+            width: 100%; height: 100vh; max-width: 450px;
             background-image: url('https://nasukafoods.site/image/goldwall.jpg'); 
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-color: black; 
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-sizing: border-box;
+            background-size: cover; background-position: center;
+            background-repeat: no-repeat; background-color: black; 
+            display: flex; flex-direction: column; position: relative; box-sizing: border-box;
         }
 
-        /* --- UI COMPONENTS --- */
         .top-nav {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 20px;
-            font-size: 0.75rem;
-            background: rgba(0, 0, 0, 0.6);
-            position: relative;
-            z-index: 1000;
+            display: flex; justify-content: space-between; padding: 15px 20px;
+            font-size: 0.75rem; background: rgba(0, 0, 0, 0.6); position: relative; z-index: 1000;
         }
 
         .nav-link { color: var(--gold); text-decoration: underline; cursor: pointer; }
 
         #multiplier-bar {
-            background: transparent;
-            display: flex;
-            justify-content: space-around; 
-            align-items: center;
-            padding: 0 10px;
-            height: 50px; 
-            position: relative;
-            z-index: 500;
-            margin-bottom: -40px; 
-            pointer-events: none;
+            background: transparent; display: flex; justify-content: space-around; 
+            align-items: center; padding: 0 10px; height: 50px; 
+            position: relative; z-index: 500; margin-bottom: -40px; pointer-events: none;
         }
 
         .mult {
-            width: 50px;
-            height: auto;
-            opacity: 0.3;
-            filter: grayscale(100%);
+            width: 50px; height: auto; opacity: 0.3; filter: grayscale(100%);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            pointer-events: auto;
+            position: relative; pointer-events: auto;
         }
 
         #m1 { transform: translateY(20px) rotate(-15deg); } 
@@ -89,653 +59,357 @@
         #m5 { transform: translateY(20px) rotate(15deg); }  
 
         .mult.active {
-            opacity: 1;
-            filter: grayscale(0%) drop-shadow(0 0 10px var(--gold));
-            z-index: 100;
+            opacity: 1; filter: grayscale(0%) drop-shadow(0 0 10px var(--gold));
+            z-index: 100; transform: scale(1.4);
         }
 
-        #m1.active { transform: translateY(20px) rotate(-15deg) scale(1.4); }
-        #m2.active { transform: translateY(-5px) rotate(-5deg) scale(1.4); }
-        #m3.active { transform: translateY(-5px) rotate(5deg) scale(1.4); }
-        #m5.active { transform: translateY(20px) rotate(15deg) scale(1.4); }
-
         #grid-container {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(5, 1fr);
-            gap: 6px;
-            padding: 12px;
-            margin: 10px auto;
-            width: 92%;
-            aspect-ratio: 1 / 1;
+            display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);
+            gap: 6px; padding: 12px; margin: 10px auto; width: 92%; aspect-ratio: 1 / 1;
             background-image: url('https://nasukafoods.site/image/ombak.gif');
-            background-size: cover;
-            background-position: center;
-            background-color: #000; 
-            z-index: 1;
-            position: relative;
-            box-sizing: border-box;
+            background-size: cover; background-position: center; background-color: #000; 
+            z-index: 1; position: relative; box-sizing: border-box;
         }
 
         #win-announcement {
-            position: absolute; 
-            top: 40%; left: 50%; 
-            transform: translate(-50%, -50%) scale(0); 
-            z-index: 2000; 
-            text-align: center; 
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0); 
+            z-index: 2000; text-align: center; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
         }
 
         #win-announcement.show-win {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+            opacity: 1; transform: translate(-50%, -50%) scale(1);
             animation: pulse-bigwin 0.8s infinite ease-in-out;
         }
 
         @keyframes pulse-bigwin {
-            0% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 10px var(--gold)); }
+            0%, 100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 10px var(--gold)); }
             50% { transform: translate(-50%, -50%) scale(1.15); filter: drop-shadow(0 0 30px var(--gold-bright)); }
-            100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 10px var(--gold)); }
         }
 
         .tile {
-            background: var(--tile-white);
-            border-radius: 6px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: var(--tile-white); border-radius: 6px; display: flex; justify-content: center; align-items: center;
             box-shadow: inset 0 -5px 0 var(--tile-shadow), 0 4px 6px rgba(0,0,0,0.3);
-            position: relative;
-            transition: transform 0.1s;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
 
-        .tile img {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-            pointer-events: none;
-        }
-
-        .exploded { 
-            animation: win-glow 0.5s infinite alternate; 
-            z-index: 5; 
-            border: 2px solid white; 
-            box-shadow: 0 0 15px var(--gold-bright);
-        }
-
-        @keyframes win-glow {
-            from { transform: scale(1); filter: brightness(1); }
-            to { transform: scale(1.05); filter: brightness(1.3); }
-        }
+        .tile img { width: 85%; height: 85%; object-fit: contain; pointer-events: none; }
 
         #ui-panel {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            z-index: 900;
-            box-shadow: 0 -10px 20px rgba(0,0,0,0.5);
-            width: 100%;
-            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.8); padding: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative; z-index: 900; width: 100%; box-sizing: border-box;
         }
 
-        .win-box { text-align: center; height: 30px; font-weight: bold; color: var(--gold-bright); font-size: 1.2rem; }
         .stats-main { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-        .stat-card { background: rgba(0,0,0,0.5); flex: 1; padding: 6px; border-radius: 4px; text-align: center; border: 1px solid #444; position: relative; }
-        .label { font-size: 0.65rem; color: var(--gold); display: block; margin-bottom: 2px; text-transform: uppercase; }
+        .stat-card { background: rgba(0,0,0,0.5); flex: 1; padding: 6px; border-radius: 4px; text-align: center; border: 1px solid #444; }
+        .label { font-size: 0.65rem; color: var(--gold); display: block; text-transform: uppercase; }
         .value { font-size: 0.9rem; font-weight: bold; }
 
         .bet-controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; }
         .bet-btn { background: #444; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
 
         .spin-area { display: flex; justify-content: center; align-items: center; gap: 20px; }
-        #spin-btn { width: 80px; height: 80px; background: radial-gradient(circle, #4caf50, #1b5e20); border: 4px solid #fff; border-radius: 50%; font-size: 2.2rem; cursor: pointer; }
-        #spin-btn:disabled { filter: grayscale(1); opacity: 0.7; }
-        .auto-btn { background: #333; color: #fff; border: 1px solid #666; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; }
+        #spin-btn { width: 80px; height: 80px; background: radial-gradient(circle, #4caf50, #1b5e20); border: 4px solid #fff; border-radius: 50%; font-size: 2.2rem; cursor: pointer; color:white; }
+        .auto-btn { background: #333; color: #fff; border: 1px solid #666; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; }
         .auto-btn.active { border-color: #ff4444; color: #ff4444; }
 
-        /* SPA PAGES */
         .spa-page {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark);
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark);
+            z-index: 1000; display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto;
         }
 
         .card { background: var(--red-panel); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: none; box-sizing: border-box; font-weight: bold; }
-        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 10px; text-decoration: none; display: block; text-align: center; }
-        
-        .pulse-active {
-            animation: pulse-gold 0.6s infinite ease-in-out !important;
-            z-index: 999 !important;
-        }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: none; box-sizing: border-box; font-weight: bold; color: #000; }
+        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 6px; width: 100%; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 5px; }
 
-        @keyframes pulse-gold {
-            0% { transform: scale(1.4); filter: drop-shadow(0 0 5px var(--gold)); }
-            50% { transform: scale(1.6); filter: drop-shadow(0 0 20px var(--gold-bright)); }
-            100% { transform: scale(1.4); filter: drop-shadow(0 0 5px var(--gold)); }
-        }
-
-        .btn-retro-buy {
-            width: 100%;
-            margin-top: 15px;
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            font-weight: 900;
-            font-family: 'Arial Black', sans-serif;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { font-size: 0.7rem; color: var(--gold); margin-left: 5px; }
-
-        /* --- CUSTOM ALERT MODAL --- */
         #nasuka-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 9999;
-            display: none; justify-content: center; align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+            z-index: 9999; display: none; justify-content: center; align-items: center;
         }
-        .nasuka-modal {
-            width: 85%; max-width: 320px; background: #1e2a38; border: 2px solid var(--gold);
-            border-radius: 12px; padding: 20px; text-align: center;
-            box-shadow: 0 0 20px var(--gold); transform: scale(0.7); transition: transform 0.2s;
-        }
-        .nasuka-modal.pop { transform: scale(1); }
-        .nasuka-modal h4 { color: var(--gold); margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-        .nasuka-modal p { font-size: 0.9rem; line-height: 1.5; color: #eee; margin-bottom: 20px; }
-        .nasuka-modal-btns { display: flex; gap: 10px; justify-content: center; }
-        .nasuka-modal-btns button {
-            flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
-        }
-        .btn-confirm { background: var(--gold); color: #000; }
-        .btn-cancel { background: #444; color: #fff; }
-
+        .nasuka-modal { width: 85%; max-width: 320px; background: #1e2a38; border: 2px solid var(--gold); border-radius: 12px; padding: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div id="nasuka-modal-overlay">
-    <div class="nasuka-modal" id="nasuka-modal">
-        <h4 id="modal-title">INFO</h4>
-        <p id="modal-msg">Pesan disini...</p>
-        <div class="nasuka-modal-btns" id="modal-btns"></div>
+    <div class="nasuka-modal">
+        <h4 id="modal-title" style="color:var(--gold); margin:0 0 10px 0;">INFO</h4>
+        <p id="modal-msg" style="font-size:0.9rem;"></p>
+        <div id="modal-btns" style="display:flex; gap:10px; justify-content:center;"></div>
     </div>
 </div>
 
 <div id="game-view">
     <div class="top-nav">
         <span class="nav-link" onclick="showPage('page-disclaimer')">Disclaimer</span>
-        <span class="nav-link" onclick="showPage('page-kontak')">Kontak</span>
         <span class="nav-link" id="user-nav" onclick="handleUserNav()">Login/Profil</span>
     </div>
 
     <div id="multiplier-bar">
-        <img src="https://nasukafoods.site/image/1x.png" class="mult" id="m1" alt="x1">
-        <img src="https://nasukafoods.site/image/2x.png" class="mult" id="m2" alt="x2">
-        <img src="https://nasukafoods.site/image/3x.png" class="mult" id="m3" alt="x3">
-        <img src="https://nasukafoods.site/image/5x.png" class="mult" id="m5" alt="x5">
+        <img src="https://nasukafoods.site/image/1x.png" class="mult" id="m1">
+        <img src="https://nasukafoods.site/image/2x.png" class="mult" id="m2">
+        <img src="https://nasukafoods.site/image/3x.png" class="mult" id="m3">
+        <img src="https://nasukafoods.site/image/5x.png" class="mult" id="m5">
     </div>
 
     <div id="win-announcement">
-        <h2 style="color: #ffeb3b; font-size: 3.5rem; margin: 0; text-shadow: 0 0 20px #000, 2px 2px 0 #8b1e1e; font-style: italic;">BIG WIN!</h2>
-        <div id="win-amount-popup" style="color: #fff; font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 10px #000;">🪙0</div>
+        <h2 style="color: #ffeb3b; font-size: 3.5rem; margin: 0; text-shadow: 0 0 20px #000;">BIG WIN!</h2>
+        <div id="win-amount-popup" style="color: #fff; font-size: 2.2rem; font-weight: bold;">0</div>
     </div>
 
     <div id="grid-container"></div>
 
     <div id="ui-panel">
-        <div class="win-box" id="win-display"></div>
         <div class="stats-main">
-            <div class="stat-card" onclick="handleUserNav()">
-                <span class="label">GEMS</span>
-                <span class="value" id="balance-display">🪙0</span>
-            </div>
-            <div class="stat-card">
-                <span class="label">KEMENANGAN</span>
-                <span class="value" id="total-win-display">🪙0</span>
-            </div>
+            <div class="stat-card"><span class="label">GEMS</span><span class="value" id="balance-display">0</span></div>
+            <div class="stat-card"><span class="label">BET</span><span class="value" id="bet-display">500</span></div>
         </div>
         <div class="bet-controls">
             <button class="bet-btn" onclick="adjustBet(-1)">-</button>
-            <div style="text-align: center; min-width: 100px;">
-                <span class="label">Bet</span>
-                <span class="value" id="bet-display" style="color: var(--gold-bright);">🪙 500</span>
-            </div>
             <button class="bet-btn" onclick="adjustBet(1)">+</button>
         </div>
         <div class="spin-area">
             <button id="auto-btn" class="auto-btn" onclick="toggleAuto()">AUTO 10</button>
             <button id="spin-btn" onclick="handleSpin()">⚡</button>
-            <div style="min-width: 70px; text-align: left;">
-                <span id="auto-count-display" style="color: #ff4444; font-size: 0.7rem; font-weight: bold; display: none;">REMAIN: 0</span>
-            </div>
         </div>
-        <div class="pity-info" id="pity-status" style="font-size: 0.6rem; color: #777; text-align: center; margin-top: 8px;">LOSE STREAK: 0/40</div>
     </div>
 
     <div id="page-login" class="spa-page">
-        <div class="page-header" style="display:flex; justify-content: space-between; align-items: center;">
-            <h3 style="color: var(--gold); margin:0;">LOGIN</h3>
-            <span class="nav-link" onclick="closePages()">Tutup</span>
-        </div>
+        <h3 style="color:var(--gold)">MASUK / DAFTAR</h3>
         <div class="card">
             <input type="number" id="login-wa" placeholder="Nomor WhatsApp">
-            <input type="number" id="login-pin" placeholder="PIN 4 Digit" oninput="if(this.value.length > 4) this.value = this.value.slice(0,4);">
-            <button class="btn-gold" onclick="processAuth()">MASUK</button>
+            <input type="number" id="login-pin" placeholder="PIN 4 Digit">
+            <button class="btn-gold" onclick="processAuth()">LANJUTKAN</button>
+            <button class="btn-gold" style="background:#444; color:#fff" onclick="closePages()">BATAL</button>
         </div>
     </div>
 
     <div id="page-profil" class="spa-page">
-        <div class="page-header" style="display:flex; justify-content: space-between; align-items: center;">
-            <h3 style="color: var(--gold); margin:0;">PROFIL</h3>
-            <span class="nav-link" onclick="closePages()">Tutup</span>
-        </div>
+        <h3 style="color:var(--gold)">PROFIL</h3>
         <div class="card">
-            <p>Nama: <span id="prof-nama" style="color: var(--gold); font-weight:bold;"></span> 
-               <small class="nav-link" style="font-size: 0.6rem; margin-left:10px;" onclick="showEditProfil()">[Ubah]</small>
-            </p>
-            <p>WA: <span id="prof-wa" style="color: var(--gold);"></span></p>
-            <p>Gems: <span id="prof-saldo" style="color: var(--gold-bright);"></span></p>
-            <p>Saldo Nasuka: <span id="prof-nasuka" style="color: #4CAF50;">Rp0</span></p>
+            <p>Nama: <span id="prof-nama" style="color:var(--gold)"></span></p>
+            <p>WA: <span id="prof-wa"></span></p>
+            <p>Gems: <span id="prof-saldo"></span></p>
+            <p>Saldo Nasuka: <span id="prof-nasuka" style="color:#4CAF50"></span></p>
         </div>
-        <button class="btn-gold" onclick="showPage('page-produk')">Beli GEMS</button>
-        <button class="btn-gold" style="background:#444; color:white; margin-top:20px;" onclick="logout()">LOGOUT</button>
-    </div>
-
-    <div id="page-edit-profil" class="spa-page">
-        <div class="page-header" style="display:flex; justify-content: space-between; align-items: center;">
-            <h3 style="color: var(--gold); margin:0;">EDIT PROFIL</h3>
-            <span class="nav-link" onclick="showPage('page-profil')">Batal</span>
-        </div>
-        <div class="card">
-            <div class="input-group">
-                <label>NAMA BARU</label>
-                <input type="text" id="edit-nama" placeholder="Masukkan Nama Baru...">
-            </div>
-            <button class="btn-gold" onclick="updateProfileData()">SIMPAN PERUBAHAN</button>
-        </div>
+        <button class="btn-gold" onclick="showPage('page-produk')">BELI GEMS</button>
+        <button class="btn-gold" style="background:#cc0000; color:#fff" onclick="logout()">LOGOUT</button>
+        <button class="btn-gold" style="background:#444; color:#fff" onclick="closePages()">TUTUP</button>
     </div>
 
     <div id="page-produk" class="spa-page">
-        <div class="page-header" style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="color: var(--gold); margin:0; font-family: 'Courier New', Courier, monospace;">Beli GEMS</h3>
-            <span class="nav-link" onclick="showPage('page-profil')">KEMBALI</span>
+        <h3 style="color:var(--gold)">BELI GEMS</h3>
+        <div class="card">
+            <p>Saldo Nasuka: <b id="buy-nasuka-val"></b></p>
+            <button class="btn-gold" onclick="convertBalance(5000, 500000)">500rb Gems (Rp5.000)</button>
+            <button class="btn-gold" onclick="convertBalance(20000, 3000000)">3jt Gems (Rp20.000)</button>
         </div>
-        <div style="background: #fff; border: 3px solid #000; box-shadow: 6px 6px 0px #000; padding: 10px; margin-bottom: 25px; color: #000;">
-            <p style="font-size: 0.8rem; margin: 0; font-weight: bold;">SALDO NASUKA:</p>
-            <b id="buy-nasuka-val" style="color:#1e5b8b; font-size: 1.2rem;">Rp0</b>
-        </div>
-        <div class="retro-card" style="background: #00d4ff; border: 4px solid #000; padding: 15px; color: #000; margin-bottom: 20px;">
-            <b>500.000 Gems</b><p>Rp 5.000</p>
-            <button class="btn-retro-buy" onclick="convertBalance(5000, 500000)">BELI SEKARANG</button>
-        </div>
-        <div class="retro-card" style="background: #ffeb3b; border: 4px solid #000; padding: 15px; color: #000;">
-            <b>3.000.000 Gems</b><p>Rp 20.000</p>
-            <button class="btn-retro-buy" style="background: #ff4444;" onclick="convertBalance(20000, 3000000)">BELI SEKARANG</button>
-        </div>
+        <button class="btn-gold" style="background:#444; color:#fff" onclick="showPage('page-profil')">KEMBALI</button>
     </div>
 
     <div id="page-disclaimer" class="spa-page">
-        <div class="page-header" style="display:flex; justify-content: space-between; align-items: center;">
-            <h3 style="color: var(--gold); margin:0;">Peringatan</h3>
-            <span class="nav-link" onclick="closePages()">Tutup</span>
-        </div>
-        <div class="card">
-            <p style="font-size:0.7rem;">Murni bersifat hiburan dan edukasi. Perjudian dilarang keras.</p>
-            <button class="btn-gold" onclick="closePages()">SAYA MENGERTI</button>
-        </div>
+        <h3>PERINGATAN</h3>
+        <div class="card"><p>Aplikasi ini bersifat hiburan semata.</p></div>
+        <button class="btn-gold" onclick="closePages()">SAYA MENGERTI</button>
     </div>
-
-    <div id="page-kontak" class="spa-page">
-        <div class="page-header" style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="color: var(--gold); margin:0;">KONTAK & INFO</h3>
-            <span class="nav-link" onclick="closePages()">Tutup</span>
-        </div>
-        <div class="card" style="line-height: 1.6;">
-            <h4 style="color: var(--gold-bright); margin-top: 0;">Nasuka Mahjong Pro</h4>
-            <p style="font-size: 0.85rem;">Bagian dari ekosistem digital <b>Nasuka Foods</b>.</p>
-        </div>
-        <div style="padding: 0 10px; margin-top: 10px;">
-            
-            
-            
-            <a href="https://api.whatsapp.com/send/?phone=62859109819017&text=Hallo%20admin%20Nasuka%20Mahjong%20"
-
-    
-    
-       
-       class="btn-gold" 
-       style="background: #25D366; color: white; text-decoration: none; width: auto; display: block; padding: 10px; font-size: 0.8rem; margin: 0 auto;">
-        HUBUNGI WHATSAPP
-    </a>
-    
-            
-            
-            
-            
-        </div>
-    </div>
-</div> 
+</div>
 
 <script>
-    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
         authDomain: "nasukafoods1.firebaseapp.app",
         databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
         projectId: "nasukafoods1",
-        messagingSenderId: "84287800896",
         appId: "1:84287800896:web:83189d6766997b00f701a5"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- ASSETS & GLOBALS ---
-    const sfx = {
-        spin: new Audio('https://www.soundjay.com/buttons/sounds/button-20.mp3'),
-        win: new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3'),
-        click: new Audio('https://www.soundjay.com/buttons/sounds/button-3.mp3')
-    };
-
     const baseURL = "https://nasukafoods.site/image/";
     const symbolImages = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg'];
     const betLevels = [100, 200, 500, 1000, 2000, 5000, 10000, 50000];
-    
-    let currentBetIndex = 2; 
-    let balanceGems = 0; 
-    let saldoNasuka = 0; 
-    let isSpinning = false;
-    let gridTiles = [];
-    let autoSpinsRemaining = 0;
-    let loseStreak = 0;
+
+    let currentBetIndex = 2;
     let currentUser = localStorage.getItem("ID");
+    let balanceGems = 0;
+    let saldoNasuka = 0;
+    let isSpinning = false;
+    let autoSpinsRemaining = 0;
+    let firebaseListener = null;
 
-    // --- GAME UI LOGIC ---
-    function setMultiplier(val) {
-        document.querySelectorAll('.mult').forEach(m => m.classList.remove('active', 'pulse-active'));
-        let id = (val >= 5) ? 'm5' : 'm' + val;
-        let target = document.getElementById(id);
-        if(target) {
-            target.classList.add('active');
-            if(val > 1) target.classList.add('pulse-active');
-        }
-    }
-
-    function updateUI() {
-        document.getElementById('balance-display').innerText = "🪙" + balanceGems.toLocaleString();
-        document.getElementById('pity-status').innerText = "LOSE STREAK: " + loseStreak + "/40";
-        const buyNasuka = document.getElementById('buy-nasuka-val');
-        if(buyNasuka) buyNasuka.innerText = "Rp" + saldoNasuka.toLocaleString();
-    }
-
-    function showPage(pageId) {
-        sfx.click.play();
+    function showPage(id) {
         document.querySelectorAll('.spa-page').forEach(p => p.style.display = 'none');
-        document.getElementById(pageId).style.display = 'flex';
-        if(currentUser) {
-            if(pageId === 'page-profil') {
-                document.getElementById('prof-wa').innerText = currentUser;
-                document.getElementById('prof-saldo').innerText = "🪙" + balanceGems.toLocaleString();
-                document.getElementById('prof-nasuka').innerText = "Rp" + saldoNasuka.toLocaleString();
-            }
+        document.getElementById(id).style.display = 'flex';
+        if(currentUser && (id === 'page-profil' || id === 'page-produk')) {
+            updateProfileUI();
         }
+    }
+
+    function updateProfileUI() {
+        if(document.getElementById('prof-wa')) document.getElementById('prof-wa').innerText = currentUser;
+        if(document.getElementById('prof-saldo')) document.getElementById('prof-saldo').innerText = balanceGems.toLocaleString();
+        if(document.getElementById('prof-nasuka')) document.getElementById('prof-nasuka').innerText = "Rp" + saldoNasuka.toLocaleString();
+        if(document.getElementById('buy-nasuka-val')) document.getElementById('buy-nasuka-val').innerText = "Rp" + saldoNasuka.toLocaleString();
     }
 
     function closePages() { document.querySelectorAll('.spa-page').forEach(p => p.style.display = 'none'); }
-    function handleUserNav() { if (currentUser) showPage('page-profil'); else showPage('page-login'); }
+    function handleUserNav() { currentUser ? showPage('page-profil') : showPage('page-login'); }
 
-    // --- AUTH & SYNC (ANTI-RELOAD) ---
     async function processAuth() {
         const wa = document.getElementById('login-wa').value;
         const pin = document.getElementById('login-pin').value;
-        if (wa.length < 10) return nasukaAlert("Nomor WA minimal 10 digit.");
-        if (pin.length !== 4) return nasukaAlert("PIN harus tepat 4 digit.");
+        if (wa.length < 10 || pin.length !== 4) return nasukaAlert("WA minimal 10 digit & PIN harus 4 digit!");
 
         try {
             const snap = await db.ref(`users/${wa}`).once('value');
-            if (snap.exists() && snap.val().PIN === pin) {
-                localStorage.setItem("ID", wa);
-                currentUser = wa;
-                initUserSync(); // Jalankan listener tanpa reload
-                closePages();
-                nasukaAlert("Login Berhasil!");
-            } else if (!snap.exists()) {
-                if (await nasukaAlert("Nomor tidak ada. Daftar?", "REG", true)) {
-                    await db.ref(`users/${wa}`).set({ Nama: "User "+wa.slice(-4), PIN: pin, Saldo: 0, balance: 50000 });
-                    localStorage.setItem("ID", wa);
-                    currentUser = wa;
-                    initUserSync();
-                    closePages();
-                    nasukaAlert("Pendaftaran Berhasil!");
+            if (snap.exists()) {
+                const data = snap.val();
+                if (String(data.PIN) === String(pin)) {
+                    loginUser(wa);
+                    nasukaAlert("Login Berhasil!");
+                } else {
+                    nasukaAlert("PIN SALAH!");
                 }
-            } else nasukaAlert("PIN Salah!");
-        } catch(e) { nasukaAlert("Koneksi Error"); }
+            } else {
+                const newUser = {
+                    Nama: "User_" + wa.slice(-4),
+                    PIN: pin,
+                    Saldo: 0,
+                    balance: 50000
+                };
+                await db.ref(`users/${wa}`).set(newUser);
+                loginUser(wa);
+                nasukaAlert("Akun Baru Berhasil Dibuat!");
+            }
+        } catch(e) { nasukaAlert("Koneksi Gagal!"); }
+    }
+
+    function loginUser(id) {
+        localStorage.setItem("ID", id);
+        currentUser = id;
+        initUserSync();
+        closePages();
     }
 
     function initUserSync() {
         if (!currentUser) return;
-        // Hapus listener lama jika ada (untuk mencegah double listener)
-        db.ref(`users/${currentUser}`).off();
-        
-        db.ref(`users/${currentUser}`).on('value', (snap) => {
+        if (firebaseListener) db.ref(`users/${currentUser}`).off('value', firebaseListener);
+
+        firebaseListener = db.ref(`users/${currentUser}`).on('value', (snap) => {
             if (snap.exists()) {
                 const data = snap.val();
                 balanceGems = data.balance || 0;
                 saldoNasuka = data.Saldo || 0;
-                document.getElementById('user-nav').innerText = "PROFIL: " + (data.Nama || currentUser);
-                document.getElementById('prof-nama').innerText = data.Nama || "User";
-                updateUI();
+                document.getElementById('user-nav').innerText = data.Nama || currentUser;
+                document.getElementById('balance-display').innerText = balanceGems.toLocaleString();
+                if(document.getElementById('prof-nama')) document.getElementById('prof-nama').innerText = data.Nama || "User";
+                updateProfileUI();
             }
         });
     }
 
     function logout() {
+        if (firebaseListener) db.ref(`users/${currentUser}`).off('value', firebaseListener);
         localStorage.removeItem("ID");
         currentUser = null;
         balanceGems = 0;
         saldoNasuka = 0;
         document.getElementById('user-nav').innerText = "Login/Profil";
-        document.getElementById('balance-display').innerText = "🪙0";
-        db.ref(`users`).off(); 
+        document.getElementById('balance-display').innerText = "0";
         closePages();
-        nasukaAlert("Berhasil Logout.");
-    }
-
-    function showEditProfil() {
-        const currentName = document.getElementById('prof-nama').innerText;
-        document.getElementById('edit-nama').value = currentName;
-        showPage('page-edit-profil');
-    }
-
-    async function updateProfileData() {
-        const newName = document.getElementById('edit-nama').value.trim();
-        if (!newName) return nasukaAlert("Nama kosong!");
-        await db.ref(`users/${currentUser}`).update({ Nama: newName });
-        nasukaAlert("Berhasil Diupdate!");
-        showPage('page-profil');
-    }
-
-    async function convertBalance(cost, gems) {
-        if (saldoNasuka < cost) return nasukaAlert("Saldo Nasuka kurang.");
-        if (await nasukaAlert("Tukar?", "KONFIRMASI", true)) {
-            await db.ref(`users/${currentUser}`).transaction((curr) => {
-                if (curr && curr.Saldo >= cost) {
-                    curr.Saldo -= cost;
-                    curr.balance = (curr.balance || 0) + gems;
-                }
-                return curr;
-            });
-            nasukaAlert("Tukar Gems Berhasil!");
-        }
-    }
-
-    // --- SLOT ENGINE (AUTO FIXED) ---
-    function initGrid() {
-        const container = document.getElementById('grid-container');
-        container.innerHTML = ''; gridTiles = [];
-        for (let i = 0; i < 25; i++) {
-            const el = document.createElement('div');
-            el.className = 'tile';
-            const sym = symbolImages[Math.floor(Math.random() * 4)];
-            el.innerHTML = `<img src="${baseURL}${sym}">`;
-            container.appendChild(el);
-            gridTiles.push({ el, symbol: sym, col: i % 5 });
-        }
-        setMultiplier(1);
+        nasukaAlert("Berhasil Keluar");
     }
 
     function adjustBet(dir) {
-        if (isSpinning) return;
         currentBetIndex = Math.max(0, Math.min(betLevels.length - 1, currentBetIndex + dir));
-        document.getElementById('bet-display').innerText = "🪙" + betLevels[currentBetIndex].toLocaleString();
+        document.getElementById('bet-display').innerText = betLevels[currentBetIndex].toLocaleString();
     }
 
-    function stopAuto() {
-        autoSpinsRemaining = 0;
-        const btn = document.getElementById('auto-btn');
-        btn.classList.remove('active');
-        btn.innerText = "AUTO 10";
-        document.getElementById('auto-count-display').style.display = 'none';
+    async function convertBalance(cost, gems) {
+        if (saldoNasuka < cost) return nasukaAlert("Saldo Nasuka tidak cukup!");
+        await db.ref(`users/${currentUser}`).transaction((curr) => {
+            if (curr && curr.Saldo >= cost) {
+                curr.Saldo -= cost;
+                curr.balance = (curr.balance || 0) + gems;
+            }
+            return curr;
+        });
+        nasukaAlert("Pembelian Berhasil!");
     }
 
-    function toggleAuto() {
-        if(autoSpinsRemaining > 0) { stopAuto(); }
-        else {
-            autoSpinsRemaining = 10;
-            const btn = document.getElementById('auto-btn');
-            btn.classList.add('active');
-            btn.innerText = "STOP AUTO";
-            document.getElementById('auto-count-display').style.display = 'block';
-            document.getElementById('auto-count-display').innerText = "REMAIN: 10";
-            handleSpin();
+    function initGrid() {
+        const container = document.getElementById('grid-container');
+        container.innerHTML = '';
+        for (let i = 0; i < 25; i++) {
+            const el = document.createElement('div');
+            el.className = 'tile';
+            el.innerHTML = `<img src="${baseURL}${symbolImages[Math.floor(Math.random() * 4)]}">`;
+            container.appendChild(el);
         }
     }
 
     async function handleSpin() {
         if (isSpinning) return;
-        
-        const bet = betLevels[currentBetIndex];
         if (!currentUser) return showPage('page-login');
+        const bet = betLevels[currentBetIndex];
         if (balanceGems < bet) { 
-            nasukaAlert("Gems kurang."); 
-            stopAuto(); 
+            nasukaAlert("Gems tidak cukup!"); 
+            autoSpinsRemaining = 0; 
+            document.getElementById('auto-btn').classList.remove('active');
             return; 
         }
 
         isSpinning = true;
         document.getElementById('spin-btn').disabled = true;
-        document.getElementById('win-announcement').classList.remove('show-win');
-
         balanceGems -= bet;
-        updateUI();
         db.ref(`users/${currentUser}`).update({ balance: balanceGems });
 
-        sfx.spin.currentTime = 0; sfx.spin.play();
-        gridTiles.forEach(t => { t.done = false; t.el.classList.remove('exploded'); });
-
-        const rollInterval = setInterval(() => {
-            gridTiles.forEach(t => {
-                if(!t.done) {
-                    const r = symbolImages[Math.floor(Math.random() * 4)];
-                    t.el.innerHTML = `<img src="${baseURL}${r}">`;
-                }
-            });
-        }, 50);
-
-        for(let c = 0; c < 5; c++) {
-            await new Promise(res => setTimeout(res, 200));
-            gridTiles.filter(t => t.col === c).forEach(t => {
-                t.done = true;
-                t.symbol = symbolImages[Math.floor(Math.random() * 4)];
-                t.el.innerHTML = `<img src="${baseURL}${t.symbol}">`;
-            });
-        }
-        
-        clearInterval(rollInterval);
-        
-        // UNLOCK DISINI agar checkWins bisa memicu handleSpin lagi
-        isSpinning = false; 
-        document.getElementById('spin-btn').disabled = false;
-        
-        checkWins(bet);
+        let timer = 0;
+        const roll = setInterval(() => {
+            initGrid();
+            if (timer++ > 10) {
+                clearInterval(roll);
+                isSpinning = false;
+                document.getElementById('spin-btn').disabled = false;
+                checkWin(bet);
+            }
+        }, 80);
     }
 
-    function checkWins(bet) {
-        let win = Math.random() > 0.7;
-        if (win) {
-            let mult = Math.floor(Math.random() * 4) + 2;
-            let winAmt = bet * mult;
-            balanceGems += winAmt;
-            sfx.win.play();
-            setMultiplier(mult);
-            document.getElementById('win-amount-popup').innerText = "🪙" + winAmt.toLocaleString();
-            document.getElementById('win-announcement').classList.add('show-win');
-            gridTiles.forEach(t => { if(Math.random() > 0.6) t.el.classList.add('exploded'); });
-            
+    function checkWin(bet) {
+        if (Math.random() > 0.8) {
+            const win = bet * 5;
+            balanceGems += win;
             db.ref(`users/${currentUser}`).update({ balance: balanceGems });
-            loseStreak = 0;
-        } else {
-            loseStreak++;
-            setMultiplier(1);
+            document.getElementById('win-amount-popup').innerText = win.toLocaleString();
+            document.getElementById('win-announcement').classList.add('show-win');
+            setTimeout(() => document.getElementById('win-announcement').classList.remove('show-win'), 2000);
         }
-        
-        updateUI();
 
-        // LOGIKA PEMICU PUTARAN BERIKUTNYA
         if (autoSpinsRemaining > 0) {
             autoSpinsRemaining--;
-            document.getElementById('auto-count-display').innerText = "REMAIN: " + autoSpinsRemaining;
-            
-            if (autoSpinsRemaining <= 0) {
-                stopAuto();
-            } else {
-                // Jeda 1.5 detik sebelum spin otomatis berikutnya
-                setTimeout(() => {
-                    if(!isSpinning) handleSpin(); 
-                }, 1500);
-            }
+            if (autoSpinsRemaining === 0) document.getElementById('auto-btn').classList.remove('active');
+            setTimeout(handleSpin, 1500);
         }
     }
 
-    // --- CUSTOM ALERT MODAL ---
-    function nasukaAlert(msg, title = "INFO", isConfirm = false) {
-        return new Promise((resolve) => {
-            const overlay = document.getElementById('nasuka-modal-overlay');
-            const modal = document.getElementById('nasuka-modal');
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-msg').innerText = msg;
-            const btns = document.getElementById('modal-btns');
-            btns.innerHTML = '';
-            
-            if (isConfirm) {
-                const bc = document.createElement('button');
-                bc.className = 'btn-cancel'; bc.innerText = 'BATAL';
-                bc.onclick = () => { overlay.style.display='none'; resolve(false); };
-                btns.appendChild(bc);
-            }
-            const ok = document.createElement('button');
-            ok.className = 'btn-confirm'; ok.innerText = 'OK';
-            ok.onclick = () => { overlay.style.display='none'; resolve(true); };
-            btns.appendChild(ok);
-            
-            overlay.style.display = 'flex';
-            setTimeout(() => modal.classList.add('pop'), 10);
-        });
+    function toggleAuto() {
+        if(autoSpinsRemaining > 0) {
+            autoSpinsRemaining = 0;
+            document.getElementById('auto-btn').classList.remove('active');
+        } else {
+            autoSpinsRemaining = 10;
+            document.getElementById('auto-btn').classList.add('active');
+            handleSpin();
+        }
     }
 
-    // INITIAL STARTUP
+    function nasukaAlert(msg) {
+        document.getElementById('modal-msg').innerText = msg;
+        const btns = document.getElementById('modal-btns');
+        btns.innerHTML = `<button class="btn-gold" style="width:100px" onclick="document.getElementById('nasuka-modal-overlay').style.display='none'">OK</button>`;
+        document.getElementById('nasuka-modal-overlay').style.display = 'flex';
+    }
+
     initGrid();
     initUserSync();
 </script>
