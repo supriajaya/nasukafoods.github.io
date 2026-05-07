@@ -2,146 +2,355 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nasuka Mahjong - Pro Edition</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka - Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
     <style>
-        :root {
-            --bg-dark: #0c1b2b;
-            --gold: #00d4ff;
-            --gold-bright: #e0f7ff;
-            --red-panel: #1e5b8b;
-            --tile-white: #f9f9f9;
-            --tile-shadow: #b3c7d6;
-            --overlay: rgba(0,0,0,1);
+        :root { 
+            --primary: #00529C; 
+            --secondary: #f37021; 
+            --bg-body: #f4f7fa; 
+            --text-main: #2c3e50; 
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+            --gold: #FFD700;
+            --gold-bright: #FFF700;
+            --tile-white: #fff;
+            --tile-shadow: #ddd;
+            --retro-border: 3px solid #2c3e50;
+            --retro-shadow: 4px 4px 0px #2c3e50;
+            --retro-shadow-active: 1px 1px 0px #2c3e50;
         }
 
-        body {
-            margin: 0; padding: 0; background-color: #000;
-            font-family: 'Arial', sans-serif; display: flex;
-            justify-content: center; align-items: center;
-            height: 100vh; color: white; overflow: hidden;
+        body { 
+            background-color: var(--bg-body); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            margin: 0; 
+            color: var(--text-main);
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
         }
 
-        #game-view {
-            width: 100%; height: 100vh; max-width: 450px;
+        /* --- GAME VIEW CSS (SLOT) --- */
+        #slot-page {
+            width: 100%;
+            min-height: 100vh;
             background-image: url('https://nasukafoods.site/image/qris.jpg'); 
-            background-size: cover; background-position: center;
-            background-repeat: no-repeat; background-color: black; 
-            display: flex; flex-direction: column; position: relative; box-sizing: border-box;
+            background-size: cover;
+            background-position: center;
+            display: none;
+            flex-direction: column;
+            position: relative;
         }
-
-        .top-nav {
-            display: flex; justify-content: space-between; padding: 15px 20px;
-            font-size: 0.75rem; background: rgba(0, 0, 0, 0.6); position: relative; z-index: 1000;
-        }
-
-        .nav-link { color: var(--gold); text-decoration: underline; cursor: pointer; }
 
         #multiplier-bar {
-            background: transparent; display: flex; justify-content: space-around; 
-            align-items: center; padding: 0 10px; height: 50px; 
-            position: relative; z-index: 500; margin-bottom: -40px; pointer-events: none;
+            display: flex;
+            justify-content: space-around; 
+            align-items: center;
+            padding: 10px;
+            height: 60px; 
+            margin-bottom: -20px;
         }
 
         .mult {
-            width: 50px; height: auto; opacity: 0.3; filter: grayscale(100%);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative; pointer-events: auto;
+            width: 50px;
+            opacity: 0.3;
+            filter: grayscale(100%);
+            transition: 0.3s;
         }
 
-        #m1 { transform: translateY(20px) rotate(-15deg); } 
-        #m2 { transform: translateY(-5px) rotate(-5deg); }  
-        #m3 { transform: translateY(-5px) rotate(5deg); }   
-        #m5 { transform: translateY(20px) rotate(15deg); }  
-
         .mult.active {
-            opacity: 1; filter: grayscale(0%) drop-shadow(0 0 10px var(--gold));
-            z-index: 100; transform: scale(1.4);
+            opacity: 1;
+            filter: grayscale(0%) drop-shadow(0 0 10px var(--gold));
+            transform: scale(1.3);
         }
 
         #grid-container {
-            display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr);
-            gap: 6px; padding: 12px; margin: 10px auto; width: 92%; aspect-ratio: 1 / 1;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            padding: 12px;
+            margin: 10px auto;
+            width: 90%;
+            aspect-ratio: 1 / 1;
             background-image: url('https://nasukafoods.site/image/ombak.gif');
-            background-size: cover; background-position: center; background-color: #000; 
-            z-index: 1; position: relative; box-sizing: border-box;
-        }
-
-        #win-announcement {
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0); 
-            z-index: 2000; text-align: center; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
-        }
-
-        #win-announcement.show-win {
-            opacity: 1; transform: translate(-50%, -50%) scale(1);
-            animation: pulse-bigwin 0.8s infinite ease-in-out;
-        }
-
-        @keyframes pulse-bigwin {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 10px var(--gold)); }
-            50% { transform: translate(-50%, -50%) scale(1.15); filter: drop-shadow(0 0 30px var(--gold-bright)); }
+            background-size: cover;
+            border: 4px solid #444;
+            border-radius: 10px;
         }
 
         .tile {
-            background: var(--tile-white); border-radius: 6px; display: flex; justify-content: center; align-items: center;
-            box-shadow: inset 0 -5px 0 var(--tile-shadow), 0 4px 6px rgba(0,0,0,0.3);
-            position: relative; overflow: hidden;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 -3px 0 #ccc;
         }
 
-        .tile img { width: 85%; height: 85%; object-fit: contain; pointer-events: none; }
+        .tile img { width: 85%; height: 85%; object-fit: contain; }
 
-        #ui-panel {
-            background: rgba(0, 0, 0, 0.8); padding: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative; z-index: 900; width: 100%; box-sizing: border-box;
+        .exploded { animation: win-glow 0.5s infinite alternate; border: 2px solid white; }
+
+        @keyframes win-glow { from { filter: brightness(1); } to { filter: brightness(1.5); } }
+
+        #win-announcement {
+            position: absolute; 
+            top: 40%; left: 50%; 
+            transform: translate(-50%, -50%) scale(0); 
+            z-index: 2000; 
+            text-align: center; 
+            pointer-events: none;
+            transition: 0.3s;
         }
 
-        .stats-main { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-        .stat-card { background: rgba(0,0,0,0.5); flex: 1; padding: 6px; border-radius: 4px; text-align: center; border: 1px solid #444; }
-        .label { font-size: 0.65rem; color: var(--gold); display: block; text-transform: uppercase; }
-        .value { font-size: 0.9rem; font-weight: bold; }
+        #win-announcement.show-win { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 
-        .bet-controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .bet-btn { background: #444; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
-
-        .spin-area { display: flex; justify-content: center; align-items: center; gap: 20px; }
-        #spin-btn { width: 80px; height: 80px; background: radial-gradient(circle, #4caf50, #1b5e20); border: 4px solid #fff; border-radius: 50%; font-size: 2.2rem; cursor: pointer; color:white; }
-        .auto-btn { background: #333; color: #fff; border: 1px solid #666; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; }
-        .auto-btn.active { border-color: #ff4444; color: #ff4444; }
-
-        .spa-page {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark);
-            z-index: 1000; display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto;
+        #ui-panel-slot {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            color: white;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
         }
 
-        .card { background: var(--red-panel); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: none; box-sizing: border-box; font-weight: bold; color: #000; }
-        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 6px; width: 100%; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 5px; }
+        /* --- ANGKOT PAGE CSS --- */
+        #angkot-page {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #222;
+            z-index: 5000;
+        }
 
+        #ui-container-angkot {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            z-index: 10;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        #coin-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #f1c40f;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #road-count {
+            font-size: 0.9em; 
+            color: #ecf0f1;
+            margin-top: 5px;
+            font-weight: 600;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        #controls-angkot {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        #controls-angkot div {
+            display: grid;
+            grid-template-columns: 60px 60px 60px;
+            gap: 15px;
+        }
+
+        #controls-angkot button {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0px 4px 0px #999;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        #controls-angkot button:active {
+            box-shadow: 0px 1px 0px #999;
+            transform: translateY(3px);
+        }
+
+        #result-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            background: rgba(0,0,0,0.8);
+            z-index: 20;
+        }
+
+        #result {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            min-width: 280px;
+        }
+
+        .btn-group {
+            display: flex; gap: 10px; margin-top: 20px;
+        }
+
+        .game-btn {
+            padding: 15px 30px;
+            font-family: inherit;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        #retry { background-color: #ff4757; color: white; }
+
+        canvas.game {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- GLOBAL UI COMPONENTS --- */
         #nasuka-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
-            z-index: 9999; display: none; justify-content: center; align-items: center;
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        .nasuka-modal { width: 85%; max-width: 320px; background: #1e2a38; border: 2px solid var(--gold); border-radius: 12px; padding: 20px; text-align: center; }
+        #nasuka-modal-overlay.active { display: flex; }
+        .nasuka-modal-card {
+            background: white;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .modal-icon-box { width: 70px; height: 70px; margin: 0 auto 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+        .modal-icon-success { background: #ecfdf5; color: var(--success); }
+        .modal-icon-error { background: #fef2f2; color: var(--danger); }
+
+        .modal-btn { width: 100%; padding: 14px; border-radius: 8px; border: var(--retro-border); font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .btn-confirm { background: #FFD93D; box-shadow: var(--retro-shadow); }
+
+        .hero-section { background: var(--primary); padding: 30px 20px 60px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; background: white; margin: -35px 15px 20px; border-radius: 20px; box-shadow: var(--shadow); position: relative; z-index: 10; }
+        .menu-item { text-align: center; cursor: pointer; }
+        .menu-icon { width: 48px; height: 48px; background: #f0f7ff; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; overflow: hidden; }
+        .menu-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+        .balance-card { background: linear-gradient(135deg, #00529C 0%, #0076de 100%); padding: 25px 20px; border-radius: 20px; color: white; margin-bottom: 20px; text-align: center; }
+        .voucher-card { background: white; border-radius: 18px; margin-bottom: 15px; box-shadow: var(--shadow); display: flex; align-items: center; padding: 12px; }
+        .voucher-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; margin-right: 15px; }
+
+        .btn-beli { background: #6BCB77; color: #2c3e50; border: var(--retro-border); padding: 10px 18px; border-radius: 8px; font-weight: 900; cursor: pointer; box-shadow: var(--retro-shadow); transition: 0.1s; }
+        .btn-beli:active { transform: translate(2px, 2px); box-shadow: var(--retro-shadow-active); }
+
+        .page-content { display: none; padding-bottom: 30px; animation: slideUp 0.3s ease; }
+        .active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        #login-page { position: fixed; inset: 0; background: white; z-index: 10000; padding: 40px 25px; display: none; text-align: center; }
+        .auth-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 12px; box-sizing: border-box; }
+        
+        .stat-card-slot { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; flex: 1; text-align: center; }
+        .spin-btn-slot { width: 70px; height: 70px; background: radial-gradient(circle, #4caf50, #1b5e20); border: 4px solid #fff; border-radius: 50%; font-size: 1.5rem; color: white; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="nasuka-modal-overlay">
-    <div class="nasuka-modal">
-        <h4 id="modal-title" style="color:var(--gold); margin:0 0 10px 0;">INFO</h4>
-        <p id="modal-msg" style="font-size:0.9rem;"></p>
-        <div id="modal-btns" style="display:flex; gap:10px; justify-content:center;"></div>
+    <div class="nasuka-modal-card">
+        <div id="modal-icon" class="modal-icon-box"></div>
+        <div id="modal-title" style="font-weight:800; font-size:18px; margin-bottom:10px;">Judul</div>
+        <div id="modal-msg" style="font-size:14px; color:#64748b; margin-bottom:25px;">Pesan</div>
+        <button id="modal-btn-main" class="modal-btn btn-confirm">Selesai</button>
     </div>
 </div>
 
-<div id="game-view">
-    <div class="top-nav">
-        <span class="nav-link" onclick="showPage('page-disclaimer')">Disclaimer</span>
-        <span class="nav-link" id="user-nav" onclick="handleUserNav()">Login/Profil</span>
+<div id="home-page" class="page-content active">
+    <div class="hero-section">
+        <div><span>Selamat Datang,</span><h1 id="header-user-name">Tamu</h1></div>
+        <img id="top-avatar" onclick="showProfile()" class="top-avatar" src="https://nasukafoods.site/image/profil.jpg" style="width:45px; height:45px; border-radius:50%; cursor:pointer; object-fit: cover;">
+    </div>
+
+    <div class="menu-grid">
+        <div class="menu-item" onclick="showInformasi()"><div class="menu-icon"><img src="https://nasukafoods.site/image/informasi.jpg"></div><span>Info</span></div>
+        
+    </div>
+
+    <div style="padding:0 20px; font-weight:800; color:var(--primary); margin-bottom:10px;">Produk Pilihan</div>
+    <div id="voucher-list" style="padding:0 15px;"></div>
+</div>
+
+<div id="angkot-page">
+    <div style="position: absolute; top: 10px; width: 100%; padding: 0 15px; display: flex; justify-content: space-between; align-items: center; z-index: 100;">
+        <button onclick="closeAngkot()" style="background:rgba(0,0,0,0.6); border:none; color:white; padding: 8px 15px; border-radius: 20px; font-weight:bold; cursor:pointer;"><i class="fas fa-times"></i> TUTUP</button>
+        <div style="color:white; font-weight:bold; background: rgba(0,0,0,0.4); padding: 5px 10px; border-radius: 10px;">ANGKOT CROSSER</div>
+    </div>
+
+    <div id="ui-container-angkot">
+        <span id="coin-display">GEMS: 0</span>
+        <div id="road-count">JALAN DILEWATI: 0</div>
+    </div>
+
+    <div id="controls-angkot">
+      <div>
+        <span></span>
+        <button id="forward">▲</button>
+        <span></span>
+        <button id="left">◀</button>
+        <button id="backward">▼</button>
+        <button id="right">▶</button>
+      </div>
+    </div>
+
+    <div id="result-container">
+      <div id="result">
+        <h1 id="result-status">GAME OVER</h1>
+        <p id="result-desc" style="color: #555;">Kamu tertabrak angkot!</p>
+        <div class="btn-group">
+            <button id="retry" class="game-btn">MAIN LAGI</button>
+        </div>
+      </div>
+    </div>
+    <canvas class="game"></canvas>
+</div>
+
+<div id="slot-page">
+    <div style="padding: 10px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5);">
+        <button onclick="showHome()" style="background:none; border:none; color:gold; font-weight:bold; cursor:pointer;"><i class="fas fa-arrow-left"></i> KELUAR</button>
+        <div style="color:white; font-weight:bold;">NASUKA SLOT (FOR FUN)</div>
     </div>
 
     <div id="multiplier-bar">
@@ -152,266 +361,566 @@
     </div>
 
     <div id="win-announcement">
-        <h2 style="color: #ffeb3b; font-size: 3.5rem; margin: 0; text-shadow: 0 0 20px #000;">BIG WIN!</h2>
-        <div id="win-amount-popup" style="color: #fff; font-size: 2.2rem; font-weight: bold;">0</div>
+        <h2 style="color: #ffeb3b; font-size: 3rem; margin: 0; text-shadow: 2px 2px #000;">BIG WIN!</h2>
+        <div id="win-amount-popup" style="color: white; font-size: 2rem; font-weight: bold;">💎0</div>
     </div>
 
     <div id="grid-container"></div>
 
-    <div id="ui-panel">
-        <div class="stats-main">
-            <div class="stat-card"><span class="label">GEMS</span><span class="value" id="balance-display">0</span></div>
-            <div class="stat-card"><span class="label">BET</span><span class="value" id="bet-display">500</span></div>
+    <div id="ui-panel-slot">
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <div class="stat-card-slot"><small>GEMS</small><div id="slot-gems" style="font-weight:bold; color:cyan;">💎0</div></div>
+            <div class="stat-card-slot"><small>WIN</small><div id="slot-win" style="font-weight:bold; color:#6BCB77;">💎0</div></div>
         </div>
-        <div class="bet-controls">
-            <button class="bet-btn" onclick="adjustBet(-1)">-</button>
-            <button class="bet-btn" onclick="adjustBet(1)">+</button>
+        
+        <div style="display:flex; justify-content:center; align-items:center; gap:20px;">
+            <button onclick="adjustBetSlot(-1)" class="btn-beli" style="padding:5px 15px;">-</button>
+            <div style="text-align:center;"><small>BET</small><div id="slot-bet" style="font-weight:bold; color:cyan;">💎500</div></div>
+            <button onclick="adjustBetSlot(1)" class="btn-beli" style="padding:5px 15px;">+</button>
+            <button id="spin-btn-slot" onclick="handleSpinSlot()" class="spin-btn-slot">⚡</button>
         </div>
-        <div class="spin-area">
-            <button id="auto-btn" class="auto-btn" onclick="toggleAuto()">AUTO 10</button>
-            <button id="spin-btn" onclick="handleSpin()">⚡</button>
-        </div>
-    </div>
-
-    <div id="page-login" class="spa-page">
-        <h3 style="color:var(--gold)">MASUK / DAFTAR</h3>
-        <div class="card">
-            <input type="number" id="login-wa" placeholder="Nomor WhatsApp">
-            <input type="number" id="login-pin" placeholder="PIN 4 Digit">
-            <button class="btn-gold" onclick="processAuth()">LANJUTKAN</button>
-            <button class="btn-gold" style="background:#444; color:#fff" onclick="closePages()">BATAL</button>
-        </div>
-    </div>
-
-    <div id="page-profil" class="spa-page">
-        <h3 style="color:var(--gold)">PROFIL</h3>
-        <div class="card">
-            <p>Nama: <span id="prof-nama" style="color:var(--gold)"></span></p>
-            <p>WA: <span id="prof-wa"></span></p>
-            <p>Gems: <span id="prof-saldo"></span></p>
-            <p>Saldo Nasuka: <span id="prof-nasuka" style="color:#4CAF50"></span></p>
-        </div>
-        <button class="btn-gold" onclick="showPage('page-produk')">BELI GEMS</button>
-        <button class="btn-gold" style="background:#cc0000; color:#fff" onclick="logout()">LOGOUT</button>
-        <button class="btn-gold" style="background:#444; color:#fff" onclick="closePages()">TUTUP</button>
-    </div>
-
-    <div id="page-produk" class="spa-page">
-        <h3 style="color:var(--gold)">BELI GEMS</h3>
-        <div class="card">
-            <p>Saldo Nasuka: <b id="buy-nasuka-val"></b></p>
-            <button class="btn-gold" onclick="convertBalance(5000, 500000)">500rb Gems (Rp5.000)</button>
-            <button class="btn-gold" onclick="convertBalance(20000, 3000000)">3jt Gems (Rp20.000)</button>
-        </div>
-        <button class="btn-gold" style="background:#444; color:#fff" onclick="showPage('page-profil')">KEMBALI</button>
-    </div>
-
-    <div id="page-disclaimer" class="spa-page">
-        <h3>PERINGATAN</h3>
-        <div class="card"><p>Aplikasi ini bersifat hiburan semata.</p></div>
-        <button class="btn-gold" onclick="closePages()">SAYA MENGERTI</button>
     </div>
 </div>
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
-        authDomain: "nasukafoods1.firebaseapp.app",
-        databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "nasukafoods1",
-        appId: "1:84287800896:web:83189d6766997b00f701a5"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+<div id="profile-page" class="page-content">
+    <div style="padding: 20px;">
+        <button class="btn-beli" onclick="showHome()" style="background:white; margin-bottom:20px;"><i class="fas fa-arrow-left"></i> Beranda</button>
+        <div class="balance-card">
+            <small>SALDO ANDA</small>
+            <h2 id="displaySaldo">Rp 0</h2>
+            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;">
+            <small>MY GEMS</small>
+            <h3 id="displayGems">💎 0</h3>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 20px; text-align: center;">
+            <h3 id="profile-name-view">Nama Pengguna</h3>
+            <button onclick="tukarGems()" class="btn-beli" style="width:100%; background:var(--primary); color:white; margin-bottom:10px;">BELI 25RB GEMS (Rp 500)</button>
+            <button onclick="logout()" class="btn-beli" style="width:100%; background:#ef4444; color:white;">KELUAR AKUN</button>
+        </div>
+    </div>
+</div>
 
-    const baseURL = "https://nasukafoods.site/image/";
-    const symbolImages = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg'];
-    const betLevels = [100, 200, 500, 1000, 2000, 5000, 10000, 50000];
+<div id="history-page" class="page-content">
+    <div style="padding: 20px;">
+        <button class="btn-beli" onclick="showHome()" style="background:white; margin-bottom:20px;"><i class="fas fa-arrow-left"></i> Beranda</button>
+        <div id="history-list"></div>
+    </div>
+</div>
 
-    let currentBetIndex = 2;
-    let currentUser = localStorage.getItem("ID");
-    let balanceGems = 0;
-    let saldoNasuka = 0;
-    let isSpinning = false;
-    let autoSpinsRemaining = 0;
-    let firebaseListener = null;
+<div id="login-page">
+    <div style="text-align:right; margin-bottom: 20px;">
+        <button onclick="showHome()" style="background:none; border:none; font-size:24px;">&times;</button>
+    </div>
+    <img src="https://nasukafoods.site/image/profil.jpg" style="width: 80px; height: 80px; border-radius: 20px; margin-bottom: 20px; object-fit: cover;">
+    <h2>Nasuka Digital</h2>
+    <p>Silakan masuk untuk bertransaksi</p>
+    <input type="tel" id="auth-wa" class="auth-input" placeholder="WhatsApp (08xxx)">
+    <input type="password" id="auth-pin" class="auth-input" placeholder="PIN 4 Digit">
+    <button onclick="handleAuth()" class="btn-beli" style="width:100%; padding:15px; background: #6BCB77;">MASUK SEKARANG</button>
+</div>
 
-    function showPage(id) {
-        document.querySelectorAll('.spa-page').forEach(p => p.style.display = 'none');
-        document.getElementById(id).style.display = 'flex';
-        if(currentUser && (id === 'page-profil' || id === 'page-produk')) {
-            updateProfileUI();
-        }
-    }
+<script type="module">
+import * as THREE from "https://esm.sh/three";
 
-    function updateProfileUI() {
-        if(document.getElementById('prof-wa')) document.getElementById('prof-wa').innerText = currentUser;
-        if(document.getElementById('prof-saldo')) document.getElementById('prof-saldo').innerText = balanceGems.toLocaleString();
-        if(document.getElementById('prof-nasuka')) document.getElementById('prof-nasuka').innerText = "Rp" + saldoNasuka.toLocaleString();
-        if(document.getElementById('buy-nasuka-val')) document.getElementById('buy-nasuka-val').innerText = "Rp" + saldoNasuka.toLocaleString();
-    }
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafood1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    messagingSenderId: "84287800896",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
 
-    function closePages() { document.querySelectorAll('.spa-page').forEach(p => p.style.display = 'none'); }
-    function handleUserNav() { currentUser ? showPage('page-profil') : showPage('page-login'); }
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+window.db = db;
 
-    async function processAuth() {
-        const wa = document.getElementById('login-wa').value;
-        const pin = document.getElementById('login-pin').value;
-        if (wa.length < 10 || pin.length !== 4) return nasukaAlert("WA minimal 10 digit & PIN harus 4 digit!");
+let userID = localStorage.getItem("ID");
+let userSaldo = 0;
+let userGems = 0;
+let userRef = null;
 
-        try {
-            const snap = await db.ref(`users/${wa}`).once('value');
-            if (snap.exists()) {
-                const data = snap.val();
-                if (String(data.PIN) === String(pin)) {
-                    loginUser(wa);
-                    nasukaAlert("Login Berhasil!");
-                } else {
-                    nasukaAlert("PIN SALAH!");
-                }
-            } else {
-                const newUser = {
-                    Nama: "User_" + wa.slice(-4),
-                    PIN: pin,
-                    Saldo: 0,
-                    balance: 50000
-                };
-                await db.ref(`users/${wa}`).set(newUser);
-                loginUser(wa);
-                nasukaAlert("Akun Baru Berhasil Dibuat!");
-            }
-        } catch(e) { nasukaAlert("Koneksi Gagal!"); }
-    }
+// --- ANGKOT GAME LOGIC ---
+const minTileIndex = -7; 
+const maxTileIndex = 7;  
+const tileSize = 42;
+const zoomLevel = 3.05; 
 
-    function loginUser(id) {
-        localStorage.setItem("ID", id);
-        currentUser = id;
-        initUserSync();
-        closePages();
-    }
+let roadsPassed = 0;
+let lastRoadIndex = -1;
+let isGameOver = false;
+let gameInitialized = false;
 
-    function initUserSync() {
-        if (!currentUser) return;
-        if (firebaseListener) db.ref(`users/${currentUser}`).off('value', firebaseListener);
+const scene = new THREE.Scene();
+const map = new THREE.Group();
+scene.add(map);
 
-        firebaseListener = db.ref(`users/${currentUser}`).on('value', (snap) => {
-            if (snap.exists()) {
-                const data = snap.val();
-                balanceGems = data.balance || 0;
-                saldoNasuka = data.Saldo || 0;
-                document.getElementById('user-nav').innerText = data.Nama || currentUser;
-                document.getElementById('balance-display').innerText = balanceGems.toLocaleString();
-                if(document.getElementById('prof-nama')) document.getElementById('prof-nama').innerText = data.Nama || "User";
-                updateProfileUI();
-            }
-        });
-    }
+const textureLoader = new THREE.TextureLoader();
+const playerTex = textureLoader.load('https://nasukafoods.site/image/orangnyebrang.jpg');
+const carRightTex = textureLoader.load('https://nasukafoods.site/image/angkotkanan.jpg');
+const carLeftTex = textureLoader.load('https://nasukafoods.site/image/angkotkiri.jpg');
 
-    function logout() {
-        if (firebaseListener) db.ref(`users/${currentUser}`).off('value', firebaseListener);
-        localStorage.removeItem("ID");
-        currentUser = null;
-        balanceGems = 0;
-        saldoNasuka = 0;
-        document.getElementById('user-nav').innerText = "Login/Profil";
-        document.getElementById('balance-display').innerText = "0";
-        closePages();
-        nasukaAlert("Berhasil Keluar");
-    }
+const player = new THREE.Group();
+const playerSpriteMaterial = new THREE.SpriteMaterial({ map: playerTex });
+const playerBody = new THREE.Sprite(playerSpriteMaterial);
+playerBody.scale.set(32, 32, 1);
+playerBody.position.z = 16; 
+player.add(playerBody);
+scene.add(player);
 
-    function adjustBet(dir) {
-        currentBetIndex = Math.max(0, Math.min(betLevels.length - 1, currentBetIndex + dir));
-        document.getElementById('bet-display').innerText = betLevels[currentBetIndex].toLocaleString();
-    }
+let position = { currentRow: 0, currentTile: 0 };
+const movesQueue = [];
+const clock = new THREE.Clock();
+const moveClock = new THREE.Clock(false);
+const metadata = [];
 
-    async function convertBalance(cost, gems) {
-        if (saldoNasuka < cost) return nasukaAlert("Saldo Nasuka tidak cukup!");
-        await db.ref(`users/${currentUser}`).transaction((curr) => {
-            if (curr && curr.Saldo >= cost) {
-                curr.Saldo -= cost;
-                curr.balance = (curr.balance || 0) + gems;
-            }
-            return curr;
-        });
-        nasukaAlert("Pembelian Berhasil!");
-    }
+function Car(initialTileIndex, direction) {
+  const car = new THREE.Group();
+  car.position.x = initialTileIndex * tileSize;
+  const selectedTex = direction ? carRightTex : carLeftTex;
+  const carMaterial = new THREE.SpriteMaterial({ map: selectedTex, transparent: true });
+  const carSprite = new THREE.Sprite(carMaterial);
+  carSprite.scale.set(70, 45, 1);
+  carSprite.position.z = 18; 
+  car.add(carSprite);
+  return car;
+}
 
-    function initGrid() {
-        const container = document.getElementById('grid-container');
-        container.innerHTML = '';
-        for (let i = 0; i < 25; i++) {
-            const el = document.createElement('div');
-            el.className = 'tile';
-            el.innerHTML = `<img src="${baseURL}${symbolImages[Math.floor(Math.random() * 4)]}">`;
-            container.appendChild(el);
-        }
-    }
+function Grass(rowIndex) {
+  const grass = new THREE.Group();
+  grass.position.y = rowIndex * tileSize;
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(tileSize * 30, tileSize, 3),
+    new THREE.MeshLambertMaterial({ color: 0xbaf455 })
+  );
+  grass.add(mesh);
+  return grass;
+}
 
-    async function handleSpin() {
-        if (isSpinning) return;
-        if (!currentUser) return showPage('page-login');
-        const bet = betLevels[currentBetIndex];
-        if (balanceGems < bet) { 
-            nasukaAlert("Gems tidak cukup!"); 
-            autoSpinsRemaining = 0; 
-            document.getElementById('auto-btn').classList.remove('active');
-            return; 
-        }
+function Road(rowIndex) {
+  const road = new THREE.Group();
+  road.position.y = rowIndex * tileSize;
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(tileSize * 30, tileSize),
+    new THREE.MeshLambertMaterial({ color: 0x454a59 })
+  );
+  road.add(mesh);
+  return road;
+}
 
-        isSpinning = true;
-        document.getElementById('spin-btn').disabled = true;
-        balanceGems -= bet;
-        db.ref(`users/${currentUser}`).update({ balance: balanceGems });
+function updateUI() {
+    const coinDisp = document.getElementById("coin-display");
+    const roadCount = document.getElementById("road-count");
+    if(coinDisp) coinDisp.innerText = `GEMS: ${userGems.toLocaleString()}`;
+    if(roadCount) roadCount.innerText = `JALAN DILEWATI: ${roadsPassed}`;
+}
 
-        let timer = 0;
-        const roll = setInterval(() => {
-            initGrid();
-            if (timer++ > 10) {
-                clearInterval(roll);
-                isSpinning = false;
-                document.getElementById('spin-btn').disabled = false;
-                checkWin(bet);
-            }
-        }, 80);
-    }
+window.initializeMap = () => {
+    metadata.length = 0;
+    while(map.children.length > 0) map.remove(map.children[0]);
+    for (let i = -10; i <= 0; i++) map.add(Grass(i));
+    
+    position.currentRow = 0;
+    position.currentTile = 0;
+    player.position.set(0,0,0);
+    roadsPassed = 0;
+    lastRoadIndex = -1;
+    isGameOver = false;
+    movesQueue.length = 0;
 
-    function checkWin(bet) {
-        if (Math.random() > 0.8) {
-            const win = bet * 5;
-            balanceGems += win;
-            db.ref(`users/${currentUser}`).update({ balance: balanceGems });
-            document.getElementById('win-amount-popup').innerText = win.toLocaleString();
-            document.getElementById('win-announcement').classList.add('show-win');
-            setTimeout(() => document.getElementById('win-announcement').classList.remove('show-win'), 2000);
-        }
+    addRows();
+    updateUI();
+};
 
-        if (autoSpinsRemaining > 0) {
-            autoSpinsRemaining--;
-            if (autoSpinsRemaining === 0) document.getElementById('auto-btn').classList.remove('active');
-            setTimeout(handleSpin, 1500);
-        }
-    }
+function addRows() {
+    for (let i = 0; i < 20; i++) {
+        const type = Math.random() > 0.4 ? "car" : "forest";
+        const rowIndex = metadata.length + 1;
+        let row;
+        const rowData = { type, vehicles: [] };
 
-    function toggleAuto() {
-        if(autoSpinsRemaining > 0) {
-            autoSpinsRemaining = 0;
-            document.getElementById('auto-btn').classList.remove('active');
+        if (type === "forest") {
+            row = Grass(rowIndex);
         } else {
-            autoSpinsRemaining = 10;
-            document.getElementById('auto-btn').classList.add('active');
-            handleSpin();
+            row = Road(rowIndex);
+            rowData.direction = Math.random() > 0.5;
+            rowData.speed = 120 + Math.random() * 120;
+            for (let v = 0; v < 2; v++) {
+                const initialTileIndex = Math.floor(Math.random() * (maxTileIndex - minTileIndex)) + minTileIndex;
+                const vehicle = Car(initialTileIndex, rowData.direction);
+                row.add(vehicle);
+                rowData.vehicles.push({ ref: vehicle });
+            }
+        }
+        map.add(row);
+        metadata.push(rowData);
+    }
+}
+
+function queueMove(direction) {
+    if (isGameOver) return;
+    if (direction === "left") playerBody.scale.x = -32;
+    if (direction === "right") playerBody.scale.x = 32;
+    if (direction === "forward") movesQueue.push(direction);
+    if (direction === "backward" && position.currentRow > 0) movesQueue.push(direction);
+    if (direction === "left" && position.currentTile > minTileIndex) movesQueue.push(direction);
+    if (direction === "right" && position.currentTile < maxTileIndex) movesQueue.push(direction);
+}
+
+function stepCompleted() {
+    const dir = movesQueue.shift();
+    const prevRow = position.currentRow;
+
+    if (dir === "forward") position.currentRow++;
+    if (dir === "backward") position.currentRow--;
+    if (dir === "left") position.currentTile--;
+    if (dir === "right") position.currentTile++;
+    
+    const prevRowData = metadata[prevRow - 1]; 
+    if (prevRowData && prevRowData.type === "car" && prevRow > lastRoadIndex) {
+        roadsPassed++;
+        lastRoadIndex = prevRow;
+        giveGemsReward(10); 
+        updateUI();
+    }
+
+    if (position.currentRow > metadata.length - 15) addRows();
+}
+
+async function giveGemsReward(amount) {
+    if(!userID) return;
+    userGems += amount;
+    await window.db.ref(`users/${userID}/Gems`).set(userGems);
+}
+
+function showResult(message, type) {
+    isGameOver = true;
+    const container = document.getElementById("result-container");
+    const statusText = document.getElementById("result-status");
+    const descText = document.getElementById("result-desc");
+
+    statusText.innerText = message;
+    container.style.visibility = "visible";
+    statusText.style.color = "#ff4757";
+    descText.innerText = `Skor akhir: ${roadsPassed} jalan.`;
+}
+
+const camera = new THREE.OrthographicCamera(
+    window.innerWidth / -zoomLevel, window.innerWidth / zoomLevel, 
+    window.innerHeight / zoomLevel, window.innerHeight / -zoomLevel, 
+    1, 1000
+);
+camera.position.set(0, -200, 200); 
+camera.lookAt(0, 0, 0);
+
+const canvasAngkot = document.querySelector("canvas.game");
+const renderer = new THREE.WebGLRenderer({ canvas: canvasAngkot, antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+function animate() {
+    requestAnimationFrame(animate);
+    if (isGameOver || !gameInitialized) {
+        if(gameInitialized) renderer.render(scene, camera);
+        return;
+    }
+    
+    const delta = clock.getDelta();
+    metadata.forEach(row => {
+        if (row.type === "car") {
+            row.vehicles.forEach(v => {
+                if (row.direction) {
+                    v.ref.position.x += row.speed * delta;
+                    if (v.ref.position.x > 400) v.ref.position.x = -400;
+                } else {
+                    v.ref.position.x -= row.speed * delta;
+                    if (v.ref.position.x < -400) v.ref.position.x = 400;
+                }
+            });
+        }
+    });
+
+    if (movesQueue.length > 0) {
+        if (!moveClock.running) moveClock.start();
+        const progress = Math.min(1, moveClock.getElapsedTime() / 0.15);
+        const startX = position.currentTile * tileSize;
+        const startY = position.currentRow * tileSize;
+        let endX = startX, endY = startY;
+
+        if (movesQueue[0] === "forward") endY += tileSize;
+        if (movesQueue[0] === "backward") endY -= tileSize;
+        if (movesQueue[0] === "left") endX -= tileSize;
+        if (movesQueue[0] === "right") endX += tileSize;
+
+        player.position.x = THREE.MathUtils.lerp(startX, endX, progress);
+        player.position.y = THREE.MathUtils.lerp(startY, endY, progress);
+        playerBody.position.z = 16 + Math.sin(progress * Math.PI) * 20;
+
+        if (progress >= 1) {
+            stepCompleted();
+            moveClock.stop();
         }
     }
 
-    function nasukaAlert(msg) {
-        document.getElementById('modal-msg').innerText = msg;
-        const btns = document.getElementById('modal-btns');
-        btns.innerHTML = `<button class="btn-gold" style="width:100px" onclick="document.getElementById('nasuka-modal-overlay').style.display='none'">OK</button>`;
-        document.getElementById('nasuka-modal-overlay').style.display = 'flex';
-    }
+    camera.position.y = player.position.y - 200;
+    camera.lookAt(0, player.position.y, 0);
 
-    initGrid();
-    initUserSync();
+    const curRow = metadata[position.currentRow - 1];
+    if (curRow && curRow.type === "car") {
+        curRow.vehicles.forEach(v => {
+            if (Math.abs(v.ref.position.x - player.position.x) < 35) {
+                showResult("Hati hati nyebrang jalan ya!", "lose");
+            }
+        });
+    }
+    renderer.render(scene, camera);
+}
+
+// --- CORE UI FUNCTIONS ---
+window.hideAll = () => {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.getElementById('slot-page').style.display = 'none';
+    document.getElementById('angkot-page').style.display = 'none';
+    document.getElementById('login-page').style.display = 'none';
+};
+
+window.showHome = () => { 
+    hideAll(); 
+    document.getElementById('home-page').classList.add('active'); 
+    renderProducts(); 
+};
+
+window.showProfile = () => { if(!checkLogin()) return; hideAll(); document.getElementById('profile-page').classList.add('active'); };
+window.showHistory = () => { if(!checkLogin()) return; hideAll(); document.getElementById('history-page').classList.add('active'); };
+
+window.showSlot = () => {
+    if(!checkLogin()) return;
+    hideAll();
+    document.getElementById('slot-page').style.display = 'flex';
+    initSlotGrid();
+};
+
+window.showAngkotage = () => {
+    if(!checkLogin()) return;
+    hideAll();
+    document.getElementById('angkot-page').style.display = 'block';
+    gameInitialized = true;
+    window.initializeMap();
+};
+
+window.closeAngkot = () => {
+    gameInitialized = false;
+    showHome();
+};
+
+window.checkLogin = () => {
+    if(!userID) { 
+        hideAll(); 
+        document.getElementById('login-page').style.display = 'block'; 
+        return false; 
+    }
+    return true;
+};
+
+// --- AUTH & DATA ---
+window.initApp = () => {
+    renderProducts();
+    if(userID) {
+        if(userRef) userRef.off();
+        userRef = window.db.ref(`users/${userID}`);
+        userRef.on('value', snap => {
+            const data = snap.val();
+            if(data) {
+                userSaldo = data.Saldo || 0;
+                userGems = data.Gems || 0;
+                document.getElementById('header-user-name').innerText = data.Nama || "User";
+                document.getElementById('displaySaldo').innerText = "Rp " + userSaldo.toLocaleString();
+                document.getElementById('displayGems').innerText = "💎 " + userGems.toLocaleString();
+                document.getElementById('profile-name-view').innerText = data.Nama;
+                updateSlotUI();
+                updateUI();
+            }
+        });
+    } else {
+        document.getElementById('header-user-name').innerText = "Tamu";
+    }
+};
+
+window.handleAuth = () => {
+    const wa = document.getElementById('auth-wa').value;
+    const pin = document.getElementById('auth-pin').value;
+    if(wa.length < 10) return alert("Nomor WA tidak valid");
+    window.db.ref(`users/${wa}`).once('value', snap => {
+        if(snap.exists() && snap.val().PIN !== pin) return alert("PIN Salah");
+        if(!snap.exists()) {
+            window.db.ref(`users/${wa}`).set({ Nama: "Kawan", PIN: pin, Saldo: 0, Gems: 25000 });
+        }
+        localStorage.setItem("ID", wa);
+        userID = wa;
+        initApp();
+        showHome();
+    });
+};
+
+window.logout = () => { 
+    localStorage.removeItem("ID"); 
+    userID = null;
+    if(userRef) userRef.off();
+    userSaldo = 0;
+    userGems = 0;
+    document.getElementById('header-user-name').innerText = "Tamu";
+    document.getElementById('displaySaldo').innerText = "Rp 0";
+    document.getElementById('displayGems').innerText = "💎 0";
+    hideAll();
+    document.getElementById('login-page').style.display = 'block';
+};
+
+// --- SLOT SYSTEM ---
+const symbolImages = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg'];
+const betLevels = [100, 200, 500, 1000, 2000, 5000];
+let currentBetIdx = 2;
+let isSpinningSlot = false;
+let gridTiles = [];
+
+window.initSlotGrid = () => {
+    const container = document.getElementById('grid-container');
+    container.innerHTML = ''; gridTiles = [];
+    for(let i=0; i<25; i++) {
+        const div = document.createElement('div'); div.className = 'tile';
+        const img = symbolImages[Math.floor(Math.random()*4)];
+        div.innerHTML = `<img src="https://nasukafoods.site/image/${img}">`;
+        container.appendChild(div);
+        gridTiles.push({ el: div, symbol: img });
+    }
+};
+
+window.updateSlotUI = () => {
+    const gemEl = document.getElementById('slot-gems');
+    const betEl = document.getElementById('slot-bet');
+    if(gemEl) gemEl.innerText = "💎 " + userGems.toLocaleString();
+    if(betEl) betEl.innerText = "💎 " + betLevels[currentBetIdx].toLocaleString();
+};
+
+window.adjustBetSlot = (dir) => {
+    if(isSpinningSlot) return;
+    currentBetIdx = Math.max(0, Math.min(betLevels.length-1, currentBetIdx + dir));
+    updateSlotUI();
+};
+
+window.handleSpinSlot = async () => {
+    if(isSpinningSlot) return;
+    const bet = betLevels[currentBetIdx];
+    if(userGems < bet) return showNasukaModal('error', 'Gems Habis', 'Saldo Gems tidak cukup.');
+
+    isSpinningSlot = true;
+    userGems -= bet;
+    window.db.ref(`users/${userID}/Gems`).set(userGems);
+    
+    const roll = setInterval(() => {
+        gridTiles.forEach(t => {
+            const sym = symbolImages[Math.floor(Math.random()*4)];
+            t.el.innerHTML = `<img src="https://nasukafoods.site/image/${sym}">`;
+        });
+    }, 100);
+
+    setTimeout(() => {
+        clearInterval(roll);
+        finishSpin(bet);
+    }, 1200);
+};
+
+function finishSpin(bet) {
+    let win = Math.random() > 0.7;
+    if(win) {
+        let mult = [2, 3, 5][Math.floor(Math.random()*3)];
+        let winAmt = bet * mult;
+        userGems += winAmt;
+        window.db.ref(`users/${userID}/Gems`).set(userGems);
+        document.getElementById('win-amount-popup').innerText = "💎 " + winAmt.toLocaleString();
+        document.getElementById('win-announcement').classList.add('show-win');
+        setTimeout(() => document.getElementById('win-announcement').classList.remove('show-win'), 2000);
+    }
+    isSpinningSlot = false;
+    updateSlotUI();
+}
+
+// --- UTILS ---
+window.showNasukaModal = (type, title, msg) => {
+    const overlay = document.getElementById('nasuka-modal-overlay');
+    document.getElementById('modal-icon').className = `modal-icon-box modal-icon-${type === 'error' ? 'error' : 'success'}`;
+    document.getElementById('modal-icon').innerHTML = type === 'error' ? '×' : '✓';
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-msg').innerText = msg;
+    overlay.classList.add('active');
+    document.getElementById('modal-btn-main').onclick = () => overlay.classList.remove('active');
+};
+
+const products = [
+    { id: "ax1", name: "Axis 5GB 1hr", price: 7000, img: "https://nasukafoods.site/image/axis.jpg" },
+    { id: "xl1", name: "XL 10GB", price: 12000, img: "https://nasukafoods.site/image/xl.jpg" }
+];
+
+window.renderProducts = () => {
+    const list = document.getElementById('voucher-list');
+    if(!list) return;
+    list.innerHTML = products.map(p => `
+        <div class="voucher-card">
+            <img src="${p.img}" class="voucher-img">
+            <div style="flex:1"><b>${p.name}</b><br><span style="color:orange">Rp ${p.price.toLocaleString()}</span></div>
+            <button onclick="prosesBeli('${p.id}', '${p.name}', ${p.price})" class="btn-beli">BELI</button>
+        </div>
+    `).join('');
+};
+
+window.prosesBeli = async (id, nama, harga) => {
+    if(!checkLogin()) return;
+    if(userSaldo < harga) return showNasukaModal('error', 'Saldo Kurang', 'Silakan Topup Saldo Rp.');
+    if(confirm(`Beli ${nama}?`)) {
+        userSaldo -= harga;
+        await window.db.ref(`users/${userID}/Saldo`).set(userSaldo);
+        showNasukaModal('success', 'Berhasil', 'Pembelian sukses!');
+    }
+};
+
+window.tukarGems = async () => {
+    if(!checkLogin()) return;
+    const hargaGems = 500;
+    const dapatGems = 25000;
+    if(userSaldo < hargaGems) return alert("Saldo Rupiah tidak cukup!");
+    if(confirm(`Beli 25.000 Gems seharga Rp 500?`)) {
+        userSaldo -= hargaGems;
+        userGems += dapatGems;
+        await window.db.ref(`users/${userID}`).update({ Saldo: userSaldo, Gems: userGems });
+        alert("Berhasil membeli Gems!");
+    }
+}
+
+window.showInformasi = () => showNasukaModal('info', 'Info Admin', 'WhatsApp: 0859109819017');
+
+document.getElementById("forward").onclick = () => queueMove("forward");
+document.getElementById("backward").onclick = () => queueMove("backward");
+document.getElementById("left").onclick = () => queueMove("left");
+document.getElementById("right").onclick = () => queueMove("right");
+document.getElementById("retry").onclick = () => { 
+    document.getElementById("result-container").style.visibility = "hidden"; 
+    window.initializeMap(); 
+};
+
+window.addEventListener("resize", () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.left = window.innerWidth / -zoomLevel;
+    camera.right = window.innerWidth / zoomLevel;
+    camera.top = window.innerHeight / zoomLevel;
+    camera.bottom = window.innerHeight / -zoomLevel;
+    camera.updateProjectionMatrix();
+});
+
+window.addEventListener('load', () => {
+    window.initApp();
+});
+
+animate();
 </script>
 </body>
 </html>
