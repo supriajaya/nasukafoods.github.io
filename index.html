@@ -3,762 +3,507 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nasuka Admin - Retro Panel Bright</title>
+    <title>Nasuka Super App</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
         :root {
-            --lcd-bg: #c5dcc0; 
-            --lcd-text: #1a1d15;
+            --nasuka-blue: #00529C;
+            --nasuka-orange: #f37021;
+            --bg-light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.9);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
 
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-            font-weight: 800 !important; 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body, html { 
+            margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light); color: #1e293b; overflow-x: hidden; height: 100%;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            background-color: var(--lcd-bg);
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
-            color: var(--lcd-text);
+        /* --- SISTEM LOADING --- */
+        #main-loader {
+            position: fixed; inset: 0; background: white; z-index: 100000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .loader-ring { width: 60px; height: 60px; border: 5px solid #f3f3f3; border-top: 5px solid var(--nasuka-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- AUTH SCREEN --- */
+        #auth-page {
+            position: fixed; inset: 0; background: white; z-index: 90000;
+            padding: 40px 30px; display: none; flex-direction: column; align-items: center;
+        }
+        .auth-card { width: 100%; max-width: 400px; text-align: center; }
+        .logo-img { width: 120px; height: 120px; border-radius: 30px; margin-bottom: 20px; box-shadow: var(--shadow-md); }
+        .input-group { width: 100%; margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #64748b; font-size: 14px; }
+        .auth-input { 
+            width: 100%; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; 
+            font-size: 16px; transition: 0.3s;
+        }
+        .auth-input:focus { border-color: var(--nasuka-blue); box-shadow: 0 0 0 4px rgba(0,82,156,0.1); }
+        .btn-primary {
+            width: 100%; padding: 16px; border-radius: 15px; border: none;
+            background: var(--nasuka-blue); color: white; font-weight: 800;
+            font-size: 16px; cursor: pointer; box-shadow: 0 4px 0 #003d75;
+        }
+        .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #003d75; }
+
+        /* --- NAVIGATION BAR --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: white;
+            display: flex; justify-content: space-around; padding: 12px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 5000;
+        }
+        .nav-item { text-align: center; color: #94a3b8; font-size: 11px; font-weight: bold; flex: 1; }
+        .nav-item.active { color: var(--nasuka-blue); }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+
+        /* --- DASHBOARD STYLING --- */
+        .header { background: var(--nasuka-blue); padding: 30px 20px 80px; color: white; position: relative; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .balance-overlay {
+            background: white; margin: -50px 20px 20px; border-radius: 25px;
+            padding: 25px; box-shadow: var(--shadow-md); position: relative; z-index: 10;
+        }
+        .row-balance { display: flex; justify-content: space-between; align-items: flex-end; }
+        .amount-big { font-size: 28px; font-weight: 900; color: #1e293b; margin: 5px 0; }
+        .gems-pill { 
+            background: #f1f5f9; padding: 8px 15px; border-radius: 20px;
+            font-weight: 800; font-size: 14px; color: #0ea5e9; display: flex; align-items: center; gap: 8px;
         }
 
-        body::before {
-            content: " "; display: block; position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.03) 50%);
-            z-index: 100; background-size: 100% 3px; pointer-events: none;
+        /* --- MENU GRID --- */
+        .grid-menu {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
+            padding: 0 20px 30px;
+        }
+        .menu-btn { text-align: center; }
+        .icon-box {
+            width: 100%; aspect-ratio: 1/1; background: white; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-sm); margin-bottom: 8px; border: 1px solid #f1f5f9;
+        }
+        .icon-box img { width: 60%; height: 60%; object-fit: contain; }
+        .menu-btn span { font-size: 11px; font-weight: 800; color: #475569; }
+
+        /* --- LIST PRODUK --- */
+        .p-section { padding: 0 20px 100px; }
+        .p-card {
+            background: white; border-radius: 20px; padding: 15px; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow-sm);
+        }
+        .p-img { width: 60px; height: 60px; border-radius: 12px; background: #eee; }
+        .p-info { flex: 1; }
+        .p-name { font-weight: 800; font-size: 15px; margin-bottom: 2px; }
+        .p-price { color: var(--nasuka-orange); font-weight: 900; font-size: 14px; }
+        .p-btn { 
+            background: #10b981; color: white; border: none; padding: 10px 15px;
+            border-radius: 10px; font-weight: bold; font-size: 12px;
         }
 
-        .container { display: flex; flex-direction: column; height: 100vh; padding: 10px; }
-        .header { 
-            flex-shrink: 0; 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 16px; 
-            border-bottom: 3px solid var(--lcd-text); 
-            padding-bottom: 5px; 
-            margin-bottom: 5px; 
+        /* --- GAME UI: SLOT --- */
+        #game-slot {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: none; flex-direction: column;
+            background-image: radial-gradient(circle at center, #1e293b 0%, #000 100%);
         }
+        .slot-top { padding: 15px; display: flex; justify-content: space-between; align-items: center; color: gold; font-weight: 900; border-bottom: 1px solid #334155; }
+        .slot-grid-container {
+            flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px;
+        }
+        #slot-canvas-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+            width: 100%; max-width: 400px; aspect-ratio: 1/1;
+            background: #334155; padding: 5px; border-radius: 10px; border: 4px solid #1e293b;
+        }
+        .slot-tile { background: white; border-radius: 5px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .slot-tile img { width: 85%; height: 85%; object-fit: contain; }
+        .slot-footer { background: #111; padding: 25px; border-radius: 30px 30px 0 0; }
+        .win-display { text-align: center; color: #10b981; font-weight: 900; font-size: 20px; margin-bottom: 15px; height: 30px; }
 
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; flex: 1; align-content: start; overflow-y: auto; }
-        .menu-item {
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; border: 3px solid var(--lcd-text); padding: 5px; height: 110px; cursor: pointer;
-            background: rgba(255,255,255,0.2);
-        }
-        .menu-item:active { background-color: var(--lcd-text); color: var(--lcd-bg); }
-        .icon { font-size: 32px; margin-bottom: 5px; }
-        .label { font-size: 12px; text-transform: uppercase; }
+        /* --- GAME UI: ANGKOT --- */
+        #game-angkot { position: fixed; inset: 0; background: #111; z-index: 10001; display: none; }
+        .angkot-ui { position: absolute; top: 20px; left: 20px; color: white; pointer-events: none; }
+        .angkot-ctrl { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; gap: 20px; }
+        .a-btn { width: 75px; height: 75px; background: white; border-radius: 20px; border: none; font-size: 28px; box-shadow: 0 5px 0 #cbd5e1; }
+        .a-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #cbd5e1; }
 
-        #app-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
-        .app-title { flex-shrink: 0; text-align: center; border-bottom: 2px solid var(--lcd-text); margin-bottom: 8px; font-size: 16px; text-transform: uppercase; padding: 5px; }
-        
-        .app-body { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding-right: 5px; 
-            font-size: 14px; 
-            -webkit-overflow-scrolling: touch; 
-        }
-
-        input, select, textarea, button {
-            background: rgba(255,255,255,0.3); border: 2px solid var(--lcd-text);
-            color: var(--lcd-text); font-family: inherit; width: 100%;
-            margin-bottom: 8px; padding: 10px; outline: none; border-radius: 0;
-            font-size: 14px;
-        }
-        button { cursor: pointer; text-transform: uppercase; }
-        button:active { background: var(--lcd-text); color: var(--lcd-bg); }
-
-        .card-item { border: 2px solid var(--lcd-text); padding: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.4); }
-        .footer { flex-shrink: 0; display: flex; justify-content: space-between; font-size: 18px; border-top: 3px solid var(--lcd-text); padding-top: 8px; margin-top: 5px; }
-        
-        .hidden { display: none !important; }
-        .badge-stok { border: 2px solid var(--lcd-text); padding: 2px 6px; margin-left: 5px; background: var(--lcd-text); color: var(--lcd-bg); }
-        
-        .app-content { height: 100%; display: flex; flex-direction: column; }
-        #userListOtoritas { flex: 1; overflow-y: auto; padding-bottom: 20px; }
-
-        /* Media Tab Specific */
-        #resultMedia { margin-top: 10px; padding: 10px; border: 2px dashed var(--lcd-text); font-size: 11px; word-break: break-all; min-height: 40px; }
-
-        #historyModal, #saldoModal, #customAlert { 
-            display: none; position: fixed; inset: 0; background: var(--lcd-bg); z-index: 500; padding: 20px; overflow-y: auto; 
-        }
-        #saldoModal { flex-direction: column; z-index: 600; }
-
-        #customAlert {
-            z-index: 999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        .alert-box {
-            border: 3px solid var(--lcd-text);
-            padding: 15px;
-            width: 100%;
-            max-width: 280px;
-            background: rgba(255,255,255,0.5);
-        }
-
-        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; flex: 1; margin-top: 10px; }
-        .display-saldo { font-size: 26px; text-align: center; border: 3px solid var(--lcd-text); padding: 15px; margin-bottom: 10px; background: #fff; }
-        
-        .clean-nav { display: flex; gap: 5px; margin-bottom: 10px; }
-        .clean-nav button { padding: 8px 0; margin-bottom: 0; flex: 1; font-size: 12px; }
-        .btn-active { background: var(--lcd-text) !important; color: var(--lcd-bg) !important; }
-
-        .calc-display {
-            background: #fff;
-            border: 3px solid var(--lcd-text);
-            padding: 15px;
-            font-size: 24px;
-            text-align: right;
-            margin-bottom: 10px;
-            width: 100%;
-            height: 60px;
-            color: #000;
-        }
-        .calc-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-        .calc-grid button {
-            padding: 15px 5px;
-            margin-bottom: 0;
-            font-size: 18px;
-        }
-        .btn-op { background: rgba(0,0,0,0.1); }
-        .btn-eq { background: var(--lcd-text); color: var(--lcd-bg); }
+        /* --- GLOBAL --- */
+        .page { display: none; height: 100%; overflow-y: auto; }
+        .active-page { display: block; }
     </style>
 </head>
 <body>
 
-    <div id="customAlert">
-        <div class="alert-box">
-            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
-            <div id="alertMessage" style="margin-bottom: 20px; text-transform: uppercase;">PESAN</div>
-            <div id="alertButtons" style="display: flex; gap: 10px;">
-                <button id="alertConfirmBtn" style="background: var(--lcd-text); color: var(--lcd-bg);">OKE</button>
-                <button id="alertCancelBtn" class="hidden">BATAL</button>
-            </div>
-        </div>
-    </div>
+<div id="main-loader">
+    <div class="loader-ring"></div>
+    <p style="margin-top:20px; font-weight:900; color:#475569;">MENYAMBUNGKAN KE DATABASE...</p>
+</div>
 
-    <div class="container">
-        <div class="header">
-            <span>📶 NASUKA ADMIN</span>
-            <span id="time">00:00</span>
-            <span>🔋</span>
-        </div>
-
-        <div id="main-view" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
-            <div id="menu-grid" class="menu-grid">
-                <div class="menu-item" onclick="openApp('tab-chat', 'INBOX CHAT')">
-                    <div class="icon">✉️</div><div class="label">Chat</div>
-                </div>
-                <div class="menu-item" onclick="openApp('tab-stok-input', 'STOK VOUCHER')">
-                    <div class="icon">📦</div><div class="label">Stok</div>
-                </div>
-                <div class="menu-item" onclick="openApp('tab-otoritas', 'KELOLA USER')">
-                    <div class="icon">👥</div><div class="label">Otoritas</div>
-                </div>
-                <div class="menu-item" onclick="openApp('tab-media', 'MANAGEMENT MEDIA')">
-                    <div class="icon">🖼️</div><div class="label">Media</div>
-                </div>
-               
-                <div class="menu-item" onclick="openApp('tab-del', 'BERSIHKAN DATA')">
-                    <div class="icon">🗑️</div><div class="label">Bersih</div>
-                </div>
-                <div class="menu-item" onclick="openApp('tab-kal', 'KALKULATOR')">
-                    <div class="icon">📝</div><div class="label">Kalkulator</div>
-                </div>
-            </div>
-
-            <div id="app-screen">
-                <div id="app-title" class="app-title">TITLE</div>
-                <div id="app-body" class="app-body">
-                    
-                    <div id="content-tab-chat" class="app-content hidden">
-                        <div id="userListChat"></div>
-                        <div id="chatRoom" class="hidden">
-                            <button onclick="closeChat()">[ KEMBALI ]</button>
-                            <div id="activeUserName" style="border-bottom: 2px solid var(--lcd-text); padding: 5px; font-weight: bold;"></div>
-                            
-                            <div id="chatDisplay" style="height: 250px; overflow-y: auto; border: 2px solid var(--lcd-text); margin: 5px 0; padding: 10px; background: rgba(255,255,255,0.2);"></div>
-                            
-                            <div id="imgInputBox" class="hidden" style="margin-bottom: 5px; border: 2px dashed var(--lcd-text); padding: 5px;">
-                                <small>MASUKKAN URL GAMBAR:</small>
-                                <input type="text" id="adminImgUrl" placeholder="https://contoh.com/gambar.jpg">
-                            </div>
-
-                            <textarea id="adminInput" placeholder="Ketik balasan..." style="height: 60px; margin-bottom: 5px;"></textarea>
-                            
-                            <div style="display: flex; gap: 5px;">
-                                <button onclick="toggleImgInput()" style="flex: 1; background: #eee;">🖼️ FOTO</button>
-                                <button onclick="sendReply()" style="flex: 2; background: var(--lcd-text); color: var(--lcd-bg);">KIRIM</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="content-tab-stok-input" class="app-content hidden">
-                        <select id="productID">
-                            <optgroup label="Voucher Data">
-                                <option value="ax1">Axis 500MB (ax1)</option>
-                                <option value="ax2">Axis 5GB 1hr (ax2)</option>
-                                <option value="ts1">Tsel Bandung (ts1)</option>
-                                <option value="is1">Indosat 5GB (is1)</option>
-                            </optgroup>
-                            <optgroup label="Wifi">
-                                <option value="nc1">Nits 6Jam (nc1)</option>
-                                <option value="nc2">Nits 12Jam (nc2)</option>
-                            </optgroup>
-                        </select>
-                        <textarea id="voucherCode" placeholder="Kode SN (Pisah Koma)"></textarea>
-                        <button onclick="simpanVoucherDatabase()">TAMBAH STOK</button>
-                        <hr style="border: 1px dashed var(--lcd-text)">
-                        <b style="font-size: 16px;">SISA STOK:</b>
-                        <div id="stockBodyRealtime"></div>
-                    </div>
-
-                    <div id="content-tab-otoritas" class="app-content hidden">
-                        <input type="text" id="adminSearch" onkeyup="searchUser()" placeholder="Cari Nama/WA...">
-                        <div id="userListOtoritas"></div>
-                    </div>
-
-                    <div id="content-tab-media" class="app-content hidden">
-                        <div class="card-item">
-                            <p><b>UPLOAD FOTO KE SERVER</b></p>
-                            <input type="file" id="pilihFoto" accept="image/*" onchange="isiNamaOtomatis()">
-                            <input type="text" id="namaKustom" placeholder="Nama file (tanpa .jpg)">
-                            <button onclick="prosesUpload()" style="background: #28a745; color: white;">UPLOAD KE GITHUB</button>
-                        </div>
-                        <div class="card-item">
-                            <p><b>HAPUS FOTO PERMANEN</b></p>
-                            <input type="text" id="namaHapus" placeholder="Nama file (contoh: profil.jpg)">
-                            <button onclick="prosesHapus()" style="background: #dc3545; color: white;">HAPUS DARI SERVER</button>
-                        </div>
-                        <div id="resultMedia">Status: Menunggu aksi...</div>
-                    </div>
-
-                    <div id="content-tab-notif" class="app-content hidden">
-                        <div style="margin-bottom: 10px; font-size: 11px; border-bottom: 1px solid var(--lcd-text); padding-bottom: 5px;">
-                            * Menghapus di sini akan menghapus data di Database (RTDB) & Lokal Device User.
-                        </div>
-                        <div id="notifListContainer"></div>
-                    </div>
-
-                    <div id="content-tab-del" class="app-content hidden">
-                        <div class="clean-nav">
-                            <button id="btnSubChat" onclick="switchCleanTab('chat')" class="btn-active">CHAT</button>
-                            <button id="btnSubAcc" onclick="switchCleanTab('acc')">AKUN</button>
-                        </div>
-                        <div id="sub-clean-chat"><div id="userListDelChat"></div></div>
-                        <div id="sub-clean-acc" class="hidden"><div id="userListDelAcc"></div></div>
-                    </div>
-
-                    <div id="content-tab-kal" class="app-content hidden">
-                        <input type="text" id="calc-display" class="calc-display" placeholder="0" readonly>
-                        <div class="calc-grid">
-                            <button onclick="clearCalc()" style="color: #4a0000;">C</button>
-                            <button onclick="delCalc()">⌫</button>
-                            <button class="btn-op" onclick="inputCalc('%')">%</button>
-                            <button class="btn-op" onclick="inputCalc('/')">÷</button>
-                            
-                            <button onclick="inputCalc('7')">7</button>
-                            <button onclick="inputCalc('8')">8</button>
-                            <button onclick="inputCalc('9')">9</button>
-                            <button class="btn-op" onclick="inputCalc('*')">×</button>
-                            
-                            <button onclick="inputCalc('4')">4</button>
-                            <button onclick="inputCalc('5')">5</button>
-                            <button onclick="inputCalc('6')">6</button>
-                            <button class="btn-op" onclick="inputCalc('-')">-</button>
-                            
-                            <button onclick="inputCalc('1')">1</button>
-                            <button onclick="inputCalc('2')">2</button>
-                            <button onclick="inputCalc('3')">3</button>
-                            <button class="btn-op" onclick="inputCalc('+')">+</button>
-                            
-                            <button onclick="inputCalc('0')">0</button>
-                            <button onclick="inputCalc('.')">.</button>
-                            <button class="btn-eq" style="grid-column: span 2;" onclick="execCalc()">=</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <span id="btn-left">PILIH</span>
-            <span id="btn-right" onclick="handleBack()">MENU</span>
-        </div>
-    </div>
-
-    <div id="historyModal">
-        <button onclick="closeModal()">[ TUTUP ]</button>
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--lcd-text); margin-bottom: 10px;">
-            <h3>RIWAYAT USER</h3>
-            <button onclick="deleteHistory()" style="width: auto; padding: 5px; font-size: 10px; background: #4a0000; color: #fff;">BERSIHKAN</button>
-        </div>
-        <div id="historyContent"></div>
-    </div>
-
-    <div id="saldoModal">
-        <div class="app-title">TOPUP SALDO</div>
-        <div id="targetUserName" style="text-align: center; margin-bottom: 10px; border-bottom: 2px solid var(--lcd-text); background: var(--lcd-text); color: var(--lcd-bg); padding: 5px;">USER</div>
-        <div class="display-saldo" id="saldoDisplay">0</div>
-        <div class="keypad">
-            <button onclick="pressNum(1)">1</button><button onclick="pressNum(2)">2</button><button onclick="pressNum(3)">3</button>
-            <button onclick="pressNum(4)">4</button><button onclick="pressNum(5)">5</button><button onclick="pressNum(6)">6</button>
-            <button onclick="pressNum(7)">7</button><button onclick="pressNum(8)">8</button><button onclick="pressNum(9)">9</button>
-            <button onclick="pressNum('DEL')" style="color: #4a0000;">DEL</button>
-            <button onclick="pressNum(0)">0</button>
-            <button onclick="pressNum('CLR')">CLR</button>
-        </div>
-        <div style="display: flex; gap: 8px; margin-top: 15px;">
-            <button onclick="closeSaldoModal()" style="flex: 1;">BATAL</button>
-            <button onclick="prosesIsiSaldo()" style="flex: 2; background: var(--lcd-text); color: var(--lcd-bg);">KONFIRMASI</button>
-        </div>
-    </div>
-
-    <script>
-        // CONFIGURATIONS
-        const firebaseConfig = {
-            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
-            authDomain: "nasukafoods1.firebaseapp.app",
-            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "nasukafoods1",
-            messagingSenderId: "84287800896",
-            appId: "1:84287800896:web:83189d6766997b00f701a5"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        const ghConfig = {
-            token: "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",
-            owner: "supriajaya",
-            repo: "nasukafoods.github.io"
-        };
-
-        let currentTab = null;
-        let selectedUID = "";
-        let inputSaldo = "0";
-        let activeChatID = null;
-        let calcVal = "";
-
-        // UI HELPERS
-        function updateTime() {
-            const now = new Date();
-            $('#time').text(`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`);
-        }
-        setInterval(updateTime, 1000); updateTime();
-
-        function openApp(id, title) {
-            currentTab = id;
-            $('#menu-grid').addClass('hidden');
-            $('#app-screen').show().css('display', 'flex');
-            $('#app-title').text(title);
-            $('.app-content').addClass('hidden');
-            $('#content-' + id).removeClass('hidden');
-            $('#btn-left').text('OKE');
-            if(id === 'tab-del') switchCleanTab('chat');
-            if(id === 'tab-notif') loadNotifLog();
-        }
-
-        function handleBack() {
-            if (currentTab) {
-                currentTab = null;
-                $('#menu-grid').removeClass('hidden');
-                $('#app-screen').hide();
-                $('#btn-left').text('PILIH');
-            }
-        }
-
-        // --- MEDIA LOGIC (DARI UPDELWEB) ---
-        function isiNamaOtomatis() {
-            const input = document.getElementById('pilihFoto');
-            if (input.files.length > 0) {
-                document.getElementById('namaKustom').value = input.files[0].name.split('.').slice(0, -1).join('.');
-            }
-        }
-
-        async function prosesUpload() {
-            const input = document.getElementById('pilihFoto');
-            const namaInput = document.getElementById('namaKustom');
-            const res = document.getElementById('resultMedia');
-            
-            if (input.files.length === 0 || !namaInput.value) {
-                return showRetroAlert("Pilih file & isi nama!", "warn");
-            }
-
-            const file = input.files[0];
-            const ekstensi = file.name.split('.').pop();
-            const namaFileFinal = `${namaInput.value.trim().replace(/\s+/g, '_')}.${ekstensi}`;
-            
-            res.innerHTML = "Membaca file...";
-            const reader = new FileReader();
-            reader.onload = async function() {
-                const base64Content = reader.result.split(',')[1];
-                const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/image/${namaFileFinal}`;
-
-                res.innerHTML = "Mengunggah ke GitHub...";
-                try {
-                    const response = await fetch(url, {
-                        method: 'PUT',
-                        headers: { 
-                            'Authorization': `token ${ghConfig.token}`, 
-                            'Content-Type': 'application/json' 
-                        },
-                        body: JSON.stringify({
-                            message: `Upload: ${namaFileFinal}`,
-                            content: base64Content
-                        })
-                    });
-
-                    if (response.ok) {
-                        res.innerHTML = `<b style="color:green">BERHASIL!</b><br>URL: https://nasukafoods.site/image/${namaFileFinal}`;
-                        showRetroAlert("UPLOAD BERHASIL", "success");
-                    } else {
-                        res.innerHTML = "GAGAL. Nama file mungkin sudah ada atau token bermasalah.";
-                    }
-                } catch (e) {
-                    res.innerHTML = "ERROR: " + e.message;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function prosesHapus() {
-            const namaFile = document.getElementById('namaHapus').value.trim();
-            const res = document.getElementById('resultMedia');
-            if (!namaFile) return showRetroAlert("Masukkan nama file!", "warn");
-
-            showRetroAlert(`HAPUS ${namaFile} PERMANEN?`, "warn", async () => {
-                res.innerHTML = "Mencari file...";
-                const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/image/${namaFile}`;
-
-                try {
-                    const getRes = await fetch(url, {
-                        headers: { 'Authorization': `token ${ghConfig.token}` }
-                    });
-
-                    if (!getRes.ok) throw new Error("File tidak ditemukan.");
-                    const data = await getRes.json();
-                    
-                    res.innerHTML = "Menghapus...";
-                    const delRes = await fetch(url, {
-                        method: 'DELETE',
-                        headers: { 
-                            'Authorization': `token ${ghConfig.token}`, 
-                            'Content-Type': 'application/json' 
-                        },
-                        body: JSON.stringify({
-                            message: `Hapus file: ${namaFile}`,
-                            sha: data.sha
-                        })
-                    });
-
-                    if (delRes.ok) {
-                        res.innerHTML = "BERHASIL DIHAPUS!";
-                        document.getElementById('namaHapus').value = "";
-                        showRetroAlert("TERHAPUS PERMANEN", "success");
-                    }
-                } catch (e) {
-                    res.innerHTML = e.message;
-                }
-            }, true);
-        }
-
-        // --- KALKULATOR LOGIC ---
-        function inputCalc(v) {
-            const last = calcVal.slice(-1);
-            if (['+','-','*','/','.'].includes(last) && ['+','-','*','/','.'].includes(v)) return;
-            calcVal += v;
-            updateCalcUI();
-        }
-        function clearCalc() { calcVal = ""; updateCalcUI(); }
-        function delCalc() { calcVal = calcVal.slice(0, -1); updateCalcUI(); }
-        function updateCalcUI() {
-            let display = calcVal.replace(/\*/g, '×').replace(/\//g, '÷');
-            $('#calc-display').val(display || "0");
-        }
-        function execCalc() {
-            try {
-                if(!calcVal) return;
-                let expression = calcVal;
-                if (expression.includes('%')) {
-                    const percentPattern = /(\d+\.?\d*)([\+\-\*\/])(\d+\.?\d*)%/g;
-                    if (expression.match(percentPattern)) {
-                        expression = expression.replace(percentPattern, (match, p1, op, p2) => {
-                            const base = parseFloat(p1);
-                            const percent = parseFloat(p2) / 100;
-                            return (op === '+' || op === '-') ? `${base} ${op} (${percent} * ${base})` : `${base} ${op} ${percent}`;
-                        });
-                    } else {
-                        expression = expression.replace(/(\d+\.?\d*)%/g, "($1/100)");
-                    }
-                }
-                let res = eval(expression);
-                res = Number.isInteger(res) ? res : parseFloat(res.toFixed(2));
-                calcVal = res.toString();
-                $('#calc-display').val(res.toLocaleString('id-ID'));
-            } catch(e) {
-                $('#calc-display').val("ERR");
-                setTimeout(clearCalc, 1000);
-            }
-        }
-
-        // --- ALERT ---
-        function showRetroAlert(msg, type = 'info', onConfirm = null, showCancel = false) {
-            const icons = { info: 'ℹ️', warn: '⚠️', success: '✅' };
-            $('#alertMessage').text(msg);
-            $('#alertIcon').text(icons[type] || 'ℹ️');
-            $('#customAlert').css('display', 'flex');
-            if (showCancel) $('#alertCancelBtn').removeClass('hidden');
-            else $('#alertCancelBtn').addClass('hidden');
-            $('#alertConfirmBtn').off('click').on('click', () => { $('#customAlert').hide(); if (onConfirm) onConfirm(); });
-            $('#alertCancelBtn').off('click').on('click', () => { $('#customAlert').hide(); });
-        }
-
-        // --- STOK ---
-        function simpanVoucherDatabase() {
-            const id = $('#productID').val();
-            const codes = $('#voucherCode').val();
-            if (!codes.trim()) return;
-            const codeArray = codes.split(',').map(i => i.trim()).filter(i => i !== "");
-            codeArray.forEach(code => { db.ref(`stok_voucher/${id}`).push(code); });
-            showRetroAlert("Stok Berhasil Ditambah!", "success");
-            $('#voucherCode').val("");
-        }
-
-        function monitorStokRealtime() {
-            db.ref('stok_voucher').on('value', (snap) => {
-                const data = snap.val() || {};
-                let html = "";
-                $('#productID option').each(function() {
-                    const id = $(this).val();
-                    const name = $(this).text();
-                    const count = data[id] ? Object.keys(data[id]).length : 0;
-                    html += `<div class="card-item">${name} <span class="badge-stok">${count} PCS</span></div>`;
-                });
-                $('#stockBodyRealtime').html(html);
-            });
-        }
-
-        // --- USERS & SALDO ---
-        function loadUsers() {
-            db.ref('users').on('value', (snap) => {
-                const container = document.getElementById('userListOtoritas');
-                const listDelAcc = document.getElementById('userListDelAcc');
-                if(!container) return;
-                container.innerHTML = "";
-                if(listDelAcc) listDelAcc.innerHTML = "";
-                snap.forEach((child) => {
-                    const u = child.val();
-                    const uid = child.key;
-                    container.innerHTML += `<div class="card-item user-card" data-search="${u.Nama} ${u.Username}"><b style="font-size:16px;">${u.Nama}</b><br>Saldo: <b>Rp ${u.Saldo ? u.Saldo.toLocaleString('id-ID') : 0}</b><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px;"><button onclick="editSaldo('${uid}', '${u.Nama}')" style="background:var(--lcd-text);color:var(--lcd-bg)">ISI SALDO</button><button onclick="viewHistory('${uid}')">RIWAYAT</button><button onclick="chatDuluan('${uid}', '${u.Nama}')" style="grid-column: span 2;">PESAN</button></div></div>`;
-                    if(listDelAcc) listDelAcc.innerHTML += `<div class="card-item"><b>${u.Nama}</b><br><button onclick="deleteAccount('${uid}', '${u.Nama}')" style="background:#4a0000; color:#fff;">HAPUS AKUN</button></div>`;
-                });
-            });
-        }
-
-        function deleteAccount(uid, nama) {
-            showRetroAlert(`HAPUS PERMANEN AKUN ${nama}?`, 'warn', () => {
-                db.ref(`users/${uid}`).remove().then(() => {
-                    showRetroAlert("AKUN DIHAPUS", "success");
-                });
-            }, true);
-        }
-
-        function editSaldo(uid, nama) {
-            selectedUID = uid; inputSaldo = "0";
-            $('#targetUserName').text(nama.toUpperCase());
-            $('#saldoDisplay').text("0");
-            $('#saldoModal').css('display', 'flex');
-        }
-        function pressNum(val) {
-            if (val === 'DEL') inputSaldo = inputSaldo.length > 1 ? inputSaldo.slice(0, -1) : "0";
-            else if (val === 'CLR') inputSaldo = "0";
-            else {
-                if (inputSaldo === "0") inputSaldo = val.toString();
-                else if (inputSaldo.length < 9) inputSaldo += val.toString();
-            }
-            $('#saldoDisplay').text(parseInt(inputSaldo).toLocaleString('id-ID'));
-        }
-        function closeSaldoModal() { $('#saldoModal').hide(); }
-        function prosesIsiSaldo() {
-            const jumlah = parseInt(inputSaldo);
-            if (jumlah <= 0) return;
-            showRetroAlert(`ISI SALDO RP ${jumlah.toLocaleString('id-ID')}?`, 'warn', () => {
-                db.ref(`users/${selectedUID}/Saldo`).transaction((s) => (s || 0) + jumlah, (err, comm) => {
-                    if (comm) {
-                        db.ref(`history/${selectedUID}`).push({ tanggal: new Date().toLocaleString(), produk: "TOPUP ADMIN", total: `+${jumlah}` });
-                        showRetroAlert("BERHASIL!", "success");
-                        closeSaldoModal();
-                    }
-                });
-            }, true);
-        }
-
-        // --- LOGIKA NOTIFIKASI ---
-        function loadNotifLog() {
-            db.ref('notifications').on('value', (snap) => {
-                const container = document.getElementById('notifListContainer');
-                if(!container) return;
-                container.innerHTML = "";
-                
-                let data = [];
-                snap.forEach(child => { data.push({ id: child.key, ...child.val() }); });
-
-                data.reverse().forEach(item => {
-                    container.innerHTML += `
-                        <div class="card-item" style="position:relative;">
-                            <small style="font-size:10px;">ID: ${item.uid || 'ALL'}</small><br>
-                            <b style="color:#4a0000;">${item.judul || 'No Title'}</b><br>
-                            <div style="font-size:12px; margin-top:5px;">${item.pesan || ''}</div>
-                            <div style="font-size:9px; margin-top:5px; opacity:0.7;">${item.tanggal || ''}</div>
-                            <button onclick="confirmDeleteNotif('${item.id}', '${item.uid}')" 
-                                style="margin-top:10px; background:#4a0000; color:white; padding:5px; font-size:10px;">
-                                HAPUS PERMANEN
-                            </button>
-                        </div>
-                    `;
-                });
-            });
-        }
-
-        function confirmDeleteNotif(notifId, targetUid) {
-            showRetroAlert("Hapus Notif ini dari Database & Device User?", "warn", () => {
-                db.ref(`notifications/${notifId}`).remove().then(() => {
-                    db.ref(`commands/${targetUid}`).push({
-                        action: "DELETE_LOCAL_NOTIF",
-                        targetId: notifId,
-                        timestamp: Date.now()
-                    });
-                    showRetroAlert("DATA DIHAPUS!", "success");
-                }).catch(err => showRetroAlert("GAGAL: " + err.message, "warn"));
-            }, true);
-        }
-
-        // --- CHAT LOGIC ---
-        function toggleImgInput() { $('#imgInputBox').toggleClass('hidden'); }
-
-        function chatDuluan(uid, nama) {
-            openApp('tab-chat', 'INBOX CHAT');
-            db.ref(`admin_inbox/${uid}`).once('value', (s) => {
-                if(!s.exists()) db.ref(`admin_inbox/${uid}`).set({ nama: nama, lastMsg: "...", timestamp: Date.now(), unread: false });
-                selectUser(uid, nama);
-            });
-        }
-
-        db.ref('admin_inbox').on('value', (snap) => {
-            const list = document.getElementById('userListChat');
-            const listDelChat = document.getElementById('userListDelChat');
-            if(!list) return;
-            list.innerHTML = "";
-            snap.forEach(child => {
-                const u = child.val();
-                list.innerHTML += `<div class="card-item" onclick="selectUser('${child.key}', '${u.nama}')"><b>${u.nama}</b><br><small>${u.lastMsg}</small> ${u.unread ? '(!)' : ''}</div>`;
-                if(listDelChat) listDelChat.innerHTML += `<div class="card-item">${u.nama} <button onclick="deleteChatUser('${child.key}')" style="background:#4a0000; color:#fff;">HAPUS</button></div>`;
-            });
-        });
-
-        function deleteChatUser(uid) {
-            showRetroAlert(`HAPUS SEMUA CHAT DENGAN USER INI?`, 'warn', () => {
-                db.ref(`admin_inbox/${uid}`).remove();
-                db.ref(`chats/${uid}`).remove();
-                showRetroAlert("CHAT DIHAPUS", "success");
-            }, true);
-        }
-
-        function selectUser(id, name) {
-            activeChatID = id;
-            $('#activeUserName').text("KE: " + name);
-            $('#userListChat').addClass('hidden');
-            $('#chatRoom').removeClass('hidden');
-            
-            db.ref(`chats/${id}`).off();
-            db.ref(`chats/${id}`).on('value', (snap) => {
-                const d = document.getElementById('chatDisplay'); 
-                d.innerHTML = "";
-                snap.forEach(c => {
-                    const m = c.val();
-                    let content = m.text;
-                    if (content && content.startsWith("[IMG]")) {
-                        const url = content.replace("[IMG]", "").trim();
-                        content = `<img src="${url}" style="max-width: 100%; border: 2px solid var(--lcd-text); margin-top: 5px; display: block;" onerror="this.src='https://via.placeholder.com/150?text=Gambar+Error'">`;
-                    } else {
-                        content = content ? content.replace(/\n/g, "<br>") : "";
-                    }
-                    const align = m.sender === 'admin' ? 'text-align:right' : 'text-align:left';
-                    const bgColor = m.sender === 'admin' ? 'background:rgba(0,0,0,0.05)' : 'background:white';
-                    d.innerHTML += `<div style="${align}; margin-bottom: 10px;"><div style="display:inline-block; padding:8px; border:1px solid var(--lcd-text); ${bgColor}; max-width:85%; word-wrap: break-word;"><small style="font-size:10px; opacity:0.6;">${m.sender.toUpperCase()}</small><br>${content}</div></div>`;
-                });
-                d.scrollTop = d.scrollHeight;
-            });
-            db.ref(`admin_inbox/${id}`).update({ unread: false });
-        }
-
-        function closeChat() { $('#chatRoom').addClass('hidden'); $('#userListChat').removeClass('hidden'); }
+<div id="auth-page">
+    <div class="auth-card">
+        <img src="https://nasukafoods.site/image/profil.jpg" class="logo-img">
+        <h1 style="margin:0; font-weight:900;">Nasuka Login</h1>
+        <p style="color:#64748b; margin-bottom:35px;">Akses saldo dan aset digital Anda</p>
         
-        function sendReply() {
-            const textMsg = $('#adminInput').val().trim();
-            const imgUrl = $('#adminImgUrl').val().trim();
-            if(!activeChatID) return;
-            let finalPayload = imgUrl !== "" ? "[IMG]" + imgUrl : textMsg;
-            if (!finalPayload) return;
+        <div class="input-group">
+            <label>Nomor WhatsApp</label>
+            <input type="tel" id="user-wa" class="auth-input" placeholder="085xxxxxxxx">
+        </div>
+        <div class="input-group">
+            <label>PIN Keamanan</label>
+            <input type="password" id="user-pin" class="auth-input" placeholder="4 Digit PIN">
+        </div>
+        
+        <button onclick="handleLogin()" class="btn-primary">MASUK SEKARANG</button>
+        <p style="margin-top:20px; font-size:12px; color:#94a3b8;">Sistem akan mendaftarkan nomor baru secara otomatis jika belum terdaftar.</p>
+    </div>
+</div>
 
-            db.ref(`chats/${activeChatID}`).push({ sender: 'admin', text: finalPayload, timestamp: Date.now() });
-            let preview = finalPayload.startsWith("[IMG]") ? "🖼️ Foto" : finalPayload.substring(0, 30);
-            db.ref(`admin_inbox/${activeChatID}`).update({ lastMsg: "Admin: " + preview, timestamp: Date.now(), unread: false });
+<div id="dashboard" class="page active-page">
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <small style="opacity:0.8;">Selamat Datang,</small>
+                <h3 id="display-name" style="margin:5px 0 0; font-weight:900;">Tamu</h3>
+            </div>
+            <img src="https://nasukafoods.site/image/profil.jpg" style="width:45px; height:45px; border-radius:50%; border:2px solid white;">
+        </div>
+    </div>
 
-            $('#adminInput').val('');
-            $('#adminImgUrl').val('');
-            $('#imgInputBox').addClass('hidden');
+    <div class="balance-overlay">
+        <div class="row-balance">
+            <div>
+                <small style="color:#64748b; font-weight:bold; font-size:11px;">SALDO RUPIAH</small>
+                <div class="amount-big" id="display-saldo">Rp 0</div>
+            </div>
+            <div class="gems-pill">
+                <i class="fas fa-gem"></i> <span id="display-gems">0</span> GEMS
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-menu">
+        <div class="menu-btn" onclick="openSlot()">
+            <div class="icon-box"><img src="https://nasukafoods.site/image/m3.jpg"></div>
+            <span>SLOT GACOR</span>
+        </div>
+        <div class="menu-btn" onclick="openAngkot()">
+            <div class="icon-box"><img src="https://nasukafoods.site/image/angkotkanan.jpg"></div>
+            <span>ANGKOT 3D</span>
+        </div>
+        <div class="menu-btn" onclick="alert('Admin WA: 0859109819017')">
+            <div class="icon-box"><img src="https://nasukafoods.site/image/informasi.jpg"></div>
+            <span>SUPPORT</span>
+        </div>
+        <div class="menu-btn" onclick="showHistory()">
+            <div class="icon-box"><img src="https://nasukafoods.site/image/xl.jpg"></div>
+            <span>RIWAYAT</span>
+        </div>
+    </div>
+
+    <div class="p-section">
+        <div style="font-weight:900; margin-bottom:15px; color:var(--nasuka-blue);">REKOMENDASI PRODUK</div>
+        <div id="product-container">
+            </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active"><i class="fas fa-home"></i>Home</div>
+        <div class="nav-item" onclick="alert('Segera Hadir')"><i class="fas fa-wallet"></i>Topup</div>
+        <div class="nav-item" onclick="logout()"><i class="fas fa-user-circle"></i>Keluar</div>
+    </div>
+</div>
+
+<div id="game-slot">
+    <div class="slot-top">
+        <div onclick="closeSlot()"><i class="fas fa-times-circle"></i> EXIT</div>
+        <div>NASUKA PRAGMATIC</div>
+        <div id="slot-gems-top">0 💎</div>
+    </div>
+    
+    <div class="slot-grid-container">
+        <div id="slot-canvas-grid"></div>
+    </div>
+
+    <div class="slot-footer">
+        <div id="win-text" class="win-display"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="background:#222; padding:10px 20px; border-radius:20px; border:1px solid #444;">
+                <small style="color:#888; display:block; font-size:10px;">BET</small>
+                <div id="bet-amount" style="color:white; font-weight:900;">500</div>
+            </div>
+            <button id="spin-btn" onclick="playSlot()" style="width:80px; height:80px; border-radius:50%; background:radial-gradient(circle, #facc15, #f59e0b); border:4px solid white; font-size:30px; color:white; box-shadow:0 0 20px rgba(245,158,11,0.5);">⚡</button>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+                <button onclick="adjustBet(100)" style="background:#333; color:white; border:none; border-radius:5px; padding:5px 10px;">+</button>
+                <button onclick="adjustBet(-100)" style="background:#333; color:white; border:none; border-radius:5px; padding:5px 10px;">-</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="game-angkot">
+    <button onclick="closeAngkot()" style="position:absolute; top:20px; right:20px; z-index:100; background:red; color:white; border:none; padding:10px 15px; border-radius:10px; font-weight:bold;">TUTUP</button>
+    <div class="angkot-ui">
+        <div style="font-size:24px; font-weight:900; color:gold;">GEMS: <span id="a-gems">0</span></div>
+        <div style="font-size:14px; opacity:0.8;">SKOR: <span id="a-score">0</span></div>
+    </div>
+    <div class="angkot-ctrl">
+        <div style="display:grid; grid-template-columns: repeat(3, 80px); gap:10px;">
+            <span></span><button class="a-btn" onclick="moveAngkot('up')">▲</button><span></span>
+            <button class="a-btn" onclick="moveAngkot('left')">◀</button><button class="a-btn" onclick="moveAngkot('down')">▼</button><button class="a-btn" onclick="moveAngkot('right')">▶</button>
+        </div>
+    </div>
+    <canvas id="angkot-canvas"></canvas>
+</div>
+
+<script>
+// --- CONFIG FIREBASE ---
+const firebaseConfig = {
+    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+    authDomain: "nasukafood1.firebaseapp.com",
+    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "nasukafoods1",
+    appId: "1:84287800896:web:83189d6766997b00f701a5"
+};
+
+firebase.initializeApp(firebaseConfig);
+const rtdb = firebase.database();
+
+// --- STATE UTAMA ---
+let U_ID = localStorage.getItem('nasuka_id');
+let U_DATA = null;
+let currentBet = 500;
+let isSpinning = false;
+
+// --- SISTEM AUTH ---
+async function handleLogin() {
+    const wa = document.getElementById('user-wa').value.trim();
+    const pin = document.getElementById('user-pin').value.trim();
+
+    if(wa.length < 10 || pin.length < 4) return alert("Data tidak valid!");
+
+    document.getElementById('main-loader').style.display = 'flex';
+
+    const snap = await rtdb.ref('users/' + wa).once('value');
+    if(snap.exists()) {
+        if(snap.val().PIN === pin) {
+            proceed(wa);
+        } else {
+            alert("PIN Salah!");
+            document.getElementById('main-loader').style.display = 'none';
         }
+    } else {
+        // Daftar baru
+        const newData = { Nama: "Kawan Nasuka", PIN: pin, Saldo: 0, Gems: 1000, Phone: wa };
+        await rtdb.ref('users/' + wa).set(newData);
+        proceed(wa);
+    }
+}
 
-        function switchCleanTab(type) {
-            $('.clean-nav button').removeClass('btn-active');
-            if(type === 'chat') { $('#btnSubChat').addClass('btn-active'); $('#sub-clean-chat').removeClass('hidden'); $('#sub-clean-acc').addClass('hidden'); }
-            else { $('#btnSubAcc').addClass('btn-active'); $('#sub-clean-acc').removeClass('hidden'); $('#sub-clean-chat').addClass('hidden'); }
+function proceed(id) {
+    localStorage.setItem('nasuka_id', id);
+    U_ID = id;
+    location.reload();
+}
+
+function logout() {
+    localStorage.removeItem('nasuka_id');
+    location.reload();
+}
+
+// --- SYNC DATA REALTIME ---
+function initDataSync() {
+    if(!U_ID) {
+        document.getElementById('auth-page').style.display = 'flex';
+        document.getElementById('main-loader').style.display = 'none';
+        return;
+    }
+
+    rtdb.ref('users/' + U_ID).on('value', snap => {
+        U_DATA = snap.val();
+        if(U_DATA) {
+            document.getElementById('display-name').innerText = U_DATA.Nama;
+            document.getElementById('display-saldo').innerText = "Rp " + U_DATA.Saldo.toLocaleString();
+            document.getElementById('display-gems').innerText = U_DATA.Gems.toLocaleString();
+            document.getElementById('slot-gems-top').innerText = U_DATA.Gems.toLocaleString() + " 💎";
+            document.getElementById('a-gems').innerText = U_DATA.Gems.toLocaleString();
+            
+            document.getElementById('main-loader').style.display = 'none';
         }
+    });
+}
 
-        function searchUser() {
-            const val = $('#adminSearch').val().toLowerCase();
-            $('.user-card').each(function() { $(this).toggle($(this).attr('data-search').toLowerCase().includes(val)); });
+// --- PRODUK ---
+const items = [
+    { n: "Axis 5GB 1 Hari", p: 7000, i: "axis.jpg" },
+    { n: "XL Extra 10GB", p: 12000, i: "xl.jpg" },
+    { n: "Isi Saldo 25rb", p: 25500, i: "qris.jpg" }
+];
+
+function renderStore() {
+    const cont = document.getElementById('product-container');
+    cont.innerHTML = items.map(x => `
+        <div class="p-card">
+            <img src="https://nasukafoods.site/image/${x.i}" class="p-img">
+            <div class="p-info">
+                <div class="p-name">${x.n}</div>
+                <div class="p-price">Rp ${x.p.toLocaleString()}</div>
+            </div>
+            <button class="p-btn" onclick="buyItem('${x.n}', ${x.p})">BELI</button>
+        </div>
+    `).join('');
+}
+
+async function buyItem(name, price) {
+    if(U_DATA.Saldo < price) return alert("Saldo Rupiah Tidak Cukup!");
+    if(confirm("Beli " + name + "?")) {
+        await rtdb.ref('users/' + U_ID).update({ Saldo: U_DATA.Saldo - price });
+        alert("Pembelian Berhasil!");
+    }
+}
+
+// --- SLOT ENGINE ---
+const icons = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg', 'qris.jpg'];
+function initSlot() {
+    const grid = document.getElementById('slot-canvas-grid');
+    grid.innerHTML = '';
+    for(let i=0; i<25; i++) {
+        const div = document.createElement('div');
+        div.className = 'slot-tile';
+        div.innerHTML = `<img src="https://nasukafoods.site/image/${icons[Math.floor(Math.random()*icons.length)]}">`;
+        grid.appendChild(div);
+    }
+}
+
+function adjustBet(v) {
+    currentBet = Math.max(100, currentBet + v);
+    document.getElementById('bet-amount').innerText = currentBet;
+}
+
+async function playSlot() {
+    if(isSpinning || U_DATA.Gems < currentBet) return;
+    
+    isSpinning = true;
+    document.getElementById('spin-btn').disabled = true;
+    document.getElementById('win-text').innerText = "";
+
+    // Potong gems
+    await rtdb.ref('users/' + U_ID + '/Gems').set(U_DATA.Gems - currentBet);
+
+    let count = 0;
+    const interval = setInterval(() => {
+        initSlot();
+        count++;
+        if(count > 15) {
+            clearInterval(interval);
+            finishSlot();
         }
+    }, 100);
+}
 
-        function viewHistory(uid) {
-            selectedUID = uid;
-            $('#historyModal').show();
-            db.ref(`history/${uid}`).limitToLast(15).on('value', (snap) => {
-                let h = "";
-                snap.forEach(c => { h += `<div class="card-item">${c.val().tanggal}<br><b>${c.val().produk}</b> [${c.val().total}]</div>`; });
-                $('#historyContent').html(h || "Kosong");
-            });
+async function finishSlot() {
+    const winChance = Math.random();
+    let winAmt = 0;
+    
+    if(winChance > 0.85) {
+        winAmt = currentBet * 5;
+        document.getElementById('win-text').innerText = "BIG WIN! +💎" + winAmt;
+    } else if(winChance > 0.6) {
+        winAmt = Math.floor(currentBet * 1.5);
+        document.getElementById('win-text').innerText = "WIN +💎" + winAmt;
+    }
+
+    if(winAmt > 0) {
+        await rtdb.ref('users/' + U_ID + '/Gems').set(U_DATA.Gems + winAmt);
+    }
+
+    isSpinning = false;
+    document.getElementById('spin-btn').disabled = false;
+}
+
+function openSlot() { document.getElementById('game-slot').style.display = 'flex'; initSlot(); }
+function closeSlot() { document.getElementById('game-slot').style.display = 'none'; }
+
+// --- ANGKOT 3D ENGINE ---
+let a_scene, a_camera, a_renderer, a_player;
+let a_active = false;
+let a_score = 0;
+
+function openAngkot() {
+    document.getElementById('game-angkot').style.display = 'block';
+    a_active = true;
+    initAngkot();
+}
+
+function closeAngkot() {
+    document.getElementById('game-angkot').style.display = 'none';
+    a_active = false;
+}
+
+function initAngkot() {
+    const cvs = document.getElementById('angkot-canvas');
+    a_scene = new THREE.Scene();
+    a_camera = new THREE.OrthographicCamera(window.innerWidth/-2, window.innerWidth/2, window.innerHeight/2, window.innerHeight/-2, 1, 1000);
+    a_camera.position.set(0, -200, 200);
+    a_camera.lookAt(0,0,0);
+
+    a_renderer = new THREE.WebGLRenderer({ canvas: cvs, antialias: true, alpha: true });
+    a_renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(0, -100, 100);
+    a_scene.add(light);
+    a_scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+    // Player
+    a_player = new THREE.Mesh(new THREE.BoxGeometry(35, 35, 35), new THREE.MeshLambertMaterial({color: 0x3b82f6}));
+    a_player.position.z = 17.5;
+    a_scene.add(a_player);
+
+    // Floor Base
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshLambertMaterial({color: 0x10b981}));
+    a_scene.add(floor);
+
+    requestAnimationFrame(a_loop);
+}
+
+function a_loop() {
+    if(!a_active) return;
+    a_renderer.render(a_scene, a_camera);
+    requestAnimationFrame(a_loop);
+}
+
+async function moveAngkot(dir) {
+    if(!a_active) return;
+    if(dir === 'up') {
+        a_player.position.y += 40;
+        a_score++;
+        document.getElementById('a-score').innerText = a_score;
+        a_camera.position.y += 40;
+        // Reward Gems tiap 5 langkah
+        if(a_score % 5 === 0) {
+            await rtdb.ref('users/' + U_ID + '/Gems').set(U_DATA.Gems + 50);
         }
+    }
+    if(dir === 'down') a_player.position.y -= 40;
+    if(dir === 'left') a_player.position.x -= 40;
+    if(dir === 'right') a_player.position.x += 40;
+}
 
-        function deleteHistory() {
-            if (!selectedUID) return;
-            showRetroAlert("Hapus semua riwayat user ini?", "warn", () => {
-                db.ref(`history/${selectedUID}`).remove().then(() => {
-                    showRetroAlert("RIWAYAT DIBERSIHKAN", "success");
-                });
-            }, true);
-        }
+// --- INIT APP ---
+window.onload = () => {
+    initDataSync();
+    renderStore();
+};
+</script>
 
-        function closeModal() { $('#historyModal').hide(); db.ref(`history/${selectedUID}`).off(); }
-
-        $(document).ready(() => { loadUsers(); monitorStokRealtime(); });
-    </script>
 </body>
 </html>
