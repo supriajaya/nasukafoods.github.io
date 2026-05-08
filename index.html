@@ -3,730 +3,762 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nasuka Digital Ecosystem</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+    <title>Nasuka Admin - Retro Panel Bright</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        :root { 
-            --primary: #00529C; --secondary: #f37021; --bg-body: #f4f7fa; 
-            --text-main: #2c3e50; --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --danger: #ef4444; --success: #10b981; --gold: #FFD700;
-            --gold-bright: #FFF700; --tile-white: #fff; --tile-shadow: #ddd;
-            --retro-border: 3px solid #2c3e50; --retro-shadow: 4px 4px 0px #2c3e50;
-            --retro-shadow-active: 1px 1px 0px #2c3e50;
+        :root {
+            --lcd-bg: #c5dcc0; 
+            --lcd-text: #1a1d15;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            font-weight: 800 !important; 
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: var(--lcd-bg);
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            color: var(--lcd-text);
+        }
+
+        body::before {
+            content: " "; display: block; position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.03) 50%);
+            z-index: 100; background-size: 100% 3px; pointer-events: none;
+        }
+
+        .container { display: flex; flex-direction: column; height: 100vh; padding: 10px; }
+        .header { 
+            flex-shrink: 0; 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 16px; 
+            border-bottom: 3px solid var(--lcd-text); 
+            padding-bottom: 5px; 
+            margin-bottom: 5px; 
+        }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; flex: 1; align-content: start; overflow-y: auto; }
+        .menu-item {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; border: 3px solid var(--lcd-text); padding: 5px; height: 110px; cursor: pointer;
+            background: rgba(255,255,255,0.2);
+        }
+        .menu-item:active { background-color: var(--lcd-text); color: var(--lcd-bg); }
+        .icon { font-size: 32px; margin-bottom: 5px; }
+        .label { font-size: 12px; text-transform: uppercase; }
+
+        #app-screen { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
+        .app-title { flex-shrink: 0; text-align: center; border-bottom: 2px solid var(--lcd-text); margin-bottom: 8px; font-size: 16px; text-transform: uppercase; padding: 5px; }
         
-        body { 
-            background-color: var(--bg-body); font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; color: var(--text-main); overflow-x: hidden; touch-action: manipulation;
+        .app-body { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding-right: 5px; 
+            font-size: 14px; 
+            -webkit-overflow-scrolling: touch; 
         }
 
-        /* --- LOADING OVERLAY --- */
-        #loading-screen {
-            position: fixed; inset: 0; background: var(--primary); z-index: 99999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
+        input, select, textarea, button {
+            background: rgba(255,255,255,0.3); border: 2px solid var(--lcd-text);
+            color: var(--lcd-text); font-family: inherit; width: 100%;
+            margin-bottom: 8px; padding: 10px; outline: none; border-radius: 0;
+            font-size: 14px;
         }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 1s infinite linear; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        button { cursor: pointer; text-transform: uppercase; }
+        button:active { background: var(--lcd-text); color: var(--lcd-bg); }
 
-        /* --- AUTH PAGE --- */
-        #login-page { position: fixed; inset: 0; background: white; z-index: 10000; padding: 40px 25px; display: none; text-align: center; }
-        .auth-container { max-width: 400px; margin: 0 auto; }
-        .auth-logo { width: 100px; height: 100px; border-radius: 25px; margin-bottom: 20px; box-shadow: var(--shadow); }
-        .auth-input { width: 100%; padding: 18px; border-radius: 15px; border: 2px solid #e2e8f0; margin-bottom: 15px; font-size: 16px; outline: none; transition: 0.3s; }
-        .auth-input:focus { border-color: var(--primary); }
-
-        /* --- DASHBOARD / HOME --- */
-        .hero-section { background: var(--primary); padding: 30px 20px 70px; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .user-info h1 { margin: 5px 0; font-size: 24px; }
-        .top-avatar { width: 50px; height: 50px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover; }
-
-        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 20px; background: white; margin: -40px 15px 20px; border-radius: 24px; box-shadow: var(--shadow); position: relative; z-index: 10; }
-        .menu-item { text-align: center; cursor: pointer; }
-        .menu-icon { width: 55px; height: 55px; background: #f0f7ff; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; transition: 0.2s; }
-        .menu-icon:active { transform: scale(0.9); background: #e0efff; }
-        .menu-icon img { width: 35px; height: 35px; object-fit: contain; }
-        .menu-item span { font-size: 12px; font-weight: 800; color: #475569; }
-
-        .balance-card { background: linear-gradient(135deg, #00529C 0%, #0076de 100%); padding: 25px; border-radius: 24px; color: white; margin: 0 15px 25px; position: relative; overflow: hidden; }
-        .balance-card::after { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; }
-        .balance-label { font-size: 13px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
-        .balance-value { font-size: 32px; font-weight: 900; margin: 10px 0; }
-        .gems-badge { display: inline-flex; align-items: center; background: rgba(0,0,0,0.2); padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
-
-        /* --- PRODUCT LIST --- */
-        .section-title { padding: 0 20px; font-weight: 800; color: var(--primary); margin-bottom: 15px; display: flex; justify-content: space-between; }
-        .voucher-container { padding: 0 15px; }
-        .voucher-card { background: white; border-radius: 20px; margin-bottom: 12px; box-shadow: var(--shadow); display: flex; align-items: center; padding: 15px; border: 1px solid #f1f5f9; }
-        .voucher-img { width: 65px; height: 65px; border-radius: 15px; object-fit: cover; margin-right: 15px; }
-        .voucher-info { flex: 1; }
-        .voucher-info b { font-size: 16px; color: #1e293b; }
-        .voucher-info p { margin: 4px 0 0; color: var(--secondary); font-weight: 900; font-size: 15px; }
-
-        .btn-beli { background: #6BCB77; color: #2c3e50; border: var(--retro-border); padding: 10px 20px; border-radius: 12px; font-weight: 900; cursor: pointer; box-shadow: var(--retro-shadow); transition: 0.1s; font-size: 14px; }
-        .btn-beli:active { transform: translate(2px, 2px); box-shadow: var(--retro-shadow-active); }
-
-        /* --- SLOT MACHINE PAGE --- */
-        #slot-page {
-            position: fixed; inset: 0; background: #000; z-index: 5000;
-            display: none; flex-direction: column;
-            background-image: url('https://nasukafoods.site/image/qris.jpg'); 
-            background-size: cover; background-position: center;
-        }
-        #slot-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.7); color: white; border-bottom: 2px solid var(--gold); }
+        .card-item { border: 2px solid var(--lcd-text); padding: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.4); }
+        .footer { flex-shrink: 0; display: flex; justify-content: space-between; font-size: 18px; border-top: 3px solid var(--lcd-text); padding-top: 8px; margin-top: 5px; }
         
-        #multiplier-bar { display: flex; justify-content: space-around; padding: 15px; background: rgba(0,0,0,0.5); }
-        .mult-box { width: 55px; height: 35px; border: 2px solid #555; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #222; opacity: 0.4; transition: 0.3s; }
-        .mult-box.active { opacity: 1; border-color: var(--gold); box-shadow: 0 0 15px var(--gold); transform: scale(1.1); background: #000; }
-        .mult-box img { width: 80%; height: 80%; object-fit: contain; }
-
-        #grid-container {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px;
-            padding: 10px; margin: 20px auto; width: 95%; aspect-ratio: 1/1;
-            background: rgba(0,0,0,0.6); border: 4px solid #333; border-radius: 15px;
-            position: relative; overflow: hidden;
-        }
-        .tile { background: white; border-radius: 8px; display: flex; justify-content: center; align-items: center; position: relative; transition: 0.2s; }
-        .tile img { width: 85%; height: 85%; object-fit: contain; }
-        .tile.winning { animation: pulse-win 0.5s infinite alternate; z-index: 2; }
-        @keyframes pulse-win { from { transform: scale(1); filter: brightness(1); } to { transform: scale(1.1); filter: brightness(1.5); border: 2px solid gold; } }
-
-        #slot-controls { background: rgba(0,0,0,0.9); padding: 20px; border-top: 3px solid #444; border-top-left-radius: 30px; border-top-right-radius: 30px; margin-top: auto; }
-        .stat-row { display: flex; gap: 15px; margin-bottom: 20px; }
-        .stat-box { flex: 1; background: #1a1a1a; padding: 12px; border-radius: 15px; text-align: center; border: 1px solid #333; }
-        .stat-box small { color: #888; font-size: 10px; text-transform: uppercase; }
-        .stat-box div { font-weight: 900; font-size: 18px; }
-
-        .spin-btn { 
-            width: 80px; height: 80px; background: radial-gradient(circle, #ff4e50, #f9d423); 
-            border: 5px solid #fff; border-radius: 50%; font-size: 30px; color: #fff;
-            box-shadow: 0 0 20px rgba(255, 78, 80, 0.6); cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-        .spin-btn:disabled { filter: grayscale(1); opacity: 0.5; }
-
-        /* --- ANGKOT CROSSER 3D --- */
-        #angkot-page { position: fixed; inset: 0; background: #111; z-index: 6000; display: none; }
-        #angkot-canvas { width: 100%; height: 100%; display: block; }
-        #angkot-ui { position: absolute; top: 70px; left: 20px; color: white; pointer-events: none; z-index: 100; }
-        .angkot-btn-exit { position: absolute; top: 15px; left: 15px; padding: 10px 20px; background: var(--danger); color: white; border: none; border-radius: 30px; font-weight: bold; z-index: 100; }
+        .hidden { display: none !important; }
+        .badge-stok { border: 2px solid var(--lcd-text); padding: 2px 6px; margin-left: 5px; background: var(--lcd-text); color: var(--lcd-bg); }
         
-        #angkot-controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; gap: 20px; z-index: 100; }
-        .ctrl-grid { display: grid; grid-template-columns: repeat(3, 70px); gap: 15px; }
-        .btn-ctrl { width: 70px; height: 70px; background: white; border-radius: 15px; border: none; font-size: 24px; box-shadow: 0 5px 0 #ccc; display: flex; align-items: center; justify-content: center; }
-        .btn-ctrl:active { transform: translateY(4px); box-shadow: 0 1px 0 #ccc; }
+        .app-content { height: 100%; display: flex; flex-direction: column; }
+        #userListOtoritas { flex: 1; overflow-y: auto; padding-bottom: 20px; }
 
-        #game-over-screen { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; color: white; z-index: 200; }
+        /* Media Tab Specific */
+        #resultMedia { margin-top: 10px; padding: 10px; border: 2px dashed var(--lcd-text); font-size: 11px; word-break: break-all; min-height: 40px; }
 
-        /* --- MODAL SYSTEM --- */
-        #nasuka-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 30000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-card { background: white; width: 100%; max-width: 350px; border-radius: 30px; padding: 35px 25px; text-align: center; position: relative; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes modalPop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-icon { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-        .modal-success { background: #ecfdf5; color: #10b981; }
-        .modal-error { background: #fef2f2; color: #ef4444; }
+        #historyModal, #saldoModal, #customAlert { 
+            display: none; position: fixed; inset: 0; background: var(--lcd-bg); z-index: 500; padding: 20px; overflow-y: auto; 
+        }
+        #saldoModal { flex-direction: column; z-index: 600; }
 
-        .page-content { display: none; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
-        .active { display: block !important; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #customAlert {
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .alert-box {
+            border: 3px solid var(--lcd-text);
+            padding: 15px;
+            width: 100%;
+            max-width: 280px;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; flex: 1; margin-top: 10px; }
+        .display-saldo { font-size: 26px; text-align: center; border: 3px solid var(--lcd-text); padding: 15px; margin-bottom: 10px; background: #fff; }
+        
+        .clean-nav { display: flex; gap: 5px; margin-bottom: 10px; }
+        .clean-nav button { padding: 8px 0; margin-bottom: 0; flex: 1; font-size: 12px; }
+        .btn-active { background: var(--lcd-text) !important; color: var(--lcd-bg) !important; }
+
+        .calc-display {
+            background: #fff;
+            border: 3px solid var(--lcd-text);
+            padding: 15px;
+            font-size: 24px;
+            text-align: right;
+            margin-bottom: 10px;
+            width: 100%;
+            height: 60px;
+            color: #000;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .calc-grid button {
+            padding: 15px 5px;
+            margin-bottom: 0;
+            font-size: 18px;
+        }
+        .btn-op { background: rgba(0,0,0,0.1); }
+        .btn-eq { background: var(--lcd-text); color: var(--lcd-bg); }
     </style>
 </head>
 <body>
 
-<div id="loading-screen">
-    <div class="spinner"></div>
-    <p style="margin-top:20px; font-weight:bold; letter-spacing:2px;">MEMUAT DATA...</p>
-</div>
-
-<div id="nasuka-modal-overlay">
-    <div class="modal-card">
-        <div id="m-icon" class="modal-icon"></div>
-        <h2 id="m-title" style="margin:0 0 10px;">Judul</h2>
-        <p id="m-msg" style="color:#64748b; margin-bottom:25px;">Pesan Anda di sini.</p>
-        <button onclick="closeModal()" class="btn-beli" style="width:100%; padding:15px;">MENGERTI</button>
-    </div>
-</div>
-
-<div id="login-page">
-    <div class="auth-container">
-        <img src="https://nasukafoods.site/image/profil.jpg" class="auth-logo">
-        <h1 style="margin-bottom:5px;">Nasuka Digital</h1>
-        <p style="color:#64748b; margin-bottom:30px;">Silakan login untuk mengakses aset digital Anda</p>
-        <input type="tel" id="login-wa" class="auth-input" placeholder="Nomor WhatsApp (08xxxx)">
-        <input type="password" id="login-pin" class="auth-input" placeholder="PIN Keamanan (4 Digit)">
-        <button onclick="processLogin()" class="btn-beli" style="width:100%; padding:18px; font-size:16px;">MASUK KE AKUN</button>
-        <p style="margin-top:20px; font-size:13px; color:#94a3b8;">Belum punya akun? Masukkan nomor baru untuk mendaftar otomatis.</p>
-    </div>
-</div>
-
-<div id="home-page" class="page-content">
-    <div class="hero-section">
-        <div class="user-info">
-            <span>Selamat Datang,</span>
-            <h1 id="user-display-name">Tamu</h1>
-        </div>
-        <img onclick="showPage('profile-page')" src="https://nasukafoods.site/image/profil.jpg" class="top-avatar">
-    </div>
-
-    <div class="menu-grid">
-        <div class="menu-item" onclick="showSlotGame()">
-            <div class="menu-icon"><img src="https://nasukafoods.site/image/m3.jpg"></div>
-            <span>SLOT</span>
-        </div>
-        <div class="menu-item" onclick="showAngkotGame()">
-            <div class="menu-icon"><img src="https://nasukafoods.site/image/angkotkanan.jpg"></div>
-            <span>ANGKOT</span>
-        </div>
-        <div class="menu-item" onclick="showModal('info', 'Layanan Nasuka', 'Hubungi WhatsApp Admin di 0859109819017 untuk bantuan.')">
-            <div class="menu-icon"><img src="https://nasukafoods.site/image/informasi.jpg"></div>
-            <span>INFO</span>
-        </div>
-        <div class="menu-item" onclick="showPage('history-page')">
-            <div class="menu-icon"><img src="https://nasukafoods.site/image/xl.jpg"></div>
-            <span>RIWAYAT</span>
-        </div>
-    </div>
-
-    <div class="balance-card">
-        <div class="balance-label">Total Saldo Rupiah</div>
-        <div class="balance-value" id="val-saldo">Rp 0</div>
-        <div class="gems-badge">💎 <span id="val-gems">0</span> GEMS</div>
-    </div>
-
-    <div class="section-title">
-        <span>PRODUK DIGITAL</span>
-        <span style="font-size:12px; color:#94a3b8; font-weight:normal;">Lihat Semua</span>
-    </div>
-    <div id="product-list" class="voucher-container"></div>
-</div>
-
-<div id="profile-page" class="page-content" style="padding:20px;">
-    <button onclick="showPage('home-page')" class="btn-beli" style="background:white; margin-bottom:20px;">← KEMBALI</button>
-    <div style="background:white; border-radius:24px; padding:30px; text-align:center; box-shadow:var(--shadow);">
-        <img src="https://nasukafoods.site/image/profil.jpg" style="width:100px; height:100px; border-radius:50%; margin-bottom:15px; border:4px solid var(--primary);">
-        <h2 id="p-name" style="margin:0;">-</h2>
-        <p id="p-phone" style="color:#64748b; margin-top:5px;">-</p>
-        <hr style="margin:20px 0; border:0; border-top:1px solid #f1f5f9;">
-        <button onclick="exchangeGems()" class="btn-beli" style="width:100%; background:var(--primary); color:white; margin-bottom:12px;">BELI 25.000 GEMS (Rp 500)</button>
-        <button onclick="logout()" class="btn-beli" style="width:100%; background:var(--danger); color:white;">KELUAR AKUN</button>
-    </div>
-</div>
-
-<div id="history-page" class="page-content" style="padding:20px;">
-    <button onclick="showPage('home-page')" class="btn-beli" style="background:white; margin-bottom:20px;">← KEMBALI</button>
-    <div id="history-items">
-        <div style="text-align:center; padding:50px; color:#94a3b8;">Belum ada riwayat transaksi.</div>
-    </div>
-</div>
-
-<div id="slot-page">
-    <div id="slot-header">
-        <div onclick="exitSlot()" style="font-weight:900; color:var(--gold); cursor:pointer;">← EXIT</div>
-        <div style="font-weight:900; letter-spacing:2px;">NASUKA PRAGMATIC</div>
-        <div><i class="fas fa-bars"></i></div>
-    </div>
-
-    <div id="multiplier-bar">
-        <div class="mult-box" id="m2x"><img src="https://nasukafoods.site/image/1x.png"></div>
-        <div class="mult-box" id="m3x"><img src="https://nasukafoods.site/image/2x.png"></div>
-        <div class="mult-box" id="m5x"><img src="https://nasukafoods.site/image/3x.png"></div>
-        <div class="mult-box" id="m10x"><img src="https://nasukafoods.site/image/5x.png"></div>
-    </div>
-
-    <div id="grid-container"></div>
-
-    <div id="slot-controls">
-        <div class="stat-row">
-            <div class="stat-box">
-                <small>MY GEMS</small>
-                <div id="slot-gems-display" style="color:cyan;">0</div>
-            </div>
-            <div class="stat-box">
-                <small>TOTAL WIN</small>
-                <div id="slot-win-display" style="color:var(--success);">0</div>
+    <div id="customAlert">
+        <div class="alert-box">
+            <div id="alertIcon" style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
+            <div id="alertMessage" style="margin-bottom: 20px; text-transform: uppercase;">PESAN</div>
+            <div id="alertButtons" style="display: flex; gap: 10px;">
+                <button id="alertConfirmBtn" style="background: var(--lcd-text); color: var(--lcd-bg);">OKE</button>
+                <button id="alertCancelBtn" class="hidden">BATAL</button>
             </div>
         </div>
+    </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="display:flex; align-items:center; gap:15px; background:#1a1a1a; padding:10px 20px; border-radius:40px; border:1px solid #333;">
-                <button onclick="changeBet(-100)" style="background:none; border:none; color:white; font-size:24px;">-</button>
-                <div style="text-align:center; min-width:80px;">
-                    <small style="color:#888; font-size:9px;">TARUHAN</small>
-                    <div id="slot-bet-display" style="color:var(--gold); font-weight:900;">500</div>
+    <div class="container">
+        <div class="header">
+            <span>📶 NASUKA ADMIN</span>
+            <span id="time">00:00</span>
+            <span>🔋</span>
+        </div>
+
+        <div id="main-view" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+            <div id="menu-grid" class="menu-grid">
+                <div class="menu-item" onclick="openApp('tab-chat', 'INBOX CHAT')">
+                    <div class="icon">✉️</div><div class="label">Chat</div>
                 </div>
-                <button onclick="changeBet(100)" style="background:none; border:none; color:white; font-size:24px;">+</button>
+                <div class="menu-item" onclick="openApp('tab-stok-input', 'STOK VOUCHER')">
+                    <div class="icon">📦</div><div class="label">Stok</div>
+                </div>
+                <div class="menu-item" onclick="openApp('tab-otoritas', 'KELOLA USER')">
+                    <div class="icon">👥</div><div class="label">Otoritas</div>
+                </div>
+                <div class="menu-item" onclick="openApp('tab-media', 'MANAGEMENT MEDIA')">
+                    <div class="icon">🖼️</div><div class="label">Media</div>
+                </div>
+               
+                <div class="menu-item" onclick="openApp('tab-del', 'BERSIHKAN DATA')">
+                    <div class="icon">🗑️</div><div class="label">Bersih</div>
+                </div>
+                <div class="menu-item" onclick="openApp('tab-kal', 'KALKULATOR')">
+                    <div class="icon">📝</div><div class="label">Kalkulator</div>
+                </div>
             </div>
 
-            <button id="spin-trigger" onclick="startSpin()" class="spin-btn">⚡</button>
+            <div id="app-screen">
+                <div id="app-title" class="app-title">TITLE</div>
+                <div id="app-body" class="app-body">
+                    
+                    <div id="content-tab-chat" class="app-content hidden">
+                        <div id="userListChat"></div>
+                        <div id="chatRoom" class="hidden">
+                            <button onclick="closeChat()">[ KEMBALI ]</button>
+                            <div id="activeUserName" style="border-bottom: 2px solid var(--lcd-text); padding: 5px; font-weight: bold;"></div>
+                            
+                            <div id="chatDisplay" style="height: 250px; overflow-y: auto; border: 2px solid var(--lcd-text); margin: 5px 0; padding: 10px; background: rgba(255,255,255,0.2);"></div>
+                            
+                            <div id="imgInputBox" class="hidden" style="margin-bottom: 5px; border: 2px dashed var(--lcd-text); padding: 5px;">
+                                <small>MASUKKAN URL GAMBAR:</small>
+                                <input type="text" id="adminImgUrl" placeholder="https://contoh.com/gambar.jpg">
+                            </div>
 
-            <div style="background:#1a1a1a; padding:15px; border-radius:15px; border:1px solid #333;">
-                <i class="fas fa-history" style="color:#888;"></i>
+                            <textarea id="adminInput" placeholder="Ketik balasan..." style="height: 60px; margin-bottom: 5px;"></textarea>
+                            
+                            <div style="display: flex; gap: 5px;">
+                                <button onclick="toggleImgInput()" style="flex: 1; background: #eee;">🖼️ FOTO</button>
+                                <button onclick="sendReply()" style="flex: 2; background: var(--lcd-text); color: var(--lcd-bg);">KIRIM</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="content-tab-stok-input" class="app-content hidden">
+                        <select id="productID">
+                            <optgroup label="Voucher Data">
+                                <option value="ax1">Axis 500MB (ax1)</option>
+                                <option value="ax2">Axis 5GB 1hr (ax2)</option>
+                                <option value="ts1">Tsel Bandung (ts1)</option>
+                                <option value="is1">Indosat 5GB (is1)</option>
+                            </optgroup>
+                            <optgroup label="Wifi">
+                                <option value="nc1">Nits 6Jam (nc1)</option>
+                                <option value="nc2">Nits 12Jam (nc2)</option>
+                            </optgroup>
+                        </select>
+                        <textarea id="voucherCode" placeholder="Kode SN (Pisah Koma)"></textarea>
+                        <button onclick="simpanVoucherDatabase()">TAMBAH STOK</button>
+                        <hr style="border: 1px dashed var(--lcd-text)">
+                        <b style="font-size: 16px;">SISA STOK:</b>
+                        <div id="stockBodyRealtime"></div>
+                    </div>
+
+                    <div id="content-tab-otoritas" class="app-content hidden">
+                        <input type="text" id="adminSearch" onkeyup="searchUser()" placeholder="Cari Nama/WA...">
+                        <div id="userListOtoritas"></div>
+                    </div>
+
+                    <div id="content-tab-media" class="app-content hidden">
+                        <div class="card-item">
+                            <p><b>UPLOAD FOTO KE SERVER</b></p>
+                            <input type="file" id="pilihFoto" accept="image/*" onchange="isiNamaOtomatis()">
+                            <input type="text" id="namaKustom" placeholder="Nama file (tanpa .jpg)">
+                            <button onclick="prosesUpload()" style="background: #28a745; color: white;">UPLOAD KE GITHUB</button>
+                        </div>
+                        <div class="card-item">
+                            <p><b>HAPUS FOTO PERMANEN</b></p>
+                            <input type="text" id="namaHapus" placeholder="Nama file (contoh: profil.jpg)">
+                            <button onclick="prosesHapus()" style="background: #dc3545; color: white;">HAPUS DARI SERVER</button>
+                        </div>
+                        <div id="resultMedia">Status: Menunggu aksi...</div>
+                    </div>
+
+                    <div id="content-tab-notif" class="app-content hidden">
+                        <div style="margin-bottom: 10px; font-size: 11px; border-bottom: 1px solid var(--lcd-text); padding-bottom: 5px;">
+                            * Menghapus di sini akan menghapus data di Database (RTDB) & Lokal Device User.
+                        </div>
+                        <div id="notifListContainer"></div>
+                    </div>
+
+                    <div id="content-tab-del" class="app-content hidden">
+                        <div class="clean-nav">
+                            <button id="btnSubChat" onclick="switchCleanTab('chat')" class="btn-active">CHAT</button>
+                            <button id="btnSubAcc" onclick="switchCleanTab('acc')">AKUN</button>
+                        </div>
+                        <div id="sub-clean-chat"><div id="userListDelChat"></div></div>
+                        <div id="sub-clean-acc" class="hidden"><div id="userListDelAcc"></div></div>
+                    </div>
+
+                    <div id="content-tab-kal" class="app-content hidden">
+                        <input type="text" id="calc-display" class="calc-display" placeholder="0" readonly>
+                        <div class="calc-grid">
+                            <button onclick="clearCalc()" style="color: #4a0000;">C</button>
+                            <button onclick="delCalc()">⌫</button>
+                            <button class="btn-op" onclick="inputCalc('%')">%</button>
+                            <button class="btn-op" onclick="inputCalc('/')">÷</button>
+                            
+                            <button onclick="inputCalc('7')">7</button>
+                            <button onclick="inputCalc('8')">8</button>
+                            <button onclick="inputCalc('9')">9</button>
+                            <button class="btn-op" onclick="inputCalc('*')">×</button>
+                            
+                            <button onclick="inputCalc('4')">4</button>
+                            <button onclick="inputCalc('5')">5</button>
+                            <button onclick="inputCalc('6')">6</button>
+                            <button class="btn-op" onclick="inputCalc('-')">-</button>
+                            
+                            <button onclick="inputCalc('1')">1</button>
+                            <button onclick="inputCalc('2')">2</button>
+                            <button onclick="inputCalc('3')">3</button>
+                            <button class="btn-op" onclick="inputCalc('+')">+</button>
+                            
+                            <button onclick="inputCalc('0')">0</button>
+                            <button onclick="inputCalc('.')">.</button>
+                            <button class="btn-eq" style="grid-column: span 2;" onclick="execCalc()">=</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div id="angkot-page">
-    <button class="angkot-btn-exit" onclick="exitAngkot()">KELUAR</button>
-    <div id="angkot-ui">
-        <div style="font-size:24px; font-weight:900; color:var(--gold); text-shadow:2px 2px #000;">GEMS: <span id="angkot-gems">0</span></div>
-        <div style="background:rgba(0,0,0,0.5); padding:5px 15px; border-radius:10px; display:inline-block; margin-top:5px;">JALAN: <span id="angkot-score">0</span></div>
-    </div>
-
-    <div id="game-over-screen">
-        <h1 style="color:var(--danger); font-size:40px; margin-bottom:10px;">GAME OVER</h1>
-        <p id="final-score-text" style="font-size:18px; margin-bottom:30px;">Anda melewati 0 jalan</p>
-        <button onclick="restartAngkot()" class="btn-beli" style="padding:15px 40px; font-size:18px;">MAIN LAGI</button>
-    </div>
-
-    <div id="angkot-controls">
-        <div class="ctrl-grid">
-            <span></span><button class="btn-ctrl" id="btn-up">▲</button><span></span>
-            <button class="btn-ctrl" id="btn-left">◀</button><button class="btn-ctrl" id="btn-down">▼</button><button class="btn-ctrl" id="btn-right">▶</button>
+        <div class="footer">
+            <span id="btn-left">PILIH</span>
+            <span id="btn-right" onclick="handleBack()">MENU</span>
         </div>
     </div>
-    <canvas id="angkot-canvas"></canvas>
-</div>
 
-<script>
-// --- FIREBASE INITIALIZATION ---
-const firebaseConfig = {
-    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
-    authDomain: "nasukafood1.firebaseapp.com",
-    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasukafoods1",
-    storageBucket: "nasukafoods1.appspot.com",
-    messagingSenderId: "84287800896",
-    appId: "1:84287800896:web:83189d6766997b00f701a5"
-};
+    <div id="historyModal">
+        <button onclick="closeModal()">[ TUTUP ]</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--lcd-text); margin-bottom: 10px;">
+            <h3>RIWAYAT USER</h3>
+            <button onclick="deleteHistory()" style="width: auto; padding: 5px; font-size: 10px; background: #4a0000; color: #fff;">BERSIHKAN</button>
+        </div>
+        <div id="historyContent"></div>
+    </div>
 
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+    <div id="saldoModal">
+        <div class="app-title">TOPUP SALDO</div>
+        <div id="targetUserName" style="text-align: center; margin-bottom: 10px; border-bottom: 2px solid var(--lcd-text); background: var(--lcd-text); color: var(--lcd-bg); padding: 5px;">USER</div>
+        <div class="display-saldo" id="saldoDisplay">0</div>
+        <div class="keypad">
+            <button onclick="pressNum(1)">1</button><button onclick="pressNum(2)">2</button><button onclick="pressNum(3)">3</button>
+            <button onclick="pressNum(4)">4</button><button onclick="pressNum(5)">5</button><button onclick="pressNum(6)">6</button>
+            <button onclick="pressNum(7)">7</button><button onclick="pressNum(8)">8</button><button onclick="pressNum(9)">9</button>
+            <button onclick="pressNum('DEL')" style="color: #4a0000;">DEL</button>
+            <button onclick="pressNum(0)">0</button>
+            <button onclick="pressNum('CLR')">CLR</button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 15px;">
+            <button onclick="closeSaldoModal()" style="flex: 1;">BATAL</button>
+            <button onclick="prosesIsiSaldo()" style="flex: 2; background: var(--lcd-text); color: var(--lcd-bg);">KONFIRMASI</button>
+        </div>
+    </div>
 
-// --- STATE MANAGEMENT ---
-let currentUser = null;
-let userID = localStorage.getItem('nasuka_uid');
-let userSaldo = 0;
-let userGems = 0;
-let currentBet = 500;
-let isSpinning = false;
+    <script>
+        // CONFIGURATIONS
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
+            authDomain: "nasukafoods1.firebaseapp.app",
+            databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "nasukafoods1",
+            messagingSenderId: "84287800896",
+            appId: "1:84287800896:web:83189d6766997b00f701a5"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-// --- CORE FUNCTIONS ---
-function showPage(pageId) {
-    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-    window.scrollTo(0,0);
-}
+        const ghConfig = {
+            token: "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",
+            owner: "supriajaya",
+            repo: "nasukafoods.github.io"
+        };
 
-function showModal(type, title, msg) {
-    const overlay = document.getElementById('nasuka-modal-overlay');
-    const icon = document.getElementById('m-icon');
-    icon.className = 'modal-icon ' + (type === 'success' ? 'modal-success' : 'modal-error');
-    icon.innerHTML = (type === 'success' ? '✓' : '!');
-    document.getElementById('m-title').innerText = title;
-    document.getElementById('m-msg').innerText = msg;
-    overlay.style.display = 'flex';
-}
+        let currentTab = null;
+        let selectedUID = "";
+        let inputSaldo = "0";
+        let activeChatID = null;
+        let calcVal = "";
 
-function closeModal() {
-    document.getElementById('nasuka-modal-overlay').style.display = 'none';
-}
+        // UI HELPERS
+        function updateTime() {
+            const now = new Date();
+            $('#time').text(`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`);
+        }
+        setInterval(updateTime, 1000); updateTime();
 
-// --- AUTH LOGIC ---
-async function processLogin() {
-    const wa = document.getElementById('login-wa').value.trim();
-    const pin = document.getElementById('login-pin').value.trim();
+        function openApp(id, title) {
+            currentTab = id;
+            $('#menu-grid').addClass('hidden');
+            $('#app-screen').show().css('display', 'flex');
+            $('#app-title').text(title);
+            $('.app-content').addClass('hidden');
+            $('#content-' + id).removeClass('hidden');
+            $('#btn-left').text('OKE');
+            if(id === 'tab-del') switchCleanTab('chat');
+            if(id === 'tab-notif') loadNotifLog();
+        }
 
-    if(wa.length < 10 || pin.length < 4) {
-        return showModal('error', 'Gagal', 'Masukkan nomor WA dan PIN 4 digit dengan benar.');
-    }
-
-    document.getElementById('loading-screen').style.display = 'flex';
-
-    try {
-        const snapshot = await db.ref('users/' + wa).once('value');
-        if(snapshot.exists()) {
-            const data = snapshot.val();
-            if(data.PIN === pin) {
-                loginSuccess(wa);
-            } else {
-                showModal('error', 'PIN Salah', 'Kode PIN yang Anda masukkan tidak sesuai.');
-                document.getElementById('loading-screen').style.display = 'none';
+        function handleBack() {
+            if (currentTab) {
+                currentTab = null;
+                $('#menu-grid').removeClass('hidden');
+                $('#app-screen').hide();
+                $('#btn-left').text('PILIH');
             }
-        } else {
-            // Register User Baru
-            await db.ref('users/' + wa).set({
-                Nama: "Kawan Nasuka",
-                PIN: pin,
-                Saldo: 0,
-                Gems: 25000,
-                Phone: wa,
-                JoinDate: new Date().toISOString()
+        }
+
+        // --- MEDIA LOGIC (DARI UPDELWEB) ---
+        function isiNamaOtomatis() {
+            const input = document.getElementById('pilihFoto');
+            if (input.files.length > 0) {
+                document.getElementById('namaKustom').value = input.files[0].name.split('.').slice(0, -1).join('.');
+            }
+        }
+
+        async function prosesUpload() {
+            const input = document.getElementById('pilihFoto');
+            const namaInput = document.getElementById('namaKustom');
+            const res = document.getElementById('resultMedia');
+            
+            if (input.files.length === 0 || !namaInput.value) {
+                return showRetroAlert("Pilih file & isi nama!", "warn");
+            }
+
+            const file = input.files[0];
+            const ekstensi = file.name.split('.').pop();
+            const namaFileFinal = `${namaInput.value.trim().replace(/\s+/g, '_')}.${ekstensi}`;
+            
+            res.innerHTML = "Membaca file...";
+            const reader = new FileReader();
+            reader.onload = async function() {
+                const base64Content = reader.result.split(',')[1];
+                const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/image/${namaFileFinal}`;
+
+                res.innerHTML = "Mengunggah ke GitHub...";
+                try {
+                    const response = await fetch(url, {
+                        method: 'PUT',
+                        headers: { 
+                            'Authorization': `token ${ghConfig.token}`, 
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify({
+                            message: `Upload: ${namaFileFinal}`,
+                            content: base64Content
+                        })
+                    });
+
+                    if (response.ok) {
+                        res.innerHTML = `<b style="color:green">BERHASIL!</b><br>URL: https://nasukafoods.site/image/${namaFileFinal}`;
+                        showRetroAlert("UPLOAD BERHASIL", "success");
+                    } else {
+                        res.innerHTML = "GAGAL. Nama file mungkin sudah ada atau token bermasalah.";
+                    }
+                } catch (e) {
+                    res.innerHTML = "ERROR: " + e.message;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function prosesHapus() {
+            const namaFile = document.getElementById('namaHapus').value.trim();
+            const res = document.getElementById('resultMedia');
+            if (!namaFile) return showRetroAlert("Masukkan nama file!", "warn");
+
+            showRetroAlert(`HAPUS ${namaFile} PERMANEN?`, "warn", async () => {
+                res.innerHTML = "Mencari file...";
+                const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/image/${namaFile}`;
+
+                try {
+                    const getRes = await fetch(url, {
+                        headers: { 'Authorization': `token ${ghConfig.token}` }
+                    });
+
+                    if (!getRes.ok) throw new Error("File tidak ditemukan.");
+                    const data = await getRes.json();
+                    
+                    res.innerHTML = "Menghapus...";
+                    const delRes = await fetch(url, {
+                        method: 'DELETE',
+                        headers: { 
+                            'Authorization': `token ${ghConfig.token}`, 
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify({
+                            message: `Hapus file: ${namaFile}`,
+                            sha: data.sha
+                        })
+                    });
+
+                    if (delRes.ok) {
+                        res.innerHTML = "BERHASIL DIHAPUS!";
+                        document.getElementById('namaHapus').value = "";
+                        showRetroAlert("TERHAPUS PERMANEN", "success");
+                    }
+                } catch (e) {
+                    res.innerHTML = e.message;
+                }
+            }, true);
+        }
+
+        // --- KALKULATOR LOGIC ---
+        function inputCalc(v) {
+            const last = calcVal.slice(-1);
+            if (['+','-','*','/','.'].includes(last) && ['+','-','*','/','.'].includes(v)) return;
+            calcVal += v;
+            updateCalcUI();
+        }
+        function clearCalc() { calcVal = ""; updateCalcUI(); }
+        function delCalc() { calcVal = calcVal.slice(0, -1); updateCalcUI(); }
+        function updateCalcUI() {
+            let display = calcVal.replace(/\*/g, '×').replace(/\//g, '÷');
+            $('#calc-display').val(display || "0");
+        }
+        function execCalc() {
+            try {
+                if(!calcVal) return;
+                let expression = calcVal;
+                if (expression.includes('%')) {
+                    const percentPattern = /(\d+\.?\d*)([\+\-\*\/])(\d+\.?\d*)%/g;
+                    if (expression.match(percentPattern)) {
+                        expression = expression.replace(percentPattern, (match, p1, op, p2) => {
+                            const base = parseFloat(p1);
+                            const percent = parseFloat(p2) / 100;
+                            return (op === '+' || op === '-') ? `${base} ${op} (${percent} * ${base})` : `${base} ${op} ${percent}`;
+                        });
+                    } else {
+                        expression = expression.replace(/(\d+\.?\d*)%/g, "($1/100)");
+                    }
+                }
+                let res = eval(expression);
+                res = Number.isInteger(res) ? res : parseFloat(res.toFixed(2));
+                calcVal = res.toString();
+                $('#calc-display').val(res.toLocaleString('id-ID'));
+            } catch(e) {
+                $('#calc-display').val("ERR");
+                setTimeout(clearCalc, 1000);
+            }
+        }
+
+        // --- ALERT ---
+        function showRetroAlert(msg, type = 'info', onConfirm = null, showCancel = false) {
+            const icons = { info: 'ℹ️', warn: '⚠️', success: '✅' };
+            $('#alertMessage').text(msg);
+            $('#alertIcon').text(icons[type] || 'ℹ️');
+            $('#customAlert').css('display', 'flex');
+            if (showCancel) $('#alertCancelBtn').removeClass('hidden');
+            else $('#alertCancelBtn').addClass('hidden');
+            $('#alertConfirmBtn').off('click').on('click', () => { $('#customAlert').hide(); if (onConfirm) onConfirm(); });
+            $('#alertCancelBtn').off('click').on('click', () => { $('#customAlert').hide(); });
+        }
+
+        // --- STOK ---
+        function simpanVoucherDatabase() {
+            const id = $('#productID').val();
+            const codes = $('#voucherCode').val();
+            if (!codes.trim()) return;
+            const codeArray = codes.split(',').map(i => i.trim()).filter(i => i !== "");
+            codeArray.forEach(code => { db.ref(`stok_voucher/${id}`).push(code); });
+            showRetroAlert("Stok Berhasil Ditambah!", "success");
+            $('#voucherCode').val("");
+        }
+
+        function monitorStokRealtime() {
+            db.ref('stok_voucher').on('value', (snap) => {
+                const data = snap.val() || {};
+                let html = "";
+                $('#productID option').each(function() {
+                    const id = $(this).val();
+                    const name = $(this).text();
+                    const count = data[id] ? Object.keys(data[id]).length : 0;
+                    html += `<div class="card-item">${name} <span class="badge-stok">${count} PCS</span></div>`;
+                });
+                $('#stockBodyRealtime').html(html);
             });
-            loginSuccess(wa);
         }
-    } catch (e) {
-        console.error(e);
-        document.getElementById('loading-screen').style.display = 'none';
-    }
-}
 
-function loginSuccess(uid) {
-    localStorage.setItem('nasuka_uid', uid);
-    userID = uid;
-    document.getElementById('login-page').style.display = 'none';
-    initUserData();
-}
-
-function logout() {
-    localStorage.removeItem('nasuka_uid');
-    location.reload();
-}
-
-// --- DATA SYNC ---
-function initUserData() {
-    if(!userID) {
-        document.getElementById('login-page').style.display = 'block';
-        document.getElementById('loading-screen').style.display = 'none';
-        return;
-    }
-
-    db.ref('users/' + userID).on('value', snap => {
-        const data = snap.val();
-        if(data) {
-            userSaldo = data.Saldo || 0;
-            userGems = data.Gems || 0;
-            
-            // Update UI Home
-            document.getElementById('user-display-name').innerText = data.Nama;
-            document.getElementById('val-saldo').innerText = "Rp " + userSaldo.toLocaleString();
-            document.getElementById('val-gems').innerText = userGems.toLocaleString();
-            
-            // Update UI Profile
-            document.getElementById('p-name').innerText = data.Nama;
-            document.getElementById('p-phone').innerText = data.Phone;
-
-            // Update UI Games
-            document.getElementById('slot-gems-display').innerText = userGems.toLocaleString();
-            document.getElementById('angkot-gems').innerText = userGems.toLocaleString();
-            
-            document.getElementById('loading-screen').style.display = 'none';
-            showPage('home-page');
-        }
-    });
-}
-
-// --- PRODUCT SYSTEM ---
-const products = [
-    { id: 'v1', name: 'Axis 5GB 1 Hari', price: 7000, img: 'https://nasukafoods.site/image/axis.jpg' },
-    { id: 'v2', name: 'XL Extra Combo 10GB', price: 12000, img: 'https://nasukafoods.site/image/xl.jpg' },
-    { id: 'v3', name: 'Telkomsel Flash 2GB', price: 5000, img: 'https://nasukafoods.site/image/telkomsel.jpg' },
-    { id: 'v4', name: 'Indosat Freedom 3GB', price: 8000, img: 'https://nasukafoods.site/image/indosat.jpg' }
-];
-
-function renderProducts() {
-    const container = document.getElementById('product-list');
-    container.innerHTML = products.map(p => `
-        <div class="voucher-card">
-            <img src="${p.img}" class="voucher-img">
-            <div class="voucher-info">
-                <b>${p.name}</b>
-                <p>Rp ${p.price.toLocaleString()}</p>
-            </div>
-            <button onclick="buyProduct('${p.id}', ${p.price}, '${p.name}')" class="btn-beli">BELI</button>
-        </div>
-    `).join('');
-}
-
-async function buyProduct(id, price, name) {
-    if(userSaldo < price) {
-        return showModal('error', 'Saldo Kurang', 'Silakan top up saldo Rupiah Anda terlebih dahulu.');
-    }
-
-    if(confirm(`Beli ${name} seharga Rp ${price.toLocaleString()}?`)) {
-        try {
-            const newSaldo = userSaldo - price;
-            await db.ref('users/' + userID).update({ Saldo: newSaldo });
-            
-            // Record History
-            await db.ref('history/' + userID).push({
-                product: name,
-                price: price,
-                date: new Date().toISOString(),
-                status: 'Sukses'
+        // --- USERS & SALDO ---
+        function loadUsers() {
+            db.ref('users').on('value', (snap) => {
+                const container = document.getElementById('userListOtoritas');
+                const listDelAcc = document.getElementById('userListDelAcc');
+                if(!container) return;
+                container.innerHTML = "";
+                if(listDelAcc) listDelAcc.innerHTML = "";
+                snap.forEach((child) => {
+                    const u = child.val();
+                    const uid = child.key;
+                    container.innerHTML += `<div class="card-item user-card" data-search="${u.Nama} ${u.Username}"><b style="font-size:16px;">${u.Nama}</b><br>Saldo: <b>Rp ${u.Saldo ? u.Saldo.toLocaleString('id-ID') : 0}</b><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px;"><button onclick="editSaldo('${uid}', '${u.Nama}')" style="background:var(--lcd-text);color:var(--lcd-bg)">ISI SALDO</button><button onclick="viewHistory('${uid}')">RIWAYAT</button><button onclick="chatDuluan('${uid}', '${u.Nama}')" style="grid-column: span 2;">PESAN</button></div></div>`;
+                    if(listDelAcc) listDelAcc.innerHTML += `<div class="card-item"><b>${u.Nama}</b><br><button onclick="deleteAccount('${uid}', '${u.Nama}')" style="background:#4a0000; color:#fff;">HAPUS AKUN</button></div>`;
+                });
             });
-
-            showModal('success', 'Berhasil', `Pembelian ${name} berhasil dilakukan.`);
-        } catch (e) {
-            showModal('error', 'Gagal', 'Terjadi kesalahan koneksi.');
         }
-    }
-}
 
-async function exchangeGems() {
-    const cost = 500;
-    const gain = 25000;
-    if(userSaldo < cost) return showModal('error', 'Saldo Kurang', 'Minimal saldo Rp 500 untuk tukar Gems.');
-    
-    if(confirm(`Tukar Rp 500 dengan 25.000 Gems?`)) {
-        await db.ref('users/' + userID).update({
-            Saldo: userSaldo - cost,
-            Gems: userGems + gain
-        });
-        showModal('success', 'Berhasil', 'Gems telah ditambahkan ke akun Anda.');
-    }
-}
-
-// --- SLOT LOGIC ---
-const slotSymbols = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg', 'qris.jpg'];
-let gridTiles = [];
-
-function initSlotGrid() {
-    const container = document.getElementById('grid-container');
-    container.innerHTML = '';
-    gridTiles = [];
-    for(let i=0; i<25; i++) {
-        const tile = document.createElement('div');
-        tile.className = 'tile';
-        const symbol = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-        tile.innerHTML = `<img src="https://nasukafoods.site/image/${symbol}">`;
-        container.appendChild(tile);
-        gridTiles.push({ el: tile, symbol: symbol });
-    }
-}
-
-function changeBet(amt) {
-    if(isSpinning) return;
-    currentBet = Math.max(100, Math.min(10000, currentBet + amt));
-    document.getElementById('slot-bet-display').innerText = currentBet.toLocaleString();
-}
-
-function showSlotGame() {
-    document.getElementById('slot-page').style.display = 'flex';
-    initSlotGrid();
-}
-
-function exitSlot() {
-    if(isSpinning) return;
-    document.getElementById('slot-page').style.display = 'none';
-}
-
-async function startSpin() {
-    if(isSpinning || userGems < currentBet) {
-        if(userGems < currentBet) showModal('error', 'Gems Habis', 'Saldo Gems tidak cukup untuk taruhan ini.');
-        return;
-    }
-
-    isSpinning = true;
-    document.getElementById('spin-trigger').disabled = true;
-    
-    // Potong Gems awal
-    userGems -= currentBet;
-    await db.ref('users/' + userID + '/Gems').set(userGems);
-
-    // Animasi Rolling
-    let duration = 0;
-    const rollEffect = setInterval(() => {
-        gridTiles.forEach(t => {
-            const sym = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-            t.el.innerHTML = `<img src="https://nasukafoods.site/image/${sym}">`;
-            t.symbol = sym;
-        });
-        duration += 100;
-        if(duration >= 1500) {
-            clearInterval(rollEffect);
-            evaluateSlot();
+        function deleteAccount(uid, nama) {
+            showRetroAlert(`HAPUS PERMANEN AKUN ${nama}?`, 'warn', () => {
+                db.ref(`users/${uid}`).remove().then(() => {
+                    showRetroAlert("AKUN DIHAPUS", "success");
+                });
+            }, true);
         }
-    }, 100);
-}
 
-function evaluateSlot() {
-    // Logika Gacor: 20% peluang menang besar
-    const isWin = Math.random() > 0.8;
-    let winAmount = 0;
+        function editSaldo(uid, nama) {
+            selectedUID = uid; inputSaldo = "0";
+            $('#targetUserName').text(nama.toUpperCase());
+            $('#saldoDisplay').text("0");
+            $('#saldoModal').css('display', 'flex');
+        }
+        function pressNum(val) {
+            if (val === 'DEL') inputSaldo = inputSaldo.length > 1 ? inputSaldo.slice(0, -1) : "0";
+            else if (val === 'CLR') inputSaldo = "0";
+            else {
+                if (inputSaldo === "0") inputSaldo = val.toString();
+                else if (inputSaldo.length < 9) inputSaldo += val.toString();
+            }
+            $('#saldoDisplay').text(parseInt(inputSaldo).toLocaleString('id-ID'));
+        }
+        function closeSaldoModal() { $('#saldoModal').hide(); }
+        function prosesIsiSaldo() {
+            const jumlah = parseInt(inputSaldo);
+            if (jumlah <= 0) return;
+            showRetroAlert(`ISI SALDO RP ${jumlah.toLocaleString('id-ID')}?`, 'warn', () => {
+                db.ref(`users/${selectedUID}/Saldo`).transaction((s) => (s || 0) + jumlah, (err, comm) => {
+                    if (comm) {
+                        db.ref(`history/${selectedUID}`).push({ tanggal: new Date().toLocaleString(), produk: "TOPUP ADMIN", total: `+${jumlah}` });
+                        showRetroAlert("BERHASIL!", "success");
+                        closeSaldoModal();
+                    }
+                });
+            }, true);
+        }
 
-    if(isWin) {
-        const multipliers = [2, 3, 5, 10];
-        const mult = multipliers[Math.floor(Math.random() * multipliers.length)];
-        winAmount = currentBet * mult;
+        // --- LOGIKA NOTIFIKASI ---
+        function loadNotifLog() {
+            db.ref('notifications').on('value', (snap) => {
+                const container = document.getElementById('notifListContainer');
+                if(!container) return;
+                container.innerHTML = "";
+                
+                let data = [];
+                snap.forEach(child => { data.push({ id: child.key, ...child.val() }); });
+
+                data.reverse().forEach(item => {
+                    container.innerHTML += `
+                        <div class="card-item" style="position:relative;">
+                            <small style="font-size:10px;">ID: ${item.uid || 'ALL'}</small><br>
+                            <b style="color:#4a0000;">${item.judul || 'No Title'}</b><br>
+                            <div style="font-size:12px; margin-top:5px;">${item.pesan || ''}</div>
+                            <div style="font-size:9px; margin-top:5px; opacity:0.7;">${item.tanggal || ''}</div>
+                            <button onclick="confirmDeleteNotif('${item.id}', '${item.uid}')" 
+                                style="margin-top:10px; background:#4a0000; color:white; padding:5px; font-size:10px;">
+                                HAPUS PERMANEN
+                            </button>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function confirmDeleteNotif(notifId, targetUid) {
+            showRetroAlert("Hapus Notif ini dari Database & Device User?", "warn", () => {
+                db.ref(`notifications/${notifId}`).remove().then(() => {
+                    db.ref(`commands/${targetUid}`).push({
+                        action: "DELETE_LOCAL_NOTIF",
+                        targetId: notifId,
+                        timestamp: Date.now()
+                    });
+                    showRetroAlert("DATA DIHAPUS!", "success");
+                }).catch(err => showRetroAlert("GAGAL: " + err.message, "warn"));
+            }, true);
+        }
+
+        // --- CHAT LOGIC ---
+        function toggleImgInput() { $('#imgInputBox').toggleClass('hidden'); }
+
+        function chatDuluan(uid, nama) {
+            openApp('tab-chat', 'INBOX CHAT');
+            db.ref(`admin_inbox/${uid}`).once('value', (s) => {
+                if(!s.exists()) db.ref(`admin_inbox/${uid}`).set({ nama: nama, lastMsg: "...", timestamp: Date.now(), unread: false });
+                selectUser(uid, nama);
+            });
+        }
+
+        db.ref('admin_inbox').on('value', (snap) => {
+            const list = document.getElementById('userListChat');
+            const listDelChat = document.getElementById('userListDelChat');
+            if(!list) return;
+            list.innerHTML = "";
+            snap.forEach(child => {
+                const u = child.val();
+                list.innerHTML += `<div class="card-item" onclick="selectUser('${child.key}', '${u.nama}')"><b>${u.nama}</b><br><small>${u.lastMsg}</small> ${u.unread ? '(!)' : ''}</div>`;
+                if(listDelChat) listDelChat.innerHTML += `<div class="card-item">${u.nama} <button onclick="deleteChatUser('${child.key}')" style="background:#4a0000; color:#fff;">HAPUS</button></div>`;
+            });
+        });
+
+        function deleteChatUser(uid) {
+            showRetroAlert(`HAPUS SEMUA CHAT DENGAN USER INI?`, 'warn', () => {
+                db.ref(`admin_inbox/${uid}`).remove();
+                db.ref(`chats/${uid}`).remove();
+                showRetroAlert("CHAT DIHAPUS", "success");
+            }, true);
+        }
+
+        function selectUser(id, name) {
+            activeChatID = id;
+            $('#activeUserName').text("KE: " + name);
+            $('#userListChat').addClass('hidden');
+            $('#chatRoom').removeClass('hidden');
+            
+            db.ref(`chats/${id}`).off();
+            db.ref(`chats/${id}`).on('value', (snap) => {
+                const d = document.getElementById('chatDisplay'); 
+                d.innerHTML = "";
+                snap.forEach(c => {
+                    const m = c.val();
+                    let content = m.text;
+                    if (content && content.startsWith("[IMG]")) {
+                        const url = content.replace("[IMG]", "").trim();
+                        content = `<img src="${url}" style="max-width: 100%; border: 2px solid var(--lcd-text); margin-top: 5px; display: block;" onerror="this.src='https://via.placeholder.com/150?text=Gambar+Error'">`;
+                    } else {
+                        content = content ? content.replace(/\n/g, "<br>") : "";
+                    }
+                    const align = m.sender === 'admin' ? 'text-align:right' : 'text-align:left';
+                    const bgColor = m.sender === 'admin' ? 'background:rgba(0,0,0,0.05)' : 'background:white';
+                    d.innerHTML += `<div style="${align}; margin-bottom: 10px;"><div style="display:inline-block; padding:8px; border:1px solid var(--lcd-text); ${bgColor}; max-width:85%; word-wrap: break-word;"><small style="font-size:10px; opacity:0.6;">${m.sender.toUpperCase()}</small><br>${content}</div></div>`;
+                });
+                d.scrollTop = d.scrollHeight;
+            });
+            db.ref(`admin_inbox/${id}`).update({ unread: false });
+        }
+
+        function closeChat() { $('#chatRoom').addClass('hidden'); $('#userListChat').removeClass('hidden'); }
         
-        // Animasi Win pada Grid
-        gridTiles.forEach((t, i) => {
-            if(i % 2 === 0) t.el.classList.add('winning');
-        });
+        function sendReply() {
+            const textMsg = $('#adminInput').val().trim();
+            const imgUrl = $('#adminImgUrl').val().trim();
+            if(!activeChatID) return;
+            let finalPayload = imgUrl !== "" ? "[IMG]" + imgUrl : textMsg;
+            if (!finalPayload) return;
 
-        // Update Multiplier Bar
-        const mId = 'm' + mult + 'x';
-        if(document.getElementById(mId)) document.getElementById(mId).classList.add('active');
+            db.ref(`chats/${activeChatID}`).push({ sender: 'admin', text: finalPayload, timestamp: Date.now() });
+            let preview = finalPayload.startsWith("[IMG]") ? "🖼️ Foto" : finalPayload.substring(0, 30);
+            db.ref(`admin_inbox/${activeChatID}`).update({ lastMsg: "Admin: " + preview, timestamp: Date.now(), unread: false });
 
-        setTimeout(() => {
-            gridTiles.forEach(t => t.el.classList.remove('winning'));
-            document.querySelectorAll('.mult-box').forEach(b => b.classList.remove('active'));
-        }, 2000);
-    }
+            $('#adminInput').val('');
+            $('#adminImgUrl').val('');
+            $('#imgInputBox').addClass('hidden');
+        }
 
-    userGems += winAmount;
-    db.ref('users/' + userID + '/Gems').set(userGems);
-    document.getElementById('slot-win-display').innerText = winAmount.toLocaleString();
-    
-    isSpinning = false;
-    document.getElementById('spin-trigger').disabled = false;
-}
+        function switchCleanTab(type) {
+            $('.clean-nav button').removeClass('btn-active');
+            if(type === 'chat') { $('#btnSubChat').addClass('btn-active'); $('#sub-clean-chat').removeClass('hidden'); $('#sub-clean-acc').addClass('hidden'); }
+            else { $('#btnSubAcc').addClass('btn-active'); $('#sub-clean-acc').removeClass('hidden'); $('#sub-clean-chat').addClass('hidden'); }
+        }
 
-// --- ANGKOT CROSSER 3D LOGIC ---
-let a_scene, a_camera, a_renderer, a_player;
-let a_map = [];
-let a_enemies = [];
-let a_score = 0;
-let a_gameActive = false;
-const a_tileSize = 40;
+        function searchUser() {
+            const val = $('#adminSearch').val().toLowerCase();
+            $('.user-card').each(function() { $(this).toggle($(this).attr('data-search').toLowerCase().includes(val)); });
+        }
 
-function showAngkotGame() {
-    document.getElementById('angkot-page').style.display = 'block';
-    initAngkotEngine();
-}
+        function viewHistory(uid) {
+            selectedUID = uid;
+            $('#historyModal').show();
+            db.ref(`history/${uid}`).limitToLast(15).on('value', (snap) => {
+                let h = "";
+                snap.forEach(c => { h += `<div class="card-item">${c.val().tanggal}<br><b>${c.val().produk}</b> [${c.val().total}]</div>`; });
+                $('#historyContent').html(h || "Kosong");
+            });
+        }
 
-function initAngkotEngine() {
-    const canvas = document.getElementById('angkot-canvas');
-    a_scene = new THREE.Scene();
-    a_camera = new THREE.OrthographicCamera(window.innerWidth/-2, window.innerWidth/2, window.innerHeight/2, window.innerHeight/-2, 1, 1000);
-    a_camera.position.set(0, -250, 250);
-    a_camera.lookAt(0,0,0);
+        function deleteHistory() {
+            if (!selectedUID) return;
+            showRetroAlert("Hapus semua riwayat user ini?", "warn", () => {
+                db.ref(`history/${selectedUID}`).remove().then(() => {
+                    showRetroAlert("RIWAYAT DIBERSIHKAN", "success");
+                });
+            }, true);
+        }
 
-    a_renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-    a_renderer.setSize(window.innerWidth, window.innerHeight);
+        function closeModal() { $('#historyModal').hide(); db.ref(`history/${selectedUID}`).off(); }
 
-    const light = new THREE.AmbientLight(0xffffff, 1);
-    a_scene.add(light);
-
-    // Player (Box)
-    const pGeo = new THREE.BoxGeometry(30, 30, 30);
-    const pMat = new THREE.MeshLambertMaterial({ color: 0x3b82f6 });
-    a_player = new THREE.Mesh(pGeo, pMat);
-    a_player.position.z = 15;
-    a_scene.add(a_player);
-
-    restartAngkot();
-    a_gameLoop();
-}
-
-function restartAngkot() {
-    a_score = 0;
-    a_enemies.forEach(e => a_scene.remove(e.mesh));
-    a_enemies = [];
-    a_player.position.set(0, 0, 15);
-    document.getElementById('angkot-score').innerText = "0";
-    document.getElementById('game-over-screen').style.display = 'none';
-    
-    // Generate Initial Map
-    for(let i=-5; i<15; i++) {
-        createRow(i * a_tileSize);
-    }
-    a_gameActive = true;
-}
-
-function createRow(y) {
-    const isRoad = Math.random() > 0.5;
-    const color = isRoad ? 0x334155 : 0x22c55e;
-    const rowGeo = new THREE.PlaneGeometry(2000, a_tileSize);
-    const rowMat = new THREE.MeshLambertMaterial({ color: color });
-    const row = new THREE.Mesh(rowGeo, rowMat);
-    row.position.y = y;
-    a_scene.add(row);
-
-    if(isRoad) {
-        const speed = (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1);
-        const carGeo = new THREE.BoxGeometry(60, 30, 25);
-        const carMat = new THREE.MeshLambertMaterial({ color: 0xfacc15 });
-        const car = new THREE.Mesh(carGeo, carMat);
-        car.position.set(Math.random() * 400 - 200, y, 12.5);
-        a_scene.add(car);
-        a_enemies.push({ mesh: car, speed: speed, y: y });
-    }
-}
-
-function a_gameLoop() {
-    if(!a_renderer) return;
-    requestAnimationFrame(a_gameLoop);
-    
-    if(a_gameActive) {
-        a_enemies.forEach(e => {
-            e.mesh.position.x += e.speed;
-            if(e.mesh.position.x > 500) e.mesh.position.x = -500;
-            if(e.mesh.position.x < -500) e.mesh.position.x = 500;
-
-            // Collision Detection
-            const dx = e.mesh.position.x - a_player.position.x;
-            const dy = e.mesh.position.y - a_player.position.y;
-            if(Math.abs(dx) < 40 && Math.abs(dy) < 30) {
-                gameOverAngkot();
-            }
-        });
-
-        a_camera.position.y = a_player.position.y - 250;
-        a_camera.lookAt(0, a_player.position.y, 0);
-    }
-    a_renderer.render(a_scene, a_camera);
-}
-
-function movePlayer(dir) {
-    if(!a_gameActive) return;
-    if(dir === 'up') {
-        a_player.position.y += a_tileSize;
-        a_score++;
-        document.getElementById('angkot-score').innerText = a_score;
-        createRow(a_player.position.y + 15 * a_tileSize);
-        giveGemsReward(10);
-    }
-    if(dir === 'down' && a_player.position.y > 0) a_player.position.y -= a_tileSize;
-    if(dir === 'left') a_player.position.x -= a_tileSize;
-    if(dir === 'right') a_player.position.x += a_tileSize;
-}
-
-async function giveGemsReward(amt) {
-    userGems += amt;
-    await db.ref('users/' + userID + '/Gems').set(userGems);
-}
-
-function gameOverAngkot() {
-    a_gameActive = false;
-    document.getElementById('game-over-screen').style.display = 'flex';
-    document.getElementById('final-score-text').innerText = `Anda melewati ${a_score} jalan`;
-}
-
-function exitAngkot() {
-    a_gameActive = false;
-    document.getElementById('angkot-page').style.display = 'none';
-}
-
-// --- INITIALIZE ---
-document.getElementById('btn-up').onclick = () => movePlayer('up');
-document.getElementById('btn-down').onclick = () => movePlayer('down');
-document.getElementById('btn-left').onclick = () => movePlayer('left');
-document.getElementById('btn-right').onclick = () => movePlayer('right');
-
-window.onload = () => {
-    renderProducts();
-    initUserData();
-};
-
-window.onresize = () => {
-    if(a_renderer) {
-        a_renderer.setSize(window.innerWidth, window.innerHeight);
-        a_camera.left = window.innerWidth/-2;
-        a_camera.right = window.innerWidth/2;
-        a_camera.top = window.innerHeight/2;
-        a_camera.bottom = window.innerHeight/-2;
-        a_camera.updateProjectionMatrix();
-    }
-};
-</script>
+        $(document).ready(() => { loadUsers(); monitorStokRealtime(); });
+    </script>
 </body>
 </html>
