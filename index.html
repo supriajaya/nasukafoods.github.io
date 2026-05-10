@@ -2,507 +2,382 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nasuka Super App</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka - Super APK</title>
     <style>
-        :root {
-            --nasuka-blue: #00529C;
-            --nasuka-orange: #f37021;
-            --bg-light: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.9);
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body, html { 
-            margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-light); color: #1e293b; overflow-x: hidden; height: 100%;
+        body {
+            background-color: #ffffff;
+            color: #202124;
+            overflow-x: hidden;
         }
 
-        /* --- SISTEM LOADING --- */
-        #main-loader {
-            position: fixed; inset: 0; background: white; z-index: 100000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .loader-ring { width: 60px; height: 60px; border: 5px solid #f3f3f3; border-top: 5px solid var(--nasuka-blue); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- AUTH SCREEN --- */
-        #auth-page {
-            position: fixed; inset: 0; background: white; z-index: 90000;
-            padding: 40px 30px; display: none; flex-direction: column; align-items: center;
-        }
-        .auth-card { width: 100%; max-width: 400px; text-align: center; }
-        .logo-img { width: 120px; height: 120px; border-radius: 30px; margin-bottom: 20px; box-shadow: var(--shadow-md); }
-        .input-group { width: 100%; margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #64748b; font-size: 14px; }
-        .auth-input { 
-            width: 100%; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; 
-            font-size: 16px; transition: 0.3s;
-        }
-        .auth-input:focus { border-color: var(--nasuka-blue); box-shadow: 0 0 0 4px rgba(0,82,156,0.1); }
-        .btn-primary {
-            width: 100%; padding: 16px; border-radius: 15px; border: none;
-            background: var(--nasuka-blue); color: white; font-weight: 800;
-            font-size: 16px; cursor: pointer; box-shadow: 0 4px 0 #003d75;
-        }
-        .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #003d75; }
-
-        /* --- NAVIGATION BAR --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; background: white;
-            display: flex; justify-content: space-around; padding: 12px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 5000;
-        }
-        .nav-item { text-align: center; color: #94a3b8; font-size: 11px; font-weight: bold; flex: 1; }
-        .nav-item.active { color: var(--nasuka-blue); }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
-
-        /* --- DASHBOARD STYLING --- */
-        .header { background: var(--nasuka-blue); padding: 30px 20px 80px; color: white; position: relative; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .balance-overlay {
-            background: white; margin: -50px 20px 20px; border-radius: 25px;
-            padding: 25px; box-shadow: var(--shadow-md); position: relative; z-index: 10;
-        }
-        .row-balance { display: flex; justify-content: space-between; align-items: flex-end; }
-        .amount-big { font-size: 28px; font-weight: 900; color: #1e293b; margin: 5px 0; }
-        .gems-pill { 
-            background: #f1f5f9; padding: 8px 15px; border-radius: 20px;
-            font-weight: 800; font-size: 14px; color: #0ea5e9; display: flex; align-items: center; gap: 8px;
+        .page {
+            display: none;
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
-        /* --- MENU GRID --- */
-        .grid-menu {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
-            padding: 0 20px 30px;
-        }
-        .menu-btn { text-align: center; }
-        .icon-box {
-            width: 100%; aspect-ratio: 1/1; background: white; border-radius: 20px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-sm); margin-bottom: 8px; border: 1px solid #f1f5f9;
-        }
-        .icon-box img { width: 60%; height: 60%; object-fit: contain; }
-        .menu-btn span { font-size: 11px; font-weight: 800; color: #475569; }
-
-        /* --- LIST PRODUK --- */
-        .p-section { padding: 0 20px 100px; }
-        .p-card {
-            background: white; border-radius: 20px; padding: 15px; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow-sm);
-        }
-        .p-img { width: 60px; height: 60px; border-radius: 12px; background: #eee; }
-        .p-info { flex: 1; }
-        .p-name { font-weight: 800; font-size: 15px; margin-bottom: 2px; }
-        .p-price { color: var(--nasuka-orange); font-weight: 900; font-size: 14px; }
-        .p-btn { 
-            background: #10b981; color: white; border: none; padding: 10px 15px;
-            border-radius: 10px; font-weight: bold; font-size: 12px;
+        .page.active {
+            display: block;
         }
 
-        /* --- GAME UI: SLOT --- */
-        #game-slot {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: none; flex-direction: column;
-            background-image: radial-gradient(circle at center, #1e293b 0%, #000 100%);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .slot-top { padding: 15px; display: flex; justify-content: space-between; align-items: center; color: gold; font-weight: 900; border-bottom: 1px solid #334155; }
-        .slot-grid-container {
-            flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px;
-        }
-        #slot-canvas-grid {
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
-            width: 100%; max-width: 400px; aspect-ratio: 1/1;
-            background: #334155; padding: 5px; border-radius: 10px; border: 4px solid #1e293b;
-        }
-        .slot-tile { background: white; border-radius: 5px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .slot-tile img { width: 85%; height: 85%; object-fit: contain; }
-        .slot-footer { background: #111; padding: 25px; border-radius: 30px 30px 0 0; }
-        .win-display { text-align: center; color: #10b981; font-weight: 900; font-size: 20px; margin-bottom: 15px; height: 30px; }
 
-        /* --- GAME UI: ANGKOT --- */
-        #game-angkot { position: fixed; inset: 0; background: #111; z-index: 10001; display: none; }
-        .angkot-ui { position: absolute; top: 20px; left: 20px; color: white; pointer-events: none; }
-        .angkot-ctrl { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; gap: 20px; }
-        .a-btn { width: 75px; height: 75px; background: white; border-radius: 20px; border: none; font-size: 28px; box-shadow: 0 5px 0 #cbd5e1; }
-        .a-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #cbd5e1; }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
 
-        /* --- GLOBAL --- */
-        .page { display: none; height: 100%; overflow-y: auto; }
-        .active-page { display: block; }
+        .app-icon {
+            width: 72px;
+            height: 72px;
+            background-color: #f1f3f4;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-info {
+            margin-left: 16px;
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .app-developer {
+            color: #01875f;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .ads-label {
+            font-size: 11px;
+            color: #5f6368;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 0;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 60px;
+        }
+
+        .stat-value {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 2px;
+        }
+
+        .download-btn {
+            background-color: #01875f;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 24px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .screenshot-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .screenshot-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .screenshot-item {
+            flex: 0 0 140px;
+            height: 250px;
+            background-color: #f1f3f4;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .small-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 10px 4px;
+            text-decoration: none;
+            color: #01875f;
+            cursor: pointer;
+        }
+
+        .small-card img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 6px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #5f6368;
+            margin-bottom: 24px;
+        }
     </style>
 </head>
 <body>
 
-<div id="main-loader">
-    <div class="loader-ring"></div>
-    <p style="margin-top:20px; font-weight:900; color:#475569;">MENYAMBUNGKAN KE DATABASE...</p>
-</div>
-
-<div id="auth-page">
-    <div class="auth-card">
-        <img src="https://nasukafoods.site/image/profil.jpg" class="logo-img">
-        <h1 style="margin:0; font-weight:900;">Nasuka Login</h1>
-        <p style="color:#64748b; margin-bottom:35px;">Akses saldo dan aset digital Anda</p>
-        
-        <div class="input-group">
-            <label>Nomor WhatsApp</label>
-            <input type="tel" id="user-wa" class="auth-input" placeholder="085xxxxxxxx">
-        </div>
-        <div class="input-group">
-            <label>PIN Keamanan</label>
-            <input type="password" id="user-pin" class="auth-input" placeholder="4 Digit PIN">
-        </div>
-        
-        <button onclick="handleLogin()" class="btn-primary">MASUK SEKARANG</button>
-        <p style="margin-top:20px; font-size:12px; color:#94a3b8;">Sistem akan mendaftarkan nomor baru secara otomatis jika belum terdaftar.</p>
-    </div>
-</div>
-
-<div id="dashboard" class="page active-page">
+<!-- MAIN PAGE (NASUKA DATA) -->
+<div id="mainPage" class="page active">
     <div class="header">
-        <div class="header-top">
-            <div>
-                <small style="opacity:0.8;">Selamat Datang,</small>
-                <h3 id="display-name" style="margin:5px 0 0; font-weight:900;">Tamu</h3>
-            </div>
-            <img src="https://nasukafoods.site/image/profil.jpg" style="width:45px; height:45px; border-radius:50%; border:2px solid white;">
+        <div class="app-icon"><img src="https://nasukafoods.site/image/paketdata.jpg" alt="Nasuka Data"></div>
+        <div class="app-info">
+            <h1 class="app-title">Nasuka Data</h1>
+            <p class="app-developer">Nasuka Wireless</p>
+            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
         </div>
     </div>
-
-    <div class="balance-overlay">
-        <div class="row-balance">
-            <div>
-                <small style="color:#64748b; font-weight:bold; font-size:11px;">SALDO RUPIAH</small>
-                <div class="amount-big" id="display-saldo">Rp 0</div>
-            </div>
-            <div class="gems-pill">
-                <i class="fas fa-gem"></i> <span id="display-gems">0</span> GEMS
-            </div>
-        </div>
+    <div class="stats-container">
+        <div class="stat-item"><p class="stat-value">4.8 ★</p><p class="stat-label">Ulasan</p></div>
+        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">15 MB</p><p class="stat-label">Ukuran</p></div>
+        <div class="stat-item"><p class="stat-value">10rb+</p><p class="stat-label">Download</p></div>
     </div>
-
-    <div class="grid-menu">
-        <div class="menu-btn" onclick="openSlot()">
-            <div class="icon-box"><img src="https://nasukafoods.site/image/m3.jpg"></div>
-            <span>SLOT GACOR</span>
-        </div>
-        <div class="menu-btn" onclick="openAngkot()">
-            <div class="icon-box"><img src="https://nasukafoods.site/image/angkotkanan.jpg"></div>
-            <span>ANGKOT 3D</span>
-        </div>
-        <div class="menu-btn" onclick="alert('Admin WA: 0859109819017')">
-            <div class="icon-box"><img src="https://nasukafoods.site/image/informasi.jpg"></div>
-            <span>SUPPORT</span>
-        </div>
-        <div class="menu-btn" onclick="showHistory()">
-            <div class="icon-box"><img src="https://nasukafoods.site/image/xl.jpg"></div>
-            <span>RIWAYAT</span>
-        </div>
-    </div>
-
-    <div class="p-section">
-        <div style="font-weight:900; margin-bottom:15px; color:var(--nasuka-blue);">REKOMENDASI PRODUK</div>
-        <div id="product-container">
-            </div>
-    </div>
-
-    <div class="bottom-nav">
-        <div class="nav-item active"><i class="fas fa-home"></i>Home</div>
-        <div class="nav-item" onclick="alert('Segera Hadir')"><i class="fas fa-wallet"></i>Topup</div>
-        <div class="nav-item" onclick="logout()"><i class="fas fa-user-circle"></i>Keluar</div>
-    </div>
-</div>
-
-<div id="game-slot">
-    <div class="slot-top">
-        <div onclick="closeSlot()"><i class="fas fa-times-circle"></i> EXIT</div>
-        <div>NASUKA PRAGMATIC</div>
-        <div id="slot-gems-top">0 💎</div>
-    </div>
+    <a href="nasuka.apk" class="download-btn">Install</a>
     
-    <div class="slot-grid-container">
-        <div id="slot-canvas-grid"></div>
+    <div class="screenshot-container">
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/ss1.jpg" alt="SS 1"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 2"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 3"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 4"></div>
     </div>
 
-    <div class="slot-footer">
-        <div id="win-text" class="win-display"></div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="background:#222; padding:10px 20px; border-radius:20px; border:1px solid #444;">
-                <small style="color:#888; display:block; font-size:10px;">BET</small>
-                <div id="bet-amount" style="color:white; font-weight:900;">500</div>
-            </div>
-            <button id="spin-btn" onclick="playSlot()" style="width:80px; height:80px; border-radius:50%; background:radial-gradient(circle, #facc15, #f59e0b); border:4px solid white; font-size:30px; color:white; box-shadow:0 0 20px rgba(245,158,11,0.5);">⚡</button>
-            <div style="display:flex; flex-direction:column; gap:5px;">
-                <button onclick="adjustBet(100)" style="background:#333; color:white; border:none; border-radius:5px; padding:5px 10px;">+</button>
-                <button onclick="adjustBet(-100)" style="background:#333; color:white; border:none; border-radius:5px; padding:5px 10px;">-</button>
-            </div>
-        </div>
+    <h2 class="section-title">Aplikasi Lainnya</h2>
+    <div class="action-grid">
+        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/qris.jpg"><span style="font-size: 10px;">Nasuka Pay</span></div>
+        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/bri.jpg"><span style="font-size: 10px;">Nasuka Bank</span></div>
+        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Net</span></div>
+        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Food</span></div>
     </div>
+    <h2 class="section-title">Tentang aplikasi ini</h2>
+    <p class="description">Nasuka adalah solusi digital yang dirancang untuk memberikan kemudahan akses bagi pengguna.</p>
 </div>
 
-<div id="game-angkot">
-    <button onclick="closeAngkot()" style="position:absolute; top:20px; right:20px; z-index:100; background:red; color:white; border:none; padding:10px 15px; border-radius:10px; font-weight:bold;">TUTUP</button>
-    <div class="angkot-ui">
-        <div style="font-size:24px; font-weight:900; color:gold;">GEMS: <span id="a-gems">0</span></div>
-        <div style="font-size:14px; opacity:0.8;">SKOR: <span id="a-score">0</span></div>
-    </div>
-    <div class="angkot-ctrl">
-        <div style="display:grid; grid-template-columns: repeat(3, 80px); gap:10px;">
-            <span></span><button class="a-btn" onclick="moveAngkot('up')">▲</button><span></span>
-            <button class="a-btn" onclick="moveAngkot('left')">◀</button><button class="a-btn" onclick="moveAngkot('down')">▼</button><button class="a-btn" onclick="moveAngkot('right')">▶</button>
+<!-- PAGE APK 1 (NASUKA PAY) -->
+<div id="apk1Page" class="page">
+    <div class="header">
+        <div class="app-icon"><img src="https://nasukafoods.site/image/qris.jpg"></div>
+        <div class="app-info">
+            <h1 class="app-title">Nasuka Pay</h1>
+            <p class="app-developer">Nasuka Official</p>
+            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
         </div>
     </div>
-    <canvas id="angkot-canvas"></canvas>
+    <div class="stats-container">
+        <div class="stat-item"><p class="stat-value">4.9 ★</p><p class="stat-label">Ulasan</p></div>
+        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">12 MB</p><p class="stat-label">Ukuran</p></div>
+        <div class="stat-item"><p class="stat-value">5rb+</p><p class="stat-label">Download</p></div>
+    </div>
+    <a href="nasuka_pay.apk" class="download-btn">Install</a>
+
+    <div class="screenshot-container">
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/qris.jpg" alt="SS 1"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/qris.jpg" alt="SS 2"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/qris.jpg" alt="SS 3"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/qris.jpg" alt="SS 4"></div>
+    </div>
+
+    <h2 class="section-title">Aplikasi Lainnya</h2>
+    <div class="action-grid">
+        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
+        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/bri.jpg"><span style="font-size: 10px;">Nasuka Bank</span></div>
+        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Net</span></div>
+        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Food</span></div>
+    </div>
+    <h2 class="section-title">Deskripsi</h2>
+    <p class="description">Pembayaran digital cepat dan aman dengan integrasi QRIS nasional.</p>
+</div>
+
+<!-- PAGE APK 2 (NASUKA BANK) -->
+<div id="apk2Page" class="page">
+    <div class="header">
+        <div class="app-icon"><img src="https://nasukafoods.site/image/bri.jpg"></div>
+        <div class="app-info">
+            <h1 class="app-title">Nasuka Bank</h1>
+            <p class="app-developer">Nasuka Official</p>
+            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
+        </div>
+    </div>
+    <div class="stats-container">
+        <div class="stat-item"><p class="stat-value">4.7 ★</p><p class="stat-label">Ulasan</p></div>
+        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">20 MB</p><p class="stat-label">Ukuran</p></div>
+        <div class="stat-item"><p class="stat-value">8rb+</p><p class="stat-label">Download</p></div>
+    </div>
+    <a href="nasuka_bank.apk" class="download-btn">Install</a>
+
+    <div class="screenshot-container">
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/bri.jpg" alt="SS 1"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/bri.jpg" alt="SS 2"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/bri.jpg" alt="SS 3"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/bri.jpg" alt="SS 4"></div>
+    </div>
+
+    <h2 class="section-title">Aplikasi Lainnya</h2>
+    <div class="action-grid">
+        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
+        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/qris.jpg"><span style="font-size: 10px;">Nasuka Pay</span></div>
+        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Net</span></div>
+        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Food</span></div>
+    </div>
+    <h2 class="section-title">Deskripsi</h2>
+    <p class="description">Kelola keuangan Anda dengan fitur perbankan modern dalam satu genggaman.</p>
+</div>
+
+<!-- PAGE APK 3 (NASUKA NET) -->
+<div id="apk3Page" class="page">
+    <div class="header">
+        <div class="app-icon"><img src="https://nasukafoods.site/image/axis.jpg"></div>
+        <div class="app-info">
+            <h1 class="app-title">Nasuka Net</h1>
+            <p class="app-developer">Nasuka Official</p>
+            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
+        </div>
+    </div>
+    <div class="stats-container">
+        <div class="stat-item"><p class="stat-value">4.6 ★</p><p class="stat-label">Ulasan</p></div>
+        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">10 MB</p><p class="stat-label">Ukuran</p></div>
+        <div class="stat-item"><p class="stat-value">15rb+</p><p class="stat-label">Download</p></div>
+    </div>
+    <a href="nasuka_net.apk" class="download-btn">Install</a>
+
+    <div class="screenshot-container">
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 1"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 2"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 3"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 4"></div>
+    </div>
+
+    <h2 class="section-title">Aplikasi Lainnya</h2>
+    <div class="action-grid">
+        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
+        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/qris.jpg"><span style="font-size: 10px;">Nasuka Pay</span></div>
+        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/bri.jpg"><span style="font-size: 10px;">Nasuka Bank</span></div>
+        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Food</span></div>
+    </div>
+    <h2 class="section-title">Deskripsi</h2>
+    <p class="description">Layanan kuota dan pulsa termurah untuk semua operator di Indonesia.</p>
+</div>
+
+<!-- PAGE APK 4 (NASUKA FOOD) -->
+<div id="apk4Page" class="page">
+    <div class="header">
+        <div class="app-icon"><img src="https://nasukafoods.site/image/nasukafoods.jpg"></div>
+        <div class="app-info">
+            <h1 class="app-title">Nasuka Food</h1>
+            <p class="app-developer">Nasuka Official</p>
+            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
+        </div>
+    </div>
+    <div class="stats-container">
+        <div class="stat-item"><p class="stat-value">5.0 ★</p><p class="stat-label">Ulasan</p></div>
+        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">18 MB</p><p class="stat-label">Ukuran</p></div>
+        <div class="stat-item"><p class="stat-value">3rb+</p><p class="stat-label">Download</p></div>
+    </div>
+    <a href="nasuka_food.apk" class="download-btn">Install</a>
+
+    <div class="screenshot-container">
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 1"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 2"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 3"></div>
+        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 4"></div>
+    </div>
+
+    <h2 class="section-title">Aplikasi Lainnya</h2>
+    <div class="action-grid">
+        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
+        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/qris.jpg"><span style="font-size: 10px;">Nasuka Pay</span></div>
+        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/bri.jpg"><span style="font-size: 10px;">Nasuka Bank</span></div>
+        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Net</span></div>
+    </div>
+    <h2 class="section-title">Deskripsi</h2>
+    <p class="description">Pesan makanan favorit Anda dengan pengantaran super cepat.</p>
 </div>
 
 <script>
-// --- CONFIG FIREBASE ---
-const firebaseConfig = {
-    apiKey: "AIzaSyAJPoqA190LutHQ7xnvnV96GTRHzz24IpT",
-    authDomain: "nasukafood1.firebaseapp.com",
-    databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "nasukafoods1",
-    appId: "1:84287800896:web:83189d6766997b00f701a5"
-};
-
-firebase.initializeApp(firebaseConfig);
-const rtdb = firebase.database();
-
-// --- STATE UTAMA ---
-let U_ID = localStorage.getItem('nasuka_id');
-let U_DATA = null;
-let currentBet = 500;
-let isSpinning = false;
-
-// --- SISTEM AUTH ---
-async function handleLogin() {
-    const wa = document.getElementById('user-wa').value.trim();
-    const pin = document.getElementById('user-pin').value.trim();
-
-    if(wa.length < 10 || pin.length < 4) return alert("Data tidak valid!");
-
-    document.getElementById('main-loader').style.display = 'flex';
-
-    const snap = await rtdb.ref('users/' + wa).once('value');
-    if(snap.exists()) {
-        if(snap.val().PIN === pin) {
-            proceed(wa);
-        } else {
-            alert("PIN Salah!");
-            document.getElementById('main-loader').style.display = 'none';
-        }
-    } else {
-        // Daftar baru
-        const newData = { Nama: "Kawan Nasuka", PIN: pin, Saldo: 0, Gems: 1000, Phone: wa };
-        await rtdb.ref('users/' + wa).set(newData);
-        proceed(wa);
+    function showPage(pageId) {
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => page.classList.remove('active'));
+        const targetPage = document.getElementById(pageId);
+        targetPage.classList.add('active');
+        window.scrollTo(0, 0);
     }
-}
-
-function proceed(id) {
-    localStorage.setItem('nasuka_id', id);
-    U_ID = id;
-    location.reload();
-}
-
-function logout() {
-    localStorage.removeItem('nasuka_id');
-    location.reload();
-}
-
-// --- SYNC DATA REALTIME ---
-function initDataSync() {
-    if(!U_ID) {
-        document.getElementById('auth-page').style.display = 'flex';
-        document.getElementById('main-loader').style.display = 'none';
-        return;
-    }
-
-    rtdb.ref('users/' + U_ID).on('value', snap => {
-        U_DATA = snap.val();
-        if(U_DATA) {
-            document.getElementById('display-name').innerText = U_DATA.Nama;
-            document.getElementById('display-saldo').innerText = "Rp " + U_DATA.Saldo.toLocaleString();
-            document.getElementById('display-gems').innerText = U_DATA.Gems.toLocaleString();
-            document.getElementById('slot-gems-top').innerText = U_DATA.Gems.toLocaleString() + " 💎";
-            document.getElementById('a-gems').innerText = U_DATA.Gems.toLocaleString();
-            
-            document.getElementById('main-loader').style.display = 'none';
-        }
-    });
-}
-
-// --- PRODUK ---
-const items = [
-    { n: "Axis 5GB 1 Hari", p: 7000, i: "axis.jpg" },
-    { n: "XL Extra 10GB", p: 12000, i: "xl.jpg" },
-    { n: "Isi Saldo 25rb", p: 25500, i: "qris.jpg" }
-];
-
-function renderStore() {
-    const cont = document.getElementById('product-container');
-    cont.innerHTML = items.map(x => `
-        <div class="p-card">
-            <img src="https://nasukafoods.site/image/${x.i}" class="p-img">
-            <div class="p-info">
-                <div class="p-name">${x.n}</div>
-                <div class="p-price">Rp ${x.p.toLocaleString()}</div>
-            </div>
-            <button class="p-btn" onclick="buyItem('${x.n}', ${x.p})">BELI</button>
-        </div>
-    `).join('');
-}
-
-async function buyItem(name, price) {
-    if(U_DATA.Saldo < price) return alert("Saldo Rupiah Tidak Cukup!");
-    if(confirm("Beli " + name + "?")) {
-        await rtdb.ref('users/' + U_ID).update({ Saldo: U_DATA.Saldo - price });
-        alert("Pembelian Berhasil!");
-    }
-}
-
-// --- SLOT ENGINE ---
-const icons = ['m1.jpg', 'm2.jpg', 'm3.jpg', 'maha.jpg', 'qris.jpg'];
-function initSlot() {
-    const grid = document.getElementById('slot-canvas-grid');
-    grid.innerHTML = '';
-    for(let i=0; i<25; i++) {
-        const div = document.createElement('div');
-        div.className = 'slot-tile';
-        div.innerHTML = `<img src="https://nasukafoods.site/image/${icons[Math.floor(Math.random()*icons.length)]}">`;
-        grid.appendChild(div);
-    }
-}
-
-function adjustBet(v) {
-    currentBet = Math.max(100, currentBet + v);
-    document.getElementById('bet-amount').innerText = currentBet;
-}
-
-async function playSlot() {
-    if(isSpinning || U_DATA.Gems < currentBet) return;
-    
-    isSpinning = true;
-    document.getElementById('spin-btn').disabled = true;
-    document.getElementById('win-text').innerText = "";
-
-    // Potong gems
-    await rtdb.ref('users/' + U_ID + '/Gems').set(U_DATA.Gems - currentBet);
-
-    let count = 0;
-    const interval = setInterval(() => {
-        initSlot();
-        count++;
-        if(count > 15) {
-            clearInterval(interval);
-            finishSlot();
-        }
-    }, 100);
-}
-
-async function finishSlot() {
-    const winChance = Math.random();
-    let winAmt = 0;
-    
-    if(winChance > 0.85) {
-        winAmt = currentBet * 5;
-        document.getElementById('win-text').innerText = "BIG WIN! +💎" + winAmt;
-    } else if(winChance > 0.6) {
-        winAmt = Math.floor(currentBet * 1.5);
-        document.getElementById('win-text').innerText = "WIN +💎" + winAmt;
-    }
-
-    if(winAmt > 0) {
-        await rtdb.ref('users/' + U_ID + '/Gems').set(U_DATA.Gems + winAmt);
-    }
-
-    isSpinning = false;
-    document.getElementById('spin-btn').disabled = false;
-}
-
-function openSlot() { document.getElementById('game-slot').style.display = 'flex'; initSlot(); }
-function closeSlot() { document.getElementById('game-slot').style.display = 'none'; }
-
-// --- ANGKOT 3D ENGINE ---
-let a_scene, a_camera, a_renderer, a_player;
-let a_active = false;
-let a_score = 0;
-
-function openAngkot() {
-    document.getElementById('game-angkot').style.display = 'block';
-    a_active = true;
-    initAngkot();
-}
-
-function closeAngkot() {
-    document.getElementById('game-angkot').style.display = 'none';
-    a_active = false;
-}
-
-function initAngkot() {
-    const cvs = document.getElementById('angkot-canvas');
-    a_scene = new THREE.Scene();
-    a_camera = new THREE.OrthographicCamera(window.innerWidth/-2, window.innerWidth/2, window.innerHeight/2, window.innerHeight/-2, 1, 1000);
-    a_camera.position.set(0, -200, 200);
-    a_camera.lookAt(0,0,0);
-
-    a_renderer = new THREE.WebGLRenderer({ canvas: cvs, antialias: true, alpha: true });
-    a_renderer.setSize(window.innerWidth, window.innerHeight);
-
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(0, -100, 100);
-    a_scene.add(light);
-    a_scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-
-    // Player
-    a_player = new THREE.Mesh(new THREE.BoxGeometry(35, 35, 35), new THREE.MeshLambertMaterial({color: 0x3b82f6}));
-    a_player.position.z = 17.5;
-    a_scene.add(a_player);
-
-    // Floor Base
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshLambertMaterial({color: 0x10b981}));
-    a_scene.add(floor);
-
-    requestAnimationFrame(a_loop);
-}
-
-function a_loop() {
-    if(!a_active) return;
-    a_renderer.render(a_scene, a_camera);
-    requestAnimationFrame(a_loop);
-}
-
-async function moveAngkot(dir) {
-    if(!a_active) return;
-    if(dir === 'up') {
-        a_player.position.y += 40;
-        a_score++;
-        document.getElementById('a-score').innerText = a_score;
-        a_camera.position.y += 40;
-        // Reward Gems tiap 5 langkah
-        if(a_score % 5 === 0) {
-            await rtdb.ref('users/' + U_ID + '/Gems').set(U_DATA.Gems + 50);
-        }
-    }
-    if(dir === 'down') a_player.position.y -= 40;
-    if(dir === 'left') a_player.position.x -= 40;
-    if(dir === 'right') a_player.position.x += 40;
-}
-
-// --- INIT APP ---
-window.onload = () => {
-    initDataSync();
-    renderStore();
-};
 </script>
 
 </body>
