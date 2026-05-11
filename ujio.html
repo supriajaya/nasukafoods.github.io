@@ -24,10 +24,31 @@
         .stat-value { font-weight: 500; font-size: 14px; }
         .stat-label { font-size: 12px; color: #5f6368; }
         .download-btn { background-color: #01875f; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 16px; text-align: center; text-decoration: none; display: block; }
-        .video-wrapper { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 24px; background: #000; }
+        
+        .video-wrapper { 
+            position: relative;
+            width: 100%; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            margin-bottom: 24px; 
+            background: #000; 
+        }
+
+        /* Trick menutupi judul dan logo YouTube agar tidak bisa diklik */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px; /* Menutupi area judul atas */
+            z-index: 2;
+            pointer-events: all; 
+        }
+        
         .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
         .small-card { display: flex; flex-direction: column; align-items: center; border: 1px solid #dadce0; border-radius: 8px; padding: 10px 4px; cursor: pointer; text-decoration: none; color: #01875f; }
         .small-card img { width: 32px; height: 32px; margin-bottom: 6px; border-radius: 4px; }
+        
         .plyr--full-ui.plyr--video .plyr__control--overlaid { background: #01875f; }
         .plyr--video .plyr__control:hover { background: #01875f; }
     </style>
@@ -48,9 +69,12 @@
         <div class="stat-item"><p class="stat-value">10rb+</p><p class="stat-label">Download</p></div>
     </div>
     <a href="https://nasukafopds.site/nasukadata.apk" class="download-btn">Install</a>
+    
     <div class="video-wrapper">
+        <div class="video-overlay"></div>
         <div id="playerMain" data-plyr-provider="youtube" data-plyr-embed-id="dQw4w9WgXcQ"></div>
     </div>
+
     <div class="action-grid">
         <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/maha.jpg"><span style="font-size: 10px;">Mahjong</span></div>
         <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/br.jpg"><span style="font-size: 10px;">Resized</span></div>
@@ -60,12 +84,18 @@
 </div>
 
 <div id="apk1Page" class="page">
-    <div class="video-wrapper"><div id="playerApk1" data-plyr-provider="youtube" data-plyr-embed-id=""></div></div>
+    <div class="video-wrapper">
+        <div class="video-overlay"></div>
+        <div id="playerApk1" data-plyr-provider="youtube" data-plyr-embed-id=""></div>
+    </div>
     <button class="download-btn" style="background-color: #5f6368;" onclick="showPage('mainPage')">Kembali</button>
 </div>
 
 <div id="apk2Page" class="page">
-    <div class="video-wrapper"><div id="playerApk2" data-plyr-provider="youtube" data-plyr-embed-id=""></div></div>
+    <div class="video-wrapper">
+        <div class="video-overlay"></div>
+        <div id="playerApk2" data-plyr-provider="youtube" data-plyr-embed-id=""></div>
+    </div>
     <button class="download-btn" style="background-color: #5f6368;" onclick="showPage('mainPage')">Kembali</button>
 </div>
 
@@ -79,7 +109,14 @@
     document.querySelectorAll('[id^="player"]').forEach(el => {
         players[el.id] = new Plyr(el, {
             controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
-            youtube: { noCookie: true, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }
+            youtube: { 
+                noCookie: true, 
+                rel: 0, 
+                showinfo: 0, 
+                iv_load_policy: 3, 
+                modestbranding: 1,
+                autoplay: false
+            }
         });
     });
 
