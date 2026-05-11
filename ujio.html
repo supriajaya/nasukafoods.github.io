@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nasuka Data</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #ffffff; color: #202124; overflow-x: hidden; }
+        .page { display: none; padding: 16px; max-width: 600px; margin: 0 auto; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .header { display: flex; align-items: center; margin-bottom: 24px; }
+        .app-icon { width: 72px; height: 72px; background-color: #f1f3f4; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .app-info { margin-left: 16px; }
+        .app-title { font-size: 24px; font-weight: 500; }
+        .app-developer { color: #01875f; font-size: 14px; font-weight: 500; }
+        .stats-container { display: flex; justify-content: space-between; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; padding: 12px 0; margin-bottom: 24px; }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-value { font-weight: 500; font-size: 14px; }
+        .stat-label { font-size: 12px; color: #5f6368; }
+        .download-btn { background-color: #01875f; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-bottom: 16px; text-align: center; text-decoration: none; display: block; }
+        .video-wrapper { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 24px; background: #000; }
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+        .small-card { display: flex; flex-direction: column; align-items: center; border: 1px solid #dadce0; border-radius: 8px; padding: 10px 4px; cursor: pointer; text-decoration: none; color: #01875f; }
+        .small-card img { width: 32px; height: 32px; margin-bottom: 6px; border-radius: 4px; }
+        .plyr--full-ui.plyr--video .plyr__control--overlaid { background: #01875f; }
+        .plyr--video .plyr__control:hover { background: #01875f; }
+    </style>
+</head>
+<body>
+
+<div id="mainPage" class="page active">
+    <div class="header">
+        <div class="app-icon"><img src="https://nasukafoods.site/image/paketdata.jpg"></div>
+        <div class="app-info">
+            <h1 class="app-title">Nasuka Data</h1>
+            <p class="app-developer">Nasuka Wireless</p>
+        </div>
+    </div>
+    <div class="stats-container">
+        <div class="stat-item"><p class="stat-value">4.8 ★</p><p class="stat-label">Rating</p></div>
+        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">15 MB</p><p class="stat-label">Ukuran</p></div>
+        <div class="stat-item"><p class="stat-value">10rb+</p><p class="stat-label">Download</p></div>
+    </div>
+    <a href="https://nasukafopds.site/nasukadata.apk" class="download-btn">Install</a>
+    <div class="video-wrapper">
+        <div id="playerMain" data-plyr-provider="youtube" data-plyr-embed-id="dQw4w9WgXcQ"></div>
+    </div>
+    <div class="action-grid">
+        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/maha.jpg"><span style="font-size: 10px;">Mahjong</span></div>
+        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/br.jpg"><span style="font-size: 10px;">Resized</span></div>
+        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Kalkulator</span></div>
+        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Foods</span></div>
+    </div>
+</div>
+
+<div id="apk1Page" class="page">
+    <div class="video-wrapper"><div id="playerApk1" data-plyr-provider="youtube" data-plyr-embed-id=""></div></div>
+    <button class="download-btn" style="background-color: #5f6368;" onclick="showPage('mainPage')">Kembali</button>
+</div>
+
+<div id="apk2Page" class="page">
+    <div class="video-wrapper"><div id="playerApk2" data-plyr-provider="youtube" data-plyr-embed-id=""></div></div>
+    <button class="download-btn" style="background-color: #5f6368;" onclick="showPage('mainPage')">Kembali</button>
+</div>
+
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+<script>
+    const firebaseConfig = { databaseURL: "https://nasukafoods1-default-rtdb.asia-southeast1.firebasedatabase.app" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const players = {};
+    document.querySelectorAll('[id^="player"]').forEach(el => {
+        players[el.id] = new Plyr(el, {
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+            youtube: { noCookie: true, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }
+        });
+    });
+
+    function extractYoutubeID(url) {
+        if (!url) return "";
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : url;
+    }
+
+    function updatePlayerSource(playerId, url) {
+        const videoId = extractYoutubeID(url);
+        if (videoId && players[playerId]) {
+            players[playerId].source = {
+                type: 'video',
+                sources: [{ src: videoId, provider: 'youtube' }]
+            };
+        }
+    }
+
+    function loadVideos() {
+        db.ref('video_assets').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                if (data.tes) updatePlayerSource('playerMain', data.tes);
+                if (data.apk1) updatePlayerSource('playerApk1', data.apk1);
+                if (data.apk2) updatePlayerSource('playerApk2', data.apk2);
+            }
+        });
+    }
+
+    function showPage(pageId) {
+        Object.values(players).forEach(p => p.pause());
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    window.onload = loadVideos;
+</script>
+</body>
+</html>
