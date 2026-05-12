@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buka Aplikasi</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            gap: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 250px;
+        }
+        .btn-gobiz { background-color: #00880d; }
+        .btn-shopee { background-color: #ee4d2d; }
+    </style>
+</head>
+<body>
+
+<button class="btn-gobiz" onclick="openGoBiz()">Buka GoBiz</button>
+
+<button class="btn-shopee" onclick="openShopee()">Buka Shopee</button>
+
+<script>
+function openGoBiz() {
+    window.location.href = 'gobiz://';
+}
+
+function openShopee() {
+    const intent = 'intent://#Intent;scheme=shopeepartner;package=com.shopee.pms.id;end';
+    window.location.href = intent;
+    
+    setTimeout(function() {
+        window.location.href = 'shopeepartner://';
+    }, 500);
+}
+</script>
+
+</body>
+</html>
