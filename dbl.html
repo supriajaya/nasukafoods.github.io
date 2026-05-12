@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membuka GoFood Merchant...</title>
+</head>
+<body>
+    <p>Sedang mengalihkan ke aplikasi GoFood Merchant...</p>
+
+    <script>
+        window.onload = function() {
+            var appId = "com.gojek.resto";
+            var playStoreUrl = "https://play.google.com/store/apps/details?id=" + appId;
+            
+            // Mencoba membuka dengan skema langsung (fallback primer)
+            window.location.href = "gofood://open"; 
+
+            // Gunakan timeout untuk mencoba Intent jika skema di atas gagal
+            setTimeout(function() {
+                window.location.href = "intent://#Intent;package=" + appId + ";scheme=gofood;end";
+            }, 500);
+
+            // Jika dalam 2,5 detik aplikasi tidak terbuka, arahkan ke Play Store
+            setTimeout(function() {
+                window.location.href = playStoreUrl;
+            }, 2500);
+        };
+    </script>
+</body>
+</html>
