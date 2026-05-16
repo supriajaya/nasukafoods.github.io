@@ -12,44 +12,46 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
+        :root {
+            --retro-dark: #202124;
+            --retro-border: 3px;
+        }
+
         body {
-            background-color: #ffffff;
+            background-color: #f4f6f9;
             color: #202124;
             overflow-x: hidden;
         }
 
         .page {
-            display: none;
-            padding: 16px;
+            padding: 20px;
             max-width: 600px;
-            margin: 0 auto;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin: 20px auto;
+            background: #ffffff;
+            border: var(--retro-border) solid var(--retro-dark);
+            box-shadow: 8px 8px 0px var(--retro-dark);
+            border-radius: 12px;
         }
 
         .header {
             display: flex;
             align-items: center;
             margin-bottom: 24px;
+            background: #fafafa;
+            padding: 16px;
+            border-bottom: 2px dashed #e0e0e0;
+            border-radius: 8px 8px 0 0;
         }
 
         .app-icon {
-            width: 72px;
-            height: 72px;
+            width: 80px;
+            height: 80px;
             background-color: #f1f3f4;
-            border-radius: 16px;
+            border: 2px solid var(--retro-dark);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
@@ -64,46 +66,51 @@
         }
 
         .app-title {
-            font-size: 24px;
-            font-weight: 500;
-            margin-bottom: 2px;
+            font-size: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
         .app-developer {
             color: #01875f;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 700;
             margin-bottom: 4px;
         }
 
         .ads-label {
             font-size: 11px;
-            color: #5f6368;
+            color: #757575;
         }
 
         .stats-container {
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 12px 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             margin-bottom: 24px;
         }
 
         .stat-item {
             text-align: center;
-            flex: 1;
-            min-width: 60px;
+            background: #f8f9fa;
+            padding: 12px 8px;
+            border: 2px solid var(--retro-dark);
+            border-radius: 8px;
+            box-shadow: 3px 3px 0px var(--retro-dark);
         }
 
         .stat-value {
-            font-weight: 500;
-            font-size: 14px;
+            font-weight: 800;
+            font-size: 15px;
         }
 
         .stat-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #5f6368;
+            text-transform: uppercase;
+            font-weight: 600;
             margin-top: 2px;
         }
 
@@ -111,28 +118,37 @@
             background-color: #25D366;
             color: white;
             text-decoration: none;
-            padding: 2px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-size: 11px;
             font-weight: bold;
             display: inline-block;
-            margin-top: 2px;
+            margin-top: 4px;
+            border: 1px solid var(--retro-dark);
         }
 
         .download-btn {
             background-color: #01875f;
             color: white;
-            border: none;
+            border: var(--retro-border) solid var(--retro-dark);
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
             cursor: pointer;
             margin-bottom: 24px;
             text-align: center;
             text-decoration: none;
             display: block;
+            box-shadow: 4px 4px 0px var(--retro-dark);
+            transition: all 0.1s ease;
+        }
+
+        .download-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--retro-dark);
         }
 
         .screenshot-container {
@@ -140,7 +156,7 @@
             overflow-x: auto;
             gap: 12px;
             margin-bottom: 24px;
-            padding-bottom: 8px;
+            padding: 8px 4px;
             scrollbar-width: none;
         }
 
@@ -154,7 +170,8 @@
             background-color: #f1f3f4;
             border-radius: 8px;
             overflow: hidden;
-            border: 1px solid #e0e0e0;
+            border: 2px solid var(--retro-dark);
+            box-shadow: 3px 3px 0px var(--retro-dark);
         }
 
         .screenshot-item img {
@@ -163,44 +180,23 @@
             object-fit: cover;
         }
 
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .small-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-            padding: 10px 4px;
-            text-decoration: none;
-            color: #01875f;
-            cursor: pointer;
-        }
-
-        .small-card img {
-            width: 32px;
-            height: 32px;
-            margin-bottom: 6px;
-            border-radius: 4px;
-            object-fit: cover;
-        }
-
         .section-title {
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 800;
+            text-transform: uppercase;
             margin-bottom: 12px;
+            border-left: 4px solid #01875f;
+            padding-left: 8px;
         }
 
         .description {
             font-size: 14px;
-            line-height: 1.5;
-            color: #5f6368;
+            line-height: 1.6;
+            color: #333333;
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px dashed var(--retro-dark);
             margin-bottom: 24px;
         }
 
@@ -209,32 +205,127 @@
             vertical-align: middle;
             fill: #25D366;
         }
+        
+        .cta-section {
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #f8f8f8;
+            border: var(--retro-border) solid var(--retro-dark);
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            box-shadow: 8px 8px 0px var(--retro-dark);
+        }
+
+        .btn-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            margin: 28px auto;
+        }
+
+        .btn-order {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: 60px;
+            padding: 0 25px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 18px;
+            color: var(--retro-dark);
+            text-transform: uppercase;
+            border: var(--retro-border) solid var(--retro-dark);
+            box-shadow: 6px 6px 0px var(--retro-dark);
+            transition: all 0.1s ease;
+            position: relative;
+            gap: 15px;
+            border-radius: 8px;
+        }
+
+        .btn-order:active {
+            transform: translate(3px, 3px);
+            box-shadow: 3px 3px 0px var(--retro-dark);
+        }
+
+        .whatsapp { background-color: #25d366; }
+        .gofood { background-color: #00aa13; }
+        .grabfood { background-color: #00b14f; }
+        .shopeefood { background-color: #ee4d2d; }
+        .tiktok { background-color: #000000; color: #ffffff !important; }
+
+        .retro-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: var(--retro-border) solid var(--retro-dark);
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            border-radius: 12px;
+            box-shadow: 8px 8px 0px var(--retro-dark);
+            scrollbar-width: none;
+        }
+
+        .retro-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .retro-square-btn {
+            flex: 0 0 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 10px;
+            color: var(--retro-dark);
+            text-transform: uppercase;
+            border: var(--retro-border) solid var(--retro-dark);
+            box-shadow: 4px 4px 0px var(--retro-dark);
+            background-color: #fff;
+            border-radius: 8px;
+            transition: all 0.1s ease;
+        }
+
+        .retro-square-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--retro-dark);
+        }
+
+        .c1 { background-color: #ffeb3b; }
+        .c2 { background-color: #ff5722; color: #fff; }
+        .c3 { background-color: #2196f3; color: #fff; }
+        .c4 { background-color: #e91e63; color: #fff; }
+        .c5 { background-color: #4caf50; color: #fff; }
+        .c6 { background-color: #9c27b0; color: #fff; }
+        .c7 { background-color: #00bcd4; color: #fff; }
     </style>
 </head>
 <body>
 
-<!-- MAIN PAGE (NASUKA DATA) -->
-<div id="mainPage" class="page active">
+<div id="mainPage" class="page">
     <div class="header">
-        <div class="app-icon"><img src="https://nasukafoods.site/image/paketdata.jpg" alt="Nasuka Data"></div>
+        <div class="app-icon"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="Nasuka Data"></div>
         <div class="app-info">
-            <h1 class="app-title">Nasuka Data</h1>
-            <p class="app-developer">Nasuka Wireless</p>
-            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
+            <h1 class="app-title">NASUKA FOODS</h1>
+          
+            <p class="ads-label">Program apresiasi untuk pelanggan</p>
         </div>
     </div>
-    <div class="stats-container">
-        <div class="stat-item">
-            <p class="stat-value">
-                <svg class="wa-icon-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </p>
-            <a href="https://api.whatsapp.com/send?phone=62859109819017&text=Halo%20Admin%20Nasuka%20Data,%20saya%20ingin%20bertanya." class="wa-btn">Whatsapp</a>
-        </div>
-        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">15 MB</p><p class="stat-label">Ukuran</p></div>
-        <div class="stat-item"><p class="stat-value">10rb+</p><p class="stat-label">Download</p></div>
-    </div>
-    <a href="https://nasukafopds.site/nasukadata.apk" class="download-btn">Install</a>
     
+    
+    <div class="stats-container">
+       
+        
+       
+      
+    </div>
+  
     <div class="screenshot-container">
         <div class="screenshot-item"><img src="https://nasukafoods.site/image/ssdata1.jpg" alt="SS 1"></div>
         <div class="screenshot-item"><img src="https://nasukafoods.site/image/ssdata3.jpg" alt="SS 2"></div>
@@ -242,186 +333,31 @@
         <div class="screenshot-item"><img src="https://nasukafoods.site/image/ssdata4.jpg" alt="SS 4"></div>
     </div>
 
-    <h2 class="section-title">Aplikasi Lainnya</h2>
-    <div class="action-grid">
-        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/maha.jpg"><span style="font-size: 10px;">Mahjong</span></div>
-        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/br.jpg"><span style="font-size: 10px;">Resized</span></div>
-        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Kalkulator</span></div>
-        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Foods</span></div>
-    </div>
-    <h2 class="section-title">Tentang aplikasi ini</h2>
-    <p class="description">Nasuka adalah solusi digital yang dirancang untuk memberikan kemudahan akses bagi pengguna.</p>
+    
+    <p class="description">Nasuka Ekosistem adalah rangkaian solusi digital yang dirancang untuk mendukung kebutuhan harian Anda secara efisien. Kami menghadirkan inovasi mulai dari layanan telekomunikasi hingga kebutuhan gaya hidup yang mudah diakses kapan saja.</p>
 </div>
 
-<!-- PAGE APK 1 (MAHJONG) -->
-<div id="apk1Page" class="page">
-    <div class="header">
-        <div class="app-icon"><img src="https://nasukafoods.site/image/maha.jpg"></div>
-        <div class="app-info">
-            <h1 class="app-title">Mahjong</h1>
-            <p class="app-developer">Nasuka Official</p>
-            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
-        </div>
+<section class="cta-section">
+  Tombol langsung menuju lokasi kami :<p></p> Pastikan sudah terinstal diperangkat kamu
+    <div class="btn-stack">
+        <a href="https://wa.me/62859109819017" class="btn-order whatsapp btn-external"> WhatsApp</a>
+        <a href="https://gofood.link/a/SxpM9uU" class="btn-order gofood btn-external">Go Food</a>
+        <a href="https://r.grab.com/g/6-20260228_161633_278e450d858f4606bfe49afac669cafc_MEXMPS-6-C72BTT2CCPWEJN" class="btn-order grabfood btn-external">Grab Food</a>
+        <a href="https://app.shopeepay.co.id/universal-link/now-food/shop/22716078?deep_and_deferred=1&shareChannel=copy_link" class="btn-order shopeefood btn-external">Shopee Food</a>
+        <a href="https://vt.tokopedia.com/t/ZS9Y135d5SseK-20Jds/" class="btn-order tiktok btn-external">TikTok Shop</a>
     </div>
-    <div class="stats-container">
-        <div class="stat-item">
-            <p class="stat-value">
-                <svg class="wa-icon-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </p>
-            <a href="https://api.whatsapp.com/send?phone=62859109819017&text=Saya%20ingin%20info%20tentang%20game%20Mahjong." class="wa-btn">Whatsapp</a>
-        </div>
-        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">12 MB</p><p class="stat-label">Ukuran</p></div>
-        <div class="stat-item"><p class="stat-value">5rb+</p><p class="stat-label">Download</p></div>
-    </div>
-    <a href="nasuka_pay.apk" class="download-btn">Install</a>
+</section>
 
-    <div class="screenshot-container">
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/ssmahjong1.jpg" alt="SS 1"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/m1.jpg" alt="SS 2"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/ssmahjong3.jpg" alt="SS 3"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/ssmahjong4.jpg" alt="SS 4"></div>
-    </div>
-
-    <h2 class="section-title">Aplikasi Lainnya</h2>
-    <div class="action-grid">
-        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/paketdata.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
-        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/br.jpg"><span style="font-size: 10px;">Resized</span></div>
-        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Net</span></div>
-        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Food</span></div>
-    </div>
-    <h2 class="section-title">Deskripsi</h2>
-    <p class="description">Game simulasi kebangkrutan.</p>
+<div class="retro-scroll-container">
+    <a href="#" class="retro-square-btn c1">Pemenang</a>
+    <a href="#" class="retro-square-btn c2">Hadiah</a>
+    <a href="#" class="retro-square-btn c3">Resep</a>
+    <a href="#" class="retro-square-btn c4">Listrik</a>
+    <a href="#" class="retro-square-btn c5">Games</a>
+    <a href="#" class="retro-square-btn c6">BPJS</a>
+    <a href="#" class="retro-square-btn c7">PDAM</a>
 </div>
 
-<!-- PAGE APK 2 (RESIZED) -->
-<div id="apk2Page" class="page">
-    <div class="header">
-        <div class="app-icon"><img src="https://nasukafoods.site/image/br.jpg"></div>
-        <div class="app-info">
-            <h1 class="app-title">Resized</h1>
-            <p class="app-developer">Nasuka Wireless</p>
-            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
-        </div>
-    </div>
-    <div class="stats-container">
-        <div class="stat-item">
-            <p class="stat-value">
-                <svg class="wa-icon-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </p>
-            <a href="https://api.whatsapp.com/send?phone=62859109819017&text=Halo,%20bisa%20bantu%20tentang%20aplikasi%20Resized?" class="wa-btn">Whatsapp</a>
-        </div>
-        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">20 MB</p><p class="stat-label">Ukuran</p></div>
-        <div class="stat-item"><p class="stat-value">8rb+</p><p class="stat-label">Download</p></div>
-    </div>
-    <a href="nasuka_ban.apk" class="download-btn">Install</a>
-
-    <div class="screenshot-container">
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/br.jpg" alt="SS 1"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/br.jpg" alt="SS 2"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/br.jpg" alt="SS 3"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/br.jpg" alt="SS 4"></div>
-    </div>
-
-    <h2 class="section-title">Aplikasi Lainnya</h2>
-    <div class="action-grid">
-        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/paketdata.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
-        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/maha.jpg"><span style="font-size: 10px;">Mahjong</span></div>
-        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Net</span></div>
-        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Food</span></div>
-    </div>
-    <h2 class="section-title">Deskripsi</h2>
-    <p class="description">Minimalisir gambar.</p>
-</div>
-
-<!-- PAGE APK 3 (NASUKA NET) -->
-<div id="apk3Page" class="page">
-    <div class="header">
-        <div class="app-icon"><img src="https://nasukafoods.site/image/axis.jpg"></div>
-        <div class="app-info">
-            <h1 class="app-title">Nasuka Net</h1>
-            <p class="app-developer">Nasuka Wireless</p>
-            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
-        </div>
-    </div>
-    <div class="stats-container">
-        <div class="stat-item">
-            <p class="stat-value">
-                <svg class="wa-icon-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </p>
-            <a href="https://api.whatsapp.com/send?phone=62859109819017&text=Halo%20Nasuka%20Net,%20saya%20mau%20order%20pulsa." class="wa-btn">Whatsapp</a>
-        </div>
-        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">10 MB</p><p class="stat-label">Ukuran</p></div>
-        <div class="stat-item"><p class="stat-value">15rb+</p><p class="stat-label">Download</p></div>
-    </div>
-    <a href="nasuka_net.apk" class="download-btn">Install</a>
-
-    <div class="screenshot-container">
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 1"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 2"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 3"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/axis.jpg" alt="SS 4"></div>
-    </div>
-
-    <h2 class="section-title">Aplikasi Lainnya</h2>
-    <div class="action-grid">
-        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/paketdata.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
-        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/maha.jpg"><span style="font-size: 10px;">Mahjong</span></div>
-        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/br.jpg"><span style="font-size: 10px;">Resized</span></div>
-        <div class="small-card" onclick="showPage('apk4Page')"><img src="https://nasukafoods.site/image/nasukafoods.jpg"><span style="font-size: 10px;">Nasuka Food</span></div>
-    </div>
-    <h2 class="section-title">Deskripsi</h2>
-    <p class="description">Layanan kuota dan pulsa termurah untuk semua operator di Indonesia.</p>
-</div>
-
-<!-- PAGE APK 4 (NASUKA FOOD) -->
-<div id="apk4Page" class="page">
-    <div class="header">
-        <div class="app-icon"><img src="https://nasukafoods.site/image/nasukafoods.jpg"></div>
-        <div class="app-info">
-            <h1 class="app-title">Nasuka Food</h1>
-            <p class="app-developer">Nasuka Official</p>
-            <p class="ads-label">Tidak berisi iklan • Pembelian dalam aplikasi</p>
-        </div>
-    </div>
-    <div class="stats-container">
-        <div class="stat-item">
-            <p class="stat-value">
-                <svg class="wa-icon-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </p>
-            <a href="https://api.whatsapp.com/send?phone=62859109819017&text=Halo%20Admin,%20saya%20mau%20pesan%20makanan%20di%20Nasuka%20Food." class="wa-btn">Whatsapp</a>
-        </div>
-        <div class="stat-item" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;"><p class="stat-value">18 MB</p><p class="stat-label">Ukuran</p></div>
-        <div class="stat-item"><p class="stat-value">3rb+</p><p class="stat-label">Download</p></div>
-    </div>
-    <a href="nasuka_food.apk" class="download-btn">Install</a>
-
-    <div class="screenshot-container">
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 1"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 2"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 3"></div>
-        <div class="screenshot-item"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="SS 4"></div>
-    </div>
-
-    <h2 class="section-title">Aplikasi Lainnya</h2>
-    <div class="action-grid">
-        <div class="small-card" onclick="showPage('mainPage')"><img src="https://nasukafoods.site/image/paketdata.jpg"><span style="font-size: 10px;">Nasuka Data</span></div>
-        <div class="small-card" onclick="showPage('apk1Page')"><img src="https://nasukafoods.site/image/maha.jpg"><span style="font-size: 10px;">Mahjong</span></div>
-        <div class="small-card" onclick="showPage('apk2Page')"><img src="https://nasukafoods.site/image/br.jpg"><span style="font-size: 10px;">Resized</span></div>
-        <div class="small-card" onclick="showPage('apk3Page')"><img src="https://nasukafoods.site/image/axis.jpg"><span style="font-size: 10px;">Nasuka Net</span></div>
-    </div>
-    <h2 class="section-title">Deskripsi</h2>
-    <p class="description">Pesan makanan favorit Anda dengan pengantaran super cepat.</p>
-</div>
-
-<script>
-    function showPage(pageId) {
-        const pages = document.querySelectorAll('.page');
-        pages.forEach(page => page.classList.remove('active'));
-        const targetPage = document.getElementById(pageId);
-        targetPage.classList.add('active');
-        window.scrollTo(0, 0);
-    }
-</script>
 
 </body>
 </html>
