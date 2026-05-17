@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Apresiasi - Nasuka Foods</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --retro-dark: #202124;
+            --retro-border: 3px;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #202124;
+            overflow-x: hidden;
+        }
+
+        .page {
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border: var(--retro-border) solid var(--retro-dark);
+            box-shadow: 8px 8px 0px var(--retro-dark);
+            border-radius: 12px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            background: #fafafa;
+            padding: 16px;
+            border-bottom: 2px dashed #e0e0e0;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #f1f3f4;
+            border: 2px solid var(--retro-dark);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-info {
+            margin-left: 16px;
+        }
+
+        .app-title {
+            font-size: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .app-developer {
+            color: #01875f;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            border-left: 4px solid #01875f;
+            padding-left: 8px;
+            margin-top: 12px;
+        }
+
+        .article-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333333;
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px dashed var(--retro-dark);
+            margin-bottom: 24px;
+        }
+
+        .article-content p {
+            margin-bottom: 14px;
+        }
+
+        .grid-hadiah {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .item-hadiah {
+            background: #ffffff;
+            border: 2px solid var(--retro-dark);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 4px 4px 0px var(--retro-dark);
+        }
+
+        .item-hadiah h3 {
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #01875f;
+            margin-bottom: 4px;
+        }
+
+        .item-hadiah p {
+            font-size: 12px;
+            color: #5f6368;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background-color: #202124;
+            color: white;
+            border: var(--retro-border) solid var(--retro-dark);
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-bottom: 24px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            box-shadow: 4px 4px 0px #757575;
+            transition: all 0.1s ease;
+        }
+
+        .back-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #757575;
+        }
+
+        .main-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--retro-dark);
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+            background-color: #ffffff;
+            border: var(--retro-border) solid var(--retro-dark);
+            border-radius: 12px;
+            box-shadow: 6px 6px 0px var(--retro-dark);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="header">
+        <div class="app-icon"><img src="https://nasukafoods.site/image/nasukafoods.jpg" alt="Nasuka Data"></div>
+        <div class="app-info">
+            <h1 class="app-title">APRESIASI</h1>
+            <p class="app-developer">Nasuka Ekosistem</p>
+        </div>
+    </div>
+
+    <h2 class="section-title">Program Apresiasi Pelanggan</h2>
+    
+    <div class="article-content">
+        <p>Sebagai wujud rasa terima kasih kami atas loyalitas dan dukungan seluruh pengguna setia dalam ekosistem digital Nasuka, kami menghadirkan program apresiasi khusus.</p>
+        <p>Program ini dirancang untuk memberikan nilai tambah langsung yang dapat dirasakan oleh seluruh pelanggan dalam aktivitas sehari-hari, baik untuk kebutuhan konsumsi, perlindungan cuaca, maupun konektivitas digital.</p>
+    </div>
+
+    <h2 class="section-title">Pilihan Apresiasi Kami</h2>
+
+    <div class="grid-hadiah">
+        <div class="item-hadiah">
+            <h3>Cilok Gratis</h3>
+            <p>Kuliner khas pilihan untuk dinikmati langsung.</p>
+        </div>
+        <div class="item-hadiah">
+            <h3>Payung</h3>
+            <p>Perlindungan praktis untuk mendukung aktivitas luar ruangan.</p>
+        </div>
+        <div class="item-hadiah">
+            <h3>Jas Hujan</h3>
+            <p>Kesiapan optimal menghadapi cuaca tidak menentu.</p>
+        </div>
+        <div class="item-hadiah">
+            <h3>Paket Data</h3>
+            <p>Dukungan kuota internet untuk menunjang aktivitas komunikasi.</p>
+        </div>
+    </div>
+
+    <div class="article-content">
+        <p>Seluruh apresiasi ini disiapkan secara berkala dan terintegrasi melalui sistem aplikasi. Pastikan perangkat Anda tetap terhubung dan menggunakan versi layanan terbaru dari kami untuk dapat mengikuti serta mengklaim program yang sedang berjalan.</p>
+    </div>
+
+   
+</div>
+
+
+</body>
+</html>
